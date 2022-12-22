@@ -2,19 +2,19 @@ import { call, delay, put, takeEvery } from "redux-saga/effects";
 
 import {
   deleteOrderIdSuccess,
-  goButtonSuccess,
   postOrderSuccess,
   editOrderIdSuccess,
   updateOrderIdSuccess,
   getOrderListPageSuccess,
+  goButtonForOrderAddSuccess,
 } from "./actions";
 import {
-  editOrderID_forOrderPage_ApiCall,
-  UpdateOrder_ID_ApiCall,
-  deleteOrderID_forOrderPage_ApiCall,
+  OrderPage_Update_API,
+  OrderPage_Delete_API,
   OrderPage_Post_API,
   OrderPage_GoButton_API,
-  Order_get_API,
+  OrderList_get_Filter_API,
+  OrderPage_Edit_API,
 } from "../../../helpers/backend_helper";
 
 import {
@@ -31,45 +31,29 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
-function* goButtonGenFunc({ data, hasEditVal }) {
+function* goButtonGenFunc({ data }) {
+
 
   yield GoBtnDissable(true)
   yield delay(400)
   try {
+
     const response = yield call(OrderPage_GoButton_API, data);
-    debugger
-    if (hasEditVal) {
-      yield response.Data.forEach(element => {
-        hasEditVal.OrderItem.forEach(ele => {
-          if (element.id === ele.Item) {
-            element["Rate"] = ele.Rate
-            element["Quantity"] = ele.Quantity
-            element["Amount"] = ele.Amount
-            element["Unit"] = ele.Unit
-            element["UnitName"] = ele.UnitName
-            element["BaseUnitQuantity"] = ele.BaseUnitQuantity
-            // **======== update mode required  variables======********
-            element["poRate"] = ele.Rate
-            element["poQty"] = ele.Quantity
-            element["poBaseUnitQty"] = ele.BaseUnitQuantity
-            element["editrowId"] = ele.id
-          }
-        })
-      });
-    }
 
-    yield response.Data.forEach(row => {
-
-      if (row.poRate === undefined) { row["poRate"] = '' }
-      if (row.poQty === undefined) { row["poQty"] = 0 }
-      if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
-
-      if (row["Rate"] === undefined) { row["Rate"] = '' }
-      if (row["Quantity"] === undefined) { row["Quantity"] = '' }
-      if (row["Amount"] === undefined) { row["Amount"] = 0 }
+    yield response.Data.OrderItems.forEach((ele, k) => {
+      ele["id"] = k + 1
     });
+    const termArr = []
+    yield response.Data.TermsAndConditions.forEach((ele, k) => {
+      termArr.push({
+        value: ele.id,
+        label: ele.TermsAndCondition,
+        IsDeleted: 0
+      })
+    });
+    yield response.Data.TermsAndConditions = termArr;
 
-    yield put(goButtonSuccess(response.Data));
+    yield put(goButtonForOrderAddSuccess(response.Data));
     yield GoBtnDissable(false)
   } catch (error) {
     yield GoBtnDissable(false)
@@ -78,6 +62,59 @@ function* goButtonGenFunc({ data, hasEditVal }) {
       Status: true, Message: "500 Error Go Button-Order Page",
     }));
   }
+
+
+
+
+
+
+
+
+  // yield GoBtnDissable(true)
+  // yield delay(400)
+  // try {
+  //   const response = yield call(OrderPage_GoButton_API, data);
+  //   debugger
+  //   if (hasEditVal) {
+  //     yield response.Data.forEach(element => {
+  //       hasEditVal.OrderItem.forEach(ele => {
+  //         if (element.id === ele.Item) {
+  //           element["Rate"] = ele.Rate
+  //           element["Quantity"] = ele.Quantity
+  //           element["Amount"] = ele.Amount
+  //           element["Unit"] = ele.Unit
+  //           element["UnitName"] = ele.UnitName
+  //           element["BaseUnitQuantity"] = ele.BaseUnitQuantity
+  //           // **======== update mode required  variables======********
+  //           element["poRate"] = ele.Rate
+  //           element["poQty"] = ele.Quantity
+  //           element["poBaseUnitQty"] = ele.BaseUnitQuantity
+  //           element["editrowId"] = ele.id
+  //         }
+  //       })
+  //     });
+  //   }
+
+  //   yield response.Data.forEach(row => {
+
+  //     if (row.poRate === undefined) { row["poRate"] = '' }
+  //     if (row.poQty === undefined) { row["poQty"] = 0 }
+  //     if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
+
+  //     if (row["Rate"] === undefined) { row["Rate"] = '' }
+  //     if (row["Quantity"] === undefined) { row["Quantity"] = '' }
+  //     if (row["Amount"] === undefined) { row["Amount"] = 0 }
+  //   });
+
+  //   yield put(goButtonSuccess(response.Data));
+  //   yield GoBtnDissable(false)
+  // } catch (error) {
+  //   yield GoBtnDissable(false)
+  //   yield put(AlertState({
+  //     Type: 4,
+  //     Status: true, Message: "500 Error Go Button-Order Page",
+  //   }));
+  // }
 }
 
 function* postOrder_GenFunc({ data }) {
@@ -96,11 +133,11 @@ function* postOrder_GenFunc({ data }) {
   }
 }
 
-function* editOrderGenFunc({ id, pageMode }) {
-
+function* editOrderGenFunc({ jsonBody, pageMode }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(editOrderID_forOrderPage_ApiCall, id);
+    const response = yield call(OrderPage_Edit_API, jsonBody);
     response.pageMode = pageMode
     yield put(SpinnerState(false))
     yield put(editOrderIdSuccess(response));
@@ -116,7 +153,7 @@ function* editOrderGenFunc({ id, pageMode }) {
 function* DeleteOrder_GenFunc({ id }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(deleteOrderID_forOrderPage_ApiCall, id);
+    const response = yield call(OrderPage_Delete_API, id);
     yield put(SpinnerState(false))
     yield put(deleteOrderIdSuccess(response));
   } catch (error) {
@@ -132,7 +169,7 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 
   try {
     yield saveDissable(true)
-    const response = yield call(UpdateOrder_ID_ApiCall, data, id);
+    const response = yield call(OrderPage_Update_API, data, id);
     yield put(updateOrderIdSuccess(response))
     yield saveDissable(false)
   }
@@ -151,13 +188,15 @@ function* get_OrderList_GenFunc({ filters }) {
   yield GoBtnDissable(true)
   // yield delay(400)
   try {
-    
-    const response = yield call(Order_get_API, filters);
+
+    const response = yield call(OrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
-      
+
       var date = convertDatefunc(i.OrderDate)
       var time = convertTimefunc(i.CreatedOn)
-      var DeliveryDate = convertDatefunc(i.DeliveryDate)
+      var DeliveryDate = convertDatefunc(i.DeliveryDate);
+
+      i["preOrderDate"] = i.OrderDate
       i.OrderDate = (`${date} ${time}`)
       i.DeliveryDate = (`${DeliveryDate}`)
       return i

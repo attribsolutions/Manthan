@@ -22,10 +22,8 @@ export const listPageCommonButtonFunction = (props) => {
         deleteName,
         downUrlPath,
         ReportType,
-        makeBtnShow,
         makeBtnFunc,
-        makeBtnName
-
+        editBodyfunc
     } = props;
 
 
@@ -39,7 +37,11 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData) {
-        dispatch(editActionFun(rowData.id, "edit",));
+        if (editBodyfunc) { editBodyfunc(rowData) }
+        else {
+            dispatch(editActionFun(rowData.id, "edit",));
+        }
+
     }
 
     function copyHandler(rowData) {
@@ -58,14 +60,7 @@ export const listPageCommonButtonFunction = (props) => {
             ID: rowData.id,
         }));
     }
-    function makeBtnHandler(rowData) {
-        rowData["hasSelect"] = true;
-        let arr = []
-        arr.push(rowData)
-
-        makeBtnFunc(arr)
-    }
-
+   
 
     return ({
         text: "Action",
@@ -248,15 +243,21 @@ export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Da
     return downList
 }
 
-const currentDatefunc = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+ const currentDatefunc = (aaa=undefined )=> {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
     const current = new Date();
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
     return currentDate
 }
-export const currentDate = currentDatefunc()
-
+export const currentDate = currentDatefunc();
+// const dateConvertfunc = (inp )=> {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+//     const current = new Date(inp);
+//     const month = current.getMonth() + 1;
+//     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
+//         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
+//     return currentDate
+// }
 export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0
     try {
