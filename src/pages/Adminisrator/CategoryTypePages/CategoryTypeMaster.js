@@ -56,12 +56,15 @@ const CategoryTypeMaster = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
-        postMsg: state.categoryTypeReducer.PostData,
-        updateMsg: state.categoryTypeReducer.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
+    const { postMsg,
+        updateMsg,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            postMsg: state.categoryTypeReducer.PostData,
+            updateMsg: state.categoryTypeReducer.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
 
     useEffect(() => {
         const page_Id = pageId.CATEGORYTYPE
@@ -199,8 +202,8 @@ const CategoryTypeMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                CreatedBy:createdBy(),
-                UpdatedBy:createdBy()
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
             });
 
             saveDissable(true);//save Button Is dissable function

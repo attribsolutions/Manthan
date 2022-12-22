@@ -62,16 +62,20 @@ const CompanyModule = (props) => {
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg, updateMsg, CompanyGroup, userAccess, pageField } = useSelector((state) => ({
-    postMsg: state.Company.postMsg,
-    updateMsg: state.Company.updateMessage,
-    CompanyGroup: state.Company.CompanyGroup,
-    userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageField
-  }));
+  const { postMsg,
+    updateMsg,
+    CompanyGroup,
+    userAccess,
+    pageField } = useSelector((state) => ({
+      postMsg: state.Company.postMsg,
+      updateMsg: state.Company.updateMessage,
+      CompanyGroup: state.Company.CompanyGroup,
+      userAccess: state.Login.RoleAccessUpdateData,
+      pageField: state.CommonPageFieldReducer.pageField
+    }));
 
   useEffect(() => {
-    const page_Id =  pageId.COMPANY
+    const page_Id = pageId.COMPANY
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(page_Id))
     dispatch(getCompanyGroup());
@@ -169,7 +173,7 @@ const CompanyModule = (props) => {
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath:url.COMPANY_lIST,
+          RedirectPath: url.COMPANY_lIST,
         }))
       }
     }
@@ -193,7 +197,7 @@ const CompanyModule = (props) => {
       saveDissable(false);//save Button Is enable function
 
       history.push({
-        pathname:url.COMPANY_lIST,
+        pathname: url.COMPANY_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
       saveDissable(false);//Update Button Is enable function
