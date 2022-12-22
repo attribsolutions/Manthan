@@ -58,7 +58,7 @@ const ProductionList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
+        dispatch(BreadcrumbFilterSize(`${"Production Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(78))
         goButtonHandler(true)
