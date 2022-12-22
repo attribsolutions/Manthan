@@ -105,6 +105,7 @@ const ProductionMaster = (props) => {
 
     }, []);
     useEffect(() => {
+        debugger
         let { Data } = produtionMake;
         if (Data) {
             setState(i => {
@@ -264,6 +265,7 @@ const ProductionMaster = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
+        debugger
 
         event.preventDefault();
         // const makeproduction = produtionMake.Data.id
@@ -276,8 +278,8 @@ const ProductionMaster = (props) => {
                     }
                 ],
                 ProductionDate: values.ProductionDate,
-                EstimatedQuantity: values.EstimatedQuantity,
-                NumberOfLot: values.NumberOfLot,
+                EstimatedQuantity: values.NumberOfLot,
+                NumberOfLot: produtionMake.Data.NumberOfLot,
                 ActualQuantity: values.ActualQuantity,
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
@@ -357,32 +359,24 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.EstimatedQuantity} </Label>
                                         <Col md="7">
                                             < Input
+                                            disabled
                                                 name="EstimatedQuantity"
                                                 type="text"
                                                 placeholder="Enter EstimatedQuantity"
-                                                value={`${values.EstimatedQuantity}  ${values.NumberOfLot}`}
+                                                value={`${values.NumberOfLot? values.NumberOfLot:"0" }   Lot(${produtionMake.Data.NumberOfLot ? produtionMake.Data.NumberOfLot : "1"})`}
+                                                // value1={`${values.NumberOfLot}`}
                                                 // className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 style={{ backgroundColor: "white" }}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.EstimatedQuantity.length > 0 && (
+                                            {/* {isError.EstimatedQuantity.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.EstimatedQuantity}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
                                     </FormGroup>
-                                    <FormGroup className="row " >
-                                        <Label className=" p-2"
-                                            style={{ width: "130px" }}>{fieldLabel.NumberOfLot} :</Label>
-                                        <Label
-                                            className=" "
-                                            style={{ color: "#000000", width: "130px", marginLeft: "7cm", marginTop: "-40px" }}>&nbsp;&nbsp;
-                                            {`Lot(${produtionMake.Data.NumberOfLot ? produtionMake.Data.NumberOfLot : "empty"})`}
-                                            {/* {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
-                                            &nbsp;&nbsp;(1 lot) */}
-                                        </Label>
-                                    </FormGroup>
+                                  
                                     {/* <FormGroup className=" row " >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>BatchCode</Label>
@@ -420,7 +414,7 @@ const ProductionMaster = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-                                    {/* <FormGroup className=" row" >
+                                    <FormGroup className=" row" >
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
                                         <Col md="7">
@@ -441,7 +435,7 @@ const ProductionMaster = (props) => {
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                         </Col>
-                                    </FormGroup> */}
+                                    </FormGroup>
                                 </Col>
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
@@ -523,31 +517,7 @@ const ProductionMaster = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-                                    <FormGroup className=" mb-2 row" >
-                                        <Label className="col-sm-4 "
-                                            style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
-                                        <Col md="7">
-                                            <Flatpickr
-                                                name="BestBefore"
-                                                value={values.BestBefore}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                disabled={pageMode === "edit" ? true : false}
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                    // defaultDate: pageMode === "edit" ? values.BestBefore : "today"
-                                                }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                            />
-                                            {isError.BestBefore.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.BestBefore}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
+                                   
                                 </Col>
                             </Row>
                         </div>
