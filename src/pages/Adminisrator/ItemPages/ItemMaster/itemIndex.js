@@ -73,6 +73,8 @@ const ItemsMaster = (props) => {
         GST: '',
         HSN: '',
         isActive: true,
+        Tag: '',
+        BrandName: ''
     }
 
     const initialInValid = ["txtName0", "txtShortName0",]
@@ -131,10 +133,10 @@ const ItemsMaster = (props) => {
     const fileds = {
         id: "",
         Name: "",
-    
-      }
-    
-      const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -555,6 +557,8 @@ const ItemsMaster = (props) => {
                 isActive: formValue.isActive,
                 Company: formValue.Company.value,
                 BaseUnitID: formValue.BaseUnit.value,
+                BrandName: formValue.BrandName,
+                Tag: formValue.Tag,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 ItemCategoryDetails: ItemCategoryDetails,
@@ -887,7 +891,17 @@ const ItemsMaster = (props) => {
                                                                             classNamePrefix="select2-selection"
                                                                         />
                                                                     </FormGroup>
-
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">Brand Name</Label>
+                                                                        <Input
+                                                                            id='txtBrandName0'
+                                                                            defaultValue={EditData.BrandName}
+                                                                            placeholder=" Please Enter Brand Name "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BrandName") }}
+                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
+                                                                        />
+                                                                    </FormGroup>
                                                                 </Row>
 
                                                                 <Row>
@@ -911,10 +925,25 @@ const ItemsMaster = (props) => {
                                                                             />
                                                                         </div>
                                                                     </FormGroup>
-                                                                    <FormGroup className="mt-4 col col-md-5">
+
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">Item Tag</Label>
+                                                                        <Input
+                                                                            type="textarea"
+                                                                            rows="1"
+                                                                            id='txtTag0'
+                                                                            defaultValue={EditData.Tag}
+                                                                            placeholder=" Please Enter Item Tag "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Tag") }}
+                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
+                                                                        />
+                                                                    </FormGroup>
+
+                                                                    <FormGroup className="mt-4 col col-md-4">
                                                                         <Row className="justify-content-ml-left ">
                                                                             <Label htmlFor="horizontal-firstname-input"
-                                                                                className="col-md-2 col-form-label" >Active </Label>
+                                                                                className="col-md-3 col-form-label" >Active </Label>
                                                                             <Col md={6} style={{ marginTop: '9px' }} >
 
                                                                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
