@@ -34,19 +34,15 @@ import {
     onChangeText,
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const CompanyGroupMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const [pageMode, setPageMode] = useState();
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [modalCss, setModalCss] = useState(false);
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -55,6 +51,10 @@ const CompanyGroupMaster = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [pageMode, setPageMode] = useState();
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [modalCss, setModalCss] = useState(false);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
@@ -65,14 +65,20 @@ const CompanyGroupMaster = (props) => {
 
     }));
 
+    useEffect(() => {
+        const page_Id = pageId.COMPANYGROUP
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
+
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(3))
-    }, []);
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -119,6 +125,7 @@ const CompanyGroupMaster = (props) => {
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
@@ -142,7 +149,7 @@ const CompanyGroupMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: COMPANYGROUP_lIST,
+                    RedirectPath: url.COMPANYGROUP_lIST,
                 }))
             }
         }
@@ -164,7 +171,7 @@ const CompanyGroupMaster = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
             history.push({
-                pathname: COMPANYGROUP_lIST,
+                pathname: url.COMPANYGROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
@@ -187,11 +194,8 @@ const CompanyGroupMaster = (props) => {
         }
     }, [pageField])
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    const formSubmitHandler = (event) => {
+   
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -234,7 +238,7 @@ const CompanyGroupMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -288,7 +292,9 @@ const CompanyGroupMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"CompanyGroupMaster"}
                                                                     />
                                                                 </Col>
