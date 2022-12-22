@@ -474,7 +474,7 @@ const Order = (props) => {
                 AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "Please Select upplier",
+                    Message: "Please select supplier",
                     RedirectPath: false,
                     PermissionAction: false,
                 })
