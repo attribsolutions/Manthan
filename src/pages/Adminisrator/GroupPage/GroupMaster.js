@@ -35,22 +35,31 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction,
-
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
-import { GROUP_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const GroupMaster = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+
+    const fileds = {
+        id: "",
+        Name: "",
+        GroupTypeName: ""
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -66,25 +75,17 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    {/** Dyanamic Page access state and OnChange function */ }
+    useEffect(() => {
+        const page_Id = pageId.GROUP
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(getGroupTypeslist())
 
-    const fileds = {
-        id: "",
-        Name: "",
-        GroupTypeName: ""
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(50))
-        dispatch(getGroupTypeslist())
-    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -111,7 +112,6 @@ const GroupMaster = (props) => {
 
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -141,19 +141,20 @@ const GroupMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editGroupIDSuccess({ Status: false }))
         }
     }, [])
 
-
     useEffect(() => {
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGroupSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))//Clear form values
+            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
+            
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -166,12 +167,12 @@ const GroupMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: GROUP_lIST,
+                    RedirectPath: url.GROUP_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(getGroupListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -184,14 +185,15 @@ const GroupMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values
             history.push({
-                pathname: GROUP_lIST,
+                pathname: url.GROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updategroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -204,7 +206,6 @@ const GroupMaster = (props) => {
     }, [updateMsg, modalCss]);
 
 
-
     useEffect(() => {
 
         if (pageField) {
@@ -213,22 +214,14 @@ const GroupMaster = (props) => {
         }
     }, [pageField])
 
-
-    // get method for dropdown
-    useEffect(() => {
-        dispatch(getGroupList());
-    }, [dispatch]);
-
     const GroupTypesValues = GroupTypeAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    const formSubmitHandler = (event) => {
-        debugger
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 GroupType: values.GroupTypeName.value,
@@ -238,18 +231,14 @@ const GroupMaster = (props) => {
                 UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === "edit") {
-
                 dispatch(updateGroupID(jsonBody, values.id));
 
             }
             else {
                 dispatch(postGroupList(jsonBody));
-                // console.log("jsonBody", jsonBody)
-
-
             }
         }
     };
@@ -276,7 +265,7 @@ const GroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black " >
-                                <form onSubmit={formSubmitHandler}noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
@@ -331,7 +320,9 @@ const GroupMaster = (props) => {
                                                         <FormGroup >
                                                             <Row>
                                                                 <Col sm={4}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"GroupMaster"}
                                                                     />
                                                                 </Col>

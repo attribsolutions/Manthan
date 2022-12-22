@@ -246,7 +246,7 @@ const EmployeeTypesMaster = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black"  >
+                            <CardBody className=" vh-10 0 text-black">
                                 <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
