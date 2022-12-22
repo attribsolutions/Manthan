@@ -10,11 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-
-
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
-
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -29,10 +26,8 @@ import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actio
 import { AlertState, BreadcrumbFilterSize, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
-
 import { GRN_lIST, ORDER_lIST, PRODUCTION_LIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNId, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -325,7 +320,7 @@ const ProductionMaster = (props) => {
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
                     <Breadcrumb
                         pageHeading={userPageAccessState.PageHeading}
-                        showCount={true}
+                        // showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} noValidate>
                         <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
