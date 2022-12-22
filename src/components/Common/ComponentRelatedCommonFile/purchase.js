@@ -73,6 +73,7 @@ const PurchaseListPage = (props) => {
     } = props.action
 
     const {
+        editBodyfunc,
         MasterModal,
         masterPath,
         ButtonMsgLable,
@@ -328,7 +329,8 @@ const PurchaseListPage = (props) => {
                     ReportType: ReportType,
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
-                    makeBtnFunc: makeBtnFunc
+                    makeBtnFunc: makeBtnFunc,
+                    editBodyfunc:editBodyfunc
                 })
             )
         }

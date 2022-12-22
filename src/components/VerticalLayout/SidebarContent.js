@@ -90,9 +90,8 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-
+    
     let pathName = props.location.pathname
-
     let userAcc = RoleAccessUpdateData.find((inx) => {
       const path = inx.ActualPagePath.toLowerCase()
       return (`/${path}` === (pathName.toLowerCase()))
@@ -178,11 +177,7 @@ const SidebarContent = (props) => {
                 </li>
               )
             })} */}
-
-
-
             {RoleAccessData.map((item) => {
-            
               return (
                 <li >
                   <Link to="/#" className="has-arrow">

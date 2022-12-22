@@ -17,7 +17,8 @@ export const SUPPLIER = "/GetSupplier"
 // export const GET_ORDER_ITEM = "/Items"
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
 export const ORDER_PAGE_API = "Orders"
-export const GET_ITEM_FOR_ORDER = "/GetItemsForParty"
+export const ORDER_Edit_API = "OrderEdit"
+// export const GET_ITEM_FOR_ORDER = "/GetItemsForParty"
 
 // GRN
 export const GRN_MAKE_API = "/MakeOrdersGrn"

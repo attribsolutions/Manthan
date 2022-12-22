@@ -14,7 +14,7 @@ import {
 // const date = currentDate;
 
 const INIT_STATE = {
-  orderItem: [],
+  goBtnOrderAdd: [],
   postMsg: { Status: false },
   editData: { Status: false, Items: [] },
   updateMsg: { Status: false },
@@ -43,7 +43,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        orderItem: action.payload,
+        goBtnOrderAdd: action.payload,
       }
 
     case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:

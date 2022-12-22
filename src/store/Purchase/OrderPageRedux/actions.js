@@ -1,4 +1,3 @@
-import { ORDER_LiST_BY_FILTERS } from '../../../helpers/url_helper';
 import {
   GET_DIVISIONORDER_LIST,
   GET_DIVISIONORDER_LIST_SUCCESS,
@@ -29,12 +28,12 @@ export const orderlistfilters = filter => ({
   payload: filter,
 })
 
-export const goButton = (data, hasEditVal) => ({
+export const goButtonForOrderAdd = (data ) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
-  data, hasEditVal,
+  data,
 });
 
-export const goButtonSuccess = list => ({
+export const goButtonForOrderAddSuccess = list => ({
   type: GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   payload: list,
 })
@@ -61,9 +60,9 @@ export const postOrderSuccess = (msg) => ({
 });
 
 
-export const editOrderId = (id, pageMode) => ({
+export const editOrderId = (jsonBody, pageMode) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE,
-  id, pageMode
+  jsonBody, pageMode
 });
 export const editOrderIdSuccess = (data) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,

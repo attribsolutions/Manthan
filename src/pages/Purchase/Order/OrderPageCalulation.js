@@ -10,6 +10,7 @@ export const basicAmount = i => {
     if (!val) {
         val = 0
     }
+    
     return val
 }
 
@@ -17,6 +18,7 @@ export const GstAmount = (i) => {
 
     const base = basicAmount(i);
     const gst = parseFloat(i.GSTPercentage);
+    
     return ((base * gst) / 100)
 }
 
@@ -25,12 +27,12 @@ export const Amount = (i) => {
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
     const total = gstAmt + parseFloat(baseAmt)
-
+debugger
     return total.toFixed(2)
 }
 
 export function handleKeyDown(e, item) {
-debugger
+
     const a = ((e.keyCode > 36) && (e.keyCode < 40));
     const b = e.keyCode === 46;
     const c = e.keyCode === 110;
