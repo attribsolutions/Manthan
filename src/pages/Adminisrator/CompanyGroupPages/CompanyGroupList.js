@@ -10,9 +10,9 @@ import {
   PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { COMPANYGROUP } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 
 const CompanyGroupList = (props) => {
@@ -41,8 +41,9 @@ const CompanyGroupList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.COMPANYGROUP_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(4))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getMethodForCompanyGroupList());
   }, []);
 
