@@ -82,7 +82,7 @@ const Order = (props) => {
     const [orderItemTable, setorderItemTable] = useState([])
 
     useEffect(() => {
-        dispatch (goButtonForOrderAddSuccess([]))
+        dispatch(goButtonForOrderAddSuccess([]))
         dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
@@ -176,11 +176,10 @@ const Order = (props) => {
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
-                var fromD = dateConvertfunc(hasEditVal.POFromDate)
-                var toD = dateConvertfunc(hasEditVal.POToDate)
-                debugger
+
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
+
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
@@ -311,17 +310,20 @@ const Order = (props) => {
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
-            text: "Item Name",
+
             dataField: "ItemName",
             sort: true,
+
             headerFormatter: (value, row, k) => {
                 return (
                     <div className="d-flex justify-content-between">
-                        <div>
+                        <div
+                        >
                             Item Name
                         </div>
+
                         <div>
-                            <samp className="text-primary fst-italic text-decoration-underline"
+                            <samp style={{ display: supplierSelect.value > 0 ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
                                 onClick={assignItem_onClick}>
                                 Assign-Items</samp>
                         </div>
@@ -347,12 +349,10 @@ const Order = (props) => {
             },
         },
 
-
-
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -498,6 +498,7 @@ const Order = (props) => {
 
     const goButtonHandler = (isedit) => {
 
+    const goButtonHandler = () => {
         if (!supplierSelect > 0) {
             dispatch(
                 AlertState({
@@ -529,8 +530,28 @@ const Order = (props) => {
         dispatch(orderAddfilters(newObj))
     };
 
+    function data(istrue) {
+        if (istrue) {
+            dispatch(goButtonForOrderAddSuccess([]));
+            goButtonHandler()
+        }
+    }
     function supplierOnchange(e) {
-        dispatch (goButtonForOrderAddSuccess([]))
+        debugger
+        if ((orderItemTable.length > 0) && (e.value > 0)) {
+            dispatch(
+                AlertState({
+                    Type: 7,
+                    Status: true,
+                    Message: "If you are change Supplier Name then All Item Data is Clear",
+                    RedirectPath: false,
+                    PermissionFunction: data,
+                })
+            );
+            return;
+        }
+        debugger
+
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e
         dispatch(orderAddfilters(newObj))
