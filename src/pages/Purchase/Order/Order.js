@@ -10,11 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-
-
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
-
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -33,12 +30,9 @@ import { getOrderType, getSupplier, getSupplierAddress } from "../../../store/Co
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
-
 import { ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { convertDatefunc, createdBy, currentDate, dateConvertfunc, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -48,7 +42,6 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
-import TermsAndConditionsMaster from "../../Adminisrator/TermsAndConditions/TermsAndConditionsMaster";
 let description = ''
 let editVal = {}
 
@@ -83,6 +76,7 @@ const Order = (props) => {
     const [orderItemTable, setorderItemTable] = useState([])
 
     useEffect(() => {
+        dispatch(goButtonForOrderAddSuccess([]))
         dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
@@ -179,6 +173,7 @@ const Order = (props) => {
 
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
+
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
@@ -281,20 +276,7 @@ const Order = (props) => {
     };
 
     function assignItem_onClick() {
-
-        if (supplierSelect.value > 1) {
-            setisOpen_TermsModal(true)
-        }
-        else {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Please Select Supplier Name",
-            }));
-        }
-
-
-
+        setisOpen_TermsModal(true)
     };
 
     const supplierOptions = supplier.map((i) => ({
@@ -309,17 +291,19 @@ const Order = (props) => {
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
-            text: "Item Name",
+
             dataField: "ItemName",
             sort: true,
+
             headerFormatter: (value, row, k) => {
                 return (
                     <div className="d-flex justify-content-between">
                         <div>
                             Item Name
                         </div>
+
                         <div>
-                            <samp className="text-primary fst-italic text-decoration-underline"
+                            <samp style={{ display: supplierSelect.value > 0 ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
                                 onClick={assignItem_onClick}>
                                 Assign-Items</samp>
                         </div>
@@ -348,7 +332,7 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -492,8 +476,7 @@ const Order = (props) => {
         goButtonHandler()
     }
 
-    const goButtonHandler = (isedit) => {
-
+    const goButtonHandler = () => {
         if (!supplierSelect > 0) {
             dispatch(
                 AlertState({
@@ -525,7 +508,28 @@ const Order = (props) => {
         dispatch(orderAddfilters(newObj))
     };
 
+    function data(istrue) {
+        if (istrue) {
+            dispatch(goButtonForOrderAddSuccess([]));
+            goButtonHandler()
+        }
+    }
     function supplierOnchange(e) {
+        debugger
+        if ((orderItemTable.length > 0) && (e.value > 0)) {
+            dispatch(
+                AlertState({
+                    Type: 7,
+                    Status: true,
+                    Message: "If you are change Supplier Name then All Item Data is Clear",
+                    RedirectPath: false,
+                    PermissionFunction: data,
+                })
+            );
+            return;
+        }
+        debugger
+
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e
         dispatch(orderAddfilters(newObj))
@@ -698,7 +702,7 @@ const Order = (props) => {
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n3 c_card_filter header" >
+                    <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
                         <div className=" mt-1 row ">
                             <Col sm="6">
                                 <FormGroup className=" row mt-3 " >
@@ -755,7 +759,7 @@ const Order = (props) => {
                         </div>
                     </div>
 
-                    <div className="px-2  mb-1 c_card_body" >
+                    <div className="px-2  mb-1 c_card_body text-black" >
 
                         <div className="row">
                             <div className="col col-6">
@@ -976,7 +980,7 @@ const Order = (props) => {
                 <Modal
                     isOpen={isOpen_TermsModal}
                     toggle={() => {
-                        setisOpen_PartyItemsModal(false)
+                        setisOpen_TermsModal(false)
                     }}
                     size="xl"
                 >
@@ -984,25 +988,10 @@ const Order = (props) => {
                     <PartyItems dropMode={"save"}
                         editValue={{ SupplierName: supplierSelect }} masterPath={url.PARTYITEM}
                         redirectPath={url.ORDER}
-                        isOpenModal={Open_PartyItemsModal_func} />
-
-                </Modal>
-
-                <Modal
-                    isOpen={isOpen_TermsModal}
-                    toggle={() => {
-                        setisOpen_TermsModal(false)
-                    }}
-                    size="xl"
-                >
-
-                    <TermsAndConditionsMaster
-                     dropMode={"save"}
-                        editValue={{ SupplierName: supplierSelect }} masterPath={url.PARTYITEM}
-                        redirectPath={url.ORDER}
                         isOpenModal={Open_TermsModal_func} />
 
                 </Modal>
+
             </React.Fragment >
         )
     } else {
@@ -1010,5 +999,7 @@ const Order = (props) => {
     }
 
 }
+
+
 export default Order
 
