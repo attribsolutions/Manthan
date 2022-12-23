@@ -198,7 +198,7 @@ const OrderList = () => {
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2  mt-n1 c_card_filter" >
+                <div className="px-2  mt-n1 c_card_filter text-black" >
                     <div className=" row" style={{ marginBottom: "-12px" }}>
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
