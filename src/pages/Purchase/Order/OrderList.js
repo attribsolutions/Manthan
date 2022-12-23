@@ -129,9 +129,12 @@ const OrderList = () => {
             });
 
             if (isGRNSelect) {
-                const withoutLastComma = isGRNSelect.replace(/,*$/, '');
+
+                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+
                 const jsonBody = JSON.stringify({
-                    OrderIDs: withoutLastComma
+                    OrderIDs: isGRNSelect
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
@@ -150,8 +153,8 @@ const OrderList = () => {
             EffectiveDate: rowData.preOrderDate,
             OrderID: rowData.id
         })
-        var Mode="edit"
-        dispatch(editOrderId(jsonBody,Mode));
+        var Mode = "edit"
+        dispatch(editOrderId(jsonBody, Mode));
     }
 
 
