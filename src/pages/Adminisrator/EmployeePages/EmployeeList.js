@@ -26,7 +26,6 @@ const Employee_List = () => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.M_EmployeesReducer.postMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
     );
 
