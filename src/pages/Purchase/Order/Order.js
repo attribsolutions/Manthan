@@ -175,9 +175,9 @@ const Order = (props) => {
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
-                var fromD = dateConvertfunc(hasEditVal.POFromDate)
-                var toD = dateConvertfunc(hasEditVal.POToDate)
-                debugger
+                // var fromD = dateConvertfunc(hasEditVal.POFromDate)
+                // var toD = dateConvertfunc(hasEditVal.POToDate)
+                // debugger
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
