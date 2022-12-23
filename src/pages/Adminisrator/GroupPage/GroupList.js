@@ -64,7 +64,6 @@ const GroupList = (props) => {
           />
           : null
       }
-
     </React.Fragment>
   )
 }

@@ -48,6 +48,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
+import TermsAndConditionsMaster from "../../Adminisrator/TermsAndConditions/TermsAndConditionsMaster";
 let description = ''
 let editVal = {}
 
@@ -82,7 +83,6 @@ const Order = (props) => {
     const [orderItemTable, setorderItemTable] = useState([])
 
     useEffect(() => {
-        dispatch (goButtonForOrderAddSuccess([]))
         dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
@@ -176,9 +176,7 @@ const Order = (props) => {
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
-                // var fromD = dateConvertfunc(hasEditVal.POFromDate)
-                // var toD = dateConvertfunc(hasEditVal.POToDate)
-                // debugger
+
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
@@ -346,8 +344,6 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
-
-
 
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
@@ -530,7 +526,6 @@ const Order = (props) => {
     };
 
     function supplierOnchange(e) {
-        dispatch (goButtonForOrderAddSuccess([]))
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e
         dispatch(orderAddfilters(newObj))
@@ -981,7 +976,7 @@ const Order = (props) => {
                 <Modal
                     isOpen={isOpen_TermsModal}
                     toggle={() => {
-                        setisOpen_TermsModal(false)
+                        setisOpen_PartyItemsModal(false)
                     }}
                     size="xl"
                 >
@@ -989,10 +984,25 @@ const Order = (props) => {
                     <PartyItems dropMode={"save"}
                         editValue={{ SupplierName: supplierSelect }} masterPath={url.PARTYITEM}
                         redirectPath={url.ORDER}
-                        isOpenModal={Open_TermsModal_func} />
+                        isOpenModal={Open_PartyItemsModal_func} />
 
                 </Modal>
 
+                <Modal
+                    isOpen={isOpen_TermsModal}
+                    toggle={() => {
+                        setisOpen_TermsModal(false)
+                    }}
+                    size="xl"
+                >
+
+                    <TermsAndConditionsMaster
+                     dropMode={"save"}
+                        editValue={{ SupplierName: supplierSelect }} masterPath={url.PARTYITEM}
+                        redirectPath={url.ORDER}
+                        isOpenModal={Open_TermsModal_func} />
+
+                </Modal>
             </React.Fragment >
         )
     } else {

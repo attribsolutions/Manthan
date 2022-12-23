@@ -35,23 +35,17 @@ import {
   initialFiledFunc,
   onChangeSelect,
   onChangeText,
+  resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { ROLE_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
-
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const RoleMaster = (props) => {
+
   const dispatch = useDispatch();
   const history = useHistory()
-
-  //SetState  Edit data Geting From Modules List component
-  const [pageMode, setPageMode] = useState("");
-  const [modalCss, setModalCss] = useState(false);
-  const [userPageAccessState, setUserPageAccessState] = useState(123);
-
-  {/** Dyanamic Page access state and OnChange function */ }
 
   const fileds = {
     id: "",
@@ -66,6 +60,10 @@ const RoleMaster = (props) => {
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+  const [pageMode, setPageMode] = useState("");
+  const [modalCss, setModalCss] = useState(false);
+  const [userPageAccessState, setUserPageAccessState] = useState(123);
+  const [editCreatedBy, seteditCreatedBy] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -81,16 +79,20 @@ const RoleMaster = (props) => {
       pageField: state.CommonPageFieldReducer.pageField
     }));
 
+  useEffect(() => {
+    const page_Id = pageId.ROLE
+    dispatch(commonPageFieldSuccess());
+    dispatch(commonPageField(page_Id))
+    dispatch(getEmployeeTypelist());
+  }, []);
+
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
 
-
-  useEffect(() => {
-    dispatch(commonPageFieldSuccess());
-    dispatch(commonPageField(19))
-    dispatch(getEmployeeTypelist());
-  }, []);
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
 
   // userAccess useEffect
   useEffect(() => {
@@ -109,14 +111,6 @@ const RoleMaster = (props) => {
       setUserPageAccessState(userAcc)
     };
   }, [userAccess])
-
-  useEffect(() => {
-
-    if (pageField) {
-      const fieldArr = pageField.PageFieldMaster
-      comAddPageFieldFunc({ state, setState, fieldArr })// new change
-    }
-  }, [pageField])
 
   useEffect(() => {
 
@@ -161,18 +155,19 @@ const RoleMaster = (props) => {
 
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
+        seteditCreatedBy(hasEditVal.CreatedBy)
       }
       dispatch(editSuccess({ Status: false }))
-
     }
-
   }, [])
 
   useEffect(() => {
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-      saveDissable(false);//+++++++++save Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values  
+      saveDissable(false);//save Button Is enable function
+      dispatch(Breadcrumb_inputName(''))
+
       if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
@@ -185,13 +180,13 @@ const RoleMaster = (props) => {
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: ROLE_lIST,
+          RedirectPath: url.ROLE_lIST,
 
         }))
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-      saveDissable(false);//+++++++++save Button Is enable function
+      saveDissable(false);//save Button Is enable function
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -205,13 +200,13 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+      saveDissable(false);//Update Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values  
       history.push({
-        pathname: ROLE_lIST,
+        pathname: url.ROLE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
+      saveDissable(false);//Update Button Is enable function
       dispatch(updateSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -223,17 +218,20 @@ const RoleMaster = (props) => {
     }
   }, [updateMsg, modalCss]);
 
+  useEffect(() => {
+
+    if (pageField) {
+      const fieldArr = pageField.PageFieldMaster
+      comAddPageFieldFunc({ state, setState, fieldArr })
+    }
+  }, [pageField])
+
   const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
     value: data.id,
     label: data.Name
   }));
 
-
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
-
-  const formSubmitHandler = (event) => {
+  const SaveHandler = (event) => {
     event.preventDefault();
     if (formValid(state, setState)) {
       const jsonBody = JSON.stringify({
@@ -244,34 +242,23 @@ const RoleMaster = (props) => {
         isSCMRole: values.isSCMRole,
         IsPartyConnection: values.IsPartyConnection,
         RoleEmployeeTypes: values.RoleEmployeeTypes.map((i) => { return ({ EmployeeType: i.value }) }),
-        // RoleEmployeeTypes: [
-        //   {
-        //     EmployeeType: 1
-        //   }
-        // ],
         CreatedBy: createdBy(),
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: createdBy(),
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       });
 
-      saveDissable(true);//+++++++++save Button Is dissable function
+      saveDissable(true);//save Button Is dissable function
 
       if (pageMode === 'edit') {
         dispatch(updateID(jsonBody, values.id));
-        console.log("jsonBody", jsonBody)
       }
-
       else {
         dispatch(postRole(jsonBody));
-
       }
     }
   };
 
-
-
-  
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (modalCss || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -293,15 +280,13 @@ const RoleMaster = (props) => {
               </CardHeader>
 
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-
-                <form onSubmit={formSubmitHandler} noValidate>
-
+                <form onSubmit={SaveHandler} noValidate>
                   <Row className="">
                     <Col md={12}>
                       <Card>
                         <CardBody className="c_card_body">
                           <Row>
-                            <FormGroup className="mb-2 col col-sm-4 " >
+                            <FormGroup className="mb-2 col col-sm-4 ">
                               <Label>{fieldLabel.Name} </Label>
                               <Input
                                 name="Name"
@@ -324,13 +309,10 @@ const RoleMaster = (props) => {
 
 
                             <Col md={1} className="mx-n1"> </Col>
-
                             <FormGroup className="mb-2 col col-sm-4 ">
-
                               <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
                               <Select
                                 name="RoleEmployeeTypes"
-                                // defaultValue={EmployeeType_DropdownOptions[0]}
                                 value={values.RoleEmployeeTypes}
                                 isSearchable={false}
                                 isMulti={true}
@@ -348,7 +330,7 @@ const RoleMaster = (props) => {
                                 <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
                                 <Input
                                   type="text"
-                                  defaultValue={values.Description}
+                                  value={values.Description}
                                   className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Description"
                                   autoComplete="off"
@@ -361,9 +343,6 @@ const RoleMaster = (props) => {
                               </FormGroup>
 
                               <Col md="1">  </Col>
-                              {/* <Row md="1"></Row> */}
-
-
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.Dashboard} </Label>
                                 <Input
@@ -452,7 +431,9 @@ const RoleMaster = (props) => {
                             <FormGroup>
                               <Row>
                                 <Col sm={2}>
-                                  <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                  <SaveButton pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    editCreatedBy={editCreatedBy}
                                     module={"RoleMaster"}
                                   />
                                 </Col>
