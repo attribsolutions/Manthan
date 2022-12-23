@@ -671,7 +671,7 @@ const GRNAdd = (props) => {
 
                                 <FormGroup className=" row " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Challan No</Label>
+                                        style={{ width: "130px" }}>PO Number</Label>
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
@@ -708,7 +708,7 @@ const GRNAdd = (props) => {
                                         <Input type="text"
                                             // disabled={true}
                                             pattern={/[A-Za-z]{3}/}
-                                            value={grnDetail.challanNo}
+                                            // value={grnDetail.challanNo}
                                             placeholder="Enter Invoice No" />
                                     </Col>
                                 </FormGroup>

@@ -340,7 +340,7 @@ export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_
 export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
 //suppiler 
-export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
+export const GetSupplier_API = (party_id) => get(`${url.SUPPLIER}/${party_id}`)//get api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
