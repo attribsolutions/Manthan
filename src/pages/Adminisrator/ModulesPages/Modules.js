@@ -21,7 +21,11 @@ import {
 } from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {
+    AlertState,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { MODULE_lIST } from "../../../routes/route_url";
@@ -34,31 +38,13 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const Modules = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, pageField, userAccess, updateMsg } = useSelector((state) => ({
-        postMsg: state.Modules.modulesSubmitSuccesss,
-        updateMsg: state.Modules.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-
-    }));
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(5))
-    }, []);
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -69,6 +55,29 @@ const Modules = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { postMsg,
+        pageField,
+        userAccess,
+        updateMsg } = useSelector((state) => ({
+            postMsg: state.Modules.modulesSubmitSuccesss,
+            updateMsg: state.Modules.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+
+        }));
+
+    useEffect(() => {
+        const page_Id = pageId.MODULE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
@@ -99,8 +108,7 @@ const Modules = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -131,7 +139,7 @@ const Modules = (props) => {
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Modules))
-
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editModuleIDSuccess({ Status: false }))
         }
@@ -142,9 +150,10 @@ const Modules = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
+            
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -162,7 +171,7 @@ const Modules = (props) => {
                 }))
             }
         } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -176,13 +185,13 @@ const Modules = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: MODULE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateModuleIDSuccess({ Status: false }));
             dispatch(
                 AlertState({

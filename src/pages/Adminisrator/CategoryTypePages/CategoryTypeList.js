@@ -10,10 +10,9 @@ import {
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
 import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { CATEGORYTYPE } from "../../../routes/route_url";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
-
+import * as url from "../../../routes/route_url";
 const CategoryTypeList = (props) => {
 
   const dispatch = useDispatch();
@@ -56,8 +55,8 @@ const CategoryTypeList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={CategoryTypeMaster}
-            masterPath={CATEGORYTYPE}
-            ButtonMsgLable={"CategoryType"}
+            masterPath={url.CATEGORYTYPE}
+            ButtonMsgLable={"Category Type"}
             deleteName={"Name"}
           />
           : null
