@@ -60,7 +60,7 @@ export const listPageCommonButtonFunction = (props) => {
             ID: rowData.id,
         }));
     }
-   
+
 
     return ({
         text: "Action",
@@ -243,7 +243,7 @@ export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Da
     return downList
 }
 
- const currentDatefunc = (aaa=undefined )=> {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+const currentDatefunc = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
     const current = new Date();
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
@@ -251,13 +251,16 @@ export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Da
     return currentDate
 }
 export const currentDate = currentDatefunc();
-// const dateConvertfunc = (inp )=> {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
-//     const current = new Date(inp);
-//     const month = current.getMonth() + 1;
-//     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
-//         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
-//     return currentDate
-// }
+
+export const dateConvertfunc = (inp) => {//+++++++++++++++ Current Date++++++++++++++++++++++++++++
+    const current = new Date(inp);
+    debugger
+    const month = current.getMonth() + 1;
+    const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
+        `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
+    return currentDate
+}
+// dateConvertfunc("2022/12/12")
 export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0
     try {
@@ -266,7 +269,7 @@ export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id++++++++
     return createdBy
 }
 
-export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++++
+export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     let userCompany = 0
     try {
         userCompany = JSON.parse(localStorage.getItem('Company'))

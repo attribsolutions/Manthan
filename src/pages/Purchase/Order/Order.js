@@ -41,7 +41,7 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondit
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { convertDatefunc, createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, dateConvertfunc, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -175,11 +175,11 @@ const Order = (props) => {
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
-               var a= convertDatefunc(hasEditVal.POToDate)
-               var b=convertDatefunc(hasEditVal.POFromDate)
-               debugger
-                setpoFromDate(a)
-                setpoFromDate(b)
+                var fromD = dateConvertfunc(hasEditVal.POFromDate)
+                var toD = dateConvertfunc(hasEditVal.POToDate)
+                debugger
+                setpoToDate(hasEditVal.POToDate)
+                setpoFromDate(hasEditVal.POFromDate)
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
@@ -388,7 +388,7 @@ const Order = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, key) => {
 
                 if (!row.UnitName) {
@@ -429,7 +429,7 @@ const Order = (props) => {
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -463,7 +463,7 @@ const Order = (props) => {
         { //------------- GST column ----------------------------------
             text: "GST %",
             dataField: "GSTPercentage",
-            sort: true,
+            // sort: true,
             formatter: (value, row) => (
                 <div className="text-end mt-2"><span >
                     {value}%
@@ -489,10 +489,12 @@ const Order = (props) => {
         totalSize: 0,
         custom: true,
     };
+
     function Open_TermsModal_func() {
         setisOpen_TermsModal(false)
         goButtonHandler()
     }
+
     const goButtonHandler = (isedit) => {
 
         if (!supplierSelect > 0) {
