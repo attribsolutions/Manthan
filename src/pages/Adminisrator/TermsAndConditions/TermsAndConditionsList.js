@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import TermsAndConditionsMaster from "./TermsAndConditionsMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
@@ -15,12 +14,12 @@ import {
   DeleteTermsAndCondtions_Success,
   UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { TERMS_AND_CONDITION } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const TermsAndConditionsList = (props) => {
 
   const dispatch = useDispatch();
-  //useSelector is used to access the redux store in function component
   const reducers = useSelector(
     (state) => ({
       tableList: state.TermsAndConditionsReducer.TermsAndConditionsList,
@@ -40,18 +39,18 @@ const TermsAndConditionsList = (props) => {
     postSucc: postTermAndConditionSuccess,
     updateSucc: UpdateTermsAndCondtions_Success,
     deleteSucc: DeleteTermsAndCondtions_Success
-
   }
 
   //useEffect : used for fetching data
   useEffect(() => {
+    const page_Id = pageId.TERMS_AND_CONDITION_LIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(43))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getTermAndCondition())
-
   }, []);
   
   const { pageField } = reducers
+  
   return (
     <React.Fragment>
       {
@@ -60,7 +59,7 @@ const TermsAndConditionsList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={TermsAndConditionsMaster}
-            masterPath={TERMS_AND_CONDITION}
+            masterPath={url.TERMS_AND_CONDITION}
             ButtonMsgLable={"Terms & Conditions"}
             deleteName={"Name"}
           />
