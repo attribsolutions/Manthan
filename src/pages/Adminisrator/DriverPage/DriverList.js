@@ -11,9 +11,8 @@ import {
 } from "../../../store/Administrator/DriverRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { DRIVER } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-
+import * as url from "../../../routes/route_url";
 const DriverList = (props) => {
 
   const dispatch = useDispatch();
@@ -55,7 +54,7 @@ const DriverList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={DriverMaster}
-            masterPath={DRIVER}
+            masterPath={url.DRIVER}
             ButtonMsgLable={"Driver"}
             deleteName={"Name"}
           />

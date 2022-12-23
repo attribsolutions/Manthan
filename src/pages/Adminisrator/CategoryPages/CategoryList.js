@@ -10,9 +10,9 @@ import {
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { CATEGORY } from "../../../routes/route_url";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const CategoryList = (props) => {
 
@@ -56,7 +56,7 @@ const CategoryList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={CategoryMaster}
-            masterPath={CATEGORY}
+            masterPath={url.CATEGORY}
             ButtonMsgLable={"Category"}
             deleteName={"Name"}
           />
