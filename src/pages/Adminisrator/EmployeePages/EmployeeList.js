@@ -12,6 +12,7 @@ import AddEmployee from "./EmployeeMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const Employee_List = () => {
 
@@ -25,7 +26,6 @@ const Employee_List = () => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.M_EmployeesReducer.postMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
     );
 
@@ -56,6 +56,7 @@ const Employee_List = () => {
             action={action}
             reducers={reducers}
             MasterModal={AddEmployee}
+            masterPath={url.EMPLOYEE}
             ButtonMsgLable={"Employee"}
             deleteName={"Name"}
           />

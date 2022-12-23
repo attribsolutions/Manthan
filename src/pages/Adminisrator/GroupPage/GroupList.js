@@ -5,7 +5,6 @@ import {
   commonPageFieldList,
   commonPageFieldListSuccess,
 } from "../../../store/actions";
-import { GROUP } from "../../../routes/route_url";
 import GroupMaster from "./GroupMaster";
 import {
   deleteGrouplistSuccess,
@@ -16,6 +15,7 @@ import {
   updategroupIDSuccess
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const GroupList = (props) => {
 
@@ -58,13 +58,12 @@ const GroupList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={GroupMaster}
-            masterPath={GROUP}
+            masterPath={url.GROUP}
             ButtonMsgLable={"Group"}
             deleteName={"Name"}
           />
           : null
       }
-
     </React.Fragment>
   )
 }

@@ -41,7 +41,7 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondit
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { convertDatefunc, createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, dateConvertfunc, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -176,11 +176,10 @@ const Order = (props) => {
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
-                var a = convertDatefunc(hasEditVal.POToDate)
-                var b = convertDatefunc(hasEditVal.POFromDate)
-                debugger
-                setpoFromDate(a)
-                setpoFromDate(b)
+
+                setpoToDate(hasEditVal.POToDate)
+                setpoFromDate(hasEditVal.POFromDate)
+
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
@@ -496,6 +495,8 @@ const Order = (props) => {
         setisOpen_TermsModal(false)
         goButtonHandler()
     }
+
+    const goButtonHandler = (isedit) => {
 
     const goButtonHandler = () => {
         if (!supplierSelect > 0) {

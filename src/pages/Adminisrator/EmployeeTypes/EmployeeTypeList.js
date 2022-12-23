@@ -11,8 +11,8 @@ import {
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { EMPLOYEETYPE } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const EmployeeTypeList = (props) => {
 
@@ -26,7 +26,6 @@ const EmployeeTypeList = (props) => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.EmployeeTypeReducer.PostEmployeeType,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
   );
 
@@ -57,7 +56,7 @@ const EmployeeTypeList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={EmployeeTypesMaster}
-            masterPath={EMPLOYEETYPE}
+            masterPath={url.EMPLOYEETYPE}
             ButtonMsgLable={"Employee Type"}
             deleteName={"Name"}
           />

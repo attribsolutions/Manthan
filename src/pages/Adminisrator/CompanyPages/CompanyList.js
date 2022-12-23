@@ -11,8 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { COMPANY } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const CompanyList = () => {
     const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const CompanyList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={CompanyModule}
-                        masterPath={COMPANY}
+                        masterPath={url.COMPANY}
                         ButtonMsgLable={"Company"}
                         deleteName={"Name"}
                     />

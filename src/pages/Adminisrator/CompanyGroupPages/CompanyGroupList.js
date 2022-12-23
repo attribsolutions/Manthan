@@ -11,9 +11,8 @@ import {
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { COMPANYGROUP } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-
+import * as url from "../../../routes/route_url";
 
 const CompanyGroupList = (props) => {
 
@@ -57,8 +56,8 @@ const CompanyGroupList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={CompanyGroupMaster}
-            masterPath={COMPANYGROUP}
-            ButtonMsgLable={"CompanyGroup"}
+            masterPath={url.COMPANYGROUP}
+            ButtonMsgLable={"Company Group"}
             deleteName={"Name"}
           />
           : null

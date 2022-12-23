@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import { GROUPTYPE } from "../../../routes/route_url";
 import {
   commonPageFieldList,
   commonPageFieldListSuccess
@@ -16,6 +15,7 @@ import {
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import GroupTypeMaster from "./GroupTypeMaster";
 import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const GroupTypeList = (props) => {
   const dispatch = useDispatch();
@@ -57,8 +57,8 @@ const GroupTypeList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={GroupTypeMaster}
-            masterPath={GROUPTYPE}
-            ButtonMsgLable={"GroupType"}
+            masterPath={url.GROUPTYPE}
+            ButtonMsgLable={"Group Type"}
             deleteName={"Name"}
           />
           : null
