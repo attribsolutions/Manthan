@@ -28,7 +28,6 @@ import {
 } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { MODULE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -70,7 +69,6 @@ const Modules = (props) => {
             updateMsg: state.Modules.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
-
         }));
 
     useEffect(() => {
@@ -153,7 +151,7 @@ const Modules = (props) => {
             setState(() => resetFunction(fileds, state)) // Clear form values 
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
-            
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -166,7 +164,7 @@ const Modules = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: MODULE_lIST,
+                    RedirectPath: url.MODULE_lIST,
 
                 }))
             }
@@ -188,7 +186,7 @@ const Modules = (props) => {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname: MODULE_lIST,
+                pathname: url.MODULE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
@@ -212,7 +210,7 @@ const Modules = (props) => {
     }, [pageField])
 
     //'Save' And 'Update' Button Handller
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -224,7 +222,7 @@ const Modules = (props) => {
                 UpdatedBy: createdBy(),
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateModuleID(jsonBody, values.id));
@@ -257,7 +255,7 @@ const Modules = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}  >
@@ -349,7 +347,9 @@ const Modules = (props) => {
                                                     <FormGroup >
                                                         <Row >
                                                             <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                <SaveButton pageMode={pageMode}
+                                                                    userAcc={userPageAccessState}
+                                                                    editCreatedBy={editCreatedBy}
                                                                     module={"Modules"}
                                                                 />
                                                             </Col>
@@ -375,11 +375,3 @@ const Modules = (props) => {
     }
 };
 export default Modules
-// if (!(userPageAccessState === '')) {
-
-// }
-// else {
-//     return (
-//         <React.Fragment></React.Fragment>
-//     )
-// }
