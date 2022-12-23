@@ -82,6 +82,7 @@ const Order = (props) => {
     const [orderItemTable, setorderItemTable] = useState([])
 
     useEffect(() => {
+        dispatch (goButtonForOrderAddSuccess([]))
         dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
@@ -527,6 +528,7 @@ const Order = (props) => {
     };
 
     function supplierOnchange(e) {
+        dispatch (goButtonForOrderAddSuccess([]))
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e
         dispatch(orderAddfilters(newObj))
