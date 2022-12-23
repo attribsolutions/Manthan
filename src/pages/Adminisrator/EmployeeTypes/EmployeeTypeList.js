@@ -26,7 +26,6 @@ const EmployeeTypeList = (props) => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.EmployeeTypeReducer.PostEmployeeType,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
   );
 
