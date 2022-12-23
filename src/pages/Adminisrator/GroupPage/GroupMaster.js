@@ -209,7 +209,7 @@ const GroupMaster = (props) => {
 
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
@@ -272,7 +272,6 @@ const GroupMaster = (props) => {
                                                     <Row>
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
-
                                                             <Col md={4}  >
                                                                 <Input
                                                                     name="Name"
@@ -301,7 +300,6 @@ const GroupMaster = (props) => {
                                                                 <Col md={4} >
                                                                     <Select
                                                                         name="GroupTypeName"
-                                                                        // defaultValue={EmployeeType_DropdownOptions[0]}
                                                                         value={values.GroupTypeName}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
