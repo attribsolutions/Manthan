@@ -280,6 +280,7 @@ function onChange2() {
 
 
 const MySearch = () => {
+    debugger
 
     let input;
     const handleClick = (e) => {

@@ -12,7 +12,8 @@ import giftBox from "../../assets/images/giftbox.png";
 
 //i18n
 import { withTranslation } from "react-i18next";
-
+import * as url from "../../routes/route_url";
+import * as urlRel from "../../routes/urlRalations";
 // MetisMenu
 import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
@@ -45,10 +46,6 @@ const SidebarContent = (props) => {
         var employee = role.Employee_id;
         dispatch(roleAceessAction(party, employee))
       };
-
-
-      // dispatch(getUserDetailsAction(user))
-      // roleAceessAction()
     }
   }, [])
 
@@ -90,22 +87,18 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    
+    debugger
     let pathName = props.location.pathname
     let userAcc = RoleAccessUpdateData.find((inx) => {
       const path = inx.ActualPagePath.toLowerCase()
       return (`/${path}` === (pathName.toLowerCase()))
     })
-    if (userAcc === undefined) {
-    }
+    if (userAcc === undefined) { }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
-      let listPagePath = RoleAccessUpdateData.find((inx) => {
-        return ((inx.id === userAcc.RelatedPageID))
-      })
-      if (!(listPagePath === undefined)) {
-        pathName = `/${listPagePath.ActualPagePath}`
-      }
+      pathName = urlRel[`${userAcc.ActualPagePath}`]
+      debugger
     }
+
     const initMenu = () => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;

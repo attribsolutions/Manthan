@@ -43,7 +43,7 @@ function* postProductionGenFunc({ data }) {
 function* DeleteProductionGenFunc({ id }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call( id);
+    const response = yield call(id);
     yield put(SpinnerState(false))
     yield put(delete_ProductionIdSuccess(response));
   } catch (error) {
@@ -58,7 +58,7 @@ function* DeleteProductionGenFunc({ id }) {
 function* UpdateProductionGenFunc({ data, id }) {
   try {
     yield put(SpinnerState(true))
-    const response = yield call( id);
+    const response = yield call(id);
     yield put(SpinnerState(false))
     yield put(update_ProductionIdSuccess(response))
   }
@@ -77,12 +77,17 @@ function* get_PRODUCTION_GerFunc({ filters }) {
   try {
     debugger
     const response = yield call(production_get_API, filters);
-    const newList = yield response.Data.map((i) => {
-      var date = convertDatefunc(i.GRNDate)
-      var time = convertTimefunc(i.CreatedOn)
-      i.GRNDate = (`${date} ${time}`)
-      return i
-    })
+    // const newList = yield response.Data.map((i) => {
+    //   var date = convertDatefunc(i.GRNDate)
+    //   var time = convertTimefunc(i.CreatedOn)
+    //   i.GRNDate = (`${date} ${time}`)
+    //   return i
+    // })
+
+    const newList = response.Data.map((index) => {
+      index.Name = index.Item.Name
+      return index
+    });
     yield put(SpinnerState(false))
     yield put(getProductionistPageSuccess(newList))
   } catch (error) {
@@ -97,13 +102,15 @@ function* get_PRODUCTION_GerFunc({ filters }) {
 // List Page API
 function* getProduction_Mode2_GenFunc({ data }) {
   debugger
-  const { jsonBody, pageMode,path } = data
+  const { jsonBody, pageMode, path } = data
   yield put(SpinnerState(true))
   try {
     const response = yield call(production_Make_API, jsonBody);
     response.Data = response.Data[0];
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
+
+
 
     yield put(SpinnerState(false))
     yield put(getProduction_Mode2_Success(response))

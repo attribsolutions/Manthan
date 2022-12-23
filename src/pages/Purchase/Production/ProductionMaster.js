@@ -61,7 +61,12 @@ const ProductionMaster = (props) => {
         SupplierBatchCode: "",
         BestBefore: "",
         Remark: "",
-        Item: "",
+        value:"",
+        label:"",
+        Name:"",
+        Item:""
+
+        
     }
     debugger
     const [state, setState] = useState(initialFiledFunc(initialFiled))
@@ -111,9 +116,9 @@ const ProductionMaster = (props) => {
                 i.values.id = Data.id;
                 i.values.LotQuantity = Data.LotQuantity;
                 i.values.NumberOfLot = Data.NumberOfLot;
-
+                
                 i.hasValid.id.valid = true
-                i.hasValid.Item.valid = true
+                i.hasValid.value.valid = true
                 i.hasValid.LotQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i
@@ -269,6 +274,7 @@ const ProductionMaster = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
+        debugger
         event.preventDefault();
         // const makeproduction = produtionMake.Data.id
         // const LotQuantity = produtionMake.Data.LotQuantity
@@ -280,17 +286,16 @@ const ProductionMaster = (props) => {
                     }
                 ],
                 ProductionDate: values.ProductionDate,
-                EstimatedQuantity: values.NumberOfLot,
-                NumberOfLot: produtionMake.Data.NumberOfLot,
+                EstimatedQuantity: values.LotQuantity,
+                NumberOfLot: values.NumberOfLot,
                 ActualQuantity: values.ActualQuantity,
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
                 StoreLocation: "aa",
-                SupplierBatchCode: values.SupplierBatchCode,
+                SupplierBatchCode:values.SupplierBatchCode,
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
-                CreatedBy: 1,
-                Item: values.Item.value,
+                CreatedBy: 1,                
                 UpdatedBy: 1,
                 Company: 1,
                 Division: 4,
@@ -298,6 +303,7 @@ const ProductionMaster = (props) => {
                 Unit: 45,
                 MRP: " ",
                 Rate: 55,
+                Item: values.Item.value,
             });
             // saveDissable(true)
             // if ((pageMode === 'edit') && !mode) {
@@ -306,6 +312,7 @@ const ProductionMaster = (props) => {
             // else
             //  {
             dispatch(post_Production(jsonBody));
+            console.log(jsonBody)
             // }
             // }
         }
@@ -455,11 +462,11 @@ const ProductionMaster = (props) => {
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Item}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.Name}</Label>
                                         <Col md="7">
                                             <Select
                                             isDisabled={true}
-                                                name="Item"
+                                                name="Name"
                                                 value={values.Item}
                                                 // isSearchable={true}
                                                 // className="react-dropdown"
@@ -472,8 +479,8 @@ const ProductionMaster = (props) => {
                                                 }
                                                 }
                                             />
-                                            {isError.Item.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Item}</small></span>
+                                            {isError.id.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
