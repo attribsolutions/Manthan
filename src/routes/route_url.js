@@ -91,7 +91,7 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const ORDER = "/Order"
 export const ORDER_lIST = "/OrderList"
 
-export const GRN_ADD_Mode_2 = "/GRN-Master-Mode2"
+export const GRN_ADD_Mode_2 = "/GRN_ADD_Mode_2"
 export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
 
@@ -103,11 +103,11 @@ export const WORK_ORDER_LIST = "/WorkOrderList"
 
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
-export const MATERIAL_ISSUE_ADD_Mode_2 = "/MaterialIssue-Add-Mode-2"
+export const MATERIAL_ISSUE_ADD_Mode_2 = "/MaterialIssue_Add_Mode_2"
 
 export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
-export const PRODUCTION_ADD_Mode_2 = "/Production-Add-Mode-2"
+export const PRODUCTION_ADD_Mode_2 = "/Production_Add_Mode"
 
 
 
