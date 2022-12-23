@@ -11,7 +11,8 @@ import {
 import PartyType from "./PartyType";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import {  commonPageFieldList, commonPageFieldListSuccess} from "../../../store/actions";
-import { PARTYTYPE } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const PartyTypeList = (props) => {
 
@@ -25,7 +26,6 @@ const PartyTypeList = (props) => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.PartyTypeReducer.PostData,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
     );
 
@@ -40,8 +40,9 @@ const PartyTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.PARTYTYPE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(32))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getPartyTypelist());
   }, []);
 
@@ -55,13 +56,12 @@ const PartyTypeList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={PartyType}
-            masterPath={PARTYTYPE}
-            ButtonMsgLable={"PartyType"}
+            masterPath={url.PARTYTYPE}
+            ButtonMsgLable={"Party Type"}
             deleteName={"Name"}
           />
           : null
       }
-
     </React.Fragment>
   )
 }

@@ -18,7 +18,8 @@ import { useHistory } from "react-router-dom";
 import {
     Breadcrumb_inputName,
     AlertState,
-    commonPageField
+    commonPageField,
+    commonPageFieldSuccess
 } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
@@ -35,34 +36,15 @@ import {
     onChangeText,
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { PARTYTYPE_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const PartyType = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-
-    const { PostAPIResponse, pageField, updateMsg, userAccess } =
-        useSelector((state) => ({
-            PostAPIResponse: state.PartyTypeReducer.PostData,
-            pageField: state.CommonPageFieldReducer.pageField,
-            userAccess: state.Login.RoleAccessUpdateData,
-            updateMsg: state.PartyTypeReducer.updateMessage
-        }));
-
-    useEffect(() => {
-        dispatch(commonPageField(31))
-    }, []);
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -73,6 +55,27 @@ const PartyType = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { PostAPIResponse, pageField, updateMsg, userAccess } =
+        useSelector((state) => ({
+            PostAPIResponse: state.PartyTypeReducer.PostData,
+            pageField: state.CommonPageFieldReducer.pageField,
+            userAccess: state.Login.RoleAccessUpdateData,
+            updateMsg: state.PartyTypeReducer.updateMessage
+        }));
+
+    useEffect(() => {
+        const page_Id = pageId.PARTYTYPE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(getPartyTypelist());
+    }, []);
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -80,7 +83,6 @@ const PartyType = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -100,11 +102,6 @@ const PartyType = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        dispatch(getPartyTypelist());
-    }, [dispatch]);
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -122,7 +119,6 @@ const PartyType = (props) => {
             }
 
             if (hasEditVal) {
-
                 const { id, Name, IsSCM, IsDivision } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
@@ -135,19 +131,20 @@ const PartyType = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
 
             }
             dispatch(editPartyTypeSuccess({ Status: false }))
         }
     }, [])
 
-
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -160,13 +157,13 @@ const PartyType = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: PARTYTYPE_lIST,
+                    RedirectPath: url.PARTYTYPE_lIST,
 
                 }))
             }
         }
         else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -180,13 +177,13 @@ const PartyType = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
-                pathname: PARTYTYPE_lIST,
+                pathname: url.PARTYTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updatePartyTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -206,7 +203,7 @@ const PartyType = (props) => {
         }
     }, [pageField])
 
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -219,7 +216,7 @@ const PartyType = (props) => {
                 UpdatedOn: "2022-07-18T00:00:00"
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === "edit") {
                 dispatch(updatePartyTypeID(jsonBody, values.id));
@@ -230,9 +227,6 @@ const PartyType = (props) => {
         }
     };
 
-
-
-    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -253,7 +247,7 @@ const PartyType = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -285,7 +279,7 @@ const PartyType = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <div className="form-check form-switch form-switch-md mb-2">
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 checked={values.IsSCM}
                                                                                 name="IsSCM"
@@ -329,7 +323,9 @@ const PartyType = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"PartyType"}
                                                                     />
                                                                 </Col>
