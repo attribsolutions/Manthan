@@ -11,7 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import RoleMaster from "./RoleMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { ROLE } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const RoleList = (props) => {
 
@@ -39,8 +40,9 @@ const RoleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.ROLE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(20))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getRole());
   }, []);
 
@@ -54,7 +56,7 @@ const RoleList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={RoleMaster}
-            masterPath={ROLE}
+            masterPath={url.ROLE}
             ButtonMsgLable={"Role"}
             deleteName={"Name"}
           />
