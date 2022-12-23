@@ -35,7 +35,6 @@ import {
 } from "../../../store/Administrator/ItemsRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { PARTY_SUB_PARTY_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -274,11 +273,8 @@ const PartySubParty = (props) => {
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
             }))
-
             const jsonBody = JSON.stringify(arr);
-
             saveDissable(true);//save Button Is dissable function
-
             if (pageMode === "edit") {
                 dispatch(updatePartySubParty(jsonBody, values.id,));
             }
