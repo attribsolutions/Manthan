@@ -10,7 +10,6 @@ import {
     FormGroup,
     Input,
 } from "reactstrap";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostModelsSubmit,
@@ -52,7 +51,7 @@ const Modules = (props) => {
         Icon: "",
         isActive: false,
     }
-
+    
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
