@@ -36,33 +36,23 @@ import {
 } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
-// import { actionChannel } from "redux-saga/effects";
-import { VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
     onChangeSelect,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
-
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const VehicleMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [divisionData, setDivisionData] = useState([]);
-    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -75,6 +65,12 @@ const VehicleMaster = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [divisionData, setDivisionData] = useState([]);
+    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -95,25 +91,23 @@ const VehicleMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+    useEffect(() => {
+        const page_Id = pageId.VEHICLE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(getMethodForVehicleList());
+        dispatch(getMethod_DriverList_ForDropDown());
+        dispatch(getMethod_VehicleTypes_ForDropDown());
+        dispatch(get_Division_ForDropDown());
+    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(29))
-    }, []);
-
-
-    useEffect(() => {
-        //  dispatch(PostMethodForVehicleMaster());
-        dispatch(getMethodForVehicleList());
-        dispatch(getMethod_DriverList_ForDropDown());
-        dispatch(getMethod_VehicleTypes_ForDropDown());
-        dispatch(get_Division_ForDropDown());
-    }, [dispatch]);
-
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -178,17 +172,18 @@ const VehicleMaster = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, []);
 
-
     useEffect(() => {
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -201,12 +196,12 @@ const VehicleMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: VEHICLE_lIST,
+                    RedirectPath: url.VEHICLE_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -220,13 +215,13 @@ const VehicleMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
-                pathname: VEHICLE_lIST,
+                pathname: url.VEHICLE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateVehicleTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -246,19 +241,10 @@ const VehicleMaster = (props) => {
         }
     }, [pageField])
 
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
     const DivisionType_DropdownOptions = Divisions.map((data) => ({
         value: data.id,
         label: data.Name
     }));
-
-    function DivisionType_DropDown_handller(e) {
-        setDivisionType_dropdown_Select(e)
-    }
 
     const DriverList_DropdownOptions = DriverList_redux.map((data) => ({
         value: data.id,
@@ -270,44 +256,18 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
+    function DivisionType_DropDown_handller(e) {
+        setDivisionType_dropdown_Select(e)
+    }
 
-    const formSubmitHandler = (event) => {
-        event.preventDefault();
-        const leng = divisionData.length
-        if (leng === 0) {
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: "Select Atleast One Division..!",
-            }));
-            return
-        }
-        if (formValid(state, setState)) {
-            var division = divisionData.map(i => ({ Division: i.value }))
-            const jsonBody = JSON.stringify({
-                VehicleNumber: values.VehicleNumber,
-                Description: values.Description,
-                Driver: values.Driver.value,
-                VehicleType: values.VehicleType.value,
-                VehicleDivisions: division,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy()
-            });
-
-            saveDissable(true);//+++++++++save Button Is dissable function
-
-            if (pageMode === 'edit') {
-                dispatch(updateVehicleTypeID(jsonBody, values.id));
-                console.log("update jsonBody", jsonBody)
-            }
-            else {
-                dispatch(PostMethodForVehicleMaster(jsonBody));
-                console.log("post jsonBody", jsonBody)
-            }
-        }
-    };
-
+    // For Delete Button in table
+    function UserRoles_DeleteButton_Handller(tableValue) {
+        setDivisionData(divisionData.filter(
+            (item) => !(item.value === tableValue)
+        )
+        )
+    }
     function AddDivisionHandler() {
-
         const find = divisionData.find((element) => {
             return element.value === divisionType_dropdown_Select.value
         });
@@ -337,9 +297,40 @@ const VehicleMaster = (props) => {
         )
     }
 
+    const SaveHandler = (event) => {
+        event.preventDefault();
+        const leng = divisionData.length
+        if (leng === 0) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Atleast One Division..!",
+            }));
+            return
+        }
+        if (formValid(state, setState)) {
+            var division = divisionData.map(i => ({ Division: i.value }))
+            const jsonBody = JSON.stringify({
+                VehicleNumber: values.VehicleNumber,
+                Description: values.Description,
+                Driver: values.Driver.value,
+                VehicleType: values.VehicleType.value,
+                VehicleDivisions: division,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
+            });
+
+            saveDissable(true);//save Button Is dissable function
+
+            if (pageMode === 'edit') {
+                dispatch(updateVehicleTypeID(jsonBody, values.id));
+            }
+            else {
+                dispatch(PostMethodForVehicleMaster(jsonBody));
+            }
+        }
+    };
 
 
-    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -361,7 +352,7 @@ const VehicleMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -373,7 +364,6 @@ const VehicleMaster = (props) => {
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="DriverDropDown "
-                                                                        // disabled={true}
                                                                         name="Driver"
                                                                         value={values.Driver}
                                                                         isSearchable={false}
@@ -389,7 +379,6 @@ const VehicleMaster = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
-
                                                         <Col md="1" className="mx-n1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
@@ -397,7 +386,6 @@ const VehicleMaster = (props) => {
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="VehicleDropDown "
-                                                                        // disabled={true}
                                                                         name="VehicleType"
                                                                         value={values.VehicleType}
                                                                         isSearchable={false}
@@ -464,7 +452,6 @@ const VehicleMaster = (props) => {
                                                                 <Label htmlFor="validationCustom21">{fieldLabel.VehicleDivisions}</Label>
                                                                 <Select
                                                                     id="DivisionDropDown "
-                                                                    // disabled={true}
                                                                     name="VehicleDivisions"
                                                                     value={values.VehicleDivisions}
                                                                     isSearchable={false}
@@ -532,7 +519,9 @@ const VehicleMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2} className="mt-3">
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"VehicleMaster"}
                                                                     />
                                                                 </Col>
