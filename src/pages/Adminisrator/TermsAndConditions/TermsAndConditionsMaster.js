@@ -11,13 +11,15 @@ import {
     Label,
     Row,
 } from "reactstrap";
-
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {
+    AlertState,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
     comAddPageFieldFunc,
     formValid,
@@ -26,7 +28,6 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
 import {
     EditTermsAndCondtions_Success,
     postTermAndCondition,
@@ -34,8 +35,9 @@ import {
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { TERMS_AND_CONDITION_LIST } from "../../../routes/route_url";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const TermsAndConditionsMaster = (props) => {
 
@@ -63,8 +65,9 @@ const TermsAndConditionsMaster = (props) => {
     }));
 
     useEffect(() => {
+        const page_Id = pageId.TERMS_AND_CONDITION
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(42))
+        dispatch(commonPageField(page_Id))
     }, []);
 
     const values = { ...state.values }
@@ -83,11 +86,9 @@ const TermsAndConditionsMaster = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserPageAccessState(userAcc)
         };
@@ -108,8 +109,8 @@ const TermsAndConditionsMaster = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-               
-                const { id, Name ,IsDefault} = hasEditVal
+
+                const { id, Name, IsDefault } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 values.id = id
@@ -132,6 +133,8 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(postTermAndConditionSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -144,7 +147,7 @@ const TermsAndConditionsMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: TERMS_AND_CONDITION_LIST,
+                    RedirectPath: url.TERMS_AND_CONDITION_LIST,
                 }))
             }
         }
@@ -167,7 +170,7 @@ const TermsAndConditionsMaster = (props) => {
             setState(() => resetFunction(fileds, state)) // Clear form values 
             saveDissable(false); //save Button Is enable function
             history.push({
-                pathname: TERMS_AND_CONDITION_LIST,
+                pathname: url.TERMS_AND_CONDITION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false); //Update Button Is enable function
@@ -190,8 +193,7 @@ const TermsAndConditionsMaster = (props) => {
         }
     }, [pageField])
 
-    const formSubmitHandler = (event) => {
-
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -209,7 +211,6 @@ const TermsAndConditionsMaster = (props) => {
             else {
                 dispatch(postTermAndCondition(jsonBody))
             }
-
         }
     };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -232,7 +233,7 @@ const TermsAndConditionsMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -293,7 +294,6 @@ const TermsAndConditionsMaster = (props) => {
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
-
                                                     </Row>
                                                 </CardBody>
                                             </Card>
@@ -301,9 +301,7 @@ const TermsAndConditionsMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>
