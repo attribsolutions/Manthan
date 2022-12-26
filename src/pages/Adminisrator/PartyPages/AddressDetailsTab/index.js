@@ -11,8 +11,8 @@ function AddressDetails_Tab(props) {
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(false);
-    const [imageTable, setImageTable ]= useState('');
-    debugger
+    const [imageTable, setImageTable] = useState('');
+ 
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
     }
@@ -34,7 +34,7 @@ function AddressDetails_Tab(props) {
     }
 
     const addRowsHandler = (data) => {
-        debugger
+
         const val = {
             Address: address,
             FSSAINo: FSSAINo,
@@ -71,6 +71,7 @@ function AddressDetails_Tab(props) {
         setFSSAINo('');
         setIsDefault(false);
         setPIN('');
+        setImageTable('');
     };
 
     const onchangeHandler = async (event) => {
@@ -82,7 +83,7 @@ function AddressDetails_Tab(props) {
     }
 
     const convertBase64 = (file) => {
-        debugger
+
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file);
@@ -205,7 +206,9 @@ function AddressDetails_Tab(props) {
 
                                 <FormGroup className=" col col-sm-4 " >
                                     <Label >FSSI Document</Label>
-                                    <Input type="file" className="form-control "
+                                    <Input type="file"
+                                        className="form-control "
+                                        // value={FileName}
                                         name="image"
                                         id="file"
                                         accept=".jpg, .jpeg, .png ,.pdf"
