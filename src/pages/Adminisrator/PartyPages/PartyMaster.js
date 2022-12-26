@@ -39,10 +39,9 @@ import {
 } from "../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
-import { PARTY_lIST } from "../../../routes/route_url"
 import AddressDetails_Tab from "./AddressDetailsTab"
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction"
+import { PARTY_lIST } from "../../../routes/allPageID"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -90,32 +89,6 @@ const PartyMaster = (props) => {
 
     }));
 
-    const fileds = {
-        id: "",
-        Name: "",
-        Address: "",
-        FSSAINo: "",
-        FSSAIExipry: "",
-        PIN: "",
-        IsDefault: "",
-        District: "",
-        State: "",
-        Company: "",
-        PartyType: "",
-        PriceList: "",
-        IsDivision: "",
-        isActive: "",
-        Taluka: "",
-        City: "",
-        Orderprefix: "",
-        Invoiceprefix: "",
-        Grnprefix: "",
-        Receiptprefix:""
-
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -137,7 +110,6 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -199,13 +171,12 @@ const PartyMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postPartyDataSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
             setCompanyList_dropdown_Select('')
             setPartyType_dropdown_Select('')
             setPriceList_dropdown_Select('')
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -224,7 +195,7 @@ const PartyMaster = (props) => {
             }
         }
         else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);
             dispatch(postPartyDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -238,13 +209,12 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);
             history.push({
-                pathname: PARTY_lIST,
+                pathname:PARTY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);
             dispatch(updatePartyIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -392,8 +362,6 @@ const PartyMaster = (props) => {
 
         });
 
-        saveDissable(true);//+++++++++save Button Is dissable function
-
         if (pageMode === 'edit') {
             dispatch(updatePartyID(jsonBody, EditData.id));
             console.log("update jsonBody", jsonBody)
@@ -411,7 +379,7 @@ const PartyMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags>
-                        <title>Item Master| FoodERP-React FrontEnd</title>
+                        <title>Party Master| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
@@ -607,14 +575,12 @@ const PartyMaster = (props) => {
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01"> Party Type </Label>
-                                                                        {/* <Col sm={12}> */}
                                                                         <Select
                                                                             value={partyType_dropdown_Select}
                                                                             options={PartyTypeDropdown_Options}
                                                                             onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                         />
 
-                                                                        {/* </Col> */}
                                                                     </FormGroup>
                                                                 </Col>
 
@@ -622,41 +588,25 @@ const PartyMaster = (props) => {
                                                                 <Col md="3">
                                                                     <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Price List </Label>
-
-                                                                        {/* <Select
-                                                                        value={PriceList_dropdown_Select}
-                                                                        options={PriceList_DropdownOptions}
-                                                                        onChange={(e) =>{ handllerPriceList(e)}}
-                                                                        // onChange={(e) =>{setPriceList_dropdown_Select(e)}}
-
-                                                                    /> */}
-
                                                                         <Input id="Input"
                                                                             value={PriceList_dropdown_Select.label}
                                                                             placeholder="Select..."
-                                                                            // onChange={(e) => setDropOpen(!dropOpen)}
                                                                             onClick={onclickselect}
-
                                                                         >
                                                                         </Input>
-
                                                                         {test1()}
-
-
                                                                     </FormGroup>
                                                                 </Col>
-                                                                <Col md="1">  </Col>
 
+                                                                <Col md="1">  </Col>
                                                                 <Col md="3">
                                                                     <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Company Name </Label>
-                                                                        {/* <Col sm={12}> */}
                                                                         <Select
                                                                             value={companyList_dropdown_Select}
                                                                             options={companyListValues}
                                                                             onChange={(e) => { handllercompanyList(e) }}
                                                                         />
-                                                                        {/* </Col> */}
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
@@ -731,7 +681,6 @@ const PartyMaster = (props) => {
                                                                         </Row>
                                                                     </FormGroup>
                                                                 </Col>
-
                                                             </Row>
 
                                                             <Row>
@@ -788,7 +737,6 @@ const PartyMaster = (props) => {
                                                             </Row>
                                                         </CardBody>
                                                     </Card>
-
                                                 </TabPane>
 
                                                 <TabPane tabId="2">
@@ -804,16 +752,12 @@ const PartyMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
-                                                    {/* <Row> */}
                                                     <Col md={12}  >
-                                                        {/* <Row className="mt-3"> */}
-
                                                         <Card className="text-black " >
                                                             <CardBody className="c_card_body">
                                                                 <Col>
                                                                     <FormGroup className="mb-3">
                                                                         <Row md="5">
-
                                                                             <Label htmlFor="validationCustom01"> Order Prefix</Label>
                                                                             <AvField
                                                                                 value={PartyPrefix.length === 1 ? PartyPrefix[0].Orderprefix : ''}
@@ -824,14 +768,12 @@ const PartyMaster = (props) => {
                                                                                 className="form-control "
                                                                             />
                                                                         </Row>
-
                                                                     </FormGroup>
                                                                 </Col>
 
                                                                 <Col >
                                                                     <FormGroup className="mb-3">
                                                                         <Row md="5">
-
                                                                             <Label htmlFor="validationCustom01">Invoice Prefix</Label>
                                                                             <AvField
                                                                                 value={PartyPrefix.length === 1 ? PartyPrefix[0].Invoiceprefix : ''}
@@ -842,7 +784,6 @@ const PartyMaster = (props) => {
                                                                                 className="form-control"
                                                                             />
                                                                         </Row>
-
                                                                     </FormGroup>
                                                                 </Col>
 
@@ -865,7 +806,6 @@ const PartyMaster = (props) => {
                                                                 <Col>
                                                                     <FormGroup>
                                                                         <Row md="5">
-
                                                                             <Label htmlFor="validationCustom01"> Receipt Prefix</Label>
                                                                             <AvField
                                                                                 value={PartyPrefix.length === 1 ? PartyPrefix[0].Receiptprefix : ''}
@@ -880,9 +820,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
                                                             </CardBody>
                                                         </Card>
-                                                        {/* </Row> */}
                                                     </Col>
-                                                    {/* </Row> */}
                                                 </TabPane>
                                             </TabContent>
                                         </CardBody>

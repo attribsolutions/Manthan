@@ -11,7 +11,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,16 +23,23 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvField, AvForm } from "availity-reactstrap-validation";
-import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, getGSTListPage, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
-import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { AvForm } from "availity-reactstrap-validation";
+import {
+    deleteGSTForMasterPage,
+    deleteGSTForMasterPageSuccess,
+    getGSTListPage,
+    postGoButtonForGST_Master,
+    postGoButtonForGST_Master_Success,
+    postGSTMasterData,
+    postGSTMasterDataSuccess
+} from "../../../store/Administrator/GSTRedux/action";
+import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editMode = history.location.pageMode;
 
     //SetState  Edit data Geting From Modules List component
@@ -57,15 +63,6 @@ const GSTMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
-
-    const fileds = {
-        id: "",
-        Name: "",
-
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     // userAccess useEffect
     useEffect(() => {
@@ -118,9 +115,8 @@ const GSTMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postGSTMasterDataSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
-            saveDissable(false);//+++++++++save Button Is enable function
             setEffectiveDate('')
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -139,7 +135,6 @@ const GSTMaster = (props) => {
         }
 
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postGSTMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -396,12 +391,6 @@ const GSTMaster = (props) => {
         const jsonBody = JSON.stringify(Find)
 
         if (!(Find.length > 0) && !(editMode)) {
-            // dispatch(AlertState({
-            //     Type: 4, Status: true,
-            //     Message: "At Least one MRP add",
-            //     RedirectPath: false,
-            //     PermissionAction: false,
-            // }));
             alert("At Least one MRP add")
         }
 
@@ -410,7 +399,6 @@ const GSTMaster = (props) => {
             console.log("jsonBody", jsonBody)
         }
 
-        saveDissable(true);//+++++++++save Button Is dissable function
 
     };
 
@@ -423,7 +411,7 @@ const GSTMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
+                    <title>GST Master| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                 <Container fluid>
@@ -502,7 +490,6 @@ const GSTMaster = (props) => {
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
-                                                                        // defaultSorted={defaultSorted}
                                                                         classes={"table  table-bordered"}
                                                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
