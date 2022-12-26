@@ -664,8 +664,8 @@ const Order = (props) => {
             POType: 1,
             Division: division,
             POType: orderTypeSelect.value,
-            POFromDate: poFromDate,
-            POToDate: poToDate,
+            POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
+            POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
             OrderItem: itemArr,
@@ -977,6 +977,7 @@ const Order = (props) => {
                             : <div className="row save1"></div>
                     }
                 </div >
+                
                 <Modal
                     isOpen={isOpen_TermsModal}
                     toggle={() => {
