@@ -316,7 +316,7 @@ export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCOND
 export const get_TermsAndCondtionsList_API = () => get(url.TERMSANDCONDITIONS_API)// get api
 export const del_TermsAndCondtions_Master_API = (id) => del(`${url.TERMSANDCONDITIONS_API}/${id}`)// delete api
 export const edit_TermsAndCondtions_Master_API = (id) => get(`${url.TERMSANDCONDITIONS_API}/${id}`)// edit api
-export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`,data)// update api
+export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`, data)// update api
 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
@@ -340,7 +340,7 @@ export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_
 export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
 //suppiler 
-export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
+export const GetSupplier_API = (party_id) => get(`${url.SUPPLIER}/${party_id}`)//get api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
@@ -352,16 +352,13 @@ export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/$
 
 // Order Page api  
 
-export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER, data)//get api
-export const Order_get_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
+export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
+export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
 export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
-export const OrderPage_Edit_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
+export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
 
-export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
-export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
-export const UpdateOrder_ID_ApiCall = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
-export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
-export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
+export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
+export const OrderPage_Update_API = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
 // OrderType Dropdown API

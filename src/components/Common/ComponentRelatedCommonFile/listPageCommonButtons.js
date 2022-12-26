@@ -22,10 +22,8 @@ export const listPageCommonButtonFunction = (props) => {
         deleteName,
         downUrlPath,
         ReportType,
-        makeBtnShow,
         makeBtnFunc,
-        makeBtnName
-
+        editBodyfunc
     } = props;
 
 
@@ -39,7 +37,11 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData) {
-        dispatch(editActionFun(rowData.id, "edit",));
+        if (editBodyfunc) { editBodyfunc(rowData) }
+        else {
+            dispatch(editActionFun(rowData.id, "edit",));
+        }
+
     }
 
     function copyHandler(rowData) {
@@ -57,13 +59,6 @@ export const listPageCommonButtonFunction = (props) => {
             PermissionAction: deleteActionFun,
             ID: rowData.id,
         }));
-    }
-    function makeBtnHandler(rowData) {
-        rowData["hasSelect"] = true;
-        let arr = []
-        arr.push(rowData)
-
-        makeBtnFunc(arr)
     }
 
 
@@ -255,8 +250,17 @@ const currentDatefunc = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
     return currentDate
 }
-export const currentDate = currentDatefunc()
+export const currentDate = currentDatefunc();
 
+export const dateConvertfunc = (inp) => {//+++++++++++++++ Current Date++++++++++++++++++++++++++++
+    const current = new Date(inp);
+    debugger
+    const month = current.getMonth() + 1;
+    const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
+        `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
+    return currentDate
+}
+// dateConvertfunc("2022/12/12")
 export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0
     try {
@@ -265,7 +269,7 @@ export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id++++++++
     return createdBy
 }
 
-export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++++
+export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     let userCompany = 0
     try {
         userCompany = JSON.parse(localStorage.getItem('Company'))

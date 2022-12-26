@@ -19,12 +19,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import {
-    editOrderIdSuccess,
-    goButton,
-    goButtonSuccess,
-    updateOrderIdSuccess
-} from "../../../store/Purchase/OrderPageRedux/actions";
+
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
@@ -34,7 +29,7 @@ import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { editGRNId, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import {  getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
@@ -152,47 +147,6 @@ const GRNAdd = (props) => {
     }, [items])
 
 
-    useEffect(() => {
-        dispatch(goButtonSuccess([]))
-
-        if ((hasShowloction || hasShowModal)) {
-
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-
-            if (hasEditVal) {
-
-                const jsonBody = JSON.stringify({
-                    Supplier: hasEditVal.Supplier,
-                    EffectiveDate: hasEditVal.OrderDate
-                }
-                );
-                dispatch(goButton(jsonBody, hasEditVal))
-                // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-
-                setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-                // setgrnDate(hasEditVal.OrderDate)
-                setdeliverydate(hasEditVal.DeliveryDate)
-                setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
-                setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
-                description = hasEditVal.Description
-                editVal = hasEditVal
-                setOrderAmount(hasEditVal.OrderAmount)
-
-            }
-            dispatch(editOrderIdSuccess({ Status: false }))
-        }
-
-
-    }, [])
 
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
@@ -229,25 +183,25 @@ const GRNAdd = (props) => {
 
 
 
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
-            history.push({
-                pathname: ORDER_lIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            dispatch(updateOrderIdSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
+    // useEffect(() => {
+    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+    //         saveDissable(false);//+++++++++Update Button Is enable function
+    //         setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+    //         history.push({
+    //             pathname: ORDER_lIST,
+    //         })
+    //     } else if (updateMsg.Status === true && !modalCss) {
+    //         saveDissable(false);//+++++++++Update Button Is enable function
+    //         // dispatch(updateOrderIdSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 3,
+    //                 Status: true,
+    //                 Message: JSON.stringify(updateMsg.Message),
+    //             })
+    //         );
+    //     }
+    // }, [updateMsg, modalCss]);
 
 
     function val_onChange(val, row, type) {
@@ -717,7 +671,7 @@ const GRNAdd = (props) => {
 
                                 <FormGroup className=" row " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Challan No</Label>
+                                        style={{ width: "130px" }}>PO Number</Label>
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
@@ -754,7 +708,7 @@ const GRNAdd = (props) => {
                                         <Input type="text"
                                             // disabled={true}
                                             pattern={/[A-Za-z]{3}/}
-                                            value={grnDetail.challanNo}
+                                            // value={grnDetail.challanNo}
                                             placeholder="Enter Invoice No" />
                                     </Col>
                                 </FormGroup>

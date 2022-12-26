@@ -44,31 +44,22 @@ function* Get_Party_GenratorFunction() {
       return result
     }
 
-    const data1 = response.Data.map((index) => ({
-      StateId: index.State.id,
-      State: index.State.Name,
-      DistrictId: index.District.id,
-      District: index.District.Name,
-      CompanyId: index.Company.id,
-      Company: index.Company.Name,
-      PartyTypeId: index.PartyType.id,
-      PartyTypeName: index.PartyType.Name,
-      PriceListId: index.PriceList.id,
-      PriceListName: index.PriceList.Name,
-      Name: index.Name,
-      Email: index.Email,
-      MobileNo: index.MobileNo,
-      AlternateContactNo: index.AlternateContactNo,
-      GSTIN: index.GSTIN,
-      PAN: index.PAN,
-      IsDivision: index.IsDivision,
-      MkUpMkDn: index.MkUpMkDn,
-      isActive: index.isActive,
-      id: index.id,
-      PartyAddress: address(index)
+    const data1 = response.Data.map((index) => {
+      // index["StateId"] = index.State.id;
+      index["State"] = index.State.Name;
+      // index["DistrictId"] = index.District.id;
+      index["District"] = index.District.Name;
+      // index["CompanyId"] = index.Company.id;
+      index['Company'] = index.Company.Name;
+      // index["PartyTypeId"] = index.PartyType.id;
+      index['PartyTypeName'] = index.PartyType.Name;
+      // index["PriceListId"] = index.PriceList.id;
+      index["PriceListName"] = index.PriceList.Name;
+      index["PartyAddress"] = address(index);
 
-    }));
-   
+      return index;
+    });
+
 
     yield put(SpinnerState(false))
     yield put(getPartyListAPISuccess(data1))
@@ -117,35 +108,6 @@ function* Edit_Party_GenratorFunction({ id, pageMode }) {
     debugger
     const response = yield call(Party_Master_Edit_API, id);
     response.pageMode = pageMode
-    console.log("response",response)
-
-    // const data1 = response.Data.map((index) => ({
-    //   StateId: index.State.id,
-    //   State: index.State.Name,
-    //   DistrictId: index.District.id,
-    //   District: index.District.Name,
-    //   CompanyId: index.Company.id,
-    //   Company: index.Company.Name,
-    //   PartyTypeId: index.PartyType.id,
-    //   PartyTypeName: index.PartyType.Name,
-    //   PriceListId: index.PriceList.id,
-    //   PriceListName: index.PriceList.Name,
-    //   Name: index.Name,
-    //   Email: index.Email,
-    //   MobileNo: index.MobileNo,
-    //   AlternateContactNo: index.AlternateContactNo,
-    //   GSTIN: index.GSTIN,
-    //   PAN: index.PAN,
-    //   IsDivision: index.IsDivision,
-    //   MkUpMkDn: index.MkUpMkDn,
-    //   isActive: index.isActive,
-    //   id: index.id,
-    //   // PartyAddress: address(index)
-
-    // }));
-
-    // console.log("data1",data1)
-
     yield put(editPartyIDSuccess(response));
 
   } catch (error) {
@@ -172,7 +134,6 @@ function* Update_Party_GenratorFunction({ updateData, id }) {
     }));
   }
 }
-
 // GetDistrictOnState API
 function* GetDistrictOnState_saga({ id }) {
   try {

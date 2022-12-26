@@ -6,7 +6,6 @@ import Flatpickr from "react-flatpickr";
 import {
     deleteOrderId,
     deleteOrderIdSuccess,
-    editOrderIdSuccess,
     editOrderId,
     getOrderListPage,
     updateOrderIdSuccess,
@@ -25,7 +24,6 @@ import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { editOrderID_forOrderPage_ApiCall } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -61,7 +59,7 @@ const OrderList = () => {
 
     const action = {
         getList: getOrderListPage,
-        editId: editOrderId,
+        // editId: editOrderId,
         deleteId: deleteOrderId,
         postSucc: postMessage,
         updateSucc: updateOrderIdSuccess,
@@ -131,9 +129,12 @@ const OrderList = () => {
             });
 
             if (isGRNSelect) {
-                const withoutLastComma = isGRNSelect.replace(/,*$/, '');
+
+                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+
                 const jsonBody = JSON.stringify({
-                    OrderIDs: withoutLastComma
+                    OrderIDs: isGRNSelect
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
@@ -144,6 +145,18 @@ const OrderList = () => {
         }
 
     }
+    function editBodyfunc(rowData) {
+
+        const jsonBody = JSON.stringify({
+            Party: rowData.SupplierID,
+            Customer: rowData.CustomerID,
+            EffectiveDate: rowData.preOrderDate,
+            OrderID: rowData.id
+        })
+        var Mode = "edit"
+        dispatch(editOrderId(jsonBody, Mode));
+    }
+
 
     function goButtonHandler() {
 
@@ -269,9 +282,9 @@ const OrderList = () => {
                             makeBtnShow={pageMode === url.ORDER_lIST ? false : true}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
-                            downUrlPath={editOrderID_forOrderPage_ApiCall}
+                            downUrlPath={editOrderId}
                             ReportType={report.order1}
-
+                            editBodyfunc={editBodyfunc}
                         />
                         : null
                 }

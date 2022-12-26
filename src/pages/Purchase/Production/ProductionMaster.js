@@ -10,11 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-
-
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
-
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -29,10 +26,8 @@ import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actio
 import { AlertState, BreadcrumbFilterSize, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
-
 import { GRN_lIST, ORDER_lIST, PRODUCTION_LIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNId, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -66,7 +61,12 @@ const ProductionMaster = (props) => {
         SupplierBatchCode: "",
         BestBefore: "",
         Remark: "",
-        Item: "",
+        value:"",
+        label:"",
+        Name:"",
+        Item:""
+
+        
     }
     debugger
     const [state, setState] = useState(initialFiledFunc(initialFiled))
@@ -116,9 +116,9 @@ const ProductionMaster = (props) => {
                 i.values.id = Data.id;
                 i.values.LotQuantity = Data.LotQuantity;
                 i.values.NumberOfLot = Data.NumberOfLot;
-
+                
                 i.hasValid.id.valid = true
-                i.hasValid.Item.valid = true
+                i.hasValid.value.valid = true
                 i.hasValid.LotQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i
@@ -274,6 +274,7 @@ const ProductionMaster = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
+        debugger
         event.preventDefault();
         // const makeproduction = produtionMake.Data.id
         // const LotQuantity = produtionMake.Data.LotQuantity
@@ -285,17 +286,16 @@ const ProductionMaster = (props) => {
                     }
                 ],
                 ProductionDate: values.ProductionDate,
-                EstimatedQuantity: values.NumberOfLot,
-                NumberOfLot: produtionMake.Data.NumberOfLot,
+                EstimatedQuantity: values.LotQuantity,
+                NumberOfLot: values.NumberOfLot,
                 ActualQuantity: values.ActualQuantity,
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
                 StoreLocation: "aa",
-                SupplierBatchCode: values.SupplierBatchCode,
+                SupplierBatchCode:values.SupplierBatchCode,
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
-                CreatedBy: 1,
-                Item: values.Item.value,
+                CreatedBy: 1,                
                 UpdatedBy: 1,
                 Company: 1,
                 Division: 4,
@@ -303,6 +303,7 @@ const ProductionMaster = (props) => {
                 Unit: 45,
                 MRP: " ",
                 Rate: 55,
+                Item: values.Item.value,
             });
             // saveDissable(true)
             // if ((pageMode === 'edit') && !mode) {
@@ -311,6 +312,7 @@ const ProductionMaster = (props) => {
             // else
             //  {
             dispatch(post_Production(jsonBody));
+            console.log(jsonBody)
             // }
             // }
         }
@@ -325,7 +327,7 @@ const ProductionMaster = (props) => {
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
                     <Breadcrumb
                         pageHeading={userPageAccessState.PageHeading}
-                        showCount={true}
+                        // showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} noValidate>
                         <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
@@ -335,10 +337,6 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.ProductionDate}</Label>
                                         <Col sm="7">
-
-
-
-
                                             <Flatpickr
                                                 name="ProductionDate"
                                                 value={values.ProductionDate}
@@ -464,15 +462,15 @@ const ProductionMaster = (props) => {
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Item}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.Name}</Label>
                                         <Col md="7">
                                             <Select
-                                                disabled
-                                                name="Item"
+                                            isDisabled={true}
+                                                name="Name"
                                                 value={values.Item}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
+                                                // isSearchable={true}
+                                                // className="react-dropdown"
+                                                // classNamePrefix="dropdown"
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -481,8 +479,8 @@ const ProductionMaster = (props) => {
                                                 }
                                                 }
                                             />
-                                            {isError.Item.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Item}</small></span>
+                                            {isError.id.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
@@ -499,9 +497,9 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {/* {isError.ActualQuantity.length > 0 && (
+                                            {isError.ActualQuantity.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
-                                            )} */}
+                                            )}
                                         </Col>
                                     </FormGroup>
                                     {/*
