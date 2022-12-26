@@ -99,7 +99,6 @@ const PartyItems = (props) => {
             postMsg: state.PartyItemsReducer.postMsg,
             updateMsg: state.PartyItemsReducer.updateMsg,
             tableList: state.PartyItemsReducer.partyItem,
-
             supplier: state.PartyItemsReducer.supplier,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -164,7 +163,6 @@ const PartyItems = (props) => {
 
                 hasValid.SupplierName.valid = true;
 
-
                 values.id = id
                 values.SupplierName = SupplierName;
                 setState({ values, fieldLabel, hasValid, required, isError })
@@ -181,8 +179,6 @@ const PartyItems = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(PostPartyItemsSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
             if (hasDropMode) {
                 props.isOpenModal(false)
             }
@@ -199,7 +195,6 @@ const PartyItems = (props) => {
 
         } else if
             (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostPartyItemsSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1,
@@ -214,14 +209,10 @@ const PartyItems = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: PARTYITEM_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updategroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -283,8 +274,6 @@ const PartyItems = (props) => {
                     />
 
                 </span>
-
-
             ),
 
         }
@@ -313,12 +302,10 @@ const PartyItems = (props) => {
             }
         }
         dispatch(getpartyItemList(supplier))
-
     };
 
 
     const SubmitHandler = (event) => {
-        debugger
         const Find = itemArr.filter((index) => {
             return (index.itemCheck === true)
         })
@@ -328,13 +315,9 @@ const PartyItems = (props) => {
             Party: values.SupplierName.value
 
         }))
-
-        saveDissable(true);//+++++++++save Button Is dissable function
         const jsonBody = JSON.stringify(PartyData)
         dispatch(PostPartyItems(jsonBody));
-
     };
-
 
 
 
@@ -396,9 +379,6 @@ const PartyItems = (props) => {
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="3" className="mt-4">
-                                                            {/* <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                                                // onClick={GoButton_Handler}
-                                                            >Go</Button> */}
                                                         </Col>
                                                     </Row>
                                                 </Row>
@@ -424,8 +404,6 @@ const PartyItems = (props) => {
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
-                                                            // id="BootstrapTable"
-                                                            // selectRow={selectRow}
                                                             keyField={"id"}
                                                             bordered={true}
                                                             striped={false}

@@ -1,6 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, Input, } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  CardHeader,
+  Label,
+  FormGroup
+} from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,7 +21,7 @@ import {
   getEmployeeForUseRegistration,
   editSuccess
 }
-  from "../../../store/Administrator/UserRegistrationRedux/actions";
+from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
@@ -37,7 +46,7 @@ const AddUser = (props) => {
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
-  console.log("EmployeeSelect", EmployeeSelect.length)
+ 
   // M_Roles DropDown
 
   const [password, setPassword] = useState('');
@@ -46,25 +55,10 @@ const AddUser = (props) => {
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
   const [isCPassword, setisCPassword] = useState(false);
 
-
-  useEffect(() => {
-    if (isCPassword) {
-      if (password === cPassword) {
-        setShowErrorMessage(false);
-        setCPasswordClass('form-control is-valid')
-      } else {
-        setShowErrorMessage(true)
-        setCPasswordClass('form-control is-invalid')
-      }
-    }
-  }, [cPassword])
-
-
   const handleCPassword = (e) => {
     setCPassword(e.target.value);
     setisCPassword(true);
   }
-
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -82,19 +76,21 @@ const AddUser = (props) => {
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
-  console.log("employeelistForDropdown", employeelistForDropdown)
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
 
-  const fileds = {
-    id: "",
-    Name: "",
-
-}
-
-const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+  useEffect(() => {
+    if (isCPassword) {
+      if (password === cPassword) {
+        setShowErrorMessage(false);
+        setCPasswordClass('form-control is-valid')
+      } else {
+        setShowErrorMessage(true)
+        setCPasswordClass('form-control is-invalid')
+      }
+    }
+  }, [cPassword])
 
   // userAccess useEffect
   useEffect(() => {
@@ -168,11 +164,9 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
         })
         console.log("arraynew", arraynew)
         setPartyRoleData(arraynew)
-
         dispatch(editSuccess({ Status: false }))
       }
     }
-
   }, [])
 
 
@@ -180,10 +174,9 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(addUserSuccess({ Status: false }))
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-      saveDissable(false);//+++++++++save Button Is enable function
       setEmployeeSelect('')
       setPartyRoleData('')
+
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -201,8 +194,8 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
         }))
       }
     }
+
     else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
-      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(addUserSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -220,11 +213,6 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
     dispatch(getRoles());
   }, [dispatch]);
 
-  function handllerEmployeeID(e) {
-    setEmployeeSelect(e)
-    dispatch(GetUserPartiesForUserMastePage(e.value))
-  }
-
   const EmployeeValues = employeelistForDropdown.map((Data) => ({
     value: Data.id,
     label: Data.Name
@@ -235,6 +223,10 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
     label: Data.Name
   }));
 
+  function handllerEmployeeID(e) {
+    setEmployeeSelect(e)
+    dispatch(GetUserPartiesForUserMastePage(e.value))
+  }
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
@@ -279,12 +271,9 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
         PermissionAction: false,
       }));
 
-      saveDissable(true);//+++++++++save Button Is dissable function
     }
 
-  
     else if (pageMode === 'edit') {
-
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
       console.log("Update jsonBody", jsonBody)
@@ -294,7 +283,6 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
       console.log("Post jsonBody", jsonBody)
     }
   };
-
 
   const rolaTable = () => {
 
@@ -416,7 +404,6 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                                 <Label htmlFor="validationCustom01">Confirm Password</Label>
                                 <AvField name="password" id="password"
                                   type="password"
-                                  // value={EditData.password}
                                   placeholder="Please Enter Password"
                                   autoComplete="new-password"
                                   className={cPasswordClass}
@@ -493,9 +480,7 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                                   <div>
                                     {
                                       pageMode === "edit" ?
-
                                         userPageAccessState.RoleAccess_IsEdit ?
-
                                           <button
                                             type="submit"
                                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
@@ -511,7 +496,6 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                                               type="submit"
                                               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
                                               className="btn btn-primary w-md"
-                                              // onClick={this.handleClick} disabled={this.state.disabled}
                                             >
                                               <i className="fas fa-save me-2"></i> Save
                                             </button>
@@ -522,7 +506,6 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                                   </div>
                                 </Col>
                               </Row> : <></>}
-
                           </CardBody>
                         </Card>
 
@@ -530,10 +513,8 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                           < Card className="mt-n2">
                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
                               <Row className="">
-
                                 {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
                                   <Col sm={6} style={{ marginTop: '28px' }}>
-
                                     {partyRoleData ? (
                                       <div >
                                         {rolaTable()}
@@ -544,7 +525,6 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                                   </Col> : <div className="col-lg-3 col-md-6">
                                     <div className="mb-3">
                                       <Label className="form-label font-size-13 ">Role name</Label>
-
                                       <Select
                                         defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
                                         options={RolesValues}
@@ -562,9 +542,7 @@ const [state, setState] = useState(() => initialFiledFunc(fileds))
                                     <div>
                                       {
                                         pageMode === "edit" ?
-
                                           userPageAccessState.RoleAccess_IsEdit ?
-
                                             <button
                                               type="submit"
                                               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
