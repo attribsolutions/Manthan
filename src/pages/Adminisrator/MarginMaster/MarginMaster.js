@@ -378,7 +378,6 @@ const MarginMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
@@ -410,7 +409,7 @@ const MarginMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
+                    <title>Margin Master| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                 <Container fluid>

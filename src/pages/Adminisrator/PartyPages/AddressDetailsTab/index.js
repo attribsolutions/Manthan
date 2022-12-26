@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, CardBody, Col, FormGroup, Label, Row } from 'reactstrap';
+import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import AddressDetailsTable from './Table';
 import { AvField, AvInput } from 'availity-reactstrap-validation';
@@ -11,7 +11,8 @@ function AddressDetails_Tab(props) {
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(false);
-
+    const [imageTable, setImageTable] = useState('');
+ 
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
     }
@@ -39,7 +40,8 @@ function AddressDetails_Tab(props) {
             FSSAINo: FSSAINo,
             FSSAIExipry: FSSAIExipry,
             PIN: PIN,
-            IsDefault: IsDefault
+            IsDefault: IsDefault,
+            fssaidocument: imageTable
         };
 
         if (!(address === "")
@@ -69,7 +71,32 @@ function AddressDetails_Tab(props) {
         setFSSAINo('');
         setIsDefault(false);
         setPIN('');
+        setImageTable('');
     };
+
+    const onchangeHandler = async (event) => {
+        debugger
+        const file = event.target.files[0]
+        const base64 = await convertBase64(file);
+        let ImageUpload = base64
+        setImageTable(ImageUpload)
+    }
+
+    const convertBase64 = (file) => {
+
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader()
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result)
+
+            };
+            fileReader.onerror = (error) => {
+                reject(error)
+            }
+        })
+    }
 
     return (
         <Row>
@@ -100,13 +127,14 @@ function AddressDetails_Tab(props) {
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus mt-3"> </i> 
+                                            <i className="dripicons-plus mt-3"> </i>
                                         </Button>
                                     </Col>
                                 </Row>
                             </Col>
 
                         </Row>
+
                         <Row>
                             {/* <Col md="4"></Col> */}
                             <Col md="4">
@@ -119,7 +147,6 @@ function AddressDetails_Tab(props) {
                                         placeholder="Please Enter FSSAINo"
                                         autoComplete='off'
                                         type="text"
-
                                         errorMessage="Please Enter FSSAI Number."
                                         className="form-control"
                                         // validate={{
@@ -154,30 +181,43 @@ function AddressDetails_Tab(props) {
                                 </FormGroup>
                             </Col>
 
-                            {/* <Col md="1">  </Col> */}
+                            <Col md="1">  </Col>
                             <Row className='col col-12'>
-                                {/* <Col md="4"> */}
-                                <FormGroup className="col-4">
-                                    <Label htmlFor="validationCustom01"> PIN </Label>
-                                    <AvField name="PIN" type="text"
-                                        value={PIN}
-                                        placeholder=" PIN No. "
-                                        autoComplete='off'
-                                        // validate={{
-                                        //     required: { value: true, errorMessage: 'Please Enter your PIN No.' },
-                                        //     tel: {
-                                        //         pattern: "^[1-9][0-9]{5}$",
-                                        //         errorMessage: 'PIN Should be Six Digit Only.'
-                                        //     }
-                                        // }
-                                        // }
-                                        onChange={PINHandler}
+                                <Col md="4">
+                                    <FormGroup >
+                                        <Label> PIN </Label>
+                                        <AvField name="PIN" type="text"
+                                            value={PIN}
+                                            placeholder=" PIN No. "
+                                            autoComplete='off'
+                                            // validate={{
+                                            //     required: { value: true, errorMessage: 'Please Enter your PIN No.' },
+                                            //     tel: {
+                                            //         pattern: "^[1-9][0-9]{5}$",
+                                            //         errorMessage: 'PIN Should be Six Digit Only.'
+                                            //     }
+                                            // }
+                                            // }
+                                            onChange={PINHandler}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md="1">  </Col>
+
+                                <FormGroup className=" col col-sm-4 " >
+                                    <Label >FSSI Document</Label>
+                                    <Input type="file"
+                                        className="form-control "
+                                        // value={FileName}
+                                        name="image"
+                                        id="file"
+                                        accept=".jpg, .jpeg, .png ,.pdf"
+                                        onChange={(event) => { onchangeHandler(event) }}
                                     />
                                 </FormGroup>
-                                {/* </Col> */}
+
                                 <Col md="1">  </Col>
-                                {/* <Col md="9"> */}
-                                <FormGroup className="col col-sm-5 mt-4">
+                                <FormGroup className="col col-sm-4 mt-4">
                                     <Row className="justify-content-md-left">
                                         <Label htmlFor="horizontal-firstname-input" className="col-sm-4 col-form-label" >IsDefault </Label>
                                         <Col md={3} style={{ marginTop: '9px' }} >
@@ -188,14 +228,14 @@ function AddressDetails_Tab(props) {
                                                     checked={IsDefault}
                                                     name="IsDefault"
                                                     onChange={IsDefaultHandler}
-                                                // defaultChecked
+
                                                 />
                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                             </div>
                                         </Col>
                                     </Row>
                                 </FormGroup>
-                                {/* </Col> */}
+
                             </Row>
                         </Row>
 

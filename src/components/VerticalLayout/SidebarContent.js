@@ -87,7 +87,7 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    debugger
+
     let pathName = props.location.pathname
     let userAcc = RoleAccessUpdateData.find((inx) => {
       const path = inx.ActualPagePath.toLowerCase()
@@ -96,7 +96,7 @@ const SidebarContent = (props) => {
     if (userAcc === undefined) { }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
       pathName = urlRel[`${userAcc.ActualPagePath}`]
-      debugger
+     
     }
 
     const initMenu = () => {
@@ -126,6 +126,7 @@ const SidebarContent = (props) => {
       }
     }
   }
+  
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
