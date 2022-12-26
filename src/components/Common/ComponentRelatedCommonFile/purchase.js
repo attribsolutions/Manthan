@@ -51,9 +51,9 @@ const PurchaseListPage = (props) => {
 
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
+    const [tableList, settableList] = useState([]);
 
     const {
-        tableList,
         editData,
         updateMsg,
         deleteMsg,
@@ -89,6 +89,9 @@ const PurchaseListPage = (props) => {
 
     const fileds = pageField.PageFieldMaster;
 
+    useEffect(() => {
+        settableList(props.reducers.tableList)
+    }, [props.reducers.tableList])
 
     useEffect(() => {
 
@@ -146,8 +149,6 @@ const PurchaseListPage = (props) => {
         }
     }, [updateMsg]);
 
-
-
     useEffect(() => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
@@ -170,9 +171,6 @@ const PurchaseListPage = (props) => {
             );
         }
     }, [deleteMsg]);
-
-
-
 
     useEffect(() => {
 
@@ -200,7 +198,6 @@ const PurchaseListPage = (props) => {
 
 
     }, [postMsg])
-
 
 
     // Edit Modal Show When Edit Data is true
@@ -238,6 +235,35 @@ const PurchaseListPage = (props) => {
     });
     // *******
 
+    //**** GRNMode2_ list multilple make_GRN checkBox selection Onchange ********************/
+
+    function GRNMode2_checkBtnOnchange(e, rowData) {
+
+        let isEvent = e.target.checked
+        rowData.hasSelect = isEvent
+
+        let found = tableList.filter(i => (i.hasSelect))
+
+        tableList.map((ele, k) => {
+
+            if (found.length === 1 && isEvent) {
+                if (!(ele.SupplierID === rowData.SupplierID)) {
+                    try {
+                        document.getElementById(`checkhasSelect${k}`).disabled = true
+                    }
+                    catch (e) { }
+                }
+            }
+            else if (found.length === 0 && !isEvent) {
+                try {
+                    document.getElementById(`checkhasSelect${k}`).disabled = false
+                }
+                catch (e) { }
+            }
+        })
+
+    }
+
     let sortLabel = ""
     const columns = []
 
@@ -270,10 +296,18 @@ const PurchaseListPage = (props) => {
                     rowData["hasSelect"] = false
                     return (
                         <div>
-                            <Input type="checkbox"
+                            <Input
+                                type="checkbox"
                                 className="mx-2"
+                                id={`checkhasSelect${key}`}
                                 defaultChecked={rowData.hasSelect}
-                                onChange={e => rowData.hasSelect = e.target.checked}
+                                disabled={rowData["isdisabled"]}
+                                key={rowData.hasSelect}
+                                onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
+
+
+
+
                             />
                             <Button
                                 type="button"
@@ -290,7 +324,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-       else if ((makeBtnShow) && (fileds.length - 1 === k)) {
+        else if ((makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
@@ -300,7 +334,7 @@ const PurchaseListPage = (props) => {
                     rowData["hasSelect"] = false
                     return (
                         <div>
-                     
+
                             <Button
                                 type="button"
                                 className={makeBtnCss}
@@ -330,7 +364,7 @@ const PurchaseListPage = (props) => {
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
                     makeBtnFunc: makeBtnFunc,
-                    editBodyfunc:editBodyfunc
+                    editBodyfunc: editBodyfunc
                 })
             )
         }
