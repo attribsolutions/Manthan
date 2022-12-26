@@ -39,8 +39,6 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
 import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-
 
 const MRPMaster = (props) => {
 
@@ -76,12 +74,6 @@ const MRPMaster = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    const fileds = {
-        id: "",
-        Name: "",
-
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     // userAccess useEffect
     useEffect(() => {
@@ -143,8 +135,6 @@ const MRPMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
             setDivision_dropdown_Select('')
             setEffectiveDate('')
             setParty_dropdown_Select('')
@@ -167,7 +157,6 @@ const MRPMaster = (props) => {
         }
 
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postMRPMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -381,7 +370,6 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -394,24 +382,19 @@ const MRPMaster = (props) => {
             Item: index.Item,
             MRP: index.MRP,
             id: index.id
-
         }))
 
         const Find = ItemData.filter((index) => {
             return (!(index.MRP === '') && (index.id === ''))
         })
-        saveDissable(true);//+++++++++save Button Is dissable function
-
         const jsonBody = JSON.stringify(Find)
         dispatch(postMRPMasterData(jsonBody));
-        console.log("post Data", jsonBody)
 
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
 
     return (
         <React.Fragment>
@@ -427,7 +410,6 @@ const MRPMaster = (props) => {
                         }}
                         ref={formRef}
                     >
-
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -521,9 +503,7 @@ const MRPMaster = (props) => {
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
-                                                                        // defaultSorted={defaultSorted}
                                                                         classes={"table  table-bordered"}
-                                                                        // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
                                                                     />

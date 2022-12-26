@@ -45,19 +45,15 @@ import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
 import { createdBy, saveDissable } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc, resetFunction } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-
-
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [activeTab1, setactiveTab1] = useState("1")
-
 
     let initial = {
         Name: "",
@@ -86,30 +82,21 @@ const ItemsMaster = (props) => {
         Division: false
     })
     let [isValidate, setIsValidate] = useState(initialInValid);
-
     const [formValue, setFormValue] = useState(initial);
     const [pageRefresh, setpageRefresh] = useState(false);
-
-
-
     const [marginMaster, setMarginMaster] = useState([]);
-
     const [imageTabTable, setImageTabTable] = useState([{
         ImageType: '',
         ImageUpload: ''
     }]);
-    console.log("imageTabTable", imageTabTable)
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
         Unit: '',
         IsBase: false
     }]);
-
-
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
-
 
     const {
         companyList,
@@ -128,15 +115,6 @@ const ItemsMaster = (props) => {
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
         CategoryList: state.ItemMastersReducer.Category,
     }));
-
-
-    const fileds = {
-        id: "",
-        Name: "",
-
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -163,7 +141,6 @@ const ItemsMaster = (props) => {
 
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -226,8 +203,6 @@ const ItemsMaster = (props) => {
                 })
 
 
-
-
                 // ====================== Unit Conversion tab  start ======================
 
                 const UnitDetails = []
@@ -254,27 +229,20 @@ const ItemsMaster = (props) => {
 
                 setFormValue(initialFormValue);
                 setImageTabTable(ItemImagesDetails)
-
                 setMRP_Tab_TableData(hasEditVal.ItemMRPDetails)
                 setMarginMaster(hasEditVal.ItemMarginDetails)
                 setGStDetailsMaster(hasEditVal.ItemGSTHSNDetails)
                 setGroup_Tab_TableData(hasEditVal.ItemGroupDetails)
-
                 dispatch(editItemSuccess({ Status: false }))
-
             }
         }
 
     }, [])
 
-
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostItemDataSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
-            saveDissable(false);//+++++++++save Button Is enable function
-
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -293,7 +261,6 @@ const ItemsMaster = (props) => {
         }
 
         else if (PostAPIResponse.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostItemDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -397,8 +364,6 @@ const ItemsMaster = (props) => {
         }
 
     }
-
-
 
     const CategoryType_Handler = (event) => {
         dropDownValidation(event, "CategoryType")
@@ -548,7 +513,6 @@ const ItemsMaster = (props) => {
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
 
-            debugger
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -581,11 +545,8 @@ const ItemsMaster = (props) => {
 
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
-
             if (pageMode === 'edit') {
                 dispatch(updateItemID(jsonBody, EditData.id));
-                console.log("items edit json", jsonBody)
             }
 
             else {
@@ -597,152 +558,12 @@ const ItemsMaster = (props) => {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: JSON.stringify(inValidMsg),
-                // Message: (inValidMsg),
                 RedirectPath: false,
                 PermissionAction: false,
             }));
         }
 
     };
-
-
-
-    // autocomplet item
-
-    // function autocomplete(inp, arr) {
-    //     /*the autocomplete function takes two arguments,
-    //     the text field element and an array of possible autocompleted values:*/
-    //     var currentFocus;
-    //     /*execute a function when someone writes in the text field:*/
-    //     inp.addEventListener("input", function (e) {
-    //         var a, b, i, val = this.value;
-    //         /*close any already open lists of autocompleted values*/
-    //         closeAllLists();
-    //         if (!val) { return false; }
-    //         currentFocus = -1;
-    //         /*create a DIV element that will contain the items (values):*/
-    //         a = document.createElement("DIV");
-    //         a.setAttribute("id", this.id + "autocomplete-list");
-    //         a.setAttribute("class", "autocomplete-items");
-    //         /*append the DIV element as a child of the autocomplete container:*/
-    //         this.parentNode.appendChild(a);
-    //         /*for each item in the array...*/
-    //         for (i = 0; i < arr.length; i++) {
-    //             /*check if the item starts with the same letters as the text field value:*/
-    //             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-    //                 /*create a DIV element for each matching element:*/
-    //                 b = document.createElement("DIV");
-    //                 /*make the matching letters bold:*/
-    //                 b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-    //                 b.innerHTML += arr[i].substr(val.length);
-    //                 /*insert a input field that will hold the current array item's value:*/
-    //                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-    //                 /*execute a function when someone clicks on the item value (DIV element):*/
-    //                 b.addEventListener("click", function (e) {
-    //                     /*insert the value for the autocomplete text field:*/
-    //                     inp.value = this.getElementsByTagName("input")[0].value;
-    //                     /*close the list of autocompleted values,
-    //                     (or any other open lists of autocompleted values:*/
-    //                     closeAllLists();
-    //                 });
-    //                 a.appendChild(b);
-    //             }
-    //         }
-    //     });
-    //     /*execute a function presses a key on the keyboard:*/
-    //     inp.addEventListener("keydown", function (e) {
-    //         var x = document.getElementById(this.id + "autocomplete-list");
-    //         if (x) x = x.getElementsByTagName("div");
-    //         if (e.keyCode == 40) {
-    //             /*If the arrow DOWN key is pressed,
-    //             increase the currentFocus variable:*/
-    //             currentFocus++;
-    //             /*and and make the current item more visible:*/
-    //             addActive(x);
-    //         } else if (e.keyCode == 38) { //up
-    //             /*If the arrow UP key is pressed,
-    //             decrease the currentFocus variable:*/
-    //             currentFocus--;
-    //             /*and and make the current item more visible:*/
-    //             addActive(x);
-    //         } else if (e.keyCode == 13) {
-    //             /*If the ENTER key is pressed, prevent the form from being submitted,*/
-    //             e.preventDefault();
-    //             if (currentFocus > -1) {
-    //                 /*and simulate a click on the "active" item:*/
-    //                 if (x) x[currentFocus].click();
-    //             }
-    //         }
-    //     });
-    //     function addActive(x) {
-    //         /*a function to classify an item as "active":*/
-    //         if (!x) return false;
-    //         /*start by removing the "active" class on all items:*/
-    //         removeActive(x);
-    //         if (currentFocus >= x.length) currentFocus = 0;
-    //         if (currentFocus < 0) currentFocus = (x.length - 1);
-    //         /*add class "autocomplete-active":*/
-    //         x[currentFocus].classList.add("autocomplete-active");
-    //     }
-    //     function removeActive(x) {
-    //         /*a function to remove the "active" class from all autocomplete items:*/
-    //         for (var i = 0; i < x.length; i++) {
-    //             x[i].classList.remove("autocomplete-active");
-    //         }
-    //     }
-    //     function closeAllLists(elmnt) {
-    //         /*close all autocomplete lists in the document,
-    //         except the one passed as an argument:*/
-    //         var x = document.getElementsByClassName("autocomplete-items");
-    //         for (var i = 0; i < x.length; i++) {
-    //             if (elmnt != x[i] && elmnt != inp) {
-    //                 x[i].parentNode.removeChild(x[i]);
-    //             }
-    //         }
-    //     }
-    //     /*execute a function when someone clicks in the document:*/
-    //     document.addEventListener("click", function (e) {
-    //         closeAllLists(e.target);
-    //     });
-    // }
-
-
-    // var countries = ["Afghanistan", "Albania", "Algeria",
-    //     "Andorra", "Angola", "Anguilla", "Antigua & Barbuda", "Argentina",
-    //     "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas",
-    //     "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize",
-    //     "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia & Herzegovina", "Botswana",
-    //     "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
-    //     "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central Arfrican Republic", "Chad",
-    //     "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cuba",
-    //     "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
-    //     "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe",
-    //     "Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia",
-    //     "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea",
-    //     "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran",
-    //     "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan",
-    //     "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia",
-    //     "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia",
-    //     "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova",
-    //     "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauro", "Nepal", "Netherlands",
-    //     "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway",
-    //     "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland",
-    //     "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre & Miquelon", "Samoa",
-    //     "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore",
-    //     "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain",
-    //     "Sri Lanka", "St Kitts & Nevis", "St Lucia", "St Vincent", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland",
-    //     "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey",
-    //     "Turkmenistan", "Turks & Caicos",
-    //     "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu",
-    //     "Vatican City", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
-
-    // autocomplete(document.getElementById("myInput"), countries);
-
-    // autocomplet item
-
-
-
-
 
 
     var IsEditMode_Css = ''
@@ -909,14 +730,11 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter Name "
                                                                             defaultValue={EditData.Name}
                                                                             autoComplete="off"
-                                                                            // onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                                             onChange={(e) => {
                                                                                 dispatch(Breadcrumb_inputName(e.target.value));
                                                                                 CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Name")
                                                                             }}
                                                                         />
-                                                                          {/* </div> */}
-
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
@@ -928,7 +746,6 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter ShortName "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
-                                                                        // onChange={(e) => { formValue.ShortName = e.target.value }}
                                                                         />
                                                                     </FormGroup>
 
@@ -942,13 +759,11 @@ const ItemsMaster = (props) => {
                                                                                 control: base => ({
                                                                                     ...base,
                                                                                     border: inValidDrop.Company ? '1px solid red' : '',
-
                                                                                 })
                                                                             }}
                                                                             onChange={(event) => dropDownValidation(event, "Company")}
                                                                         />
                                                                     </FormGroup>
-
                                                                 </Row>
 
                                                                 <Row>
@@ -989,7 +804,6 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter Sequence "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Sequence") }}
-                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
 
                                                                     </FormGroup>
@@ -1006,7 +820,6 @@ const ItemsMaster = (props) => {
                                                                                 control: base => ({
                                                                                     ...base,
                                                                                     border: inValidDrop.CategoryType ? '1px solid red' : '',
-
                                                                                 })
                                                                             }}
                                                                             onChange={(e) => { CategoryType_Handler(e) }}
@@ -1015,7 +828,6 @@ const ItemsMaster = (props) => {
 
 
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
-
                                                                         <Label className="form-label font-size-13 ">Category</Label>
                                                                         <Select
                                                                             defaultValue={formValue.Category}
@@ -1041,7 +853,6 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter Brand Name "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BrandName") }}
-                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
                                                                     </FormGroup>
                                                                 </Row>
@@ -1078,7 +889,6 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter Item Tag "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Tag") }}
-                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
                                                                     </FormGroup>
 
@@ -1131,114 +941,7 @@ const ItemsMaster = (props) => {
                                                         settable={setBaseUnitTableData}
                                                         setFormValue={setFormValue}
                                                     />
-                                                    {/* <Card className="text-black">
-                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                            <Row>
-                                                                <FormGroup className=" col col-sm-4 " >
-                                                                    <Label >Base Unit</Label>
-                                                                    <Select
-                                                                        id={`dropBaseUnit-0`}
-                                                                        placeholder="Select..."
-                                                                        value={formValue.BaseUnit}
-                                                                        isDisabled={pageMode === "edit" ? true : false}
-                                                                        options={BaseUnit_DropdownOptions}
-                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit", 0)}
-                                                                    />
-                                                                </FormGroup>
-                                                            </Row>
-
-                                                            {!(formValue.BaseUnit.value === 0)
-                                                                ? <Row className="mt-3">
-                                                                    <Col md={8}><Table className="table table-bordered  ">
-                                                                        <Thead >
-                                                                            <tr>
-                                                                                <th className="col-sm-3">Unit Name</th>
-                                                                                <th className="col-sm-3 text-center">Conversion To Base Unit </th>
-                                                                                <th className="col-sm-2">Action</th>
-                                                                            </tr>
-                                                                        </Thead>
-                                                                        <Tbody  >
-                                                                            {baseUnitTableData.map((TableValue, key) => (
-
-                                                                                <tr >
-                                                                                    <td>
-                                                                                        <Row>
-                                                                                            <Label className=" col-sm-2 col-form-label">1</Label>
-                                                                                            <Col md={7}>
-                                                                                                <Select
-                                                                                                    id={`dropUnit-${key}`}
-                                                                                                    placeholder="Select..."
-                                                                                                    value={baseUnitTableData[key].Unit}
-                                                                                                    options={BaseUnit_DropdownOptions2}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
-                                                                                                />
-                                                                                            </Col>
-                                                                                            < Label className=" col-sm-3 col-form-label">=</Label>
-                                                                                        </Row>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <Row>
-                                                                                            <Col>
-                                                                                                <Input
-                                                                                                    type="text"
-                                                                                                    id={`txtConversion${key}`}
-                                                                                                    placeholder="Select..."
-                                                                                                    autoComplete="off"
-                                                                                                    value={baseUnitTableData[key].Conversion}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}>
-
-                                                                                                </Input>
-                                                                                            </Col>
-                                                                                            <Label className=" col-sm-4 col-form-label"> {formValue.BaseUnit.label}</Label>
-                                                                                        </Row>
-                                                                                    </td>
-
-                                                                                    <td>
-                                                                                        {(baseUnitTableData.length === key + 1) ?
-                                                                                            <Row className="">
-                                                                                                <Col md={6} className=" mt-3">
-                                                                                                    {(baseUnitTableData.length > 1) ? <>
-                                                                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                            UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                                        }} >
-                                                                                                        </i>
-                                                                                                    </> : <Col md={6} ></Col>}
-
-                                                                                                </Col>
-
-                                                                                                <Col md={6} >
-                                                                                                    <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
-                                                                                                        type="button"
-                                                                                                        onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
-                                                                                                        <i className="dripicons-plus"></i>
-                                                                                                    </Button>
-                                                                                                </Col>
-                                                                                            </Row>
-                                                                                            :
-
-                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                            }} >
-                                                                                            </i>
-                                                                                        }
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            ))}
-                                                                        </Tbody>
-                                                                    </Table>
-                                                                    </Col>
-                                                                </Row>
-                                                                :
-                                                                <Row className="mt-3">
-                                                                    <br></br>
-                                                                    <Label className="text-danger">Please select BaseUnit</Label></Row>}
-                                                        </CardBody>
-                                                    </Card> */}
-
                                                 </TabPane>
-
 
                                                 <TabPane tabId="4">{/* ++++++++++++ TabPane Item Image ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Image state={{
@@ -1246,7 +949,6 @@ const ItemsMaster = (props) => {
                                                         setImageTable: setImageTabTable,
                                                     }} />
                                                 </TabPane>
-
 
                                                 <TabPane tabId="5">{/* ++++++++++++ TabPane MRP_Tab ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Row>
@@ -1270,7 +972,6 @@ const ItemsMaster = (props) => {
                                                             </Row>
                                                         </Col>
                                                     </Row>
-
                                                 </TabPane>
 
                                                 <TabPane tabId="7">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}

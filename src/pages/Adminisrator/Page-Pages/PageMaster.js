@@ -1,10 +1,9 @@
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, {  useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  CardText,
   Col,
   Container,
   FormGroup,
@@ -46,7 +45,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 const PageMaster = (props) => {
@@ -63,7 +61,7 @@ const PageMaster = (props) => {
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
-  debugger
+
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
@@ -108,14 +106,6 @@ const PageMaster = (props) => {
     PageList: state.H_Pages.PageList,
   }));
 
-  const fileds = {
-    id: "",
-    Name: "",
-
-  }
-
-  const [state, setState] = useState(() => initialFiledFunc(fileds))
-
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
@@ -149,7 +139,6 @@ const PageMaster = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -160,7 +149,6 @@ const PageMaster = (props) => {
       else if (hasShowModal) {
         hasEditVal = props.editValue
         setPageMode(props.pageMode)
-        // setModalreturnCss(true)
       }
 
       if (hasEditVal) {
@@ -251,7 +239,6 @@ const PageMaster = (props) => {
           setrelatedPage_DropdownSelect({ value: 0 });
           setPageType_DropdownSelect({ value: 1, label: "AddPage" });
         }
-        console.log("hasEditVal", hasEditVal)
         dispatch(editHPagesIDSuccess({ Status: false }));
       }
     }
@@ -275,12 +262,11 @@ const PageMaster = (props) => {
   useEffect(() => {
     if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
-      setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
-      saveDissable(false);//+++++++++save Button Is enable function
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
       setPageType_DropdownSelect("");
       setrelatedPage_DropdownSelect("");
+
       if (pageMode === "true") {
         dispatch(
           AlertState({
@@ -301,7 +287,6 @@ const PageMaster = (props) => {
         );
       }
     } else if (postMsg.Status === true) {
-      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(saveHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -339,13 +324,10 @@ const PageMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
-      setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
       history.push({
         pathname: PAGE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
       dispatch(updateHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -475,8 +457,6 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-    debugger
-
     let Access = []
     PageAccess.forEach((element, key) => {
       if (element.hascheck) {
@@ -512,9 +492,8 @@ const PageMaster = (props) => {
       );
       return;
     }
-    debugger
+  
     if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
-      debugger
       dispatch(
         AlertState({
           Type: 4,
@@ -527,7 +506,6 @@ const PageMaster = (props) => {
       return;
     }
 
-    debugger
     const jsonBody = JSON.stringify({
 
       Name: values.Name,
@@ -548,7 +526,7 @@ const PageMaster = (props) => {
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
-    debugger
+
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
       {
         dispatch(
@@ -568,10 +546,8 @@ const PageMaster = (props) => {
 
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
-      console.log("updated jsonBody", jsonBody)
     } else {
       dispatch(saveHPages(jsonBody));
-      console.log("post jsonBody", jsonBody)
     }
   };
 
@@ -580,7 +556,6 @@ const PageMaster = (props) => {
   const Module_DropdownSelectHandller = (e) => {
     setModule_DropdownSelect(e);
   };
-
 
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
@@ -601,11 +576,8 @@ const PageMaster = (props) => {
   };
 
   const relatedPage_DropdownSelectHandller = (e) => {
-    debugger
     setrelatedPage_DropdownSelect(e);
   };
-
-
 
   function tog_center() {
     setmodal_center(!modal_center)
@@ -613,7 +585,6 @@ const PageMaster = (props) => {
   function DropDownAddHandler() {
     tog_center()
   }
-
 
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -660,7 +631,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      {/* {(pageType_DropdownSelect.value === 1) ? */}
+
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
@@ -735,7 +706,6 @@ const PageMaster = (props) => {
                                     name="Name"
                                     id="txtName"
                                     value={EditData.Name}
-                                    // disabled={pageMode === 'edit' ? true : false}
                                     type="text"
                                     placeholder="Please Enter Name"
                                     autoComplete="off"
@@ -832,8 +802,6 @@ const PageMaster = (props) => {
 
                               <Col md="1" className=" mt-3">
                                 <Button
-
-                                  // className=" mt-3 btn btn-sm"
                                   className=" button_add"
                                   color="btn btn-outline-primary border-2 font-size-12"
                                   type="button" onClick={() => { DropDownAddHandler() }}>
@@ -910,7 +878,6 @@ const PageMaster = (props) => {
                                     name="pagePath"
                                     id="pagePathid"
                                     value={EditData.ActualPagePath}
-                                    // disabled={pageMode === 'edit' ? true : false}
                                     type="text"
                                     placeholder="Please Enter Page Path"
                                     validate={{
@@ -1079,8 +1046,6 @@ const PageMaster = (props) => {
                                   )
                                 })}
                               </Row>
-
-
                             </CardBody>
                           </Card>
                         ) : null}
@@ -1144,7 +1109,6 @@ const PageMaster = (props) => {
                                       <div style={{ width: "150px" }}>
                                         <Select
                                           id={`ControlType-${key}`}
-                                          // placeholder="select unit"
                                           value={pageFieldTabTable[key].ControlType}
                                           options={ControlTypes_DropdownOptions}
                                           onChange={(e) => { ControlType_Dropdown_Handler(e, key); }}
@@ -1157,7 +1121,6 @@ const PageMaster = (props) => {
                                           id={`FieldValidation-${key}`}
                                           autoComplete="off"
                                           value={pageFieldTabTable[key].FieldValidation}
-                                          // isDisabled={TableValue.ControlType.value === 4 ? true : false}
                                           options={FieldValidations_DropdownOptions}
                                           onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                         />
@@ -1282,7 +1245,6 @@ const PageMaster = (props) => {
                                             <div className="col border-end d-flex justify-content-center ">
                                               <Button
                                                 className="btn btn-outline-light btn-sm  align-items-sm-center text-center mt-3"
-                                                // className="button button-white button-animate "
                                                 type="button"
                                                 onClick={() => { PageField_Tab_AddRow_Handler(key) }}
                                               >
@@ -1317,18 +1279,12 @@ const PageMaster = (props) => {
                                   </Button>
                                 </div> : null
                             }
-                            {/* className="btn btn-sm "> */}
-
                           </div>
                         </div>
-
                       </TabPane>
-
                     </TabContent>
-
                   </CardBody>
                 </Card>
-
               </Col>
             </AvForm>
           </Container>
