@@ -255,6 +255,28 @@ const Header = props => {
                       </Link>
                     </Col>
                   </Row>
+
+                  <Row className="g-0">
+                    <Col>
+                      <Link className="dropdown-icon-item" to="#">
+                        <img src={dropbox} alt="dropbox" />
+                        <span>Dropbox</span>
+                      </Link>
+                    </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="#">
+                        <img src={mail_chimp} alt="mail_chimp" />
+                        <span>Mail Chimp</span>
+                      </Link>
+                    </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="#">
+                        <img src={slack} alt="slack" />
+                        <span>Slack</span>
+                      </Link>
+                    </Col>
+                  </Row>
+                  
                 </div>
               </DropdownMenu>
             </Dropdown>

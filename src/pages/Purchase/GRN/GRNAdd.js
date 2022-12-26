@@ -1,6 +1,9 @@
 import {
     Button,
     Col,
+    Dropdown,
+    DropdownMenu,
+    DropdownToggle,
     FormGroup,
     Input,
     Label,
@@ -25,45 +28,38 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
-import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
+import { GRN_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import {  getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import FeatherIcon from "feather-icons-react";
 
-let description = ''
-let editVal = {}
+
 let initialTableData = []
+
 const GRNAdd = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userAccState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const [grnDate, setgrnDate] = useState(currentDate);
-    const [invoiceDate, setInvoiceDate] = useState(currentDate);
 
-    const [deliverydate, setdeliverydate] = useState("today")
-    const [billAddr, setbillAddr] = useState('')
-    const [shippAddr, setshippAddr] = useState('')
-
-    const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
-    console.log("grnDetail", grnDetail)
-
+    const [openPOdrp, setopenPOdrp] = useState(false);
+    const [openPOdata, setopenPOdata] = useState([]);
 
     useEffect(() => {
-        // dispatch(getSupplier())
         dispatch(getSupplierAddress())
 
     }, [])
@@ -72,8 +68,6 @@ const GRNAdd = (props) => {
         items,
         postMsg,
         userAccess,
-        updateMsg,
-        supplierAddress,
     } = useSelector((state) => ({
         supplierAddress: state.SupplierReducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
@@ -82,15 +76,6 @@ const GRNAdd = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
-
-
-    const fileds = {
-        id: "",
-        Name: "",
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -109,7 +94,6 @@ const GRNAdd = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
@@ -130,14 +114,16 @@ const GRNAdd = (props) => {
             });
             initialTableData = []
             let details = { ...grnItems }
-            initialTableData = details.OrderItem
+            initialTableData = details.OrderItem;
             setgrnItemList(initialTableData)
             details.OrderItem = []
 
             setGrnDetail(details)
 
-            setsupplierSelect({ label: grnItems.SupplierName, value: grnItems.Supplier })
-            // setOrderAmount(hasEditVal.OrderAmount)
+            let myArr = grnItems.challanNo.split(",");
+            let newArr = myArr.map(i => ({ Name: i, hascheck: false }))
+            debugger
+            setopenPOdata(details.GRNReferences)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
 
@@ -149,17 +135,9 @@ const GRNAdd = (props) => {
 
 
     useEffect(() => {
-        if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
-            setbillAddr(supplierAddress[0]);
-            setshippAddr(supplierAddress[0]);
-        }
-    }, [supplierAddress])
-
-    useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
             saveDissable(false);//+++++++++save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
@@ -180,28 +158,6 @@ const GRNAdd = (props) => {
             }));
         }
     }, [postMsg])
-
-
-
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         saveDissable(false);//+++++++++Update Button Is enable function
-    //         setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
-    //         history.push({
-    //             pathname: ORDER_lIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         saveDissable(false);//+++++++++Update Button Is enable function
-    //         // dispatch(updateOrderIdSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
 
 
     function val_onChange(val, row, type) {
@@ -587,7 +543,6 @@ const GRNAdd = (props) => {
             }));
             return
         }
-
         const jsonBody = JSON.stringify({
             GRNDate: grnDate,
             Customer: grnDetail.Customer,
@@ -597,9 +552,10 @@ const GRNAdd = (props) => {
             CreatedBy: createdBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
-            GRNReferences: grnDetail.GRNReferences
+            GRNReferences: openPOdata
 
         });
+
         saveDissable(true);//+++++++++save Button Is dissable function
 
         if (pageMode === "edit") {
@@ -645,7 +601,6 @@ const GRNAdd = (props) => {
                                                 defaultDate: "today"
                                             }}
                                             onChange={(e, date) => { setgrnDate(date) }}
-                                            onReady={(e, date) => { setgrnDate(date); }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -656,13 +611,6 @@ const GRNAdd = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
-                                        {/* <Select
-                                            value={supplierSelect}
-                                            classNamePrefix="select2-Customer"
-                                            isDisabled={pageMode === "edit" ? true : false}
-                                            options={supplierOptions}
-                                            onChange={(e) => { setsupplierSelect(e) }}
-                                        /> */}
                                         < Input
                                             style={{ backgroundColor: "white" }}
                                             type="text" value={grnDetail.SupplierName} disabled={true} />
@@ -696,8 +644,6 @@ const GRNAdd = (props) => {
                                                 dateFormat: "Y-m-d",
                                                 defaultDate: "today"
                                             }}
-                                            onChange={(e, date) => { setInvoiceDate(date) }}
-                                            onReady={(e, date) => { setInvoiceDate(date); }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -706,20 +652,81 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Invoice No</Label>
                                     <Col md="7">
                                         <Input type="text"
-                                            // disabled={true}
-                                            pattern={/[A-Za-z]{3}/}
-                                            // value={grnDetail.challanNo}
                                             placeholder="Enter Invoice No" />
                                     </Col>
                                 </FormGroup>
+
+                                <FormGroup className="mb-2 row  " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Close PO</Label>
+                                    <Col md="7" style={{ marginLeft: "-14px" }}>
+                                        {
+                                            openPOdata.length === 1 ?
+                                                <Input
+                                                    type="checkbox"
+                                                    style={{ paddingTop: "7px" }}
+                                                    placeholder="Enter Invoice No"
+                                                    onChange={(e) => openPOdata[0].Inward = e.target.checked}
+                                                />
+                                                :
+                                                <Dropdown
+                                                    className="d-none d-lg-inline-block ms-1"
+                                                    isOpen={openPOdrp}
+                                                    toggle={() => {
+                                                        setopenPOdrp(!openPOdrp)
+                                                    }}
+                                                >
+                                                    <DropdownToggle
+                                                        className="btn header-item noti-icon mt-n2 mb-n3 "
+                                                        tag="button"
+                                                    >
+                                                        <FeatherIcon
+                                                            icon="square"
+                                                            className="icon-sm text-primary"
+                                                        />
+                                                    </DropdownToggle>
+                                                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-end">
+                                                        <Row className="row  g-0 " >
+                                                            {openPOdata.map((index, key) => {
+                                                                return (
+                                                                    <Col className="col col-4 dropdown-icon-item px-3 text-black "
+                                                                    >
+                                                                        <li onClick={e => {
+                                                                            openPOdata[key].Inward = !openPOdata[key].Inward
+                                                                            document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
+                                                                        }} >
+                                                                            <Row className="row ">
+                                                                                <Col className=" col col-6 user-select ">
+                                                                                    <li>
+                                                                                        <Label className="">{index.ChallanNo}</Label>
+                                                                                    </li>
+                                                                                </Col>
+
+                                                                                <Col className=" col col-6 mt-2">
+                                                                                    <Input
+                                                                                        id={`hasInwardCheck${key}`}
+                                                                                        className="col col-2 text-black "
+                                                                                        type="checkbox"
+                                                                                        defaultChecked={openPOdata[key].Inward}
+                                                                                    />
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </li>
+                                                                    </Col>
+                                                                )
+                                                            })}
+                                                        </Row>
+
+                                                    </DropdownMenu>
+                                                </Dropdown>
+                                        }
+
+                                    </Col>
+                                </FormGroup>
+
                             </Col>
                         </Row>
 
-
-                        {/* <Col md="1" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={GoButton_Handler}>Go</Button>
-                            </Col> */}
                     </div>
 
 
@@ -738,7 +745,6 @@ const GRNAdd = (props) => {
                                             <Col xl="12">
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
-                                                        // keyField={"id"}
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
