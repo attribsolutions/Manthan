@@ -470,8 +470,6 @@ const Order = (props) => {
                             defaultValue={''}
                             className="text-end"
                             autoComplete="off"
-                    
-                        // onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
 
@@ -481,7 +479,6 @@ const Order = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
-
 
         },
     ];
@@ -543,7 +540,7 @@ const Order = (props) => {
         }
     }
     function supplierOnchange(e) {
-        debugger
+
         if ((orderItemTable.length > 0) && (e.value > 0)) {
             dispatch(
                 AlertState({
@@ -556,7 +553,6 @@ const Order = (props) => {
             );
             return;
         }
-        debugger
 
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e

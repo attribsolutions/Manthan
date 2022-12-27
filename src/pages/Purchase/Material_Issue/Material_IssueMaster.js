@@ -54,6 +54,7 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
+       
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -118,66 +119,71 @@ const MaterialIssueMaster = (props) => {
         dispatch(getWorkOrderListPage(jsonBody));
     }, [])
 
-    const goButtonHandler = (event) => {
 
-        event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                WorkOrder: Itemselect.WorkOrderId,
-                Item: Itemselect.Item,
-                Company: userCompany(),
-                Party: userParty(),
-                Quantity: parseInt(values.LotQuantity)
-            });
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
 
-            dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                debugger
+
+                const { id, Item, ItemName, Company, EstimatedOutputQty, Quantity, NumberOfLot } = hasEditVal
+
+                setItemselect({ value: Item, label: ItemName })
+                setState((i) => {
+                    i.values.ItemName = { value: Item, label: ItemName }
+                    i.values.NumberOfLot = NumberOfLot;
+                    i.hasValid.ItemName.valid = true;
+                    i.values.LotQuantity = EstimatedOutputQty;
+                    i.hasValid.NumberOfLot.valid = true;
+                    i.hasValid.LotQuantity.valid = true;
+
+                    return i
+                })
+
+
+                // hasValid.id.valid = true;
+                // hasValid.MaterialIssueDate.valid = true;
+                // hasValid.ItemName.valid = true;
+                // hasValid.UnitName.valid = true;
+                // hasValid.EstimatedOutputQty.valid = true;
+                // hasValid.Comment.valid = true;
+                // hasValid.IsActive.valid = true;
+
+                // values.id = id
+                // values.BomDate = BomDate;
+                // values.EstimatedOutputQty = EstimatedOutputQty;
+                // values.Comment = Comment;
+                // values.IsActive = IsActive;
+                // values.ItemName = { label: ItemName, value: Item };
+                // values.UnitName = { label: UnitName, value: Unit };
+                // setState({ values, fieldLabel, hasValid, required, isError })
+                // dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+
+                const jsonBody = JSON.stringify({
+                    WorkOrder: id,
+                    Item: Item,
+                    Company: Company,
+                    Party: userParty(),
+                    Quantity: parseInt(Quantity)
+                });
+
+                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+            }
         }
-
-    }
-
-    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             console.log("hasEditVal", hasEditVal)
-    //             setEditData(hasEditVal);
-    //             const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-    //             hasValid.id.valid = true;
-    //             hasValid.BomDate.valid = true;
-    //             hasValid.ItemName.valid = true;
-    //             hasValid.UnitName.valid = true;
-    //             hasValid.EstimatedOutputQty.valid = true;
-    //             hasValid.Comment.valid = true;
-    //             hasValid.IsActive.valid = true;
-
-    //             values.id = id
-    //             values.BomDate = BomDate;
-    //             values.EstimatedOutputQty = EstimatedOutputQty;
-    //             values.Comment = Comment;
-    //             values.IsActive = IsActive;
-    //             values.ItemName = { label: ItemName, value: Item };
-    //             values.UnitName = { label: UnitName, value: Unit };
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(editBOMListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
+    }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -256,6 +262,24 @@ const MaterialIssueMaster = (props) => {
         NumberOfLot: index.NumberOfLot
     }));
 
+    const goButtonHandler = (event) => {
+
+        event.preventDefault();
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                WorkOrder: Itemselect.WorkOrderId,
+                Item: Itemselect.Item,
+                Company: userCompany(),
+                Party: userParty(),
+                Quantity: parseInt(values.LotQuantity)
+            });
+
+            dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+        }
+
+    }
+
+
     function ItemOnchange(e) {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
@@ -273,7 +297,7 @@ const MaterialIssueMaster = (props) => {
         const value1 = Math.max('', Math.min(Itemselect.Quantity, Number(event.target.value)));
         event.target.value = value1
         onChangeText({ event, state, setState });
-           }
+    }
 
     const values = { ...state.values }
     const { isError } = state;

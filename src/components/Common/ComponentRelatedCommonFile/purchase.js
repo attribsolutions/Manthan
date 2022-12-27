@@ -224,6 +224,12 @@ const PurchaseListPage = (props) => {
         makeBtnFunc(arr)
     }
 
+    function onSaveBtnClick() {
+     
+        makeBtnFunc(tableList);
+
+    }
+    
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     }
@@ -363,7 +369,6 @@ const PurchaseListPage = (props) => {
                     ReportType: ReportType,
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
-                    makeBtnFunc: makeBtnFunc,
                     editBodyfunc: editBodyfunc
                 })
             )
@@ -383,11 +388,7 @@ const PurchaseListPage = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
-    function onSaveBtnClick() {
-        debugger
-        makeBtnFunc(tableList);
-
-    }
+  
     if (!(userAccState === '')) {
         return (
             <React.Fragment>

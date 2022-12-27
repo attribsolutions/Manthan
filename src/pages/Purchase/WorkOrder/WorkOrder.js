@@ -104,53 +104,53 @@ const WorkOrder = (props) => {
     }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+    //     if ((hasShowloction || hasShowModal)) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
 
-            if (hasEditVal) {
-                debugger
-                setEditData(hasEditVal);
-                const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //         if (hasEditVal) {
+    //             debugger
+    //             setEditData(hasEditVal);
+    //             const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.id.valid = true;
-                hasValid.WorkOrderDate.valid = true;
-                hasValid.ItemName.valid = true;
-                hasValid.EstimatedOutputQty.valid = true;
-                hasValid.NumberOfLot.valid = true;
-                hasValid.Quantity.valid = true;
+    //             hasValid.id.valid = true;
+    //             hasValid.WorkOrderDate.valid = true;
+    //             hasValid.ItemName.valid = true;
+    //             hasValid.EstimatedOutputQty.valid = true;
+    //             hasValid.NumberOfLot.valid = true;
+    //             hasValid.Quantity.valid = true;
 
-                values.id = id
-                values.WorkOrderDate = WorkOrderDate;
-                values.EstimatedOutputQty = EstimatedOutputQty;
-                values.NumberOfLot = NumberOfLot;
-                values.Quantity = Quantity;
-                values.ItemName = { label: ItemName, value: Item };
+    //             values.id = id
+    //             values.WorkOrderDate = WorkOrderDate;
+    //             values.EstimatedOutputQty = EstimatedOutputQty;
+    //             values.NumberOfLot = NumberOfLot;
+    //             values.Quantity = Quantity;
+    //             values.ItemName = { label: ItemName, value: Item };
 
-                const jsonBody = JSON.stringify({
-                    Item: hasEditVal.Item,
-                    Bom: hasEditVal.Bom,
-                    Quantity: parseInt(hasEditVal.Quantity)
-                });
-                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editWorkOrderListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
+    //             const jsonBody = JSON.stringify({
+    //                 Item: hasEditVal.Item,
+    //                 Bom: hasEditVal.Bom,
+    //                 Quantity: parseInt(hasEditVal.Quantity)
+    //             });
+    //             dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             dispatch(editWorkOrderListSuccess({ Status: false }))
+    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+    //         }
+    //     }
+    // }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
