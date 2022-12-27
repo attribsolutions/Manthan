@@ -441,20 +441,48 @@ const Order = (props) => {
             }
         },
 
-        { //------------- GST column ----------------------------------
-            text: "GST %",
-            dataField: "GSTPercentage",
+        // { //------------- GST column ----------------------------------
+        //     text: "GST %",
+        //     dataField: "",
+        //     // sort: true,
+        //     formatter: (value, row) => (
+        //         <div className="text-end mt-2"><span >
+        //             {value}%
+        //         </span></div>
+
+
+        //     ),
+        //     headerStyle: (colum, colIndex) => {
+        //         return { width: '130px', textAlign: 'center', text: "left" };
+        //     }
+        // },
+
+        { //------------- Comment column ----------------------------------
+            text: "Comment",
+            dataField: "",
             // sort: true,
-            formatter: (value, row) => (
-                <div className="text-end mt-2"><span >
-                    {value}%
-                </span></div>
+            formatter: (value, row, k) => {
+                debugger
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Comment${k}`}
+                            defaultValue={''}
+                            className="text-end"
+                            autoComplete="off"
+                    
+                        // onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
+                        />
+                    </span>
 
+                )
+            },
 
-            ),
             headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center', text: "left" };
+                return { width: '140px', textAlign: 'center' };
             }
+
+
         },
     ];
 
@@ -977,7 +1005,7 @@ const Order = (props) => {
                             : <div className="row save1"></div>
                     }
                 </div >
-                
+
                 <Modal
                     isOpen={isOpen_TermsModal}
                     toggle={() => {
