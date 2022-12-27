@@ -89,6 +89,7 @@ const CustomAlert = () => {
       <Modal
         isOpen={AlertData.Status}
         toggle={() => { tog_standard() }}
+        centered
       >
         {(Type === 1) &&
           <UncontrolledAlert color="success" className="px-6 mb-0 text-center">
