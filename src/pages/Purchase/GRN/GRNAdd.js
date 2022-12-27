@@ -671,6 +671,7 @@ const GRNAdd = (props) => {
                                                 :
                                                 <Dropdown
                                                     className="d-none d-lg-inline-block ms-1"
+
                                                     isOpen={openPOdrp}
                                                     toggle={() => {
                                                         setopenPOdrp(!openPOdrp)
@@ -685,24 +686,24 @@ const GRNAdd = (props) => {
                                                             className="icon-sm text-primary"
                                                         />
                                                     </DropdownToggle>
-                                                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-end">
+                                                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
                                                         <Row className="row  g-0 " >
                                                             {openPOdata.map((index, key) => {
                                                                 return (
-                                                                    <Col className="col col-4 dropdown-icon-item px-3 text-black "
+                                                                    <Col className="col col-6 dropdown-icon-item  text-black "
                                                                     >
                                                                         <li onClick={e => {
                                                                             openPOdata[key].Inward = !openPOdata[key].Inward
                                                                             document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
                                                                         }} >
                                                                             <Row className="row ">
-                                                                                <Col className=" col col-6 user-select ">
+                                                                                <Col className=" col user-select ">
                                                                                     <li>
-                                                                                        <Label className="">{index.ChallanNo}</Label>
+                                                                                        <Label className="" >{index.ChallanNo}</Label>
                                                                                     </li>
                                                                                 </Col>
 
-                                                                                <Col className=" col col-6 mt-2">
+                                                                                <Col className=" col  mt-2" style={{paddingLeft: "inherit"}}>
                                                                                     <Input
                                                                                         id={`hasInwardCheck${key}`}
                                                                                         className="col col-2 text-black "
