@@ -11,20 +11,6 @@ export const SOCIAL_LOGIN = "/social-login"
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
-//ORDERS
-export const SUPPLIER = "/GetSupplier"
-
-// export const GET_ORDER_ITEM = "/Items"
-export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
-export const ORDER_PAGE_API = "Orders"
-export const ORDER_Edit_API = "OrderEdit"
-// export const GET_ITEM_FOR_ORDER = "/GetItemsForParty"
-
-// GRN
-export const GRN_MAKE_API = "/MakeOrdersGrn"
-export const GRN = "/GRN"
-export const GRN_LiST_BY_FILTERS = "/GRNFilter"
-
 
 
 
@@ -176,6 +162,23 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 //PartyItems
 export const PARTYITEMS = '/PartyItemList' // FOR Get
 
+
+//******** purchase modal *********************************************************************************************************************** */
+
+export const SUPPLIER = "/GetSupplier"
+
+//order 
+export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
+export const ORDER_PAGE_API = "Orders"
+export const ORDER_Edit_API = "OrderEdit"
+export const ORDER_TYPE_API ='/POType'
+
+// GRN
+export const GRN_MAKE_API = "/MakeOrdersGrn"
+export const GRN = "/GRN"
+export const GRN_LiST_BY_FILTERS = "/GRNFilter"
+
+
 //Bill Of Master
 export const BOM = '/Billofmaterial'
 export const GET_ITEM_UNITS = '/GetItemUnits'
@@ -197,5 +200,4 @@ export const GO_BUTTON_POST_API_FOR_PRODUCTION ='/Production'
 export const POST_API_FOR_PRODUCTION_LIST ='/ProductionFilter'
 export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
 
-// Order Type 
-export const ORDER_TYPE_API ='/POType'
+
