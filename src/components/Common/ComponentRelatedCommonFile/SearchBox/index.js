@@ -4,19 +4,16 @@ import '../../../../assets/searchBox/searchBox.scss'
 import { MySearch } from '../MySearch';
 
 export const MainSearchBox = () => {
-
     const [searchRoleData, setSearchRoleData] = useState([])
     // const  RoleAccessData=demoRolleAcess
-
     const { RoleAccessData, searchProps } = useSelector((state) => ({
         RoleAccessData: state.Login.RoleData,
         searchProps: state.BreadcrumbReducer.searchProps,
     }));
 
     useEffect(() => {
-
+        debugger
         let SearchRoleData_initial = []
-
         RoleAccessData.map((i) => {
             i.ModuleData.map((index) => {
                 SearchRoleData_initial.push(index)
@@ -25,29 +22,22 @@ export const MainSearchBox = () => {
         setSearchRoleData(SearchRoleData_initial)
     }, [RoleAccessData])
 
-
     useEffect(() => {
-
+        debugger
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
             var currentFocus;
             /*execute a function when someone writes in the text field:*/
-
             inp.addEventListener("input", function (e) {
-
                 var a, b, i, val = this.value;
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
-
                 // if (!val) { return false; }
                 // var a = input.value
-
                 if (val[0] === "/") { val = val.substring(1); }
                 else { return false }
-
                 if (!val) { return false; }
-
                 currentFocus = -1;
                 /*create a DIV element that will contain the items (values):*/
                 a = document.createElement("DIV");
@@ -73,7 +63,6 @@ export const MainSearchBox = () => {
                             /*insert the value for the autocomplete text field:*/
                             inp.value = this.getElementsByTagName("input")[0].value;
                             var input_id = this.getElementsByTagName("input")[0].id;
-
                             // alert(input_id)
                             var ActualPagePath = arr[input_id].ActualPagePath
                             window.location.href = (ActualPagePath)
@@ -143,15 +132,10 @@ export const MainSearchBox = () => {
                 closeAllLists(e.target);
             });
         }
-
-
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
         autocomplete(document.getElementById("myInput"), searchRoleData);
-
     }, [searchRoleData])
-
     // searchProps2 = searchProps
-
     return (
         <React.Fragment>
             <MySearch />

@@ -3,6 +3,7 @@ import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'react
 import Flatpickr from "react-flatpickr"
 import AddressDetailsTable from './Table';
 import { AvField, AvInput } from 'availity-reactstrap-validation';
+import { Modal } from 'bootstrap';
 
 function AddressDetails_Tab(props) {
 
@@ -12,7 +13,7 @@ function AddressDetails_Tab(props) {
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(false);
     const [imageTable, setImageTable] = useState('');
- 
+
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
     }
@@ -98,6 +99,7 @@ function AddressDetails_Tab(props) {
         })
     }
 
+  
     return (
         <Row>
             <Col md={12}  >
@@ -160,7 +162,9 @@ function AddressDetails_Tab(props) {
                                     />
                                 </FormGroup>
                             </Col>
-                            <Col md="1"></Col>
+                            <Col md="1">
+
+                            </Col>
                             <Col md="4">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">FSSAI Exipry </Label>
@@ -179,9 +183,12 @@ function AddressDetails_Tab(props) {
                                         onChange={FSSAIExipryHandler}
                                     />
                                 </FormGroup>
+
                             </Col>
 
-                            <Col md="1">  </Col>
+                            <Col md="1">
+
+                            </Col>
                             <Row className='col col-12'>
                                 <Col md="4">
                                     <FormGroup >
@@ -203,19 +210,19 @@ function AddressDetails_Tab(props) {
                                     </FormGroup>
                                 </Col>
                                 <Col md="1">  </Col>
-
-                                <FormGroup className=" col col-sm-4 " >
-                                    <Label >FSSI Document</Label>
-                                    <Input type="file"
-                                        className="form-control "
-                                        // value={FileName}
-                                        name="image"
-                                        id="file"
-                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                        onChange={(event) => { onchangeHandler(event) }}
-                                    />
-                                </FormGroup>
-
+                                <Col md="4" style={{ width: "8cm" }}>
+                                    <FormGroup >
+                                        <Label >FSSI Document</Label>
+                                        <Input type="file"
+                                            className="form-control "
+                                            // value={FileName}
+                                            name="image"
+                                            id="file"
+                                            accept=".jpg, .jpeg, .png ,.pdf"
+                                            onChange={(event) => { onchangeHandler(event) }}
+                                        />
+                                    </FormGroup>
+                                </Col>
                                 <Col md="1">  </Col>
                                 <FormGroup className="col col-sm-4 mt-4">
                                     <Row className="justify-content-md-left">
@@ -228,7 +235,6 @@ function AddressDetails_Tab(props) {
                                                     checked={IsDefault}
                                                     name="IsDefault"
                                                     onChange={IsDefaultHandler}
-
                                                 />
                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                             </div>
@@ -238,13 +244,21 @@ function AddressDetails_Tab(props) {
 
                             </Row>
                         </Row>
-
+                        {/* <a id="add-img" href='#'>< img id='add-img' src="https://images.pexels.com/photos/1563355/pexels-photo-1563355.jpeg?auto=compress&cs=tinysrgb&w=600" /> </a> */}
+                        {/* <img id="myImg" src="img_snow.jpg" alt="Snow" style="width:100%;max-width:300px"/> */}
                     </CardBody>
                 </Card>
                 <Row>
                     <AddressDetailsTable tableData={props.tableData} func={props.func} />
                 </Row>
             </Col>
+{/*            
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" id="img01"/>
+                <div id="caption"></div>
+            </div> */}
+
         </Row>
     );
 }

@@ -298,7 +298,7 @@ const MySearch = () => {
     return (
         <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
             <div className="position-relative">
-                <input
+                {/* <input
                     id="myInput"
                     className="form-control"
                     placeholder="Search..."
@@ -307,7 +307,7 @@ const MySearch = () => {
                     type="text"
                     onChange={handleClick}
                     name="myCountry"
-                />
+                /> */}
                 <button className="btn btn-primary"
                     onClick={handleClick}
                     type="button">
