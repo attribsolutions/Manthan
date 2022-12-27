@@ -111,7 +111,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     const makeBtnFunc = (list = []) => {
-        debugger
+    
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []

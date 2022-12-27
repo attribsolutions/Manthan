@@ -115,7 +115,7 @@ const MaterialIssueList = () => {
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
-            ToDate: fromdate,
+            ToDate: todate,
         });
         dispatch(getMaterialIssueListPage(jsonBody));
     }
