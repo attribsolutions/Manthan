@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
-import './demo.scss'
 import {
     Card,
     CardBody,
