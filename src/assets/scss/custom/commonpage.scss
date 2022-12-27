@@ -43,7 +43,7 @@
 }
 
 #add-img {
-  
+
   border-radius: 10px;
   transition: transform .2s;
 
@@ -58,98 +58,95 @@
   margin-bottom: 10px;
 
 }
+
 #add-img:focus {
   transform: scale(2.0);
   margin-bottom: 10px;
 
 }
 
-#images:hover{
+#images:hover {
   cursor: pointer;
 }
 
-#images{
+#images {
   width: 1.3cm;
   height: 1.3cm;
   border-radius: 10px;
   margin-bottom: 20px;
 }
 
-#add-img{
+#add-img {
   width: 3cm;
   height: 3cm;
   margin-left: 9cm;
   border-radius: 10px;
   margin-bottom: 20px;
-  margin-top:-6.5cm ;
+  margin-top: -6.5cm;
 }
 
-#add-img:hover{
+#add-img:hover {
   cursor: pointer;
 }
 
 
-.button_add{
-width:30px !important ;
-height: 30px !important;
-//  background-color:#b3e7c0 !important; 
- border-radius: 10% !important;
- margin-top: 15px !important;
- padding-bottom: 3px !important;
- padding-top: 5px !important; 
- padding-left: 7px  !important;
- 
+.button_add {
+  width: 30px !important;
+  height: 30px !important;
+  //  background-color:#b3e7c0 !important; 
+  border-radius: 10% !important;
+  margin-top: 15px !important;
+  padding-bottom: 3px !important;
+  padding-top: 5px !important;
+  padding-left: 7px !important;
+
 }
 
-.button_save{
+.button_save {
   margin-top: -1cm;
   position: fixed;
 
-  
+
   // margin-bottom: 0 !important;
 
   // margin-top: -2cm;
   // position: -webkit-sticky;
-  
+
 }
 
-.bt_save{
+.bt_save {
   margin-bottom: 1cm;
   position: static;
   bottom: 8;
 }
 
 
-header{
+header {}
 
-  
-  
-}
-
-.c_card_body{
+.c_card_body {
   // rgb(225 225 237)
   // background-color:rgb(237, 237, 242) !important ;
-  background-color:whitesmoke !important;
+  background-color: whitesmoke !important;
   border-radius: 5px;
 }
 
-.c_card_header{
-  background-color:rgb(221, 221, 221) !important;
-  border-radius: 5px;
-}
-
-
-.c_card_filter{ 
-  background-color:rgb(218, 218, 219) !important;
+.c_card_header {
+  background-color: rgb(221, 221, 221) !important;
   border-radius: 5px;
 }
 
 
-.Flatpickr{
+.c_card_filter {
+  background-color: rgb(218, 218, 219) !important;
+  border-radius: 5px;
+}
+
+
+.Flatpickr {
   border-color: red !important;
-  
+
 }
- 
+
 
 
 // image
@@ -163,86 +160,109 @@ header{
   transition: 0.3s;
 }
 
-#myImg:hover {opacity: 0.7;}
-
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+#myImg:hover {
+  opacity: 0.7;
 }
 
-/* Modal Content (image) */
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
+// /* The Modal (background) */
+// .modal {
+//   display: none;
+//   /* Hidden by default */
+//   position: fixed;
+//   /* Stay in place */
+//   z-index: 1;
+//   /* Sit on top */
+//   padding-top: 100px;
+//   /* Location of the box */
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   /* Full width */
+//   height: 100%;
+//   /* Full height */
+//   overflow: auto;
+//   /* Enable scroll if needed */
+//   background-color: rgb(0, 0, 0);
+//   /* Fallback color */
+//   background-color: rgba(0, 0, 0, 0.9);
+//   /* Black w/ opacity */
+// }
+
+// /* Modal Content (image) */
+// .modal-content {
+//   margin: auto;
+//   display: block;
+//   width: 80%;
+//   max-width: 700px;
+// }
+
+// /* Caption of Modal Image */
+// #caption {
+//   margin: auto;
+//   display: block;
+//   width: 80%;
+//   max-width: 700px;
+//   text-align: center;
+//   color: #ccc;
+//   padding: 10px 0;
+//   height: 150px;
+// }
+
+// /* Add Animation */
+// .modal-content,
+// #caption {
+//   -webkit-animation-name: zoom;
+//   -webkit-animation-duration: 0.6s;
+//   animation-name: zoom;
+//   animation-duration: 0.6s;
+// }
+
+// @-webkit-keyframes zoom {
+//   from {
+//     -webkit-transform: scale(0)
+//   }
+
+//   to {
+//     -webkit-transform: scale(1)
+//   }
+// }
+
+// @keyframes zoom {
+//   from {
+//     transform: scale(0)
+//   }
+
+//   to {
+//     transform: scale(1)
+//   }
+// }
+
+// /* The Close Button */
+// .close {
+//   position: absolute;
+//   top: 15px;
+//   right: 35px;
+//   color: #f1f1f1;
+//   font-size: 40px;
+//   font-weight: bold;
+//   transition: 0.3s;
+// }
+
+// .close:hover,
+// .close:focus {
+//   color: #bbb;
+//   text-decoration: none;
+//   cursor: pointer;
+// }
+
+
+
+
+
+
+
+.dropdown-menu-custom[style] {
+  left: 11px !important;
+  right: 10px !important;
+  top: -7.2px !important;
 }
-
-/* Caption of Modal Image */
-#caption {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-  text-align: center;
-  color: #ccc;
-  padding: 10px 0;
-  height: 150px;
-}
-
-/* Add Animation */
-.modal-content, #caption {  
-  -webkit-animation-name: zoom;
-  -webkit-animation-duration: 0.6s;
-  animation-name: zoom;
-  animation-duration: 0.6s;
-}
-
-@-webkit-keyframes zoom {
-  from {-webkit-transform:scale(0)} 
-  to {-webkit-transform:scale(1)}
-}
-
-@keyframes zoom {
-  from {transform:scale(0)} 
-  to {transform:scale(1)}
-}
-
-/* The Close Button */
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.close:hover,
-.close:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-   
-   
-
-
-
-
-
-
-
-
-
