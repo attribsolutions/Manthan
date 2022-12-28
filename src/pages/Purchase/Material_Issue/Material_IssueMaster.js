@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -54,7 +54,6 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
-       
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -64,6 +63,7 @@ const MaterialIssueMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -92,6 +92,10 @@ const MaterialIssueMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -137,7 +141,6 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
 
                 const { id, Item, ItemName, Company, EstimatedOutputQty, Quantity, NumberOfLot } = hasEditVal
 
@@ -153,25 +156,6 @@ const MaterialIssueMaster = (props) => {
                     return i
                 })
 
-
-                // hasValid.id.valid = true;
-                // hasValid.MaterialIssueDate.valid = true;
-                // hasValid.ItemName.valid = true;
-                // hasValid.UnitName.valid = true;
-                // hasValid.EstimatedOutputQty.valid = true;
-                // hasValid.Comment.valid = true;
-                // hasValid.IsActive.valid = true;
-
-                // values.id = id
-                // values.BomDate = BomDate;
-                // values.EstimatedOutputQty = EstimatedOutputQty;
-                // values.Comment = Comment;
-                // values.IsActive = IsActive;
-                // values.ItemName = { label: ItemName, value: Item };
-                // values.UnitName = { label: UnitName, value: Unit };
-                // setState({ values, fieldLabel, hasValid, required, isError })
-                // dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-
                 const jsonBody = JSON.stringify({
                     WorkOrder: id,
                     Item: Item,
@@ -179,8 +163,8 @@ const MaterialIssueMaster = (props) => {
                     Party: userParty(),
                     Quantity: parseInt(Quantity)
                 });
-
                 dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
@@ -247,7 +231,7 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
@@ -279,7 +263,6 @@ const MaterialIssueMaster = (props) => {
 
     }
 
-
     function ItemOnchange(e) {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
@@ -298,10 +281,6 @@ const MaterialIssueMaster = (props) => {
         event.target.value = value1
         onChangeText({ event, state, setState });
     }
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     const handleChange = (event, index) => {
         index.Qty = event.target.value
@@ -322,7 +301,6 @@ const MaterialIssueMaster = (props) => {
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
                     IssueQuantity: parseInt(ele.Qty)
-
                 })
             })
         })
@@ -359,11 +337,9 @@ const MaterialIssueMaster = (props) => {
 
             if (pageMode === 'edit') {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-                console.log("update jsonBody", jsonBody)
             }
             else {
                 dispatch(postMaterialIssue(jsonBody));
-                console.log("post jsonBody", jsonBody)
             }
         };
     }
@@ -441,10 +417,8 @@ const MaterialIssueMaster = (props) => {
                                                     defaultValue={index.Qty}
                                                     onChange={(event) => handleChange(event, index)}
                                                 ></Input>
-
                                             </div>
                                         </td>
-
                                     </tr>
                                 )
                             })}
@@ -482,7 +456,6 @@ const MaterialIssueMaster = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    // showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} noValidate>
 
@@ -615,9 +588,7 @@ const MaterialIssueMaster = (props) => {
                                                             responsive
                                                             bordered={false}
                                                             striped={false}
-                                                            // defaultSorted={defaultSorted}
                                                             classes={"table  table-bordered"}
-                                                            // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />
@@ -639,7 +610,9 @@ const MaterialIssueMaster = (props) => {
 
                         {GoButton.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "9px" }}>
-                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                <SaveButton pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    editCreatedBy={editCreatedBy}
                                     module={"BOMMaster"}
                                 />
                             </Col>

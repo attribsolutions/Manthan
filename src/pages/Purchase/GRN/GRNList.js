@@ -20,6 +20,7 @@ import {
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
+
 const GRNList = () => {
 
     const dispatch = useDispatch();
@@ -69,9 +70,6 @@ const GRNList = () => {
         goButtonHandler()
     }, []);
 
-
-
-
     function goButtonHandler() {
         
         const jsonBody = JSON.stringify({
@@ -101,9 +99,6 @@ const GRNList = () => {
         dispatch(grnlistfilters(newObj))
     }
 
-
-
-
     return (
 
         <React.Fragment>
@@ -119,8 +114,6 @@ const GRNList = () => {
 
                 <div className="px-2  mt-n1 c_card_filter text-black " style={{ marginBottom: "-12px" }}>
                     <div className=" mt-1 row">
-
-
                         <div className=" row">
                             <Col sm="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
