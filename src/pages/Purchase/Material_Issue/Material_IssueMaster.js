@@ -175,8 +175,8 @@ const MaterialIssueMaster = (props) => {
             dispatch(postMaterialIssueSuccess({ Status: false }))
             dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
             dispatch(postBOMSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values 
+            // saveDissable(false);//save Button Is enable function
 
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -197,7 +197,7 @@ const MaterialIssueMaster = (props) => {
         else if (postMsg.Status === true) {
             
             dispatch(postMaterialIssueSuccess({ Status: false }))
-            saveDissable(false);//save Button Is enable function
+            // saveDissable(false);//save Button Is enable function
             dispatch(postBOMSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -212,13 +212,13 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values 
+            // saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
+            // saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -278,7 +278,6 @@ const MaterialIssueMaster = (props) => {
 
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
-
     }
 
     function Quantitychange(event) {
@@ -296,8 +295,7 @@ const MaterialIssueMaster = (props) => {
         index.Qty = event.target.value
     };
 
-    const formSubmitHandler = (event) => {
-
+    const SaveHandler = (event) => {
         const MaterialIssueItems = []
         GoButton.map((index) => {
             index.BatchesData.map((ele) => {
@@ -344,7 +342,7 @@ const MaterialIssueMaster = (props) => {
             }
             );
 
-            saveDissable(true);//save Button Is dissable function
+            // saveDissable(true);//save Button Is dissable function
 
             if (pageMode === mode.edit) {
                 // dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
@@ -473,7 +471,7 @@ const MaterialIssueMaster = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     // showCount={true}
                     />
-                    <form onSubmit={formSubmitHandler} noValidate>
+                    <form onSubmit={SaveHandler} noValidate>
 
                         <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
 
