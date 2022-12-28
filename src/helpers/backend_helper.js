@@ -156,7 +156,9 @@ export const getCompanyGroup = () => get(url.GET_COMPANYGROUP)// CompanyGroup Dr
 //PageList And PageMaster
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
+export const get_PageType_HPages = (id) => get(url.GET_PAGETYPE)
 export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
+
 
 //H_pages
 export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
