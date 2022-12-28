@@ -39,7 +39,8 @@ import {
   saveHPages,
   saveHPagesSuccess,
   updateHPages,
-  updateHPagesSuccess
+  updateHPagesSuccess,
+  getPageType
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -92,7 +93,8 @@ const PageMaster = (props) => {
     ModuleData,
     PageAccess,
     modulePostAPIResponse,
-    PageList
+    PageList,
+    PageType
   } = useSelector((state) => ({
     ControlTypes: state.H_Pages.ControlTypes,
     FieldValidations: state.H_Pages.FieldValidations,
@@ -103,6 +105,7 @@ const PageMaster = (props) => {
     PageAccess: state.H_Pages.PageAccess,
     modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
     PageList: state.H_Pages.PageList,
+    PageType:state.H_Pages.PageType
   }));
 
   const location = { ...history.location }
@@ -133,6 +136,7 @@ const PageMaster = (props) => {
     dispatch(getControlTypes());
     dispatch(getFieldValidations());
     dispatch(getPageAccess_DropDown_API());
+    dispatch(getPageType());
   }, [dispatch]);
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -350,17 +354,11 @@ const PageMaster = (props) => {
   }));
 
   // PageList Dropdown
-  const PageType_DropdownOption = [
-    {
-      value: 1,
-      label: "Add Page",
-    },
-    {
-      value: 2,
-      label: "Page List",
-    },
-  ];
-
+  const PageType_DropdownOption = PageType.map((data) => ({
+    value: data.id,
+    label: data.Name,
+  }));
+    
   const ControlTypes_DropdownOptions = ControlTypes.map((data) => ({
     value: data.id,
     label: data.Name
@@ -541,15 +539,12 @@ const PageMaster = (props) => {
       }
     }
 
-    saveDissable(true);//+++++++++save Button Is dissable function
-
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
     } else {
       dispatch(saveHPages(jsonBody));
     }
   };
-
 
   // for module dropdown
   const Module_DropdownSelectHandller = (e) => {
@@ -785,7 +780,6 @@ const PageMaster = (props) => {
                           <CardBody>
                             <Row >
                               <Col md="3">
-
                                 <FormGroup className="mb-3 ">
                                   <Label htmlFor="validationCustom01">Module</Label>
                                   <Select
@@ -805,7 +799,6 @@ const PageMaster = (props) => {
                                   color="btn btn-outline-primary border-2 font-size-12"
                                   type="button" onClick={() => { DropDownAddHandler() }}>
                                   <i className="dripicons-plus"></i>
-
                                 </Button>
                               </Col>
 

@@ -11,9 +11,6 @@ export const SOCIAL_LOGIN = "/social-login"
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
-
-
-
 //Python Logic 
 export const FOOD_ERP_POST_JWT_LOGIN = "/Login"
 export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GetUserDetails"
@@ -29,6 +26,7 @@ export const GET_DEFAULT_MODULE = "/HModules"
 export const POST_MODULE_ID = "/HModules"
 export const SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN = "/showPagesListOnPageType"
 export const SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN = "/PageAccess"
+export const GET_PAGETYPE = "/PageType"
 export const GET_CONTROLTYPES_DROPDOWN_API = "/ControlTypes"
 export const GET_FIELD_VALIDATIONS_DROPDOWN_API = "/GetFieldValidationOnControlType"
 
