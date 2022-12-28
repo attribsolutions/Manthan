@@ -57,7 +57,6 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         id: "",
@@ -128,8 +127,8 @@ const WorkOrder = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postWorkOrderMasterSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values  
+            // saveDissable(false);//save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -162,8 +161,8 @@ const WorkOrder = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            saveDissable(false);//Update Button Is enable function
-            setState(() => resetFunction(fileds, state))// Clear form values  
+            // saveDissable(false);//Update Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
@@ -298,7 +297,7 @@ const WorkOrder = (props) => {
             WorkOrderItems: WorkOrderItems
         });
 
-        saveDissable(true);//save Button Is dissable function
+        // saveDissable(true);//save Button Is dissable function
 
         if (pageMode === 'edit') {
             dispatch(updateWorkOrderList(jsonBody, EditData.id));
@@ -567,7 +566,6 @@ const WorkOrder = (props) => {
                                 <Col sm={2} >
                                     <SaveButton pageMode={pageMode}
                                         userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
                                         module={"WorkOrder"}
                                     />
                                 </Col>

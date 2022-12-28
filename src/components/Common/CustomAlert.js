@@ -19,7 +19,8 @@ const CustomAlert = () => {
     AfterResponseAction = false,
     PermissionAction = false,
     RedirectPath = false,
-    PermissionFunction = () => { }
+    PermissionFunction = () => { },
+    permissionValueReturn
   } = AlertData;
 
   //  Alert Modal Show and Hide Controller
@@ -74,10 +75,10 @@ const CustomAlert = () => {
       PermissionFunction()
     };
   }
- function Permission_Ok_handeler7(){
+  function Permission_Ok_handeler7() {
     dispatch(AlertShow({ Status: false }));
     if (PermissionFunction) {
-      PermissionFunction(true)
+      PermissionFunction(permissionValueReturn)
     };
   }
   function cancel_handeler7() {
@@ -207,7 +208,7 @@ const CustomAlert = () => {
             </div>
           </UncontrolledAlert>
         }
-         {(Type === 7) &&
+        {(Type === 7) &&
           <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
             <i className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
             <p>

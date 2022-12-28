@@ -156,8 +156,8 @@ const BOMMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postBOMSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values  
+            // saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "dropdownAdd") {
@@ -178,7 +178,7 @@ const BOMMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(postBOMSuccess({ Status: false }))
-            saveDissable(false);//save Button Is enable function
+            // saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -192,8 +192,8 @@ const BOMMaster = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            saveDissable(false);//Update Button Is enable function
-            setState(() => resetFunction(fileds, state))// Clear form values  
+            // saveDissable(false);//Update Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.BIllOf_MATERIALS_LIST,
             })
@@ -207,7 +207,7 @@ const BOMMaster = (props) => {
             }));
         }
         else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
+            // saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -294,7 +294,7 @@ const BOMMaster = (props) => {
                 return;
             }
 
-            saveDissable(true);//save Button Is dissable function
+            // saveDissable(true);//save Button Is dissable function
 
             if ((pageMode === 'edit') && !mode) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
