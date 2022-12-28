@@ -2,11 +2,7 @@ import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
-    Card,
-    CardBody,
-    CardHeader,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -35,12 +31,8 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST } from "../../../routes/route_url";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
-import { BIllOf_MATERIALS_LIST } from "../../../routes/route_url";
 import { saveDissable, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -48,19 +40,13 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { handleKeyDown } from "../Order/OrderPageCalulation";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const MaterialIssueMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    const formRef = useRef(null);
-    const [EditData, setEditData] = useState({});
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [Itemselect, setItemselect] = useState([])
-    const [quantity, setQuantity] = useState([])
 
     const fileds = {
         id: "",
@@ -68,9 +54,16 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
+       
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [EditData, setEditData] = useState({});
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [Itemselect, setItemselect] = useState([])
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -80,7 +73,6 @@ const MaterialIssueMaster = (props) => {
         userAccess,
         Items,
         GoButton
-
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -91,10 +83,10 @@ const MaterialIssueMaster = (props) => {
     }));
 
     useEffect(() => {
-
+        const page_Id = pageId.MATERIAL_ISSUE
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(75))
+        dispatch(commonPageField(page_Id))
     }, []);
 
     const location = { ...history.location }
@@ -127,8 +119,151 @@ const MaterialIssueMaster = (props) => {
         dispatch(getWorkOrderListPage(jsonBody));
     }, [])
 
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                debugger
+
+                const { id, Item, ItemName, Company, EstimatedOutputQty, Quantity, NumberOfLot } = hasEditVal
+
+                setItemselect({ value: Item, label: ItemName })
+                setState((i) => {
+                    i.values.ItemName = { value: Item, label: ItemName }
+                    i.values.NumberOfLot = NumberOfLot;
+                    i.hasValid.ItemName.valid = true;
+                    i.values.LotQuantity = EstimatedOutputQty;
+                    i.hasValid.NumberOfLot.valid = true;
+                    i.hasValid.LotQuantity.valid = true;
+
+                    return i
+                })
+
+
+                // hasValid.id.valid = true;
+                // hasValid.MaterialIssueDate.valid = true;
+                // hasValid.ItemName.valid = true;
+                // hasValid.UnitName.valid = true;
+                // hasValid.EstimatedOutputQty.valid = true;
+                // hasValid.Comment.valid = true;
+                // hasValid.IsActive.valid = true;
+
+                // values.id = id
+                // values.BomDate = BomDate;
+                // values.EstimatedOutputQty = EstimatedOutputQty;
+                // values.Comment = Comment;
+                // values.IsActive = IsActive;
+                // values.ItemName = { label: ItemName, value: Item };
+                // values.UnitName = { label: UnitName, value: Unit };
+                // setState({ values, fieldLabel, hasValid, required, isError })
+                // dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+
+                const jsonBody = JSON.stringify({
+                    WorkOrder: id,
+                    Item: Item,
+                    Company: Company,
+                    Party: userParty(),
+                    Quantity: parseInt(Quantity)
+                });
+
+                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            dispatch(postBOMSuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
+
+            if (pageMode === "dropdownAdd") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                    RedirectPath: url.MATERIAL_ISSUE_LIST,
+                }))
+            }
+        }
+        else if (postMsg.Status === true) {
+            dispatch(postMaterialIssueSuccess({ Status: false }))
+            saveDissable(false);//save Button Is enable function
+            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(postMessage.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [postMsg])
+
+    useEffect(() => {
+
+        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
+            history.push({
+                pathname: url.MATERIAL_ISSUE_LIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            dispatch(updateBOMListSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+        }
+    }, [pageField])
+
+    const ItemDropdown_Options = Items.map((index) => ({
+        value: index.id,
+        label: index.ItemName,
+        Quantity: index.Quantity,
+        WorkOrderId: index.id,
+        Item: index.Item,
+        BomID: index.Bom,
+        Unit: index.Unit,
+        NumberOfLot: index.NumberOfLot
+    }));
+
     const goButtonHandler = (event) => {
-      
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -144,135 +279,8 @@ const MaterialIssueMaster = (props) => {
 
     }
 
-    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             console.log("hasEditVal", hasEditVal)
-    //             setEditData(hasEditVal);
-    //             const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-    //             hasValid.id.valid = true;
-    //             hasValid.BomDate.valid = true;
-    //             hasValid.ItemName.valid = true;
-    //             hasValid.UnitName.valid = true;
-    //             hasValid.EstimatedOutputQty.valid = true;
-    //             hasValid.Comment.valid = true;
-    //             hasValid.IsActive.valid = true;
-
-    //             values.id = id
-    //             values.BomDate = BomDate;
-    //             values.EstimatedOutputQty = EstimatedOutputQty;
-    //             values.Comment = Comment;
-    //             values.IsActive = IsActive;
-    //             values.ItemName = { label: ItemName, value: Item };
-    //             values.UnitName = { label: UnitName, value: Unit };
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(editBOMListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
-
-    useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postMaterialIssueSuccess({ Status: false }))
-            dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-            // dispatch(postMaterialIssueSuccess([]))
-            dispatch(postBOMSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds)) //+++++++++ Clear form values 
-            // saveDissable(false);//+++++++++save Button Is enable function
-
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: MATERIAL_ISSUE_LIST,
-                }))
-            }
-        }
-        else if (postMsg.Status === true) {
-
-            dispatch(postMaterialIssueSuccess({ Status: false }))
-
-            saveDissable(false);//+++++++++save Button Is enable function
-            dispatch(postBOMSuccess({ Status: false }))
-
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [postMsg])
-
-    useEffect(() => {
-
-        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            // setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
-            history.push({
-                pathname: MATERIAL_ISSUE_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            dispatch(updateBOMListSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
-
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
-        }
-    }, [pageField])
-
-    
-    const ItemDropdown_Options = Items.map((index) => ({
-        value: index.id,
-        label: index.ItemName,
-        Quantity: index.Quantity,
-        WorkOrderId: index.id,
-        Item: index.Item,
-        BomID: index.Bom,
-        Unit: index.Unit,
-        NumberOfLot:index.NumberOfLot
-    }));
 
     function ItemOnchange(e) {
- 
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
@@ -280,26 +288,15 @@ const MaterialIssueMaster = (props) => {
             i.values.LotQuantity = e.Quantity;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
-
             return i
         })
-
     }
 
     function Quantitychange(event) {
-      
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         const value1 = Math.max('', Math.min(Itemselect.Quantity, Number(event.target.value)));
         event.target.value = value1
         onChangeText({ event, state, setState });
-        // if (Itemselect.Quantity>e) {
-        //     alert("Quantity is greter")
-        //     setState((i) => {
-        //         i.values.Quantity = e;
-        //         return i
-        //     })
-        // }
-
     }
 
     const values = { ...state.values }
@@ -307,12 +304,11 @@ const MaterialIssueMaster = (props) => {
     const { fieldLabel } = state;
 
     const handleChange = (event, index) => {
-      
         index.Qty = event.target.value
     };
 
     const formSubmitHandler = (event) => {
-    
+
         const MaterialIssueItems = []
         GoButton.map((index) => {
             index.BatchesData.map((ele) => {
@@ -359,8 +355,7 @@ const MaterialIssueMaster = (props) => {
             }
             );
 
-            // saveDissable(true);//+++++++++save Button Is dissable function
-
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
@@ -433,7 +428,7 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Label
-                                                    onKeyDown={(e) => handleKeyDown(e,GoButton)}
+                                                    onKeyDown={(e) => handleKeyDown(e, GoButton)}
                                                 >
                                                     {index.ObatchwiseQuantity}
 
@@ -452,13 +447,11 @@ const MaterialIssueMaster = (props) => {
 
                                     </tr>
                                 )
-
                             })}
                         </Tbody>
                     </Table>
                 </>
             ),
-
         },
         {
 
@@ -491,7 +484,7 @@ const MaterialIssueMaster = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     // showCount={true}
                     />
-                    <form onSubmit={formSubmitHandler}noValidate>
+                    <form onSubmit={formSubmitHandler} noValidate>
 
                         <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
 
@@ -543,7 +536,6 @@ const MaterialIssueMaster = (props) => {
                                                     dispatch(Breadcrumb_inputName(hasSelect.label))
                                                 }
                                                 }
-
                                             />
                                             {isError.ItemName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
@@ -651,14 +643,11 @@ const MaterialIssueMaster = (props) => {
                                     module={"BOMMaster"}
                                 />
                             </Col>
-
                         </FormGroup > : null}
-
 
                     </form>
                 </div>
             </React.Fragment>
-
         );
     }
     else {

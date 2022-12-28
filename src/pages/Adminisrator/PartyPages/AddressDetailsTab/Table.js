@@ -25,6 +25,28 @@ function AddressDetailsTable(props) {
         });
         props.func(newtableData)
     }
+
+    // var modal = document.getElementById("myModal");
+    // // Get the image and insert it inside the modal - use its "alt" text as a caption
+    // var img = document.getElementById("myImg");
+    // var modalImg = document.getElementById("img01");
+    // var captionText = document.getElementById("caption");
+    // img.onclick = function () {
+    //     modal.style.display = "block";
+    //     modalImg.src = this.src;
+    //     captionText.innerHTML = this.alt;
+    // }
+    // // Get the <span> element that closes the modal
+    // var span = document.getElementsByClassName("close")[0];
+
+    // // When the user clicks on <span> (x), close the modal
+    // span.onclick = function () {
+    //     modal.style.display = "none";
+    // }
+    // // const myFunction = () => {
+    // //     document.getElementById("add-img").style.display ='block';
+      
+    // //   }
     const tableRows = props.tableData.map((info, key) => {
 
         return (
@@ -32,6 +54,16 @@ function AddressDetailsTable(props) {
                 <td>{info.Address}</td>
                 <td>{info.FSSAINo}</td>
                 <td>{info.FSSAIExipry}</td>
+                <td>
+                    {/* {info.fssaidocument} */}
+                <button
+                type='button'
+                // id='myImg'
+                // onClick={myFunction}
+                    className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
+                    Show Image
+                </button>
+                </td>
                 <td>{info.PIN}</td>
                 < td><Input type="radio"
                     name="btnradio"
@@ -50,7 +82,7 @@ function AddressDetailsTable(props) {
                     >
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
-                   
+
                 </td>
             </tr>
         );
@@ -66,6 +98,7 @@ function AddressDetailsTable(props) {
                                 <th className="col col-sm-3">Address</th>
                                 <th className="col col-sm-3">FSSAINo</th>
                                 <th className="col col-sm-3">FSSAIExipry</th>
+                                <th className="col col-sm-3">FSSAI Document</th>
                                 <th className="col col-sm-3">PIN</th>
                                 <th className="col col-sm-3">IsDefault</th>
                                 <th className="col col-sm-3">{"Action"}</th>

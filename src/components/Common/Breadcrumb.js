@@ -49,7 +49,7 @@ const Breadcrumb = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
-    
+
     if (pageMode === "add") {
 
       let pathName = history.location.pathname
@@ -95,7 +95,7 @@ const Breadcrumb = props => {
   }, [excelData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    
+
     var list = []
     var object1 = {}
     var selectedValues = Object.keys(values);
@@ -122,7 +122,7 @@ const Breadcrumb = props => {
     // e.preventDefault();
     const check = e.target
     // var chek = document.getElementById("checkAll").checked
-    debugger
+
     if (check.id === "checkAll") {
       if (check.checked) {
         for (var i = 0; i < downListKey.length; i++) {

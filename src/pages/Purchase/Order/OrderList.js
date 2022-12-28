@@ -111,7 +111,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     const makeBtnFunc = (list = []) => {
-        debugger
+    
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []
@@ -121,7 +121,8 @@ const OrderList = () => {
                     grnRef.push({
                         Invoice: null,
                         Order: ele.id,
-                        ChallanNo: ele.FullOrderNumber
+                        ChallanNo: ele.FullOrderNumber,
+                        Inward:false
                     });
                     isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                     challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
@@ -198,7 +199,7 @@ const OrderList = () => {
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2  mt-n1 c_card_filter" >
+                <div className="px-2  mt-n1 c_card_filter text-black" >
                     <div className=" row" style={{ marginBottom: "-12px" }}>
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >

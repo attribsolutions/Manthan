@@ -22,7 +22,6 @@ export const listPageCommonButtonFunction = (props) => {
         deleteName,
         downUrlPath,
         ReportType,
-        makeBtnFunc,
         editBodyfunc
     } = props;
 
@@ -260,7 +259,7 @@ export const dateConvertfunc = (inp) => {//+++++++++++++++ Current Date+++++++++
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
     return currentDate
 }
-// dateConvertfunc("2022/12/12")
+
 export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0
     try {

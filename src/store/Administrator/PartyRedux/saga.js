@@ -103,9 +103,9 @@ function* Delete_Party_GenratorFunction({ id }) {
 }
 
 function* Edit_Party_GenratorFunction({ id, pageMode }) {
-  debugger
+  
   try {
-    debugger
+    
     const response = yield call(Party_Master_Edit_API, id);
     response.pageMode = pageMode
     yield put(editPartyIDSuccess(response));

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
-import './demo.scss'
 import {
     Card,
     CardBody,
@@ -41,7 +40,7 @@ import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { PARTY_lIST } from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -150,7 +149,13 @@ const PartyMaster = (props) => {
                     label: hasEditVal.PriceList.Name,
                     value: hasEditVal.PriceList.id,
                 });
+                // ====================== Images tab ======================
 
+                // let ItemImagesDetails = hasEditVal.PartyAddress.map((index) => {
+                //     debugger
+                //     return index.fssaidocument
+                // })
+                debugger
                 setPartyPrefix(hasEditVal.PartyPrefix)
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
                 dispatch(editPartyIDSuccess({ Status: false }));
@@ -211,7 +216,7 @@ const PartyMaster = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);
             history.push({
-                pathname:PARTY_lIST,
+                pathname: url.PARTY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);

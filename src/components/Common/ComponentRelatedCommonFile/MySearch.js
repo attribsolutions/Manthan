@@ -27,28 +27,18 @@ export const defaultSearch = (defaultid,) => {
     return retn
 }
 
-
-
-
 export const MySearch = () => {
-
     function handleClick(e) {
-        debugger
         var len = e.target.value
         input = e.target.value
-
-
         if (!(len[0] === "/")) {
-
             props1.onSearch(len);
-
             const found = priviousSerach.find((i, k) => {
                 if ((i.id === pageid)) {
                     priviousSerach[k] = { id: i.id, text: len }
                 }
                 return (i.id === pageid)
             });
-
             if (!found) {
                 priviousSerach.push({ id: pageid, text: len })
             }

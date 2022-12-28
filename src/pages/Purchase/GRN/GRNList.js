@@ -117,7 +117,7 @@ const GRNList = () => {
                     newBtnPagePath={GRN_ADD_Mode_2}
                     excelData={downList} />
 
-                <div className="px-2  mt-n1 c_card_filter " style={{ marginBottom: "-12px" }}>
+                <div className="px-2  mt-n1 c_card_filter text-black " style={{ marginBottom: "-12px" }}>
                     <div className=" mt-1 row">
 
 

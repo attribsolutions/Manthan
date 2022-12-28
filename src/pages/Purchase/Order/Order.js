@@ -441,20 +441,45 @@ const Order = (props) => {
             }
         },
 
-        { //------------- GST column ----------------------------------
-            text: "GST %",
-            dataField: "GSTPercentage",
+        // { //------------- GST column ----------------------------------
+        //     text: "GST %",
+        //     dataField: "",
+        //     // sort: true,
+        //     formatter: (value, row) => (
+        //         <div className="text-end mt-2"><span >
+        //             {value}%
+        //         </span></div>
+
+
+        //     ),
+        //     headerStyle: (colum, colIndex) => {
+        //         return { width: '130px', textAlign: 'center', text: "left" };
+        //     }
+        // },
+
+        { //------------- Comment column ----------------------------------
+            text: "Comment",
+            dataField: "",
             // sort: true,
-            formatter: (value, row) => (
-                <div className="text-end mt-2"><span >
-                    {value}%
-                </span></div>
+            formatter: (value, row, k) => {
+                debugger
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Comment${k}`}
+                            defaultValue={''}
+                            className="text-end"
+                            autoComplete="off"
+                        />
+                    </span>
 
+                )
+            },
 
-            ),
             headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center', text: "left" };
+                return { width: '140px', textAlign: 'center' };
             }
+
         },
     ];
 
@@ -515,7 +540,7 @@ const Order = (props) => {
         }
     }
     function supplierOnchange(e) {
-        debugger
+
         if ((orderItemTable.length > 0) && (e.value > 0)) {
             dispatch(
                 AlertState({
@@ -528,7 +553,6 @@ const Order = (props) => {
             );
             return;
         }
-        debugger
 
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e
@@ -664,8 +688,8 @@ const Order = (props) => {
             POType: 1,
             Division: division,
             POType: orderTypeSelect.value,
-            POFromDate: poFromDate,
-            POToDate: poToDate,
+            POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
+            POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
             OrderItem: itemArr,
@@ -977,6 +1001,7 @@ const Order = (props) => {
                             : <div className="row save1"></div>
                     }
                 </div >
+
                 <Modal
                     isOpen={isOpen_TermsModal}
                     toggle={() => {
