@@ -20,7 +20,6 @@ import {
     editOrderIdSuccess,
     goButtonForOrderAdd,
     goButtonForOrderAddSuccess,
-    orderAddfilters,
     postOrder,
     postOrderSuccess,
     updateOrderId,
@@ -37,9 +36,11 @@ import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
-import * as url from "../../../routes/route_url";
 
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID";
 let description = ''
 let editVal = {}
 
@@ -48,18 +49,26 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const fileds = {
+        id: "",
+        Name: "",
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userAccState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
+    // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
-    const [shippAddr, setshippAddr] = useState('')
+    const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(currentDate)
-    const [poToDate, setpoToDate] = useState(currentDate)
+    const [poFromDate, setpoFromDate] = useState(currentDate);
+    const [poToDate, setpoToDate] = useState(currentDate);
+    const [orderdate, setorderdate] = useState(currentDate);
+    const [supplierSelect, setsupplierSelect] = useState('');
 
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
@@ -67,13 +76,7 @@ const Order = (props) => {
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
 
-    useEffect(() => {
-        dispatch(goButtonForOrderAddSuccess([]))
-        dispatch(getSupplier())
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
-    }, [])
+
 
     const {
         goBtnOrderdata,
@@ -83,7 +86,7 @@ const Order = (props) => {
         orderType,
         updateMsg,
         supplierAddress = [],
-        orderAddFilter
+
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         supplier: state.SupplierReducer.supplier,
@@ -93,14 +96,10 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        orderAddFilter: state.OrderReducer.orderAddFilter,
+        // orderAddFilter: state.OrderReducer.orderAddFilter,
     }));
 
-    const { supplierSelect, orderdate } = orderAddFilter;
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
 
     // userAccess useEffect
     useEffect(() => {
@@ -118,15 +117,9 @@ const Order = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-
-        if (goBtnOrderdata) {
-            let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-            setorderItemTable(OrderItems)
-            setTermsAndConTable(TermsAndConditions)
-            dispatch(goButtonForOrderAddSuccess(''))
-        }
-    }, [goBtnOrderdata])
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
 
     useEffect(() => {
@@ -143,17 +136,14 @@ const Order = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-                dispatch(orderAddfilters({
-                    orderdate: hasEditVal.OrderDate,
-                    supplierSelect: {
-                        label: hasEditVal.SupplierName,
-                        value: hasEditVal.Supplier
-                    }
-                }));
 
+                setorderdate(hasEditVal.OrderDate)
+                setsupplierSelect({
+                    label: hasEditVal.SupplierName,
+                    value: hasEditVal.Supplier
+                })
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
@@ -183,7 +173,28 @@ const Order = (props) => {
             dispatch(editOrderIdSuccess({ Status: false }))
         } else {
             dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0`))
+            // dispatch(orderAddfilters({
+            //     orderdate: currentDate,
+            //     supplierSelect: ''
+            // }));
         }
+    }, [])
+
+    useEffect(() => {
+        if (goBtnOrderdata) {
+            let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
+            setorderItemTable(OrderItems)
+            setTermsAndConTable(TermsAndConditions)
+            dispatch(goButtonForOrderAddSuccess(''))
+        }
+    }, [goBtnOrderdata])
+    useEffect(() => {
+        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(getSupplier())
+        dispatch(getSupplierAddress())
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+        description = ''
     }, [])
 
     useEffect(() => {
@@ -194,8 +205,19 @@ const Order = (props) => {
     }, [supplierAddress])
 
     useEffect(() => {
+        if ((orderType.length > 0) && (!((hasShowloction || hasShowModal)))) {
+            setorderTypeSelect({
+                value: orderType[0].id,
+                label: orderType[0].Name,
+            });
+        }
+    }, [orderType])
+
+    useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
             description = ''
@@ -207,6 +229,7 @@ const Order = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -220,11 +243,15 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             description = ''
             history.push({
-                pathname: url.ORDER_lIST,
+                pathname: ORDER_lIST,
+                // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -278,8 +305,6 @@ const Order = (props) => {
         {//------------- ItemName column ----------------------------------
 
             dataField: "ItemName",
-            sort: true,
-
             headerFormatter: (value, row, k) => {
                 return (
                     <div className="d-flex justify-content-between">
@@ -300,6 +325,7 @@ const Order = (props) => {
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             dataField: "StockQuantity",
+            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -316,6 +342,7 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
+            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -352,6 +379,7 @@ const Order = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
+            // sort: true,
             formatter: (value, row, key) => {
 
                 if (!row.UnitName) {
@@ -366,6 +394,7 @@ const Order = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -391,6 +420,7 @@ const Order = (props) => {
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
             dataField: "",
+            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -424,6 +454,7 @@ const Order = (props) => {
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
+            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -434,12 +465,14 @@ const Order = (props) => {
                             autoComplete="off"
                         />
                     </span>
+
                 )
             },
 
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
+
         },
     ];
 
@@ -488,35 +521,40 @@ const Order = (props) => {
     };
 
     function orderdateOnchange(e, date) {
-        let newObj = { ...orderAddFilter }
-        newObj.orderdate = date
-        dispatch(orderAddfilters(newObj))
+        setorderdate(date)
     };
 
-    function data(istrue) {
+    function permissionfunc(istrue) {
         if (istrue) {
-            dispatch(goButtonForOrderAddSuccess([]));
-            goButtonHandler()
+            setsupplierSelect(istrue)// **istrue is == event value
+            setorderItemTable([])
         }
     }
-    function supplierOnchange(e) {
 
-        if ((orderItemTable.length > 0) && (e.value > 0)) {
+    function supplierOnchange(e) {
+        var isfind = orderItemTable.find(i => (i.Quantity > 0))
+        if (isfind) {
             dispatch(
                 AlertState({
                     Type: 7,
                     Status: true,
                     Message: "If you are change Supplier Name then All Item Data is Clear",
                     RedirectPath: false,
-                    PermissionFunction: data,
+                    PermissionFunction: permissionfunc,
+                    permissionValueReturn: e
+
                 })
             );
             return;
+        } else {
+            setsupplierSelect(e)
+            setorderItemTable([])
+            setTermsAndConTable([])
         }
 
-        let newObj = { ...orderAddFilter }
-        newObj.supplierSelect = e
-        dispatch(orderAddfilters(newObj))
+        // let newObj = { ...orderAddFilter }
+        // newObj.supplierSelect = e
+        // dispatch(orderAddfilters(newObj))
     };
 
     const saveHandeller = () => {
@@ -572,6 +610,10 @@ const Order = (props) => {
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
             }
+            //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
+            //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
+            // }
+
             else if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
@@ -596,6 +638,7 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
+        // }
 
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -653,7 +696,7 @@ const Order = (props) => {
 
         });
 
-        saveDissable(true);//save Button Is dissable function
+        saveDissable(true);//+++++++++save Button Is dissable function
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))
@@ -661,6 +704,7 @@ const Order = (props) => {
         } else {
 
             dispatch(postOrder(jsonBody))
+            console.log("Oder Post Json", jsonBody)
         }
 
 
@@ -672,6 +716,8 @@ const Order = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
+
+
                 <div className="page-content">
 
                     <Breadcrumb
@@ -703,6 +749,7 @@ const Order = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
+
 
                             <Col sm="6">
                                 <FormGroup className="mb-1 row mt-3 " >
@@ -741,6 +788,7 @@ const Order = (props) => {
                                             placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
                                         />
+
                                     </div>
 
                                 </FormGroup>
@@ -761,6 +809,8 @@ const Order = (props) => {
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
+                                                // minDate: pageMode === "edit" ? orderdate : "today",
+
                                             }}
                                             onChange={(e, date) => { setdeliverydate(date) }}
                                         />
@@ -784,6 +834,7 @@ const Order = (props) => {
                                                 control: base => ({
                                                     ...base,
                                                     border: 'non',
+                                                    // backgroundColor: ""
                                                 })
                                             }}
                                             onChange={(e) => { setbillAddr(e) }}
@@ -800,10 +851,12 @@ const Order = (props) => {
                                         <Select
                                             value={shippAddr}
                                             classNamePrefix="select2-Customer"
+                                            // isDisabled={pageMode === "edit" ? true : false}
                                             styles={{
                                                 control: base => ({
                                                     ...base,
                                                     border: 'non',
+                                                    // backgroundColor: ""
                                                 })
                                             }}
                                             options={supplierAddress}
@@ -841,6 +894,7 @@ const Order = (props) => {
                                             id="pofromdate"
                                             name="pofromdate"
                                             value={poFromDate}
+                                            // disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
@@ -863,6 +917,7 @@ const Order = (props) => {
                                             id="potodate"
                                             name="potodate"
                                             value={poToDate}
+                                            // disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
@@ -931,8 +986,7 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode}
-                                userAcc={userAccState}
+                            <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"Order"} onClick={saveHandeller}
                             />
                         </div>
