@@ -369,7 +369,6 @@ const GSTMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
             Company: userCompany(),
