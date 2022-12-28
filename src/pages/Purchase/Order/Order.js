@@ -74,7 +74,8 @@ const Order = (props) => {
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
-
+    const [comment, setComment] = useState([])
+    console.log("orderItemTable", orderItemTable)
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess([]))
         dispatch(getSupplier())
@@ -441,23 +442,7 @@ const Order = (props) => {
             }
         },
 
-        // { //------------- GST column ----------------------------------
-        //     text: "GST %",
-        //     dataField: "",
-        //     // sort: true,
-        //     formatter: (value, row) => (
-        //         <div className="text-end mt-2"><span >
-        //             {value}%
-        //         </span></div>
-
-
-        //     ),
-        //     headerStyle: (colum, colIndex) => {
-        //         return { width: '130px', textAlign: 'center', text: "left" };
-        //     }
-        // },
-
-        { //------------- Comment column ----------------------------------
+          { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
             // sort: true,
@@ -467,9 +452,12 @@ const Order = (props) => {
                     <span >
                         <Input type="text"
                             id={`Comment${k}`}
-                            defaultValue={''}
-                            className="text-end"
+                            defaultValue={row.Comment}
                             autoComplete="off"
+                            onChange={(e) => {
+                                row["Comment"] = e.target.value
+
+                            }}
                         />
                     </span>
 
@@ -589,7 +577,8 @@ const Order = (props) => {
                 SGSTPercentage: (i.GSTPercentage / 2),
                 IGSTPercentage: 0,
                 Amount: i.Amount,
-                IsDeleted: isedit
+                IsDeleted: isedit,
+                Comment:i.Comment
             }
             itemArr.push(arr)
         };
