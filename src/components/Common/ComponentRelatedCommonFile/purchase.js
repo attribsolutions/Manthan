@@ -83,8 +83,7 @@ const PurchaseListPage = (props) => {
         makeBtnFunc = () => { },
         makeBtnShow,
         makeBtnName,
-        downUrlPath = () => { },
-        ReportType
+        downBtnFunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -225,11 +224,11 @@ const PurchaseListPage = (props) => {
     }
 
     function onSaveBtnClick() {
-     
+
         makeBtnFunc(tableList);
 
     }
-    
+
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     }
@@ -365,8 +364,7 @@ const PurchaseListPage = (props) => {
                     userAccState: userAccState,
                     editActionFun: editId,
                     deleteActionFun: deleteId,
-                    downUrlPath: downUrlPath,
-                    ReportType: ReportType,
+                    downBtnFunc: downBtnFunc,
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
                     editBodyfunc: editBodyfunc
@@ -388,7 +386,7 @@ const PurchaseListPage = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
-  
+
     if (!(userAccState === '')) {
         return (
             <React.Fragment>

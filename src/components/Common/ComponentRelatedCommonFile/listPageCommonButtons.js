@@ -20,8 +20,7 @@ export const listPageCommonButtonFunction = (props) => {
         deleteActionFun,
         ButtonMsgLable,
         deleteName,
-        downUrlPath,
-        ReportType,
+        downBtnFunc,
         editBodyfunc
     } = props;
 
@@ -47,7 +46,7 @@ export const listPageCommonButtonFunction = (props) => {
         dispatch(editActionFun(rowData.id, "copy",));
     }
     function downHandler(rowData) {
-        dispatch(getpdfReportdata(downUrlPath, ReportType, rowData.id));
+        downBtnFunc(rowData);
     }
 
     function deleteHandler(rowData) {

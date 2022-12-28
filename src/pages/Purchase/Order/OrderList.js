@@ -26,6 +26,8 @@ import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 const OrderList = () => {
 
@@ -106,7 +108,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     const makeBtnFunc = (list = []) => {
-    
+
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []
@@ -117,7 +119,7 @@ const OrderList = () => {
                         Invoice: null,
                         Order: ele.id,
                         ChallanNo: ele.FullOrderNumber,
-                        Inward:false
+                        Inward: false
                     });
                     isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                     challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
@@ -152,7 +154,10 @@ const OrderList = () => {
         var Mode = "edit"
         dispatch(editOrderId(jsonBody, Mode));
     }
-
+    function downBtnFunc(row) {
+        var ReportType = report.order1;
+        dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
+    }
 
     function goButtonHandler() {
 
@@ -270,12 +275,11 @@ const OrderList = () => {
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
-                            makeBtnFunc={makeBtnFunc}
                             makeBtnShow={pageMode === url.ORDER_lIST ? false : true}
+                            makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
-                            downUrlPath={editOrderId}
-                            ReportType={report.order1}
+                            downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
                         />
                         : null
