@@ -10,7 +10,6 @@ import {
     getOrderListPage,
     updateOrderIdSuccess,
     orderlistfilters,
-    // getOrderList
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
@@ -34,9 +33,6 @@ const OrderList = () => {
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
-    // const hasShowloction = history.location.hasOwnProperty("renderMode")
-
-    // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState(url.ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
 
@@ -59,7 +55,6 @@ const OrderList = () => {
 
     const action = {
         getList: getOrderListPage,
-        // editId: editOrderId,
         deleteId: deleteOrderId,
         postSucc: postMessage,
         updateSucc: updateOrderIdSuccess,
@@ -260,10 +255,6 @@ const OrderList = () => {
                         </Col >
 
                         <Col sm="1" className="mt-3 ">
-                            {/* <Button id="gobtn_submmit" type="button"
-                                color="btn btn-outline-success border-2 font-size-12 mb-2 "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button> */}
                             <Go_Button onClick={goButtonHandler} />
                         </Col>
                     </div>

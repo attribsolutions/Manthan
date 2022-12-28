@@ -2,16 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
+import {
+    BreadcrumbFilterSize,
+    commonPageFieldList,
+    commonPageFieldListSuccess
+} from "../../../../store/actions";
 import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { BOMlistfilters, deleteBOMId, deleteBOMIdSuccess, editBOMList, getBOMListPage, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
+import {
+    BOMlistfilters,
+    deleteBOMId,
+    deleteBOMIdSuccess,
+    editBOMList,
+    getBOMListPage,
+    updateBOMListSuccess
+} from "../../../../store/Purchase/BOMRedux/action";
 import BOMMaster from "../BOMMaster/BOMIndex";
+import * as pageId from "../../../../routes//allPageID";
+import * as url from "../../../../routes/route_url";
 
 const BOMList = () => {
 
@@ -32,10 +45,10 @@ const BOMList = () => {
             editData: state.BOMReducer.editData,
             bomlistFilters: state.BOMReducer.bomlistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList,
+            pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    
+
     const { userAccess, pageField, tableList, bomlistFilters } = reducers;
     const { fromdate, todate } = bomlistFilters;
 
@@ -50,14 +63,14 @@ const BOMList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = pageId.BIllOf_MATERIALS_LIST
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(70))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbFilterSize(`${"BOM Count"} :0`))
         goButtonHandler(true)
 
     }, []);
-
 
     const downList = useMemo(() => {
         let PageFieldMaster = []
@@ -129,6 +142,7 @@ const BOMList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
+
                         <Col sm="5" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
@@ -165,20 +179,15 @@ const BOMList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={BOMMaster}
-                            masterPath={BIllOf_MATERIALS}
+                            masterPath={url.BIllOf_MATERIALS}
                             ButtonMsgLable={"BOM"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            // makeBtnFunc={makeBtnFunc}
-                            // makeBtnShow={true}
-                            // makeBtnName={"Make Production"}
                         />
                         : null
                 }
             </div>
-
-
         </React.Fragment>
     )
 }

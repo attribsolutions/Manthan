@@ -46,7 +46,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import * as pageId from "../../../routes/allPageID"
+import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 
 const VehicleMaster = (props) => {

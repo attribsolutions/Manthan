@@ -74,8 +74,7 @@ const Order = (props) => {
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
-    const [comment, setComment] = useState([])
-    console.log("orderItemTable", orderItemTable)
+
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess([]))
         dispatch(getSupplier())
