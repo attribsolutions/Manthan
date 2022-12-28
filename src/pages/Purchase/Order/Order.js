@@ -20,7 +20,6 @@ import {
     editOrderIdSuccess,
     goButtonForOrderAdd,
     goButtonForOrderAddSuccess,
-    orderAddfilters,
     postOrder,
     postOrderSuccess,
     updateOrderId,
@@ -39,6 +38,7 @@ import { createdBy, currentDate, saveDissable, userParty } from "../../../compon
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
+
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 let description = ''
@@ -63,10 +63,12 @@ const Order = (props) => {
     // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
-    const [shippAddr, setshippAddr] = useState('')
+    const [shippAddr, setshippAddr] = useState('');
 
-    const [poFromDate, setpoFromDate] = useState(currentDate)
-    const [poToDate, setpoToDate] = useState(currentDate)
+    const [poFromDate, setpoFromDate] = useState(currentDate);
+    const [poToDate, setpoToDate] = useState(currentDate);
+    const [orderdate, setorderdate] = useState(currentDate);
+    const [supplierSelect, setsupplierSelect] = useState('');
 
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
@@ -74,13 +76,7 @@ const Order = (props) => {
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
 
-    useEffect(() => {
-        dispatch(goButtonForOrderAddSuccess([]))
-        dispatch(getSupplier())
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
-    }, [])
+
 
     const {
         goBtnOrderdata,
@@ -90,7 +86,7 @@ const Order = (props) => {
         orderType,
         updateMsg,
         supplierAddress = [],
-        orderAddFilter
+
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         supplier: state.SupplierReducer.supplier,
@@ -100,14 +96,11 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        orderAddFilter: state.OrderReducer.orderAddFilter,
+        // orderAddFilter: state.OrderReducer.orderAddFilter,
     }));
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
 
-    const { supplierSelect, orderdate } = orderAddFilter;
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -124,15 +117,9 @@ const Order = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-
-        if (goBtnOrderdata) {
-            let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-            setorderItemTable(OrderItems)
-            setTermsAndConTable(TermsAndConditions)
-            dispatch(goButtonForOrderAddSuccess(''))
-        }
-    }, [goBtnOrderdata])
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
 
     useEffect(() => {
@@ -149,17 +136,14 @@ const Order = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-                dispatch(orderAddfilters({
-                    orderdate: hasEditVal.OrderDate,
-                    supplierSelect: {
-                        label: hasEditVal.SupplierName,
-                        value: hasEditVal.Supplier
-                    }
-                }));
 
+                setorderdate(hasEditVal.OrderDate)
+                setsupplierSelect({
+                    label: hasEditVal.SupplierName,
+                    value: hasEditVal.Supplier
+                })
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
@@ -189,7 +173,28 @@ const Order = (props) => {
             dispatch(editOrderIdSuccess({ Status: false }))
         } else {
             dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0`))
+            // dispatch(orderAddfilters({
+            //     orderdate: currentDate,
+            //     supplierSelect: ''
+            // }));
         }
+    }, [])
+
+    useEffect(() => {
+        if (goBtnOrderdata) {
+            let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
+            setorderItemTable(OrderItems)
+            setTermsAndConTable(TermsAndConditions)
+            dispatch(goButtonForOrderAddSuccess(''))
+        }
+    }, [goBtnOrderdata])
+    useEffect(() => {
+        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(getSupplier())
+        dispatch(getSupplierAddress())
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+        description = ''
     }, [])
 
     useEffect(() => {
@@ -198,6 +203,15 @@ const Order = (props) => {
             setshippAddr(supplierAddress[0]);
         }
     }, [supplierAddress])
+
+    useEffect(() => {
+        if ((orderType.length > 0) && (!((hasShowloction || hasShowModal)))) {
+            setorderTypeSelect({
+                value: orderType[0].id,
+                label: orderType[0].Name,
+            });
+        }
+    }, [orderType])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -291,8 +305,6 @@ const Order = (props) => {
         {//------------- ItemName column ----------------------------------
 
             dataField: "ItemName",
-            sort: true,
-
             headerFormatter: (value, row, k) => {
                 return (
                     <div className="d-flex justify-content-between">
@@ -439,22 +451,18 @@ const Order = (props) => {
             }
         },
 
-          { //------------- Comment column ----------------------------------
+        { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
             // sort: true,
             formatter: (value, row, k) => {
-                debugger
                 return (
                     <span >
                         <Input type="text"
                             id={`Comment${k}`}
-                            defaultValue={row.Comment}
+                            defaultValue={''}
+                            className="text-end"
                             autoComplete="off"
-                            onChange={(e) => {
-                                row["Comment"] = e.target.value
-
-                            }}
                         />
                     </span>
 
@@ -513,35 +521,40 @@ const Order = (props) => {
     };
 
     function orderdateOnchange(e, date) {
-        let newObj = { ...orderAddFilter }
-        newObj.orderdate = date
-        dispatch(orderAddfilters(newObj))
+        setorderdate(date)
     };
 
-    function data(istrue) {
+    function permissionfunc(istrue) {
         if (istrue) {
-            dispatch(goButtonForOrderAddSuccess([]));
-            goButtonHandler()
+            setsupplierSelect(istrue)// **istrue is == event value
+            setorderItemTable([])
         }
     }
-    function supplierOnchange(e) {
 
-        if ((orderItemTable.length > 0) && (e.value > 0)) {
+    function supplierOnchange(e) {
+        var isfind = orderItemTable.find(i => (i.Quantity > 0))
+        if (isfind) {
             dispatch(
                 AlertState({
                     Type: 7,
                     Status: true,
                     Message: "If you are change Supplier Name then All Item Data is Clear",
                     RedirectPath: false,
-                    PermissionFunction: data,
+                    PermissionFunction: permissionfunc,
+                    permissionValueReturn: e
+
                 })
             );
             return;
+        } else {
+            setsupplierSelect(e)
+            setorderItemTable([])
+            setTermsAndConTable([])
         }
 
-        let newObj = { ...orderAddFilter }
-        newObj.supplierSelect = e
-        dispatch(orderAddfilters(newObj))
+        // let newObj = { ...orderAddFilter }
+        // newObj.supplierSelect = e
+        // dispatch(orderAddfilters(newObj))
     };
 
     const saveHandeller = () => {
@@ -574,8 +587,7 @@ const Order = (props) => {
                 SGSTPercentage: (i.GSTPercentage / 2),
                 IGSTPercentage: 0,
                 Amount: i.Amount,
-                IsDeleted: isedit,
-                Comment:i.Comment
+                IsDeleted: isedit
             }
             itemArr.push(arr)
         };
@@ -626,6 +638,7 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
+        // }
 
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -753,17 +766,11 @@ const Order = (props) => {
                                     </Col>
                                     <Col sm="1" className="mx-4 ">
                                         {pageMode === "save" ?
-                                            //  <Button
-                                            //     id={""}
-                                            //      type="button" color="btn btn-outline-success border-2 font-size-12"
-                                            //         onClick={(e) => goButtonHandler()}>Go</Button> */}
                                             <Go_Button onClick={(e) => goButtonHandler()} />
                                             : null}
                                     </Col>
                                 </FormGroup>
                             </Col >
-
-
 
                         </div>
                     </div>
@@ -979,8 +986,7 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode}
-                                userAcc={userAccState}
+                            <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"Order"} onClick={saveHandeller}
                             />
                         </div>
