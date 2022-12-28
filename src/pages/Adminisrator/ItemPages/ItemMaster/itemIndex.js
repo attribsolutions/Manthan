@@ -44,7 +44,7 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { createdBy, saveDissable } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -70,10 +70,11 @@ const ItemsMaster = (props) => {
         HSN: '',
         isActive: true,
         Tag: '',
-        BrandName: ''
+        BrandName: '',
+        ShelfLife: ''
     }
-
     const initialInValid = ["txtName0", "txtShortName0",]
+
     const [inValidDrop, setInValidDrop] = useState({
         BaseUnit: false,
         Company: false,
@@ -82,13 +83,17 @@ const ItemsMaster = (props) => {
         Division: false
     })
     let [isValidate, setIsValidate] = useState(initialInValid);
+
     const [formValue, setFormValue] = useState(initial);
     const [pageRefresh, setpageRefresh] = useState(false);
     const [marginMaster, setMarginMaster] = useState([]);
+
     const [imageTabTable, setImageTabTable] = useState([{
         ImageType: '',
         ImageUpload: ''
     }]);
+    console.log("imageTabTable item master", imageTabTable)
+
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
         Unit: '',
@@ -97,6 +102,8 @@ const ItemsMaster = (props) => {
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
+
+    const [shelfLife, setShelfLife] = useState('');
 
     const {
         companyList,
@@ -140,7 +147,7 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -155,7 +162,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -190,19 +197,36 @@ const ItemsMaster = (props) => {
                 }
                 // ====================== Images tab ======================
 
-                let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
-                    debugger
-                    return {
-                        ImageType:
-                        {
-                            label: index.ImageTypeName,
-                            value: index.ImageType
-                        },
-                        ImageUpload: index.Item_pic
-                    }
+
+
+                if (hasEditVal.ItemImagesDetails.length === 0) {
+                    setImageTabTable(imageTabTable)
+                }
+                // let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
+                //     debugger
+                //     if (index.ItemImagesDetails.length === 0) {
+                //         return setImageTabTable(imageTabTable)
+                //     }
+                //     else {
+                //         return {
+                //             ImageType:
+                //             {
+                //                 label: index.ImageTypeName,
+                //                 value: index.ImageType
+                //             },
+                //             ImageUpload: index.Item_pic,
+                //         }
+                //     }
+
+                // })
+                // setImageTabTable(ItemImagesDetails)
+
+
+                let ShelfLife = hasEditVal.ItemShelfLife.map((index) => {
+
+                    return index.Days
                 })
-
-
+                setShelfLife(ShelfLife)
                 // ====================== Unit Conversion tab  start ======================
 
                 const UnitDetails = []
@@ -228,7 +252,7 @@ const ItemsMaster = (props) => {
                 // ====================== Unit Conversion tab  end ======================
 
                 setFormValue(initialFormValue);
-                setImageTabTable(ItemImagesDetails)
+                // setImageTabTable(ItemImagesDetails)
                 setMRP_Tab_TableData(hasEditVal.ItemMRPDetails)
                 setMarginMaster(hasEditVal.ItemMarginDetails)
                 setGStDetailsMaster(hasEditVal.ItemGSTHSNDetails)
@@ -285,7 +309,6 @@ const ItemsMaster = (props) => {
         dispatch(get_Category_By_CategoryType_ForDropDownAPI());
     }, [dispatch]);
 
-
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -302,8 +325,6 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-
-
     const CategoryTypeList_DropdownOptions = CategoryTypeList.map((data) => ({
         value: data.id,
         label: data.Name,
@@ -314,12 +335,10 @@ const ItemsMaster = (props) => {
         label: data.Name,
     }));
 
-
     const Division_DropdownOptions = Division.map((data) => ({
         value: data.id,
         label: data.Name
     }));
-
 
     function dropDownValidation(event, type,) {
 
@@ -347,6 +366,7 @@ const ItemsMaster = (props) => {
             return true
         }
     }
+
     function CommonTab_SimpleText_INPUT_handller_ForAll(event, type, key) {
 
         let validateReturn = Common_Text_INPUT_Validation(event, type, 0);
@@ -380,7 +400,7 @@ const ItemsMaster = (props) => {
     };
 
     const handleValidSubmit = (event, values) => {
-
+        debugger
         let isvalid = true
         let inValidMsg = []
 
@@ -495,6 +515,7 @@ const ItemsMaster = (props) => {
             //  ======================   MRP_Tab_TableData *****start   ====================== 
 
             let hasAdd_MRP = []
+
             MRP_Tab_TableData.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_MRP.push(index) }
             })
@@ -502,6 +523,7 @@ const ItemsMaster = (props) => {
             // ======================  marginMaster *****start   ====================== 
 
             let hasAdd_Margin = []
+
             marginMaster.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_Margin.push(index) }
             })
@@ -509,9 +531,30 @@ const ItemsMaster = (props) => {
             // ======================  GStDetailsMaster *****start   ====================== 
 
             let hasAdd_GST = []
+
             GStDetailsMaster.forEach((index) => {
+
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
+            debugger
+
+
+            let imagedata = imageTabTable.map(function (index) {
+                debugger
+
+                if ((index.ImageType === '') || (index.ImageUpload === '')) {
+                    debugger
+                    return imageTabTable.length = []
+                }
+                else {
+                    return ({
+                        ImageType: index.ImageType.value,
+                        Item_pic: index.ImageUpload
+                    })
+                }
+            })
+
+            let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
 
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
@@ -533,16 +576,23 @@ const ItemsMaster = (props) => {
                     return ({ Division: i.value })
                 }),
 
-                ItemImagesDetails: imageTabTable.map((i) => ({
-
-                    ImageType: i.ImageType.value,
-                    Item_pic: i.ImageUpload
-                })),
+                // ItemImagesDetails: imageTabTable.map((i) => ({
+                //     ImageType: i.ImageType.value,
+                //     Item_pic: i.ImageUpload
+                // })),
+                ItemImagesDetails: imagedata1,
                 ItemMRPDetails: hasAdd_MRP,
                 ItemMarginDetails: hasAdd_Margin,
                 ItemGSTHSNDetails: hasAdd_GST,
                 ItemGroupDetails: Group_Tab_TableData,
-
+                ItemShelfLife: [
+                    {
+                        Days: formValue.ShelfLife,
+                        CreatedBy: createdBy(),
+                        UpdatedBy: createdBy(),
+                        IsAdd: true
+                    }
+                ]
             });
 
             if (pageMode === 'edit') {
@@ -855,7 +905,7 @@ const ItemsMaster = (props) => {
                                                                 </Row>
 
                                                                 <Row>
-                                                                    <FormGroup className="mb-3 col col-sm-4 ">
+                                                                    <FormGroup className=" col col-sm-4 ">
                                                                         <div className="mb-3">
                                                                             <Label className="form-label font-size-13 ">Division</Label>
                                                                             <Select
@@ -876,7 +926,7 @@ const ItemsMaster = (props) => {
                                                                         </div>
                                                                     </FormGroup>
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                    <FormGroup className=" col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">Item Tag</Label>
                                                                         <Input
                                                                             type="textarea"
@@ -888,8 +938,22 @@ const ItemsMaster = (props) => {
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Tag") }}
                                                                         />
                                                                     </FormGroup>
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">Shelf Life</Label>
+                                                                        <Input
+                                                                            type="text"
+                                                                            rows="1"
+                                                                            id='txtShelfLife0'
+                                                                            defaultValue={pageMode === 'edit' ? shelfLife : ''}
+                                                                            placeholder=" Please Enter Shelf Life "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}
+                                                                        />
+                                                                    </FormGroup>
 
-                                                                    <FormGroup className="mt-4 col col-md-4">
+                                                                </Row>
+                                                                <Row >
+                                                                    <FormGroup className=" col col-md-4">
                                                                         <Row className="justify-content-ml-left ">
                                                                             <Label htmlFor="horizontal-firstname-input"
                                                                                 className="col-md-3 col-form-label" >Active </Label>
@@ -905,6 +969,7 @@ const ItemsMaster = (props) => {
                                                                             </Col>
                                                                         </Row>
                                                                     </FormGroup>
+
                                                                 </Row>
 
 
@@ -939,12 +1004,12 @@ const ItemsMaster = (props) => {
                                                         setFormValue={setFormValue}
                                                     />
                                                 </TabPane>
-
                                                 <TabPane tabId="4">{/* ++++++++++++ TabPane Item Image ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Image state={{
                                                         imageTable: imageTabTable,
-                                                        setImageTable: setImageTabTable,
-                                                    }} />
+                                                        setImageTable: setImageTabTable
+                                                    }}
+                                                    />
                                                 </TabPane>
 
                                                 <TabPane tabId="5">{/* ++++++++++++ TabPane MRP_Tab ++++++++++++++++++++++++++++++++++++++++++ */}
