@@ -91,7 +91,6 @@ function AddressDetails_Tab(props) {
 
             fileReader.onload = () => {
                 resolve(fileReader.result)
-
             };
             fileReader.onerror = (error) => {
                 reject(error)
@@ -99,11 +98,14 @@ function AddressDetails_Tab(props) {
         })
     }
 
-  
     return (
         <Row>
+            {/* <div className='abc1'> */}
+            {/* < img id='add-img' src="https://images.pexels.com/photos/1563355/pexels-photo-1563355.jpeg?auto=compress&cs=tinysrgb&w=600" /> */}
+            {/* </div> */}
             <Col md={12}  >
                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
+
                     <CardBody >
                         <Row >
                             <Col md="9" >
@@ -121,7 +123,6 @@ function AddressDetails_Tab(props) {
                             </Col>
 
                             <Col md={1}>
-
                                 <Row className=" mt-3">
                                     <Col >
                                         <Button
@@ -244,15 +245,19 @@ function AddressDetails_Tab(props) {
 
                             </Row>
                         </Row>
-                        {/* <a id="add-img" href='#'>< img id='add-img' src="https://images.pexels.com/photos/1563355/pexels-photo-1563355.jpeg?auto=compress&cs=tinysrgb&w=600" /> </a> */}
-                        {/* <img id="myImg" src="img_snow.jpg" alt="Snow" style="width:100%;max-width:300px"/> */}
+
+
+                            {/* <div className='abc1'> */}
+                            {/* </div> */}
+
+                       
                     </CardBody>
                 </Card>
                 <Row>
                     <AddressDetailsTable tableData={props.tableData} func={props.func} />
                 </Row>
             </Col>
-{/*            
+            {/*            
             <div id="myModal" class="modal">
                 <span class="close">&times;</span>
                 <img class="modal-content" id="img01"/>

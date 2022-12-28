@@ -548,7 +548,6 @@ const ItemsMaster = (props) => {
             if (pageMode === 'edit') {
                 dispatch(updateItemID(jsonBody, EditData.id));
             }
-
             else {
                 dispatch(postItemData(jsonBody));
                 console.log("items post json", jsonBody)
@@ -564,7 +563,6 @@ const ItemsMaster = (props) => {
         }
 
     };
-
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -605,7 +603,6 @@ const ItemsMaster = (props) => {
                                                         <span className="d-none d-sm-block">Basic Info</span>
                                                     </NavLink>
                                                 </NavItem>
-
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-2"
