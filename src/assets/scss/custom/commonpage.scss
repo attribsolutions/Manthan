@@ -17,7 +17,6 @@
   position: absolute;
   z-index: 1;
   padding-top: 0;
-
   display: none;
 }
 
@@ -36,22 +35,19 @@
   height: 35px;
   width: 35px;
   padding: -3cm;
-
-
   // -webkit-transition: width .35s ease-in-out;
   // transition: width .35s ease-in-out;
 }
 
-#add-img {
+// #add-img {
+//   border-radius: 10px;
+//   transition: transform .2s;
 
-  border-radius: 10px;
-  transition: transform .2s;
-
-  margin-top: 18px;
-  height: 70px;
-  width: 70px;
-  padding: -3cm
-}
+//   margin-top: 18px;
+//   height: 70px;
+//   width: 70px;
+//   padding: -3cm
+// }
 
 #img:focus {
   transform: scale(2.0);
@@ -77,18 +73,36 @@
 }
 
 #add-img {
-  width: 3cm;
-  height: 3cm;
+  width: 7cm;
+  height: 7cm;
   margin-left: 9cm;
   border-radius: 10px;
   margin-bottom: 20px;
-  margin-top: -6.5cm;
+  // margin-top: -px;
+  z-index: 435445 !important;
 }
 
-#add-img:hover {
-  cursor: pointer;
-}
+.abc1{
+  width: 7cm;
+  height: 7cm;
+  // margin-block: 100px;
+  z-index: 435445 !important;
+  background-color:burlywood;
+  position: absolute;
+  margin-top: -7cm;
+margin-left: 8cm;
+border-radius: 5%;
+border: #4CAF50;
+display: none;
 
+
+
+
+}
+.imgs{
+width: 9cm;
+height: 9cm;
+}
 
 .button_add {
   width: 30px !important;
@@ -99,7 +113,6 @@
   padding-bottom: 3px !important;
   padding-top: 5px !important;
   padding-left: 7px !important;
-
 }
 
 .button_save {
@@ -144,7 +157,6 @@
 
 .Flatpickr {
   border-color: red !important;
-
 }
 
 
@@ -253,6 +265,20 @@
 //   color: #bbb;
 //   text-decoration: none;
 //   cursor: pointer;
+// }
+
+// #images {
+//   font-size: 16px;
+//   padding: 10px;
+//   text-align: center;
+//   background-color: #4CAF50;
+//   color: white;
+//   border: solid 1px #a6d8a8;
+//   margin: auto;
+// }
+
+// #images {
+//   display: none;
 // }
 
 
