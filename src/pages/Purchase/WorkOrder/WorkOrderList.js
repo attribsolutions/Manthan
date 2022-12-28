@@ -117,25 +117,11 @@ const WorkOrderList = () => {
 
     const makeBtnFunc = (list = []) => {
 
-        var isSelect = ''
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.hasSelect) {
-                    isSelect = isSelect.concat(`${ele.id},`)
-                }
-            });
-            if (isSelect) {
-                const withoutLastComma = isSelect.replace(/,*$/, '');
-                const jsonBody = JSON.stringify({
-                    MaterialIssueID: withoutLastComma
-                })
-
-                dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
-
-            } else {
-                alert("Please Select Material Issue")
-            }
-        }
+        history.push({
+            pathname: url.MATERIAL_ISSUE,
+            pageMode: "save",
+            editValue: list[0]
+        })
 
     }
     return (
@@ -214,7 +200,7 @@ const WorkOrderList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={false}
+                            makeBtnShow={pageMode === url.WORK_ORDER_LIST ? false : true}
                             makeBtnName={"Make Material Issue"}
                         />
                         : null

@@ -12,7 +12,6 @@ export const MainSearchBox = () => {
     }));
 
     useEffect(() => {
-        debugger
         let SearchRoleData_initial = []
         RoleAccessData.map((i) => {
             i.ModuleData.map((index) => {
@@ -23,7 +22,6 @@ export const MainSearchBox = () => {
     }, [RoleAccessData])
 
     useEffect(() => {
-        debugger
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/

@@ -690,7 +690,7 @@ const GRNAdd = (props) => {
                                                         <Row className="row  g-0 " >
                                                             {openPOdata.map((index, key) => {
                                                                 return (
-                                                                    <Col className="col col-6 dropdown-icon-item  text-black "
+                                                                    <Col className="col col-6 dropdown-icon-item-custom  text-black "
                                                                     >
                                                                         <li onClick={e => {
                                                                             openPOdata[key].Inward = !openPOdata[key].Inward
@@ -703,7 +703,7 @@ const GRNAdd = (props) => {
                                                                                     </li>
                                                                                 </Col>
 
-                                                                                <Col className=" col  mt-2" style={{paddingLeft: "inherit"}}>
+                                                                                <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
                                                                                     <Input
                                                                                         id={`hasInwardCheck${key}`}
                                                                                         className="col col-2 text-black "

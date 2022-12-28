@@ -103,54 +103,8 @@ const WorkOrder = (props) => {
         };
     }, [userAccess])
 
-    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-
-        if ((hasShowloction || hasShowModal)) {
-
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-
-            if (hasEditVal) {
-                debugger
-                setEditData(hasEditVal);
-                const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-                hasValid.id.valid = true;
-                hasValid.WorkOrderDate.valid = true;
-                hasValid.ItemName.valid = true;
-                hasValid.EstimatedOutputQty.valid = true;
-                hasValid.NumberOfLot.valid = true;
-                hasValid.Quantity.valid = true;
-
-                values.id = id
-                values.WorkOrderDate = WorkOrderDate;
-                values.EstimatedOutputQty = EstimatedOutputQty;
-                values.NumberOfLot = NumberOfLot;
-                values.Quantity = Quantity;
-                values.ItemName = { label: ItemName, value: Item };
-
-                const jsonBody = JSON.stringify({
-                    Item: hasEditVal.Item,
-                    Bom: hasEditVal.Bom,
-                    Quantity: parseInt(hasEditVal.Quantity)
-                });
-                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editWorkOrderListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
+ 
+   
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -215,7 +169,7 @@ const WorkOrder = (props) => {
     }, [pageField])
 
     let filterItems = Items.filter((index) => {
-        debugger
+
         return index.IsActive === true
     })
 
@@ -240,7 +194,7 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
-        debugger
+      
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
@@ -252,7 +206,7 @@ const WorkOrder = (props) => {
         })
     }
     function NumberOfLotchange(e) {
-        debugger
+
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         let qty = ''
         if (pageMode === "edit") {
@@ -297,8 +251,8 @@ const WorkOrder = (props) => {
 
     const goButtonHandler = (event) => {
 
-        event.preventDefault();
-        if (formValid(state, setState)) {
+        // event.preventDefault();
+        // if (formValid(state, setState)) {
 
             const jsonBody = JSON.stringify({
                 Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
@@ -306,7 +260,7 @@ const WorkOrder = (props) => {
                 Quantity: parseInt(values.Quantity)
             });
             dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-        }
+        // }
     }
 
     const values = { ...state.values }
@@ -324,7 +278,7 @@ const WorkOrder = (props) => {
         }))
 
         event.preventDefault();
-        if (formValid(state, setState)) {
+        // if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 WorkOrderDate: values.WorkOrderDate,
                 Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
@@ -347,7 +301,7 @@ const WorkOrder = (props) => {
                 dispatch(postWorkOrderMaster(jsonBody));
                 console.log("post jsonBody", jsonBody)
             }
-        }
+        // }
     };
     const QuantityHandler = (e, user) => {
         user["CurrentMRP"] = e.target.value
