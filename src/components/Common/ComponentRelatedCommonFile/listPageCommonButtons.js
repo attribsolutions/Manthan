@@ -251,7 +251,7 @@ const currentDatefunc = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++
 }
 export const currentDate = currentDatefunc();
 
-export const dateConvertfunc = (inp) => {//+++++++++++++++ Current Date++++++++++++++++++++++++++++
+export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++++++++++++++++++++
     const current = new Date(inp);
     debugger
     const month = current.getMonth() + 1;

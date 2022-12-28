@@ -31,7 +31,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, invertDatefunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { saveDissable, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
@@ -42,6 +42,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { handleKeyDown } from "../Order/OrderPageCalulation";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 
 const MaterialIssueMaster = (props) => {
 
@@ -50,18 +51,17 @@ const MaterialIssueMaster = (props) => {
 
     const fileds = {
         id: "",
-        MaterialIssueDate: "",
+        MaterialIssueDate: currentDate,
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
-       
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(url.MATERIAL_ISSUE);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
 
@@ -137,41 +137,24 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
 
-                const { id, Item, ItemName, Company, EstimatedOutputQty, Quantity, NumberOfLot } = hasEditVal
-
-                setItemselect({ value: Item, label: ItemName })
+                const { id, Item, ItemName, Company, WorkDate, EstimatedOutputQty, Quantity, NumberOfLot } = hasEditVal
+                // setItemselect({ value: Item, label: ItemName })
                 setState((i) => {
-                    i.values.ItemName = { value: Item, label: ItemName }
+                    i.values.MaterialIssueDate = WorkDate
+                    i.values.ItemName = { value: id, label: ItemName, Item: Item };
                     i.values.NumberOfLot = NumberOfLot;
-                    i.hasValid.ItemName.valid = true;
                     i.values.LotQuantity = EstimatedOutputQty;
+                    i.hasValid.ItemName.valid = true;
+                    i.hasValid.MaterialIssueDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
                     i.hasValid.LotQuantity.valid = true;
 
                     return i
                 })
 
-
-                // hasValid.id.valid = true;
-                // hasValid.MaterialIssueDate.valid = true;
-                // hasValid.ItemName.valid = true;
-                // hasValid.UnitName.valid = true;
-                // hasValid.EstimatedOutputQty.valid = true;
-                // hasValid.Comment.valid = true;
-                // hasValid.IsActive.valid = true;
-
-                // values.id = id
-                // values.BomDate = BomDate;
-                // values.EstimatedOutputQty = EstimatedOutputQty;
-                // values.Comment = Comment;
-                // values.IsActive = IsActive;
-                // values.ItemName = { label: ItemName, value: Item };
-                // values.UnitName = { label: UnitName, value: Unit };
-                // setState({ values, fieldLabel, hasValid, required, isError })
-                // dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-
+                //go Button Api call json body
+                {/* 
                 const jsonBody = JSON.stringify({
                     WorkOrder: id,
                     Item: Item,
@@ -181,6 +164,8 @@ const MaterialIssueMaster = (props) => {
                 });
 
                 dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+            */}
+
             }
         }
     }, [])
@@ -210,13 +195,14 @@ const MaterialIssueMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            
             dispatch(postMaterialIssueSuccess({ Status: false }))
             saveDissable(false);//save Button Is enable function
             dispatch(postBOMSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -255,20 +241,36 @@ const MaterialIssueMaster = (props) => {
         value: index.id,
         label: index.ItemName,
         Quantity: index.Quantity,
-        WorkOrderId: index.id,
+        // WorkOrderId: index.id,
         Item: index.Item,
         BomID: index.Bom,
         Unit: index.Unit,
         NumberOfLot: index.NumberOfLot
     }));
 
-    const goButtonHandler = (event) => {
+    function ItemOnchange(hasSelect, evn) {
+        onChangeSelect({ hasSelect, evn, state, setState });
+        dispatch(Breadcrumb_inputName(hasSelect.label))
+        // setItemselect(e)
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        setState((i) => {
+
+            i.values.ItemName = hasSelect
+            i.values.NumberOfLot = hasSelect.NumberOfLot;
+            i.values.LotQuantity = hasSelect.Quantity;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.LotQuantity.valid = true;
+            return i
+        })
+    }
+
+    function goButtonHandler(event) {
 
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
-                WorkOrder: Itemselect.WorkOrderId,
-                Item: Itemselect.Item,
+                WorkOrder: values.ItemName.value,
+                Item: values.ItemName.Item,
                 Company: userCompany(),
                 Party: userParty(),
                 Quantity: parseInt(values.LotQuantity)
@@ -277,19 +279,6 @@ const MaterialIssueMaster = (props) => {
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
 
-    }
-
-
-    function ItemOnchange(e) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        setItemselect(e)
-        setState((i) => {
-            i.values.NumberOfLot = e.NumberOfLot;
-            i.values.LotQuantity = e.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            return i
-        })
     }
 
     function Quantitychange(event) {
@@ -357,8 +346,8 @@ const MaterialIssueMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === 'edit') {
-                dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
+            if (pageMode === mode.edit) {
+                // dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
                 console.log("update jsonBody", jsonBody)
             }
             else {
@@ -499,16 +488,12 @@ const MaterialIssueMaster = (props) => {
                                                 value={values.MaterialIssueDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                disabled={pageMode === "edit" ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: pageMode === "edit" ? values.Date : "today"
                                                 }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                             {isError.MaterialIssueDate.length > 0 && (
                                                 <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
@@ -530,12 +515,7 @@ const MaterialIssueMaster = (props) => {
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ItemDropdown_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                    ItemOnchange(hasSelect);
-                                                    dispatch(Breadcrumb_inputName(hasSelect.label))
-                                                }
-                                                }
+                                                onChange={ItemOnchange}
                                             />
                                             {isError.ItemName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
