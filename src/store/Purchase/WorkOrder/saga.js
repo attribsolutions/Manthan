@@ -71,11 +71,9 @@ function* Post_WorkOrder_GenratorFunction({ Data }) {
 
   yield put(SpinnerState(true))
   try {
-
     const response = yield call(Post_WorkOrder_Master_API, Data);
     yield put(SpinnerState(false))
     yield put(postWorkOrderMasterSuccess(response));
-    console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -93,6 +91,7 @@ function* GetWorkOrderGenFunc({ filters }) {
 
     const response = yield call(WorkOrder_Get_API, filters);
     const newList = yield response.Data.map((i) => {
+      i.WorkDate = i.WorkOrderDate;
       var date = convertDatefunc(i.WorkOrderDate)
       var time = convertTimefunc(i.CreatedOn)
       i.WorkOrderDate = (`${date} ${time}`)
@@ -111,10 +110,10 @@ function* GetWorkOrderGenFunc({ filters }) {
 
 // Work Order edit List page
 function* editWorkOrderGenFunc({ id1, pageMode }) {
-debugger
+  
   yield put(SpinnerState(true))
   try {
-    debugger
+    
     let response = yield call(WorkOrder_edit_Api, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
