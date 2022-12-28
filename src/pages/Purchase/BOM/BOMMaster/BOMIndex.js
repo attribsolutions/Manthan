@@ -1,12 +1,7 @@
-import React, { useEffect, useRef, useState, } from "react";
-// import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../../../components/Common/Breadcrumb3"
 import {
-    Card,
-    CardBody,
-    CardHeader,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -25,6 +20,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
+    resetFunction,
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -37,8 +33,9 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import { BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { createdBy, saveDissable, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../../routes//allPageID";
+import * as url from "../../../../routes/route_url";
 
 const BOMMaster = (props) => {
 
@@ -50,9 +47,10 @@ const BOMMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
-        
+
         id: "",
         BomDate: "",
         ItemName: "",
@@ -80,15 +78,22 @@ const BOMMaster = (props) => {
         GetItemUnits: state.BOMReducer.GetItemUnits,
         Items: state.ItemMastersReducer.pages,
     }));
+
     useEffect(() => {
+        const page_Id = pageId.BIllOf_MATERIALS
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(69))
+        dispatch(commonPageField(page_Id))
         dispatch(getItemList())
-        // dispatch(getBaseUnit_ForDropDown());
+
     }, []);
+
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -120,7 +125,7 @@ const BOMMaster = (props) => {
             }
 
             if (hasEditVal) {
-                console.log("hasEditVal", hasEditVal)
+
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -131,6 +136,7 @@ const BOMMaster = (props) => {
                 hasValid.EstimatedOutputQty.valid = true;
                 hasValid.Comment.valid = true;
                 hasValid.IsActive.valid = true;
+
                 values.id = id
                 values.BomDate = BomDate;
                 values.EstimatedOutputQty = EstimatedOutputQty;
@@ -142,6 +148,7 @@ const BOMMaster = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editBOMListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
@@ -149,8 +156,10 @@ const BOMMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postBOMSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -163,13 +172,13 @@ const BOMMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BIllOf_MATERIALS_LIST,
+                    RedirectPath: url.BIllOf_MATERIALS_LIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
             dispatch(postBOMSuccess({ Status: false }))
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -180,18 +189,13 @@ const BOMMaster = (props) => {
         }
     }, [postMsg])
 
-    function PermissionFunction() {
-        let event = { preventDefault: () => { } }
-        formSubmitHandler({ event, mode: true })
-    }
-
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // saveDissable(false);//+++++++++Update Button Is enable function
-            // setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
-                pathname: BIllOf_MATERIALS_LIST,
+                pathname: url.BIllOf_MATERIALS_LIST,
             })
         } else if ((updateMsg.Status === true) && (updateMsg.StatusCode === 100) && !(modalCss)) {
             dispatch(updateBOMListSuccess({ Status: false }));
@@ -203,7 +207,7 @@ const BOMMaster = (props) => {
             }));
         }
         else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -214,14 +218,15 @@ const BOMMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+
     useEffect(() => {
-        debugger
+
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-    
+
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -230,6 +235,12 @@ const BOMMaster = (props) => {
         value: data.value,
         label: data.label
     }))
+
+    function PermissionFunction() {
+        let event = { preventDefault: () => { } }
+        SaveHandler({ event, mode: true })
+    }
+
     function Items_Dropdown_Handler(e) {
         const jsonBody = JSON.stringify({
             Item: e.value,
@@ -243,13 +254,8 @@ const BOMMaster = (props) => {
             return a
         })
     }
-    const values = { ...state.values }
-    debugger
-    const { isError } = state;
-    const { fieldLabel } = state;
-    
 
-    const formSubmitHandler = ({ event, mode = false }) => {
+    const SaveHandler = ({ event, mode = false }) => {
         event.preventDefault();
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
@@ -288,12 +294,10 @@ const BOMMaster = (props) => {
                 return;
             }
 
-
-            // saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if ((pageMode === 'edit') && !mode) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-
             }
             else {
                 dispatch(postBOM(jsonBody));
@@ -313,7 +317,7 @@ const BOMMaster = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
                     />
-                    <form onSubmit={(event) => formSubmitHandler({ event })} noValidate>
+                    <form onSubmit={(event) => SaveHandler({ event })} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
                             <div className=" mt-1 row  ">
                                 <Col sm="6">
@@ -342,6 +346,7 @@ const BOMMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2 ">
                                         <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
@@ -362,7 +367,8 @@ const BOMMaster = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
+
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row  ">
                                         <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
@@ -387,6 +393,7 @@ const BOMMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row  ">
                                         <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
@@ -406,6 +413,7 @@ const BOMMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row  ">
                                         <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
@@ -427,13 +435,14 @@ const BOMMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
                                 <Col sm="6">
-                                    <FormGroup className=" row  ">
+                                    <FormGroup className=" row ">
                                         <Row className="justify-content-md-left">
                                             <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
                                             <Col md={7} style={{ marginTop: '10px' }} >
 
-                                                <div className="form-check form-switch form-switch-md mb-3" >
+                                                <div className="form-check form-switch form-switch-md mb-3">
                                                     <Input type="checkbox" className="form-check-input"
                                                         checked={values.IsActive}
                                                         name="IsActive"
@@ -452,6 +461,7 @@ const BOMMaster = (props) => {
                                 </Col>
                             </div>
                         </div>
+
                         <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
                             <Row>
                                 <Row className="mt-3">
@@ -459,9 +469,12 @@ const BOMMaster = (props) => {
                                         <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
                                     </Col>
                                 </Row>
+
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "9px" }}>
-                                        <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                        <SaveButton pageMode={pageMode}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
                                             module={"BOMMaster"}
                                         />
                                     </Col>

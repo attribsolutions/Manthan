@@ -12,18 +12,17 @@ import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-
-import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { PRODUCTION_LIST } from "../../../routes/route_url";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
     getProduction_Mode2_Success,
@@ -33,15 +32,17 @@ import {
 } from "../../../store/Purchase/ProductionRedux/actions";
 import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
 import * as pageId from "../../../routes/allPageID";
+import * as url from "../../../routes/route_url";
 
 const ProductionMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
-    const initialFiled = {
+    const fileds = {
         id: "",
         ProductionDate: currentDate,
         NumberOfLot: "",
@@ -55,11 +56,7 @@ const ProductionMaster = (props) => {
         Name: "",
         Item: ""
     }
-
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+    const [state, setState] = useState(initialFiledFunc(fileds))
 
     const {
         postMsg,
@@ -87,8 +84,15 @@ const ProductionMaster = (props) => {
             ToDate: currentDate,
         });
         dispatch(getMaterialIssueListPage(jsonBody));
-
     }, []);
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     useEffect(() => {
         let { Data } = produtionMake;
@@ -99,7 +103,6 @@ const ProductionMaster = (props) => {
                     label: produtionMake.Data.Item.Name,
                     value: produtionMake.Data.Item.id
                 }
-                // i.values.ProductionDate = Data.ProductionDate
                 i.values.id = Data.id;
                 i.values.EstimatedQuantity = Data.LotQuantity;//EstimatedQuantity===LoQuantity
                 i.values.NumberOfLot = Data.NumberOfLot;      //NumberOfLot===NumberOfLot
@@ -112,9 +115,10 @@ const ProductionMaster = (props) => {
                 return i
             })
             dispatch(getProduction_Mode2_Success({ Status: false }))
-
+            
         }
     }, [produtionMake]);
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -130,54 +134,20 @@ const ProductionMaster = (props) => {
         };
     }, [userAccess]);
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
-
-    // useEffect(() => {
-    //     debugger
-    //     if ((hasShowloction || hasShowModal)) {
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-    //         if (hasEditVal) {
-    //             const { id, MaterialIssueDate, NumberOfLot, LotQuantity, } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-    //             values.id = id;
-    //             values.ProductionDate = ""
-    //             values.EstimatedQuantity = ""
-    //             values.NumberOfLot = ""
-    //             values.ActualQuantity = ""
-    //             values.BatchDate = ""
-    //             values.BatchCode = ""
-    //             values.StoreLocation = ""
-    //             values.SupplierBatchCode = ""
-    //             values.BestBefore = ""
-    //             values.Remark = ""
-    //             values.Item = ""
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, []);
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(post_ProductionSuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: PRODUCTION_LIST,
+                RedirectPath: url.PRODUCTION_LIST,
             }))
         } else if (postMsg.Status === true) {
+            saveDissable(false);//save Button Is enable function
             dispatch(post_ProductionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -191,10 +161,13 @@ const ProductionMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
-                pathname: PRODUCTION_LIST,
+                pathname:url.PRODUCTION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
             dispatch(update_ProductionIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -209,7 +182,7 @@ const ProductionMaster = (props) => {
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
 
@@ -218,8 +191,7 @@ const ProductionMaster = (props) => {
         label: index.ItemName,
     }));
 
-    const formSubmitHandler = (event) => {
-
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -248,16 +220,7 @@ const ProductionMaster = (props) => {
                 Rate: 55,
                 Item: values.Item.value,
             });
-            // saveDissable(true)
-            // if ((pageMode === 'edit') && !mode) {
-            //     dispatch(update_ProductionId(jsonBody));
-            // }
-            // else
-            //  {
             dispatch(post_Production(jsonBody));
-            console.log(jsonBody)
-            // }
-            // }
         }
     };
 
@@ -271,7 +234,7 @@ const ProductionMaster = (props) => {
                     <Breadcrumb
                         pageHeading={userPageAccessState.PageHeading}
                     />
-                    <form onSubmit={formSubmitHandler} noValidate>
+                    <form onSubmit={SaveHandler} noValidate>
                         <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
                             <Row>
                                 <Col sm={5}>
@@ -284,14 +247,11 @@ const ProductionMaster = (props) => {
                                                 value={values.ProductionDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-
                                                 disabled={pageMode === "edit" ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-
-
                                                 }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
@@ -426,7 +386,8 @@ const ProductionMaster = (props) => {
                             <Row>
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "", marginTop: "20px" }}>
-                                        <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                        <SaveButton pageMode={pageMode}
+                                            userAcc={userPageAccessState}
                                             module={"ProductionMaster"}
                                         />
                                     </Col>
