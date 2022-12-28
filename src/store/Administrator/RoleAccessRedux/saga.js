@@ -135,7 +135,6 @@ function* Get_RoleAccessList_GenratorFunction() {
 
 
 // post api
-
 function*  Post_MethodForCopyRoleAccess_GenFun({data}) {
   debugger
   yield put(SpinnerState(true))
