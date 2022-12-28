@@ -490,7 +490,6 @@ const MaterialIssueMaster = (props) => {
                                 </Col>
 
                                 <Col sm="6">
-
                                     <FormGroup className="mb-2 row mt-2 ">
                                         <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
