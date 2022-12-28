@@ -22,9 +22,9 @@ const MaterialIssueList = () => {
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
-
     const [pageMode, setpageMode] = useState(url.MATERIAL_ISSUE_LIST)
     const [userAccState, setUserAccState] = useState('');
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.MaterialIssueReducer.materialIssueList,
@@ -80,7 +80,6 @@ const MaterialIssueList = () => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
             history.push({
                 pathname: produtionMake.path,
@@ -90,7 +89,6 @@ const MaterialIssueList = () => {
     }, [produtionMake])
 
     const makeBtnFunc = (list = []) => {
-        debugger
         var isSelect = ''
         if (list.length > 0) {
             list.forEach(ele => {
@@ -135,14 +133,6 @@ const MaterialIssueList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} /> */}
-
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}

@@ -13,29 +13,22 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-
-
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
-
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
-
 import { GRN_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import FeatherIcon from "feather-icons-react";
 
 
@@ -50,9 +43,7 @@ const GRNAdd = (props) => {
     const [userAccState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-
     const [grnDate, setgrnDate] = useState(currentDate);
-
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
@@ -61,7 +52,6 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         dispatch(getSupplierAddress())
-
     }, [])
 
     const {
@@ -99,7 +89,6 @@ const GRNAdd = (props) => {
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const grnItems = items.Data
-            debugger
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
                 ele["poQuantity"] = ele.Quantity
@@ -122,7 +111,6 @@ const GRNAdd = (props) => {
 
             let myArr = grnItems.challanNo.split(",");
             let newArr = myArr.map(i => ({ Name: i, hascheck: false }))
-            debugger
             setopenPOdata(details.GRNReferences)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
@@ -132,13 +120,11 @@ const GRNAdd = (props) => {
 
     }, [items])
 
-
-
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -147,7 +133,7 @@ const GRNAdd = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -172,7 +158,7 @@ const GRNAdd = (props) => {
         row["Amount"] = amount
         try {
             document.getElementById(`abc${row.id}`).innerText = amount
-            // value = amount
+
         }
         catch { alert("`abc${row.id}`") }
 
@@ -200,7 +186,6 @@ const GRNAdd = (props) => {
             dataField: "poQuantity",
             sort: true,
             formatter: (value, row, k) => {
-                debugger
                 return (
                     <samp className="font-asian">{value}</samp>
                 )
@@ -242,9 +227,8 @@ const GRNAdd = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center' };
             }
-
-
         },
+
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
@@ -260,7 +244,6 @@ const GRNAdd = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         defaultValue={{ value: row.Unit, label: row.UnitName }}
-                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -282,6 +265,7 @@ const GRNAdd = (props) => {
             }
 
         },
+
         {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
@@ -556,19 +540,13 @@ const GRNAdd = (props) => {
 
         });
 
-        saveDissable(true);//+++++++++save Button Is dissable function
+        saveDissable(true);//save Button Is dissable function
 
         if (pageMode === "edit") {
-            // dispatch(editGRNId(jsonBody, editVal.id))
-            console.log("GRNedit", jsonBody)
-
         } else {
 
             dispatch(postGRN(jsonBody))
-            console.log("postGRNsave", jsonBody)
         }
-
-
     }
 
     if (!(userAccState === "")) {
@@ -623,8 +601,6 @@ const GRNAdd = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
-
-                                            // disabled={true}
                                             value={grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>
@@ -727,9 +703,7 @@ const GRNAdd = (props) => {
 
                             </Col>
                         </Row>
-
                     </div>
-
 
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
@@ -777,7 +751,8 @@ const GRNAdd = (props) => {
 
                     {
                         (grnItemList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            <SaveButton pageMode={pageMode}
+                                userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
                         </div>

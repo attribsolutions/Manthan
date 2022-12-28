@@ -35,13 +35,11 @@ import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelat
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { convertDatefunc, createdBy, currentDate, dateConvertfunc, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
-
 import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID";
+
 let description = ''
 let editVal = {}
 
@@ -50,18 +48,12 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const fileds = {
-        id: "",
-        Name: "",
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userAccState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('')
@@ -104,8 +96,12 @@ const Order = (props) => {
         orderAddFilter: state.OrderReducer.orderAddFilter,
     }));
 
-
     const { supplierSelect, orderdate } = orderAddFilter;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -121,10 +117,6 @@ const Order = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
 
@@ -204,8 +196,6 @@ const Order = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
             description = ''
@@ -217,7 +207,6 @@ const Order = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -231,15 +220,11 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             description = ''
             history.push({
-                pathname: ORDER_lIST,
-                // renderMode: true
+                pathname: url.ORDER_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -315,7 +300,6 @@ const Order = (props) => {
         {//------------- Stock Quantity column ----------------------------------
             text: "Stock Qty",
             dataField: "StockQuantity",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -332,7 +316,6 @@ const Order = (props) => {
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -369,7 +352,6 @@ const Order = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
-            // sort: true,
             formatter: (value, row, key) => {
 
                 if (!row.UnitName) {
@@ -384,7 +366,6 @@ const Order = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         defaultValue={{ value: row.Unit_id, label: row.UnitName }}
-                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -410,7 +391,6 @@ const Order = (props) => {
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -441,28 +421,10 @@ const Order = (props) => {
             }
         },
 
-        // { //------------- GST column ----------------------------------
-        //     text: "GST %",
-        //     dataField: "",
-        //     // sort: true,
-        //     formatter: (value, row) => (
-        //         <div className="text-end mt-2"><span >
-        //             {value}%
-        //         </span></div>
-
-
-        //     ),
-        //     headerStyle: (colum, colIndex) => {
-        //         return { width: '130px', textAlign: 'center', text: "left" };
-        //     }
-        // },
-
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
-                debugger
                 return (
                     <span >
                         <Input type="text"
@@ -472,14 +434,12 @@ const Order = (props) => {
                             autoComplete="off"
                         />
                     </span>
-
                 )
             },
 
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
-
         },
     ];
 
@@ -612,10 +572,6 @@ const Order = (props) => {
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
             }
-            //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
-            //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
-            // }
-
             else if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
@@ -640,7 +596,6 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-        // }
 
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -698,7 +653,7 @@ const Order = (props) => {
 
         });
 
-        saveDissable(true);//+++++++++save Button Is dissable function
+        saveDissable(true);//save Button Is dissable function
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))
@@ -706,7 +661,6 @@ const Order = (props) => {
         } else {
 
             dispatch(postOrder(jsonBody))
-            console.log("Oder Post Json", jsonBody)
         }
 
 
@@ -718,8 +672,6 @@ const Order = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-
-
                 <div className="page-content">
 
                     <Breadcrumb
@@ -752,7 +704,6 @@ const Order = (props) => {
                                 </FormGroup>
                             </Col>
 
-
                             <Col sm="6">
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
@@ -768,17 +719,11 @@ const Order = (props) => {
                                     </Col>
                                     <Col sm="1" className="mx-4 ">
                                         {pageMode === "save" ?
-                                            //  <Button
-                                            //     id={""}
-                                            //      type="button" color="btn btn-outline-success border-2 font-size-12"
-                                            //         onClick={(e) => goButtonHandler()}>Go</Button> */}
                                             <Go_Button onClick={(e) => goButtonHandler()} />
                                             : null}
                                     </Col>
                                 </FormGroup>
                             </Col >
-
-
 
                         </div>
                     </div>
@@ -796,7 +741,6 @@ const Order = (props) => {
                                             placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
                                         />
-
                                     </div>
 
                                 </FormGroup>
@@ -817,8 +761,6 @@ const Order = (props) => {
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
-                                                // minDate: pageMode === "edit" ? orderdate : "today",
-
                                             }}
                                             onChange={(e, date) => { setdeliverydate(date) }}
                                         />
@@ -842,7 +784,6 @@ const Order = (props) => {
                                                 control: base => ({
                                                     ...base,
                                                     border: 'non',
-                                                    // backgroundColor: ""
                                                 })
                                             }}
                                             onChange={(e) => { setbillAddr(e) }}
@@ -859,12 +800,10 @@ const Order = (props) => {
                                         <Select
                                             value={shippAddr}
                                             classNamePrefix="select2-Customer"
-                                            // isDisabled={pageMode === "edit" ? true : false}
                                             styles={{
                                                 control: base => ({
                                                     ...base,
                                                     border: 'non',
-                                                    // backgroundColor: ""
                                                 })
                                             }}
                                             options={supplierAddress}
@@ -902,7 +841,6 @@ const Order = (props) => {
                                             id="pofromdate"
                                             name="pofromdate"
                                             value={poFromDate}
-                                            // disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
@@ -925,7 +863,6 @@ const Order = (props) => {
                                             id="potodate"
                                             name="potodate"
                                             value={poToDate}
-                                            // disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
@@ -994,7 +931,8 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            <SaveButton pageMode={pageMode}
+                                userAcc={userAccState}
                                 module={"Order"} onClick={saveHandeller}
                             />
                         </div>
