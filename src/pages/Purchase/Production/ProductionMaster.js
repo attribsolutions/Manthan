@@ -161,13 +161,13 @@ const ProductionMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
-            setState(() => resetFunction(fileds, state))// Clear form values  
+            // saveDissable(false);//Update Button Is enable function
+            // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname:url.PRODUCTION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
+            // saveDissable(false);//Update Button Is enable function
             dispatch(update_ProductionIdSuccess({ Status: false }));
             dispatch(
                 AlertState({

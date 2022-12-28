@@ -158,7 +158,7 @@ const GRNAdd = (props) => {
         row["Amount"] = amount
         try {
             document.getElementById(`abc${row.id}`).innerText = amount
-           
+
         }
         catch { alert("`abc${row.id}`") }
 
@@ -186,7 +186,6 @@ const GRNAdd = (props) => {
             dataField: "poQuantity",
             sort: true,
             formatter: (value, row, k) => {
-                debugger
                 return (
                     <samp className="font-asian">{value}</samp>
                 )
@@ -752,7 +751,8 @@ const GRNAdd = (props) => {
 
                     {
                         (grnItemList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            <SaveButton pageMode={pageMode}
+                                userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
                         </div>

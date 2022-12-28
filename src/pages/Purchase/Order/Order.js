@@ -35,7 +35,7 @@ import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelat
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import {  createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
@@ -97,7 +97,7 @@ const Order = (props) => {
     }));
 
     const { supplierSelect, orderdate } = orderAddFilter;
-    
+
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -596,7 +596,7 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-      
+
         if (validMsg.length > 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -931,7 +931,8 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            <SaveButton pageMode={pageMode}
+                                userAcc={userAccState}
                                 module={"Order"} onClick={saveHandeller}
                             />
                         </div>
