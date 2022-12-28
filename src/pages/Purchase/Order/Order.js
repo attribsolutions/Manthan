@@ -460,9 +460,10 @@ const Order = (props) => {
                     <span >
                         <Input type="text"
                             id={`Comment${k}`}
-                            defaultValue={''}
+                            defaultValue={row.Comment}
                             className="text-end"
                             autoComplete="off"
+                            onChange={(e) => { row["Comment"] = e.target.value }}
                         />
                     </span>
 
@@ -587,7 +588,8 @@ const Order = (props) => {
                 SGSTPercentage: (i.GSTPercentage / 2),
                 IGSTPercentage: 0,
                 Amount: i.Amount,
-                IsDeleted: isedit
+                IsDeleted: isedit,
+                Comment: i.Comment
             }
             itemArr.push(arr)
         };
