@@ -81,7 +81,6 @@ const PageMaster = (props) => {
     ShowInListPage: false,
     ShowInDownload: false,
     DownloadDefaultSelect: false,
-
   }]);
 
   const {
