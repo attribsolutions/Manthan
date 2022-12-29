@@ -1005,7 +1005,7 @@ const PageMaster = (props) => {
 
                         {pageAccessDropDownView ? (
 
-                          <Card className=" mt-n2  " >
+                          <Card className=" mt-n2">
                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
                               <h5 className="text-black "> Page Access</h5><br></br>
 
@@ -1186,7 +1186,6 @@ const PageMaster = (props) => {
                                               onClick={(e) => arrow_value1(key)}></i>
                                           </div>
                                           : null}
-
                                       </div>
                                     </td>
 
@@ -1241,7 +1240,6 @@ const PageMaster = (props) => {
                                                 onClick={() => { PageField_Tab_AddRow_Handler(key) }}
                                               >
                                                 <i className="dripicons-plus">
-
                                                 </i>
                                               </Button>
                                             </div>
