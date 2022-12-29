@@ -187,7 +187,8 @@ const Order = (props) => {
             setTermsAndConTable(TermsAndConditions)
             dispatch(goButtonForOrderAddSuccess(''))
         }
-    }, [goBtnOrderdata])
+    }, [goBtnOrderdata]);
+
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess(null))
         dispatch(getSupplier())
@@ -571,7 +572,7 @@ const Order = (props) => {
             const cgstAmt = (GstAmount(i))
             const arr = {
                 id: i.editrowId,
-                Item: i.id,
+                Item: i.Item_id,
                 Quantity: isdel ? 0 : i.Quantity,
                 MRP: i.MRP,
                 Rate: i.Rate,
@@ -706,7 +707,6 @@ const Order = (props) => {
         } else {
 
             dispatch(postOrder(jsonBody))
-            console.log("Oder Post Json", jsonBody)
         }
 
 
