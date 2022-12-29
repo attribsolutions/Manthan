@@ -22,7 +22,7 @@ const ordeRreport = (data) => {
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: `OrderReport/${data.OrderDate}-${data.CustomerName} `
+        title: `POReport/${data.OrderDate}-${data.CustomerName} `
     });
     window.open(doc.output('dataurlnewwindow'));
 

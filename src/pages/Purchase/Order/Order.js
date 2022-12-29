@@ -41,6 +41,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
+import * as mode from "../../../routes/PageMode";
 let description = ''
 let editVal = {}
 
@@ -187,7 +188,8 @@ const Order = (props) => {
             setTermsAndConTable(TermsAndConditions)
             dispatch(goButtonForOrderAddSuccess(''))
         }
-    }, [goBtnOrderdata])
+    }, [goBtnOrderdata]);
+
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess(null))
         dispatch(getSupplier())
@@ -571,7 +573,7 @@ const Order = (props) => {
             const cgstAmt = (GstAmount(i))
             const arr = {
                 id: i.editrowId,
-                Item: i.id,
+                Item: i.Item_id,
                 Quantity: isdel ? 0 : i.Quantity,
                 MRP: i.MRP,
                 Rate: i.Rate,
@@ -706,7 +708,6 @@ const Order = (props) => {
         } else {
 
             dispatch(postOrder(jsonBody))
-            console.log("Oder Post Json", jsonBody)
         }
 
 
@@ -1004,8 +1005,10 @@ const Order = (props) => {
                     size="xl"
                 >
 
-                    <PartyItems dropMode={"save"}
-                        editValue={{ SupplierName: supplierSelect }} masterPath={url.PARTYITEM}
+                    <PartyItems
+                        dropMode={mode.dropdownAdd}
+                        editValue={{ SupplierName: supplierSelect }}
+                        masterPath={url.PARTYITEM}
                         redirectPath={url.ORDER}
                         isOpenModal={Open_TermsModal_func} />
 

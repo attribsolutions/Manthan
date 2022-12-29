@@ -121,10 +121,9 @@ const PartyItems = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         }
-        else if (hasDropMode) {
-            locationPath = props.masterPath;
-        };
-
+        // else if (hasDropMode) {
+        //     locationPath = props.masterPath;
+        // };
 
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
@@ -141,20 +140,21 @@ const PartyItems = (props) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-
+            
             let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
+            if (hasShowModal) {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
-            } else if (hasDropMode) {
-                setModalCss(true)
-                hasEditVal = props.editValue
-            };
+            }
+            else if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            // else if (hasDropMode) {
+            //     setModalCss(true)
+            //     hasEditVal = props.editValue
+            // };
 
             if (hasEditVal) {
 
