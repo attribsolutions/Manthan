@@ -463,7 +463,6 @@ const Order = (props) => {
                         <Input type="text"
                             id={`Comment${k}`}
                             defaultValue={row.Comment}
-                            className="text-end"
                             autoComplete="off"
                             onChange={(e) => { row["Comment"] = e.target.value }}
                         />
