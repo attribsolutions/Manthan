@@ -257,8 +257,8 @@ export const reportFooter = (doc, data) => {
             },
         },
         didParseCell: function (cell, data) {
-            console.log("didParseCell", cell)
-            console.log(" didParse data", data)
+            // console.log("didParseCell", cell)
+            // console.log(" didParse data", data)
 
             if (cell.row.index === 4) {
                 cell.cell.styles.fontSize = 12;

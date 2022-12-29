@@ -22,9 +22,9 @@ axiosApi.interceptors.response.use(
 export async function get(url, config = {}) {
 
   AuthonticationFunction();
+  await console.log(`${url}/* getapiCall Url=>`, url);
   const res = await axiosApi.get(url, { ...config }).then(response => response.data)
-  await console.log("getapiCall Url:", url);
-  await console.log("getapiCall response:", res);
+  await console.log(`${url}/* getapiCall response:=>`, res);
   return res
 }
 
@@ -32,14 +32,14 @@ export async function getModify(url) {
   AuthonticationFunction();
   const res = await axiosApi.get(url).then(response => response.data)
   console.log("getModify Url:", url);
-  console.log("getModify response:", res);
+  console.log(`${url}/* getModify response:=>`, res);
   return res
 }
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
-  await console.log("postapiCall Url:", url);
-  await console.log("postapiCall Body:", data)
+  await console.log(`${url}/*postapiCall Url:`, url);
+  await console.log(`${url}/*postapiCall Body:`, data)
   const res = await axiosApi
     .post(url, data, {
       headers: {
@@ -48,13 +48,13 @@ export async function post(url, data, config = {}) {
       }
     })
     .then(response => response.data)
-  await console.log("postapiCall Response:", res);
+  await console.log(`${url}/* postapiCall Response:`, res);
   return res
 }
 
 export async function put(url, data, config = {}) {
-  await console.log("put-apiCall Url:", url);
-  await  console.log("put-apiCall Body:", data);
+  await console.log(`${url}/*put-apiCall Url:`, url);
+  await console.log(`${url}/*put-apiCall Body:`, data);
   AuthonticationFunction();
   const res = await axiosApi
     .put(url, data, {
@@ -65,17 +65,17 @@ export async function put(url, data, config = {}) {
     })
     .then(response => response.data)
 
-  await console.log("putapiCall Response:", res);
+  await console.log(`${url}/*putapiCall Response:`, res);
   return res
 }
 
 export async function del(url, config = {}) {
   AuthonticationFunction();
-  await console.log("deleteapiCall Url:", url);
+  await console.log(`${url}/*deleteapiCall Url:`, url);
   const rep = await axiosApi
     .delete(url, { ...config })
     .then(response => response.data)
-  await console.log("deleteapiCall response:", rep);
+  await console.log(`${url}/*deleteapiCall response:`, rep);
   return rep
 }
 // for forget password

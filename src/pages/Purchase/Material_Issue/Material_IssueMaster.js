@@ -261,7 +261,7 @@ const MaterialIssueMaster = (props) => {
     function ItemOnchange(hasSelect, evn) {
         onChangeSelect({ hasSelect, evn, state, setState });
         dispatch(Breadcrumb_inputName(hasSelect.label))
-        // setItemselect(e)
+        setItemselect(hasSelect)
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setState((i) => {
 
@@ -270,6 +270,7 @@ const MaterialIssueMaster = (props) => {
             i.values.LotQuantity = hasSelect.Quantity;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
+            i.hasValid.MaterialIssueDate.valid = true;
             return i
         })
     }
@@ -304,10 +305,19 @@ const MaterialIssueMaster = (props) => {
 
 
     function Quantitychange(event) {
+        debugger
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        const value1 = Math.max('', Math.min(Itemselect.Quantity, Number(event.target.value)));
-        event.target.value = value1
-        onChangeText({ event, state, setState });
+        if(Itemselect.value>0){
+            const value1 = Math.max('', Math.min(Itemselect.Quantity, Number(event.target.value)));
+            event.target.value = value1
+            onChangeText({ event, state, setState });
+        }
+        
+        setState((i) => {
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.LotQuantity.valid = true;
+            return i
+        })
     }
 
     const handleChange = (event, index) => {
