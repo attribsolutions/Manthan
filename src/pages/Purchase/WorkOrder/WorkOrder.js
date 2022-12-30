@@ -32,6 +32,7 @@ import {
     userParty
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
+    editWorkOrderListSuccess,
     getBOMList,
     postGoButtonForWorkOrder_Master,
     postGoButtonForWorkOrder_MasterSuccess,
@@ -64,7 +65,7 @@ const WorkOrder = (props) => {
         ItemName: [],
         NumberOfLot: "",
         Quantity: "",
-        StockQuantity: "",
+        StockQuantity: "0",
         EstimatedOutputQty: ""
     }
 
@@ -123,6 +124,47 @@ const WorkOrder = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
+    useEffect(() => {
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                debugger
+                setEditData(hasEditVal);
+                const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
+                    , Quantity, EstimatedOutputQty } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                hasValid.id.valid = true;
+                hasValid.WorkOrderDate.valid = true;
+                hasValid.EstimatedOutputQty.valid = true;
+                hasValid.Quantity.valid = true;
+                hasValid.NumberOfLot.valid = true;
+                hasValid.ItemName.valid = true;
+
+                values.id = id
+                values.WorkOrderDate = WorkOrderDate;
+                values.EstimatedOutputQty = EstimatedOutputQty;
+                values.Quantity = Quantity;
+                values.NumberOfLot = NumberOfLot;
+                values.StockQuantity = Stock;
+                values.ItemName = { label: ItemName, value: Item };
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editWorkOrderListSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+            }
+        }
+    }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -211,7 +253,7 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
-
+        debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
@@ -313,22 +355,22 @@ const WorkOrder = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-            sort: true,
+
         },
         {
             text: "Stock Quantity",
             dataField: "StockQuantity",
-            sort: true,
+
         },
         {
             text: "BomQuantity",
             dataField: "BomQuantity",
-            sort: true,
+
         },
         {
             text: "Quantity",
             dataField: "Quantity",
-            sort: true,
+
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -338,7 +380,8 @@ const WorkOrder = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={cellContent.toPrecision(10)}
+                                    // defaultValue={cellContent.toPrecision(5)}
+                                    defaultValue={parseFloat(cellContent).toFixed(3)}
                                     className="col col-sm text-center"
                                     onChange={(e) => QuantityHandler(e, user)}
                                 />
@@ -353,7 +396,7 @@ const WorkOrder = (props) => {
         {
             text: "UnitName",
             dataField: "UnitName",
-            sort: true,
+
         },
     ]
     const pageOptions = {
@@ -362,8 +405,6 @@ const WorkOrder = (props) => {
         custom: true,
     };
 
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -376,8 +417,8 @@ const WorkOrder = (props) => {
                         <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
                             <div className="row">
                                 <div className="col col-6">
-                                    <FormGroup className=" row  mt-3" >
-                                        <Label className="   p-2"
+                                    <FormGroup className=" row  mt-2" >
+                                        <Label
                                             style={{ width: "115px" }}>{fieldLabel.WorkOrderDate}</Label>
                                         <div className="col-6">
                                             <Flatpickr
@@ -404,8 +445,8 @@ const WorkOrder = (props) => {
                                     </FormGroup>
                                 </div >
                                 <div className="col col-6" >
-                                    <FormGroup className=" row mt-3 " >
-                                        <Label className=" p-2"
+                                    <FormGroup className=" row  mt-2" >
+                                        <Label
                                             style={{ width: "130px" }}>{fieldLabel.ItemName} </Label>
                                         <div className="col col-6 sm-1">
                                             <Select
@@ -431,37 +472,48 @@ const WorkOrder = (props) => {
                                 </div >
                             </div>
 
-                            <div className="row  ">
-                                <div className="col col-6">
-                                    <FormGroup className="mb-2 row  " >
-                                        <Label className=" p-2"
-                                            style={{ width: "115px" }}>{fieldLabel.StockQuantity}:</Label>
-                                        <Label className=" p-2" style={{ color: "#000000", width: "130px" }}
-                                        >&nbsp;&nbsp;
-                                            {pageMode === "edit" ? EditData.Stock : itemselect.StockQty}
-                                            &nbsp;&nbsp; &nbsp;</Label>
-                                    </FormGroup>
-                                </div >
-                                <div className="col col-6">
-                                    <FormGroup className="mb-2 row " >
-                                        <Label className=" p-2"
-                                            style={{ width: "130px" }}>{fieldLabel.EstimatedOutputQty} :</Label>
 
+                            <div className="row">
+                                <div className="col col-6">
+                                    <FormGroup className=" row" >
                                         <Label
-                                            className="p-2 "
-                                            style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
-                                            {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
-                                            &nbsp;&nbsp;(1 lot)
+                                            style={{ width: "115px" }}>{fieldLabel.StockQuantity}
                                         </Label>
+                                        <div className="col-6">
+                                            <Input
+                                                value={pageMode === "edit" ?
+                                                    EditData.Stock : itemselect.StockQty}
+                                                disabled={true}
+                                                placeholder="Please Enter Stock Quantity"
+                                            />
+                                        </div>
                                     </FormGroup>
                                 </div >
+                                <div className="col col-6" >
+                                    <FormGroup className=" row" >
+                                        <Label
+                                            style={{ width: "130px" }}>{fieldLabel.EstimatedOutputQty}
+                                        </Label>
+                                        <div className="col-6">
+                                            <Input
+                                                value={pageMode === "edit" ?
+                                                    EditData.EstimatedOutputQty
+                                                    : itemselect.EstimatedOutputQty}
+                                                disabled={true}
+                                                placeholder="Please Enter Estimated Output Qty"
+                                                autoComplete='off'
+                                            />
 
+                                        </div>
+                                    </FormGroup>
+
+                                </div >
                             </div>
 
                             <div className="row  ">
                                 <div className="col col-6">
                                     <FormGroup className="mb-2 row  " >
-                                        <Label className=" p-2"
+                                        <Label
                                             style={{ width: "115px" }}>{fieldLabel.NumberOfLot}</Label>
                                         <div className="col col-6">
                                             <Input
@@ -485,7 +537,7 @@ const WorkOrder = (props) => {
 
                                 <div className="col col-6">
                                     <FormGroup className="mb-2 row " >
-                                        <Label className=" p-2"
+                                        <Label
                                             style={{ width: "130px" }}>{fieldLabel.Quantity}</Label>
                                         <div className="col col-6">
                                             <Input

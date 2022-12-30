@@ -2,6 +2,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      EDIT_ITEM_ID, EDIT_ITEM_ID_SUCCESS, 
      GET_BASEUNIT_FOR_DROPDOWN, 
      GET_BASEUNIT_FOR_DROPDOWN_SUCCESS, 
+     GET_BRANDTAG_API, 
+     GET_BRANDTAG_API_SUCCESS, 
      GET_CATEGORYTYPE_FOR_DROPDOWN, 
      GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, 
@@ -14,6 +16,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_IMAGETYPE_FOR_DROPDOWN, 
      GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS, 
+     GET_ITEMTAG_API, 
+     GET_ITEMTAG_API_SUCCESS, 
      GET_ITEM_GROUP_FOR_DROPDOWN, 
      GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_LIST_API, GET_ITEM_LIST_API_SUCCESS, 
@@ -46,10 +50,32 @@ export const getItemList = () => ({
   type: GET_ITEM_LIST_API,
 });
 
+
 export const getItemListSuccess = (data) => ({
   type: GET_ITEM_LIST_API_SUCCESS,
     payload:data,
   });
+
+  // getItemTag api
+export const getItemTagName = () => ({
+  type: GET_ITEMTAG_API,
+});
+
+export const getItemtagSuccess = (data) => ({
+  type: GET_ITEMTAG_API_SUCCESS,
+    payload:data,
+  });
+
+  // get brand Tag api
+  export const getBrandTagName = () => ({
+    type: GET_BRANDTAG_API,
+  });
+  
+  export const getBrandtagSuccess = (data) => ({
+    type: GET_BRANDTAG_API_SUCCESS,
+      payload:data,
+    });
+
 
 // post api
 export const postItemData = (data) => ({

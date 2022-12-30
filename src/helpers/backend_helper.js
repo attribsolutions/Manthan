@@ -188,6 +188,11 @@ export const Category_By_CategoryTypes_DropDown_API = (id) => get(`${url.CATEGOR
 export const SubCategory_By_CategoryTypes_DropDown_API = (id) => get(`${url.SUBCATEGORY_DROPDOWN_API}/${id}`)//  GetSubCategoryByCategoryID DropDown API
 export const Group_By_GroupTypes_DropDown_API = (id) => get(`${url.GET_GROUP_BY_GROUPTYPES_ID}/${id}`)//  GetGroupByGroupTypeID DropDown API
 export const SubGroup_By_Group_DropDown_API = (id) => get(`${url.GET_SUBGROUP_BY_GROUP_ID}/${id}`)// GetSubGroupByGroupID DropDown API
+export const Get_Item_Tag = () => get(url.GET_ITEM_TAG)// Get Item Tag Api
+export const Get_Brand_Tag = () => get(url.GET_BRAND_TAG)// Get Item Tag Api
+
+
+
 
 // Party Master
 export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
@@ -358,6 +363,7 @@ export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//
 export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
 export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
 export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
+export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
 
 export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
 export const OrderPage_Update_API = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api

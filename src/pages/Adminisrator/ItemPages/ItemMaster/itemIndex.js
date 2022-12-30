@@ -26,6 +26,8 @@ import { fetchCompanyList } from "../../../../store/Administrator/CompanyRedux/a
 import {
     editItemSuccess,
     getBaseUnit_ForDropDown,
+    getBrandTagName,
+    getItemTagName,
     get_CategoryTypes_ForDropDown,
     get_Category_By_CategoryType_ForDropDownAPI,
     get_Division_ForDropDown,
@@ -54,6 +56,13 @@ const ItemsMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [activeTab1, setactiveTab1] = useState("1")
+
+    const [searchTerm, setSearchTerm] = React.useState("");
+    const [searchResults, setSearchResults] = React.useState([]);
+    const [searchTerm1, setSearchTerm1] = React.useState("");
+    const [searchResults1, setSearchResults1] = React.useState([]);
+
+
 
     let initial = {
         Name: "",
@@ -112,7 +121,9 @@ const ItemsMaster = (props) => {
         userAccess,
         Division,
         CategoryTypeList,
-        CategoryList
+        CategoryList,
+        ItemTagList,
+        BrandTagList
     } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
@@ -121,6 +132,10 @@ const ItemsMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
         CategoryList: state.ItemMastersReducer.Category,
+        ItemTagList: state.ItemMastersReducer.ItemTagList,
+        BrandTagList: state.ItemMastersReducer.BrandTagList,
+
+
     }));
 
     const location = { ...history.location }
@@ -307,6 +322,10 @@ const ItemsMaster = (props) => {
         dispatch(get_PriceList_ForDropDown());
         dispatch(getCategoryTypelist());
         dispatch(get_Category_By_CategoryType_ForDropDownAPI());
+        dispatch(getItemTagName())
+        dispatch(getBrandTagName())
+
+
     }, [dispatch]);
 
     const toggle1 = tab => {
@@ -515,7 +534,6 @@ const ItemsMaster = (props) => {
             //  ======================   MRP_Tab_TableData *****start   ====================== 
 
             let hasAdd_MRP = []
-
             MRP_Tab_TableData.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_MRP.push(index) }
             })
@@ -555,7 +573,6 @@ const ItemsMaster = (props) => {
             })
 
             let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
-
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -569,7 +586,6 @@ const ItemsMaster = (props) => {
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 ItemCategoryDetails: ItemCategoryDetails,
-
                 ItemUnitDetails: itemUnitDetails,
 
                 ItemDivisionDetails: formValue.Division.map((i) => {
@@ -614,6 +630,92 @@ const ItemsMaster = (props) => {
 
     };
 
+
+    let data1 = BrandTagList.map((index) => {
+        return index.dta
+    })
+
+    let data = ItemTagList.map((index) => {
+        return index.dta
+    })
+
+    const handleChange = event => {
+        dispatch(Breadcrumb_inputName(event.target.value));
+        CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
+
+        // setSearchTerm(event.target.value);
+        var searchtext = event.target.value
+
+        const results = data.filter(person =>
+            person.toLowerCase().includes(searchtext)
+        );
+        setSearchResults(results);
+        debugger
+        var x = document.getElementById("itemtag");
+        x.style.display = "block";
+        var di = "100Px"
+        if (results.length < 4) {
+            di = "30Px"
+        }
+        else if (results.length < 5) {
+            di = "200Px"
+        } else if (results.length > 5) {
+            di = "100Px"
+        }
+        x.style.height = di
+
+    };
+
+    const handlerChange = event => {
+     CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "BrandName") 
+     var searchtext = event.target.value
+
+     const results = data1.filter(person =>
+        person.toLowerCase().includes(searchtext)
+    );
+        // var x = document.getElementById("brandtag");
+        // x.style.display = "block";
+        setSearchResults1(results);
+        var x = document.getElementById("brandtag");
+        x.style.display = "block";
+        var di = "100Px"
+        if (results.length < 4) {
+            di = "30Px"
+            
+        }
+        else if (results.length < 5) {
+            di = "200Px"
+        } else if (results.length > 5) {
+            di = "100Px"
+        }
+        x.style.height = di
+        
+    };
+
+    const onclickselect = function () {
+        const hasNone = document.getElementById("itemtag").style;
+
+        if (hasNone.display === "none") {
+            hasNone.display = "block";
+        } else {
+            hasNone.display = "none";
+        }
+    };
+    const onclickselects = function () {
+        const hasNone = document.getElementById("brandtag").style;
+        if (hasNone.display === "none") {
+            hasNone.display = "block";
+        } else {
+            hasNone.display = "none";
+        }
+    };
+    React.useEffect(() => {
+
+    }, [searchTerm]);
+
+    React.useEffect(() => {
+       
+    }, [searchTerm1]);
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
@@ -769,19 +871,25 @@ const ItemsMaster = (props) => {
                                                         <Card className="text-black">
                                                             <CardBody className="c_card_body">
                                                                 <Row>
-
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label >Name</Label>
                                                                         <Input type="text"
                                                                             id='txtName0'
                                                                             placeholder=" Please Enter Name "
-                                                                            defaultValue={EditData.Name}
+                                                                            value={EditData.Name}
                                                                             autoComplete="off"
-                                                                            onChange={(e) => {
-                                                                                dispatch(Breadcrumb_inputName(e.target.value));
-                                                                                CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Name")
-                                                                            }}
+                                                                            // value={searchTerm}
+                                                                            onClick={onclickselect}
+                                                                            onChange={handleChange}
+
                                                                         />
+                                                                        <div id="itemtag" >
+                                                                            <ul style={{}}>
+                                                                                {searchResults.map(item => (
+                                                                                    <li className="liitem" style={{ marginLeft: "-27px", marginBottom: "5px" }}>{item}</li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
@@ -899,8 +1007,18 @@ const ItemsMaster = (props) => {
                                                                             defaultValue={EditData.BrandName}
                                                                             placeholder=" Please Enter Brand Name "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BrandName") }}
+                                                                            onChange={handlerChange}
+                                                                            onClick={onclickselects}
+
+
                                                                         />
+                                                                        <div id="brandtag" >
+                                                                            <ul>
+                                                                                {searchResults1.map(item => (
+                                                                                    <li className="liitem" style={{ marginLeft: "-27px" }}>{item}</li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
                                                                     </FormGroup>
                                                                 </Row>
 

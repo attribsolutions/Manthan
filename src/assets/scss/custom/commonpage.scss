@@ -314,3 +314,73 @@ height: 9cm;
       background-color: rgb(218, 218, 219) !important;
   }
 }
+
+
+#itemtag {
+  width: 94%;
+  display: inline-block;
+  // width: 8cm;
+  border: 15px;
+  // padding: 50px;
+  margin: 12px;
+  background-color: white;
+  min-width: auto;
+  height: 50px;
+  min-height: auto;
+  margin-left: 0cm;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 0%, 80%);
+  // overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // float: left;
+  position: absolute;
+  z-index: 1;
+  padding-top: 0;
+  display: none;
+  padding-left: 0px;
+  // padding-bottom: -10px;
+  
+  
+}
+
+#Input:hover+.itemtag {
+  display: block;
+}
+
+#brandtag {
+  width: 94%;
+  display: inline-block;
+  // width: 8cm;
+  border: 15px;
+  // padding: 50px;
+  margin: 12px;
+  background-color: white;
+  min-width: auto;
+  height: 4cm;
+  min-height: auto;
+  margin-left: 0cm;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 0%, 80%);
+  // overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // float: left;
+  position: absolute;
+  z-index: 1;
+  padding-top: 0;
+  display: none;
+
+}
+
+#Input:hover+.brandtag {
+  display: block;
+}
+
+.liitem:hover{
+background-color: rgb(221, 221, 221);
+cursor: pointer;
+}
+.liitem{
+  width: 300%;
+}

@@ -256,6 +256,7 @@ const BOMMaster = (props) => {
     }
 
     const SaveHandler = ({ event, mode = false }) => {
+        debugger
         event.preventDefault();
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
@@ -315,7 +316,7 @@ const BOMMaster = (props) => {
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                        showCount={true}
+                        // showCount={true}
                     />
                     <form onSubmit={(event) => SaveHandler({ event })} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >

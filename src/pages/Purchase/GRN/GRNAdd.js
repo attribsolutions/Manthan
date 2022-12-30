@@ -124,7 +124,7 @@ const GRNAdd = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
-            saveDissable(false);//save Button Is enable function
+            // saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -133,7 +133,7 @@ const GRNAdd = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
+            // saveDissable(false);//save Button Is enable function
             dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -540,7 +540,7 @@ const GRNAdd = (props) => {
 
         });
 
-        saveDissable(true);//save Button Is dissable function
+        // saveDissable(true);//save Button Is dissable function
 
         if (pageMode === "edit") {
         } else {

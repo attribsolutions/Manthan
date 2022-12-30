@@ -62,6 +62,10 @@ export const ROLE_MASTER_API = "/Roles" // role get api
 export const Items_MASTER_API = "/Items"
 export const GET_GROUP_BY_GROUPTYPES_ID = "/GetGroupByGroupTypeID"
 export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
+export const GET_ITEM_TAG = "/ItemTag"
+export const GET_BRAND_TAG = "/ItemBrand"
+
+
 
 // M_Items_group Api
 export const ITEMS_GROUP_API = "/ItemGroups"
