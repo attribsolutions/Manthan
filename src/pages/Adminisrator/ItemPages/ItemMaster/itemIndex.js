@@ -101,7 +101,6 @@ const ItemsMaster = (props) => {
         ImageType: '',
         ImageUpload: ''
     }]);
-    console.log("imageTabTable item master", imageTabTable)
 
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
@@ -113,7 +112,7 @@ const ItemsMaster = (props) => {
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
 
     const [shelfLife, setShelfLife] = useState('');
-
+debugger
     const {
         companyList,
         BaseUnit,
@@ -162,7 +161,7 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+      
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -177,7 +176,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+              
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -630,6 +629,15 @@ const ItemsMaster = (props) => {
 
     };
 
+var modal = document.getElementById('itemtag');
+debugger
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 
     let data1 = BrandTagList.map((index) => {
         return index.dta
@@ -886,7 +894,7 @@ const ItemsMaster = (props) => {
                                                                         <div id="itemtag" >
                                                                             <ul style={{}}>
                                                                                 {searchResults.map(item => (
-                                                                                    <li className="liitem" style={{ marginLeft: "-27px", marginBottom: "5px" }}>{item}</li>
+                                                                                    <li className="liitem" >{item}</li>
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
@@ -1010,12 +1018,11 @@ const ItemsMaster = (props) => {
                                                                             onChange={handlerChange}
                                                                             onClick={onclickselects}
 
-
                                                                         />
                                                                         <div id="brandtag" >
                                                                             <ul>
                                                                                 {searchResults1.map(item => (
-                                                                                    <li className="liitem" style={{ marginLeft: "-27px" }}>{item}</li>
+                                                                                    <li className="liitem" >{item}</li>
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
@@ -1062,7 +1069,7 @@ const ItemsMaster = (props) => {
                                                                             type="text"
                                                                             rows="1"
                                                                             id='txtShelfLife0'
-                                                                            defaultValue={pageMode === 'edit' ? shelfLife : ''}
+                                                                            defaultValue={pageMode === 'edit' ? shelfLife[0] : ''}
                                                                             placeholder=" Please Enter Shelf Life "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}

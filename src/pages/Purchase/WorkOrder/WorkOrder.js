@@ -25,6 +25,7 @@ import {
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
+    convertNumber,
     createdBy,
     currentDate,
     saveDissable,
@@ -58,6 +59,7 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
+    console.log("itemselect", itemselect)
 
     const fileds = {
         id: "",
@@ -242,6 +244,7 @@ const WorkOrder = (props) => {
         StockQty: index.StockQty
     }));
 
+
     useEffect(() => {
 
         const jsonBody = JSON.stringify({
@@ -309,10 +312,12 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
+        debugger
+
         const jsonBody = JSON.stringify({
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
-            Quantity: parseInt(values.Quantity)
+            Quantity: parseFloat(values.Quantity)
         });
         dispatch(postGoButtonForWorkOrder_Master(jsonBody));
     }
@@ -331,7 +336,7 @@ const WorkOrder = (props) => {
             Bom: (pageMode === "edit" ? id : values.ItemName.value),
             Unit: (pageMode === "edit" ? Unit : values.ItemName.Unit),
             NumberOfLot: values.NumberOfLot,
-            Quantity: values.Quantity,
+            Quantity: convertNumber(values.Quantity),
             Company: userCompany(),
             Party: userParty(),
             CreatedBy: createdBy(),
@@ -472,7 +477,6 @@ const WorkOrder = (props) => {
                                 </div >
                             </div>
 
-
                             <div className="row">
                                 <div className="col col-6">
                                     <FormGroup className=" row" >
@@ -482,13 +486,19 @@ const WorkOrder = (props) => {
                                         <div className="col-6">
                                             <Input
                                                 value={pageMode === "edit" ?
-                                                    EditData.Stock : itemselect.StockQty}
+                                                    EditData.Stock : itemselect.StockQty
+                                                }
                                                 disabled={true}
                                                 placeholder="Please Enter Stock Quantity"
                                             />
                                         </div>
+                                        <div className="col col-2">
+                                            <Label style={{ marginTop: '5px' }}>
+                                                {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                        </div>
                                     </FormGroup>
                                 </div >
+
                                 <div className="col col-6" >
                                     <FormGroup className=" row" >
                                         <Label
@@ -503,11 +513,15 @@ const WorkOrder = (props) => {
                                                 placeholder="Please Enter Estimated Output Qty"
                                                 autoComplete='off'
                                             />
+                                        </div>
 
+                                        <div className="col col-2">
+                                            <Label style={{ marginTop: '5px' }}>
+                                                {itemselect.value > 0 ? '(1 Lot)' : ''}</Label>
                                         </div>
                                     </FormGroup>
-
                                 </div >
+
                             </div>
 
                             <div className="row  ">

@@ -49,6 +49,10 @@ const SidebarContent = (props) => {
     }
   }, [])
 
+  useEffect(() => {
+    
+  }, [])
+
   const activateParentDropdown = useCallback(item => {
 
     item.classList.add("active");
@@ -84,9 +88,11 @@ const SidebarContent = (props) => {
     scrollElement(item);
     return false;
   }, []);
+  
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
+    debugger
 
     let pathName = props.location.pathname
     let userAcc = RoleAccessUpdateData.find((inx) => {
@@ -100,6 +106,7 @@ const SidebarContent = (props) => {
     }
 
     const initMenu = () => {
+      debugger
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");

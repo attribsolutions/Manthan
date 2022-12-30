@@ -250,21 +250,22 @@ const PurchaseListPage = (props) => {
         let found = tableList.filter(i => (i.hasSelect))
 
         tableList.map((ele, k) => {
-
             if (found.length === 1 && isEvent) {
                 if (!(ele.SupplierID === rowData.SupplierID)) {
                     try {
-                        document.getElementById(`checkhasSelect${k}`).disabled = true
+                        document.getElementById(`checkhasSelect${ele.id}`).disabled = true
+                        document.getElementById(`checkhasSelect${ele.id}`).style.border= "white"
                     }
                     catch (e) { }
-                }
+                };
             }
             else if (found.length === 0 && !isEvent) {
                 try {
-                    document.getElementById(`checkhasSelect${k}`).disabled = false
+                    document.getElementById(`checkhasSelect${ele.id}`).disabled = false
+                    document.getElementById(`checkhasSelect${ele.id}`).style.border= ""
                 }
                 catch (e) { }
-            }
+            };
         })
 
     }
@@ -304,9 +305,9 @@ const PurchaseListPage = (props) => {
                             <Input
                                 type="checkbox"
                                 className="mx-2"
-                                id={`checkhasSelect${key}`}
+                                id={`checkhasSelect${rowData.id}`}
                                 defaultChecked={rowData.hasSelect}
-                                disabled={rowData["isdisabled"]}
+                                // disabled={rowData["isdisabled"]}
                                 key={rowData.hasSelect}
                                 onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
 

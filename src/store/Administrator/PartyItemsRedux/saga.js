@@ -7,7 +7,7 @@ import { POST_PARTYITEMS, GET_SUPPLIER, GET_PARTY_ITEM_LIST, GET_PARTY_LIST, } f
 
 // post api
 function* Post_PartyItems_GneratorFunction({ data }) {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(Party_Items, data);

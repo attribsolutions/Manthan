@@ -130,10 +130,10 @@ const Order = (props) => {
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
-                hasEditVal = location.editValue[0]
+                hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-                hasEditVal = props.editValue[0]
+                hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
@@ -157,7 +157,7 @@ const Order = (props) => {
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
 
-                const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
+                const termsAndCondition = hasEditVal.TermsAndCondition.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
                     IsDeleted: 0
@@ -219,7 +219,7 @@ const Order = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
             description = ''
@@ -231,7 +231,7 @@ const Order = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -245,7 +245,7 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             description = ''
             history.push({
@@ -253,7 +253,7 @@ const Order = (props) => {
                 // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -509,14 +509,13 @@ const Order = (props) => {
             );
             return;
         }
-
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
 
         const jsonBody = JSON.stringify({
             Party: supplierSelect.value,
             Customer: userParty(),
             EffectiveDate: orderdate,
-            OrderID: 0
+            OrderID: (pageMode === mode.save) ? 0 : editVal.id
         })
 
         dispatch(goButtonForOrderAdd(jsonBody))
@@ -699,7 +698,7 @@ const Order = (props) => {
 
         });
 
-        saveDissable(true);//+++++++++save Button Is dissable function
+        saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))
