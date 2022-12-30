@@ -1010,7 +1010,6 @@ const ItemsMaster = (props) => {
                                                                             onChange={handlerChange}
                                                                             onClick={onclickselects}
 
-
                                                                         />
                                                                         <div id="brandtag" >
                                                                             <ul>
