@@ -503,7 +503,7 @@ const MaterialIssueMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="row mt-2  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.MaterialIssueDate} </Label>
+                                        <Label className="mt-1" style={{ width: "115px" }}>{fieldLabel.MaterialIssueDate} </Label>
                                         <Col sm="7">
                                             <Flatpickr
                                                 name="MaterialIssueDate"
@@ -527,7 +527,7 @@ const MaterialIssueMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="row mt-2 ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
+                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
                                             <Select
                                                 name="ItemName"
@@ -547,8 +547,8 @@ const MaterialIssueMaster = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.NumberOfLot} </Label>
+                                    <FormGroup className="mb-2 row  " style={{marginTop:"-5px"}}>
+                                        <Label className="mt-1" style={{ width: "115px" }}> {fieldLabel.NumberOfLot} </Label>
                                         <Col sm={7}>
                                             <Input
                                                 name="NumberOfLot"
@@ -571,8 +571,8 @@ const MaterialIssueMaster = (props) => {
                                 </Col>
 
                                 <Col sm="6">
-                                    <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.LotQuantity} </Label>
+                                    <FormGroup className="mb-1 row" style={{marginTop:"-5px"}}>
+                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
                                         <Col sm={7}>
                                             <Input
                                                 name="LotQuantity"
@@ -582,6 +582,7 @@ const MaterialIssueMaster = (props) => {
                                                 placeholder="Please Enter LotQuantity"
                                                 autoComplete='off'
                                                 onChange={Quantitychange}
+                                                
                                             />
                                             {isError.LotQuantity.length > 0 && (
                                                 <span className="invalid-feedback">{isError.LotQuantity}</span>
