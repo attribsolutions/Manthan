@@ -6,8 +6,9 @@ import {
   deleteItemIdSuccess,
   editItemSuccess,
   getBaseUnit_ForDropDownSuccess,
+  getBrandtagSuccess,
   getItemGroup_ForDropDownSuccess,
-  getItemListSuccess, get_CategoryTypes_ForDropDown_Success,
+  getItemListSuccess, getItemtagSuccess, get_CategoryTypes_ForDropDown_Success,
   get_Category_By_CategoryType_ForDropDownAPI_Success,
   get_Category_By_CategoryType_ForDropDown_Success,
   get_Division_ForDropDown_Success,
@@ -24,6 +25,7 @@ import {
 import {
   DELETE_ITEM_ID, EDIT_ITEM_ID,
   GET_BASEUNIT_FOR_DROPDOWN,
+  GET_BRANDTAG_API,
   GET_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
@@ -31,6 +33,7 @@ import {
   GET_DIVISION_FOR_DROPDOWN,
   GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
   GET_IMAGETYPE_FOR_DROPDOWN,
+  GET_ITEMTAG_API,
   GET_ITEM_GROUP_FOR_DROPDOWN,
   GET_ITEM_LIST_API,
   GET_MRPTYPE_FOR_DROPDOWN,
@@ -222,6 +225,27 @@ function* PriceList_DropDown_GenratorFunction() {
   }
 }
 
+// Item tag Name 
+function* Item_tagname_GenratorFunction () {
+  try {
+    const response = yield call(apiCall.Get_Item_Tag);
+    yield put(getItemtagSuccess(response.Data));
+  } catch (error) {
+    console.log("Item tag name Api error", error);
+  }
+}
+
+// Brand tag Name 
+function* Brand_tagname_GenratorFunction () {
+  try {
+    const response = yield call(apiCall.Get_Brand_Tag);
+    yield put(getBrandtagSuccess(response.Data));
+  } catch (error) {
+    console.log("Brand tag name Api error", error);
+  }
+}
+
+
 function* Group_DropDown_GenratorFunction({ id }) {
   try {
     const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API, id);
@@ -269,6 +293,10 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenratorFunction);
   yield takeEvery(GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenratorFunction);
   yield takeEvery(GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenratorFunction);
+  yield takeEvery(GET_ITEMTAG_API, Item_tagname_GenratorFunction);
+  yield takeEvery(GET_BRANDTAG_API, Brand_tagname_GenratorFunction);
+
+
 }
 
 export default ItemsMastersSaga;
