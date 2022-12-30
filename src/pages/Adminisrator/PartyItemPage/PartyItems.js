@@ -241,7 +241,7 @@ const PartyItems = (props) => {
 
     const tableColumns = [
         {
-            text: "PartyItemID",
+            text: "ItemID",
             dataField: "id",
             sort: true,
         },
@@ -337,7 +337,7 @@ const PartyItems = (props) => {
                         <Breadcrumb
                             pageHeading={userAccState.PageHeading}
                             newBtnView={false}
-                            showCount={hasDropMode ? false : true}
+                            // showCount={hasDropMode ? false : true}
                             excelBtnView={false}
                         />
 
