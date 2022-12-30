@@ -1,4 +1,4 @@
-import React, {  useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -105,7 +105,7 @@ const PageMaster = (props) => {
     PageAccess: state.H_Pages.PageAccess,
     modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
     PageList: state.H_Pages.PageList,
-    PageType:state.H_Pages.PageType
+    PageType: state.H_Pages.PageType
   }));
 
   const location = { ...history.location }
@@ -235,7 +235,10 @@ const PageMaster = (props) => {
         if (pageType_ID === 2) {
           setPageAccessDropDownView(true);
           dispatch(getPageList(pageType_ID));
-          setPageType_DropdownSelect({ value: 2, label: "ListPage" });
+          setPageType_DropdownSelect({
+            value: 2, label: "ListPage"
+
+          });
 
         } else if (pageType_ID === 1) {
           dispatch(getPageListSuccess([]));
@@ -358,7 +361,7 @@ const PageMaster = (props) => {
     value: data.id,
     label: data.Name,
   }));
-    
+
   const ControlTypes_DropdownOptions = ControlTypes.map((data) => ({
     value: data.id,
     label: data.Name
@@ -489,7 +492,7 @@ const PageMaster = (props) => {
       );
       return;
     }
-  
+
     if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
       dispatch(
         AlertState({
@@ -553,7 +556,8 @@ const PageMaster = (props) => {
 
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
-    if (e.value === 2 ) {
+  
+    if (e.value === 2) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
       dispatch(getPageList(e.value));
@@ -563,6 +567,13 @@ const PageMaster = (props) => {
       setRelatedPageListShowUI(false)
       setTablePageAccessDataState([]);
       setPageAccessDropDownView(false);
+      dispatch(getPageListSuccess([]));
+      setrelatedPage_DropdownSelect({ value: 0 });
+    }
+    else if (e.value === 3) {
+      setRelatedPageListShowUI(false)
+      setTablePageAccessDataState([]);
+      setPageAccessDropDownView(true);
       dispatch(getPageListSuccess([]));
       setrelatedPage_DropdownSelect({ value: 0 });
     }
@@ -965,7 +976,7 @@ const PageMaster = (props) => {
                                 </Row>
                               </FormGroup>
 
-                              {pageType_DropdownSelect.value === 2||3 ?
+                              {pageType_DropdownSelect.value === 2 || 3 ?
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
