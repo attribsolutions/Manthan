@@ -332,6 +332,8 @@ export function GoBtnDissable(state = false) {//+++++++++++++++++++++ Save Butto
     } catch (e) {
         // alert("Go btn dissable  error") 
     }
+}
 
-
+export function convertNumber(e) {//++++++++++++++++++++++ Convert Quantity +++++++++++++++++++++++++++++
+    return parseFloat(e).toFixed(3)
 }

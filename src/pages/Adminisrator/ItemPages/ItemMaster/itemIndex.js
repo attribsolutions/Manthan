@@ -101,7 +101,6 @@ const ItemsMaster = (props) => {
         ImageType: '',
         ImageUpload: ''
     }]);
-    console.log("imageTabTable item master", imageTabTable)
 
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
@@ -113,7 +112,7 @@ const ItemsMaster = (props) => {
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
 
     const [shelfLife, setShelfLife] = useState('');
-
+debugger
     const {
         companyList,
         BaseUnit,
@@ -162,7 +161,7 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+      
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -177,7 +176,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+              
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -1010,7 +1009,6 @@ const ItemsMaster = (props) => {
                                                                             onChange={handlerChange}
                                                                             onClick={onclickselects}
 
-
                                                                         />
                                                                         <div id="brandtag" >
                                                                             <ul>
@@ -1062,7 +1060,7 @@ const ItemsMaster = (props) => {
                                                                             type="text"
                                                                             rows="1"
                                                                             id='txtShelfLife0'
-                                                                            defaultValue={pageMode === 'edit' ? shelfLife : ''}
+                                                                            defaultValue={pageMode === 'edit' ? shelfLife[0] : ''}
                                                                             placeholder=" Please Enter Shelf Life "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}
