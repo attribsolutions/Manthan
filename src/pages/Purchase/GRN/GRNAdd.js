@@ -182,7 +182,7 @@ const GRNAdd = (props) => {
             ),
         },
         {//------------- Quntity first column ----------------------------------
-            text: "PO-QTY",
+            text: "PO-Qty",
             dataField: "poQuantity",
             sort: true,
             formatter: (value, row, k) => {
@@ -195,7 +195,7 @@ const GRNAdd = (props) => {
             }
         },
         {//  ------------Quntity column -----------------------------------  
-            text: "GRN-QTY",
+            text: "GRN-Qty",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
@@ -303,29 +303,29 @@ const GRNAdd = (props) => {
                 return { width: '100px', textAlign: 'center' };
             }
         },
-        {//------------- GST column ------------------------------------
-            text: "GST %",
-            dataField: "GSTPercentage",
-            sort: true,
-            formatter: (value, row) => (
-                <div className="text-center mt-2">
-                    <span>{value}</span>
-                </div>
+        // {//------------- GST column ------------------------------------
+        //     text: "GST %",
+        //     dataField: "GSTPercentage",
+        //     sort: true,
+        //     formatter: (value, row) => (
+        //         <div className="text-center mt-2">
+        //             <span>{value}</span>
+        //         </div>
 
 
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '70px', textAlign: 'center', text: "left" };
-            }
+        //     ),
+        //     headerStyle: (colum, colIndex) => {
+        //         return { width: '70px', textAlign: 'center', text: "left" };
+        //     }
 
-        },
+        // },
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => (
                 <div className="row mt-1">
-                    <div className="col ">
+                    <div className="text-end ">
                         <samp id={`abc${row.id}`}>{row.Amount}</samp>
                     </div>
                 </div>
