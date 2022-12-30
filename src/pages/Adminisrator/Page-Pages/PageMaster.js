@@ -353,7 +353,7 @@ const PageMaster = (props) => {
     label: d.Name,
   }));
 
-  // PageList Dropdown
+  // PageType Dropdown
   const PageType_DropdownOption = PageType.map((data) => ({
     value: data.id,
     label: data.Name,
@@ -553,7 +553,7 @@ const PageMaster = (props) => {
 
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
-    if (e.value === 2) {
+    if (e.value === 2 ) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
       dispatch(getPageList(e.value));
@@ -651,7 +651,7 @@ const PageMaster = (props) => {
                           <span className="d-block d-sm-none">
                             <i className="fas fa-home"></i>
                           </span>
-                          <Row >
+                          <Row>
                             <Col sm={2}>
                               <div>
                                 {
@@ -965,7 +965,7 @@ const PageMaster = (props) => {
                                 </Row>
                               </FormGroup>
 
-                              {pageType_DropdownSelect.value === 2 ?
+                              {pageType_DropdownSelect.value === 2||3 ?
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
@@ -1069,7 +1069,7 @@ const PageMaster = (props) => {
                                 </tr>
                               </Thead>
 
-                              <Tbody  >
+                              <Tbody>
 
                                 {pageFieldTabTable.map((TableValue, key) => (
                                   <tr >
@@ -1159,7 +1159,6 @@ const PageMaster = (props) => {
                                       <div className="d-flex">
                                         <div>
                                           <Input
-
                                             type="radio"
                                             name="btnradio"
                                             value={`DefaultSort${key}`}
@@ -1240,6 +1239,7 @@ const PageMaster = (props) => {
                                                 onClick={() => { PageField_Tab_AddRow_Handler(key) }}
                                               >
                                                 <i className="dripicons-plus">
+
                                                 </i>
                                               </Button>
                                             </div>

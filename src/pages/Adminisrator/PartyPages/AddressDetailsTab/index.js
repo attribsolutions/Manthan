@@ -105,7 +105,6 @@ function AddressDetails_Tab(props) {
             {/* </div> */}
             <Col md={12}  >
                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
-
                     <CardBody >
                         <Row >
                             <Col md="9" >
