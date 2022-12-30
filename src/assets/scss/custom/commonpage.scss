@@ -378,9 +378,11 @@ height: 9cm;
 }
 
 .liitem:hover{
-background-color: rgb(221, 221, 221);
+background-color: rgb(206, 223, 244);
 cursor: pointer;
 }
 .liitem{
+  margin-bottom: 10px;
   width: 300%;
+  margin-left: -32px;
 }

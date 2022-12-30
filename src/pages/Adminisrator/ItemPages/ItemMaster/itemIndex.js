@@ -629,6 +629,15 @@ debugger
 
     };
 
+var modal = document.getElementById('itemtag');
+debugger
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 
     let data1 = BrandTagList.map((index) => {
         return index.dta
@@ -885,7 +894,7 @@ debugger
                                                                         <div id="itemtag" >
                                                                             <ul style={{}}>
                                                                                 {searchResults.map(item => (
-                                                                                    <li className="liitem" style={{ marginLeft: "-27px", marginBottom: "5px" }}>{item}</li>
+                                                                                    <li className="liitem" >{item}</li>
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
@@ -1013,7 +1022,7 @@ debugger
                                                                         <div id="brandtag" >
                                                                             <ul>
                                                                                 {searchResults1.map(item => (
-                                                                                    <li className="liitem" style={{ marginLeft: "-27px" }}>{item}</li>
+                                                                                    <li className="liitem" >{item}</li>
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
