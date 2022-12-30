@@ -2,12 +2,14 @@ import {
     DELETE_ITEM_ID_SUCCESS,
     EDIT_ITEM_ID_SUCCESS,
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
+    GET_BRANDTAG_API_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_DIVISION_FOR_DROPDOWN_SUCCESS,
     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
+    GET_ITEMTAG_API_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
@@ -39,7 +41,10 @@ const INIT_STATE = {
     PriceList: [],
     GroupList: [],
     SubGroupList: [],
-    Category: []
+    Category: [],
+    ItemTagList: [],
+    BrandTagList: []
+
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -62,6 +67,18 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 ItemGroupList: action.payload,
+            }
+        // get itemTag success
+        case GET_ITEMTAG_API_SUCCESS:
+            return {
+                ...state,
+                ItemTagList: action.payload,
+            }
+        // get Brand tag
+        case GET_BRANDTAG_API_SUCCESS:
+            return {
+                ...state,
+                BrandTagList: action.payload,
             }
 
         case POST_ITEM_DATA_SUCCESS:
