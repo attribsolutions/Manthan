@@ -517,7 +517,7 @@ const WorkOrder = (props) => {
 
                                         <div className="col col-2">
                                             <Label style={{ marginTop: '5px' }}>
-                                                {itemselect.value > 0 ? ('(1 Lot)') : ''}</Label>
+                                                {itemselect.value > 0 ? '(1 Lot)' : ''}</Label>
                                         </div>
                                     </FormGroup>
                                 </div >
