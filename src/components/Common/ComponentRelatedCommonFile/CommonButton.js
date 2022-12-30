@@ -3,18 +3,18 @@ import { createdBy } from "./listPageCommonButtons";
 
 export function SaveButton(props) {
 
-  const { pageMode, userAcc, module, onClick ,editCreatedBy={}} = props
-
-  const isCreated=(createdBy()===editCreatedBy ) 
+  const { pageMode, userAcc, module, onClick, editCreatedBy = {} } = props
+  
+  const isCreated = (createdBy() === editCreatedBy)
 
   return (
     <div>
       {
         pageMode === "edit" ?
-          (userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) &&(isCreated)) ?
+          (userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) && (isCreated)) ?
             <button
               type="submit"
-              id='form_submmit'
+              id={`form_submmit${userAcc.ActualPagePath}`}
               data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Update ${module}`}
               className="btn btn-success w-md"
               onClick={onClick}
@@ -27,7 +27,7 @@ export function SaveButton(props) {
             userAcc.RoleAccess_IsSave ?
               <button
                 type="submit"
-                id='form_submmit'
+                id={`form_submmit${userAcc.ActualPagePath}`}
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Save ${module}`}
                 className="btn btn-primary w-md"
                 onClick={onClick}

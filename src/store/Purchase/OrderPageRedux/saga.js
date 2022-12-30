@@ -39,12 +39,13 @@ function* goButtonGenFunc({ data }) {
   try {
 
     const response = yield call(OrderPage_GoButton_API, data);
-
+    debugger
     yield response.Data.OrderItems.forEach((ele, k) => {
       ele["id"] = k + 1
     });
     const termArr = []
-    yield response.Data.TermsAndConditions.forEach((ele, k) => {
+    var term = response.Data.TermsAndCondition
+    yield term.forEach((ele, k) => {
       termArr.push({
         value: ele.id,
         label: ele.TermsAndCondition,
@@ -134,7 +135,7 @@ function* postOrder_GenFunc({ data }) {
 }
 
 function* editOrderGenFunc({ jsonBody, pageMode }) {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_Edit_API, jsonBody);

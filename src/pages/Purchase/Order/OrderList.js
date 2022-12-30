@@ -90,6 +90,7 @@ const OrderList = () => {
 
     useEffect(() => {
         const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+ 
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
         })
@@ -160,7 +161,6 @@ const OrderList = () => {
     }
 
     function goButtonHandler() {
-
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,

@@ -121,9 +121,9 @@ const PartyItems = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         }
-        // else if (hasDropMode) {
-        //     locationPath = props.masterPath;
-        // };
+        else if (hasDropMode) {
+            locationPath = props.masterPath;
+        };
 
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
@@ -140,7 +140,7 @@ const PartyItems = (props) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-            
+
             let hasEditVal = null
             if (hasShowModal) {
                 hasEditVal = props.editValue
@@ -241,7 +241,7 @@ const PartyItems = (props) => {
 
     const tableColumns = [
         {
-            text: "PartyItemID",
+            text: "ItemID",
             dataField: "id",
             sort: true,
         },
@@ -254,11 +254,13 @@ const PartyItems = (props) => {
             text: "SelectAll",
             dataField: "itemCheck",
             sort: true,
-            formatter: (cellContent, row, col, k) => (
-                <span >
+            formatter: (cellContent, row, col, k) => {
+                if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
+                return (<span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={cellContent}
+                        disabled={hasDropMode ? row.hasInitialVal ? true : false : false}
                         onChange={e => {
                             setitemArr(ele => {
                                 var newrr = ele.map(i => {
@@ -274,7 +276,8 @@ const PartyItems = (props) => {
                     />
 
                 </span>
-            ),
+                )
+            },
 
         }
     ];
@@ -305,7 +308,8 @@ const PartyItems = (props) => {
     };
 
 
-    const SubmitHandler = (event) => {
+    const SubmitHandler = (e) => {
+        e.preventDefault();
         const Find = itemArr.filter((index) => {
             return (index.itemCheck === true)
         })
@@ -336,9 +340,6 @@ const PartyItems = (props) => {
 
                         <Breadcrumb
                             pageHeading={userAccState.PageHeading}
-                            newBtnView={false}
-                            showCount={hasDropMode ? false : true}
-                            excelBtnView={false}
                         />
 
                         <Card className="text-black">
@@ -436,7 +437,9 @@ const PartyItems = (props) => {
 
 
                                 {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                    <SaveButton pageMode={pageMode} userAcc={userAccState}
+                                    <SaveButton
+                                        pageMode={pageMode}
+                                        userAcc={userAccState}
                                         module={"supplier"} onClick={SubmitHandler}
                                     />
                                 </div>
