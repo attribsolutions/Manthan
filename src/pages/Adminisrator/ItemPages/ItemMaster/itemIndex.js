@@ -662,13 +662,15 @@ window.onclick = function(event) {
         var x = document.getElementById("itemtag");
         x.style.display = "block";
         var di = "100Px"
-        if (results.length < 4) {
-            di = "30Px"
+        if (results.length == 0) {
+            di = `${x.style.display="none"}`
         }
-        else if (results.length < 5) {
-            di = "200Px"
+        else if (results.length < 2) {
+            di = "50Px"
         } else if (results.length > 5) {
-            di = "100Px"
+            di = "300Px"
+        }else if (results.length <2) {
+            di = "50Px"
         }
         x.style.height = di
 
@@ -687,17 +689,17 @@ window.onclick = function(event) {
         var x = document.getElementById("brandtag");
         x.style.display = "block";
         var di = "100Px"
-        if (results.length < 4) {
-            di = "30Px"
-            
+        if (results.length == 0) {
+            di = `${x.style.display="none"}`
         }
-        else if (results.length < 5) {
-            di = "200Px"
+        else if (results.length < 2) {
+            di = "50Px"
         } else if (results.length > 5) {
-            di = "100Px"
+            di = "300Px"
+        }else if (results.length <2) {
+            di = "50Px"
         }
         x.style.height = di
-        
     };
 
     const onclickselect = function () {
