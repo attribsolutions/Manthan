@@ -27,16 +27,14 @@ import { SaveButton } from "../../../../components/Common/ComponentRelatedCommon
 import ItemTab from "./ItemQuantityTab";
 import {
     editBOMListSuccess,
-    GetItemUnitsDrodownAPI,
     postBOM,
     postBOMSuccess,
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import { createdBy, saveDissable, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
-import { Value } from "sass";
 
 const BOMMaster = (props) => {
 
@@ -44,15 +42,16 @@ const BOMMaster = (props) => {
     const history = useHistory()
 
     const [EditData, setEditData] = useState({});
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [ItemUnitOptions, setItemUnitOptions] = useState([]);
+    const [ItemUnitOnEditData, setItemUnitOnEditData] = useState([]);
 
     const fileds = {
-
         id: "",
         BomDate: "",
         ItemName: "",
@@ -125,7 +124,14 @@ const BOMMaster = (props) => {
             }
 
             if (hasEditVal) {
+                debugger
 
+                let ItemUnits = hasEditVal.ParentUnitDetails.map((data) => ({
+                    value: data.Unit,
+                    label: data.UnitName
+                }))
+                setItemUnitOnEditData(ItemUnits)
+                // setItemUnitOptions(ItemUnits)
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -239,6 +245,7 @@ const BOMMaster = (props) => {
 
     function Items_Dropdown_Handler(e) {
 
+        setItemTabDetails([])
         let Item = Items.filter((index) => {
             return index.id === e.value
         })
@@ -404,7 +411,7 @@ const BOMMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={ItemUnitOptions}
+                                                options={pageMode === 'edit' ? ItemUnitOnEditData : ItemUnitOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                             {isError.UnitName.length > 0 && (
