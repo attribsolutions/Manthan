@@ -750,7 +750,8 @@ const GRNAdd = (props) => {
 
 
                     {
-                        (grnItemList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        (grnItemList.length > 0) ?
+                         <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode}
                                 userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
