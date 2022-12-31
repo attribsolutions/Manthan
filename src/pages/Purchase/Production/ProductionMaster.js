@@ -51,10 +51,8 @@ const ProductionMaster = (props) => {
         SupplierBatchCode: "",
         BestBefore: "",
         Remark: "",
-        value: "",
-        label: "",
-        Name: "",
-        Item: ""
+        Item: "",
+        UnitName: ""
     }
     const [state, setState] = useState(initialFiledFunc(fileds))
 
@@ -115,7 +113,7 @@ const ProductionMaster = (props) => {
                 return i
             })
             dispatch(getProduction_Mode2_Success({ Status: false }))
-            
+
         }
     }, [produtionMake]);
 
@@ -164,7 +162,7 @@ const ProductionMaster = (props) => {
             // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
-                pathname:url.PRODUCTION_LIST,
+                pathname: url.PRODUCTION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             // saveDissable(false);//Update Button Is enable function
@@ -261,6 +259,7 @@ const ProductionMaster = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
+
                                     <FormGroup className=" row  " >
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.EstimatedQuantity} </Label>
@@ -277,6 +276,89 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
+                                        </Col>
+                                    </FormGroup>
+
+                                    <FormGroup className="row  " >
+                                        <Label className="col-sm-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.ActualQuantity}</Label>
+                                        <Col md="7">
+                                            <Input
+                                                type="text"
+                                                name="ActualQuantity"
+                                                value={values.ActualQuantity}
+                                                placeholder="Enter ActualQuantity"
+                                                autoComplete="off"
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.ActualQuantity.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+
+                                    <FormGroup className=" row" >
+                                        <Label className="col-sm-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
+                                        <Col md="7">
+                                            <Flatpickr
+                                                name="BestBefore"
+                                                value={values.BestBefore}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="YYYY-MM-DD"
+                                                disabled={pageMode === "edit" ? true : false}
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    defaultDate: pageMode === "edit" ? values.BestBefore : "today"
+                                                }}
+                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm={5}>
+                                    <FormGroup className=" row mt-2" >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.Item}</Label>
+                                        <Col md="7">
+                                            <Select
+                                                isDisabled={true}
+                                                name="Name"
+                                                value={values.Item}
+                                                options={ItemDropdown_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState });
+                                                }
+                                                }
+                                            />
+                                            {isError.id.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+
+                                    <FormGroup className=" row" >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.UnitName}</Label>
+                                        <Col md="7">
+                                            <Select
+                                                // isDisabled={true}
+                                                name="UnitName"
+                                                value={values.UnitName}
+                                                options={[]}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState });
+                                                }
+                                                }
+                                            />
+                                            {isError.id.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
+                                            )}
                                         </Col>
                                     </FormGroup>
 
@@ -299,66 +381,7 @@ const ProductionMaster = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-                                    <FormGroup className=" row" >
-                                        <Label className="col-sm-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
-                                        <Col md="7">
-                                            <Flatpickr
-                                                name="BestBefore"
-                                                value={values.BestBefore}
-                                                className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                disabled={pageMode === "edit" ? true : false}
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                    defaultDate: pageMode === "edit" ? values.BestBefore : "today"
-                                                }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm={5}>
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Name}</Label>
-                                        <Col md="7">
-                                            <Select
-                                                isDisabled={true}
-                                                name="Name"
-                                                value={values.Item}
-                                                options={ItemDropdown_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                }
-                                                }
-                                            />
-                                            {isError.id.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                    <FormGroup className="row  " >
-                                        <Label className="col-sm-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.ActualQuantity}</Label>
-                                        <Col md="7">
-                                            <Input
-                                                type="text"
-                                                name="ActualQuantity"
-                                                value={values.ActualQuantity}
-                                                placeholder="Enter ActualQuantity"
-                                                autoComplete="off"
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.ActualQuantity.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
+
                                     <FormGroup className=" row  " >
                                         <Label className="col-md-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.SupplierBatchCode}</Label>
