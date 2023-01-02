@@ -44,8 +44,8 @@ function* goButtonGenFunc({ data }) {
       ele["id"] = k + 1
     });
     const termArr = []
-    var term = response.Data.TermsAndCondition
-    if (term === undefined) { term = response.Data.TermsAndConditions }
+    var term = response.Data.TermsAndConditions
+    // if (term === undefined) { term = response.Data.TermsAndConditions }
     yield term.forEach((ele, k) => {
       termArr.push({
         value: ele.id,
