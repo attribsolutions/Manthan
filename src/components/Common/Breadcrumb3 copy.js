@@ -233,7 +233,7 @@ const BreadcrumbCopy = props => {
                             <div >
                                 <div className=" d-flex  justify-content-end">
                                     {excelBtnView ?
-                                        <div className="px-2 " style={{ marginTop: "7px" }}>
+                                        <div className="px-2 " style={{ marginTop: "20px" }}>
                                             <Button
                                                 type="button"
                                                 title="Download List"
@@ -248,7 +248,7 @@ const BreadcrumbCopy = props => {
                                     {
                                         (showCount) ?
                                             <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
-                                                style={{ width: "100%" }}>
+                                                style={{ width: "100%" ,marginTop:"13px",marginRight:"10px" }} >
                                                 <samp className="px-2 ">{filterSize}</samp>
                                             </div>
                                             :
