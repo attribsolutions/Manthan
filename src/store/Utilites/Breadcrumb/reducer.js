@@ -1,19 +1,14 @@
 import {
   BREADCRUMB_FILTER_SIZE,
-  BREADCRUMB_SEARCH_PROPS,
+  COMMON_BREADCRUMB_ALL_DETAIL,
   BREADCRUMB_SHOW
 } from "./actionType"
 
-let search = {
-  onClear: function onClear() { },
-  onSearch: function onSearch() { },
-  searchText: ""
-}
 
 const INIT_STATE = {
   bredcrumbName: '',
   filterSize: '',
-  searchProps: search
+  breadcrumbDetail: {}
 }
 const BreadcrumbReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -28,10 +23,10 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         ...state,
         filterSize: action.payload,
       }
-    case BREADCRUMB_SEARCH_PROPS:
+    case COMMON_BREADCRUMB_ALL_DETAIL:
       return {
         ...state,
-        searchProps: action.payload,
+        breadcrumbDetail: action.payload,
       }
     default:
       return state
