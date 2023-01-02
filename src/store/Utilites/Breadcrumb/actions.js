@@ -1,4 +1,4 @@
-import { BREADCRUMB_FILTER_SIZE, COMMON_BREADCRUMB_ALL_DETAIL, BREADCRUMB_SHOW } from "./actionType";
+import { BREADCRUMB_FILTER_SIZE, BREADCRUMB_SEARCH_PROPS, BREADCRUMB_SHOW } from "./actionType";
 
 export const Breadcrumb_inputName = (data) => ({
   type: BREADCRUMB_SHOW,
@@ -10,8 +10,8 @@ export const BreadcrumbFilterSize = (label) => ({
   payload: label,
 });
 
-export const CommonBreadcrumbDetails = (props) => ({
-  type: COMMON_BREADCRUMB_ALL_DETAIL,
+export const BreadcrumbSearchProps = (props) => ({
+  type: BREADCRUMB_SEARCH_PROPS,
   payload: props,
 });
 
