@@ -19,23 +19,29 @@
 
 .page-breadcrumb {
   position: fixed;
-  top: 45px ;
-  right: 0;
-  left: 250px;
-  height: 75px;
-  background-color: #ffbf53;
+  top: 50px ;
+  right: 10px;
+  left: 260px;
+  height: 80px;
+  background-color:white;
   z-index: 4;
+  // border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .newbuttom{
-  // top: 20px;
+  margin-top: 15px;
+  margin-left: 10px;
 }
 .breadcrumb-body {
   position: sticky ;
-  top: 68px;
-  // background-color: #0d0a05;
+  top: 60px;
+  background-color:rgb(207, 207, 215);
   right: 0;
   left: 0;
-  // height: 75px;
+  border-radius:5px ;
+  // margin-left: 20px;
+  // margin-right: 20px;
+  height: 65px;
   // background-color: #ffbf53;
 }
