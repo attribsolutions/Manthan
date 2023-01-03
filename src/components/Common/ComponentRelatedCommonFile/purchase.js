@@ -449,8 +449,9 @@ const PurchaseListPage = (props) => {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
 
-                            <div className="button_save " style={{ paddingBottom: 'center' }}>
+                            <div className=" " style={{ paddingBottom: 'center' }}>
                                 <button
+                                style={{marginTop:"-30px"}}
                                     id='form_submmit'
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"
