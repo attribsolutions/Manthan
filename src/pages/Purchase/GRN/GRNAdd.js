@@ -174,7 +174,7 @@ const GRNAdd = (props) => {
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
-            sort: true,
+            // sort: true,
             formatter: (value, row) => (
                 <div className=" mt-2">
                     <span>{value}</span>
@@ -184,10 +184,12 @@ const GRNAdd = (props) => {
         {//------------- Quntity first column ----------------------------------
             text: "PO-Qty",
             dataField: "poQuantity",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
                 return (
+                    <div className="text-end">
                     <samp className="font-asian">{value}</samp>
+                    </div>
                 )
             },
             headerStyle: (colum, colIndex) => {
@@ -197,7 +199,7 @@ const GRNAdd = (props) => {
         {//  ------------Quntity column -----------------------------------  
             text: "GRN-Qty",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
                 try {
                     document.getElementById(`Quantity${k}`).value = row.Quantity
@@ -232,7 +234,7 @@ const GRNAdd = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, key) => {
                 if (row.UnitName === undefined) {
                     row["Unit"] = row.UnitDetails[0].Unit
@@ -268,8 +270,8 @@ const GRNAdd = (props) => {
 
         {  //-------------Rate column ----------------------------------
             text: "Rate",
-            dataField: "Rate",
-            sort: true,
+            dataField: "",
+            // sort: true,
             formatter: (value, row, k) => {
                 if (row.Rate === undefined) { row["Rate"] = 0 }
                 if (row.Amount === undefined) { row["Amount"] = 0 }
@@ -278,8 +280,9 @@ const GRNAdd = (props) => {
                         <Input
                             type="text"
                             id={`Ratey${k}`}
-                            className="border-0 text-end"
+                            className=" text-end"
                             defaultValue={row.Rate}
+                            autoComplete="off"
                             disabled={(row.GST === '') ? true : false}
                             onChange={e => {
                                 row["Rate"] = e.target.value;
@@ -322,7 +325,7 @@ const GRNAdd = (props) => {
         {//------------- ItemName column ----------------------------------
             text: "Amount",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => (
                 <div className="row mt-1">
                     <div className="text-end ">
@@ -337,7 +340,7 @@ const GRNAdd = (props) => {
         {//------------- Batch Code column ----------------------------------
             text: "BatchCode",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
                 try {
                     document.getElementById(`Batch${k}`).value = row.BatchCode
@@ -360,7 +363,7 @@ const GRNAdd = (props) => {
         {//------------- Batch Date column ----------------------------------
             text: "Batch Date",
             dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, k) => {
                 try {
                     document.getElementById(`BatchDate${k}`).value = row.BatchDate

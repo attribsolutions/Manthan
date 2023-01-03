@@ -157,7 +157,7 @@ const Order = (props) => {
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
 
-                const termsAndCondition = hasEditVal.TermsAndCondition.map(i => ({
+                const termsAndCondition = hasEditVal.TermsAndConditions.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
                     IsDeleted: 0

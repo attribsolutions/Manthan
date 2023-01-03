@@ -107,7 +107,7 @@ const ProductionMaster = (props) => {
 
                 i.hasValid.id.valid = true
                 i.hasValid.ProductionDate.valid = true
-                i.hasValid.value.valid = true
+                i.hasValid.Item.valid = true
                 i.hasValid.EstimatedQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i

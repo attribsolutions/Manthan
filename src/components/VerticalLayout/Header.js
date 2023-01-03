@@ -86,6 +86,7 @@ const Header = props => {
 
   return (
     <React.Fragment>
+        <BreadcrumbCopy/>
       <header id="page-topbar">
         <div className="navbar-header">
           <div className="d-flex">
@@ -311,7 +312,7 @@ const Header = props => {
         <RightSidebar onClose={onDrawerClose} onChangeLayoutMode={onChangeLayoutMode} />
 
       </ReactDrawer>
-      <BreadcrumbCopy></BreadcrumbCopy>
+    
     </React.Fragment>
   )
 }
