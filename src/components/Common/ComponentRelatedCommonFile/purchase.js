@@ -89,7 +89,16 @@ const PurchaseListPage = (props) => {
     const fileds = pageField.PageFieldMaster;
 
     useEffect(() => {
-        settableList(props.reducers.tableList)
+
+        if (pageMode === url.GRN_ADD_Mode_2) {
+            let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
+                return i.Inward === "Open"
+            })
+            settableList(OnlyInwardZeroRecord)
+        }
+        else {
+            settableList(props.reducers.tableList)
+        }
     }, [props.reducers.tableList])
 
     useEffect(() => {
@@ -254,7 +263,7 @@ const PurchaseListPage = (props) => {
                 if (!(ele.SupplierID === rowData.SupplierID)) {
                     try {
                         document.getElementById(`checkhasSelect${ele.id}`).disabled = true
-                        document.getElementById(`checkhasSelect${ele.id}`).style.border= "white"
+                        document.getElementById(`checkhasSelect${ele.id}`).style.border = "white"
                     }
                     catch (e) { }
                 };
@@ -262,7 +271,7 @@ const PurchaseListPage = (props) => {
             else if (found.length === 0 && !isEvent) {
                 try {
                     document.getElementById(`checkhasSelect${ele.id}`).disabled = false
-                    document.getElementById(`checkhasSelect${ele.id}`).style.border= ""
+                    document.getElementById(`checkhasSelect${ele.id}`).style.border = ""
                 }
                 catch (e) { }
             };
@@ -442,8 +451,9 @@ const PurchaseListPage = (props) => {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
 
-                            <div className="button_save " style={{ paddingBottom: 'center' }}>
+                            <div className=" " style={{ paddingBottom: 'center' }}>
                                 <button
+                                style={{marginTop:"-30px"}}
                                     id='form_submmit'
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"

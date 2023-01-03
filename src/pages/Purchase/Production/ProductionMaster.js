@@ -26,6 +26,8 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
     getProduction_Mode2_Success,
+    getUnitIDForProdunction,
+    getUnitIDForProdunctionSuccess,
     post_Production,
     post_ProductionSuccess,
     update_ProductionIdSuccess
@@ -35,6 +37,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 
 const ProductionMaster = (props) => {
+    debugger
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -60,20 +63,23 @@ const ProductionMaster = (props) => {
         postMsg,
         userAccess,
         updateMsg,
-        produtionMake,
         pageField,
-        itemsDrop
+        itemsDrop,
+        UnitDropdown
     } = useSelector((state) => ({
         supplierAddress: state.SupplierReducer.supplierAddress,
         postMsg: state.ProductionReducer.postMsg,
         updateMsg: state.ProductionReducer.updateMsg,
-        produtionMake: state.ProductionReducer.produtionMake,
+        UnitDropdown: state.ProductionReducer.unit,
         itemsDrop: state.MaterialIssueReducer.materialIssueList,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
+    console.log("UnitDropdown", UnitDropdown)
+
     useEffect(() => {
+        dispatch(getUnitIDForProdunctionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PRODUCTION_LIST))
 
@@ -93,29 +99,38 @@ const ProductionMaster = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        let { Data } = produtionMake;
-        if (Data) {
 
+        let mode2Data = props.location
+        const MaterialProductionaData = Object.assign({}, mode2Data.MaterialProductionaData)
+
+        if (mode2Data.pageMode === "Mode2") {
             setState(i => {
                 i.values.Item = {
-                    label: produtionMake.Data.Item.Name,
-                    value: produtionMake.Data.Item.id
+                    label: MaterialProductionaData[0].ItemName,
+                    value: MaterialProductionaData[0].Item
                 }
-                i.values.id = Data.id;
-                i.values.EstimatedQuantity = Data.LotQuantity;//EstimatedQuantity===LoQuantity
-                i.values.NumberOfLot = Data.NumberOfLot;      //NumberOfLot===NumberOfLot
+                i.values.UnitName = {
+                    label: MaterialProductionaData[0].UnitName,
+                    value: MaterialProductionaData[0].Unit
+                }
+                i.values.id = MaterialProductionaData[0].id;
+                i.values.EstimatedQuantity = MaterialProductionaData[0].LotQuantity;//EstimatedQuantity===LoQuantity
+                i.values.NumberOfLot = MaterialProductionaData[0].NumberOfLot;      //NumberOfLot===NumberOfLot
 
                 i.hasValid.id.valid = true
                 i.hasValid.ProductionDate.valid = true
-                i.hasValid.value.valid = true
+                i.hasValid.Item.valid = true
                 i.hasValid.EstimatedQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i
             })
-            dispatch(getProduction_Mode2_Success({ Status: false }))
-
+            debugger
+            const jsonBody = JSON.stringify({
+                Item:MaterialProductionaData[0].Item
+            });
+            dispatch(getUnitIDForProdunction(jsonBody));
         }
-    }, [produtionMake]);
+    }, [props.location]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -131,7 +146,6 @@ const ProductionMaster = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess]);
-
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -333,8 +347,7 @@ const ProductionMaster = (props) => {
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
-                                                }
-                                                }
+                                                }}
                                             />
                                             {isError.id.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.id}</small></span>
@@ -350,7 +363,7 @@ const ProductionMaster = (props) => {
                                                 // isDisabled={true}
                                                 name="UnitName"
                                                 value={values.UnitName}
-                                                options={[]}
+                                                options={UnitDropdown}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                 }
