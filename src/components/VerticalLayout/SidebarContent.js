@@ -92,8 +92,6 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    debugger
-
     let pathName = props.location.pathname
     let userAcc = RoleAccessUpdateData.find((inx) => {
       const path = inx.ActualPagePath.toLowerCase()
@@ -106,7 +104,6 @@ const SidebarContent = (props) => {
     }
 
     const initMenu = () => {
-      debugger
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
