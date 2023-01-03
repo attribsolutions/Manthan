@@ -44,8 +44,8 @@ function* goButtonGenFunc({ data }) {
       ele["id"] = k + 1
     });
     const termArr = []
-    var term = response.Data.TermsAndCondition
-    if (term === undefined) { term = response.Data.TermsAndConditions }
+    var term = response.Data.TermsAndConditions
+    // if (term === undefined) { term = response.Data.TermsAndConditions }
     yield term.forEach((ele, k) => {
       termArr.push({
         value: ele.id,
@@ -186,21 +186,21 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
-
+  debugger
   yield GoBtnDissable(true)
   // yield delay(400)
   try {
-
+    debugger
     const response = yield call(OrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
 
       var date = convertDatefunc(i.OrderDate)
       var time = convertTimefunc(i.CreatedOn)
       var DeliveryDate = convertDatefunc(i.DeliveryDate);
-
       i["preOrderDate"] = i.OrderDate
       i.OrderDate = (`${date} ${time}`)
       i.DeliveryDate = (`${DeliveryDate}`)
+      i.Inward === 0 ? i.Inward = "Open" : i.Inward = "Close";
       return i
     })
     yield put(getOrderListPageSuccess(newList))
