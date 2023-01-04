@@ -64,6 +64,7 @@ const MaterialIssueMaster = (props) => {
     const [pageMode, setPageMode] = useState(url.MATERIAL_ISSUE);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
+    console.log("Itemselect",Itemselect)
     const [Itemselectonchange, setItemselectonchange] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -162,6 +163,7 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     useEffect(() => {
+        debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
             dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
@@ -340,7 +342,8 @@ const MaterialIssueMaster = (props) => {
                     BatchDate: ele.BatchDate,
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty)
+                    IssueQuantity: parseInt(ele.Qty),
+                    BatchID:index.id
                 })
             })
         })
@@ -366,8 +369,9 @@ const MaterialIssueMaster = (props) => {
                 MaterialIssueItems: FilterData,
                 MaterialIssueWorkOrder: [
                     {
-                        WorkOrder: Itemselect.WorkOrderId,
-                        Bom: Itemselect.BomID
+                        WorkOrder: Itemselect.id,
+                        Bom: Itemselect.Bom
+
                     }
                 ]
             }
