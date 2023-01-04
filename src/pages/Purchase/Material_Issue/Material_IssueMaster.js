@@ -29,7 +29,7 @@ import {
     postBOMSuccess,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate,userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -319,7 +319,7 @@ const MaterialIssueMaster = (props) => {
         const MaterialIssueItems = []
         GoButton.map((index) => {
             index.BatchesData.map((ele) => {
-
+                debugger
                 MaterialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
@@ -329,7 +329,7 @@ const MaterialIssueMaster = (props) => {
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
                     IssueQuantity: parseInt(ele.Qty),
-                    BatchID: index.id
+                    BatchID: ele.id
                 })
             })
         })
