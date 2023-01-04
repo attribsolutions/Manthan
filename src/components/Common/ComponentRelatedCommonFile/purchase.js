@@ -450,19 +450,19 @@ const PurchaseListPage = (props) => {
                     {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
-
-                            <div className=" " style={{ paddingBottom: 'center' }}>
-                                <button
-                                style={{marginTop:"-10px"}}
-                                    id='form_submmit'
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md  "
-                                    onClick={onSaveBtnClick}
-                                >
-                                    <i class="fas fa-edit me-2"></i>{makeBtnName}
-                                </button>
-                            </div>
+                            (tableList.length == 0) ? null :
+                                <div className=" " style={{ paddingBottom: 'center' }}>
+                                    <button
+                                        style={{ marginTop: "-10px" }}
+                                        id='form_submmit'
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                        className="btn btn-primary w-md  "
+                                        onClick={onSaveBtnClick}
+                                    >
+                                        <i class="fas fa-edit me-2"></i>{makeBtnName}
+                                    </button>
+                                </div>
                             :
                             null
                     }

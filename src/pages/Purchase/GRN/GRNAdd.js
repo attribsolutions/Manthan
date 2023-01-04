@@ -755,10 +755,10 @@ const GRNAdd = (props) => {
                     {
                         (grnItemList.length > 0) ?
                          <div className="row save1" style={{ paddingBottom: 'center', marginTop:"-30px" }}>
-                            {/* <SaveButton pageMode={pageMode}
+                            <SaveButton pageMode={pageMode}
                                 userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
-                            /> */}
+                            />
                         </div>
                             :
                             <div className="row save1"></div>
