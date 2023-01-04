@@ -453,11 +453,11 @@ const PurchaseListPage = (props) => {
 
                             <div className=" " style={{ paddingBottom: 'center' }}>
                                 <button
-                                style={{marginTop:"-30px"}}
+                                style={{marginTop:"-10px"}}
                                     id='form_submmit'
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md  bt_save"
+                                    className="btn btn-primary w-md  "
                                     onClick={onSaveBtnClick}
                                 >
                                     <i class="fas fa-edit me-2"></i>{makeBtnName}
