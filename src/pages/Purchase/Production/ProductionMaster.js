@@ -247,7 +247,7 @@ const ProductionMaster = (props) => {
                         pageHeading={userPageAccessState.PageHeading}
                     />
                     <form onSubmit={SaveHandler} noValidate>
-                        <div className="px-2 mb-1  c_card_header text-black " style={{ marginTop: "-15px" }} >
+                        <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
                             <Row>
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2 " >

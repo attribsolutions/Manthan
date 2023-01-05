@@ -20,7 +20,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-
+    resetFunction,
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -58,7 +58,7 @@ const BOMMaster = (props) => {
         EstimatedOutputQty: "",
         UnitName: "",
         Comment: "",
-        IsActive: true
+        IsActive: false
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -131,6 +131,7 @@ const BOMMaster = (props) => {
                     label: data.UnitName
                 }))
                 setItemUnitOnEditData(ItemUnits)
+                // setItemUnitOptions(ItemUnits)
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }

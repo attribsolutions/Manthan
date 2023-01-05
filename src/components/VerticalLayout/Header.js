@@ -41,8 +41,6 @@ import {
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import { MainSearchBox, } from '../Common/ComponentRelatedCommonFile/SearchBox/index';
-import BreadcrumbCopy from '../Common/Breadcrumb3 copy';
-
 
 
 
@@ -86,7 +84,6 @@ const Header = props => {
 
   return (
     <React.Fragment>
-        <BreadcrumbCopy/>
       <header id="page-topbar">
         <div className="navbar-header">
           <div className="d-flex">
@@ -310,9 +307,7 @@ const Header = props => {
         onClose={onDrawerClose}
       >
         <RightSidebar onClose={onDrawerClose} onChangeLayoutMode={onChangeLayoutMode} />
-
       </ReactDrawer>
-    
     </React.Fragment>
   )
 }
