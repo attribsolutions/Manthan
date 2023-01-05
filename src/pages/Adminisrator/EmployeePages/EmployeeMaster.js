@@ -381,7 +381,7 @@ const AddEmployee = (props) => {
           <MetaTags>
             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+          {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
           <Container fluid>
             <Card className="text-black">

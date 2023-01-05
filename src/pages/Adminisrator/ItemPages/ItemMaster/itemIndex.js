@@ -737,7 +737,7 @@ window.onclick = function(event) {
                         <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
-                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
                             <Row>
                                 <Col lg={12}>

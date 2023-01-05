@@ -338,9 +338,9 @@ const PartyItems = (props) => {
                             <title>{userAccState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
 
-                        <Breadcrumb
+                        {/* <Breadcrumb
                             pageHeading={userAccState.PageHeading}
-                        />
+                        /> */}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

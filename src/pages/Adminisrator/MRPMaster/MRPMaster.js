@@ -402,7 +402,7 @@ const MRPMaster = (props) => {
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
