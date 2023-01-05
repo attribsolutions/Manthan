@@ -13,39 +13,43 @@ import Select from "react-select";
 import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
-import { GetItemUnitsDrodownAPI } from '../../../../../store/Purchase/BOMRedux/action';
 
 function ItemTab(props) {
+
     const dispatch = useDispatch();
     const [contentItemSelect, setContentItemSelect] = useState('');
     const [Quantity, setQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
-    const { Items, GetItemUnits } = useSelector((state) => ({
+    const [ItemUnitOptions, setItemUnitOptions] = useState([]);
+
+    const { Items } = useSelector((state) => ({
         Items: state.ItemMastersReducer.pages,
-        GetItemUnits: state.BOMReducer.GetItemUnits,
     }));
 
     useEffect(() => {
         dispatch(getItemList())
         dispatch(getBaseUnit_ForDropDown());
     }, [dispatch]);
+
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
-    const Unit_DropdownOptions = GetItemUnits.map((data) => ({
-        value: data.value,
-        label: data.label
-    }));
 
-    const ContentItem_Handler = (event) => {
-        const jsonBody = JSON.stringify({
-            Item: event.value,
-        });
-        dispatch(GetItemUnitsDrodownAPI(jsonBody))
-        setContentItemSelect(event);
+    function ContentItem_Handler(e) {
         setUnitSelect('')
-    };
+        setContentItemSelect(e)
+        let Item = Items.filter((index) => {
+            return index.id === e.value
+        })
+        let ItemUnits = Item[0].UnitDetails.map((data) => ({
+            value: data.UnitID,
+            label: data.UnitName
+        }))
+        setItemUnitOptions(ItemUnits)
+
+    }
+
     const Unit_Handler = (event) => {
         setUnitSelect(event);
     };
@@ -99,10 +103,11 @@ function ItemTab(props) {
                         <FormGroup className="mb-3 col col-sm-3 " >
                             <Label >Item Quantity</Label>
                             <Input
-                                style={{ textAlign: "right" }}
+                                // style={{ textAlign: "right" }}
                                 type="text"
+                                className='text-end'
                                 value={Quantity}
-                                placeholder="Please Enter Quantity" 
+                                placeholder="Please Enter Quantity"
                                 autoComplete="off"
                                 onChange={handleChange}
                             />
@@ -111,7 +116,7 @@ function ItemTab(props) {
                             <Label>Unit</Label>
                             <Select
                                 value={unitSelect}
-                                options={Unit_DropdownOptions}
+                                options={ItemUnitOptions}
                                 onChange={Unit_Handler}
                             />
                         </FormGroup>
@@ -125,7 +130,7 @@ function ItemTab(props) {
                                         type="button"
                                         onClick={addRowsHandler}
                                     >
-                                     <i className="dripicons-plus mt-3"> </i>
+                                        <i className="dripicons-plus mt-3"> </i>
                                     </Button>
                                 </Col>
                             </Row>

@@ -310,7 +310,7 @@ const MaterialIssueMaster = (props) => {
         const value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
             Itemselectonchange.NumberOfLot
             : Itemselect.NumberOfLot, Number(event.target.value)));
-             event.target.value = value1
+        event.target.value = value1
         if ((event.target.value === "NaN")) {
             event.target.value = 0
         }
@@ -386,17 +386,17 @@ const MaterialIssueMaster = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-           
+
         },
         {
             text: "Work Order Qty",
             dataField: "Quantity",
-           
+
         },
         {
             text: "Batch Code",
             dataField: "BatchesData",
-           
+
 
             formatter: (cellContent, user) => (
                 <>
@@ -469,7 +469,7 @@ const MaterialIssueMaster = (props) => {
 
             text: "Unit",
             dataField: "UnitName",
-          
+
         },
     ]
 
@@ -492,113 +492,123 @@ const MaterialIssueMaster = (props) => {
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     />
                     <form onSubmit={SaveHandler} noValidate>
+                        <Col className="px-2 mb-1 mt-n3 c_card_filter header text-black" sm={12}>
+                            <Row>
+                                <Col className=" mt-1 row  " sm={11} >
+                                    <Col sm="6">
+                                        <FormGroup className="row mt-2  ">
+                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
+                                            <Col sm="7">
+                                                <Flatpickr
+                                                    name="MaterialIssueDate"
+                                                    value={values.MaterialIssueDate}
+                                                    className="form-control d-block bg-white text-dark"
+                                                    placeholder="YYYY-MM-DD"
+                                                    options={{
+                                                        altInput: true,
+                                                        altFormat: "d-m-Y",
+                                                        dateFormat: "Y-m-d",
+                                                    }}
+                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                />
+                                                {isError.MaterialIssueDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
 
-                        <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
-
-                            <div className=" mt-1 row  ">
-
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2  ">
-                                        <Label className="mt-1" style={{ width: "115px" }}>{fieldLabel.MaterialIssueDate} </Label>
-                                        <Col sm="7">
-                                            <Flatpickr
-                                                name="MaterialIssueDate"
-                                                value={values.MaterialIssueDate}
-                                                className="form-control d-block bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                options={{
-                                                    altInput: true,
-                                                    altFormat: "d-m-Y",
-                                                    dateFormat: "Y-m-d",
-                                                }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                            />
-                                            {isError.MaterialIssueDate.length > 0 && (
-                                                <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col>
-
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2 ">
-                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
-                                        <Col sm={7}>
-                                            <Select
-                                                name="ItemName"
-                                                value={values.ItemName}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={ItemDropdown_Options}
-                                                onChange={ItemOnchange}
-                                            />
-                                            {isError.ItemName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-
-                                </Col >
-
-                                <Col sm="6">
-                                    <FormGroup className="mb-2 row  " style={{marginTop:"-5px"}}>
-                                        <Label className="mt-1" style={{ width: "115px" }}> {fieldLabel.NumberOfLot} </Label>
-                                        <Col sm={7}>
-                                            <Input
-                                                name="NumberOfLot"
-                                                value={values.NumberOfLot}
-                                                type="text"
-                                                className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Number Of Lots"
-                                                autoComplete='off'
-                                                // onChange={(event) => {
-                                                //     onChangeText({ event, state, setState });
-                                                //     dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-                                                // }}
-                                                onChange={NumberOfLotchange}
-                                            />
-                                            {isError.NumberOfLot.length > 0 && (
-                                                <span className="invalid-feedback">{isError.NumberOfLot}</span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-                                <Col sm="6">
-                                    <FormGroup className="mb-1 row" style={{marginTop:"-5px"}}>
-                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
-                                        <Col sm={7}>
-                                            <Input
-                                                name="LotQuantity"
-                                                value={values.LotQuantity}
-                                                type="text"
-                                                className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter LotQuantity"
-                                                autoComplete='off'
-                                                onChange={Quantitychange}
-                                                
-                                            />
-                                            {isError.LotQuantity.length > 0 && (
-                                                <span className="invalid-feedback">{isError.LotQuantity}</span>
-                                            )}
-                                        </Col>
-
-                                        <div className="col col-1">
+                                    <Col sm="6">
+                                        <FormGroup className="row mt-2 ">
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
+                                            <Col sm={7}>
+                                                <Select
+                                                    name="ItemName"
+                                                    value={values.ItemName}
+                                                    isSearchable={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={ItemDropdown_Options}
+                                                    onChange={ItemOnchange}
+                                                />
+                                                {isError.ItemName.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+                                                )}
+                                            </Col>
+                                            {/* <Col sm={2}>
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
                                                 onClick={(e) => goButtonHandler(e)}
                                             >Go</Button>
-                                        </div>
-                                    </FormGroup>
+                                        </Col > */}
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm="6">
+                                        <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
+                                            <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.NumberOfLot} </Label>
+                                            <Col sm={7}>
+                                                <Input
+                                                    name="NumberOfLot"
+                                                    value={values.NumberOfLot}
+                                                    type="text"
+                                                    className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    placeholder="Please Enter Number Of Lots"
+                                                    autoComplete='off'
+                                                    // onChange={(event) => {
+                                                    //     onChangeText({ event, state, setState });
+                                                    //     dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+                                                    // }}
+                                                    onChange={NumberOfLotchange}
+                                                />
+                                                {isError.NumberOfLot.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.NumberOfLot}</span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col sm="6">
+                                        <FormGroup className="mb-1 mt-2  row" >
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
+                                            <Col sm={7}>
+                                                <Input
+                                                    name="LotQuantity"
+                                                    value={values.LotQuantity}
+                                                    type="text"
+                                                    className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    placeholder="Please Enter LotQuantity"
+                                                    autoComplete='off'
+                                                    onChange={Quantitychange}
+
+                                                />
+                                                {isError.LotQuantity.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.LotQuantity}</span>
+                                                )}
+                                            </Col>
+
+                                            {/* <div className="col col-1">
+                                            <Button
+                                                color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
+                                                onClick={(e) => goButtonHandler(e)}
+                                            >Go</Button>
+                                        </div> */}
+                                        </FormGroup>
+                                    </Col>
+
                                 </Col>
-                            </div>
-                        </div>
+                                <Col sm={1} className="mt-2">
+                                    <Button
+                                        color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
+                                        onClick={(e) => goButtonHandler(e)}
+                                    >Go</Button>
+                                </Col>
+                                <Col>
+                                </Col>
+                            </Row>
+                        </Col>
 
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (

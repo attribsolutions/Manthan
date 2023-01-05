@@ -4,7 +4,6 @@ import { Tbody, Thead } from 'react-super-responsive-table';
 
 function BOMTable(props) {
 
-  const [quantity, setQuantity] = useState()
   const onDeleteHandeler = (ele) => {
 
     if (!(ele === 0)) {
@@ -27,6 +26,7 @@ function BOMTable(props) {
         <td>
           <div className='text-center'style={{ width: "150px" }}>
             <Input type="text"
+            className="text-end"
               defaultValue={info.Quantity}
               onChange={(event) => handleChange(event, info)}
             >

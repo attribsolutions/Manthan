@@ -52,8 +52,8 @@ const PurchaseListPage = (props) => {
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
     const [tableList, settableList] = useState([]);
-
-    const {
+    const [InwardZeroRecord, setInwardZeroRecord] = useState([]);
+      const {
         editData,
         updateMsg,
         deleteMsg,
@@ -91,6 +91,13 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
         settableList(props.reducers.tableList)
     }, [props.reducers.tableList])
+
+    useEffect(() => {
+        let OnlyInwardZeroRecord = tableList.filter((i) => {
+            return i.Inward === "Open"
+        })
+        setInwardZeroRecord(OnlyInwardZeroRecord)
+    }, [tableList])
 
     useEffect(() => {
 
@@ -254,7 +261,7 @@ const PurchaseListPage = (props) => {
                 if (!(ele.SupplierID === rowData.SupplierID)) {
                     try {
                         document.getElementById(`checkhasSelect${ele.id}`).disabled = true
-                        document.getElementById(`checkhasSelect${ele.id}`).style.border= "white"
+                        document.getElementById(`checkhasSelect${ele.id}`).style.border = "white"
                     }
                     catch (e) { }
                 };
@@ -262,7 +269,7 @@ const PurchaseListPage = (props) => {
             else if (found.length === 0 && !isEvent) {
                 try {
                     document.getElementById(`checkhasSelect${ele.id}`).disabled = false
-                    document.getElementById(`checkhasSelect${ele.id}`).style.border= ""
+                    document.getElementById(`checkhasSelect${ele.id}`).style.border = ""
                 }
                 catch (e) { }
             };
@@ -399,7 +406,7 @@ const PurchaseListPage = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={tableList}
+                                data={(pageMode === url.GRN_ADD_Mode_2) ? InwardZeroRecord : tableList}
                                 columns={columns}
                                 search={defaultSearch(pageField.id)}
                             >
@@ -442,7 +449,7 @@ const PurchaseListPage = (props) => {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
 
-                            <div className="button_save " style={{ paddingBottom: 'center' }}>
+                            <div className="button_save ">
                                 <button
                                     id='form_submmit'
                                     type="submit"

@@ -62,7 +62,7 @@ const PageMaster = (props) => {
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
-
+  console.log("pageType_DropdownSelect", pageType_DropdownSelect)
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
@@ -155,6 +155,7 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
+        debugger
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
@@ -190,9 +191,13 @@ const PageMaster = (props) => {
         })
         PageFieldMaster.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
 
-        if (!(PageFieldMaster.length === 0) && (pageType_ID === 1)) {
+        if (!(PageFieldMaster.length === 0) && (pageType_ID === 1) || (pageType_ID === 3)) {
           setPageFieldTabTable(PageFieldMaster)
         }
+
+        // if (pageType_ID === 3) {
+        //   setPageFieldTabTable(PageFieldMaster)
+        // }
 
         let PageFieldList = hasEditVal.PageFieldList.map((index) => {
           return {
@@ -245,8 +250,15 @@ const PageMaster = (props) => {
           setrelatedPage_DropdownSelect({ value: 0 });
           setPageType_DropdownSelect({ value: 1, label: "AddPage" });
         }
-        dispatch(editHPagesIDSuccess({ Status: false }));
       }
+      else if (hasEditVal.PageType=== 3) {
+        dispatch(getPageListSuccess([]));
+        // setrelatedPage_DropdownSelect({ value: 0 });
+        setPageType_DropdownSelect({ value: 3, label: "SourceTransactionPage" });
+      }
+      dispatch(editHPagesIDSuccess({ Status: false }));
+
+
     }
   }, []);
 
@@ -505,7 +517,7 @@ const PageMaster = (props) => {
       );
       return;
     }
-
+    debugger
     const jsonBody = JSON.stringify({
 
       Name: values.Name,
@@ -556,7 +568,7 @@ const PageMaster = (props) => {
 
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
-  
+
     if (e.value === 2) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
@@ -575,7 +587,7 @@ const PageMaster = (props) => {
       setTablePageAccessDataState([]);
       setPageAccessDropDownView(true);
       dispatch(getPageListSuccess([]));
-      setrelatedPage_DropdownSelect({ value: 0 });
+      // setrelatedPage_DropdownSelect({ value: 0 });
     }
     setPageType_DropdownSelect(e);
   };

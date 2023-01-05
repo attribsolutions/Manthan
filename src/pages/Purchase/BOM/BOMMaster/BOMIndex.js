@@ -20,20 +20,19 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-    resetFunction,
+
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import ItemTab from "./ItemQuantityTab";
 import {
     editBOMListSuccess,
-    GetItemUnitsDrodownAPI,
     postBOM,
     postBOMSuccess,
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import { createdBy, saveDissable, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 
@@ -43,21 +42,23 @@ const BOMMaster = (props) => {
     const history = useHistory()
 
     const [EditData, setEditData] = useState({});
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [ItemUnitOptions, setItemUnitOptions] = useState([]);
+    const [ItemUnitOnEditData, setItemUnitOnEditData] = useState([]);
 
     const fileds = {
-
         id: "",
         BomDate: "",
         ItemName: "",
         EstimatedOutputQty: "",
         UnitName: "",
         Comment: "",
-        IsActive: false
+        IsActive: true
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -69,13 +70,11 @@ const BOMMaster = (props) => {
         pageField,
         userAccess,
         Items,
-        GetItemUnits
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        GetItemUnits: state.BOMReducer.GetItemUnits,
         Items: state.ItemMastersReducer.pages,
     }));
 
@@ -125,7 +124,13 @@ const BOMMaster = (props) => {
             }
 
             if (hasEditVal) {
+                debugger
 
+                let ItemUnits = hasEditVal.ParentUnitDetails.map((data) => ({
+                    value: data.Unit,
+                    label: data.UnitName
+                }))
+                setItemUnitOnEditData(ItemUnits)
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -231,10 +236,6 @@ const BOMMaster = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    const Unit_DropdownOptions = GetItemUnits.map((data) => ({
-        value: data.value,
-        label: data.label
-    }))
 
     function PermissionFunction() {
         let event = { preventDefault: () => { } }
@@ -242,16 +243,22 @@ const BOMMaster = (props) => {
     }
 
     function Items_Dropdown_Handler(e) {
-        const jsonBody = JSON.stringify({
-            Item: e.value,
-        });
-        dispatch(GetItemUnitsDrodownAPI(jsonBody))
-        setState((i) => {
 
-            const a = { ...i }
-            a.values.UnitName = "";
-            a.hasValid.UnitName.valid = false
-            return a
+        setItemTabDetails([])
+        let Item = Items.filter((index) => {
+            return index.id === e.value
+        })
+        let ItemUnits = Item[0].UnitDetails.map((data) => ({
+            value: data.UnitID,
+            label: data.UnitName
+        }))
+
+        setItemUnitOptions(ItemUnits)
+
+        setState((i) => {
+            i.values.UnitName = "";
+            i.hasValid.UnitName.valid = false
+            return i
         })
     }
 
@@ -306,8 +313,6 @@ const BOMMaster = (props) => {
         }
     };
 
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -316,7 +321,7 @@ const BOMMaster = (props) => {
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                        // showCount={true}
+                    // showCount={true}
                     />
                     <form onSubmit={(event) => SaveHandler({ event })} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
@@ -350,28 +355,6 @@ const BOMMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2 ">
-                                        <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="EstimatedOutputQty"
-                                                value={values.EstimatedOutputQty}
-                                                type="text"
-                                                className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter EstimatedOutputQty"
-                                                autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.EstimatedOutputQty.length > 0 && (
-                                                <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-                                <Col sm="6">
-                                    <FormGroup className="mb-2 row  ">
                                         <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
                                             <Select
@@ -396,6 +379,28 @@ const BOMMaster = (props) => {
                                 </Col>
 
                                 <Col sm="6">
+                                    <FormGroup className="mb-2 row ">
+                                        <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="EstimatedOutputQty"
+                                                value={values.EstimatedOutputQty}
+                                                type="text"
+                                                className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter EstimatedOutputQty"
+                                                autoComplete='off'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.EstimatedOutputQty.length > 0 && (
+                                                <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="6">
                                     <FormGroup className="mb-2 row  ">
                                         <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
                                         <Col sm={7}>
@@ -405,7 +410,7 @@ const BOMMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={Unit_DropdownOptions}
+                                                options={pageMode === 'edit' ? ItemUnitOnEditData : ItemUnitOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                             {isError.UnitName.length > 0 && (
