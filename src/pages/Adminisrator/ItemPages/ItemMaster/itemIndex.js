@@ -62,8 +62,6 @@ const ItemsMaster = (props) => {
     const [searchTerm1, setSearchTerm1] = React.useState("");
     const [searchResults1, setSearchResults1] = React.useState([]);
 
-
-
     let initial = {
         Name: "",
         Sequence: "",
@@ -105,14 +103,17 @@ const ItemsMaster = (props) => {
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
         Unit: '',
+        POUnit: false,
+        SOUnit: false,
         IsBase: false
     }]);
+    
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
 
     const [shelfLife, setShelfLife] = useState('');
-debugger
+
     const {
         companyList,
         BaseUnit,
@@ -161,7 +162,7 @@ debugger
     }, [userAccess])
 
     useEffect(() => {
-      
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -176,7 +177,7 @@ debugger
             }
 
             if (hasEditVal) {
-              
+
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -418,7 +419,7 @@ debugger
     };
 
     const handleValidSubmit = (event, values) => {
-        debugger
+
         let isvalid = true
         let inValidMsg = []
 
@@ -553,14 +554,11 @@ debugger
 
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
-            debugger
-
 
             let imagedata = imageTabTable.map(function (index) {
-                debugger
 
                 if ((index.ImageType === '') || (index.ImageUpload === '')) {
-                    debugger
+
                     return imageTabTable.length = []
                 }
                 else {
@@ -629,14 +627,14 @@ debugger
 
     };
 
-var modal = document.getElementById('itemtag');
-debugger
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+    var modal = document.getElementById('itemtag');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
 
     let data1 = BrandTagList.map((index) => {
@@ -658,18 +656,18 @@ window.onclick = function(event) {
             person.toLowerCase().includes(searchtext)
         );
         setSearchResults(results);
-        debugger
+
         var x = document.getElementById("itemtag");
         x.style.display = "block";
         var di = "100Px"
         if (results.length == 0) {
-            di = `${x.style.display="none"}`
+            di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {
             di = "50Px"
         } else if (results.length > 5) {
             di = "300Px"
-        }else if (results.length <2) {
+        } else if (results.length < 2) {
             di = "50Px"
         }
         x.style.height = di
@@ -677,12 +675,12 @@ window.onclick = function(event) {
     };
 
     const handlerChange = event => {
-     CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "BrandName") 
-     var searchtext = event.target.value
+        CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "BrandName")
+        var searchtext = event.target.value
 
-     const results = data1.filter(person =>
-        person.toLowerCase().includes(searchtext)
-    );
+        const results = data1.filter(person =>
+            person.toLowerCase().includes(searchtext)
+        );
         // var x = document.getElementById("brandtag");
         // x.style.display = "block";
         setSearchResults1(results);
@@ -690,13 +688,13 @@ window.onclick = function(event) {
         x.style.display = "block";
         var di = "100Px"
         if (results.length == 0) {
-            di = `${x.style.display="none"}`
+            di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {
             di = "50Px"
         } else if (results.length > 5) {
             di = "300Px"
-        }else if (results.length <2) {
+        } else if (results.length < 2) {
             di = "50Px"
         }
         x.style.height = di
@@ -724,7 +722,7 @@ window.onclick = function(event) {
     }, [searchTerm]);
 
     React.useEffect(() => {
-       
+
     }, [searchTerm1]);
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
