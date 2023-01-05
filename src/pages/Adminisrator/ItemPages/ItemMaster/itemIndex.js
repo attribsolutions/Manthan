@@ -112,7 +112,7 @@ const ItemsMaster = (props) => {
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
 
     const [shelfLife, setShelfLife] = useState('');
-debugger
+
     const {
         companyList,
         BaseUnit,
@@ -418,7 +418,7 @@ debugger
     };
 
     const handleValidSubmit = (event, values) => {
-        debugger
+       
         let isvalid = true
         let inValidMsg = []
 
@@ -553,14 +553,14 @@ debugger
 
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
-            debugger
+          
 
 
             let imagedata = imageTabTable.map(function (index) {
-                debugger
+               
 
                 if ((index.ImageType === '') || (index.ImageUpload === '')) {
-                    debugger
+                   
                     return imageTabTable.length = []
                 }
                 else {
@@ -630,7 +630,7 @@ debugger
     };
 
 var modal = document.getElementById('itemtag');
-debugger
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
@@ -658,7 +658,7 @@ window.onclick = function(event) {
             person.toLowerCase().includes(searchtext)
         );
         setSearchResults(results);
-        debugger
+      
         var x = document.getElementById("itemtag");
         x.style.display = "block";
         var di = "100Px"
