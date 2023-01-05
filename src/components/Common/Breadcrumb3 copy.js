@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
-
-const Breadcrumb = props => {
+import './breadcrumb.scss'
+const BreadcrumbCopy = props => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -16,25 +16,37 @@ const Breadcrumb = props => {
     const [modal_scroll, setmodal_scroll] = useState(false);
     const [downListKey, setDownListKey] = useState([]);
 
+    // const {
+    //     newBtnView = false,
+    //     excelBtnView = false,
+    //     pageHeading = '',
+    //     showCount = false,
+    //     excelData = [],
+    //     userAcc = {},
+    //     pageField = {}
+    // } = props;
+
     const {
-        newBtnView = false,
-        excelBtnView = false,
-        pageHeading = '',
-        showCount = false,
+        breadcrumbDetail = {}
+    } = useSelector((state) => ({
+        // bredcrumbName: state.BreadcrumbReducer.breadcrumbDetail,
+        // filterSize: state.BreadcrumbReducer.filterSize,
+        // userAccess: state.Login.RoleAccessUpdateData,
+
+    }));
+    const {
+        bredcrumbName = 'page Name',
+        filterSize = "showCount Axtxtxtxtxtxtx 9524",
+        userAccess = {},
+        newBtnView = true,
+        excelBtnView = true,
+        pageHeading = 'page Heading',
+        showCount = true,
         excelData = [],
         userAcc = {},
         pageField = {}
-    } = props;
+    } = breadcrumbDetail;
 
-    const {
-        bredcrumbName = '',
-        filterSize,
-        userAccess
-    } = useSelector((state) => ({
-        bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
-        filterSize: state.BreadcrumbReducer.filterSize,
-        userAccess: state.Login.RoleAccessUpdateData,
-    }));
 
     function tog_scroll() {
         setmodal_scroll(!modal_scroll);
@@ -187,9 +199,9 @@ const Breadcrumb = props => {
 
     return (
         <React.Fragment>
-            {/* <div className="page-content "  style={{marginTop:"40px"}}> */}
-                <div className='page-breadcrumb ' >
-                    <div className="breadcrumb-body ">
+            {/* <div className="page-content" >
+                <div className='page-breadcrumb px-2 'style={{left:"40px"}}>
+                    <div className="breadcrumb-body px-2" style={{left:"4cm"}}>
                         <div className="mb-3 " style={{ Color: "F7F8F4", }}>
                             <div className=" d-flex  justify-content-between">
                                 <div className="mb-1 ">
@@ -202,7 +214,7 @@ const Breadcrumb = props => {
                                                         onClick={NewButtonHandeller}>
                                                         New
                                                     </button>
-                                                    <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px" }} >{pageHeading}</label>
+                                                    <label className="font-size-18 col-ls-6 colform-label text-black " style={{ paddingLeft: "7px" }} >{pageHeading}</label>
 
                                                 </div>
                                                 :
@@ -213,7 +225,6 @@ const Breadcrumb = props => {
                                                             style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                                                         : null
                                                     }
-
                                                 </div>
                                         }
                                     </div>
@@ -222,7 +233,7 @@ const Breadcrumb = props => {
                                 <div >
                                     <div className=" d-flex  justify-content-end">
                                         {excelBtnView ?
-                                            <div className="px-2 " style={{ marginTop: "7px" }}>
+                                            <div className="px-2 " style={{ marginTop: "20px" }}>
                                                 <Button
                                                     type="button"
                                                     title="Download List"
@@ -237,7 +248,7 @@ const Breadcrumb = props => {
                                         {
                                             (showCount) ?
                                                 <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
-                                                    style={{ width: "100%" }}>
+                                                    style={{ width: "100%", marginTop: "13px", marginRight: "10px" }} >
                                                     <samp className="px-2 ">{filterSize}</samp>
                                                 </div>
                                                 :
@@ -299,12 +310,12 @@ const Breadcrumb = props => {
                         </div>
                     </div>
                 </div>
-            {/* </div> */}
+            </div> */}
         </React.Fragment>
     )
 }
-Breadcrumb.propTypes = {
-    breadcrumbItem: PropTypes.string,
-    title: PropTypes.string
-}
-export default Breadcrumb;
+// Breadcrumb.propTypes = {
+//     breadcrumbItem: PropTypes.string,
+//     title: PropTypes.string
+// }
+export default BreadcrumbCopy;

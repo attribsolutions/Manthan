@@ -450,6 +450,7 @@ const PurchaseListPage = (props) => {
                     {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
+
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button

@@ -93,8 +93,8 @@ function ItemTab(props) {
                 <div className="px-2  mb-1 c_card_body text-black mt-1" style={{ width: "100%" }}>
                     <Row>
                         <Col sm={3}>
-                            <FormGroup className="mb-3 row  ">
-                                <Label style={{width:"2cm"}}>Content Item</Label>
+                            <FormGroup className="mb-1 row mt-3 ">
+                                <Label style={{ width: "2cm" }}>Content Item</Label>
                                 <Col sm={8} >
                                     <Select
                                         value={contentItemSelect}
@@ -106,8 +106,8 @@ function ItemTab(props) {
                         </Col>
                         <Col sm={3} >
 
-                            <FormGroup className="mb-3 row  " >
-                                <Label style={{width:"2cm"}} >Item Quantity</Label>
+                            <FormGroup className="mb-1 row mt-3 " >
+                                <Label style={{ width: "2cm" }} >Item Quantity</Label>
                                 <Col sm={8} >
                                     <Input
                                         // style={{ textAlign: "right" }}
@@ -122,8 +122,8 @@ function ItemTab(props) {
                             </FormGroup>
                         </Col>
                         <Col sm={4}>
-                            <FormGroup className="mb-3 row  ">
-                                <Label style={{width:"1.5cm"}}>Unit</Label>
+                            <FormGroup className="mb-1 row  mt-3">
+                                <Label style={{ width: "1.5cm" }} className=" mt-1">Unit</Label>
                                 <Col sm={7}>
                                     <Select
                                         value={unitSelect}
@@ -135,10 +135,9 @@ function ItemTab(props) {
                         </Col >
 
                         <Col md={1}>
-                            <Row className=" mt-3">
+                            <Row className=" mt-2">
                                 <Col >
                                     <Button
-
                                         className=" button_add"
                                         color="btn btn-outline-primary border-2 font-size-12"
                                         type="button"
