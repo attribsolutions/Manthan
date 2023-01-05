@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize, CommonBreadcrumbDetails } from "../../../store/actions";
 import { excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
@@ -88,15 +88,9 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
-    
 
-    const locationPath = history.location.pathname
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
-    })
-    if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
-    }
+
+
   }, [userAccess])
 
   // this useEffect for MasterPagePath dynamically work 
@@ -107,6 +101,19 @@ const CommonListPage = (props) => {
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
+
+    if (!(userAcc === undefined)) {
+      setUserAccState(userAcc);
+      dispatch(CommonBreadcrumbDetails({
+        userAccess: userAcc,
+        pageHeading: userAcc.PageHeading,
+        newBtnView: true,
+        showCount: true,
+        excelBtnView: true,
+        masterPath:userAcc.RedirectPath
+        // excelData: downList
+      }));
+    }
 
     let MasterPagePath = userAccess.find((inx) => {
       return (inx.id === userAcc.RelatedPageID)
@@ -140,7 +147,7 @@ const CommonListPage = (props) => {
       );
       tog_center();
     } else if (updateMsg.Status === true) {
-      
+
       saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
       dispatch(
@@ -285,17 +292,17 @@ const CommonListPage = (props) => {
           <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
-          {showBreadcrumb ?
+          {/* {showBreadcrumb ?
             <Breadcrumb
               pageHeading={userAccState.PageHeading}
               newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
               showCount={true}
-              excelBtnView={(userAccState.RoleAccess_Exceldownload)  ? true : false}
+              excelBtnView={(userAccState.RoleAccess_Exceldownload) ? true : false}
               // handleDataChange={ }
-          excelData={downList}
+              excelData={downList}
             />
-          : null
-          }
+            : null
+          } */}
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
