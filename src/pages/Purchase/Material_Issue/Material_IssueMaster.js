@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
@@ -22,17 +22,14 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-    resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     postBOMSuccess,
-    updateBOMList,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, invertDatefunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { saveDissable, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -55,7 +52,6 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -124,7 +120,6 @@ const MaterialIssueMaster = (props) => {
         dispatch(getWorkOrderListPage(jsonBody));
     }, [])
 
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -144,9 +139,8 @@ const MaterialIssueMaster = (props) => {
             if (hasEditVal) {
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
-                // setItemselect({ value: Item, label: ItemName })
                 setState((i) => {
-                    i.values.MaterialIssueDate = WorkDate
+                    i.values.MaterialIssueDate = currentDate
                     i.values.ItemName = { value: id, label: ItemName, Item: Item };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
@@ -156,12 +150,12 @@ const MaterialIssueMaster = (props) => {
                     i.hasValid.LotQuantity.valid = true;
                     return i
                 })
-
             }
         }
     }, [])
 
     useEffect(() => {
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
             dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
@@ -254,10 +248,9 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        debugger
+
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
             const jsonBody = JSON.stringify({
                 WorkOrder: values.ItemName.value,
                 Item: values.ItemName.Item,
@@ -265,17 +258,14 @@ const MaterialIssueMaster = (props) => {
                 Party: userParty(),
                 Quantity: parseInt(values.LotQuantity)
             });
-
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
     }
 
     function ItemOnchange(e) {
-        debugger
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselectonchange(e)
         setState((i) => {
-            debugger
             i.values.ItemName = { value: e.value, label: e.label, Item: e.Item };
             i.values.NumberOfLot = e.NumberOfLot;
             i.values.LotQuantity = e.Quantity;
@@ -287,7 +277,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function Quantitychange(event) {
-        debugger
+
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         const value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
             Itemselectonchange.Quantity :
@@ -306,7 +296,6 @@ const MaterialIssueMaster = (props) => {
 
     function NumberOfLotchange(event) {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-
         const value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
             Itemselectonchange.NumberOfLot
             : Itemselect.NumberOfLot, Number(event.target.value)));
@@ -315,7 +304,6 @@ const MaterialIssueMaster = (props) => {
             event.target.value = 0
         }
         onChangeText({ event, state, setState });
-
         setState((i) => {
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
@@ -331,7 +319,7 @@ const MaterialIssueMaster = (props) => {
         const MaterialIssueItems = []
         GoButton.map((index) => {
             index.BatchesData.map((ele) => {
-
+                debugger
                 MaterialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
@@ -340,7 +328,8 @@ const MaterialIssueMaster = (props) => {
                     BatchDate: ele.BatchDate,
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty)
+                    IssueQuantity: parseInt(ele.Qty),
+                    BatchID: ele.id
                 })
             })
         })
@@ -351,9 +340,7 @@ const MaterialIssueMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-
             const jsonBody = JSON.stringify({
-
                 MaterialIssueDate: values.MaterialIssueDate,
                 NumberOfLot: values.NumberOfLot,
                 LotQuantity: values.LotQuantity,
@@ -366,14 +353,13 @@ const MaterialIssueMaster = (props) => {
                 MaterialIssueItems: FilterData,
                 MaterialIssueWorkOrder: [
                     {
-                        WorkOrder: Itemselect.WorkOrderId,
-                        Bom: Itemselect.BomID
+                        WorkOrder: Itemselect.id,
+                        Bom: Itemselect.Bom
+
                     }
                 ]
             }
             );
-
-
             if (pageMode === mode.edit) {
             }
             else {
@@ -381,26 +367,38 @@ const MaterialIssueMaster = (props) => {
             }
         };
     }
-
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
-
+            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
+                let Stock = user.BatchesData.map((index) => {
+                    return index.ObatchwiseQuantity
+                })
+                var TotalStock = 0;
+                Stock.forEach(x => {
+                    TotalStock += parseFloat(x);
+                });
+                debugger
+                var OrderQty = parseFloat(user.Quantity)
+                if (OrderQty > TotalStock) {
+                    return {
+                        color: "red",
+                        
+                    }; 
+                } 
+            },
         },
         {
             text: "Work Order Qty",
             dataField: "Quantity",
-
         },
         {
             text: "Batch Code",
             dataField: "BatchesData",
 
-
             formatter: (cellContent, user) => (
                 <>
-
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead  >
                             <tr style={{ zIndex: "23" }} className="">
@@ -409,7 +407,6 @@ const MaterialIssueMaster = (props) => {
                                 <th className="">Batch Date</th>
                                 <th className="">Stock Quantity</th>
                                 <th className="" >Quantity</th>
-
                             </tr>
                         </Thead>
 
@@ -445,7 +442,6 @@ const MaterialIssueMaster = (props) => {
                                                     onKeyDown={(e) => handleKeyDown(e, GoButton)}
                                                 >
                                                     {index.ObatchwiseQuantity}
-
                                                 </Label>
                                             </div>
                                         </td>
@@ -466,10 +462,8 @@ const MaterialIssueMaster = (props) => {
             ),
         },
         {
-
             text: "Unit",
             dataField: "UnitName",
-
         },
     ]
 
@@ -479,15 +473,9 @@ const MaterialIssueMaster = (props) => {
         custom: true,
     };
 
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
-
-
             <React.Fragment>
-
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -526,6 +514,7 @@ const MaterialIssueMaster = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                             <Col sm={7}>
                                                 <Select
+                                                    isDisabled={values.ItemName ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
                                                     isSearchable={true}
@@ -538,12 +527,6 @@ const MaterialIssueMaster = (props) => {
                                                     <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
                                                 )}
                                             </Col>
-                                            {/* <Col sm={2}>
-                                            <Button
-                                                color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                                onClick={(e) => goButtonHandler(e)}
-                                            >Go</Button>
-                                        </Col > */}
                                         </FormGroup>
                                     </Col >
                                     <Col sm="6">
@@ -557,10 +540,6 @@ const MaterialIssueMaster = (props) => {
                                                     className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Number Of Lots"
                                                     autoComplete='off'
-                                                    // onChange={(event) => {
-                                                    //     onChangeText({ event, state, setState });
-                                                    //     dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-                                                    // }}
                                                     onChange={NumberOfLotchange}
                                                 />
                                                 {isError.NumberOfLot.length > 0 && (
@@ -588,13 +567,6 @@ const MaterialIssueMaster = (props) => {
                                                     <span className="invalid-feedback">{isError.LotQuantity}</span>
                                                 )}
                                             </Col>
-
-                                            {/* <div className="col col-1">
-                                            <Button
-                                                color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                                onClick={(e) => goButtonHandler(e)}
-                                            >Go</Button>
-                                        </div> */}
                                         </FormGroup>
                                     </Col>
 
@@ -632,7 +604,6 @@ const MaterialIssueMaster = (props) => {
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />
-
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -656,7 +627,6 @@ const MaterialIssueMaster = (props) => {
                                 />
                             </Col>
                         </FormGroup > : null}
-
                     </form>
                 </div>
             </React.Fragment>

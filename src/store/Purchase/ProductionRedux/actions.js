@@ -9,6 +9,8 @@ import {
   GET_PRODUCTION_ITEM_MODE_2_SUCCESS,
   GET_PRODUCTION_LIST_PAGE,
   GET_PRODUCTION_LIST_PAGE_SUCCESS,
+  GET_UNIT_ID_FOR_PRODUNCTION,
+  GET_UNIT_ID_FOR_PRODUNCTION_SUCCESS,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS,
   SET_PRODUCTION_LIST_FILTERS,
@@ -81,5 +83,14 @@ export const delete_ProductionIdSuccess = (data) => ({
   payload: data,
 });
 
+//DesignationID  dropdown
+export const getUnitIDForProdunction = (data) => ({
+  type: GET_UNIT_ID_FOR_PRODUNCTION,
+  data,
+});
+export const getUnitIDForProdunctionSuccess = (unitID) => ({
+  type: GET_UNIT_ID_FOR_PRODUNCTION_SUCCESS,
+  payload: unitID,
+});
 
 

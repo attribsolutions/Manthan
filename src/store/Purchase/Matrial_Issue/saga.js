@@ -43,10 +43,10 @@ function* Post_Material_Issue_GenratorFunction({ data }) {
 
   // get Work Order List API Using post method
 function* GetMaterialIssueGenFunc({ filters }) {
-debugger
+
   yield put(SpinnerState(true))
   try {
-    debugger
+
     const response = yield call(Material_Issue_Get_API, filters);
     const newList = yield response.Data.map((i) => {
       var date = convertDatefunc(i.MaterialIssueDate)
