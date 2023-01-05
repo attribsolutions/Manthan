@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
@@ -38,7 +38,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
 
     if (!(iscall === searchCount)) {
-        dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
+        dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
         searchCount = paginationProps.dataSize
     }
     searchProps = toolkitProps.searchProps
@@ -94,13 +94,12 @@ const PurchaseListPage = (props) => {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })
-            settableList(OnlyInwardZeroRecord);
+            settableList(OnlyInwardZeroRecord)
         }
         else {
-            settableList(props.reducers.tableList);
-        };
-
-    }, [props.reducers.tableList]);
+            settableList(props.reducers.tableList)
+        }
+    }, [props.reducers.tableList])
 
     useEffect(() => {
 
@@ -110,18 +109,6 @@ const PurchaseListPage = (props) => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
-            // dispatch(CommonBreadcrumbDetails({
-            //     bredcrumbItemName: '',
-            //     pageHeading: userAcc.PageHeading,
-            //     filterSize: "",
-            //     userAccess: {},
-            //     newBtnView: true,
-            //     excelBtnView: true,
-            //     showCount: true,
-            //     excelData: [],
-            //     masterPage: masterPath,
-            //     breadShow: true
-            // }))
         }
     }, [userAccess])
 
@@ -246,7 +233,9 @@ const PurchaseListPage = (props) => {
     }
 
     function onSaveBtnClick() {
+
         makeBtnFunc(tableList);
+
     }
 
     function tog_center() {
@@ -330,6 +319,10 @@ const PurchaseListPage = (props) => {
                                 // disabled={rowData["isdisabled"]}
                                 key={rowData.hasSelect}
                                 onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
+
+
+
+
                             />
                             <Button
                                 type="button"
@@ -457,19 +450,19 @@ const PurchaseListPage = (props) => {
                     {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
-
-                            <div className=" " style={{ paddingBottom: 'center' }}>
-                                <button
-                                    style={{ marginTop: "-30px" }}
-                                    id='form_submmit'
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md  "
-                                    onClick={onSaveBtnClick}
-                                >
-                                    <i class="fas fa-edit me-2"></i>{makeBtnName}
-                                </button>
-                            </div>
+                            (tableList.length == 0) ? null :
+                                <div className=" " style={{ paddingBottom: 'center' }}>
+                                    <button
+                                        style={{ marginTop: "-10px" }}
+                                        id='form_submmit'
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                        className="btn btn-primary w-md  "
+                                        onClick={onSaveBtnClick}
+                                    >
+                                        <i class="fas fa-edit me-2"></i>{makeBtnName}
+                                    </button>
+                                </div>
                             :
                             null
                     }

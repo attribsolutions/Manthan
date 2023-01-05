@@ -20,11 +20,10 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 import { GRN_lIST } from "../../../routes/route_url";
-
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
@@ -81,7 +80,6 @@ const GRNAdd = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-
         };
     }, [userAccess])
 
@@ -117,7 +115,7 @@ const GRNAdd = (props) => {
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
 
-            dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItems.OrderAmount}`))
+            dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
     }, [items])
@@ -169,7 +167,7 @@ const GRNAdd = (props) => {
             sum = sum + parseFloat(ind.Amount)
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${sum.toFixed(2)}`))
     }
 
     const pagesListColumns = [
@@ -190,7 +188,7 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 return (
                     <div className="text-end">
-                        <samp className="font-asian">{value}</samp>
+                    <samp className="font-asian">{value}</samp>
                     </div>
                 )
             },
@@ -561,11 +559,11 @@ const GRNAdd = (props) => {
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" >
-                    {/* <Breadcrumb
+                    <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
-                    /> */}
-                    <div className="px-2 mb-1  c_card_header "  >
+                    />
+                    <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
                         <Row>
                             <Col sm={5}>
 
@@ -756,12 +754,12 @@ const GRNAdd = (props) => {
 
                     {
                         (grnItemList.length > 0) ?
-                            <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
-                                {/* <SaveButton pageMode={pageMode}
+                         <div className="row save1" style={{ paddingBottom: 'center', marginTop:"-30px" }}>
+                            <SaveButton pageMode={pageMode}
                                 userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
-                            /> */}
-                            </div>
+                            />
+                        </div>
                             :
                             <div className="row save1"></div>
                     }
