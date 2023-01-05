@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Table, } from 'reactstrap';
+import { Button, Col, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
 function BOMTable(props) {
@@ -24,9 +24,10 @@ function BOMTable(props) {
       <tr>
         <td>{info.ItemName}</td>
         <td>
-          <div className='text-center'style={{ width: "150px" }}>
+          <div className='text-center' style={{ width: "150px" }}>
             <Input type="text"
-            className="text-end"
+              style={{ width: '140px', textAlign: 'center' }}
+              className="text-end"
               defaultValue={info.Quantity}
               onChange={(event) => handleChange(event, info)}
             >
@@ -51,19 +52,30 @@ function BOMTable(props) {
   return (
     <>
       <div>
-        {props.tableData.length > 0 ?
-          <Table className="table table-bordered table-hover">
-            <Thead>
-              <tr>
-                <th className="col col-sm-3">Item</th>
-                <th className="col col-sm-3">Quantity </th>
-                <th className="col col-sm-3">Unit</th>
-                <th className="col col-sm-3">{"Action"}</th>
-              </tr>
-            </Thead>
-            <Tbody>{tableRows}</Tbody>
-          </Table>
-          : null}
+        <Table className="table table-bordered table-hover mb-2">
+          <Thead>
+            <tr>
+              <th className="col col-sm-3">Item</th>
+              <th className="col col-sm-3">Quantity </th>
+              <th className="col col-sm-3">Unit</th>
+              <th className="col col-sm-3">{"Action"}</th>
+            </tr>
+          </Thead>
+          <Tbody>{tableRows}</Tbody>
+          {props.tableData.length > 0 ?
+            <></>
+            :
+            <tr className="text-danger text-center mt-4 "
+              style={{
+                marginTop: "25px",
+                marginBottom: "12px"
+              }}>
+              <td colspan="4">Items Not available</td>
+            </tr>
+
+          }
+        </Table>
+       
       </div>
     </>
   );
