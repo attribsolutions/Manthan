@@ -140,7 +140,7 @@ const MaterialIssueMaster = (props) => {
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
-                    i.values.MaterialIssueDate = WorkDate
+                    i.values.MaterialIssueDate = currentDate
                     i.values.ItemName = { value: id, label: ItemName, Item: Item };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
@@ -367,11 +367,27 @@ const MaterialIssueMaster = (props) => {
             }
         };
     }
-
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
+            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
+                let Stock = user.BatchesData.map((index) => {
+                    return index.ObatchwiseQuantity
+                })
+                var TotalStock = 0;
+                Stock.forEach(x => {
+                    TotalStock += parseFloat(x);
+                });
+                debugger
+                var OrderQty = parseFloat(user.Quantity)
+                if (OrderQty > TotalStock) {
+                    return {
+                        color: "red",
+                        
+                    }; 
+                } 
+            },
         },
         {
             text: "Work Order Qty",
@@ -396,6 +412,7 @@ const MaterialIssueMaster = (props) => {
 
                         <Tbody  >
                             {cellContent.map((index) => {
+
                                 return (
                                     < tr >
                                         <td>
@@ -497,6 +514,7 @@ const MaterialIssueMaster = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                             <Col sm={7}>
                                                 <Select
+                                                    isDisabled={values.ItemName ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
                                                     isSearchable={true}
