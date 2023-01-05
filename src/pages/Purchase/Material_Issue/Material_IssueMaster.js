@@ -480,12 +480,12 @@ const MaterialIssueMaster = (props) => {
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    />
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} */}
+                    {/* /> */}
                     <form onSubmit={SaveHandler} noValidate>
-                        <Col className="px-2 mb-1 mt-n3 c_card_filter header text-black" sm={12}>
+                        <Col className="px-2  c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
+                                <Col className="row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>

@@ -96,7 +96,7 @@ const OrderList = () => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
-           
+
         }
     }, [userAccess])
 
@@ -201,7 +201,7 @@ const OrderList = () => {
                     excelData={downList} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
-                    <div className=" row" style={{ marginBottom: "-12px" }}>
+                    <div className="row" >
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"

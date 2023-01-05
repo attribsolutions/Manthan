@@ -416,10 +416,10 @@ const WorkOrder = (props) => {
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" style={{ marginTop: "-0.4cm",marginBottom:"200px" }}>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                <div className="page-content" style={{ marginBottom:"200px" }}>
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <form onSubmit={SaveHandler} noValidate>
-                        <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
+                        <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
                                 <Col sm={11}>
                                     <div className="row">

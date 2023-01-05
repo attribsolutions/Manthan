@@ -104,7 +104,7 @@ export const SubGroupMaster = url.SUBGROUP_LIST
 export const OrderList = url.ORDER_lIST
 export const Order = url.ORDER_lIST
 
-export const GRNList = url.GRN_lIST
+export const GRNList = url.GRN_ADD_Mode_2
 export const GRN = url.GRN_lIST
 export const GRN_ADD_Mode_2 = url.GRN_lIST
 

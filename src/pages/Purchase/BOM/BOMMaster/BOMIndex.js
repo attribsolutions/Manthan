@@ -321,12 +321,12 @@ const BOMMaster = (props) => {
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading}
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     // showCount={true}
-                    />
+                    /> */}
                     <form onSubmit={(event) => SaveHandler({ event })} noValidate>
-                        <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
-                            <div className=" mt-1 row  ">
+                        <div className="px-2 c_card_filter header text-black" >
+                            <div className=" row  ">
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
                                         <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>

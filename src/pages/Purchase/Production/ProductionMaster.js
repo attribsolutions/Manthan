@@ -243,11 +243,11 @@ const ProductionMaster = (props) => {
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
-                    <Breadcrumb
+                    {/* <Breadcrumb
                         pageHeading={userPageAccessState.PageHeading}
-                    />
+                    /> */}
                     <form onSubmit={SaveHandler} noValidate>
-                        <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
+                        <div className="px-2 mb-1  c_card_header "  >
                             <Row>
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2 " >

@@ -46,7 +46,7 @@ const ProductionList = () => {
         })
     );
 
-    const action = {  
+    const action = {
         getList: getWorkOrderListPage,
         editId: editWorkOrderList,
         deleteId: deleteWorkOrderId,
@@ -63,9 +63,9 @@ const ProductionList = () => {
         dispatch(commonPageFieldList(78))
         goButtonHandler(true)
     }, []);
-    const { userAccess, pageField, tableList,productionFilter } = reducers;
+    const { userAccess, pageField, tableList, productionFilter } = reducers;
     const { fromdate, todate } = productionFilter
-    
+
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
@@ -84,7 +84,7 @@ const ProductionList = () => {
 
     const goButtonHandler = (onload = false) => {
         debugger
-        
+
         let FromDate
         let ToDate
         if (onload) {
@@ -98,7 +98,7 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-        
+
         dispatch(getProductionListPage(jsonBody));
     }
     function fromdateOnchange(e, date) {
@@ -114,16 +114,16 @@ const ProductionList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
                     pageMode={url.PRODUCTION_ADD_Mode_2}
                     newBtnPagePath={url.PRODUCTION_ADD_Mode_2}
-                    excelData={downList} />
-                <div className="px-2 mt-n1  c_card_header" style={{marginBottom: "-12px" }} >
-                    <div className="mt-1  row" >
+                    excelData={downList} /> */}
+                <div className="px-2  c_card_header"  >
+                    <div className="row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
@@ -139,7 +139,7 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={fromdateOnchange}  
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>

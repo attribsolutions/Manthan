@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb_inputName, CommonBreadcrumbDetails } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
+import * as urlRalations from "../../routes/urlRalations"
 
 
 export const initialstate = {
@@ -79,19 +80,21 @@ const Header1 = props => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      let relatedpage = userAccess.find((inx) => {
-        return (inx.id === userAcc.RelatedPageID)
-      })
+      // let relatedpage = userAccess.find((inx) => {
+      //   return (inx.id === userAcc.RelatedPageID)
+      // })
+      debugger
+      var a= urlRalations[userAcc.ActualPagePath]
       showCountlabel = '';
       bredcrumbItemName = '';
-      let isnewBtnView = (!(userAcc.PageType === 1) && (userAcc.RoleAccess_IsSave));
+      let isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
 
       setbreadcrumbDetail({
         newBtnView: isnewBtnView,
         excelBtnView: userAcc.RoleAccess_Exceldownload,
         pageHeading: userAcc.PageHeading,
         // showCount: false,
-        masterPage: relatedpage.ActualPagePath,
+        masterPage: urlRalations[userAcc.ActualPagePath],
         excelData: [],
       })
 

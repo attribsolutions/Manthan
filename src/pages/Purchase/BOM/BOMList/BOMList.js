@@ -112,15 +112,15 @@ const BOMList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
-                    excelData={downList} />
+                    excelData={downList} /> */}
 
-                <div className="px-2  mt-n1 c_card_header text-black" style={{ marginBottom: "-12px" }} >
-                    <div className=" mt-1 row">
+                <div className="px-2   c_card_header text-black" >
+                    <div className="row">
                         <Col sm="5">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
