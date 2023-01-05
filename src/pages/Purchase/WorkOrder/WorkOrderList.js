@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
@@ -61,7 +61,7 @@ const WorkOrderList = () => {
     useEffect(() => {
         const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)

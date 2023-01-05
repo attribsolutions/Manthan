@@ -1,32 +1,33 @@
 import {
-  BREADCRUMB_FILTER_SIZE,
   COMMON_BREADCRUMB_ALL_DETAIL,
-  BREADCRUMB_SHOW
+  BREADCRUMB_ITEM_NAME,
+  BREADCRUMB_SHOW_COUNT_LABLE
 } from "./actionType"
 
 
 const INIT_STATE = {
-  bredcrumbName: '',
-  filterSize: '',
+  bredcrumbItemName: '',
+  showCountlabel: '',
   breadcrumbDetail: {}
 }
 const BreadcrumbReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case BREADCRUMB_SHOW:
+    case BREADCRUMB_ITEM_NAME:
       return {
         ...state,
-        bredcrumbName: action.payload,
+        bredcrumbItemName: action.payload,
       }
-    case BREADCRUMB_FILTER_SIZE:
+    case BREADCRUMB_SHOW_COUNT_LABLE:
       return {
         ...state,
-        filterSize: action.payload,
+        showCountlabel: action.payload,
       }
     case COMMON_BREADCRUMB_ALL_DETAIL:
       return {
         ...state,
         breadcrumbDetail: action.payload,
+
       }
     default:
       return state

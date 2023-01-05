@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
@@ -38,7 +38,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
 
     if (!(iscall === searchCount)) {
-        dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
+        dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
         searchCount = paginationProps.dataSize
     }
     searchProps = toolkitProps.searchProps
@@ -94,12 +94,13 @@ const PurchaseListPage = (props) => {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })
-            settableList(OnlyInwardZeroRecord)
+            settableList(OnlyInwardZeroRecord);
         }
         else {
-            settableList(props.reducers.tableList)
-        }
-    }, [props.reducers.tableList])
+            settableList(props.reducers.tableList);
+        };
+
+    }, [props.reducers.tableList]);
 
     useEffect(() => {
 
@@ -109,6 +110,18 @@ const PurchaseListPage = (props) => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
+            // dispatch(CommonBreadcrumbDetails({
+            //     bredcrumbItemName: '',
+            //     pageHeading: userAcc.PageHeading,
+            //     filterSize: "",
+            //     userAccess: {},
+            //     newBtnView: true,
+            //     excelBtnView: true,
+            //     showCount: true,
+            //     excelData: [],
+            //     masterPage: masterPath,
+            //     breadShow: true
+            // }))
         }
     }, [userAccess])
 
@@ -233,9 +246,7 @@ const PurchaseListPage = (props) => {
     }
 
     function onSaveBtnClick() {
-
         makeBtnFunc(tableList);
-
     }
 
     function tog_center() {
@@ -319,10 +330,6 @@ const PurchaseListPage = (props) => {
                                 // disabled={rowData["isdisabled"]}
                                 key={rowData.hasSelect}
                                 onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
-
-
-
-
                             />
                             <Button
                                 type="button"
@@ -453,7 +460,7 @@ const PurchaseListPage = (props) => {
 
                             <div className=" " style={{ paddingBottom: 'center' }}>
                                 <button
-                                style={{marginTop:"-10px"}}
+                                    style={{ marginTop: "-30px" }}
                                     id='form_submmit'
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"

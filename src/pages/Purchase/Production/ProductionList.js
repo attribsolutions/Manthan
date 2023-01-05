@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { PRODUCTION_LIST, PRODUCTION_MASTER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
@@ -58,7 +58,7 @@ const ProductionList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Production Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(78))
         goButtonHandler(true)

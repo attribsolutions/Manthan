@@ -29,22 +29,23 @@ const BreadcrumbCopy = props => {
     const {
         breadcrumbDetail = {}
     } = useSelector((state) => ({
-        // bredcrumbName: state.BreadcrumbReducer.breadcrumbDetail,
+        breadcrumbDetail: state.BreadcrumbReducer.breadcrumbDetail,
         // filterSize: state.BreadcrumbReducer.filterSize,
         // userAccess: state.Login.RoleAccessUpdateData,
 
     }));
     const {
-        bredcrumbName = 'page Name',
+        bredcrumbItemName = 'page Name',
         filterSize = "showCount Axtxtxtxtxtxtx 9524",
         userAccess = {},
-        newBtnView = true,
-        excelBtnView = true,
-        pageHeading = 'page Heading',
-        showCount = true,
+        newBtnView = false,
+        excelBtnView = false,
+        pageHeading = '',
+        showCount = false,
         excelData = [],
         userAcc = {},
-        pageField = {}
+        pageField = {},
+        masterPage
     } = breadcrumbDetail;
 
 
@@ -62,18 +63,19 @@ const BreadcrumbCopy = props => {
 
 
 
-        let pathName = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === pathName)
-        })
-        let listPagePath = userAccess.find((inx) => {
-            return (inx.id === userAcc.RelatedPageID)
-        })
-        if (listPagePath === undefined) {
-            return
-        }
+        // let pathName = history.location.pathname
+        // let userAcc = userAccess.find((inx) => {
+        //     return (`/${inx.ActualPagePath}` === pathName)
+        // })
+        // let listPagePath = userAccess.find((inx) => {
+        //     return (inx.id === userAcc.RelatedPageID)
+        // })
+        // if (listPagePath === undefined) {
+        //     return
+        // }
+        debugger
         history.push({
-            pathname: `/${listPagePath.ActualPagePath}`,
+            pathname: masterPage,
         })
     }
 
@@ -200,115 +202,9 @@ const BreadcrumbCopy = props => {
     return (
         <React.Fragment>
             <div className='page-breadcrumb'>
-                <div className="breadcrumb-body"
+                <div className=""
                 >
-                    <div className="mb-3 " style={{ Color: "F7F8F4", }}>
-                        <div className=" d-flex  justify-content-between">
-                            <div className="mb-1 ">
-                                <div className="d-flex  justify-content-start">
-                                    {
-                                        newBtnView ?
-                                            <div>
-                                                <button type="button" className="btn btn-success"
-                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                                                    onClick={NewButtonHandeller}>
-                                                    New
-                                                </button>
-                                                <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px" }} >{pageHeading}</label>
-
-                                            </div>
-                                            :
-                                            <div>
-                                                <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{pageHeading}</label>
-                                                {(bredcrumbName.length > 0) ?
-                                                    <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
-                                                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
-                                                    : null
-                                                }
-
-                                            </div>
-                                    }
-                                </div>
-                            </div>
-
-                            <div >
-                                <div className=" d-flex  justify-content-end">
-                                    {excelBtnView ?
-                                        <div className="px-2 " style={{ marginTop: "7px" }}>
-                                            <Button
-                                                type="button"
-                                                title="Download List"
-                                                color="btn btn-sm btn-outline-primary "
-                                                onClick={() => { tog_scroll(); }}
-                                                data-toggle="modal"
-                                            >
-                                                <i className="bx bx-download font-size-14" ></i>
-                                            </Button>
-                                        </div>
-                                        : null}
-                                    {
-                                        (showCount) ?
-                                            <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
-                                                style={{ width: "100%" }}>
-                                                <samp className="px-2 ">{filterSize}</samp>
-                                            </div>
-                                            :
-                                            null
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <Modal
-                            isOpen={modal_scroll}
-                            toggle={() => {
-                                tog_scroll();
-                            }}
-                            scrollable={true}
-                        >
-                            <div className="modal-header">
-                                <h5 className="modal-title mt-0">List</h5>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setmodal_scroll(false)}
-                                    className="close"
-                                    data-dismiss="modal"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <AvForm onValidSubmit={(e, v) => { DownloadInExcelButtonHanler(e, v); }}>
-                                    <div className="form-check">
-                                        <input
-                                            id="checkAll"
-                                            type="checkbox"
-                                            className="form-check-input"
-                                            onChange={excelCheckBoxOnChange}
-                                        />
-                                        <label className="form-label text-black">All Select</label>
-                                    </div>
-                                    <ExcelCheckBox />
-
-                                    <div className="modal-body">
-                                        <div className="modal-footer">
-                                            <button
-                                                type="button"
-                                                className="btn btn-secondary"
-                                                onClick={() => setmodal_scroll(false)}
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button type="submit" className="btn btn-primary" >
-                                                Download in Excel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </AvForm>
-                            </div>
-                        </Modal>
-                    </div>
+                   
                 </div></div>
         </React.Fragment>
     )

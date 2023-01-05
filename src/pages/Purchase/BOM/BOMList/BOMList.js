@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import {
-    BreadcrumbFilterSize,
+    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
@@ -67,7 +67,7 @@ const BOMList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbFilterSize(`${"BOM Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"BOM Count"} :0`))
         goButtonHandler(true)
 
     }, []);

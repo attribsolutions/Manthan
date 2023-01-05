@@ -29,11 +29,11 @@ const Breadcrumb = props => {
   } = props;
 
   const {
-    bredcrumbName = '',
+    bredcrumbItemName = '',
     filterSize,
     userAccess
   } = useSelector((state) => ({
-    bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+    bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
     filterSize: state.BreadcrumbReducer.filterSize,
     userAccess: state.Login.RoleAccessUpdateData,
   }));
@@ -196,9 +196,9 @@ const Breadcrumb = props => {
                   :
                   <div>
                     <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{pageHeading}</label>
-                    {(bredcrumbName.length > 0) ?
+                    {(bredcrumbItemName.length > 0) ?
                       <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
-                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
                       : null
                     }
 

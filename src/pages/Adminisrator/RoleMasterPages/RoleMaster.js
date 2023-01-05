@@ -25,7 +25,7 @@ import {
   updateSuccess
 } from "../../../store/actions";
 import Select from "react-select";
-import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName, CommonBreadcrumbDetails } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
@@ -109,6 +109,15 @@ const RoleMaster = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
+      dispatch(CommonBreadcrumbDetails({
+        // bredcrumbItemName: '',
+        pageHeading: userAcc.PageHeading,
+        userAccess: {},
+        newBtnView: false,
+        showCount: false,
+        excelData: [],
+        breadShow:true
+      }))
     };
   }, [userAccess])
 
@@ -266,12 +275,12 @@ const RoleMaster = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content" >
           <Container fluid>
-            <MetaTags>
+            {/* <MetaTags>
               <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-            </MetaTags>
-            <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+            </MetaTags> */}
+            {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
             <Card className="text-black">
               <CardHeader className="card-header  text-black c_card_header" >
