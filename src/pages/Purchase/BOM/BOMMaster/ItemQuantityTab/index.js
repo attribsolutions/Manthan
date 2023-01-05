@@ -89,42 +89,55 @@ function ItemTab(props) {
     };
     return (
         <Row>
-            <Col md={12}  >
+            <Col  >
                 <div className="px-2  mb-1 c_card_body text-black mt-1" style={{ width: "100%" }}>
                     <Row>
-                        <FormGroup className="mb-3 col col-sm-3 ">
-                            <Label>Content Item</Label>
-                            <Select
-                                value={contentItemSelect}
-                                options={ItemDropdown_Options}
-                                onChange={ContentItem_Handler}
-                            />
-                        </FormGroup>
-                        <FormGroup className="mb-3 col col-sm-3 " >
-                            <Label >Item Quantity</Label>
-                            <Input
-                                // style={{ textAlign: "right" }}
-                                type="text"
-                                className='text-end'
-                                value={Quantity}
-                                placeholder="Please Enter Quantity"
-                                autoComplete="off"
-                                onChange={handleChange}
-                            />
-                        </FormGroup>
-                        <FormGroup className="mb-3 col col-sm-3 ">
-                            <Label>Unit</Label>
-                            <Select
-                                value={unitSelect}
-                                options={ItemUnitOptions}
-                                onChange={Unit_Handler}
-                            />
-                        </FormGroup>
+                        <Col sm={3}>
+                            <FormGroup className="mb-1 row mt-3 ">
+                                <Label style={{ width: "2cm" }}>Content Item</Label>
+                                <Col sm={8} >
+                                    <Select
+                                        value={contentItemSelect}
+                                        options={ItemDropdown_Options}
+                                        onChange={ContentItem_Handler}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col sm={3} >
+
+                            <FormGroup className="mb-1 row mt-3 " >
+                                <Label style={{ width: "2cm" }} >Item Quantity</Label>
+                                <Col sm={8} >
+                                    <Input
+                                        // style={{ textAlign: "right" }}
+                                        type="text"
+                                        className='text-end'
+                                        value={Quantity}
+                                        placeholder="Please Enter Quantity"
+                                        autoComplete="off"
+                                        onChange={handleChange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col sm={4}>
+                            <FormGroup className="mb-1 row  mt-3">
+                                <Label style={{ width: "1.5cm" }} className=" mt-1">Unit</Label>
+                                <Col sm={7}>
+                                    <Select
+                                        value={unitSelect}
+                                        options={ItemUnitOptions}
+                                        onChange={Unit_Handler}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
+
                         <Col md={1}>
-                            <Row className=" mt-3">
+                            <Row className=" mt-2">
                                 <Col >
                                     <Button
-
                                         className=" button_add"
                                         color="btn btn-outline-primary border-2 font-size-12"
                                         type="button"

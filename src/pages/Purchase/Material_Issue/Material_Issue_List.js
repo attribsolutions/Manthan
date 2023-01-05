@@ -14,7 +14,7 @@ import MaterialIssueMaster from "./Material_IssueMaster";
 import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
-import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
+import { Mode2 } from "../../../routes/PageMode";
 
 const MaterialIssueList = () => {
 
@@ -88,27 +88,32 @@ const MaterialIssueList = () => {
         }
     }, [produtionMake])
 
-    const makeBtnFunc = (list = []) => {
-        var isSelect = ''
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.hasSelect) {
-                    isSelect = isSelect.concat(`${ele.id},`)
-                }
-            });
-            if (isSelect) {
-                const withoutLastComma = isSelect.replace(/,*$/, '');
-                const jsonBody = JSON.stringify({
-                    MaterialIssueID: withoutLastComma
-                })
+    const makeBtnFunc = (list = {}) => {
+        debugger
+        // var isSelect = ''
+        // if (list.length > 0) {
+        //     list.forEach(ele => {
+        //         if (ele.hasSelect) {
+        //             isSelect = isSelect.concat(`${ele.id},`)
+        //         }
+        //     });
+        //     if (isSelect) {
+        //         const withoutLastComma = isSelect.replace(/,*$/, '');
+        //         const jsonBody = JSON.stringify({
+        //             MaterialIssueID: withoutLastComma
+        //         })
 
-                dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
+        //         dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
 
-            } else {
-                alert("Please Select Material Issue")
-            }
-        }
-
+        //     } else {
+        //         alert("Please Select Material Issue")
+        //     }
+        // }
+        history.push({
+            pathname:url.PRODUCTION_MASTER,
+            MaterialProductionaData:list,
+            pageMode:Mode2
+        })
     }
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({

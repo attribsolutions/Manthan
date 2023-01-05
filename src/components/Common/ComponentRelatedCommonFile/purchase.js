@@ -52,8 +52,8 @@ const PurchaseListPage = (props) => {
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
     const [tableList, settableList] = useState([]);
-    const [InwardZeroRecord, setInwardZeroRecord] = useState([]);
-      const {
+
+    const {
         editData,
         updateMsg,
         deleteMsg,
@@ -89,15 +89,17 @@ const PurchaseListPage = (props) => {
     const fileds = pageField.PageFieldMaster;
 
     useEffect(() => {
-        settableList(props.reducers.tableList)
-    }, [props.reducers.tableList])
 
-    useEffect(() => {
-        let OnlyInwardZeroRecord = tableList.filter((i) => {
-            return i.Inward === "Open"
-        })
-        setInwardZeroRecord(OnlyInwardZeroRecord)
-    }, [tableList])
+        if (pageMode === url.GRN_ADD_Mode_2) {
+            let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
+                return i.Inward === "Open"
+            })
+            settableList(OnlyInwardZeroRecord)
+        }
+        else {
+            settableList(props.reducers.tableList)
+        }
+    }, [props.reducers.tableList])
 
     useEffect(() => {
 
@@ -406,7 +408,7 @@ const PurchaseListPage = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={(pageMode === url.GRN_ADD_Mode_2) ? InwardZeroRecord : tableList}
+                                data={tableList}
                                 columns={columns}
                                 search={defaultSearch(pageField.id)}
                             >
@@ -449,17 +451,19 @@ const PurchaseListPage = (props) => {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
 
-                            <div className="button_save ">
-                                <button
-                                    id='form_submmit'
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md  bt_save"
-                                    onClick={onSaveBtnClick}
-                                >
-                                    <i class="fas fa-edit me-2"></i>{makeBtnName}
-                                </button>
-                            </div>
+                            (tableList.length == 0) ? null :
+                                <div className=" " style={{ paddingBottom: 'center' }}>
+                                    <button
+                                        style={{ marginTop: "-10px" }}
+                                        id='form_submmit'
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                        className="btn btn-primary w-md  "
+                                        onClick={onSaveBtnClick}
+                                    >
+                                        <i class="fas fa-edit me-2"></i>{makeBtnName}
+                                    </button>
+                                </div>
                             :
                             null
                     }
