@@ -331,7 +331,7 @@ const AddUser = (props) => {
           <title>User Registration| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+          {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
           <Container fluid>
             <div >
               <Row>
