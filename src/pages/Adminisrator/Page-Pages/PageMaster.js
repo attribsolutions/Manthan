@@ -49,6 +49,7 @@ import { createdBy, saveDissable } from "../../../components/Common/ComponentRel
 
 
 const PageMaster = (props) => {
+  debugger
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -84,6 +85,7 @@ const PageMaster = (props) => {
     DownloadDefaultSelect: false,
   }]);
 
+
   const {
     ControlTypes,
     FieldValidations,
@@ -111,6 +113,7 @@ const PageMaster = (props) => {
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
+
 
   // userAccess useEffect
   useEffect(() => {
@@ -159,7 +162,7 @@ const PageMaster = (props) => {
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
-
+      
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         setPageAccessData(hasEditVal.PagePageAccess);
 
@@ -251,7 +254,7 @@ const PageMaster = (props) => {
           setPageType_DropdownSelect({ value: 1, label: "AddPage" });
         }
       }
-      else if (hasEditVal.PageType=== 3) {
+      else if (hasEditVal.PageType === 3) {
         dispatch(getPageListSuccess([]));
         // setrelatedPage_DropdownSelect({ value: 0 });
         setPageType_DropdownSelect({ value: 3, label: "SourceTransactionPage" });
@@ -525,6 +528,8 @@ const PageMaster = (props) => {
       isActive: values.isActive,
       DisplayIndex: values.displayIndex,
       Icon: values.Icon,
+      CountLabel: values.CountLabel,
+      ShowCountLabel: values.ShowCountLabel,
       ActualPagePath: values.pagePath,
       PageType: pageType_DropdownSelect.value,
       PageHeading: values.pageheading,
@@ -927,6 +932,58 @@ const PageMaster = (props) => {
                               </Col>
                             </Row>
 
+                            <Row>
+                              <Col md="3">
+                                <FormGroup className="mb-3">
+                                  <Label htmlFor="validationCustom01"> Show Count Label</Label>
+                                  <AvField
+                                    name="ShowCountLabel"
+                                    value={EditData.ShowCountLabel}
+                                    type="text"
+                                    placeholder="Please Enter  Show Count Label"
+                                    validate={{
+                                      required: {
+                                        value: true,
+                                        errorMessage: "Please Enter ShowCountLabel",
+                                      },
+                                    }}
+                                    autoComplete="off"
+                                  />
+                                </FormGroup>
+                              </Col>
+
+                              <FormGroup className="mb-1 col col-sm-4">
+                                <Row className="justify-content-md-left">
+                                <Col md="3"> </Col>
+                                  <Label
+                                    htmlFor="horizontal-firstname-input"
+                                    className="col-sm-4 col-form-label mt-4"
+                                  >
+                                    Count Label
+                                  </Label>
+                                  <Col md={5} style={{ marginTop: "15px" }}>
+                                    <div
+                                      className="form-check form-switch form-switch-md mb-1"
+                                      dir="ltr"
+                                    >
+                                      <AvInput
+                                        type="checkbox"
+                                        className="form-check-input mt-4"
+                                        id="customSwitchsizemd"
+                                        defaultChecked={EditData.CountLabel}
+                                        name="CountLabel"
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor="customSwitchsizemd"
+                                      ></label>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
+                            </Row>
+
+
                             <Row Col sm="12">
                               <FormGroup className="mb-1 col col-sm-4">
                                 <Row className="justify-content-md-left">
@@ -1227,6 +1284,7 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
                                       </Input>
                                     </td>
+                                    
                                     <td>
                                       <Input
                                         type="checkbox"
@@ -1239,6 +1297,7 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
                                       </Input>
                                     </td>
+
                                     <td>
                                       {(pageFieldTabTable.length === key + 1) ?
                                         <Row className="">
