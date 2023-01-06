@@ -649,19 +649,18 @@ const ItemsMaster = (props) => {
     })
 
     const handleChange = event => {
+        debugger
         dispatch(Breadcrumb_inputName(event.target.value));
         CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
-
         // setSearchTerm(event.target.value);
         var searchtext = event.target.value
-
         const results = data.filter(person =>
             person.toLowerCase().includes(searchtext)
         );
         setSearchResults(results);
-
-
-
+        if (searchtext =="") {
+            di = `${x.style.display = "none"}`
+        }
         var x = document.getElementById("itemtag");
         x.style.display = "block";
         var di = "100Px"
