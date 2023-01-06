@@ -132,6 +132,7 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
+                debugger
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
@@ -530,7 +531,7 @@ const MaterialIssueMaster = (props) => {
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     /> */}
                     <form onSubmit={SaveHandler} noValidate>
-                        <Col className="px-2 mb-1  c_card_filter header text-black" sm={12}>
+                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">

@@ -11,7 +11,7 @@ import { excelDownCommonFunc } from "../../../components/Common/ComponentRelated
 import { useMemo } from "react";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import MaterialIssueMaster from "./Material_IssueMaster";
-import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
+import { deleteMaterialIssueId, deleteMaterialIssueIdSuccess, getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 import { Mode2 } from "../../../routes/PageMode";
@@ -28,7 +28,7 @@ const MaterialIssueList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.MaterialIssueReducer.materialIssueList,
-            deleteMsg: state.WorkOrderReducer.deleteMsg,
+            deleteMsg: state.MaterialIssueReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
@@ -45,10 +45,10 @@ debugger
     const action = {
         getList: getMaterialIssueListPage,
         editId: editWorkOrderList,
-        deleteId: deleteWorkOrderId,
+        deleteId: deleteMaterialIssueId,
         postSucc: postMessage,
         updateSucc: updateWorkOrderListSuccess,
-        deleteSucc: deleteWorkOrderIdSuccess
+        deleteSucc: deleteMaterialIssueIdSuccess,
     }
 
     // Featch Modules List data  First Rendering
