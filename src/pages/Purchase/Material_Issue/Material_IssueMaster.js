@@ -163,6 +163,12 @@ const MaterialIssueMaster = (props) => {
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
 
+            // dispatch(AlertState({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: "Item is out of stock",
+            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
+            // }))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -248,7 +254,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-
+        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -258,6 +264,7 @@ const MaterialIssueMaster = (props) => {
                 Party: userParty(),
                 Quantity: parseInt(values.LotQuantity)
             });
+
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
     }
@@ -277,6 +284,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function Quantitychange(event) {
+
 
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         const value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
@@ -315,11 +323,31 @@ const MaterialIssueMaster = (props) => {
         index.Qty = event.target.value
     };
 
+
+
     const SaveHandler = (event) => {
+        const validMsg = []
+        
         const MaterialIssueItems = []
         GoButton.map((index) => {
+            debugger
+            let Stock = index.BatchesData.map((i) => {
+                return i.ObatchwiseQuantity
+            })
+            var TotalStock = 0;
+            Stock.forEach(x => {
+                TotalStock += parseFloat(x);
+            });
+            var OrderQty = parseFloat(index.Quantity)
+            if (OrderQty > TotalStock) {
+                { 
+                    // alert(` ${index.ItemName} out of stock`)
+                validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+
+                }; 
+            } 
+            
             index.BatchesData.map((ele) => {
-                debugger
                 MaterialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
@@ -340,6 +368,17 @@ const MaterialIssueMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
+
+            if (validMsg.length > 0) {
+                dispatch(AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message:(validMsg),
+                    RedirectPath: false,
+                    AfterResponseAction: false
+                }));
+                return
+            }
             const jsonBody = JSON.stringify({
                 MaterialIssueDate: values.MaterialIssueDate,
                 NumberOfLot: values.NumberOfLot,
@@ -379,7 +418,6 @@ const MaterialIssueMaster = (props) => {
                 Stock.forEach(x => {
                     TotalStock += parseFloat(x);
                 });
-                debugger
                 var OrderQty = parseFloat(user.Quantity)
                 if (OrderQty > TotalStock) {
                     return {
@@ -389,6 +427,7 @@ const MaterialIssueMaster = (props) => {
                 } 
             },
         },
+        
         {
             text: "Work Order Qty",
             dataField: "Quantity",
@@ -409,10 +448,8 @@ const MaterialIssueMaster = (props) => {
                                 <th className="" >Quantity</th>
                             </tr>
                         </Thead>
-
                         <Tbody  >
                             {cellContent.map((index) => {
-
                                 return (
                                     < tr >
                                         <td>
@@ -480,12 +517,12 @@ const MaterialIssueMaster = (props) => {
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} */}
-                    {/* /> */}
+                    <Breadcrumb pageHeading={userPageAccessState.PageHeading}
+                    />
                     <form onSubmit={SaveHandler} noValidate>
-                        <Col className="px-2  c_card_filter header text-black" sm={12}>
+                        <Col className="px-2 mb-1 mt-n3 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className="row  " sm={11} >
+                                <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
@@ -620,8 +657,9 @@ const MaterialIssueMaster = (props) => {
                         </PaginationProvider>
 
                         {GoButton.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "9px" }}>
+                            <Col sm={2}  style={{marginLeft:"-40px"}} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
+                                //   onClick={onsave}
                                     userAcc={userPageAccessState}
                                     module={"BOMMaster"}
                                 />
