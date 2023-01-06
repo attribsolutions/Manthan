@@ -1,9 +1,10 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS, MATERIAL_ISSUE_LIST_FILTERS, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS, POST_MATERIAL_ISSUE_SUCCESS } from "./actionType"
+import { DELETE_MATERIAL_ISSUE_PAGE_SUCCESS, GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS, MATERIAL_ISSUE_LIST_FILTERS, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS, POST_MATERIAL_ISSUE_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     GoButton: [],
     postMsg: { Status: false },
+    deleteMsg: { Status: false },
     materialIssueList: [],
     materialIssuelistFilters: { fromdate: currentDate, todate: currentDate, }
 
@@ -38,9 +39,16 @@ const MaterialIssueReducer = (state = INIT_STATE, action) => {
                 ...state,
                 materialIssueList: action.payload,
             }
+        // Delete list page
+        case DELETE_MATERIAL_ISSUE_PAGE_SUCCESS:
+            return {
+                ...state,
+                deleteMsg: action.payload,
+            }
         default:
             return state
     }
+
 }
 
 export default MaterialIssueReducer
