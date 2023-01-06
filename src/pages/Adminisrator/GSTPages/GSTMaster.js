@@ -244,7 +244,7 @@ const GSTMaster = (props) => {
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => CurrentGSTPercentageHandler(e, user)}
                                 />
                             </FormGroup>
@@ -273,7 +273,7 @@ const GSTMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.GSTPerDis}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => GSTPercentageHandler(e, user)}
                                 />
                             </FormGroup>
@@ -298,7 +298,7 @@ const GSTMaster = (props) => {
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => CurrentHSNCodeHandler(e, user)}
                                 />
                             </FormGroup>
@@ -327,7 +327,7 @@ const GSTMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.hsncodeDis}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => HSNCodeHandler(e, user)}
                                 />
                             </FormGroup>
