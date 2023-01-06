@@ -90,65 +90,62 @@ function ItemTab(props) {
     return (
         <Row>
             <Col  >
+
                 <div className="px-2  mb-1 c_card_body text-black mt-1" style={{ width: "100%" }}>
-                    <Row >
-                        <Col sm={3}>
-                            <FormGroup className='mt-2 mb-2'>
-                                <Label >Content Item</Label>
-                                <Col sm={8} >
-                                    <Select
-                                        value={contentItemSelect}
-                                        options={ItemDropdown_Options}
-                                        onChange={ContentItem_Handler}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col sm={3} >
+                    <div className="row">
+                        <div className=" row">
+                            <Col sm="3" >
+                                <FormGroup className=" row mt-3 " >
+                                    <Label className="col-sm-4 p-2"
+                                    >Content Item</Label>
+                                    <Col sm="7">
+                                        <Select
+                                            value={contentItemSelect}
+                                            options={ItemDropdown_Options}
+                                            onChange={ContentItem_Handler}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
 
-                            <FormGroup className='mt-2 mb-2' >
-                                <Label >Item Quantity</Label>
-                                <Col sm={8} >
-                                    <Input
-                                        // style={{ textAlign: "right" }}
-                                        type="text"
-                                        className='text-end'
-                                        value={Quantity}
-                                        placeholder="Please Enter Quantity"
-                                        autoComplete="off"
-                                        onChange={handleChange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col sm={4}>
-                            <FormGroup className='mt-2 mb-2'>
-                                <Label >Unit</Label>
-                                <Col sm={7}>
-                                    <Select
-                                        value={unitSelect}
-                                        options={ItemUnitOptions}
-                                        onChange={Unit_Handler}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
+                            <Col sm="3" >
+                                <FormGroup className=" row mt-3 " >
+                                    <Label className="col-sm-4 p-2"
+                                    >Item Quantity</Label>
+                                    <Col sm="7">
+                                        <Input
+                                            type="text"
+                                            className='text-end'
+                                            value={Quantity}
+                                            placeholder="Please Enter Quantity"
+                                            autoComplete="off"
+                                            onChange={handleChange}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
 
-                        <Col md={1}>
-                            <Row className=" mt-4">
-                                <Col >
-                                    <Button
-                                        className=" button_add"
-                                        color="btn btn-outline-primary border-2 font-size-12"
-                                        type="button"
-                                        onClick={addRowsHandler}
-                                    >
-                                        <i className="dripicons-plus mt-3"> </i>
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                            <Col sm="3" className="">
+                                <FormGroup className="mb- row mt-3 " >
+                                    <Label className="col-sm-2 p-2"
+                                    >Unit</Label>
+                                    <Col sm="7">
+                                        <Select
+                                            value={unitSelect}
+                                            options={ItemUnitOptions}
+                                            onChange={Unit_Handler}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col sm="1" className="mt-3 ">
+                                <Button type="button" color="btn btn-outline-primary border-1 font-size-11 "
+                                    onClick={addRowsHandler}
+                                >        <i className="dripicons-plus mt-3"> </i>Add</Button>
+                            </Col>
+                        </div>
+                    </div>
                 </div>
                 <Row>
                     <BOMTable tableData={props.tableData} func={props.func} />

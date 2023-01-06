@@ -52,6 +52,7 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
+        
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -131,6 +132,7 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
+                debugger
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
@@ -255,8 +257,13 @@ const MaterialIssueMaster = (props) => {
 
     function goButtonHandler(event) {
         debugger
+
         event.preventDefault();
+        if (state.values.LotQuantity == "0") {
+            alert("Quantity Can Not be 0")
+        }else
         if (formValid(state, setState)) {
+           
             const jsonBody = JSON.stringify({
                 WorkOrder: values.ItemName.value,
                 Item: values.ItemName.Item,
@@ -282,6 +289,7 @@ const MaterialIssueMaster = (props) => {
             return i
         })
     }
+   
 
     function Quantitychange(event) {
 
@@ -327,7 +335,7 @@ const MaterialIssueMaster = (props) => {
 
     const SaveHandler = (event) => {
         const validMsg = []
-        
+
         const MaterialIssueItems = []
         GoButton.map((index) => {
             debugger
@@ -340,13 +348,13 @@ const MaterialIssueMaster = (props) => {
             });
             var OrderQty = parseFloat(index.Quantity)
             if (OrderQty > TotalStock) {
-                { 
+                {
                     // alert(` ${index.ItemName} out of stock`)
-                validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
 
-                }; 
-            } 
-            
+                };
+            }
+
             index.BatchesData.map((ele) => {
                 MaterialIssueItems.push({
                     Item: index.Item,
@@ -368,12 +376,13 @@ const MaterialIssueMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
+            debugger
 
             if (validMsg.length > 0) {
                 dispatch(AlertState({
                     Type: 4,
                     Status: true,
-                    Message:(validMsg),
+                    Message: (validMsg),
                     RedirectPath: false,
                     AfterResponseAction: false
                 }));
@@ -422,15 +431,19 @@ const MaterialIssueMaster = (props) => {
                 if (OrderQty > TotalStock) {
                     return {
                         color: "red",
-                        
-                    }; 
-                } 
+
+                    };
+                }
             },
         },
-        
+
         {
             text: "Work Order Qty",
             dataField: "Quantity",
+        },
+        {
+            text: "Unit",
+            dataField: "UnitName",
         },
         {
             text: "Batch Code",
@@ -443,7 +456,7 @@ const MaterialIssueMaster = (props) => {
                             <tr style={{ zIndex: "23" }} className="">
                                 <th className="">Batch Code </th>
                                 <th className="" >Supplier BatchCode</th>
-                                <th className="">Batch Date</th>
+                                <th className="" >Batch Date</th>
                                 <th className="">Stock Quantity</th>
                                 <th className="" >Quantity</th>
                             </tr>
@@ -467,14 +480,14 @@ const MaterialIssueMaster = (props) => {
                                             </div>
                                         </td>
                                         <td>
-                                            <div style={{ width: "150px" }}>
+                                            <div style={{ width: "100px" }}>
                                                 <Label>
                                                     {convertDatefunc(index.BatchDate)}
                                                 </Label>
                                             </div>
                                         </td>
                                         <td>
-                                            <div style={{ width: "150px" }}>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label
                                                     onKeyDown={(e) => handleKeyDown(e, GoButton)}
                                                 >
@@ -485,6 +498,7 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Input type="text"
+                                                    style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
                                                     onChange={(event) => handleChange(event, index)}
                                                 ></Input>
@@ -498,10 +512,7 @@ const MaterialIssueMaster = (props) => {
                 </>
             ),
         },
-        {
-            text: "Unit",
-            dataField: "UnitName",
-        },
+       
     ]
 
     const pageOptions = {
@@ -516,11 +527,11 @@ const MaterialIssueMaster = (props) => {
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    />
+                <div className="page-content" >
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
+                    /> */}
                     <form onSubmit={SaveHandler} noValidate>
-                        <Col className="px-2 mb-1 mt-n3 c_card_filter header text-black" sm={12}>
+                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
@@ -571,6 +582,7 @@ const MaterialIssueMaster = (props) => {
                                             <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.NumberOfLot} </Label>
                                             <Col sm={7}>
                                                 <Input
+                                                    style={{ textAlign: "right" }}
                                                     name="NumberOfLot"
                                                     value={values.NumberOfLot}
                                                     type="text"
@@ -591,6 +603,7 @@ const MaterialIssueMaster = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
                                             <Col sm={7}>
                                                 <Input
+                                                    style={{ textAlign: "right" }}
                                                     name="LotQuantity"
                                                     value={values.LotQuantity}
                                                     type="text"
@@ -604,6 +617,10 @@ const MaterialIssueMaster = (props) => {
                                                     <span className="invalid-feedback">{isError.LotQuantity}</span>
                                                 )}
                                             </Col>
+                                            <div className="col col-1">
+                                                    <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-23px' }}>
+                                                       </Label>
+                                                </div>
                                         </FormGroup>
                                     </Col>
 
@@ -657,11 +674,11 @@ const MaterialIssueMaster = (props) => {
                         </PaginationProvider>
 
                         {GoButton.length > 0 ? <FormGroup>
-                            <Col sm={2}  style={{marginLeft:"-40px"}} className={"row save1"}>
+                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
-                                //   onClick={onsave}
+                                    //   onClick={onsave}
                                     userAcc={userPageAccessState}
-                                    module={"BOMMaster"}
+                                    module={"Material Issue"}
                                 />
                             </Col>
                         </FormGroup > : null}

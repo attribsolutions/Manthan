@@ -173,7 +173,7 @@ const MarginMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e, user) => {
+    const MarginHandler = (e, user) => {
         user["Margin"] = e.target.value
     }
 
@@ -292,7 +292,7 @@ const MarginMaster = (props) => {
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => CurrentMRPHandler(e, user)}
                                 />
                             </FormGroup>
@@ -339,8 +339,8 @@ const MarginMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.margin}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, user)}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => MarginHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>

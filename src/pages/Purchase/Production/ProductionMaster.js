@@ -126,7 +126,7 @@ const ProductionMaster = (props) => {
             })
             debugger
             const jsonBody = JSON.stringify({
-                Item:MaterialProductionaData[0].Item
+                Item: MaterialProductionaData[0].Item
             });
             dispatch(getUnitIDForProdunction(jsonBody));
         }
@@ -355,26 +355,6 @@ const ProductionMaster = (props) => {
                                         </Col>
                                     </FormGroup>
 
-                                    <FormGroup className=" row" >
-                                        <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.UnitName}</Label>
-                                        <Col md="7">
-                                            <Select
-                                                // isDisabled={true}
-                                                name="UnitName"
-                                                value={values.UnitName}
-                                                options={UnitDropdown}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                }
-                                                }
-                                            />
-                                            {isError.id.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-
                                     <FormGroup className=" row " >
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.Remark}</Label>
@@ -391,6 +371,26 @@ const ProductionMaster = (props) => {
                                             />
                                             {isError.Remark.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Remark}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+
+                                    <FormGroup className=" row" >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.UnitName}</Label>
+                                        <Col md="7">
+                                            <Select
+                                                // isDisabled={true}
+                                                name="UnitName"
+                                                value={values.UnitName}
+                                                options={UnitDropdown}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState });
+                                                }
+                                                }
+                                            />
+                                            {isError.id.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
@@ -414,10 +414,10 @@ const ProductionMaster = (props) => {
                                             )}
                                         </Col>
                                     </FormGroup>
-
                                 </Col>
                             </Row>
                         </div>
+                        
                         <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
                             <Row>
                                 <FormGroup>

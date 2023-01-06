@@ -1,4 +1,6 @@
 import {
+  DELETE_MATERIAL_ISSUE_LIST_PAGE,
+    DELETE_MATERIAL_ISSUE_PAGE_SUCCESS,
     GET_MATERIAL_ISSUE_LIST_PAGE,
     GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
     MATERIAL_ISSUE_LIST_FILTERS,
@@ -43,5 +45,17 @@ export const getMaterialIssueListPage = (filters) => ({
   
   export const getMaterialIssueListPageSuccess = (data) => ({
     type:GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
+    payload: data,
+  });
+
+  // listpage api
+
+
+  export const deleteMaterialIssueId = (id) => ({
+    type: DELETE_MATERIAL_ISSUE_LIST_PAGE,
+    id,
+  });
+  export const deleteMaterialIssueIdSuccess = (data) => ({
+    type: DELETE_MATERIAL_ISSUE_PAGE_SUCCESS,
     payload: data,
   });
