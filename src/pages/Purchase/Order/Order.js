@@ -26,7 +26,7 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 import { ORDER_lIST } from "../../../routes/route_url";
@@ -42,6 +42,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
+import { initialstate } from "../../../components/VerticalLayout/Header1";
 let description = ''
 let editVal = {}
 
@@ -115,6 +116,11 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            var a = { ...initialstate }
+            a.pageHeading = userAcc.PageHeading;
+            a.showCount = true;
+            a.breadShow = true;
+            dispatch(CommonBreadcrumbDetails(a))
         };
     }, [userAccess])
 
@@ -138,7 +144,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
 
                 setorderdate(hasEditVal.OrderDate)
                 setsupplierSelect({
@@ -173,7 +179,7 @@ const Order = (props) => {
             }
             dispatch(editOrderIdSuccess({ Status: false }))
         } else {
-            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0`))
+            dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0`))
             // dispatch(orderAddfilters({
             //     orderdate: currentDate,
             //     supplierSelect: ''
@@ -286,7 +292,9 @@ const Order = (props) => {
             sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
     function assignItem_onClick() {
@@ -509,7 +517,7 @@ const Order = (props) => {
             );
             return;
         }
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
         const jsonBody = JSON.stringify({
             Party: supplierSelect.value,
@@ -646,7 +654,7 @@ const Order = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(validMsg),
+                Message: validMsg,
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -721,11 +729,11 @@ const Order = (props) => {
 
                 <div className="page-content">
 
-                    <Breadcrumb
+                    {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
-                    />
-                    <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
+                    /> */}
+                    <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                         <div className=" mt-1 row ">
                             <Col sm="6">
                                 <FormGroup className=" row mt-3 " >

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
@@ -41,7 +41,7 @@ const MaterialIssueList = () => {
 
     const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters
-
+debugger
     const action = {
         getList: getMaterialIssueListPage,
         editId: editWorkOrderList,
@@ -55,7 +55,7 @@ const MaterialIssueList = () => {
     useEffect(() => {
         const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
@@ -110,9 +110,9 @@ const MaterialIssueList = () => {
         //     }
         // }
         history.push({
-            pathname:url.PRODUCTION_MASTER,
-            MaterialProductionaData:list,
-            pageMode:Mode2
+            pathname: url.PRODUCTION_MASTER,
+            MaterialProductionaData: list,
+            pageMode: Mode2
         })
     }
     const goButtonHandler = () => {
@@ -138,17 +138,17 @@ const MaterialIssueList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
                     pageMode={url.MATERIAL_ISSUE_ADD_Mode_2}
                     newBtnPagePath={url.MATERIAL_ISSUE_ADD_Mode_2}
-                    excelData={downList} />
+                    excelData={downList} /> */}
 
-                <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
-                    <div className="mt-1  row" >
+                <div className="px-2  c_card_header text-black" >
+                    <div className=" row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"

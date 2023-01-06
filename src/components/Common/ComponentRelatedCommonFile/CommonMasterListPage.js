@@ -12,11 +12,11 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
 import { excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-
+import * as urlRalations from "../../../routes/urlRalations"
 let sortType = "asc"
 let searchCount = 0
 let downList = []
@@ -37,7 +37,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   }
 
   if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
+    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
     searchCount = paginationProps.dataSize
   }
   searchProps = toolkitProps.searchProps
@@ -88,7 +88,7 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
-    
+
 
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
@@ -96,27 +96,47 @@ const CommonListPage = (props) => {
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc)
+
+      let MasterPagePath = userAccess.find((inx) => {
+        return (inx.id === userAcc.RelatedPageID)
+      })
+
+      if (!(MasterPagePath === undefined)) {
+        setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+      }
+      dispatch(CommonBreadcrumbDetails({
+        bredcrumbItemName: '',
+        pageHeading: userAcc.PageHeading,
+        filterSize: "showCount Axtxtxtxtxtddddddddddddddddddddddddddddd",
+        userAccess: {},
+        newBtnView: true,
+        excelBtnView: true,
+        showCount: true,
+        excelData: [],
+        masterPage: `/${MasterPagePath.ActualPagePath}`,
+        breadShow: true
+      }))
     }
   }, [userAccess])
 
   // this useEffect for MasterPagePath dynamically work 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const locationPath = history.location.pathname
+  //   const locationPath = history.location.pathname
 
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
-    })
+  //   let userAcc = userAccess.find((inx) => {
+  //     return (`/${inx.ActualPagePath}` === locationPath)
+  //   })
 
-    let MasterPagePath = userAccess.find((inx) => {
-      return (inx.id === userAcc.RelatedPageID)
-    })
+  //   let MasterPagePath = userAccess.find((inx) => {
+  //     return (inx.id === userAcc.RelatedPageID)
+  //   })
 
-    if (!(MasterPagePath === undefined)) {
-      setmasterPath(`/${MasterPagePath.ActualPagePath}`)
-    }
+  //   if (!(MasterPagePath === undefined)) {
+  //     setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+  //   }
 
-  }, [userAccess])
+  // }, [userAccess])
 
 
   const downList = useMemo(() => {
@@ -140,7 +160,7 @@ const CommonListPage = (props) => {
       );
       tog_center();
     } else if (updateMsg.Status === true) {
-      
+
       saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
       dispatch(
@@ -285,17 +305,17 @@ const CommonListPage = (props) => {
           <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
-          {showBreadcrumb ?
+          {/* {showBreadcrumb==="dddd" ?
             <Breadcrumb
               pageHeading={userAccState.PageHeading}
               newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
               showCount={true}
-              excelBtnView={(userAccState.RoleAccess_Exceldownload)  ? true : false}
+              excelBtnView={(userAccState.RoleAccess_Exceldownload) ? true : false}
               // handleDataChange={ }
-          excelData={downList}
+              excelData={downList}
             />
-          : null
-          }
+            : null
+          } */}
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider

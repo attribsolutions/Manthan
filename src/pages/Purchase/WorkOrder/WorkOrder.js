@@ -416,10 +416,10 @@ const WorkOrder = (props) => {
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" style={{ marginTop: "-0.4cm",marginBottom:"200px" }}>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                <div className="page-content" style={{ marginBottom: "200px" }}>
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <form onSubmit={SaveHandler} noValidate>
-                        <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
+                        <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
                                 <Col sm={11}>
                                     <div className="row">
@@ -494,7 +494,7 @@ const WorkOrder = (props) => {
                                                     />
                                                 </div>
                                                 <div className="col col-2">
-                                                    <Label style={{ marginTop: '5px', width: "72px" ,marginLeft:'-15px' }}>
+                                                    <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-15px' }}>
                                                         {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                             </FormGroup>
@@ -509,14 +509,14 @@ const WorkOrder = (props) => {
                                                 <div className="col-6">
                                                     <Input
                                                         value={`${pageMode === "edit" ?
-                                                            EditData.EstimatedOutputQty
-                                                            : itemselect.EstimatedOutputQty?itemselect.EstimatedOutputQty:""}      ${itemselect.value > 0 ? '(1 Lot)' : ''}`}
+                                                            EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
+                                                                itemselect.EstimatedOutputQty : ""} ${itemselect.value > 0 ? '(1 Lot)' : ''}`}
                                                         disabled={true}
                                                         placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
                                                 </div>
-{/* 
+                                                {/* 
                                                 <div className="col col-2">
                                                     <Label style={{ marginTop: '5px' }}>
                                                         {itemselect.value > 0 ? '(1 Lot)' : ''}</Label>
@@ -567,14 +567,14 @@ const WorkOrder = (props) => {
                                                             onChangeText({ event, state, setState })
                                                             Quantitychange(event.target.value)
                                                         }}
-                                                        
+
                                                     />
                                                     {isError.Quantity.length > 0 && (
                                                         <span className="invalid-feedback">{isError.Quantity}</span>
-                                                    )}     
+                                                    )}
                                                 </div>
                                                 <div className="col col-1">
-                                                    <Label style={{ marginTop: '5px', width: "72px",marginLeft:'-23px'  }}>
+                                                    <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-23px' }}>
                                                         {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                                 {/* <div className="col col-1">
@@ -588,14 +588,14 @@ const WorkOrder = (props) => {
                                     </div>
                                 </Col>
 
-                                    <Col sm={1}>
-                                        <div className="col col-1 mt-1">
-                                            <Button
-                                                color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                                onClick={(e) => goButtonHandler(e)}
-                                            >Go</Button>
-                                        </div>
-                                    </Col>
+                                <Col sm={1}>
+                                    <div className="col col-1 mt-1">
+                                        <Button
+                                            color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
+                                            onClick={(e) => goButtonHandler(e)}
+                                        >Go</Button>
+                                    </div>
+                                </Col>
                             </Row>
                         </div>
 
@@ -641,7 +641,7 @@ const WorkOrder = (props) => {
                             </PaginationProvider>
                             : <></>}
 
-                        {BOMItems.length > 0 ? <FormGroup style={{marginTop:"-25px"}}>
+                        {BOMItems.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
                             <Row >
                                 <Col sm={2} className="mt-n4">
                                     <SaveButton pageMode={pageMode}

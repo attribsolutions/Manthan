@@ -261,7 +261,7 @@ const CompanyModule = (props) => {
           <MetaTags>
             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+          {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
           <Container fluid>
             <Row>
               <Col lg={12}>

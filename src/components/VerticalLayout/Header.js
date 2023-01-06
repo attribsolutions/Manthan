@@ -41,7 +41,8 @@ import {
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import { MainSearchBox, } from '../Common/ComponentRelatedCommonFile/SearchBox/index';
-
+import BreadcrumbCopy from '../Common/Breadcrumb3 copy';
+// Common\breadcrumb.sass
 
 
 const Header = props => {
@@ -115,9 +116,9 @@ const Header = props => {
               <i className="fa fa-fw fa-bars"></i>
             </button>
             {/* <SearchBoxSecond/> */}
-            <MainSearchBox/>
-             
-           
+            <MainSearchBox />
+
+
             {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />
@@ -276,7 +277,7 @@ const Header = props => {
                       </Link>
                     </Col>
                   </Row>
-                  
+
                 </div>
               </DropdownMenu>
             </Dropdown>
@@ -308,6 +309,7 @@ const Header = props => {
       >
         <RightSidebar onClose={onDrawerClose} onChangeLayoutMode={onChangeLayoutMode} />
       </ReactDrawer>
+      <BreadcrumbCopy />
     </React.Fragment>
   )
 }

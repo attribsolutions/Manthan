@@ -19,7 +19,7 @@
     align-items: center;
     margin: 0 auto;
     height: $header-height;
-    padding: 0 $grid-gutter-width 0 0;
+    padding: 0 5px 0 0;
 
     .dropdown .show {
         &.header-item {
@@ -135,8 +135,39 @@ body[data-layout-mode="dark"] {
 }
 
 .page-content {
-    padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+    padding-top: calc(#{$header-height} + 60px);
+    padding-right: 5px;
+    padding-left: 5px;
+    // padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
 }
+
+// .page-breadcrumb {
+//     // position: absolute;
+//     // top:calc(100px+#{$header-height});
+//     // z-index: 1;
+//     // right: 0;
+//     // left: 250px;
+//     // height: 75px;
+//     // padding: 10px 0 30px 0;
+//     // margin-top: calc(#{$header-height});
+//     // margin-right: #{};
+//     // margin-bottom: 30px;
+//     // margin-left: 0px;
+//     background-color: #ffbf53;
+//   }
+//   .breadcrumb-body {
+//     // position: sticky !important;
+//     // top: 50px;
+//     // z-index: 2;
+//     // right: 0;
+//     // left: 0;
+//     // height: 75px;
+//     // background-color: #ffbf53;
+//   }
+
+
+
+
 
 .header-item {
     height: $header-height;

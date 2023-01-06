@@ -19,8 +19,7 @@ import {
 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
-
+import * as url from "../../../routes/route_url"
 const GRNList = () => {
 
     const dispatch = useDispatch();
@@ -103,17 +102,17 @@ const GRNList = () => {
 
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={"GRN List"}
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
                     pageMode={GRN_ADD_Mode_2}
                     newBtnPagePath={GRN_ADD_Mode_2}
-                    excelData={downList} />
+                    excelData={downList} /> */}
 
-                <div className="px-2  mt-n1 c_card_filter text-black " style={{ marginBottom: "-12px" }}>
-                    <div className=" mt-1 row">
+                <div className="px-2  c_card_filter text-black " >
+                    <div className="row">
                         <div className=" row">
                             <Col sm="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
@@ -187,7 +186,7 @@ const GRNList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            masterPath={ORDER}
+                            masterPath={url.GRN_ADD_Mode_2}
                             ButtonMsgLable={"GRN"}
                             deleteName={"GRNNumber"}
                             pageMode={"List"}

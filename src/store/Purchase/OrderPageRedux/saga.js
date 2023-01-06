@@ -39,7 +39,7 @@ function* goButtonGenFunc({ data }) {
   try {
 
     const response = yield call(OrderPage_GoButton_API, data);
-    debugger
+
     yield response.Data.OrderItems.forEach((ele, k) => {
       ele["id"] = k + 1
     });
@@ -186,11 +186,9 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
-  debugger
   yield GoBtnDissable(true)
   // yield delay(400)
   try {
-    debugger
     const response = yield call(OrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
 

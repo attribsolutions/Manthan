@@ -189,13 +189,13 @@ const MRPList = (props) => {
           <MetaTags>
             <title>MRP List| FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumb
+          {/* <Breadcrumb
             pageHeading={userAccState.PageHeading}
             newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
             showCount={true}
             excelBtnView={true}
             excelData={tableList}
-          />
+          /> */}
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >

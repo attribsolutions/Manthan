@@ -18,6 +18,7 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
+import Header1 from "./Header1";
 const Layout = props => {
   const dispatch = useDispatch();
 
@@ -144,6 +145,7 @@ const Layout = props => {
        
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
+        <Header1 toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}

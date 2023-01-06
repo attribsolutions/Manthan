@@ -1,24 +1,29 @@
-import { BREADCRUMB_FILTER_SIZE, BREADCRUMB_SEARCH_PROPS, BREADCRUMB_SHOW } from "./actionType";
+import { BREADCRUMB_SHOW_COUNT_LABLE, COMMON_BREADCRUMB_ALL_DETAIL, BREADCRUMB_ITEM_NAME, COMMON_BREADCRUMB_ALL_DETAIL_redux } from "./actionType";
 
 export const Breadcrumb_inputName = (data) => ({
-  type: BREADCRUMB_SHOW,
+  type: BREADCRUMB_ITEM_NAME,
   payload: data,
 });
 
-export const BreadcrumbFilterSize = (label) => ({
-  type: BREADCRUMB_FILTER_SIZE,
+export const BreadcrumbShowCountlabel = (label) => ({
+  type: BREADCRUMB_SHOW_COUNT_LABLE,
   payload: label,
 });
 
-export const BreadcrumbSearchProps = (props) => ({
-  type: BREADCRUMB_SEARCH_PROPS,
+export const CommonBreadcrumbDetails = (props) => ({
+  type: COMMON_BREADCRUMB_ALL_DETAIL,
+  payload: props,
+});
+export const CommonBreadcrumbDetails_reducer = (props) => ({
+  type: COMMON_BREADCRUMB_ALL_DETAIL_redux,
   payload: props,
 });
 
 
 
-// export const BreadcrumbFilterSizeSuccess = (label) => ({
-//   type: BREADCRUMB_FILTER_SIZE_SUCEESS,
+
+// export const BreadcrumbShowCountlabelSuccess = (label) => ({
+//   type: BREADCRUMB_ITEM_NAME_LABLE_SUCEESS,
 //   payload:label,
 // });
 
