@@ -27,7 +27,6 @@ export const Amount = (i) => {
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
     const total = gstAmt + parseFloat(baseAmt)
-debugger
     return total.toFixed(2)
 }
 

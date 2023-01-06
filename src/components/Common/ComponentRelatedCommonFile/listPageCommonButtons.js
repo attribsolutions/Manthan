@@ -10,7 +10,6 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 
 
-
 export const listPageCommonButtonFunction = (props) => {
 
     const dispatch = props.dispatchHook;

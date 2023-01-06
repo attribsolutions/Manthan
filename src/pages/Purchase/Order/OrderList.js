@@ -11,7 +11,7 @@ import {
     updateOrderIdSuccess,
     orderlistfilters,
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { BreadcrumbFilterSize, CommonBreadcrumbDetails, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
 
@@ -69,7 +69,7 @@ const OrderList = () => {
         const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbFilterSize(`${"Orders Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
         dispatch(getSupplier());
         goButtonHandler(true)
 
@@ -96,17 +96,8 @@ const OrderList = () => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
-            dispatch(CommonBreadcrumbDetails({
-                userAccess: userAcc,
-                pageHeading: userAcc.PageHeading,
-                newBtnView: (pageMode === url.ORDER_lIST) ? true : false,
-                showCount: true,
-                excelBtnView: true,
-                excelData: downList
-            }
-            ))
+
         }
-       
     }, [userAccess])
 
     useEffect(() => {
@@ -202,15 +193,15 @@ const OrderList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={(pageMode === url.ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-                    excelData={downList} />
+                    excelData={downList} /> */}
 
-                <div className="px-2  mt-n1 c_card_filter text-black" >
-                    <div className=" row" style={{ marginBottom: "-12px" }}>
+                <div className="px-2   c_card_filter text-black" >
+                    <div className="row" >
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"

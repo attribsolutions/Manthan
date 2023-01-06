@@ -48,6 +48,7 @@ import BOMSaga from "./Purchase/BOMRedux/saga"
 import WorkOrderSaga from "./Purchase/WorkOrder/saga"
 import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
 import ProductionSaga from "./Purchase/ProductionRedux/saga"
+import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 
 
 
@@ -61,6 +62,7 @@ export default function* rootSaga() {
     fork(LayoutSaga),
     fork(Spinner_Saga),
     fork(CustomSearch_Saga),
+    fork(Breadcrumb_Saga),
     fork(CommonPageField_Saga),
     fork(pdfReport_Saga),
 

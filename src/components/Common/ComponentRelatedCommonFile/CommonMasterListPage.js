@@ -12,11 +12,11 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbFilterSize, CommonBreadcrumbDetails } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
 import { excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-
+import * as urlRalations from "../../../routes/urlRalations"
 let sortType = "asc"
 let searchCount = 0
 let downList = []
@@ -37,7 +37,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   }
 
   if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
+    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
     searchCount = paginationProps.dataSize
   }
   searchProps = toolkitProps.searchProps
@@ -90,40 +90,53 @@ const CommonListPage = (props) => {
   useEffect(() => {
 
 
-
-  }, [userAccess])
-
-  // this useEffect for MasterPagePath dynamically work 
-  useEffect(() => {
-
     const locationPath = history.location.pathname
-
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
-
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc);
+      setUserAccState(userAcc)
+
+      let MasterPagePath = userAccess.find((inx) => {
+        return (inx.id === userAcc.RelatedPageID)
+      })
+
+      if (!(MasterPagePath === undefined)) {
+        setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+      }
       dispatch(CommonBreadcrumbDetails({
-        userAccess: userAcc,
+        bredcrumbItemName: '',
         pageHeading: userAcc.PageHeading,
+        filterSize: "showCount Axtxtxtxtxtddddddddddddddddddddddddddddd",
+        userAccess: {},
         newBtnView: true,
-        showCount: true,
         excelBtnView: true,
-        masterPath:userAcc.RedirectPath
-        // excelData: downList
-      }));
+        showCount: true,
+        excelData: [],
+        masterPage: `/${MasterPagePath.ActualPagePath}`,
+        breadShow: true
+      }))
     }
-
-    let MasterPagePath = userAccess.find((inx) => {
-      return (inx.id === userAcc.RelatedPageID)
-    })
-
-    if (!(MasterPagePath === undefined)) {
-      setmasterPath(`/${MasterPagePath.ActualPagePath}`)
-    }
-
   }, [userAccess])
+
+  // this useEffect for MasterPagePath dynamically work 
+  // useEffect(() => {
+
+  //   const locationPath = history.location.pathname
+
+  //   let userAcc = userAccess.find((inx) => {
+  //     return (`/${inx.ActualPagePath}` === locationPath)
+  //   })
+
+  //   let MasterPagePath = userAccess.find((inx) => {
+  //     return (inx.id === userAcc.RelatedPageID)
+  //   })
+
+  //   if (!(MasterPagePath === undefined)) {
+  //     setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+  //   }
+
+  // }, [userAccess])
 
 
   const downList = useMemo(() => {
@@ -292,7 +305,7 @@ const CommonListPage = (props) => {
           <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
-          {/* {showBreadcrumb ?
+          {/* {showBreadcrumb==="dddd" ?
             <Breadcrumb
               pageHeading={userAccState.PageHeading}
               newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}

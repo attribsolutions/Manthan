@@ -62,8 +62,6 @@ const ItemsMaster = (props) => {
     const [searchTerm1, setSearchTerm1] = React.useState("");
     const [searchResults1, setSearchResults1] = React.useState([]);
 
-
-
     let initial = {
         Name: "",
         Sequence: "",
@@ -105,8 +103,11 @@ const ItemsMaster = (props) => {
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
         Unit: '',
+        POUnit: false,
+        SOUnit: false,
         IsBase: false
     }]);
+    
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
@@ -161,7 +162,7 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-      
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -176,7 +177,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-              
+
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -418,7 +419,7 @@ const ItemsMaster = (props) => {
     };
 
     const handleValidSubmit = (event, values) => {
-       
+
         let isvalid = true
         let inValidMsg = []
 
@@ -553,14 +554,13 @@ const ItemsMaster = (props) => {
 
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
-          
 
 
             let imagedata = imageTabTable.map(function (index) {
-               
 
                 if ((index.ImageType === '') || (index.ImageUpload === '')) {
-                   
+
+
                     return imageTabTable.length = []
                 }
                 else {
@@ -629,14 +629,15 @@ const ItemsMaster = (props) => {
 
     };
 
-var modal = document.getElementById('itemtag');
+    var modal = document.getElementById('itemtag');
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
 
 
     let data1 = BrandTagList.map((index) => {
@@ -658,18 +659,20 @@ window.onclick = function(event) {
             person.toLowerCase().includes(searchtext)
         );
         setSearchResults(results);
-      
+
+
+
         var x = document.getElementById("itemtag");
         x.style.display = "block";
         var di = "100Px"
         if (results.length == 0) {
-            di = `${x.style.display="none"}`
+            di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {
             di = "50Px"
         } else if (results.length > 5) {
             di = "300Px"
-        }else if (results.length <2) {
+        } else if (results.length < 2) {
             di = "50Px"
         }
         x.style.height = di
@@ -677,12 +680,12 @@ window.onclick = function(event) {
     };
 
     const handlerChange = event => {
-     CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "BrandName") 
-     var searchtext = event.target.value
+        CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "BrandName")
+        var searchtext = event.target.value
 
-     const results = data1.filter(person =>
-        person.toLowerCase().includes(searchtext)
-    );
+        const results = data1.filter(person =>
+            person.toLowerCase().includes(searchtext)
+        );
         // var x = document.getElementById("brandtag");
         // x.style.display = "block";
         setSearchResults1(results);
@@ -690,13 +693,13 @@ window.onclick = function(event) {
         x.style.display = "block";
         var di = "100Px"
         if (results.length == 0) {
-            di = `${x.style.display="none"}`
+            di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {
             di = "50Px"
         } else if (results.length > 5) {
             di = "300Px"
-        }else if (results.length <2) {
+        } else if (results.length < 2) {
             di = "50Px"
         }
         x.style.height = di
@@ -724,7 +727,7 @@ window.onclick = function(event) {
     }, [searchTerm]);
 
     React.useEffect(() => {
-       
+
     }, [searchTerm1]);
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -737,7 +740,7 @@ window.onclick = function(event) {
                         <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
-                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
                             <Row>
                                 <Col lg={12}>

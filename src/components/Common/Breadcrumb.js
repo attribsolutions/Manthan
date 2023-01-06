@@ -29,11 +29,11 @@ const Breadcrumb = props => {
   } = props;
 
   const {
-    bredcrumbName = '',
+    bredcrumbItemName = '',
     filterSize,
     userAccess
   } = useSelector((state) => ({
-    bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+    bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
     filterSize: state.BreadcrumbReducer.filterSize,
     userAccess: state.Login.RoleAccessUpdateData,
   }));
@@ -176,15 +176,15 @@ const Breadcrumb = props => {
 
   return (
     <React.Fragment>
-      <div className="bread1">
-      <div className="bread">
+
+
       <div className="mb-3 " style={{ Color: "F7F8F4", }}>
         <div className=" d-flex  justify-content-between">
           <div className="mb-1 ">
             <div className="d-flex  justify-content-start">
               {
                 newBtnView ?
-                  <div style={{marginTop:"-5px"}}>
+                  <div>
                     <button type="button" className="btn btn-success"
                       data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                       onClick={NewButtonHandeller}>
@@ -194,11 +194,11 @@ const Breadcrumb = props => {
 
                   </div>
                   :
-                  <div >
+                  <div>
                     <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{pageHeading}</label>
-                    {(bredcrumbName.length > 0) ?
+                    {(bredcrumbItemName.length > 0) ?
                       <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
-                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
                       : null
                     }
 
@@ -206,10 +206,14 @@ const Breadcrumb = props => {
               }
             </div>
           </div>
+
+
+
+
           <div >
             <div className=" d-flex  justify-content-end">
               {excelBtnView ?
-                <div className="px-2 " s>
+                <div className="px-2 " style={{ marginTop: "7px" }}>
                   <Button
                     type="button"
                     title="Download List"
@@ -224,7 +228,7 @@ const Breadcrumb = props => {
               {
                 (showCount) ?
                   <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
-                    style={{ width: "100%" ,marginTop:"-6px"}}>
+                    style={{ width: "100%" }}>
                     <samp className="px-2 ">{filterSize}</samp>
                   </div>
                   :
@@ -242,6 +246,7 @@ const Breadcrumb = props => {
         >
           <div className="modal-header">
             <h5 className="modal-title mt-0">List</h5>
+
             <button
               type="button"
               onClick={() => setmodal_scroll(false)}
@@ -282,8 +287,6 @@ const Breadcrumb = props => {
             </AvForm>
           </div>
         </Modal>
-      </div>
-      </div>
       </div>
     </React.Fragment>
   )

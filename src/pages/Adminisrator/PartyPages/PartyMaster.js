@@ -388,7 +388,7 @@ const PartyMaster = (props) => {
                     </MetaTags>
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
-                            <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                            {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                             <Row>
                                 <Col lg={12}>

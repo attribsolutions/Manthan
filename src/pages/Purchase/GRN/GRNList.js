@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { CommonBreadcrumbDetails, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
 import { GRN_ADD_Mode_2, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
@@ -19,9 +19,7 @@ import {
 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-
+import * as url from "../../../routes/route_url"
 const GRNList = () => {
 
     const dispatch = useDispatch();
@@ -37,7 +35,6 @@ const GRNList = () => {
             grnlistFilter: state.GRNReducer.grnlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
         })
     );
 
@@ -54,27 +51,6 @@ const GRNList = () => {
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
-
-    useEffect(() => {
-
-
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.GRN_lIST)
-        })
-        if (!(userAcc === undefined)) {
-            // setUserAccState(userAcc)
-            dispatch(CommonBreadcrumbDetails({
-                userAccess: userAcc,
-                pageHeading: userAcc.PageHeading,
-                newBtnView: true,
-                showCount: true,
-                excelBtnView: true,
-                excelData: downList
-            }
-            ))
-        }
-
-    }, [userAccess])
 
     const action = {
         getList: getGRNListPage,
@@ -94,7 +70,7 @@ const GRNList = () => {
     }, []);
 
     function goButtonHandler() {
-
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -126,17 +102,17 @@ const GRNList = () => {
 
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={"GRN List"}
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
                     pageMode={GRN_ADD_Mode_2}
                     newBtnPagePath={GRN_ADD_Mode_2}
-                    excelData={downList} />
+                    excelData={downList} /> */}
 
-                <div className="px-2  mt-n1 c_card_filter text-black " style={{ marginBottom: "-12px" }}>
-                    <div className=" mt-1 row">
+                <div className="px-2  c_card_filter text-black " >
+                    <div className="row">
                         <div className=" row">
                             <Col sm="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
@@ -210,7 +186,7 @@ const GRNList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            masterPath={ORDER}
+                            masterPath={url.GRN_ADD_Mode_2}
                             ButtonMsgLable={"GRN"}
                             deleteName={"GRNNumber"}
                             pageMode={"List"}

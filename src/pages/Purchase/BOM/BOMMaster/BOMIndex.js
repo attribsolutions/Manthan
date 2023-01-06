@@ -20,7 +20,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-
+    resetFunction,
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -58,7 +58,7 @@ const BOMMaster = (props) => {
         EstimatedOutputQty: "",
         UnitName: "",
         Comment: "",
-        IsActive: true
+        IsActive: false
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -131,6 +131,7 @@ const BOMMaster = (props) => {
                     label: data.UnitName
                 }))
                 setItemUnitOnEditData(ItemUnits)
+                // setItemUnitOptions(ItemUnits)
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -320,12 +321,12 @@ const BOMMaster = (props) => {
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading}
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     // showCount={true}
-                    />
+                    /> */}
                     <form onSubmit={(event) => SaveHandler({ event })} noValidate>
-                        <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
-                            <div className=" mt-1 row  ">
+                        <div className="px-2 c_card_filter header text-black" >
+                            <div className=" row  ">
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
                                         <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>

@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
@@ -38,7 +38,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
 
     if (!(iscall === searchCount)) {
-        dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
+        dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
         searchCount = paginationProps.dataSize
     }
     searchProps = toolkitProps.searchProps
@@ -416,7 +416,7 @@ const PurchaseListPage = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table-responsive mt-3">
+                                                <div className="table-responsive mt-1">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive
@@ -450,7 +450,6 @@ const PurchaseListPage = (props) => {
                     {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
-
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button

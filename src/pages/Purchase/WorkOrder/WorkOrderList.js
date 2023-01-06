@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
@@ -61,7 +61,7 @@ const WorkOrderList = () => {
     useEffect(() => {
         const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
@@ -127,15 +127,15 @@ const WorkOrderList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={(pageMode === url.WORK_ORDER_LIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-                    excelData={downList} />
+                    excelData={downList} /> */}
 
-                <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
-                    <div className="mt-1  row" >
+                <div className="px-2   c_card_header text-black"  >
+                    <div className="row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
