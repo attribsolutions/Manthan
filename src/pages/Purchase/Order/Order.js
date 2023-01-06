@@ -1010,7 +1010,9 @@ const Order = (props) => {
                         editValue={{ SupplierName: supplierSelect }}
                         masterPath={url.PARTYITEM}
                         redirectPath={url.ORDER}
-                        isOpenModal={Open_TermsModal_func} />
+                        isOpenModal={Open_TermsModal_func}
+                        pageMode={pageMode}
+                        />
 
                 </Modal>
 
