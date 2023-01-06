@@ -268,7 +268,7 @@ const BreadcrumbFix = props => {
   if (breadShow) {
     return (
       <React.Fragment>
-        <header id="page-topbar" style={{ marginTop: "56px", backgroundColor: 'white', }} >
+        <header id="page-topbar" style={{ marginTop: "56px", backgroundColor: 'white', zIndex:"1" }} >
           <div className="navbar-header" style={{ paddingRight: "-10px" }}>
             <div className="d-flex" >
               <div className="navbar-brand-box" ></div>

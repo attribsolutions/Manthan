@@ -123,6 +123,7 @@ const MaterialIssueMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
 
         if ((hasShowloction || hasShowModal)) {
 
