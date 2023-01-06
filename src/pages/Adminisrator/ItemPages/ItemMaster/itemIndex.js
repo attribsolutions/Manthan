@@ -555,9 +555,11 @@ const ItemsMaster = (props) => {
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
 
+
             let imagedata = imageTabTable.map(function (index) {
 
                 if ((index.ImageType === '') || (index.ImageUpload === '')) {
+
 
                     return imageTabTable.length = []
                 }
@@ -637,6 +639,7 @@ const ItemsMaster = (props) => {
     }
 
 
+
     let data1 = BrandTagList.map((index) => {
         return index.dta
     })
@@ -656,6 +659,8 @@ const ItemsMaster = (props) => {
             person.toLowerCase().includes(searchtext)
         );
         setSearchResults(results);
+
+
 
         var x = document.getElementById("itemtag");
         x.style.display = "block";
