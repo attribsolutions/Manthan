@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { AlertState, BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
@@ -89,16 +89,35 @@ const PurchaseListPage = (props) => {
     const fileds = pageField.PageFieldMaster;
 
     useEffect(() => {
-
+        // debugger
+        let tableArr = props.reducers.tableList;
         if (pageMode === url.GRN_ADD_Mode_2) {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })
+            tableArr = OnlyInwardZeroRecord
             settableList(OnlyInwardZeroRecord)
         }
         else {
             settableList(props.reducers.tableList)
-        }
+        };
+
+        tableArr = []
+        listObj = {}
+
+        tableArr.forEach((index1) => {
+            fileds.forEach((index2) => {
+                if (index2.ShowInDownload) {
+                    listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+                    listObj[index2.ControlID] = index1[index2.ControlID]
+                }
+            })
+            downList.push(listObj)
+            listObj = {}
+        })
+        
+        dispatch(BreadcrumbDownBtndata(downList))
+
     }, [props.reducers.tableList])
 
     useEffect(() => {
@@ -112,22 +131,24 @@ const PurchaseListPage = (props) => {
         }
     }, [userAccess])
 
-    useEffect(() => {
-        downList = []
-        listObj = {}
+    // useEffect(() => {
+    //     downList = []
+    //     listObj = {}
 
-        tableList.forEach((index1) => {
-            fileds.forEach((index2) => {
-                if (index2.ShowInDownload) {
-                    listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
-                    listObj[index2.ControlID] = index1[index2.ControlID]
-                }
-            })
-            downList.push(listObj)
-            listObj = {}
-        })
+    //     tableList.forEach((index1) => {
+    //         fileds.forEach((index2) => {
+    //             if (index2.ShowInDownload) {
+    //                 listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+    //                 listObj[index2.ControlID] = index1[index2.ControlID]
+    //             }
+    //         })
+    //         downList.push(listObj)
+    //         listObj = {}
+    //     })
 
-    }, [tableList])
+
+
+    // }, [tableList])
 
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal

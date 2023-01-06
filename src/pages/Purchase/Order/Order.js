@@ -42,7 +42,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
-import { initialstate } from "../../../components/VerticalLayout/Header1";
+
 let description = ''
 let editVal = {}
 
@@ -98,7 +98,6 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        // orderAddFilter: state.OrderReducer.orderAddFilter,
     }));
 
 
@@ -116,11 +115,6 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            var a = { ...initialstate }
-            a.pageHeading = userAcc.PageHeading;
-            a.showCount = true;
-            a.breadShow = true;
-            dispatch(CommonBreadcrumbDetails(a))
         };
     }, [userAccess])
 

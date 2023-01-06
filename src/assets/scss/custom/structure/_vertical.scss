@@ -47,8 +47,6 @@
 .main-content {
     margin-left: $sidebar-width;
     overflow: hidden;
-    min-height:cal(100%-#{$footer-height});
-
     .content {
         padding: 0 15px 10px 15px;
         margin-top: $header-height;

@@ -22,7 +22,7 @@ export const initialstate = {
   pageField: {},
   masterPage: ''
 }
-const Header1 = props => {
+const BreadcrumbFix = props => {
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -31,14 +31,16 @@ const Header1 = props => {
   const [downListKey, setDownListKey] = useState([]);
   const [breadcrumbDetail, setbreadcrumbDetail] = useState({});
 
-  const { userAccess = [], breadcrumbDetail1 = [] } = useSelector((state) => ({
+  const { userAccess = [], breadcrumbDetail1 = [], downBtnData = [] } = useSelector((state) => ({
     breadcrumbDetail1: state.BreadcrumbReducer.breadcrumbDetail,
     userAccess: state.Login.RoleAccessUpdateData,
+    downBtnData: state.BreadcrumbReducer.downBtnData,
   }));
-
+// debugger
   let { showCountlabel = '', bredcrumbItemName = '' } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
+
   }));
 
   // Onfocus Search Box
@@ -69,7 +71,7 @@ const Header1 = props => {
     excelBtnView = false,
     pageHeading = '',
     showCount = false,
-    excelData = [],
+    // excelData = [],
     masterPage
   } = breadcrumbDetail;
 
@@ -83,8 +85,8 @@ const Header1 = props => {
       // let relatedpage = userAccess.find((inx) => {
       //   return (inx.id === userAcc.RelatedPageID)
       // })
-      debugger
-      var a= urlRalations[userAcc.ActualPagePath]
+
+      var a = urlRalations[userAcc.ActualPagePath]
       showCountlabel = '';
       bredcrumbItemName = '';
       let isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
@@ -138,7 +140,7 @@ const Header1 = props => {
     // if (listPagePath === undefined) {
     //     return
     // }
-    debugger
+    // debugger
     history.push({
       pathname: masterPage,
     })
@@ -154,14 +156,14 @@ const Header1 = props => {
 
   useEffect(() => {
 
-    if (!(excelData === undefined)) {
-      if ((excelData.length > 0)) {
+    if (!(downBtnData === undefined)) {
+      if ((downBtnData.length > 0)) {
         // object to array conversion
-        const propertyNames = Object.keys(excelData[0]);
+        const propertyNames = Object.keys(downBtnData[0]);
         setDownListKey(propertyNames)
       }
     }
-  }, [excelData])
+  }, [downBtnData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
     debugger
@@ -172,7 +174,7 @@ const Header1 = props => {
       return values[selectedValues]
     });
 
-    excelData.map((index1) => {
+    downBtnData.map((index1) => {
       filteredValues.map((index2) => {
         if (index1.hasOwnProperty(index2)) {
           object1[index2] = index1[index2]
@@ -204,13 +206,12 @@ const Header1 = props => {
   };
 
   const excelCheckBoxOnChange = (e) => {
-    debugger
+    
     // e.preventDefault();
     const check = e.target
     // var chek = document.getElementById("checkAll").checked
 
     if (check.id === "checkAll") {
-      debugger
       if (check.checked) {
         for (var i = 0; i < downListKey.length; i++) {
           const a = document.getElementById(`chckbox${i}`)
@@ -251,7 +252,7 @@ const Header1 = props => {
                     type="checkbox"
                     id={`chckbox${key}`}
                     name={index}
-                    defaultValue={(excelData[0][`$defSelect${index}`]) ? true : false}
+                    defaultValue={(downBtnData[0][`$defSelect${index}`]) ? true : false}
                   />&nbsp;&nbsp;&nbsp;
                   <label className="form-label text-black"> {index} </label>
                 </div>
@@ -383,4 +384,4 @@ const Header1 = props => {
 }
 
 
-export default Header1
+export default BreadcrumbFix
