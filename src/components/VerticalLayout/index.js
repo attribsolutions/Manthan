@@ -18,7 +18,8 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
-import Header1 from "./Header1";
+
+import BreadcrumbFix from "./BradcrumbFix1";
 const Layout = props => {
   const dispatch = useDispatch();
 
@@ -124,7 +125,6 @@ const Layout = props => {
       dispatch(changelayoutMode(value, layoutType));
     }
   };
-
   return (
     <React.Fragment>
       <div id="preloader">
@@ -145,7 +145,7 @@ const Layout = props => {
        
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-        <Header1 toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
+        <BreadcrumbFix toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}

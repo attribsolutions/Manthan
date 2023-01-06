@@ -41,12 +41,8 @@ import {
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import { MainSearchBox, } from '../Common/ComponentRelatedCommonFile/SearchBox/index';
-import BreadcrumbCopy from '../Common/Breadcrumb3 copy';
-// Common\breadcrumb.sass
-
 
 const Header = props => {
-  const dispatch = useDispatch();
   const { onChangeLayoutMode } = props;
   const [search, setsearch] = useState(false)
   const [socialDrp, setsocialDrp] = useState(false)
@@ -55,9 +51,6 @@ const Header = props => {
   const [open, setOpen] = useState(false);
 
 
-  function searchFunctionHandller(e) {
-    dispatch(CustomSearchInput(e.target.value))
-  }
   /**
    * Rightsidebar drawer
    */
@@ -309,7 +302,6 @@ const Header = props => {
       >
         <RightSidebar onClose={onDrawerClose} onChangeLayoutMode={onChangeLayoutMode} />
       </ReactDrawer>
-      <BreadcrumbCopy />
     </React.Fragment>
   )
 }
