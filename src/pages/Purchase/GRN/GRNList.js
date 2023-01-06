@@ -187,7 +187,7 @@ const GRNList = () => {
                             reducers={reducers}
                             MasterModal={Order}
                             masterPath={url.GRN_ADD_Mode_2}
-                            ButtonMsgLable={"GRN"}
+                            ButtonMsgLable={"GRNNumber"}
                             deleteName={"GRNNumber"}
                             pageMode={"List"}
                             goButnFunc={goButtonHandler}
