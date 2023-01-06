@@ -41,7 +41,7 @@ const MaterialIssueList = () => {
 
     const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters
-
+debugger
     const action = {
         getList: getMaterialIssueListPage,
         editId: editWorkOrderList,

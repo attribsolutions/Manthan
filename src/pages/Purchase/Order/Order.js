@@ -654,7 +654,7 @@ const Order = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(validMsg),
+                Message: validMsg,
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
