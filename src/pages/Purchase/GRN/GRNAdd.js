@@ -49,6 +49,7 @@ const GRNAdd = (props) => {
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setopenPOdrp] = useState(false);
     const [openPOdata, setopenPOdata] = useState([]);
+    const [invoiceNo, setInvoiceNo] = useState('');
 
     useEffect(() => {
         dispatch(getSupplierAddress())
@@ -188,7 +189,7 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 return (
                     <div className="text-end">
-                    <samp className="font-asian">{value}</samp>
+                        <samp className="font-asian">{value}</samp>
                     </div>
                 )
             },
@@ -479,8 +480,8 @@ const GRNAdd = (props) => {
     }
 
 
-    const saveHandeller = () => {
-
+    const saveHandeller = (e, values) => {
+        debugger
         const itemArr = []
         grnItemList.forEach(i => {
             if ((i.Quantity > 0)) {
@@ -536,6 +537,7 @@ const GRNAdd = (props) => {
             GRNNumber: 1,
             GrandTotal: orderAmount,
             Party: grnDetail.Supplier,
+            InvoiceNumber:invoiceNo,
             CreatedBy: createdBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
@@ -630,8 +632,10 @@ const GRNAdd = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Invoice No</Label>
                                     <Col md="7">
-                                        <Input type="text"
-                                            placeholder="Enter Invoice No" />
+                                        <Input
+                                            type="text"
+                                            placeholder="Enter Invoice No"
+                                            onChange={(e)=>setInvoiceNo(e.target.value)} />
                                     </Col>
                                 </FormGroup>
 
@@ -754,12 +758,12 @@ const GRNAdd = (props) => {
 
                     {
                         (grnItemList.length > 0) ?
-                         <div className="row save1" style={{ paddingBottom: 'center', marginTop:"-30px" }}>
-                            <SaveButton pageMode={pageMode}
-                                userAcc={userAccState}
-                                module={"GRN"} onClick={saveHandeller}
-                            />
-                        </div>
+                            <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
+                                <SaveButton pageMode={pageMode}
+                                    userAcc={userAccState}
+                                    module={"GRN"} onClick={saveHandeller}
+                                />
+                            </div>
                             :
                             <div className="row save1"></div>
                     }

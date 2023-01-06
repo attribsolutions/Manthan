@@ -20,7 +20,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-    resetFunction,
+
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -42,7 +42,6 @@ const BOMMaster = (props) => {
     const history = useHistory()
 
     const [EditData, setEditData] = useState({});
-
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -58,7 +57,7 @@ const BOMMaster = (props) => {
         EstimatedOutputQty: "",
         UnitName: "",
         Comment: "",
-        IsActive: false
+        IsActive: true
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -124,8 +123,6 @@ const BOMMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
-
                 let ItemUnits = hasEditVal.ParentUnitDetails.map((data) => ({
                     value: data.Unit,
                     label: data.UnitName

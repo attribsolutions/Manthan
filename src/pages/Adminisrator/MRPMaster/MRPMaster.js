@@ -281,7 +281,7 @@ const MRPMaster = (props) => {
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => CurrentMRPHandler(e, user)}
                                 />
                             </FormGroup>
@@ -329,7 +329,7 @@ const MRPMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.mrp}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => MRPHandler(e, user)}
                                 />
                             </FormGroup>
@@ -423,7 +423,7 @@ const MRPMaster = (props) => {
                                                 <Row className="mt-3 " >
                                                     <Col sm={3}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-6 p-2 " style={{width:"2cm"}}>Division</Label>
+                                                            <Label className="col-sm-6 p-2 " style={{ width: "2cm" }}>Division</Label>
                                                             <Col sm={8} >
                                                                 <Select
                                                                     value={division_dropdown_Select}
@@ -440,7 +440,7 @@ const MRPMaster = (props) => {
 
                                                     <Col sm={3} >
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-6 p-2" style={{width:"2.5cm"}} >Party Name</Label>
+                                                            <Label className="col-sm-6 p-2" style={{ width: "2.5cm" }} >Party Name</Label>
                                                             <Col sm={8} >
                                                                 <Select
                                                                     value={party_dropdown_Select}
@@ -457,7 +457,7 @@ const MRPMaster = (props) => {
 
                                                     <Col sm={4}>
                                                         <FormGroup className="mb-3 row col ">
-                                                            <Label className="col-sm-6 p-2 " style={{width:"2.9cm"}}>EffectiveDate</Label>
+                                                            <Label className="col-sm-6 p-2 " style={{ width: "2.9cm" }}>EffectiveDate</Label>
                                                             <Col sm={8}>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
@@ -476,7 +476,7 @@ const MRPMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col >
-                                                    <Col sm={1} style={{  }} >
+                                                    <Col sm={1} style={{}} >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
                                                 </Row>
