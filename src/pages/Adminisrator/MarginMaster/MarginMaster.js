@@ -37,6 +37,8 @@ import {
 import { AvForm } from "availity-reactstrap-validation";
 import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -408,9 +410,8 @@ const MarginMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags>
-                    <title>Margin Master| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.MARGIN} />
                 {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm
@@ -448,7 +449,7 @@ const MarginMaster = (props) => {
                                                     </Col>
                                                     <Col sm={3}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2"  style={{width:"2.5cm"}}>Party Name</Label>
+                                                            <Label className="col-sm-3 p-2" style={{ width: "2.5cm" }}>Party Name</Label>
                                                             <Col sm={8} style={{}}>
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
@@ -464,7 +465,7 @@ const MarginMaster = (props) => {
                                                     </Col>
                                                     <Col sm={4}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-md-6 p-2"style={{width:"2.9cm"}}>EffectiveDate</Label>
+                                                            <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>EffectiveDate</Label>
                                                             <Col sm={8}>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"

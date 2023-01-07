@@ -13,6 +13,8 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const EmployeeTypeList = (props) => {
 
@@ -46,10 +48,12 @@ const EmployeeTypeList = (props) => {
     dispatch(getEmployeeTypelist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE_lIST} />
       {
         (pageField) ?
           <CommonListPage

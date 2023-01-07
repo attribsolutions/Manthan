@@ -19,7 +19,8 @@ import {
 } from "../../../store/Administrator/GSTRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 const GSTList = (props) => {
 
     const dispatch = useDispatch();
@@ -175,9 +176,8 @@ const GSTList = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags>
-                        <title>GST List| FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST_LIST} />
 
                     {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}

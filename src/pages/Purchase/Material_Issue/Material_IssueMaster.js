@@ -141,6 +141,7 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
+                debugger
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
@@ -620,7 +621,8 @@ const MaterialIssueMaster = (props) => {
                                                 )}
                                             </Col>
                                             <div className="col col-1">
-                                                <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-23px' }}>
+                                                <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
+                                                    {Itemselect.UnitName}
                                                 </Label>
                                             </div>
                                         </FormGroup>
