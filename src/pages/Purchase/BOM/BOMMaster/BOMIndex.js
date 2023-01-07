@@ -241,13 +241,13 @@ const BOMMaster = (props) => {
     }
 
     function Items_Dropdown_Handler(e) {
-
+        debugger
         setItemTabDetails([])
         let Item = Items.filter((index) => {
             return index.id === e.value
         })
         let ItemUnits = Item[0].UnitDetails.map((data) => ({
-            value: data.UnitID,
+            value: data.id,
             label: data.UnitName
         }))
 
@@ -263,6 +263,7 @@ const BOMMaster = (props) => {
     const SaveHandler = ({ event, mode = false }) => {
         debugger
         event.preventDefault();
+
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
             Quantity: index.Quantity,
