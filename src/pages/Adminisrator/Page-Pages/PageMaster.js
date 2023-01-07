@@ -1276,6 +1276,7 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
                                       </Input>
                                     </td>
+                                    
                                     <td>
                                       <Input
                                         type="checkbox"
