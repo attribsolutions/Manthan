@@ -50,7 +50,7 @@ const GRNList = () => {
     }));
 
     supplierOptions.unshift({
-        value: 0,
+        value: "",
         label: "Select All"
     });
 
