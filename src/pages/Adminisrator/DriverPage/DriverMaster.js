@@ -37,6 +37,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const DriverMaster = (props) => {
 
@@ -234,10 +235,13 @@ const DriverMaster = (props) => {
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };// new change
-    
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.DRIVER} />
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
@@ -246,7 +250,7 @@ const DriverMaster = (props) => {
                         </MetaTags>
 
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
-                        
+
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

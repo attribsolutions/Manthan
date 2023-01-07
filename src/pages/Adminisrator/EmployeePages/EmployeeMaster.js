@@ -34,6 +34,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const AddEmployee = (props) => {
 
@@ -91,9 +92,9 @@ const AddEmployee = (props) => {
     }));
 
   useEffect(() => {
-    const page_Id = pageId.EMPLOYEE
+
     dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(page_Id))
+    dispatch(commonPageField(pageId.EMPLOYEE))
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
@@ -377,11 +378,10 @@ const AddEmployee = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
+        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEE} />
+
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          <MetaTags>
-            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-          </MetaTags>
-          {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
           <Container fluid>
             <Card className="text-black">

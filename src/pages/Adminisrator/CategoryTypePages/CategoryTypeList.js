@@ -9,10 +9,12 @@ import {
   PostMethod_ForCategoryTypeMasterAPISuccess,
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 const CategoryTypeList = (props) => {
 
   const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const CategoryTypeList = (props) => {
   const action = {
     getList: getCategoryTypelist,
     editId: editCategoryTypeID,
-    deleteId:  delete_CategoryType_ID,
+    deleteId: delete_CategoryType_ID,
     postSucc: PostMethod_ForCategoryTypeMasterAPISuccess,
     updateSucc: updateCategoryTypeIDSuccess,
     deleteSucc: deleteCategoryTypeIDSuccess,
@@ -45,10 +47,13 @@ const CategoryTypeList = (props) => {
     dispatch(getCategoryTypelist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField, userAccess=[] } = reducers;
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORYTYPE_lIST} />
+
       {
         (pageField) ?
           <CommonListPage
