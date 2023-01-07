@@ -15,6 +15,8 @@ import { deleteMaterialIssueId, deleteMaterialIssueIdSuccess, getMaterialIssueLi
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 import { Mode2 } from "../../../routes/PageMode";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const MaterialIssueList = () => {
 
@@ -41,7 +43,8 @@ const MaterialIssueList = () => {
 
     const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters
-debugger
+    const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
+
     const action = {
         getList: getMaterialIssueListPage,
         editId: editWorkOrderList,
@@ -53,7 +56,6 @@ debugger
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
         setpageMode(hasPagePath)
         dispatch(BreadcrumbShowCountlabel(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
@@ -70,7 +72,6 @@ debugger
 
 
     useEffect(() => {
-        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
         })
@@ -137,6 +138,9 @@ debugger
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={page_Id} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}

@@ -28,6 +28,8 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const OrderList = () => {
 
@@ -55,6 +57,7 @@ const OrderList = () => {
     const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
 
+    const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
     const action = {
         getList: getOrderListPage,
         deleteId: deleteOrderId,
@@ -66,7 +69,7 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+        // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
@@ -89,7 +92,6 @@ const OrderList = () => {
 
 
     useEffect(() => {
-        const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
 
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
@@ -192,6 +194,9 @@ const OrderList = () => {
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={page_Id} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}

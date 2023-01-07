@@ -145,7 +145,7 @@ const Layout = props => {
        
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-        <BreadcrumbFix toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
+        {/* <BreadcrumbFix toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} /> */}
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}

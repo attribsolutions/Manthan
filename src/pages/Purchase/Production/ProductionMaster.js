@@ -35,6 +35,7 @@ import {
 import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const ProductionMaster = (props) => {
     debugger
@@ -239,13 +240,11 @@ const ProductionMaster = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess}  pageId={pageId.PRODUCTION_MASTER}/>
+
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
-                    {/* <Breadcrumb
-                        pageHeading={userPageAccessState.PageHeading}
-                    /> */}
+
                     <form onSubmit={SaveHandler} noValidate>
                         <div className="px-2 mb-1  c_card_header "  >
                             <Row>
@@ -417,7 +416,7 @@ const ProductionMaster = (props) => {
                                 </Col>
                             </Row>
                         </div>
-                        
+
                         <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
                             <Row>
                                 <FormGroup>
