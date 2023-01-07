@@ -18,8 +18,6 @@ import {
   TabPane,
 } from "reactstrap";
 import MetaTags from "react-meta-tags"
-//Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
@@ -31,7 +29,6 @@ import {
   fetchModelsList,
   getControlTypes,
   getFieldValidations,
-  getFieldValidationsSuccess,
   getPageAccess_DropDown_API,
   getPageList,
   getPageListSuccess,
@@ -46,10 +43,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const PageMaster = (props) => {
-  debugger
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -63,7 +60,6 @@ const PageMaster = (props) => {
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
-  console.log("pageType_DropdownSelect", pageType_DropdownSelect)
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
@@ -84,7 +80,6 @@ const PageMaster = (props) => {
     ShowInDownload: false,
     DownloadDefaultSelect: false,
   }]);
-
 
   const {
     ControlTypes,
@@ -113,7 +108,6 @@ const PageMaster = (props) => {
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
-
 
   // userAccess useEffect
   useEffect(() => {
@@ -162,7 +156,7 @@ const PageMaster = (props) => {
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
-      
+
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         setPageAccessData(hasEditVal.PagePageAccess);
 
@@ -617,9 +611,8 @@ const PageMaster = (props) => {
     return (
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          <MetaTags>
-            <title>Page Master| FoodERP-React FrontEnd</title>
-          </MetaTags>
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+          <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE} />
           <Container fluid>
             {/* Render Breadcrumbs */}
 
@@ -954,7 +947,7 @@ const PageMaster = (props) => {
 
                               <FormGroup className="mb-1 col col-sm-4">
                                 <Row className="justify-content-md-left">
-                                <Col md="3"> </Col>
+                                  <Col md="3"> </Col>
                                   <Label
                                     htmlFor="horizontal-firstname-input"
                                     className="col-sm-4 col-form-label mt-4"
@@ -1276,7 +1269,7 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
                                       </Input>
                                     </td>
-                                    
+
                                     <td>
                                       <Input
                                         type="checkbox"
@@ -1285,7 +1278,7 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
                                       </Input>
                                     </td>
-                                    
+
                                     <td>
                                       <Input
                                         type="checkbox"

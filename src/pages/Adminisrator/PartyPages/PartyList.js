@@ -12,6 +12,9 @@ import {
 import PartyMaster from './PartyMaster';
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { MetaTags } from 'react-meta-tags';
+import BreadcrumbNew from '../../../components/Common/BreadcrumbNew';
+import * as pageId from "../../../routes/allPageID"
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -44,10 +47,12 @@ const PartyList = () => {
         dispatch(getPartyListAPI());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField ,userAccess=[]} = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} />
             {
                 (pageField) ?
                     <CommonListPage
