@@ -94,9 +94,15 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
-        debugger
-        const result =event.target.value.replace(/[+-]?([0-9]*[.])?[0-9]+/,"");
-        setQuantity(event.target.value);
+        let val = event.target.value
+        const result = /^[+-]?\d+(\.\d+)?$/.test(val);
+        if (result) {
+            setQuantity(val);
+        }
+        else {
+            event.target.value = val
+            setQuantity(val);
+        }
     };
     return (
         <Row>
