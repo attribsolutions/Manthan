@@ -19,11 +19,16 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* getSupplierGenFunc() {
-  
+  debugger
   const USER = JSON.parse(localStorage.getItem("roleId"))
   try {
-    const response = yield call(GetSupplier_API, USER.Party_id
-    );
+    debugger
+    const response = yield call(GetSupplier_API, USER.Party_id);
+//     response.Data.unshift({
+//       id: 0,
+//       Supplier: "Select All"
+//     });
+// console.log("response",response)
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({
@@ -77,7 +82,7 @@ function* OrderType_GenFunc() {
       Status: true, Message: "500 Error for Order Type API ",
     }));
   }
-  }
+}
 
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
