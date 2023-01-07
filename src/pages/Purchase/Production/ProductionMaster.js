@@ -205,6 +205,7 @@ const ProductionMaster = (props) => {
     }));
 
     const SaveHandler = (event) => {
+        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -228,7 +229,7 @@ const ProductionMaster = (props) => {
                 Company: 1,
                 Division: 4,
                 GST: 8,
-                Unit: 45,
+                Unit: values.UnitName.value,
                 MRP: " ",
                 Rate: 55,
                 Item: values.Item.value,
