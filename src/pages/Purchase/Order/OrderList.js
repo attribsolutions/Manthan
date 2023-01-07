@@ -81,7 +81,7 @@ const OrderList = () => {
         label: i.Supplier,
     }));
     supplierOptions.unshift({
-        value: 0,
+        value: "",
         label: "Select All"
     });
 
