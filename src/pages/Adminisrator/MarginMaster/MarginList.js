@@ -19,6 +19,8 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const MarginList = (props) => {
 
@@ -32,24 +34,24 @@ const MarginList = (props) => {
   const {
     TableListData,
     deleteMessage,
-    RoleAccessModifiedinSingleArray,
+    userAccess,
   } = useSelector(
     (state) => ({
       TableListData: state.MarginMasterReducer.MarginList,
       deleteMessage: state.MarginMasterReducer.deleteMsg,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      userAccess: state.Login.RoleAccessUpdateData,
     })
   );
 
   useEffect(() => {
     const locationPath = history.location.pathname
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc)
     }
-  }, [RoleAccessModifiedinSingleArray])
+  }, [userAccess])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -98,7 +100,7 @@ const MarginList = (props) => {
 
     let RelatedPageID = userAccState.RelatedPageID
 
-    const found = RoleAccessModifiedinSingleArray.find((element) => {
+    const found = userAccess.find((element) => {
       return element.id === RelatedPageID
     })
 
@@ -186,9 +188,8 @@ const MarginList = (props) => {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags>
-            <title>MarginList| FoodERP-React FrontEnd</title>
-          </MetaTags>
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+          <BreadcrumbNew userAccess={userAccess} pageId={pageId.MARGIN_lIST} />
           {/* <Breadcrumb
             pageHeading={userAccState.PageHeading}
             newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
@@ -208,22 +209,22 @@ const MarginList = (props) => {
               >
                 {toolkitProps => (
                   <React.Fragment>
-                        <div className="table-responsive">
-                          <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={true}
-                            striped={false}
-                            classes={"table align-middle table-nowrap table-hover"}
-                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                            headerWrapperClasses={"thead-light"}
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
-                          />
-                          {countlabelFunc(toolkitProps, paginationProps, dispatch, "Margin")}
-                          {mySearchProps(toolkitProps.searchProps)}
-                        </div>
-                    
+                    <div className="table-responsive">
+                      <BootstrapTable
+                        keyField={"id"}
+                        responsive
+                        bordered={true}
+                        striped={false}
+                        classes={"table align-middle table-nowrap table-hover"}
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        headerWrapperClasses={"thead-light"}
+                        {...toolkitProps.baseProps}
+                        {...paginationTableProps}
+                      />
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "Margin")}
+                      {mySearchProps(toolkitProps.searchProps)}
+                    </div>
+
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">
                         <PaginationListStandalone

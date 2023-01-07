@@ -12,7 +12,9 @@ import ItemsMaster from "./ItemMaster/itemIndex";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
-
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const ItemsList = (props) => {
 
@@ -45,10 +47,12 @@ const ItemsList = (props) => {
     dispatch(getItemList());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.ITEM_lIST} />
       {
         (pageField) ?
           <CommonListPage
