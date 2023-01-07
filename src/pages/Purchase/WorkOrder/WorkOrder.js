@@ -47,6 +47,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import '../../Order/div.css'
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 
 const WorkOrder = (props) => {
@@ -141,7 +142,7 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty } = hasEditVal
@@ -230,7 +231,6 @@ const WorkOrder = (props) => {
     }, [pageField])
 
     let filterItems = Items.filter((index) => {
-
         return index.IsActive === true
     })
 
@@ -246,7 +246,6 @@ const WorkOrder = (props) => {
 
 
     useEffect(() => {
-
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
             ToDate: currentDate,
@@ -256,7 +255,6 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
-        debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
@@ -267,6 +265,7 @@ const WorkOrder = (props) => {
             return i
         })
     }
+
     function NumberOfLotchange(e) {
 
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
@@ -287,7 +286,6 @@ const WorkOrder = (props) => {
     }
 
     function Quantitychange(e) {
-        debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         state.hasValid.Quantity.valid = true
         let NumberLot = e / itemselect.EstimatedOutputQty
@@ -302,7 +300,7 @@ const WorkOrder = (props) => {
         }
         else {
             setState((i) => {
-                i.values.NumberOfLot = "1.000000";
+                i.values.NumberOfLot = "1.000";
                 i.values.Quantity = e;
                 i.hasValid.NumberOfLot.valid = true;
                 i.hasValid.Quantity.valid = true;
@@ -312,8 +310,6 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-        debugger
-
         const jsonBody = JSON.stringify({
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
@@ -330,6 +326,7 @@ const WorkOrder = (props) => {
             Quantity: index.Quantity,
         }))
         event.preventDefault();
+
         const jsonBody = JSON.stringify({
             WorkOrderDate: values.WorkOrderDate,
             Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
@@ -360,17 +357,14 @@ const WorkOrder = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-
         },
         {
             text: "Stock Quantity",
             dataField: "StockQuantity",
-
         },
         {
             text: "BomQuantity",
             dataField: "BomQuantity",
-
         },
         {
             text: "Quantity",
@@ -403,7 +397,8 @@ const WorkOrder = (props) => {
             dataField: "UnitName",
 
         },
-    ]
+    ];
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: GoButton.length,
@@ -413,9 +408,9 @@ const WorkOrder = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.WORK_ORDER} />
+
                 <div className="page-content" style={{ marginBottom: "200px" }}>
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <form onSubmit={SaveHandler} noValidate>
