@@ -241,7 +241,7 @@ const PartyItems = (props) => {
     }));
 
     supplierOptions.unshift({
-        value: 0,
+        value: "",
         label: "Select All"
     });
 
