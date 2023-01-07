@@ -292,13 +292,13 @@ const WorkOrder = (props) => {
         state.hasValid.Quantity.valid = true
         let NumberLot = e / itemselect.EstimatedOutputQty
         if (Number.isInteger(NumberLot)) {
-        setState((i) => {
-            i.values.NumberOfLot = NumberLot;
-            i.values.Quantity = e;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.Quantity.valid = true;
-            return i
-        })
+            setState((i) => {
+                i.values.NumberOfLot = NumberLot;
+                i.values.Quantity = e;
+                i.hasValid.NumberOfLot.valid = true;
+                i.hasValid.Quantity.valid = true;
+                return i
+            })
         }
         else {
             setState((i) => {
@@ -509,21 +509,22 @@ const WorkOrder = (props) => {
                                                 </Label>
                                                 <div className="col-6">
                                                     <Input
-                                                        value={pageMode === "edit" ?
+                                                        value={`${pageMode === "edit" ?
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
-                                                                itemselect.EstimatedOutputQty : ""}
+                                                                itemselect.EstimatedOutputQty : ""} ${itemselect.value > 0 ? '/Lot' : ''}`}
                                                         disabled={true}
                                                         className="text-end"
                                                         placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
                                                 </div>
-                                                {/* 
-                                                <div className="col col-2">
-                                                    <Label style={{ marginTop: '5px' }}>
-                                                        {itemselect.value > 0 ? '(1 Lot)' : ''}</Label>
-                                                </div> */}
+                                                <div className="col col-1">
+                                                    <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
+                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                </div>
                                             </FormGroup>
+
+
                                         </div >
 
                                     </div>
@@ -576,7 +577,7 @@ const WorkOrder = (props) => {
                                                     )}
                                                 </div>
                                                 <div className="col col-1">
-                                                    <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-23px' }}>
+                                                    <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
                                                         {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                                 {/* <div className="col col-1">

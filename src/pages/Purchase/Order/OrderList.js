@@ -14,9 +14,7 @@ import {
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
-
 import { Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -54,7 +52,7 @@ const OrderList = () => {
     );
     const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
-
+ 
     const action = {
         getList: getOrderListPage,
         deleteId: deleteOrderId,
@@ -75,18 +73,20 @@ const OrderList = () => {
 
     }, []);
 
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
     }));
+    supplierOptions.unshift({
+        value: 0,
+        label: "Select All"
+    });
 
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
-
 
     useEffect(() => {
         const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
@@ -143,8 +143,8 @@ const OrderList = () => {
                 alert("Please Select Order1")
             }
         }
-
     }
+
     function editBodyfunc(rowData) {
 
         const jsonBody = JSON.stringify({
@@ -156,6 +156,7 @@ const OrderList = () => {
         var Mode = "edit"
         dispatch(editOrderId(jsonBody, Mode));
     }
+    
     function downBtnFunc(row) {
         var ReportType = report.order1;
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
