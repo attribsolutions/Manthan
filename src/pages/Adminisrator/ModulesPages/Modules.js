@@ -38,6 +38,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const Modules = (props) => {
 
@@ -51,7 +52,7 @@ const Modules = (props) => {
         Icon: "",
         isActive: false,
     }
-    
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
@@ -242,9 +243,8 @@ const Modules = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags>
-                        <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.MODULE} />
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid  >
 

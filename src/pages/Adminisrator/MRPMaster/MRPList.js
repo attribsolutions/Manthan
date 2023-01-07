@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -19,6 +18,8 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const MRPList = (props) => {
 
@@ -186,9 +187,8 @@ const MRPList = (props) => {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags>
-            <title>MRP List| FoodERP-React FrontEnd</title>
-          </MetaTags>
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+          <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP_lIST} />
           {/* <Breadcrumb
             pageHeading={userAccState.PageHeading}
             newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
@@ -208,22 +208,22 @@ const MRPList = (props) => {
               >
                 {toolkitProps => (
                   <React.Fragment>
-                        <div className="table-responsive">
-                          <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={true}
-                            striped={false}
-                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                            classes={"table align-middle table-nowrap table-hover"}
-                            headerWrapperClasses={"thead-light"}
+                    <div className="table-responsive">
+                      <BootstrapTable
+                        keyField={"id"}
+                        responsive
+                        bordered={true}
+                        striped={false}
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        classes={"table align-middle table-nowrap table-hover"}
+                        headerWrapperClasses={"thead-light"}
 
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
-                          />
-                          {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                          {mySearchProps(toolkitProps.searchProps)}
-                        </div>
+                        {...toolkitProps.baseProps}
+                        {...paginationTableProps}
+                      />
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                      {mySearchProps(toolkitProps.searchProps)}
+                    </div>
 
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">

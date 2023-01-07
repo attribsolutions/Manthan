@@ -21,8 +21,7 @@ import {
   getEmployeeForUseRegistration,
   editSuccess
 }
-from "../../../store/Administrator/UserRegistrationRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+  from "../../../store/Administrator/UserRegistrationRedux/actions";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -30,7 +29,8 @@ import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const AddUser = (props) => {
 
@@ -46,7 +46,7 @@ const AddUser = (props) => {
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
- 
+
   // M_Roles DropDown
 
   const [password, setPassword] = useState('');
@@ -327,11 +327,10 @@ const AddUser = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <MetaTags>
-          <title>User Registration| FoodERP-React FrontEnd</title>
-        </MetaTags>
+        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER} />
+
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
           <Container fluid>
             <div >
               <Row>

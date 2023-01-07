@@ -10,9 +10,11 @@ import {
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import PartyType from "./PartyType";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess} from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const PartyTypeList = (props) => {
 
@@ -27,16 +29,16 @@ const PartyTypeList = (props) => {
       postMsg: state.PartyTypeReducer.PostData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
-    );
+  );
 
-    const action = {
-      getList: getPartyTypelist,
-      editId: editPartyTypeId,
-      deleteId: delete_PartyType_ID,
-      postSucc: PostPartyTypeAPISuccess,
-      updateSucc: updatePartyTypeIDSuccess,
-      deleteSucc: deletePartyTypeIDSuccess
-    }
+  const action = {
+    getList: getPartyTypelist,
+    editId: editPartyTypeId,
+    deleteId: delete_PartyType_ID,
+    postSucc: PostPartyTypeAPISuccess,
+    updateSucc: updatePartyTypeIDSuccess,
+    deleteSucc: deletePartyTypeIDSuccess
+  }
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -46,10 +48,12 @@ const PartyTypeList = (props) => {
     dispatch(getPartyTypelist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYTYPE_lIST} />
       {
         (pageField) ?
           <CommonListPage

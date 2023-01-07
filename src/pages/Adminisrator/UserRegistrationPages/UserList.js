@@ -10,12 +10,13 @@ import {
     addUserSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
-
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const UserList = () => {
-    debugger
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
@@ -26,7 +27,6 @@ const UserList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.User_Registration_Reducer.AddUserMessage,
             pageField: state.CommonPageFieldReducer.pageFieldList
-
         })
     );
 
@@ -46,10 +46,12 @@ const UserList = () => {
         dispatch(getUser());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField,userAccess=[] } = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER_lIST} />
             {
                 (pageField) ?
                     <CommonListPage
