@@ -37,6 +37,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const DriverMaster = (props) => {
 
@@ -238,11 +239,16 @@ const DriverMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.DRIVER} />
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
+
                         <MetaTags>
                             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
+
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">

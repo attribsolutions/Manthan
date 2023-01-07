@@ -16,6 +16,8 @@ import {
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const GroupList = (props) => {
 
@@ -48,10 +50,12 @@ const GroupList = (props) => {
     dispatch(getGroupList());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUP_lIST} />
       {
         (pageField) ?
           <CommonListPage

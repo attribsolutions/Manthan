@@ -34,7 +34,8 @@ import {
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
 import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -409,9 +410,8 @@ const GSTMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags>
-                    <title>GST Master| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST} />
                 {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm

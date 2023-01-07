@@ -13,6 +13,8 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const CompanyList = () => {
     const dispatch = useDispatch();
@@ -39,16 +41,18 @@ const CompanyList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id =  pageId.COMPANY_lIST
+        const page_Id = pageId.COMPANY_lIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(fetchCompanyList());
     }, []);
 
-    const { pageField } = reducers;
-    
+    const { pageField,userAccess=[] } = reducers;
+
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANY_lIST} />
             {
                 (pageField) ?
                     <CommonListPage

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -41,6 +40,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const CategoryMaster = (props) => {
 
@@ -163,7 +163,7 @@ const CategoryMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath:url.CATEGORY_lIST,
+                    RedirectPath: url.CATEGORY_lIST,
                 }))
             }
         }
@@ -185,7 +185,7 @@ const CategoryMaster = (props) => {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname:url.CATEGORY_lIST,
+                pathname: url.CATEGORY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
@@ -219,8 +219,8 @@ const CategoryMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CategoryType: values.CategoryTypeName.value,
-                CreatedBy:createdBy(),
-                UpdatedBy:createdBy()
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
             });
 
             saveDissable(true);//save Button Is dissable function
@@ -242,13 +242,11 @@ const CategoryMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css,height: "18cm" }}>
-                    <Container fluid>
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORY} />
 
+                <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
+                    <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

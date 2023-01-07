@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CategoryMaster from "./CategoryMaster";
 import {
@@ -9,10 +9,12 @@ import {
   PostMethod_ForCategoryAPISuccess,
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew"
 
 const CategoryList = (props) => {
 
@@ -24,7 +26,7 @@ const CategoryList = (props) => {
       updateMsg: state.CategoryReducer.updateMessage,
       deleteMsg: state.CategoryReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg:state.CategoryReducer.PostDataMessage,
+      postMsg: state.CategoryReducer.PostDataMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
@@ -46,10 +48,13 @@ const CategoryList = (props) => {
     dispatch(getCategorylist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField ,userAccess=[]} = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORY_lIST} />
+
       {
         (pageField) ?
           <CommonListPage

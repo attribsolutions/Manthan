@@ -47,6 +47,8 @@ import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
 import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../../routes/allPageID"
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -107,7 +109,7 @@ const ItemsMaster = (props) => {
         SOUnit: false,
         IsBase: false
     }]);
-    
+
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
@@ -658,7 +660,7 @@ const ItemsMaster = (props) => {
             person.toLowerCase().includes(searchtext)
         );
         setSearchResults(results);
-        if (searchtext =="") {
+        if (searchtext == "") {
             di = `${x.style.display = "none"}`
         }
         var x = document.getElementById("itemtag");
@@ -735,9 +737,9 @@ const ItemsMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
-                    <MetaTags>
-                        <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.ITEM} />
+
                     <Container fluid>
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>

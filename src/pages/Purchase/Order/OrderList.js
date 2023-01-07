@@ -14,9 +14,7 @@ import {
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
-
 import { Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -28,6 +26,8 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const OrderList = () => {
 
@@ -54,7 +54,8 @@ const OrderList = () => {
     );
     const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
-
+    const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+ 
     const action = {
         getList: getOrderListPage,
         deleteId: deleteOrderId,
@@ -66,7 +67,7 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+        // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
@@ -75,11 +76,14 @@ const OrderList = () => {
 
     }, []);
 
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
     }));
+    supplierOptions.unshift({
+        value: 0,
+        label: "Select All"
+    });
 
     const downList = useMemo(() => {
         let PageFieldMaster = []
@@ -87,9 +91,7 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-
     useEffect(() => {
-        const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
 
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
@@ -143,8 +145,8 @@ const OrderList = () => {
                 alert("Please Select Order1")
             }
         }
-
     }
+
     function editBodyfunc(rowData) {
 
         const jsonBody = JSON.stringify({
@@ -156,6 +158,7 @@ const OrderList = () => {
         var Mode = "edit"
         dispatch(editOrderId(jsonBody, Mode));
     }
+    
     function downBtnFunc(row) {
         var ReportType = report.order1;
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
@@ -192,6 +195,9 @@ const OrderList = () => {
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={page_Id} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}

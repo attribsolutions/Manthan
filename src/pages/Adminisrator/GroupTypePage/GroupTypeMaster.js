@@ -35,6 +35,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 
 const GroupTypeMaster = (props) => {
@@ -154,7 +155,7 @@ const GroupTypeMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath:url.GROUPTYPE_lIST,
+                    RedirectPath: url.GROUPTYPE_lIST,
                 }))
             }
         }
@@ -177,7 +178,7 @@ const GroupTypeMaster = (props) => {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))//Clear form values
             history.push({
-                pathname:url.GROUPTYPE_lIST,
+                pathname: url.GROUPTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
@@ -231,9 +232,8 @@ const GroupTypeMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-                        </MetaTags>
+                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                        <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUPTYPE} />
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
@@ -300,8 +300,8 @@ const GroupTypeMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
-                                                                     userAcc={userPageAccessState}
-                                                                     editCreatedBy={editCreatedBy}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"GroupTypeMaster"}
                                                                     />
                                                                 </Col>

@@ -13,6 +13,8 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const Employee_List = () => {
 
@@ -27,16 +29,16 @@ const Employee_List = () => {
       postMsg: state.M_EmployeesReducer.postMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
-    );
+  );
 
-    const action = {
-      getList: getEmployeelist,
-      editId: editEmployeeeId,
-      deleteId: delete_Employee_ID,
-      postSucc: PostEmployeeSuccess,
-      updateSucc: updateEmployeeIDSuccess,
-      deleteSucc: deleteEmployeeIDSuccess
-    }
+  const action = {
+    getList: getEmployeelist,
+    editId: editEmployeeeId,
+    deleteId: delete_Employee_ID,
+    postSucc: PostEmployeeSuccess,
+    updateSucc: updateEmployeeIDSuccess,
+    deleteSucc: deleteEmployeeIDSuccess
+  }
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -46,10 +48,13 @@ const Employee_List = () => {
     dispatch(getEmployeelist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE_lIST} />
+      
       {
         (pageField) ?
           <CommonListPage
@@ -66,5 +71,5 @@ const Employee_List = () => {
     </React.Fragment>
   )
 }
-  
+
 export default Employee_List;

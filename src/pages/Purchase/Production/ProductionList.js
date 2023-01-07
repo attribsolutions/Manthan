@@ -21,8 +21,11 @@ import {
 import ProductionMaster from "./ProductionMaster";
 
 import * as url from "../../../routes/route_url"
+import * as pageId from "../../../routes/allPageID"
 
 import { getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 
 const ProductionList = () => {
@@ -113,6 +116,9 @@ const ProductionList = () => {
     }
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRODUCTION_LIST} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}

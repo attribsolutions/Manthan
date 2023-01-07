@@ -27,6 +27,7 @@ function* getPartyItemGenFunc({ supplierId }) {
 
   //  Get ItemList
   try {
+   
     const itemList = yield call(Items_Master_Get_API);
     const partyItem =  yield call(get_Party_Item_List, supplierId);
     const response = itemList.Data.map((item) => {
@@ -53,8 +54,9 @@ function* getSupplierGenFunc() {
 
   const USER = JSON.parse(localStorage.getItem("roleId"))
   try {
-    const response = yield call(GetSupplier_API, USER.Party_id
- );
+    debugger
+    const response = yield call(GetSupplier_API, USER.Party_id);
+    
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({

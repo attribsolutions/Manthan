@@ -18,6 +18,7 @@ import { listPageCommonButtonFunction, makeBtnCss }
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../BreadcrumbNew";
 
 let sortType = "asc"
 let searchCount = 0
@@ -89,7 +90,7 @@ const PurchaseListPage = (props) => {
     const fileds = pageField.PageFieldMaster;
 
     useEffect(() => {
-        // debugger
+
         let tableArr = props.reducers.tableList;
         if (pageMode === url.GRN_ADD_Mode_2) {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
@@ -102,7 +103,7 @@ const PurchaseListPage = (props) => {
             settableList(props.reducers.tableList)
         };
 
-        tableArr = []
+        downList = []
         listObj = {}
 
         tableArr.forEach((index1) => {
@@ -115,7 +116,7 @@ const PurchaseListPage = (props) => {
             downList.push(listObj)
             listObj = {}
         })
-        
+        debugger
         dispatch(BreadcrumbDownBtndata(downList))
 
     }, [props.reducers.tableList])
@@ -424,6 +425,9 @@ const PurchaseListPage = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
+                {/* <BreadcrumbNew
+                    userAccess={userAccess}
+                /> */}
                 <div >
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
