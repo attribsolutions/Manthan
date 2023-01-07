@@ -49,6 +49,11 @@ const GRNList = () => {
         label: i.Supplier,
     }));
 
+    supplierOptions.unshift({
+        value: 0,
+        label: "Select All"
+    });
+
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
