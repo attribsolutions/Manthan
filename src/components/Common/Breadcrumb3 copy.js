@@ -8,14 +8,12 @@ import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 import './breadcrumb.scss'
 const BreadcrumbCopy = props => {
-
     const dispatch = useDispatch();
     const history = useHistory();
 
     // for Excel Download
     const [modal_scroll, setmodal_scroll] = useState(false);
     const [downListKey, setDownListKey] = useState([]);
-
     // const {
     //     newBtnView = false,
     //     excelBtnView = false,

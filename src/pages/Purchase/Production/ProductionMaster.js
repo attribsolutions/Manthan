@@ -208,7 +208,8 @@ const ProductionMaster = (props) => {
         debugger
         event.preventDefault();
         if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
+            debugger
+            const jsonBody = JSON.stringify({ 
                 ProductionMaterialIssue: [
                     {
                         MaterialIssue: values.id,
@@ -221,7 +222,7 @@ const ProductionMaster = (props) => {
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
                 StoreLocation: "aa",
-                SupplierBatchCode: values.SupplierBatchCode,
+                PrintedBatchCode: values.SupplierBatchCode,
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
                 CreatedBy: 1,
