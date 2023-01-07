@@ -287,18 +287,18 @@ const WorkOrder = (props) => {
     }
 
     function Quantitychange(e) {
-
+        debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         state.hasValid.Quantity.valid = true
         let NumberLot = e / itemselect.EstimatedOutputQty
         if (Number.isInteger(NumberLot)) {
-            setState((i) => {
-                i.values.NumberOfLot = NumberLot;
-                i.values.Quantity = e;
-                i.hasValid.NumberOfLot.valid = true;
-                i.hasValid.Quantity.valid = true;
-                return i
-            })
+        setState((i) => {
+            i.values.NumberOfLot = e;
+            i.values.Quantity = e;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.Quantity.valid = true;
+            return i
+        })
         }
         else {
             setState((i) => {
@@ -558,7 +558,7 @@ const WorkOrder = (props) => {
                                                 <div className="col col-6">
                                                     <Input
                                                         name="Quantity"
-                                                        value={`${values.Quantity} `}
+                                                        value={`${values.Quantity}`}
                                                         type="text"
                                                         className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                         placeholder="Please Enter Quantity"
