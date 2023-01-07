@@ -240,6 +240,11 @@ const PartyItems = (props) => {
         label: i.Supplier,
     }));
 
+    supplierOptions.unshift({
+        value: 0,
+        label: "Select All"
+    });
+
     const tableColumns = [
         {
             text: "ItemID",
