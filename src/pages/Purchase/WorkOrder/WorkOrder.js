@@ -490,6 +490,7 @@ const WorkOrder = (props) => {
                                                             EditData.Stock : itemselect.StockQty
                                                         }
                                                         disabled={true}
+                                                        className="text-end"
                                                         placeholder="Please Enter Stock Quantity"
                                                     />
                                                 </div>
@@ -512,6 +513,7 @@ const WorkOrder = (props) => {
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
                                                                 itemselect.EstimatedOutputQty : ""} `}
                                                         disabled={true}
+                                                        className="text-end"
                                                         placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
@@ -557,6 +559,7 @@ const WorkOrder = (props) => {
                                                     style={{ width: "150px" }}>{fieldLabel.Quantity}</Label>
                                                 <div className="col col-6">
                                                     <Input
+                                                      style={{ textAlign: "right" }}
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
                                                         type="text"

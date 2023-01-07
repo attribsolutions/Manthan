@@ -382,6 +382,7 @@ const BOMMaster = (props) => {
                                         <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
                                         <Col sm="7">
                                             <Input
+                                              style={{ textAlign: "right" }}
                                                 name="EstimatedOutputQty"
                                                 value={values.EstimatedOutputQty}
                                                 type="text"
