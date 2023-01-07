@@ -41,6 +41,8 @@ import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -383,9 +385,8 @@ const PartyMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags>
-                        <title>Party Master| FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY} />
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
                             {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}

@@ -14,6 +14,9 @@ import PartyItems from "./PartyItems";
 import { GetPartyList } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+
 const PartyItemsList = (props) => {
 
   const dispatch = useDispatch();
@@ -47,10 +50,12 @@ const PartyItemsList = (props) => {
 
   }, []);
 
-  const { pageField } = reducers
+  const { pageField ,userAccess=[]} = reducers
 
   return (
     <React.Fragment>
+       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYITEM_LIST} />
       {
         (pageField) ?
           <CommonListPage

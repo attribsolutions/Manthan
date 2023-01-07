@@ -41,6 +41,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const RoleMaster = (props) => {
 
@@ -116,7 +117,7 @@ const RoleMaster = (props) => {
         newBtnView: false,
         showCount: false,
         excelData: [],
-        breadShow:true
+        breadShow: true
       }))
     };
   }, [userAccess])
@@ -277,11 +278,8 @@ const RoleMaster = (props) => {
       <React.Fragment>
         <div className="page-content" >
           <Container fluid>
-            {/* <MetaTags>
-              <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-            </MetaTags> */}
-            {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
-
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.SUBGROUP} />
             <Card className="text-black">
               <CardHeader className="card-header  text-black c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
