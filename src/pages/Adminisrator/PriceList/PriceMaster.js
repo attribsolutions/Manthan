@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import './pricemaster.scss'
 import {
     Button,
@@ -35,6 +35,8 @@ import {
 } from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const PriceMaster = (props) => {
     const dispatch = useDispatch();
@@ -42,7 +44,6 @@ const PriceMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
 
     //SetState  Edit data Geting From Modules List component
     const [EditData, setEditData] = useState([]);
@@ -54,7 +55,6 @@ const PriceMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [menu, setMenu] = useState(false);
     const [dropOpen, setDropOpen] = useState(false);
-    const [dropOpen2, setDropOpen2] = useState(false);
     const [currentPrice, setCurrentPrice] = useState({ Name: '' });
     const [hasPartySelect, setHasPartySelect] = useState(false);
     const [priceList, setPriceList] = useState('');
@@ -67,7 +67,7 @@ const PriceMaster = (props) => {
         updateMessage,
         PartyTypes,
         PriceList,
-        RoleAccessModifiedinSingleArray
+        userAccess
     } = useSelector((state) => ({
         PostAPIResponse: state.PriceListReducer.postMsg,
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
@@ -75,7 +75,7 @@ const PriceMaster = (props) => {
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     // userAccess useEffect
@@ -83,19 +83,19 @@ const PriceMaster = (props) => {
         let userAcc = undefined;
         if (editDataGatingFromList === undefined) {
             let locationPath = history.location.pathname;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            userAcc = userAccess.find((inx) => {
                 return `/${inx.ActualPagePath}` === locationPath;
             });
         } else if (!(editDataGatingFromList === undefined)) {
             let relatatedPage = props.relatatedPage;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            userAcc = userAccess.find((inx) => {
                 return `/${inx.ActualPagePath}` === relatatedPage;
             });
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc);
         }
-    }, [RoleAccessModifiedinSingleArray]);
+    }, [userAccess]);
 
     useEffect(() => {
         dispatch(getPartyTypes());
@@ -172,9 +172,9 @@ const PriceMaster = (props) => {
     }
     // Edit handler
     const dropOpen_EditHandler = price => {
-         
+
         price["mode"] = "edit"
-        
+
         setCurrentPrice(price)
         setDropOpen(true)
 
@@ -199,7 +199,7 @@ const PriceMaster = (props) => {
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
-                PriceList:PriceList.value,
+                PriceList: PriceList.value,
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -210,30 +210,30 @@ const PriceMaster = (props) => {
         }
 
     }
-     // edit price handler
-    function sub_Price_edit_Handler () {
+    // edit price handler
+    function sub_Price_edit_Handler() {
         var textInp1 = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
             alert("please enter value")
         } else {
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
-                id:currentPrice.value,
+                id: currentPrice.value,
                 Name: textInp1.value,
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
-                PriceList:PriceList.value,
+                PriceList: PriceList.value,
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: 1,
                 UpdatedOn: "2022-07-18T00:00:00",
             });
-            dispatch(updatePriceList(jsonBody,currentPrice.value));
+            dispatch(updatePriceList(jsonBody, currentPrice.value));
         }
     }
-    
+
     const onclickselect = function () {
         const hasNone = document.getElementById("color").style;
 
@@ -246,7 +246,7 @@ const PriceMaster = (props) => {
 
     // drop down tree
     const test1 = () => {
-  
+
         return (
             <>
                 <div id="color"  >
@@ -275,7 +275,7 @@ const PriceMaster = (props) => {
     }
 
     function fun2(node) {
-    
+
         return (
             <div style={{ paddingLeft: "50px" }} className={"pricelistclass"} >
                 <div className='row justify-content-center mt-n4'>
@@ -286,7 +286,7 @@ const PriceMaster = (props) => {
                             defaultValue={node.label} >
                         </Input>
                     </div>
-    
+
                     <div className=' col-1 al-end'>
 
                         <Input
@@ -306,7 +306,7 @@ const PriceMaster = (props) => {
                             <DropdownToggle className="btn header-item " tag="button">
 
                             </DropdownToggle>
-                            
+
                             <DropdownMenu className="dropdown_menu dropdown-menu-end" id="drop-downcss" >
                                 <DropdownItem
                                     key={node.value}
@@ -318,7 +318,7 @@ const PriceMaster = (props) => {
 
                                 <DropdownItem
                                     key={node.value}
-                                    onClick={(e) => {dropOpen_EditHandler(node) }}
+                                    onClick={(e) => { dropOpen_EditHandler(node) }}
                                 >
                                     <span className="align-middle text-black" >{"Edit"}</span>
                                 </DropdownItem>
@@ -339,18 +339,17 @@ const PriceMaster = (props) => {
     }
 
 
-    
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"5cm" }} >
-                <MetaTags>
-                    <title>Price Master| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
+            <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE }/>
+
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >
@@ -370,13 +369,13 @@ const PriceMaster = (props) => {
                                                     <FormGroup className="mb-3 row ">
                                                         <Label className="col-sm-3 p-2 ml-n4 ">Party Type</Label>
                                                         <Col md="9" style={{}}>
-                                                            <Select 
+                                                            <Select
                                                                 value={partyType_dropdown_Select}
                                                                 options={PartyTypeDropdown_Options}
                                                                 className="rounded-bottom"
                                                                 placeholder="select"
-                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e)}}
-                                                                classNamePrefix="select2-selection"  
+                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                classNamePrefix="select2-selection"
                                                             />
                                                         </Col>
                                                     </FormGroup>
@@ -414,18 +413,18 @@ const PriceMaster = (props) => {
 
                                                     <div className="modal-body">
                                                         {currentPrice.mode === "edit" ?
-                                                        
+
                                                             <Row className="justify-content-md-left">
                                                                 <Label className="col-3 col-form-label" >Price List</Label>
                                                                 <Col className="col-9">
-                                                               <Input id="Input"
-                                                                            value={priceList.label}
-                                                                            placeholder="Select..."
-                                                                            onClick={onclickselect}
-                                                                        >
-                                                                        </Input>
+                                                                    <Input id="Input"
+                                                                        value={priceList.label}
+                                                                        placeholder="Select..."
+                                                                        onClick={onclickselect}
+                                                                    >
+                                                                    </Input>
 
-                                                                        {test1()}
+                                                                    {test1()}
                                                                 </Col>
                                                             </Row>
                                                             : null}

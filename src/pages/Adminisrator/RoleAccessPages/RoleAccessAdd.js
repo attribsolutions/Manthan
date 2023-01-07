@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -36,6 +35,8 @@ import {
 import { fetchModelsList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const RoleAccessAdd = (props) => {
 
@@ -63,7 +64,7 @@ const RoleAccessAdd = (props) => {
         PostMessage_ForRoleAccessList,
         Roles,
         PartyTypes,
-        RoleAccessModifiedinSingleArray
+        userAccess
     } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
@@ -75,14 +76,14 @@ const RoleAccessAdd = (props) => {
         AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
         GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
         PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     useEffect(() => {
         const editDataGatingFromList = history.location.state
 
         const locationPath = history.location.pathname
-        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
@@ -103,7 +104,7 @@ const RoleAccessAdd = (props) => {
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [RoleAccessModifiedinSingleArray])
+    }, [userAccess])
 
 
     useEffect(() => {
@@ -507,9 +508,8 @@ const RoleAccessAdd = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content text-black" >
-                    <MetaTags>
-                        <title>Role Access| FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS} />
                     {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 

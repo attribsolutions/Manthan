@@ -39,6 +39,8 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
 import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const MRPMaster = (props) => {
 
@@ -70,7 +72,7 @@ const MRPMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-    console.log("Go button List Data", TableData)
+
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -399,9 +401,8 @@ const MRPMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
-                <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP} />
                 {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm

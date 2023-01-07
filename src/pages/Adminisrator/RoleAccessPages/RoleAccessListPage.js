@@ -1,28 +1,25 @@
 import React, { useEffect, useState } from "react"
 import { Row, Col, Modal, Button } from "reactstrap"
 import MetaTags from 'react-meta-tags'
-
 // datatable related plugins
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, {
     PaginationProvider, PaginationListStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-
-//Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getRoleAccessListPage,
     PostMethod_ForCopyRoleAccessFor_Role_Success,
-
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const RoleAccessListPage = () => {
 
@@ -34,22 +31,22 @@ const RoleAccessListPage = () => {
     const [copy_user_RowData, setCopy_user_RowData] = useState({});
 
 
-    const { TableListData, RoleAccessModifiedinSingleArray, PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
+    const { TableListData, userAccess, PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
 
     }));
 
     useEffect(() => {
         const locationPath = history.location.pathname
-        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
-    }, [RoleAccessModifiedinSingleArray])
+    }, [userAccess])
 
 
     //  This UseEffect => Featch Modules List data  First Rendering
@@ -68,7 +65,7 @@ const RoleAccessListPage = () => {
 
         let RelatedPageID = userAccState.RelatedPageID
 
-        const found = RoleAccessModifiedinSingleArray.find((element) => {
+        const found = userAccess.find((element) => {
             return element.id === RelatedPageID
         })
 
@@ -228,16 +225,8 @@ const RoleAccessListPage = () => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags>
-                        <title>RoleAccess List Page| FoodERP-React FrontEnd</title>
-                    </MetaTags>
-                    {/* <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-                        showCount={true}
-                        excelBtnView={true}
-                        excelData={TableListData}
-                    /> */}
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS_lIST} />
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                         keyField='id'
