@@ -293,7 +293,7 @@ const WorkOrder = (props) => {
         let NumberLot = e / itemselect.EstimatedOutputQty
         if (Number.isInteger(NumberLot)) {
         setState((i) => {
-            i.values.NumberOfLot = e;
+            i.values.NumberOfLot = NumberLot;
             i.values.Quantity = e;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.Quantity.valid = true;
@@ -484,12 +484,13 @@ const WorkOrder = (props) => {
                                                 <Label className="mt-1"
                                                     style={{ width: "130px" }}>{fieldLabel.StockQuantity}
                                                 </Label>
-                                                <div className="col-6">
+                                                <div className="col-6 ">
                                                     <Input
                                                         value={pageMode === "edit" ?
                                                             EditData.Stock : itemselect.StockQty
                                                         }
                                                         disabled={true}
+                                                        className="text-end"
                                                         placeholder="Please Enter Stock Quantity"
                                                     />
                                                 </div>
@@ -508,10 +509,11 @@ const WorkOrder = (props) => {
                                                 </Label>
                                                 <div className="col-6">
                                                     <Input
-                                                        value={`${pageMode === "edit" ?
+                                                        value={pageMode === "edit" ?
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
-                                                                itemselect.EstimatedOutputQty : ""} `}
+                                                                itemselect.EstimatedOutputQty : ""}
                                                         disabled={true}
+                                                        className="text-end"
                                                         placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
@@ -536,7 +538,7 @@ const WorkOrder = (props) => {
                                                         name="NumberOfLot"
                                                         value={values.NumberOfLot}
                                                         type="text"
-                                                        className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        className={isError.NumberOfLot.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Number Of Lot"
                                                         autoComplete='off'
                                                         onChange={(event) => {
@@ -555,12 +557,12 @@ const WorkOrder = (props) => {
                                             <FormGroup className=" row mt-1 mb-2" >
                                                 <Label className="mt-1"
                                                     style={{ width: "150px" }}>{fieldLabel.Quantity}</Label>
-                                                <div className="col col-6">
+                                                <div className="col col-6 ">
                                                     <Input
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
                                                         type="text"
-                                                        className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        className={isError.Quantity.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Quantity"
                                                         autoComplete='off'
                                                         onChange={(event) => {
