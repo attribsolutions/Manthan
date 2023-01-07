@@ -21,6 +21,8 @@ import WorkOrder from "./WorkOrder";
 import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const WorkOrderList = () => {
     debugger
@@ -47,6 +49,7 @@ const WorkOrderList = () => {
 
     const { userAccess, pageField, tableList, workOrderlistFilters, GRNitem } = reducers;
     const { fromdate, todate } = workOrderlistFilters
+    const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
 
     const action = {
         getList: getWorkOrderListPage,
@@ -59,7 +62,6 @@ const WorkOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
         setpageMode(hasPagePath)
         dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
@@ -76,7 +78,6 @@ const WorkOrderList = () => {
 
 
     useEffect(() => {
-        const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
 
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
@@ -126,6 +127,9 @@ const WorkOrderList = () => {
     }
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={page_Id} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}

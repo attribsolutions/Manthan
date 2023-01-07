@@ -6,6 +6,7 @@ import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 import * as urlRalations from "../../routes/urlRalations"
+import { MetaTags } from "react-meta-tags";
 
 
 export const initialstate = {
@@ -22,19 +23,22 @@ export const initialstate = {
   pageField: {},
   masterPage: ''
 }
-const BreadcrumbFix = props => {
+const BreadcrumbNew = props => {
 
   const history = useHistory();
   const dispatch = useDispatch();
   // for Excel Download
+
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [downListKey, setDownListKey] = useState([]);
   const [breadcrumbDetail, setbreadcrumbDetail] = useState({});
 
-  const { userAccess = [], downBtnData = [] } = useSelector((state) => ({
-    userAccess: state.Login.RoleAccessUpdateData,
+  const { downBtnData = [] } = useSelector((state) => ({
+    // userAccess: state.Login.RoleAccessUpdateData,
     downBtnData: state.BreadcrumbReducer.downBtnData,
   }));
+
+  const { userAccess = [],pageId } = props;
   // debugger
   let { showCountlabel = '', bredcrumbItemName = '' } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
@@ -70,18 +74,17 @@ const BreadcrumbFix = props => {
     excelBtnView = false,
     pageHeading = '',
     CountLabel = true,
-    // excelData = [],
     masterPage
   } = breadcrumbDetail;
 
-  var aaaa = ((CountLabel) && (showCountlabel.length > 0))
-  debugger
+
   useEffect(() => {
 
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
-    })
+      return (inx.id === pageId)
+    });
+
     if (!(userAcc === undefined)) {
 
       showCountlabel = '';
@@ -112,20 +115,6 @@ const BreadcrumbFix = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
-
-
-
-    // let pathName = history.location.pathname
-    // let userAcc = userAccess.find((inx) => {
-    //     return (`/${inx.ActualPagePath}` === pathName)
-    // })
-    // let listPagePath = userAccess.find((inx) => {
-    //     return (inx.id === userAcc.RelatedPageID)
-    // })
-    // if (listPagePath === undefined) {
-    //     return
-    // }
-    // debugger
     history.push({
       pathname: masterPage,
     })
@@ -244,117 +233,117 @@ const BreadcrumbFix = props => {
 
   if (breadShow) {
     return (
-      // <React.Fragment>
-      //   <header id="page-topbar" style={{ marginTop: "56px", backgroundColor: 'white', zIndex: "1" }} >
-      //     <div className="navbar-header" style={{ paddingRight: "-10px" }}>
-      //       <div className="d-flex" >
-      //         <div className="navbar-brand-box" ></div>
-      //         <div style={{ paddingLeft: "7px" }}>
-      //           {
-      //             newBtnView ?
-      //               <div >
-      //                 <button type="button" className="btn btn-success"
-      //                   data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-      //                   onClick={NewButtonHandeller}>
-      //                   New
-      //                 </button>
-      //                 <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
+      <React.Fragment>
 
-      //               </div>
-      //               :
-      //               <div>
-      //                 <label className="font-size-18  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>
-      //                   {pageHeading}</label>
-      //                 {(bredcrumbItemName.length > 0) ?
-      //                   <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
-      //                     style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
-      //                   : null
-      //                 }
-      //               </div>
-      //           }
-      //         </div>
-      //       </div>
+        <header id="page-topbar" style={{ marginTop: "56px", backgroundColor: 'white', zIndex: "1" }} >
+          <div className="navbar-header" style={{ paddingRight: "-10px" }}>
+            <div className="d-flex" >
+              <div className="navbar-brand-box" ></div>
+              <div style={{ paddingLeft: "7px" }}>
+                {
+                  newBtnView ?
+                    <div >
+                      <button type="button" className="btn btn-success"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
+                        onClick={NewButtonHandeller}>
+                        New
+                      </button>
+                      <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
 
-      //       <div className=" d-flex  justify-content-end"  >
-      //         {excelBtnView ?
-      //           <div className="px-2 " style={{ marginTop: "7px" }}>
-      //             <Button
-      //               type="button"
-      //               title="Download List"
-      //               color="btn btn-sm btn-outline-primary "
-      //               onClick={() => { tog_scroll(); }}
-      //               data-toggle="modal"
-      //             >
-      //               <i className="bx bx-download font-size-14" ></i>
-      //             </Button>
-      //           </div>
-      //           : null}
-      //         {
-      //           (((CountLabel) && (showCountlabel.length > 0))) ?
-      //             <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
-      //               style={{ width: "100%" }}>
-      //               <samp className="px-2 ">{showCountlabel}</samp>
-      //             </div>
-      //             :
-      //             null
-      //         }
-      //       </div>
+                    </div>
+                    :
+                    <div>
+                      <label className="font-size-18  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>
+                        {pageHeading}</label>
+                      {(bredcrumbItemName.length > 0) ?
+                        <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
+                          style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
+                        : null
+                      }
+                    </div>
+                }
+              </div>
+            </div>
+
+            <div className=" d-flex  justify-content-end"  >
+              {excelBtnView ?
+                <div className="px-2 " style={{ marginTop: "7px" }}>
+                  <Button
+                    type="button"
+                    title="Download List"
+                    color="btn btn-sm btn-outline-primary "
+                    onClick={() => { tog_scroll(); }}
+                    data-toggle="modal"
+                  >
+                    <i className="bx bx-download font-size-14" ></i>
+                  </Button>
+                </div>
+                : null}
+              {
+                (((CountLabel) && (showCountlabel.length > 0))) ?
+                  <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
+                    style={{ width: "100%" }}>
+                    <samp className="px-2 ">{showCountlabel}</samp>
+                  </div>
+                  :
+                  null
+              }
+            </div>
 
 
-      //     </div>
-      //   </header>
-      //   <Modal
-      //     isOpen={modal_scroll}
-      //     toggle={() => {
-      //       tog_scroll();
-      //     }}
-      //     scrollable={true}
-      //   >
-      //     <div className="modal-header">
-      //       <h5 className="modal-title mt-0">List</h5>
+          </div>
+        </header>
+        <Modal
+          isOpen={modal_scroll}
+          toggle={() => {
+            tog_scroll();
+          }}
+          scrollable={true}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title mt-0">List</h5>
 
-      //       <button
-      //         type="button"
-      //         onClick={() => setmodal_scroll(false)}
-      //         className="close"
-      //         data-dismiss="modal"
-      //         aria-label="Close"
-      //       >
-      //         <span aria-hidden="true">&times;</span>
-      //       </button>
-      //     </div>
-      //     <div className="modal-body">
-      //       <AvForm onValidSubmit={(e, v) => { DownloadInExcelButtonHanler(e, v); }}>
-      //         <div className="form-check">
-      //           <input
-      //             id="checkAll"
-      //             type="checkbox"
-      //             className="form-check-input"
-      //             onChange={excelCheckBoxOnChange}
-      //           />
-      //           <label className="form-label text-black">All Select</label>
-      //         </div>
-      //         <ExcelCheckBox />
+            <button
+              type="button"
+              onClick={() => setmodal_scroll(false)}
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <AvForm onValidSubmit={(e, v) => { DownloadInExcelButtonHanler(e, v); }}>
+              <div className="form-check">
+                <input
+                  id="checkAll"
+                  type="checkbox"
+                  className="form-check-input"
+                  onChange={excelCheckBoxOnChange}
+                />
+                <label className="form-label text-black">All Select</label>
+              </div>
+              <ExcelCheckBox />
 
-      //         <div className="modal-body">
-      //           <div className="modal-footer">
-      //             <button
-      //               type="button"
-      //               className="btn btn-secondary"
-      //               onClick={() => setmodal_scroll(false)}
-      //             >
-      //               Cancel
-      //             </button>
-      //             <button type="submit" className="btn btn-primary" >
-      //               Download in Excel
-      //             </button>
-      //           </div>
-      //         </div>
-      //       </AvForm>
-      //     </div>
-      //   </Modal>
-      // </React.Fragment>
-      <></>
+              <div className="modal-body">
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setmodal_scroll(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary" >
+                    Download in Excel
+                  </button>
+                </div>
+              </div>
+            </AvForm>
+          </div>
+        </Modal>
+      </React.Fragment>
     )
   } else {
     return (<></>)
@@ -362,4 +351,4 @@ const BreadcrumbFix = props => {
 }
 
 
-export default BreadcrumbFix
+export default BreadcrumbNew

@@ -20,6 +20,9 @@ import {
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 const GRNList = () => {
 
     const dispatch = useDispatch();
@@ -70,7 +73,7 @@ const GRNList = () => {
     }, []);
 
     function goButtonHandler() {
-        
+
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -101,6 +104,9 @@ const GRNList = () => {
     return (
 
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_lIST} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={"GRN List"}

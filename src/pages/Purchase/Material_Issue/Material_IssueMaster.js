@@ -40,6 +40,7 @@ import { handleKeyDown } from "../Order/OrderPageCalulation";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const MaterialIssueMaster = (props) => {
 
@@ -525,9 +526,9 @@ const MaterialIssueMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} />
+
                 <div className="page-content" >
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     /> */}

@@ -25,6 +25,8 @@ import {
 import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
+import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const BOMList = () => {
 
@@ -111,6 +113,9 @@ const BOMList = () => {
     }
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS_LIST} />
+
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}

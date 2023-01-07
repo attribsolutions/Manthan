@@ -35,6 +35,7 @@ import {
 import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
+import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 
 const BOMMaster = (props) => {
 
@@ -315,9 +316,9 @@ const BOMMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS} />
+
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     // showCount={true}

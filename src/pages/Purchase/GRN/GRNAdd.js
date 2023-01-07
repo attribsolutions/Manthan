@@ -23,14 +23,16 @@ import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actio
 import { AlertState, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
-import { GRN_lIST } from "../../../routes/route_url";
+
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";
-
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID";
 
 let initialTableData = []
 
@@ -130,7 +132,7 @@ const GRNAdd = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: GRN_lIST,
+                RedirectPath: url.GRN_lIST,
             }))
 
         } else if (postMsg.Status === true) {
@@ -537,7 +539,7 @@ const GRNAdd = (props) => {
             GRNNumber: 1,
             GrandTotal: orderAmount,
             Party: grnDetail.Supplier,
-            InvoiceNumber:invoiceNo,
+            InvoiceNumber: invoiceNo,
             CreatedBy: createdBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
@@ -557,9 +559,8 @@ const GRNAdd = (props) => {
     if (!(userAccState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_ADD} />
                 <div className="page-content" >
                     {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}
@@ -635,7 +636,7 @@ const GRNAdd = (props) => {
                                         <Input
                                             type="text"
                                             placeholder="Enter Invoice No"
-                                            onChange={(e)=>setInvoiceNo(e.target.value)} />
+                                            onChange={(e) => setInvoiceNo(e.target.value)} />
                                     </Col>
                                 </FormGroup>
 

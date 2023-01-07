@@ -10,7 +10,7 @@ import {
     Row
 } from 'reactstrap';
 import Select from "react-select";
-import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
+import { AlertState, getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
 
@@ -76,7 +76,15 @@ function ItemTab(props) {
             clearState();
         }
         else {
-            alert("Please Enter value")
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Enter Value",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
         }
     };
     const clearState = () => {
@@ -86,8 +94,9 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
-        const result = event.target.value.replace(/\D/g, '');
-        setQuantity(result);
+        debugger
+        const result =event.target.value.replace(/[+-]?([0-9]*[.])?[0-9]+/,"");
+        setQuantity(event.target.value);
     };
     return (
         <Row>

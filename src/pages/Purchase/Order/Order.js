@@ -42,6 +42,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 let description = ''
 let editVal = {}
@@ -716,11 +717,8 @@ const Order = (props) => {
     if (!(userAccState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
-                </MetaTags>
-
-
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} />
                 <div className="page-content">
 
                     {/* <Breadcrumb
@@ -1012,7 +1010,7 @@ const Order = (props) => {
                         redirectPath={url.ORDER}
                         isOpenModal={Open_TermsModal_func}
                         pageMode={pageMode}
-                        />
+                    />
 
                 </Modal>
 
