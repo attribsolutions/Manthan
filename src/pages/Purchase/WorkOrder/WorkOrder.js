@@ -510,7 +510,7 @@ const WorkOrder = (props) => {
                                                     <Input
                                                         value={`${pageMode === "edit" ?
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
-                                                                itemselect.EstimatedOutputQty : ""} ${itemselect.value > 0 ? '(1 Lot)' : ''}`}
+                                                                itemselect.EstimatedOutputQty : ""} `}
                                                         disabled={true}
                                                         placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
