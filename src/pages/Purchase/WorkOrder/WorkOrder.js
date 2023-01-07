@@ -560,6 +560,7 @@ const WorkOrder = (props) => {
                                                     style={{ width: "150px" }}>{fieldLabel.Quantity}</Label>
                                                 <div className="col col-6 ">
                                                     <Input
+                                                      style={{ textAlign: "right" }}
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
                                                         type="text"

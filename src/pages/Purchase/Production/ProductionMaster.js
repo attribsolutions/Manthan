@@ -281,6 +281,7 @@ const ProductionMaster = (props) => {
                                                 disabled
                                                 name="EstimatedQuantity"
                                                 type="text"
+                                                className="text-end"
                                                 placeholder="Enter EstimatedQuantity"
                                                 value={`${values.EstimatedQuantity ? values.EstimatedQuantity : "0"}   Lot(${values.NumberOfLot ? values.NumberOfLot : "1"})`}
                                                 autoComplete="off"
@@ -300,6 +301,7 @@ const ProductionMaster = (props) => {
                                                 type="text"
                                                 name="ActualQuantity"
                                                 value={values.ActualQuantity}
+                                                className="text-end"
                                                 placeholder="Enter ActualQuantity"
                                                 autoComplete="off"
                                                 onChange={(event) => {
