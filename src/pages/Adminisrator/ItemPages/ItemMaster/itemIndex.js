@@ -654,16 +654,23 @@ const ItemsMaster = (props) => {
         debugger
         dispatch(Breadcrumb_inputName(event.target.value));
         CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
-        // setSearchTerm(event.target.value);
         var searchtext = event.target.value
         const results = data.filter(person =>
             person.toLowerCase().includes(searchtext)
         );
+
         setSearchResults(results);
         if (searchtext == "") {
             di = `${x.style.display = "none"}`
         }
+        setSearchResults(results); 
+
         var x = document.getElementById("itemtag");
+        document.addEventListener('click', function handleClickOutsideBox(event) {          
+            if (!x.contains(event.target)) {
+              x.style.display = 'none';
+            }
+          }); 
         x.style.display = "block";
         var di = "100Px"
         if (results.length == 0) {
@@ -675,7 +682,7 @@ const ItemsMaster = (props) => {
             di = "300Px"
         } else if (results.length < 2) {
             di = "50Px"
-        }
+        } 
         x.style.height = di
 
     };
@@ -691,9 +698,14 @@ const ItemsMaster = (props) => {
         // x.style.display = "block";
         setSearchResults1(results);
         var x = document.getElementById("brandtag");
+        document.addEventListener('click', function handleClickOutsideBox(event) {          
+            if (!x.contains(event.target)) {
+              x.style.display = 'none';
+            }
+          });
         x.style.display = "block";
         var di = "100Px"
-        if (results.length == 0) {
+        if (results.length == 0){
             di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {
