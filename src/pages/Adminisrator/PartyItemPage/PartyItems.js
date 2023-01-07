@@ -42,6 +42,7 @@ import { PARTYITEM_LIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
+import  * as mode  from "../../../routes/PageMode";
 
 
 
@@ -260,7 +261,7 @@ const PartyItems = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={cellContent}
-                        disabled={hasDropMode ? row.hasInitialVal ? true : false : false}
+                        disabled={hasDropMode ? row.hasInitialVal ? pageMode === mode.edit ? true : false : false : false}
                         onChange={e => {
                             setitemArr(ele => {
                                 var newrr = ele.map(i => {

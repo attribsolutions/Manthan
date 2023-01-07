@@ -37,13 +37,14 @@ function ItemTab(props) {
     }));
 
     function ContentItem_Handler(e) {
+        debugger
         setUnitSelect('')
         setContentItemSelect(e)
         let Item = Items.filter((index) => {
             return index.id === e.value
         })
         let ItemUnits = Item[0].UnitDetails.map((data) => ({
-            value: data.UnitID,
+            value: data.id,
             label: data.UnitName
         }))
         setItemUnitOptions(ItemUnits)
@@ -54,6 +55,7 @@ function ItemTab(props) {
         setUnitSelect(event);
     };
     const addRowsHandler = (data) => {
+        debugger
         const val = {
             Item: contentItemSelect === "" ? "" : contentItemSelect.value,
             ItemName: contentItemSelect.label,

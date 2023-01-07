@@ -37,9 +37,9 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { handleKeyDown } from "../Order/OrderPageCalulation";
-import * as url from "../../../routes/route_url";
+import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
+import * as url from "../../../routes/route_url"
 
 const MaterialIssueMaster = (props) => {
 
@@ -52,13 +52,13 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
-        
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(url.MATERIAL_ISSUE);
+    const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
@@ -123,6 +123,7 @@ const MaterialIssueMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -132,7 +133,7 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-                debugger
+                // debugger
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
@@ -261,19 +262,19 @@ const MaterialIssueMaster = (props) => {
         event.preventDefault();
         if (state.values.LotQuantity == "0") {
             alert("Quantity Can Not be 0")
-        }else
-        if (formValid(state, setState)) {
-           
-            const jsonBody = JSON.stringify({
-                WorkOrder: values.ItemName.value,
-                Item: values.ItemName.Item,
-                Company: userCompany(),
-                Party: userParty(),
-                Quantity: parseInt(values.LotQuantity)
-            });
+        } else
+            if (formValid(state, setState)) {
 
-            dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
-        }
+                const jsonBody = JSON.stringify({
+                    WorkOrder: values.ItemName.value,
+                    Item: values.ItemName.Item,
+                    Company: userCompany(),
+                    Party: userParty(),
+                    Quantity: parseInt(values.LotQuantity)
+                });
+
+                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+            }
     }
 
     function ItemOnchange(e) {
@@ -289,7 +290,7 @@ const MaterialIssueMaster = (props) => {
             return i
         })
     }
-   
+
 
     function Quantitychange(event) {
 
@@ -512,7 +513,7 @@ const MaterialIssueMaster = (props) => {
                 </>
             ),
         },
-       
+
     ]
 
     const pageOptions = {
@@ -618,9 +619,9 @@ const MaterialIssueMaster = (props) => {
                                                 )}
                                             </Col>
                                             <div className="col col-1">
-                                                    <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-23px' }}>
-                                                       </Label>
-                                                </div>
+                                                <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-23px' }}>
+                                                </Label>
+                                            </div>
                                         </FormGroup>
                                     </Col>
 
