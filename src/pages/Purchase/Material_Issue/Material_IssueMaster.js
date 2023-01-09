@@ -511,9 +511,9 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label
-                                                    onKeyDown={(e) => handleKeyDown(e, GoButton)}
+                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
                                                 >
-                                                    {index.ObatchwiseQuantity}
+                                                    {index.BaseUnitQuantity}
                                                 </Label>
                                             </div>
                                         </td>
@@ -615,7 +615,7 @@ const MaterialIssueMaster = (props) => {
                                                 />
 
                                                 <span className="text-danger">Note* :
-                                                    <span className="text-black">{`${fieldLabel.NumberOfLot}is less than (${values.ItemName.NoLot})`}
+                                                    <span className="text-black">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
                                                     </span></span>
 
 
