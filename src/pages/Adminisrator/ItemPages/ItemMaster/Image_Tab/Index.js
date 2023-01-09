@@ -22,9 +22,9 @@ export default function Image(props) {
     }));
 
     useEffect(() => {
-        // if(imageTable.length===0){
-        //     addRowHandler() 
-        // }
+        if(imageTable.length===0){
+            addRowHandler() 
+        }
         dispatch(get_ImageType_ForDropDown());
     }, []);
 

@@ -19,7 +19,6 @@ import {
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { AvForm } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
@@ -49,6 +48,7 @@ import Image from "./Image_Tab/Index";
 import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
+import * as url from "../../../../routes/route_url";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -216,9 +216,9 @@ const ItemsMaster = (props) => {
 
 
 
-                if (hasEditVal.ItemImagesDetails.length === 0) {
-                    setImageTabTable(imageTabTable)
-                }
+                // if (hasEditVal.ItemImagesDetails.length === 0) {
+                //     setImageTabTable(imageTabTable)
+                // }
                 // let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
                 //     debugger
                 //     if (index.ItemImagesDetails.length === 0) {
@@ -296,7 +296,7 @@ const ItemsMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/ItemList',
+                    RedirectPath: url.CATEGORY_lIST,
                 }))
             }
         }
@@ -373,6 +373,14 @@ const ItemsMaster = (props) => {
 
         }
         setpageRefresh(!pageRefresh)
+
+            if (baseUnitTableData[0]) {
+                setBaseUnitTableData([{
+                    Conversion: '1',
+                    Unit: { value: event.value, label: event.label },
+                }])
+            }
+       
     }
 
     function Common_Text_INPUT_Validation(value, type, key) {
@@ -1088,7 +1096,7 @@ const ItemsMaster = (props) => {
                                                                             rows="1"
                                                                             id='txtShelfLife0'
                                                                             defaultValue={pageMode === 'edit' ? shelfLife[0] : ''}
-                                                                            placeholder=" Please Enter Shelf Life "
+                                                                            placeholder=" Please Enter Days "
                                                                             autoComplete="off"
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}
                                                                         />
