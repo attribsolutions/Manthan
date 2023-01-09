@@ -485,41 +485,59 @@ const GRNAdd = (props) => {
     const saveHandeller = (e, values) => {
         debugger
         const itemArr = []
+        const isvalidMsg = [];
+
         grnItemList.forEach(i => {
-            if ((i.Quantity > 0)) {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+            // if ((i.Quantity > 0)) {
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
 
-                const arr = {
-                    Item: i.Item,
-                    Quantity: i.Quantity,
-                    MRP: i.MRP,
-                    ReferenceRate: i.Rate,
-                    Rate: i.Rate,
-                    Unit: i.Unit,
-                    BaseUnitQuantity: i.Quantity,
-                    GST: i.GST,
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.Amount,
+            const arr = {
+                Item: i.Item,
+                Quantity: i.Quantity,
+                MRP: i.MRP,
+                ReferenceRate: i.Rate,
+                Rate: i.Rate,
+                Unit: i.Unit,
+                BaseUnitQuantity: i.Quantity,
+                GST: i.GST,
+                BasicAmount: basicAmt.toFixed(2),
+                GSTAmount: cgstAmt.toFixed(2),
+                Amount: i.Amount,
 
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
-                    IGST: 0,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
+                IGSTPercentage: 0,
 
-                    BatchDate: i.BatchDate,
-                    BatchCode: i.BatchCode,
-                    DiscountType: "0",
-                    Discount: "0.00",
-                    DiscountAmount: "0.00",
-                    TaxType: "GST",
+                BatchDate: i.BatchDate,
+                BatchCode: i.BatchCode,
+                DiscountType: "0",
+                Discount: "0.00",
+                DiscountAmount: "0.00",
+                TaxType: "GST",
 
+            }
+            let isfound = itemArr.find(ind => {
+                return ind.Item === i.Item
+            })
+            
+            if (!(isfound === undefined)) {
+                let isdubli = ((i.Rate === isfound.Rate) && (i.BatchDate === isfound.BatchDate) && (i.BatchCode === isfound.BatchCode) && (i.Unit === isfound.Unit))
+                if ((i.Quantity > 0)) {
+                    if (!isdubli) {
+                        itemArr.push(arr)
+
+                    } else {
+                        isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
+                    }
                 }
+            } else {
                 itemArr.push(arr)
-            };
+            }
+
         })
 
 
@@ -528,6 +546,16 @@ const GRNAdd = (props) => {
                 Type: 4,
                 Status: true,
                 Message: "Please Enter One Item Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
+        if (isvalidMsg.length > 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: isvalidMsg,
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -560,8 +588,8 @@ const GRNAdd = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_ADD} />
                 <div className="page-content" >
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_ADD} />
                     {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
