@@ -99,8 +99,11 @@ function* get_PRODUCTION_GerFunc({ filters }) {
       debugger
       index.Item = index.Item.Name;
       var date = convertDatefunc(index.ProductionDate)
+      var batchdate = convertDatefunc(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
+      var batchtime = convertTimefunc(index.CreatedOn)
       index.ProductionDate = (`${date} ${time}`)
+      index.BatchDate = (`${batchdate} `)
 
       return index;
     });

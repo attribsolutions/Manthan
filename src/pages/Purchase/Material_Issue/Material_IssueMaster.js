@@ -350,18 +350,31 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index) => {
+        // GoButton.map((index) => {
+        //     let Stock = index.BatchesData.map((i) => {
+        //         return i.BaseUnitQuantity
+        //     })       
+        // console.log(Stock)
+
+        // })
+
+        // var OrderQty = parseFloat(stockQty)
+        // console.log(Stock)
+
+
         index.Qty = event.target.value
     };
 
 
 
     const SaveHandler = (event) => {
+        debugger
         const validMsg = []
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
             let Stock = index.BatchesData.map((i) => {
-                return i.ObatchwiseQuantity
+                return i.BaseUnitQuantity
             })
             var TotalStock = 0;
             Stock.forEach(x => {
