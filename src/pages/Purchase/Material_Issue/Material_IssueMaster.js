@@ -155,6 +155,17 @@ const MaterialIssueMaster = (props) => {
                     i.hasValid.LotQuantity.valid = true;
                     return i
                 })
+
+                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+                const jsonBody = JSON.stringify({
+                    WorkOrder: id,
+                    Item: Item,
+                    Company: userCompany(),
+                    Party: userParty(),
+                    Quantity: parseInt(EstimatedOutputQty)
+                });
+
+                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
             }
         }
     }, [])
