@@ -51,7 +51,7 @@ const GRNList = () => {
 
     supplierOptions.unshift({
         value: "",
-        label: "Select All"
+        label: " All"
     });
 
     const downList = useMemo(() => {
