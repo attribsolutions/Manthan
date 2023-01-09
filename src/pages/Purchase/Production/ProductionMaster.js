@@ -218,7 +218,7 @@ const ProductionMaster = (props) => {
                 ProductionDate: values.ProductionDate,
                 EstimatedQuantity: values.EstimatedQuantity,
                 NumberOfLot: values.NumberOfLot,
-                ActualQuantity: parseFloat(values.ActualQuantity).toFixed(2),
+                ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
                 StoreLocation: "aa",
@@ -358,25 +358,8 @@ const ProductionMaster = (props) => {
                                         </Col>
                                     </FormGroup>
 
-                                    <FormGroup className=" row " >
-                                        <Label className="col-sm-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Remark}</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                type="text"
-                                                name="Remark"
-                                                value={values.Remark}
-                                                placeholder="Enter Remark"
-                                                autoComplete="off"
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Remark.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Remark}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
+                                  <br></br>
+                                  <br></br>
 
                                     <FormGroup className=" row" >
                                         <Label className="col-md-4 p-2"
@@ -418,6 +401,27 @@ const ProductionMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
+                                <FormGroup className=" row " >
+                                        <Label className="col-sm-4 p-2"
+                                            style={{ width: "170px" }}>{fieldLabel.Remark}</Label>
+                                        <Col sm="3">
+                                            <Input
+                                                type="text"
+                                                name="Remark"
+                                                value={values.Remark}
+                                                placeholder="Enter Remark"
+                                                autoComplete="off"
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Remark.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Remark}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+
                             </Row>
                         </div>
 
