@@ -86,8 +86,6 @@ const ProductionList = () => {
     }, [userAccess])
 
     const goButtonHandler = (onload = false) => {
-        debugger
-
         let FromDate
         let ToDate
         if (onload) {

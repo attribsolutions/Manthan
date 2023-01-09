@@ -116,7 +116,7 @@ const PurchaseListPage = (props) => {
             downList.push(listObj)
             listObj = {}
         })
-        debugger
+        
         dispatch(BreadcrumbDownBtndata(downList))
 
     }, [props.reducers.tableList])
