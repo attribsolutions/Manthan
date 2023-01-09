@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
@@ -110,15 +111,22 @@ function* GetWorkOrderGenFunc({ filters }) {
 
 // Work Order edit List page
 function* editWorkOrderGenFunc({ id1, pageMode }) {
-  
+
   yield put(SpinnerState(true))
   try {
-    
+
     let response = yield call(WorkOrder_edit_Api, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
     yield put(SpinnerState(false))
-    yield put(editWorkOrderListSuccess(response));
+   
+    if (response.StatusCode === 204) yield put(AlertState({
+      Type: 4,
+      Status: true, Message:response.Message,
+    }));
+    else{
+      yield put(editWorkOrderListSuccess(response));
+    }
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
