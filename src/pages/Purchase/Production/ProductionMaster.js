@@ -14,7 +14,6 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     comAddPageFieldFunc,
@@ -25,7 +24,6 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
-    getProduction_Mode2_Success,
     getUnitIDForProdunction,
     getUnitIDForProdunctionSuccess,
     post_Production,
@@ -38,7 +36,7 @@ import * as url from "../../../routes/route_url";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const ProductionMaster = (props) => {
-    debugger
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -76,8 +74,6 @@ const ProductionMaster = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
-
-    console.log("UnitDropdown", UnitDropdown)
 
     useEffect(() => {
         dispatch(getUnitIDForProdunctionSuccess([]))
@@ -119,6 +115,7 @@ const ProductionMaster = (props) => {
                 i.values.NumberOfLot = MaterialProductionaData[0].NumberOfLot;      //NumberOfLot===NumberOfLot
 
                 i.hasValid.id.valid = true
+                i.hasValid.ActualQuantity.valid = true
                 i.hasValid.ProductionDate.valid = true
                 i.hasValid.ItemName.valid = true
                 i.hasValid.EstimatedQuantity.valid = true
@@ -209,7 +206,7 @@ const ProductionMaster = (props) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
-            const jsonBody = JSON.stringify({ 
+            const jsonBody = JSON.stringify({
                 ProductionMaterialIssue: [
                     {
                         MaterialIssue: values.id,
@@ -243,7 +240,7 @@ const ProductionMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess}  pageId={pageId.PRODUCTION_MASTER}/>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRODUCTION_MASTER} />
 
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
 
@@ -293,6 +290,11 @@ const ProductionMaster = (props) => {
                                                 }}
                                             />
                                         </Col>
+                                        <div className="col col-1">
+                                            <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
+                                                {values.UnitName.label}
+                                            </Label>
+                                        </div>
                                     </FormGroup>
 
                                     <FormGroup className="row  " >
@@ -358,8 +360,8 @@ const ProductionMaster = (props) => {
                                         </Col>
                                     </FormGroup>
 
-                                  <br></br>
-                                  <br></br>
+                                    <br></br>
+                                    <br></br>
 
                                     <FormGroup className=" row" >
                                         <Label className="col-md-4 p-2"
@@ -403,24 +405,24 @@ const ProductionMaster = (props) => {
                                 </Col>
 
                                 <FormGroup className=" row " >
-                                        <Label className="col-sm-4 p-2"
-                                            style={{ width: "168px" }}>{fieldLabel.Remark}</Label>
-                                        <Col md="3">
-                                            <Input
-                                                type="text"
-                                                name="Remark"
-                                                value={values.Remark}
-                                                placeholder="Enter Remark"
-                                                autoComplete="off"
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Remark.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Remark}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "168px" }}>{fieldLabel.Remark}</Label>
+                                    <Col md="3">
+                                        <Input
+                                            type="text"
+                                            name="Remark"
+                                            value={values.Remark}
+                                            placeholder="Enter Remark"
+                                            autoComplete="off"
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.Remark.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Remark}</small></span>
+                                        )}
+                                    </Col>
+                                </FormGroup>
 
                             </Row>
                         </div>
