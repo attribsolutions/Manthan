@@ -615,7 +615,7 @@ const MaterialIssueMaster = (props) => {
                                                 />
 
                                                 <span className="text-danger">Note* :
-                                                    <span className="text-black">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
+                                                    <span className="text-secondary">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
                                                     </span></span>
 
 
@@ -639,7 +639,7 @@ const MaterialIssueMaster = (props) => {
 
                                                 />
                                                 <span className="text-danger">Note* :
-                                                    <span className="text-black">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
+                                                    <span className="text-secondary">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
                                                     </span></span>
                                             </Col>
                                             <div className="col col-1">
