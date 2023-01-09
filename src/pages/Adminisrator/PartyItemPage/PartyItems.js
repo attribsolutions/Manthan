@@ -242,7 +242,7 @@ const PartyItems = (props) => {
 
     supplierOptions.unshift({
         value: "",
-        label: "Select All"
+        label: " All"
     });
 
     const tableColumns = [
