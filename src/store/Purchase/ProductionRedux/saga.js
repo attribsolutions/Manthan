@@ -26,6 +26,7 @@ import {
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
+import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function* postProductionGenFunc({ data }) {
   yield put(SpinnerState(true));
@@ -95,7 +96,11 @@ function* get_PRODUCTION_GerFunc({ filters }) {
     // })
 
     const newList = response.Data.map((index) => {
+      debugger
       index.Item = index.Item.Name;
+      var date = convertDatefunc(index.ProductionDate)
+      var time = convertTimefunc(index.CreatedOn)
+      index.ProductionDate = (`${date} ${time}`)
       return index;
     });
     yield put(SpinnerState(false));
