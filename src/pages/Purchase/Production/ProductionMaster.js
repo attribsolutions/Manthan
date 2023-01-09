@@ -55,7 +55,7 @@ const ProductionMaster = (props) => {
         PrintedBatchCode: "",
         BestBefore: "",
         Remark: "",
-        Item: "",
+        ItemName: "",
         UnitName: ""
     }
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -106,7 +106,7 @@ const ProductionMaster = (props) => {
 
         if (mode2Data.pageMode === "Mode2") {
             setState(i => {
-                i.values.Item = {
+                i.values.ItemName = {
                     label: MaterialProductionaData[0].ItemName,
                     value: MaterialProductionaData[0].Item
                 }
@@ -120,7 +120,7 @@ const ProductionMaster = (props) => {
 
                 i.hasValid.id.valid = true
                 i.hasValid.ProductionDate.valid = true
-                i.hasValid.Item.valid = true
+                i.hasValid.ItemName.valid = true
                 i.hasValid.EstimatedQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i
@@ -233,7 +233,7 @@ const ProductionMaster = (props) => {
                 Unit: values.UnitName.value,
                 MRP: " ",
                 Rate: 55,
-                Item: values.Item.value,
+                Item: values.ItemName.value,
             });
             dispatch(post_Production(jsonBody));
         }
@@ -341,12 +341,12 @@ const ProductionMaster = (props) => {
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Item}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.ItemName}</Label>
                                         <Col md="7">
                                             <Select
                                                 isDisabled={true}
                                                 name="Name"
-                                                value={values.Item}
+                                                value={values.ItemName}
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
