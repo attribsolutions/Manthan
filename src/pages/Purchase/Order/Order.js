@@ -872,7 +872,7 @@ const Order = (props) => {
                             <div className="col col-6" >
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
-                                        style={{ width: "115px" }}>Order Type</Label>
+                                        style={{ width: "115px" }}>PO Type</Label>
                                     <div className="col col-6 ">
                                         <Select
                                             value={orderTypeSelect}
