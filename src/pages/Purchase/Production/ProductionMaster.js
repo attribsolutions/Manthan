@@ -404,8 +404,8 @@ const ProductionMaster = (props) => {
 
                                 <FormGroup className=" row " >
                                         <Label className="col-sm-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Remark}</Label>
-                                        <Col sm="3">
+                                            style={{ width: "168px" }}>{fieldLabel.Remark}</Label>
+                                        <Col md="3">
                                             <Input
                                                 type="text"
                                                 name="Remark"
