@@ -94,14 +94,17 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
+  
         let val = event.target.value
-        const result = /^[+-]?\d+(\.\d+)?$/.test(val);
+        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if (result) {
             setQuantity(val);
         }
+        else if (val === "") {
+            setQuantity(val)
+        }
         else {
-            event.target.value = val
-            setQuantity(val);
+            event.target.value = ""
         }
     };
     return (

@@ -15,7 +15,17 @@ function BOMTable(props) {
   };
 
   const handleChange = (event, info) => {
-    info.Quantity = event.target.value
+    let val = event.target.value
+    const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
+    if (result) {
+      info.Quantity = event.target.value;
+    }
+    else if (val === "") {
+      info.Quantity =""
+    }
+    else {
+      event.target.value= ""
+    }
   };
 
   const tableRows = props.tableData.map((info, key) => {
