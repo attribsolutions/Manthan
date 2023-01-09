@@ -483,7 +483,7 @@ const GRNAdd = (props) => {
 
 
     const saveHandeller = (e, values) => {
-        debugger
+        // debugger
         const itemArr = []
         const isvalidMsg = [];
 
@@ -499,7 +499,7 @@ const GRNAdd = (props) => {
                 ReferenceRate: i.Rate,
                 Rate: i.Rate,
                 Unit: i.Unit,
-                BaseUnitQuantity: i.Quantity,
+                BaseUnitQuantity: i.BaseUnitQuantity,
                 GST: i.GST,
                 BasicAmount: basicAmt.toFixed(2),
                 GSTAmount: cgstAmt.toFixed(2),
@@ -523,7 +523,7 @@ const GRNAdd = (props) => {
             let isfound = itemArr.find(ind => {
                 return ind.Item === i.Item
             })
-            
+
             if (!(isfound === undefined)) {
                 let isdubli = ((i.Rate === isfound.Rate) && (i.BatchDate === isfound.BatchDate) && (i.BatchCode === isfound.BatchCode) && (i.Unit === isfound.Unit))
                 if ((i.Quantity > 0)) {
@@ -534,7 +534,7 @@ const GRNAdd = (props) => {
                         isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
                     }
                 }
-            } else {
+            } else if ((i.Quantity > 0)) {
                 itemArr.push(arr)
             }
 
@@ -589,7 +589,7 @@ const GRNAdd = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" >
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_ADD} />
+                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_ADD} />
                     {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}

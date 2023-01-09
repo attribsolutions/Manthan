@@ -486,7 +486,7 @@ const WorkOrder = (props) => {
                                                         }
                                                         disabled={true}
                                                         className="text-end"
-                                                        placeholder="Please Enter Stock Quantity"
+                                                        // placeholder="Please Enter Stock Quantity"
                                                     />
                                                 </div>
                                                 <div className="col col-2">
@@ -504,12 +504,12 @@ const WorkOrder = (props) => {
                                                 </Label>
                                                 <div className="col-6">
                                                     <Input
-                                                        value={`${pageMode === "edit" ?
+                                                        value={pageMode === "edit" ?
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
-                                                                itemselect.EstimatedOutputQty : ""} ${itemselect.value > 0 ? '/Lot' : ''}`}
+                                                                itemselect.EstimatedOutputQty : ""} 
                                                         disabled={true}
                                                         className="text-end"
-                                                        placeholder="Please Enter Estimated Output Qty"
+                                                        // placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
                                                 </div>
@@ -555,7 +555,7 @@ const WorkOrder = (props) => {
                                                     style={{ width: "150px" }}>{fieldLabel.Quantity}</Label>
                                                 <div className="col col-6 ">
                                                     <Input
-                                                      style={{ textAlign: "right" }}
+                                                        style={{ textAlign: "right" }}
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
                                                         type="text"

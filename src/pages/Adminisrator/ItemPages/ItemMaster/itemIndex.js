@@ -374,13 +374,13 @@ const ItemsMaster = (props) => {
         }
         setpageRefresh(!pageRefresh)
 
-            if (baseUnitTableData[0]) {
-                setBaseUnitTableData([{
-                    Conversion: '1',
-                    Unit: { value: event.value, label: event.label },
-                }])
-            }
-       
+        if (baseUnitTableData[0]) {
+            setBaseUnitTableData([{
+                Conversion: '1',
+                Unit: { value: event.value, label: event.label },
+            }])
+        }
+
     }
 
     function Common_Text_INPUT_Validation(value, type, key) {
@@ -643,12 +643,12 @@ const ItemsMaster = (props) => {
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        var x = document.getElementById("itemtag");
+        if (event.target == "") {
+            var x = document.getElementById("itemtag");
+            x.style.display = "none";
         }
     }
-
-
 
     let data1 = BrandTagList.map((index) => {
         return index.dta
@@ -668,20 +668,19 @@ const ItemsMaster = (props) => {
         );
 
         setSearchResults(results);
-        if (searchtext == "") {
-            di = `${x.style.display = "none"}`
-        }
-        setSearchResults(results); 
-
         var x = document.getElementById("itemtag");
-        document.addEventListener('click', function handleClickOutsideBox(event) {          
+        document.addEventListener('click', function handleClickOutsideBox(event) {
             if (!x.contains(event.target)) {
-              x.style.display = 'none';
+                x.style.display = 'none';
             }
-          }); 
+        });
         x.style.display = "block";
         var di = "100Px"
-        if (results.length == 0) {
+
+        if (event.target.value== "") {
+            di = `${x.style.display = "none"}`
+        }
+        else if (results.length == 0) {
             di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {
@@ -690,7 +689,7 @@ const ItemsMaster = (props) => {
             di = "300Px"
         } else if (results.length < 2) {
             di = "50Px"
-        } 
+        }
         x.style.height = di
 
     };
@@ -706,14 +705,18 @@ const ItemsMaster = (props) => {
         // x.style.display = "block";
         setSearchResults1(results);
         var x = document.getElementById("brandtag");
-        document.addEventListener('click', function handleClickOutsideBox(event) {          
+        document.addEventListener('click', function handleClickOutsideBox(event) {
             if (!x.contains(event.target)) {
-              x.style.display = 'none';
+                x.style.display = 'none';
             }
-          });
+        });
         x.style.display = "block";
         var di = "100Px"
-        if (results.length == 0){
+
+        if (event.target.value== "") {
+            di = `${x.style.display = "none"}`
+        }
+        else if (results.length == 0) {
             di = `${x.style.display = "none"}`
         }
         else if (results.length < 2) {

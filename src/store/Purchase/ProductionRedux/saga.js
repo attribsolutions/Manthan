@@ -101,6 +101,7 @@ function* get_PRODUCTION_GerFunc({ filters }) {
       var date = convertDatefunc(index.ProductionDate)
       var time = convertTimefunc(index.CreatedOn)
       index.ProductionDate = (`${date} ${time}`)
+
       return index;
     });
     yield put(SpinnerState(false));
