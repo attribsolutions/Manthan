@@ -180,7 +180,7 @@ const GRNAdd = (props) => {
             // sort: true,
             formatter: (value, row) => (
                 <div className=" mt-2">
-                    <span>{value}</span>
+                    <span key={row.id}>{value}</span>
                 </div>
             ),
         },
@@ -191,7 +191,7 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 return (
                     <div className="text-end">
-                        <samp className="font-asian">{value}</samp>
+                        <samp key={row.id} className="font-asian">{value}</samp>
                     </div>
                 )
             },
@@ -210,18 +210,18 @@ const GRNAdd = (props) => {
                 return (
                     <span >
                         <Input type="text"
-                            id={`Quantity${k}`}
+                            id={`Quantity${row.id}`}
                             defaultValue={row.Quantity}
                             className="text-end"
                             autoComplete="off"
-                            key={row.Quantity}
+                            key={row.id}
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
                                 } else {
-                                    document.getElementById(`Quantity${k}`).value = row.Quantity
+                                    document.getElementById(`Quantity${row.id}`).value = row.Quantity
                                 }
                             }}
                             onKeyDown={(e) => handleKeyDown(e, grnItemList)}
@@ -248,6 +248,7 @@ const GRNAdd = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
+                        key={row.id}
                         defaultValue={{ value: row.Unit, label: row.UnitName }}
                         options={
                             row.UnitDetails.map(i => ({
@@ -281,6 +282,7 @@ const GRNAdd = (props) => {
                 return (
                     <span className="text-right" >
                         <Input
+                            key={row.id}
                             type="text"
                             id={`Ratey${k}`}
                             className=" text-end"
@@ -330,9 +332,9 @@ const GRNAdd = (props) => {
             dataField: "",
             // sort: true,
             formatter: (value, row, k) => (
-                <div className="row mt-1">
+                <div className="row mt-1" >
                     <div className="text-end ">
-                        <samp id={`abc${row.id}`}>{row.Amount}</samp>
+                        <samp key={row.id} id={`abc${row.id}`}>{row.Amount}</samp>
                     </div>
                 </div>
             ),
@@ -346,11 +348,12 @@ const GRNAdd = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 try {
-                    document.getElementById(`Batch${k}`).value = row.BatchCode
+                    document.getElementById(`Batch${row.id}`).value = row.BatchCode
                 } catch (e) { }
                 return (
                     <Input type="text"
-                        id={`Batch${k}`}
+                        key={row.id}
+                        id={`Batch${row.id}`}
                         placeholder="Batch Code..."
                         className="text-end "
                         defaultValue={row.BatchCode}
@@ -520,14 +523,19 @@ const GRNAdd = (props) => {
                 TaxType: "GST",
 
             }
-            let isfound = itemArr.find(ind => {
+            let isfound = itemArr.filter(ind => {
                 return ind.Item === i.Item
             })
 
-            if (!(isfound === undefined)) {
-                let isdubli = ((i.Rate === isfound.Rate) && (i.BatchDate === isfound.BatchDate) && (i.BatchCode === isfound.BatchCode) && (i.Unit === isfound.Unit))
+            if (isfound.length > 0) {
+                let dubli = isfound.filter(ele => {
+                    let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
+                    debugger
+                    return condition
+                })
+                debugger
                 if ((i.Quantity > 0)) {
-                    if (!isdubli) {
+                    if (dubli.length === 0) {
                         itemArr.push(arr)
 
                     } else {

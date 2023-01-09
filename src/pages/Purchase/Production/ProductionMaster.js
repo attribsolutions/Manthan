@@ -52,10 +52,10 @@ const ProductionMaster = (props) => {
         NumberOfLot: "",
         EstimatedQuantity: "",
         ActualQuantity: "",
-        SupplierBatchCode: "",
+        PrintedBatchCode: "",
         BestBefore: "",
         Remark: "",
-        Item: "",
+        ItemName: "",
         UnitName: ""
     }
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -106,7 +106,7 @@ const ProductionMaster = (props) => {
 
         if (mode2Data.pageMode === "Mode2") {
             setState(i => {
-                i.values.Item = {
+                i.values.ItemName = {
                     label: MaterialProductionaData[0].ItemName,
                     value: MaterialProductionaData[0].Item
                 }
@@ -120,12 +120,12 @@ const ProductionMaster = (props) => {
 
                 i.hasValid.id.valid = true
                 i.hasValid.ProductionDate.valid = true
-                i.hasValid.Item.valid = true
+                i.hasValid.ItemName.valid = true
                 i.hasValid.EstimatedQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i
             })
-            debugger
+            // debugger
             const jsonBody = JSON.stringify({
                 Item: MaterialProductionaData[0].Item
             });
@@ -222,7 +222,7 @@ const ProductionMaster = (props) => {
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
                 StoreLocation: "aa",
-                PrintedBatchCode: values.SupplierBatchCode,
+                PrintedBatchCode: values.PrintedBatchCode,
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
                 CreatedBy: 1,
@@ -233,7 +233,7 @@ const ProductionMaster = (props) => {
                 Unit: values.UnitName.value,
                 MRP: " ",
                 Rate: 55,
-                Item: values.Item.value,
+                Item: values.ItemName.value,
             });
             dispatch(post_Production(jsonBody));
         }
@@ -341,12 +341,12 @@ const ProductionMaster = (props) => {
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Item}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.ItemName}</Label>
                                         <Col md="7">
                                             <Select
                                                 isDisabled={true}
                                                 name="Name"
-                                                value={values.Item}
+                                                value={values.ItemName}
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -383,20 +383,20 @@ const ProductionMaster = (props) => {
 
                                     <FormGroup className=" row  " >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.SupplierBatchCode}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.PrintedBatchCode}</Label>
                                         <Col md="7">
                                             <Input
                                                 type="text"
-                                                name="SupplierBatchCode"
-                                                value={values.SupplierBatchCode}
-                                                placeholder="Enter SupplierBatchCode"
+                                                name="PrintedBatchCode"
+                                                value={values.PrintedBatchCode}
+                                                placeholder="Enter PrintedBatchCode"
                                                 autoComplete="off"
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.SupplierBatchCode.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.SupplierBatchCode}</small></span>
+                                            {isError.PrintedBatchCode.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.PrintedBatchCode}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
