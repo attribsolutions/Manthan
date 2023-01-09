@@ -486,7 +486,7 @@ const WorkOrder = (props) => {
                                                         }
                                                         disabled={true}
                                                         className="text-end"
-                                                        placeholder="Please Enter Stock Quantity"
+                                                        // placeholder="Please Enter Stock Quantity"
                                                     />
                                                 </div>
                                                 <div className="col col-2">
@@ -509,7 +509,7 @@ const WorkOrder = (props) => {
                                                                 itemselect.EstimatedOutputQty : ""} 
                                                         disabled={true}
                                                         className="text-end"
-                                                        placeholder="Please Enter Estimated Output Qty"
+                                                        // placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
                                                 </div>
