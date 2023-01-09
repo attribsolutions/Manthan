@@ -12,7 +12,7 @@ import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/rout
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, userCompany, userParty } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import {
     BOMlistfilters,
@@ -96,6 +96,7 @@ const BOMList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Company: userCompany(),
+            Party:userParty(),
         });
         dispatch(getBOMListPage(jsonBody));
     }
