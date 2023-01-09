@@ -48,7 +48,7 @@ const MaterialIssueMaster = (props) => {
     const history = useHistory()
 
     const fileds = {
-        id: "",
+        // id: "",
         MaterialIssueDate: currentDate,
         ItemName: "",
         NumberOfLot: "",
@@ -146,7 +146,7 @@ const MaterialIssueMaster = (props) => {
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item };
+                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
                     i.hasValid.ItemName.valid = true;
@@ -294,7 +294,13 @@ const MaterialIssueMaster = (props) => {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselectonchange(e)
         setState((i) => {
-            i.values.ItemName = { value: e.value, label: e.label, Item: e.Item };
+            i.values.ItemName = {
+                value: e.value,
+                label: e.label,
+                Item: e.Item,
+                NoLot: e.NumberOfLot,
+                lotQty: e.Quantity
+            };
             i.values.NumberOfLot = e.NumberOfLot;
             i.values.LotQuantity = e.Quantity;
             i.hasValid.NumberOfLot.valid = true;
@@ -309,16 +315,17 @@ const MaterialIssueMaster = (props) => {
 
 
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        const value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
+        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
             Itemselectonchange.Quantity :
             Itemselect.Quantity, Number(event.target.value)));
         event.target.value = value1
         if (event.target.value === "NaN") {
-            event.target.value = 0
+            value1 = 0
         }
-        onChangeText({ event, state, setState });
+        // onChangeText({ event, state, setState });
         setState((i) => {
-            i.hasValid.NumberOfLot.valid = true;
+            i.values.LotQuantity = value1
+            // i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
             return i
         })
@@ -326,17 +333,18 @@ const MaterialIssueMaster = (props) => {
 
     function NumberOfLotchange(event) {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        const value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
+        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
             Itemselectonchange.NumberOfLot
             : Itemselect.NumberOfLot, Number(event.target.value)));
         event.target.value = value1
         if ((event.target.value === "NaN")) {
-            event.target.value = 0
+            value1 = 0
         }
-        onChangeText({ event, state, setState });
+        // onChangeText({ event, state, setState });
         setState((i) => {
+            i.values.NumberOfLot = value1
             i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
+            // i.hasValid.LotQuantity.valid = true;
             return i
         })
     }
@@ -605,9 +613,12 @@ const MaterialIssueMaster = (props) => {
                                                     autoComplete='off'
                                                     onChange={NumberOfLotchange}
                                                 />
-                                                {isError.NumberOfLot.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.NumberOfLot}</span>
-                                                )}
+
+                                                <span className="text-danger">Note* :
+                                                    <span className="text-black">{`${fieldLabel.NumberOfLot}is less than (${values.ItemName.NoLot})`}
+                                                    </span></span>
+
+
                                             </Col>
                                         </FormGroup>
                                     </Col>
@@ -627,9 +638,9 @@ const MaterialIssueMaster = (props) => {
                                                     onChange={Quantitychange}
 
                                                 />
-                                                {isError.LotQuantity.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.LotQuantity}</span>
-                                                )}
+                                                <span className="text-danger">Note* :
+                                                    <span className="text-black">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
+                                                    </span></span>
                                             </Col>
                                             <div className="col col-1">
                                                 <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
