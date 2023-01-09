@@ -60,7 +60,7 @@ const PriceList = () => {
             reducers={reducers}
             MasterModal={PriceMaster}
             masterPath={PRICE}
-            ButtonMsgLable={"Price List"}
+            ButtonMsgLable={"Price"}
             deleteName={"Name"}
           />
           : null

@@ -63,7 +63,7 @@ const PartyItemsList = (props) => {
             reducers={reducers}
             MasterModal={PartyItems}
             masterPath={url.PARTYITEM_LIST}
-            ButtonMsgLable={"Group"}
+            ButtonMsgLable={"Party Items"}
             deleteName={"Name"}
 
           />
