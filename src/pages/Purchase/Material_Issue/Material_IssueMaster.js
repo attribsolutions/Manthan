@@ -360,7 +360,6 @@ const MaterialIssueMaster = (props) => {
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
-            debugger
             let Stock = index.BatchesData.map((i) => {
                 return i.ObatchwiseQuantity
             })
@@ -398,8 +397,7 @@ const MaterialIssueMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
-
+            
             if (validMsg.length > 0) {
                 dispatch(AlertState({
                     Type: 4,
@@ -442,8 +440,9 @@ const MaterialIssueMaster = (props) => {
             text: "Item Name",
             dataField: "ItemName",
             style: (cellContent, user, cell, row, rowIndex, colIndex) => {
+                debugger
                 let Stock = user.BatchesData.map((index) => {
-                    return index.ObatchwiseQuantity
+                    return index.BaseUnitQuantity
                 })
                 var TotalStock = 0;
                 Stock.forEach(x => {
