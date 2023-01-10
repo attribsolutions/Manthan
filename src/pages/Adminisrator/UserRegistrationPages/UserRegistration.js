@@ -251,8 +251,8 @@ const AddUser = (props) => {
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
-      password: values.password,
-      AdminPassword: values.password,
+      password: pageMode === 'edit' ? EditData.AdminPassword : values.password,
+      AdminPassword: pageMode === 'edit' ? EditData.AdminPassword : values.password,
       Employee: EmployeeSelect.value,
       isActive: values.isActive,
       isSendOTP: values.isSendOTP,
