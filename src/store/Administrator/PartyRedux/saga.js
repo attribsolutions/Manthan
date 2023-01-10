@@ -45,6 +45,7 @@ function* Get_Party_GenratorFunction() {
     }
 
     const data1 = response.Data.map((index) => {
+
       // index["StateId"] = index.State.id;
       index["State"] = index.State.Name;
       // index["DistrictId"] = index.District.id;
@@ -54,7 +55,8 @@ function* Get_Party_GenratorFunction() {
       // index["PartyTypeId"] = index.PartyType.id;
       index['PartyTypeName'] = index.PartyType.Name;
       // index["PriceListId"] = index.PriceList.id;
-      index["PriceListName"] = index.PriceList.Name;
+      if (!index.PriceList) { index.PriceList = '' }
+      else { index["PriceListName"] = index.PriceList.Name; }
       index["PartyAddress"] = address(index);
 
       return index;
@@ -67,7 +69,7 @@ function* Get_Party_GenratorFunction() {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error for Get Party  ",
     }));
   }
 }
@@ -103,9 +105,9 @@ function* Delete_Party_GenratorFunction({ id }) {
 }
 
 function* Edit_Party_GenratorFunction({ id, pageMode }) {
-  
+
   try {
-    
+
     const response = yield call(Party_Master_Edit_API, id);
     response.pageMode = pageMode
     yield put(editPartyIDSuccess(response));

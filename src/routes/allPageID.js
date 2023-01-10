@@ -114,5 +114,6 @@ export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
 export const PRODUCTION_ADD_Mode_2 = 83
 
-
+export const SALE_ORDER = 117
+export const SALE_ORDER_lIST = 118
 

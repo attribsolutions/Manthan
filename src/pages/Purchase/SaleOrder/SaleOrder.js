@@ -26,8 +26,8 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 import { ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -35,8 +35,8 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondit
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import OrderPageTermsTable from "./OrderPageTermsTable";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import OrderPageTermsTable from "../Order/OrderPageTermsTable";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import * as url from "../../../routes/route_url";
@@ -47,14 +47,17 @@ import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 let description = ''
 let editVal = {}
 
-const Order = (props) => {
+const SaleOrder = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const fileds = {
         id: "",
-        Name: "",
+        SaleOrderDate: "",
+        PartyName: "",
+        Description: "",
+        DeliveryDate: "",
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
@@ -79,8 +82,6 @@ const Order = (props) => {
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
 
-
-
     const {
         goBtnOrderdata,
         postMsg,
@@ -89,7 +90,7 @@ const Order = (props) => {
         orderType,
         updateMsg,
         supplierAddress = [],
-
+        pageField
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         supplier: state.SupplierReducer.supplier,
@@ -100,8 +101,6 @@ const Order = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -123,6 +122,17 @@ const Order = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     useEffect(() => {
 
@@ -193,6 +203,9 @@ const Order = (props) => {
 
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess(null))
+        const page_Id = pageId.BIllOf_MATERIALS
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
         dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
@@ -228,7 +241,7 @@ const Order = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: ORDER_lIST,
+                RedirectPath: url.SALE_ORDER_lIST,
             }))
 
         } else if (postMsg.Status === true) {
@@ -250,7 +263,7 @@ const Order = (props) => {
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             description = ''
             history.push({
-                pathname: ORDER_lIST,
+                pathname: url.SALE_ORDER_lIST,
                 // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
@@ -266,7 +279,6 @@ const Order = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
@@ -275,7 +287,7 @@ const Order = (props) => {
         else {
             row["Rate"] = val
         }
-debugger
+
         row["Amount"] = Amount(row)
 
         let sum = 0
@@ -293,17 +305,13 @@ debugger
     };
 
     function assignItem_onClick() {
+        debugger
         setisOpen_TermsModal(true)
     };
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
-    }));
-
-    const orderTypeOptions = orderType.map((i) => ({
-        value: i.id,
-        label: i.Name,
     }));
 
     const pagesListColumns = [
@@ -324,23 +332,6 @@ debugger
                         </div>
                     </div>
                 )
-            },
-        },
-
-        {//------------- Stock Quantity column ----------------------------------
-            text: "Stock Qty",
-            dataField: "StockQuantity",
-            // sort: true,
-            formatter: (value, row, k) => {
-
-                return (
-                    <div className="text-end">
-                        <span>{row.StockQuantity}</span>
-                    </div>
-                )
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
             },
         },
 
@@ -564,7 +555,7 @@ debugger
     const saveHandeller = () => {
         const division = userParty();
         const supplier = supplierSelect.value;
-
+debugger
         const validMsg = []
         const itemArr = []
 
@@ -718,7 +709,7 @@ debugger
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} />
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.SALE_ORDER} />
                 <div className="page-content">
 
                     {/* <Breadcrumb
@@ -751,11 +742,10 @@ debugger
                                 </FormGroup>
                             </Col>
 
-
                             <Col sm="6">
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>Party Name</Label>
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
@@ -817,70 +807,6 @@ debugger
                                         />
                                     </div>
 
-                                </FormGroup>
-                            </div >
-                        </div>
-                        <div className="row  ">
-                            <div className="col col-6">
-                                <FormGroup className="row  " >
-                                    <Label className=" p-2"
-                                        style={{ width: "115px" }}>Billing Address</Label>
-                                    <div className="col col-6">
-                                        <Select
-                                            value={billAddr}
-                                            classNamePrefix="select2-Customer"
-
-                                            options={supplierAddress}
-                                            styles={{
-                                                control: base => ({
-                                                    ...base,
-                                                    border: 'non',
-                                                    // backgroundColor: ""
-                                                })
-                                            }}
-                                            onChange={(e) => { setbillAddr(e) }}
-                                        />
-                                    </div>
-                                </FormGroup>
-                            </div >
-
-                            <div className="col col-6">
-                                <FormGroup className=" row " >
-                                    <Label className=" p-2"
-                                        style={{ width: "130px" }}>Shipping Address</Label>
-                                    <div className="col col-6">
-                                        <Select
-                                            value={shippAddr}
-                                            classNamePrefix="select2-Customer"
-                                            // isDisabled={pageMode === "edit" ? true : false}
-                                            styles={{
-                                                control: base => ({
-                                                    ...base,
-                                                    border: 'non',
-                                                    // backgroundColor: ""
-                                                })
-                                            }}
-                                            options={supplierAddress}
-                                            onChange={(e) => { setshippAddr(e) }}
-                                        />
-                                    </div>
-                                </FormGroup>
-                            </div >
-                        </div>
-
-                        <div className="row" >
-                            <div className="col col-6" >
-                                <FormGroup className=" row  " >
-                                    <Label className=" p-2"
-                                        style={{ width: "115px" }}>PO Type</Label>
-                                    <div className="col col-6 ">
-                                        <Select
-                                            value={orderTypeSelect}
-                                            classNamePrefix="select2-Customer"
-                                            options={orderTypeOptions}
-                                            onChange={(e) => { setorderTypeSelect(e) }}
-                                        />
-                                    </div>
                                 </FormGroup>
                             </div >
                         </div>
@@ -979,11 +905,11 @@ debugger
 
                     </PaginationProvider>
 
-                    {
+                    {/* {
                         orderItemTable.length > 0 ?
                             <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.OrderTermsAndCondition} />
                             : null
-                    }
+                    } */}
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
@@ -1007,7 +933,7 @@ debugger
                         dropMode={mode.dropdownAdd}
                         editValue={{ SupplierName: supplierSelect }}
                         masterPath={url.PARTYITEM}
-                        redirectPath={url.ORDER}
+                        redirectPath={url.SALE_ORDER}
                         isOpenModal={Open_TermsModal_func}
                         pageMode={pageMode}
                     />
@@ -1023,5 +949,5 @@ debugger
 }
 
 
-export default Order
+export default SaleOrder
 

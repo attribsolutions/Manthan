@@ -43,7 +43,7 @@ function* Get_BOMList_GenratorFunction({ filters }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message Work oredr Items ",
+      Status: true, Message: "500 Error Message Work Order Items ",
     }));
   }
 }

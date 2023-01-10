@@ -63,12 +63,12 @@ const RoleAccessAdd = (props) => {
         GO_buttonPageMasterListForRoleAccess_Redux,
         PostMessage_ForRoleAccessList,
         Roles,
-        PartyTypes,
+        partyList,
         userAccess
     } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
-        PartyTypes: state.PartyMasterReducer.partyList,
+        partyList: state.PartyMasterReducer.partyList,
         Roles: state.User_Registration_Reducer.Roles,
         ModuleData: state.Modules.modulesList,
         PageAccess: state.H_Pages.PageAccess,
@@ -204,20 +204,20 @@ const RoleAccessAdd = (props) => {
     ]
 
 
-    const DivisionTypesValues = PartyTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const DivisionTypesValues = partyList.map((i) => ({
+        value: i.id,
+        label: i.Name
     }));
 
-    const Role_DropdownOption = Roles.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const Role_DropdownOption = Roles.map((i) => ({
+        value: i.id,
+        label: i.Name
     }));
 
 
-    const Module_DropdownOption = ModuleData.map((d) => ({
-        value: d.id,
-        label: d.Name,
+    const Module_DropdownOption = ModuleData.map((i) => ({
+        value: i.id,
+        label: i.Name,
     }));
 
     // for Page dropdown
@@ -259,6 +259,16 @@ const RoleAccessAdd = (props) => {
         if (role > 0) {
             dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
             setShowTableOnUI(true)
+        }
+        else if (role === undefined) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select Role",
+                })
+            );
+
         }
     }
 

@@ -252,13 +252,12 @@ const WorkOrder = (props) => {
         StockQty: index.StockQty
     }));
 
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
             ToDate: currentDate,
             Company: userCompany(),
-            party:userParty(),
+            Party:userParty()
         });
         dispatch(getBOMList(jsonBody));
     }, [])
@@ -323,7 +322,7 @@ const WorkOrder = (props) => {
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
             Quantity: parseFloat(values.Quantity),
-            party:userParty(),
+            Party:userParty()
         });
         dispatch(postGoButtonForWorkOrder_Master(jsonBody));
     }
