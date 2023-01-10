@@ -745,7 +745,7 @@ const SaleOrder = (props) => {
                             <Col sm="6">
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>Party Name</Label>
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
