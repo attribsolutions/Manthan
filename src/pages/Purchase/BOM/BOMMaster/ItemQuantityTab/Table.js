@@ -15,16 +15,28 @@ function BOMTable(props) {
   };
 
   const handleChange = (event, info) => {
+    debugger
+    // let val = event.target.value
+    // const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
+    // if (result) {
+    //     setQuantity(val);
+    // }
+    // else if (val === "") {
+    //     setQuantity(val)
+    // }
+    // else {
+    //     event.target.value = ""
+    // }
     let val = event.target.value
     const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
     if (result) {
       info.Quantity = event.target.value;
     }
     else if (val === "") {
-      info.Quantity =""
+      info.Quantity = event.target.value;
     }
     else {
-      event.target.value= ""
+      event.target.value = info.Quantity
     }
   };
 
@@ -36,6 +48,7 @@ function BOMTable(props) {
         <td>
           <div className='text-center' style={{ width: "150px" }}>
             <Input type="text"
+              key={info.id}
               style={{ width: '140px', textAlign: 'center' }}
               className="text-end"
               defaultValue={info.Quantity}
@@ -85,7 +98,7 @@ function BOMTable(props) {
 
           }
         </Table>
-       
+
       </div>
     </>
   );

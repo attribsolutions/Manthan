@@ -94,7 +94,7 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
-  
+        debugger
         let val = event.target.value
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if (result) {
@@ -107,6 +107,8 @@ function ItemTab(props) {
             event.target.value = ""
         }
     };
+
+
     return (
         <Row>
             <Col  >
