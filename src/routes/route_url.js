@@ -109,5 +109,6 @@ export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
 export const PRODUCTION_ADD_Mode_2 = "/Production_Add_Mode"
 
-
+export const SALE_ORDER = "/SaleOrder"
+export const SALE_ORDER_lIST = "/SaleOrderList"
 

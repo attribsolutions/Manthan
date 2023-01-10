@@ -99,7 +99,7 @@ import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_L
 
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
 import ProductionList from "../pages/Purchase/Production/ProductionList";
-
+import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
 
 const userRoutes = [
 
@@ -212,6 +212,7 @@ const userRoutes = [
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_ADD_Mode_2, component: MaterialIssueList },
 
+  { path: path.SALE_ORDER, component: SaleOrder },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

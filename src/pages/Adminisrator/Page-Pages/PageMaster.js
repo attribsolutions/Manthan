@@ -1038,7 +1038,7 @@ const PageMaster = (props) => {
                                 </Row>
                               </FormGroup>
 
-                              {pageType_DropdownSelect.value === 2 || 3 ?
+                              {(pageType_DropdownSelect.value === 2 )||(pageType_DropdownSelect.value === 3)  ?
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 

@@ -118,5 +118,6 @@ export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_ADD_Mode_2
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-
+export const SaleOrderList = url.SALE_ORDER
+export const SaleOrder = url.SALE_ORDER_lIST
 
