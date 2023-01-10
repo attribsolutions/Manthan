@@ -40,6 +40,7 @@ import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 import GSTSaga from "./Administrator/GSTRedux/saga"
 import GroupSaga from "./Administrator/GroupRedux/saga"
 import SubGroupSaga from "./Administrator/SubGroupsRedux/saga"
+import GeneralSaga from "./Administrator/GeneralRedux/saga"
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
@@ -93,6 +94,7 @@ export default function* rootSaga() {
     fork(GroupTypeSaga),
     fork(GroupSaga),
     fork(SubGroupSaga),
+    fork(GeneralSaga),
     fork(GSTSaga),
     fork(PartySubPartysaga),
     fork(PartyItemssaga),

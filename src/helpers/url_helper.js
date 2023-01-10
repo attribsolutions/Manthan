@@ -149,9 +149,9 @@ export const GROUP_API = '/Group'
 // SubGroup API
 export const SUBGROUP_API = '/SubGroups'
 
-
-
-// SUBGROUP_API
+//General API
+export const GENERAL_API = '/Generals'
+export const TYPE_API = '/Type'
 
 // GST API
 export const GST_LIST_API = '/GstHsnCode' // for list page

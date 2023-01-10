@@ -88,6 +88,9 @@ export const PARTYITEM_LIST = 62
 export const SUBGROUP = 61
 export const SUBGROUP_LIST = 63
 
+ export const GENERAL = 119
+ export const GENERAL_LIST = 120
+
 //******************************* Purchase Module ************************************//
 export const ORDER = 53
 export const ORDER_lIST = 54

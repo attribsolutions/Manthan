@@ -44,6 +44,7 @@ import TermsAndConditionsReducer from "./Administrator/TermsAndConditionsRedux/r
 import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
 import GroupReducer from "./Administrator/GroupRedux/reducer"
 import SubGroupReducer from "./Administrator/SubGroupsRedux/reducer"
+import GeneralReducer from "./Administrator/GeneralRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
@@ -51,6 +52,7 @@ import BOMReducer from "./Purchase/BOMRedux/reducer"
 import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
 import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
 import ProductionReducer from "./Purchase/ProductionRedux/reducer"
+
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -96,6 +98,7 @@ const rootReducer = combineReducers({
   GroupTypeReducer,
   GroupReducer,
   SubGroupReducer,
+  GeneralReducer,
   GSTReducer,
   PartySubPartyReducer,
   VehicleReducer,
