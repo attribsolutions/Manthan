@@ -87,6 +87,9 @@ export const PARTYITEM_LIST = '/PartyItemsList'
 export const SUBGROUP = "/SubGroupMaster"
 export const SUBGROUP_LIST = "/SubGroupList"
 
+export const GENERAL ="/GeneralMaster"
+export const GENERAL_LIST ="/GeneralList"
+
 //******************************* Purchase Module ************************************//
 export const ORDER = "/Order"
 export const ORDER_lIST = "/OrderList"
