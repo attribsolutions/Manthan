@@ -69,7 +69,7 @@ function* Get_Party_GenratorFunction() {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error for Get Party  ",
     }));
   }
 }
