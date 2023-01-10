@@ -321,7 +321,8 @@ const WorkOrder = (props) => {
         const jsonBody = JSON.stringify({
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
-            Quantity: parseFloat(values.Quantity)
+            Quantity: parseFloat(values.Quantity),
+            Party:userParty()
         });
         dispatch(postGoButtonForWorkOrder_Master(jsonBody));
     }
