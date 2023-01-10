@@ -258,6 +258,7 @@ const WorkOrder = (props) => {
             FromDate: "2022-12-01",
             ToDate: currentDate,
             Company: userCompany(),
+            party:userParty(),
         });
         dispatch(getBOMList(jsonBody));
     }, [])
@@ -321,7 +322,8 @@ const WorkOrder = (props) => {
         const jsonBody = JSON.stringify({
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
-            Quantity: parseFloat(values.Quantity)
+            Quantity: parseFloat(values.Quantity),
+            party:userParty(),
         });
         dispatch(postGoButtonForWorkOrder_Master(jsonBody));
     }
