@@ -117,7 +117,7 @@ const PurchaseListPage = (props) => {
             listObj = {}
         })
         
-        dispatch(BreadcrumbDownBtndata(downList))
+        // dispatch(BreadcrumbDownBtndata(downList))
 
     }, [props.reducers.tableList])
 
@@ -132,26 +132,7 @@ const PurchaseListPage = (props) => {
         }
     }, [userAccess])
 
-    // useEffect(() => {
-    //     downList = []
-    //     listObj = {}
-
-    //     tableList.forEach((index1) => {
-    //         fileds.forEach((index2) => {
-    //             if (index2.ShowInDownload) {
-    //                 listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
-    //                 listObj[index2.ControlID] = index1[index2.ControlID]
-    //             }
-    //         })
-    //         downList.push(listObj)
-    //         listObj = {}
-    //     })
-
-
-
-    // }, [tableList])
-
-
+   
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
 

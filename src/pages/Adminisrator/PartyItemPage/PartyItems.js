@@ -47,7 +47,7 @@ import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../routes/allPageID"
 
 const PartyItems = (props) => {
-
+debugger
     const history = useHistory()
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState("");
@@ -191,7 +191,7 @@ const PartyItems = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: hasDropMode ? url.ORDER : false,
+                RedirectPath: false,
             }))
 
         } else if

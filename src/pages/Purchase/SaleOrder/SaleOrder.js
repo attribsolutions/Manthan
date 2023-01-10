@@ -241,7 +241,7 @@ const SaleOrder = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: ORDER_lIST,
+                RedirectPath: url.SALE_ORDER_lIST,
             }))
 
         } else if (postMsg.Status === true) {
@@ -263,7 +263,7 @@ const SaleOrder = (props) => {
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             description = ''
             history.push({
-                pathname: ORDER_lIST,
+                pathname: url.SALE_ORDER_lIST,
                 // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
@@ -555,7 +555,7 @@ const SaleOrder = (props) => {
     const saveHandeller = () => {
         const division = userParty();
         const supplier = supplierSelect.value;
-
+debugger
         const validMsg = []
         const itemArr = []
 
@@ -695,11 +695,11 @@ const SaleOrder = (props) => {
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
         if (pageMode === "edit") {
-            // dispatch(updateOrderId(jsonBody, editVal.id))
+            dispatch(updateOrderId(jsonBody, editVal.id))
 
         } else {
 
-            // dispatch(postOrder(jsonBody))
+            dispatch(postOrder(jsonBody))
         }
 
 
@@ -905,11 +905,11 @@ const SaleOrder = (props) => {
 
                     </PaginationProvider>
 
-                    {
+                    {/* {
                         orderItemTable.length > 0 ?
                             <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.OrderTermsAndCondition} />
                             : null
-                    }
+                    } */}
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
@@ -933,7 +933,7 @@ const SaleOrder = (props) => {
                         dropMode={mode.dropdownAdd}
                         editValue={{ SupplierName: supplierSelect }}
                         masterPath={url.PARTYITEM}
-                        redirectPath={url.ORDER}
+                        redirectPath={url.SALE_ORDER}
                         isOpenModal={Open_TermsModal_func}
                         pageMode={pageMode}
                     />

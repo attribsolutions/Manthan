@@ -37,7 +37,7 @@ function* goButtonGenFunc({ data }) {
   yield GoBtnDissable(true)
   yield delay(400)
   try {
-
+debugger
     const response = yield call(OrderPage_GoButton_API, data);
 
     yield response.Data.OrderItems.forEach((ele, k) => {

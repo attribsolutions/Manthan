@@ -275,7 +275,7 @@ const Order = (props) => {
         else {
             row["Rate"] = val
         }
-
+debugger
         row["Amount"] = Amount(row)
 
         let sum = 0
