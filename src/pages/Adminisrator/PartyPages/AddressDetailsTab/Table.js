@@ -61,7 +61,7 @@ function AddressDetailsTable(props) {
             <tr>
                 <td>{info.Address}</td>
                 <td>{info.FSSAINo}</td>
-                <td>{info.FSSAIExipry}</td>fs
+                <td>{info.FSSAIExipry}</td>
                 <td>
                     {/* {info.fssaidocument} */}
                     { }
