@@ -98,8 +98,8 @@ const AddEmployee = (props) => {
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
-    dispatch(getPartyListAPI());
-    dispatch(Get_CompanyName_By_EmployeeTypeID());
+    // dispatch(getPartyListAPI());
+    // dispatch(Get_CompanyName_By_EmployeeTypeID());
   }, [dispatch]);
 
   const values = { ...state.values }
