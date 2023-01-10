@@ -582,6 +582,19 @@ const ItemsMaster = (props) => {
             })
 
             let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
+
+            if (GStDetailsMaster.length === 0) {
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: "GST Details Required",
+                        RedirectPath: false,
+                        PermissionAction: false,
+                    })
+                );
+                return;
+            }
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -677,7 +690,7 @@ const ItemsMaster = (props) => {
         x.style.display = "block";
         var di = "100Px"
 
-        if (event.target.value== "") {
+        if (event.target.value == "") {
             di = `${x.style.display = "none"}`
         }
         else if (results.length == 0) {
@@ -713,7 +726,7 @@ const ItemsMaster = (props) => {
         x.style.display = "block";
         var di = "100Px"
 
-        if (event.target.value== "") {
+        if (event.target.value == "") {
             di = `${x.style.display = "none"}`
         }
         else if (results.length == 0) {

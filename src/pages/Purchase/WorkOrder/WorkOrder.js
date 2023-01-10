@@ -252,12 +252,12 @@ const WorkOrder = (props) => {
         StockQty: index.StockQty
     }));
 
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
             ToDate: currentDate,
             Company: userCompany(),
+            Party:userParty()
         });
         dispatch(getBOMList(jsonBody));
     }, [])

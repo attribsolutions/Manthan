@@ -147,17 +147,19 @@ const PartyMaster = (props) => {
                     label: hasEditVal.Company.Name,
                     value: hasEditVal.Company.id,
                 });
-                setPriceList_dropdown_Select({
-                    label: hasEditVal.PriceList.Name,
-                    value: hasEditVal.PriceList.id,
-                });
+                if (hasEditVal.PriceList) {
+                    setPriceList_dropdown_Select({
+                        label: hasEditVal.PriceList.Name,
+                        value: hasEditVal.PriceList.id,
+                    });
+                }
                 // ====================== Images tab ======================
 
                 // let ItemImagesDetails = hasEditVal.PartyAddress.map((index) => {
                 //     debugger
                 //     return index.fssaidocument
                 // })
-                debugger
+
                 setPartyPrefix(hasEditVal.PartyPrefix)
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
                 dispatch(editPartyIDSuccess({ Status: false }));
