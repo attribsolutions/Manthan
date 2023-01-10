@@ -208,7 +208,7 @@ const RoleAccessAdd = (props) => {
         value: i.id,
         label: i.Name
     }));
-    
+
     const Role_DropdownOption = Roles.map((i) => ({
         value: i.id,
         label: i.Name
@@ -259,6 +259,16 @@ const RoleAccessAdd = (props) => {
         if (role > 0) {
             dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
             setShowTableOnUI(true)
+        }
+        else if (role === undefined) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select Role",
+                })
+            );
+
         }
     }
 
