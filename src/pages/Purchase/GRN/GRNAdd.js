@@ -379,7 +379,7 @@ const GRNAdd = (props) => {
                         className="form-control d-block p-2 bg-white text-dark"
                         placeholder="Batch Date..."
                         id={`BatchDate${k}`}
-
+                        key={row.id}
                         value={row.BatchDate}
                         data-enable-time
                         options={{
