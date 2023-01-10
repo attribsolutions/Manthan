@@ -356,6 +356,13 @@ export const del_SubGroup_List_API = (id) => del(`${url.SUBGROUP_API}/${id}`)// 
 export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)// edit api
 export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
+// General API
+export const get_General_List_Api = () => get(url.GENERAL_API)// get api
+export const Post_General_API = (data) => post(url.GENERAL_API, data)// post api
+export const detelet_General_List_Api = (id) => del(`${url.GENERAL_API}/${id}`)// delete api
+export const edit_General_List_Api = (id) => get(`${url.GENERAL_API}/${id}`)// edit api
+export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${id}`, data)// update api
+export const get_Type_API = () => get(url.TYPE_API)// Type DropDown API
 
 // Order Page api  
 
@@ -364,7 +371,6 @@ export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILT
 export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
 export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
-
 export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
 export const OrderPage_Update_API = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages

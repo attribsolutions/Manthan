@@ -84,6 +84,9 @@ import OrderList from "../pages/Purchase/Order/OrderList"
 
 import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
+import GeneralMaster from "../pages/Adminisrator/GeneralPage/GeneralMaster";
+import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
+
 import * as path from "./route_url";
 import GRNList from "../pages/Purchase/GRN/GRNList";
 import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
@@ -188,6 +191,9 @@ const userRoutes = [
 
   { path: path.SUBGROUP, component: SubGroupMaster },
   { path: path.SUBGROUP_LIST, component: SubGroupList },
+
+  { path: path.GENERAL, component: GeneralMaster },
+  { path: path.GENERAL_LIST, component: GeneralList },
 
   //******************************* Purchase Module ************************************//
 
