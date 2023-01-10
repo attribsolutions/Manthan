@@ -54,7 +54,7 @@ const RoleMaster = (props) => {
     Description: "",
     Dashboard: "",
     RoleEmployeeTypes: "",
-    isActive: false,
+    isActive: true,
     isSCMRole: false,
     IsPartyConnection: false
   }
