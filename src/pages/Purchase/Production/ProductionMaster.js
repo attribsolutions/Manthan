@@ -14,7 +14,6 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     comAddPageFieldFunc,
@@ -25,7 +24,6 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
-    getProduction_Mode2_Success,
     getUnitIDForProdunction,
     getUnitIDForProdunctionSuccess,
     post_Production,
@@ -38,7 +36,7 @@ import * as url from "../../../routes/route_url";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const ProductionMaster = (props) => {
-    debugger
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -52,10 +50,10 @@ const ProductionMaster = (props) => {
         NumberOfLot: "",
         EstimatedQuantity: "",
         ActualQuantity: "",
-        SupplierBatchCode: "",
+        PrintedBatchCode: "",
         BestBefore: "",
         Remark: "",
-        Item: "",
+        ItemName: "",
         UnitName: ""
     }
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -76,8 +74,6 @@ const ProductionMaster = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
-
-    console.log("UnitDropdown", UnitDropdown)
 
     useEffect(() => {
         dispatch(getUnitIDForProdunctionSuccess([]))
@@ -106,7 +102,7 @@ const ProductionMaster = (props) => {
 
         if (mode2Data.pageMode === "Mode2") {
             setState(i => {
-                i.values.Item = {
+                i.values.ItemName = {
                     label: MaterialProductionaData[0].ItemName,
                     value: MaterialProductionaData[0].Item
                 }
@@ -119,13 +115,14 @@ const ProductionMaster = (props) => {
                 i.values.NumberOfLot = MaterialProductionaData[0].NumberOfLot;      //NumberOfLot===NumberOfLot
 
                 i.hasValid.id.valid = true
+                i.hasValid.ActualQuantity.valid = true
                 i.hasValid.ProductionDate.valid = true
-                i.hasValid.Item.valid = true
+                i.hasValid.ItemName.valid = true
                 i.hasValid.EstimatedQuantity.valid = true
                 i.hasValid.NumberOfLot.valid = true
                 return i
             })
-            debugger
+            // debugger
             const jsonBody = JSON.stringify({
                 Item: MaterialProductionaData[0].Item
             });
@@ -209,7 +206,7 @@ const ProductionMaster = (props) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
-            const jsonBody = JSON.stringify({ 
+            const jsonBody = JSON.stringify({
                 ProductionMaterialIssue: [
                     {
                         MaterialIssue: values.id,
@@ -222,7 +219,7 @@ const ProductionMaster = (props) => {
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
                 StoreLocation: "aa",
-                PrintedBatchCode: values.SupplierBatchCode,
+                PrintedBatchCode: values.PrintedBatchCode,
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
                 CreatedBy: 1,
@@ -233,7 +230,7 @@ const ProductionMaster = (props) => {
                 Unit: values.UnitName.value,
                 MRP: " ",
                 Rate: 55,
-                Item: values.Item.value,
+                Item: values.ItemName.value,
             });
             dispatch(post_Production(jsonBody));
         }
@@ -243,7 +240,7 @@ const ProductionMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess}  pageId={pageId.PRODUCTION_MASTER}/>
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRODUCTION_MASTER} />
 
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
 
@@ -293,6 +290,11 @@ const ProductionMaster = (props) => {
                                                 }}
                                             />
                                         </Col>
+                                        <div className="col col-1">
+                                            <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
+                                                {values.UnitName.label}
+                                            </Label>
+                                        </div>
                                     </FormGroup>
 
                                     <FormGroup className="row  " >
@@ -341,12 +343,12 @@ const ProductionMaster = (props) => {
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.Item}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.ItemName}</Label>
                                         <Col md="7">
                                             <Select
                                                 isDisabled={true}
                                                 name="Name"
-                                                value={values.Item}
+                                                value={values.ItemName}
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -358,8 +360,8 @@ const ProductionMaster = (props) => {
                                         </Col>
                                     </FormGroup>
 
-                                  <br></br>
-                                  <br></br>
+                                    <br></br>
+                                    <br></br>
 
                                     <FormGroup className=" row" >
                                         <Label className="col-md-4 p-2"
@@ -383,44 +385,44 @@ const ProductionMaster = (props) => {
 
                                     <FormGroup className=" row  " >
                                         <Label className="col-md-4 p-2"
-                                            style={{ width: "170px" }}>{fieldLabel.SupplierBatchCode}</Label>
+                                            style={{ width: "170px" }}>{fieldLabel.PrintedBatchCode}</Label>
                                         <Col md="7">
                                             <Input
                                                 type="text"
-                                                name="SupplierBatchCode"
-                                                value={values.SupplierBatchCode}
-                                                placeholder="Enter SupplierBatchCode"
+                                                name="PrintedBatchCode"
+                                                value={values.PrintedBatchCode}
+                                                placeholder="Enter PrintedBatchCode"
                                                 autoComplete="off"
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.SupplierBatchCode.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.SupplierBatchCode}</small></span>
+                                            {isError.PrintedBatchCode.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.PrintedBatchCode}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
                                 </Col>
 
                                 <FormGroup className=" row " >
-                                        <Label className="col-sm-4 p-2"
-                                            style={{ width: "168px" }}>{fieldLabel.Remark}</Label>
-                                        <Col md="3">
-                                            <Input
-                                                type="text"
-                                                name="Remark"
-                                                value={values.Remark}
-                                                placeholder="Enter Remark"
-                                                autoComplete="off"
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Remark.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Remark}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "168px" }}>{fieldLabel.Remark}</Label>
+                                    <Col md="3">
+                                        <Input
+                                            type="text"
+                                            name="Remark"
+                                            value={values.Remark}
+                                            placeholder="Enter Remark"
+                                            autoComplete="off"
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.Remark.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Remark}</small></span>
+                                        )}
+                                    </Col>
+                                </FormGroup>
 
                             </Row>
                         </div>

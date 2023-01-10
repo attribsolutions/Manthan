@@ -145,7 +145,7 @@ const WorkOrder = (props) => {
 
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
-                    , Quantity, EstimatedOutputQty } = hasEditVal
+                    , Quantity, EstimatedOutputQty ,Bom} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.WorkOrderDate.valid = true;
@@ -162,9 +162,17 @@ const WorkOrder = (props) => {
                 values.StockQuantity = Stock;
                 values.ItemName = { label: ItemName, value: Item };
 
+                const jsonBody = JSON.stringify({
+                    Item:Item,
+                    Bom: Bom ,
+                    Quantity: parseFloat(Quantity)
+                });
+                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+                
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+               
             }
         }
     }, [])

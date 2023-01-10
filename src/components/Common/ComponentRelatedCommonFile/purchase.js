@@ -282,7 +282,8 @@ const PurchaseListPage = (props) => {
 
         tableList.map((ele, k) => {
             if (found.length === 1 && isEvent) {
-                if (!(ele.SupplierID === rowData.SupplierID)) {
+                // validation only show checkbox =supplier and same 
+                if (!(ele.SupplierID === rowData.SupplierID)||!(ele.POType === rowData.POType)) {
                     try {
                         document.getElementById(`checkhasSelect${ele.id}`).disabled = true
                         document.getElementById(`checkhasSelect${ele.id}`).style.border = "white"

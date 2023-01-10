@@ -350,18 +350,31 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index) => {
+        // GoButton.map((index) => {
+        //     let Stock = index.BatchesData.map((i) => {
+        //         return i.BaseUnitQuantity
+        //     })       
+        // console.log(Stock)
+
+        // })
+
+        // var OrderQty = parseFloat(stockQty)
+        // console.log(Stock)
+
+
         index.Qty = event.target.value
     };
 
 
 
     const SaveHandler = (event) => {
+        debugger
         const validMsg = []
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
             let Stock = index.BatchesData.map((i) => {
-                return i.ObatchwiseQuantity
+                return i.BaseUnitQuantity
             })
             var TotalStock = 0;
             Stock.forEach(x => {
@@ -614,7 +627,7 @@ const MaterialIssueMaster = (props) => {
                                                 />
 
                                                 <span className="text-danger">Note* :
-                                                    <span className="text-black">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
+                                                    <span className="text-secondary">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
                                                     </span></span>
 
 
@@ -638,7 +651,7 @@ const MaterialIssueMaster = (props) => {
 
                                                 />
                                                 <span className="text-danger">Note* :
-                                                    <span className="text-black">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
+                                                    <span className="text-secondary">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
                                                     </span></span>
                                             </Col>
                                             <div className="col col-1">
