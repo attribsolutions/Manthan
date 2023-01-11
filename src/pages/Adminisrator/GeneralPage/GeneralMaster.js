@@ -52,7 +52,7 @@ const GeneralMaster = (props) => {
         id: "",
         Type: "",
         Name: "",
-        IsActive: false
+        IsActive: true
 
     }
 
@@ -222,8 +222,7 @@ const GeneralMaster = (props) => {
 
         {
             value: 2,
-            label:"ValidationType" ,
-
+            label:"ValidationType",
         },
 
     ];

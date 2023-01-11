@@ -338,6 +338,7 @@ const PageMaster = (props) => {
   }, [modulePostAPIResponse])
 
   useEffect(() => {
+  
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
       history.push({
         pathname: PAGE_lIST,
