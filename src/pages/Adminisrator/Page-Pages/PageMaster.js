@@ -164,6 +164,13 @@ const PageMaster = (props) => {
           label: hasEditVal.ModuleName,
           value: hasEditVal.Module,
         });
+        if (!(pageType_ID === 1)) {
+          setPageAccessDropDownView(true);
+          setPageType_DropdownSelect({
+            label: hasEditVal.PageTypeName,
+            value: hasEditVal.PageType,
+          });
+        }
 
         let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
           return {
@@ -234,25 +241,27 @@ const PageMaster = (props) => {
 
         // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
 
-        if (pageType_ID === 2) {
-          setPageAccessDropDownView(true);
-          dispatch(getPageList(pageType_ID));
-          setPageType_DropdownSelect({
-            value: 2, label: "ListPage"
+        // if (pageType_ID === 2) {
+        //   setPageAccessDropDownView(true);
+        //   dispatch(getPageList(pageType_ID));
+        //   setPageType_DropdownSelect({
+        //     value: 2, label: "ListPage"
 
-          });
+        //   });
 
-        } else if (pageType_ID === 1) {
-          dispatch(getPageListSuccess([]));
-          setrelatedPage_DropdownSelect({ value: 0 });
-          setPageType_DropdownSelect({ value: 1, label: "AddPage" });
-        }
+        // } else if (pageType_ID === 1) {
+        //   dispatch(getPageListSuccess([]));
+        //   setrelatedPage_DropdownSelect({ value: 0 });
+        //   setPageType_DropdownSelect({ value: 1, label: "AddPage" });
+        // }
+        // else if (hasEditVal.PageType === 3) {
+        //   setPageAccessDropDownView(true);
+        //   dispatch(getPageListSuccess([]));
+        //   // setrelatedPage_DropdownSelect({ value: 0 });
+        //   setPageType_DropdownSelect({ value: 3, label: "SourceTransactionPage" });
+        // }
       }
-      else if (hasEditVal.PageType === 3) {
-        dispatch(getPageListSuccess([]));
-        // setrelatedPage_DropdownSelect({ value: 0 });
-        setPageType_DropdownSelect({ value: 3, label: "SourceTransactionPage" });
-      }
+
       dispatch(editHPagesIDSuccess({ Status: false }));
 
 
@@ -465,6 +474,11 @@ const PageMaster = (props) => {
       setcustomActiveTab(tab);
     }
   };
+  function FieldValidation_Dropdown_Handler(e, key) {
+    PageField_onChange_Handler(e, "FieldValidation", key);
+  }
+
+
 
   const FormSubmitButton_Handler = (event, values) => {
     let Access = []
@@ -1039,7 +1053,7 @@ const PageMaster = (props) => {
                                 </Row>
                               </FormGroup>
 
-                              {(pageType_DropdownSelect.value === 2 )||(pageType_DropdownSelect.value === 3)  ?
+                              {(pageType_DropdownSelect.value === 2) || (pageType_DropdownSelect.value === 3) ?
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
@@ -1188,7 +1202,8 @@ const PageMaster = (props) => {
                                           autoComplete="off"
                                           value={pageFieldTabTable[key].FieldValidation}
                                           options={FieldValidations_DropdownOptions}
-                                          onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
+                                          onChange={(e) => { FieldValidation_Dropdown_Handler(e, key); }}
+                                        // onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                         />
                                       </div>
                                     </td>
