@@ -164,10 +164,14 @@ const PageMaster = (props) => {
           label: hasEditVal.ModuleName,
           value: hasEditVal.Module,
         });
-        setPageType_DropdownSelect({
-          label: hasEditVal.PageTypeName,
-          value: hasEditVal.PageType,
-        });
+        if (!(pageType_ID === 1)) {
+          setPageAccessDropDownView(true);
+          setPageType_DropdownSelect({
+            label: hasEditVal.PageTypeName,
+            value: hasEditVal.PageType,
+          });
+        }
+
         let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
           return {
             ControlType: {
@@ -250,12 +254,14 @@ const PageMaster = (props) => {
         //   setrelatedPage_DropdownSelect({ value: 0 });
         //   setPageType_DropdownSelect({ value: 1, label: "AddPage" });
         // }
+        // else if (hasEditVal.PageType === 3) {
+        //   setPageAccessDropDownView(true);
+        //   dispatch(getPageListSuccess([]));
+        //   // setrelatedPage_DropdownSelect({ value: 0 });
+        //   setPageType_DropdownSelect({ value: 3, label: "SourceTransactionPage" });
+        // }
       }
-      // else if (hasEditVal.PageType === 3) {
-      //   dispatch(getPageListSuccess([]));
-      //   // setrelatedPage_DropdownSelect({ value: 0 });
-      //   setPageType_DropdownSelect({ value: 3, label: "SourceTransactionPage" });
-      // }
+
       dispatch(editHPagesIDSuccess({ Status: false }));
 
 
