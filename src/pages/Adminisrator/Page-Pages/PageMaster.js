@@ -164,7 +164,14 @@ const PageMaster = (props) => {
           label: hasEditVal.ModuleName,
           value: hasEditVal.Module,
         });
-        if (!(pageType_ID === 1)) {
+        if ((pageType_ID === 1)) {
+          setPageAccessDropDownView(false);
+          setPageType_DropdownSelect({
+            label: hasEditVal.PageTypeName,
+            value: hasEditVal.PageType,
+          });
+        }
+        if ((pageType_ID === 2)||((pageType_ID === 3))) {
           setPageAccessDropDownView(true);
           setPageType_DropdownSelect({
             label: hasEditVal.PageTypeName,
