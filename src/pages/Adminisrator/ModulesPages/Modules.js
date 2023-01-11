@@ -50,7 +50,7 @@ const Modules = (props) => {
         Name: "",
         DisplayIndex: "",
         Icon: "",
-        isActive: false,
+        isActive: true,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
