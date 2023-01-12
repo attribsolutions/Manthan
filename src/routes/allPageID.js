@@ -108,7 +108,7 @@ export const WORK_ORDER_ADD_Mode_2 =79
 
 export const MATERIAL_ISSUE = 75
 export const MATERIAL_ISSUE_LIST = 76
-export const MATERIAL_ISSUE_ADD_Mode_2 = 81
+export const MATERIAL_ISSUE_ADD_Mode_2 = 125
 
 export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
