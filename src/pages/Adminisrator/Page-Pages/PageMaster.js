@@ -65,6 +65,7 @@ const PageMaster = (props) => {
   const [modal_center, setmodal_center] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
   const [pageAccessData, setPageAccessData] = useState([]);
+  console.log("pageType_DropdownSelect", pageType_DropdownSelect)
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -171,7 +172,7 @@ const PageMaster = (props) => {
             value: hasEditVal.PageType,
           });
         }
-        if ((pageType_ID === 2)||((pageType_ID === 3))) {
+        if ((pageType_ID === 2) || ((pageType_ID === 3))) {
           setPageAccessDropDownView(true);
           setPageType_DropdownSelect({
             label: hasEditVal.PageTypeName,
@@ -354,7 +355,7 @@ const PageMaster = (props) => {
   }, [modulePostAPIResponse])
 
   useEffect(() => {
-  
+
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
       history.push({
         pathname: PAGE_lIST,
@@ -668,26 +669,27 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
+                      {!(pageType_DropdownSelect.value === 2) ?
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({
+                              active: customActiveTab === "2",
+                            })}
+                            onClick={() => {
+                              toggleCustom("2");
+                            }}
+                          >
+                            <span className="d-block d-sm-none">
+                              <i className="far fa-user"></i>
+                            </span>
+                            <span className="d-none d-sm-block">Page Field</span>
+                          </NavLink>
+                        </NavItem>
+                        :
+                        <></>}
 
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "2",
-                          })}
-                          onClick={() => {
-                            toggleCustom("2");
-                          }}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="far fa-user"></i>
-                          </span>
-                          <span className="d-none d-sm-block">Page Field</span>
-                        </NavLink>
-                      </NavItem>
-
-
-                      <NavItem>
+                      {/* <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
                         >
@@ -725,7 +727,7 @@ const PageMaster = (props) => {
                             </Col>
                           </Row>
                         </NavLink>
-                      </NavItem>
+                      </NavItem> */}
                     </Nav>
 
                     <TabContent
@@ -1372,6 +1374,36 @@ const PageMaster = (props) => {
                         </div>
                       </TabPane>
                     </TabContent>
+                    <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
+                      <Col sm={2}>
+                        <div style={{ paddingLeft: "14px" }}>
+                          {
+                            pageMode === "edit" ?
+                              userPageAccessState.RoleAccess_IsEdit ?
+                                <button
+                                  type="submit"
+                                  data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                  className="btn btn-success w-md"
+                                >
+                                  <i class="fas fa-edit me-2"></i>Update
+                                </button>
+                                :
+                                <></>
+                              : (
+                                userPageAccessState.RoleAccess_IsSave ?
+                                  <button
+                                    type="submit"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                    className="btn btn-primary w-md"
+                                  > <i className="fas fa-save me-2"></i> Save
+                                  </button>
+                                  :
+                                  <></>
+                              )
+                          }
+                        </div>
+                      </Col>
+                    </Row>
                   </CardBody>
                 </Card>
               </Col>
