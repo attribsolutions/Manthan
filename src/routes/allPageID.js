@@ -97,7 +97,7 @@ export const ORDER_lIST = 54
 
 export const GRN_ADD = 55
 export const GRN_lIST = 56
-export const GRN_ADD_Mode_2 = 59
+export const GRN_ADD_Mode_2 = 124
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
