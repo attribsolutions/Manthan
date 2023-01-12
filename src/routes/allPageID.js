@@ -112,8 +112,10 @@ export const MATERIAL_ISSUE_ADD_Mode_2 = 81
 
 export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
-export const PRODUCTION_ADD_Mode_2 = 83
+export const PRODUCTION_ADD_Mode_2 = 123
 
 export const SALE_ORDER = 117
 export const SALE_ORDER_lIST = 118
 
+export const INVOICE = 121
+export const INVOICE_LIST =122

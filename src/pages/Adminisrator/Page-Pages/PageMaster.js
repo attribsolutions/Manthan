@@ -66,24 +66,8 @@ const PageMaster = (props) => {
   const [modal_center, setmodal_center] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
   const [pageAccessData, setPageAccessData] = useState([]);
-  console.log("pageType_DropdownSelect", pageType_DropdownSelect)
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
-    ControlID: '',
-    FieldLabel: '',
-    ControlType: { label: "select", value: 0 },
-    FieldValidation: { label: "select", value: 0 },
-    InValidMsg: '',
-    ListPageSeq: '',
-    IsCompulsory: false,
-    DefaultSort: 0,
-    FieldSequence: false,
-    ShowInListPage: false,
-    ShowInDownload: false,
-    DownloadDefaultSelect: false,
-  }]);
-
-  const [pageFieldList_TabTable, setPageFieldList_TabTable] = useState([{
     ControlID: '',
     FieldLabel: '',
     ControlType: { label: "select", value: 0 },
@@ -165,7 +149,7 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
+
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
@@ -254,7 +238,6 @@ const PageMaster = (props) => {
           value: hasEditVal.RelatedPageId,
           label: hasEditVal.RelatedPageName,
         });
-
       }
 
       dispatch(editHPagesIDSuccess({ Status: false }));
@@ -381,6 +364,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
+    
     let Access = []
     PageAccess.forEach((element, key) => {
       if (element.hascheck) {
@@ -450,7 +434,7 @@ const PageMaster = (props) => {
       CreatedBy: createdBy(),
       UpdatedBy: createdBy(),
       PagePageAccess: Access,
-      PageFieldMaster: PageFieldMaster,
+      PageFieldMaster: pageType_DropdownSelect.value === 2 ? [] : PageFieldMaster,
     })
 
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
@@ -517,7 +501,6 @@ const PageMaster = (props) => {
     tog_center()
   }
 
-
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -536,7 +519,6 @@ const PageMaster = (props) => {
               name="mainForm"
               onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
 
-              {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
               <Col lg={12}>
                 <Card className="text-black" >
                   <CardHeader className="card-header   text-black c_card_header" >
@@ -561,23 +543,26 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "2",
-                          })}
-                          onClick={() => {
-                            toggleCustom("2");
-                          }}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="far fa-user"></i>
-                          </span>
+                      {!(pageType_DropdownSelect.value === 2) ?
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({
+                              active: customActiveTab === "2",
+                            })}
+                            onClick={() => {
+                              toggleCustom("2");
+                            }}
+                          >
+                            <span className="d-block d-sm-none">
+                              <i className="far fa-user"></i>
+                            </span>
                             <span className="d-none d-sm-block">Page Field</span>
-                        </NavLink>
-                      </NavItem>
+                          </NavLink>
+                        </NavItem>
+                        : <></>
+                      }
+
                     </Nav>
 
                     <TabContent
@@ -1007,7 +992,7 @@ const PageMaster = (props) => {
                               userPageAccessState.RoleAccess_IsEdit ?
                                 <button
                                   type="submit"
-                                  data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                  data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
                                   className="btn btn-success w-md"
                                 >
                                   <i class="fas fa-edit me-2"></i>Update
@@ -1018,7 +1003,7 @@ const PageMaster = (props) => {
                                 userPageAccessState.RoleAccess_IsSave ?
                                   <button
                                     type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
                                     className="btn btn-primary w-md"
                                   > <i className="fas fa-save me-2"></i> Save
                                   </button>
