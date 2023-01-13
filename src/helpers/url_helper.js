@@ -169,6 +169,8 @@ export const PARTYITEMS = '/PartyItemList' // FOR Get
 //******** purchase modal *********************************************************************************************************************** */
 
 export const SUPPLIER = "/GetSupplier"
+export const VENDOR = "/GetVender"
+export const CUSTOMER = "/GetCustomer"
 
 //order 
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
