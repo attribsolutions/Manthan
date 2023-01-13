@@ -50,7 +50,7 @@ const GeneralMaster = (props) => {
 
     const fileds = {
         id: "",
-        Type: "",
+        TypeName: "",
         Name: "",
         IsActive: true
 
@@ -128,16 +128,16 @@ const GeneralMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name, Type, IsActive } = hasEditVal
+                const { id, Name, TypeName,TypeID, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
-                hasValid.Type.valid = true;
+                hasValid.TypeName.valid = true;
                 hasValid.IsActive.valid = true;
 
                 values.id = id
                 values.Name = Name;
-                values.Type = { label: Type, value:Type };
+                values.TypeName = { label:TypeName, value:TypeID };
                 values.IsActive = IsActive;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
@@ -227,7 +227,7 @@ const GeneralMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                TypeID: values.Type.value,
+                TypeID: values.TypeName.value,
                 Company: userCompany(),
                 IsActive: values.IsActive,
                 CreatedBy: createdBy(),
@@ -275,11 +275,11 @@ const GeneralMaster = (props) => {
                                                         <Row>
                                                             <Col md="4" >
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Type} </Label>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.TypeName} </Label>
                                                                     <Col sm={12} >
                                                                         <Select
-                                                                            name="Type"
-                                                                            value={values.Type}
+                                                                            name="TypeName"
+                                                                            value={values.TypeName}
                                                                             isSearchable={true}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
@@ -287,8 +287,8 @@ const GeneralMaster = (props) => {
                                                                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                                         />
-                                                                        {isError.Type.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.Type}</small></span>
+                                                                        {isError.TypeName.length > 0 && (
+                                                                            <span className="text-danger f-8"><small>{isError.TypeName}</small></span>
                                                                         )}
                                                                     </Col>
                                                                 </FormGroup>
