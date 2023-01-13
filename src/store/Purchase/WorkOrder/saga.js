@@ -49,7 +49,7 @@ function* Get_BOMList_GenratorFunction({ filters }) {
 }
 
 // GO Botton Post API
-function* WorkOrderGoButton_post_gunfun({ data }) {
+function* GoButton_WorkOrder_post_genfun({ data }) {
 
   yield put(SpinnerState(true))
   try {
@@ -173,7 +173,7 @@ function* DeleteWorkOrderGenFunc({ id }) {
 
 function* WorkOrderSaga() {
   yield takeEvery(GET_BOM_LIST, Get_BOMList_GenratorFunction)
-  yield takeEvery(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, WorkOrderGoButton_post_gunfun)
+  yield takeEvery(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
   yield takeEvery(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
   yield takeEvery(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)
   yield takeEvery(EDIT_WORK_ORDER_LIST_ID, editWorkOrderGenFunc)

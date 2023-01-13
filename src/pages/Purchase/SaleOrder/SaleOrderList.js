@@ -17,7 +17,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -37,6 +37,10 @@ const SaleOrderList = () => {
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(url.ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
+    // const [fromdate, setfromdate] = useState(currentDate);
+    // const [todate, settodate] = useState(currentDate);
+    // const [supplierSelect, setsupplierSelect] = useState({ value: '', label: "All" });
+    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
 
     const reducers = useSelector(
         (state) => ({
@@ -52,7 +56,7 @@ const SaleOrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
+    const { userAccess, pageField, GRNitem, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
     const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.SALE_ORDER_lIST;
     debugger
@@ -165,7 +169,22 @@ const SaleOrderList = () => {
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
     }
 
-    function goButtonHandler() {
+    function goButtonHandler(onUpdate = false) {
+        let hasfilters = history.location.hasOwnProperty("filters")
+        debugger
+        if (hasfilters && onUpdate) {
+            let hasfilters = history.location.filters
+            const jsonBody = JSON.stringify({
+                FromDate: hasfilters.fromdate,
+                ToDate: hasfilters.todate,
+                Supplier: hasfilters.supplierSelect.value,
+                Customer: userParty(),
+            });
+            setorderlistFilter(hasfilters)
+            dispatch(getOrderListPage(jsonBody));
+            // history.location.filters = null
+            return
+        }
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -179,19 +198,22 @@ const SaleOrderList = () => {
     function fromdateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.fromdate = date
-        dispatch(orderlistfilters(newObj))
+        // dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.todate = date
-        dispatch(orderlistfilters(newObj))
+        // dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
     }
 
     function supplierOnchange(e) {
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
-        dispatch(orderlistfilters(newObj))
+        // dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
     }
 
     return (
@@ -289,6 +311,7 @@ const SaleOrderList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
+                            filters={orderlistFilter}
                         />
                         : null
                 }

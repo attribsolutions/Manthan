@@ -1,16 +1,16 @@
 import {
     POST_METHOD_FOR_GENERAL_API_SUCCESS,
-    GET_GENERAL_LIST_SUCCESS,
+    POST_GENERAL_LIST_SUCCESS,
     DELETE_GENERAL_ID_SUCCESS,
     EDIT_GENERAL_ID_SUCCESS,
     UPDATE_GENERAL_ID_SUCCESS,
-    GET_TYPE_SUCCESS
+    POST_TYPE_SUCCESS
 } from "./actionType";
 
 const INIT_STATE = {
     PostDataMessage: { Status: false },
     GeneralList:[],
-    Type: [],
+    Type:[],
     deleteMessage: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
@@ -26,7 +26,7 @@ const GeneralReducer = (state = INIT_STATE, action) => {
             }
 
         // get api
-        case GET_GENERAL_LIST_SUCCESS:
+        case POST_GENERAL_LIST_SUCCESS:
             return {
                 ...state,
                 GeneralList: action.payload,
@@ -52,10 +52,10 @@ const GeneralReducer = (state = INIT_STATE, action) => {
             };
 
         /// TypeDropdown
-        case GET_TYPE_SUCCESS:
+        case POST_TYPE_SUCCESS:
             return {
                 ...state,
-                Type: action.payload,
+                Type :action.payload,
             };
 
         default:

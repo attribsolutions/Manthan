@@ -142,6 +142,7 @@ const SaleOrder = (props) => {
             if (hasShowloction) {
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
+                hasEditVal["filters"] = location.filters
             }
             else if (hasShowModal) {
                 hasEditVal = props.editValue
@@ -161,6 +162,7 @@ const SaleOrder = (props) => {
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 description = hasEditVal.Description
                 editVal = {}
+
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
@@ -264,6 +266,7 @@ const SaleOrder = (props) => {
             description = ''
             history.push({
                 pathname: url.SALE_ORDER_lIST,
+                filters: editVal.filters
                 // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
@@ -555,7 +558,7 @@ const SaleOrder = (props) => {
     const saveHandeller = () => {
         const division = userParty();
         const supplier = supplierSelect.value;
-debugger
+        debugger
         const validMsg = []
         const itemArr = []
 
