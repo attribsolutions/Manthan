@@ -36,15 +36,12 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { handleKeyDown } from "../Order/OrderPageCalulation";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
-const MaterialIssueMaster = (props) => {
+const Invoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -73,7 +70,7 @@ const MaterialIssueMaster = (props) => {
         pageField,
         userAccess,
         Items,
-        GoButton = []
+        GoButton
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -84,7 +81,7 @@ const MaterialIssueMaster = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.MATERIAL_ISSUE
+        const page_Id = pageId.INVOICE
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -126,8 +123,6 @@ const MaterialIssueMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -136,14 +131,14 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-                // debugger
+               
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
             if (hasEditVal) {
-                debugger
+                
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
@@ -351,20 +346,7 @@ const MaterialIssueMaster = (props) => {
         })
     }
 
-    const handleChange = (event, index, user) => {
-        debugger
-
-
-        // let x = document.getElementById("inputid").value;
-        // // If x is Not a Number or less than one or greater than 10
-        // let text;
-        // if (index.Qty <=  parseFloat(index.BaseUnitQuantity) ) {
-        //   text = "Input not valid";
-        // } else {
-        //   text = "Input OK";
-        // }
-        // document.getElementById("demo").innerHTML = text;
-
+    const handleChange = (event, index) => {
         // GoButton.map((index) => {
         //     let Stock = index.BatchesData.map((i) => {
         //         return i.BaseUnitQuantity
@@ -376,44 +358,9 @@ const MaterialIssueMaster = (props) => {
         // var OrderQty = parseFloat(stockQty)
         // console.log(Stock)
 
-        let input = event.target.value;
-        if (input == '') { input = 0 }
-        input = parseFloat(input);
-        let compareval = index.BaseUnitQuantity;
-        compareval = parseFloat(compareval);
 
-        if (input > compareval) {
-            try {
-                document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = "red"
-                user["StockInvalid"] = true
-            }
-            catch (e) { }
-        } else {
-            document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = ""
-        }
-        debugger
-        if (user.CompareStockQty === undefined) {
-            user["CompareStockQty"] = 0
-        }
-        user["CompareStockQty"] = user["CompareStockQty"] + input;
-        if (user.CompareStockQty === user.Quantity) {
-            user["StockInvalid"] = true
-        } else {
-            user["StockInvalid"] = false
-        }
-        if (!user.StockInvalid) {
-            try {
-                document.getElementById(`ItemName${user.id}`).style.color = "red"
-            } catch (e) { }
-        } else {
-            try {
-                document.getElementById(`ItemName${user.id}`).style.color = ""
-            } catch (e) { }
-        }
         index.Qty = event.target.value
     };
-
-
 
     const SaveHandler = (event) => {
         debugger
@@ -500,13 +447,8 @@ const MaterialIssueMaster = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-            formatter: (cellContent, user) => {
-                return (
-                    <samp id={`ItemName${user.id}`}>{cellContent}</samp>
-                )
-            },
-            style: (cellContent, user,) => {
-
+            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
+                debugger
                 let Stock = user.BatchesData.map((index) => {
                     return index.BaseUnitQuantity
                 })
@@ -550,7 +492,6 @@ const MaterialIssueMaster = (props) => {
                         </Thead>
                         <Tbody  >
                             {cellContent.map((index) => {
-
                                 return (
                                     < tr >
                                         <td>
@@ -586,11 +527,9 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Input type="text"
-                                                    key={index.id}
-                                                    id={`stock${user.id}-${index.id}`}
                                                     style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
-                                                    onChange={(event) => handleChange(event, index, user)}
+                                                    onChange={(event) => handleChange(event, index)}
                                                 ></Input>
                                             </div>
                                         </td>
@@ -615,17 +554,16 @@ const MaterialIssueMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} />
+                <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE} />
 
                 <div className="page-content" >
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    /> */}
+                
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
-                                        <FormGroup className="row mt-2  ">
+                                        <FormGroup className="row mt-2 mb-3  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
                                             <Col sm="7">
                                                 <Flatpickr
@@ -648,7 +586,7 @@ const MaterialIssueMaster = (props) => {
                                     </Col>
 
                                     <Col sm="6">
-                                        <FormGroup className="row mt-2 ">
+                                        <FormGroup className="row mt-2 mb-3 ">
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                             <Col sm={7}>
                                                 <Select
@@ -667,57 +605,7 @@ const MaterialIssueMaster = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                    <Col sm="6">
-                                        <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
-                                            <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.NumberOfLot} </Label>
-                                            <Col sm={7}>
-                                                <Input
-                                                    style={{ textAlign: "right" }}
-                                                    name="NumberOfLot"
-                                                    value={values.NumberOfLot}
-                                                    type="text"
-                                                    className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter Number Of Lots"
-                                                    autoComplete='off'
-                                                    onChange={NumberOfLotchange}
-                                                />
-
-                                                <span className="text-danger">Note* :
-                                                    <span className="text-secondary">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
-                                                    </span></span>
-
-
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="6">
-                                        <FormGroup className="mb-1 mt-2  row" >
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
-                                            <Col sm={7}>
-                                                <Input
-                                                    style={{ textAlign: "right" }}
-                                                    name="LotQuantity"
-                                                    value={values.LotQuantity}
-                                                    type="text"
-                                                    className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter LotQuantity"
-                                                    autoComplete='off'
-                                                    onChange={Quantitychange}
-
-                                                />
-                                                <span className="text-danger">Note* :
-                                                    <span className="text-secondary">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
-                                                    </span></span>
-                                            </Col>
-                                            <div className="col col-1">
-                                                <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                    {Itemselect.UnitName}
-                                                </Label>
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
-
+                                 
                                 </Col>
                                 <Col sm={1} className="mt-2">
                                     <Button
@@ -752,8 +640,6 @@ const MaterialIssueMaster = (props) => {
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
-                                                        {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -790,4 +676,4 @@ const MaterialIssueMaster = (props) => {
     }
 };
 
-export default MaterialIssueMaster
+export default Invoice
