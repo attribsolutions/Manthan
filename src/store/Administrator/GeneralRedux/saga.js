@@ -46,7 +46,7 @@ function* Post_Method_ForGeneral_GenFun({ data }) {
 
 // get api
 function* Post_General_List_GenratorFunction({data}) {
-    debugger
+ 
     yield put(SpinnerState(true))
     try {
         const response = yield call(Post_General_List_Api,data);
@@ -113,7 +113,7 @@ function* Update_General_ID_GenratorFunction({ updateData, ID }) {
 /// Type Dropdown
 
 function* Post_Type_GenFun({ data }) {
-    debugger
+    
     yield put(SpinnerState(true))
     try {
         const response = yield call(post_Type_API, data);

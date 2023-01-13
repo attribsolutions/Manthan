@@ -124,7 +124,6 @@ const CategoryMaster = (props) => {
             }
 
             if (hasEditVal) {
-
                 const { id, Name, CategoryTypeName, CategoryType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 

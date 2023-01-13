@@ -47,7 +47,6 @@ const GeneralList = (props) => {
         const page_Id = pageId.GENERAL_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(PostGenerallist());
     }, []);
 
     const { pageField, userAccess = [] } = reducers
