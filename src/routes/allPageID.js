@@ -117,5 +117,7 @@ export const PRODUCTION_ADD_Mode_2 = 123
 export const SALE_ORDER = 117
 export const SALE_ORDER_lIST = 118
 
+
 export const INVOICE = 121
 export const INVOICE_LIST =122
+

@@ -21,11 +21,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     PostMethodForGeneral,
     PostMethodForGeneralSuccess,
-    getGenerallist,
     editGeneralIDSuccess,
     updateGeneralID,
     updateGeneralIDSuccess,
-    getType
+    PostType,
+    PostTypeSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -35,10 +35,10 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
-    resetFunction,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
@@ -60,13 +60,13 @@ const GeneralMaster = (props) => {
 
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [userPageAccessState, setUserPageAccessState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        Type,
+        Type=[] ,
         pageField,
         updateMsg,
         userAccess } = useSelector((state) => ({
@@ -81,9 +81,7 @@ const GeneralMaster = (props) => {
         const page_Id = pageId.GENERAL
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getGenerallist());
-        dispatch(getType());
-
+        dispatch(PostTypeSuccess());
     }, []);
 
     const values = { ...state.values }
@@ -139,7 +137,7 @@ const GeneralMaster = (props) => {
 
                 values.id = id
                 values.Name = Name;
-                values.Type = { label: Type, value: Type };
+                values.Type = { label: Type, value:Type };
                 values.IsActive = IsActive;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
@@ -150,8 +148,15 @@ const GeneralMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
 
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: userCompany(),
+        });
+        dispatch(PostType(jsonBody));
+    }, []);
+
+    useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethodForGeneralSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
@@ -214,30 +219,20 @@ const GeneralMaster = (props) => {
         }
     }, [pageField])
 
-    const TypeDropdownValues = [
-        {
-            value: 1,
-            label: "POType",
-        },
-
-        {
-            value: 2,
-            label:"ValidationType",
-        },
-
-    ];
-
+    const TypeDropdownOptions = Type.map((i) => ({ label: i.Name, value: i.id }))
 
     const saveHandeller = (event) => {
-
+     
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                Type: values.Type.value,
+                TypeID: values.Type.value,
+                Company: userCompany(),
                 IsActive: values.IsActive,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy()
+
             });
 
             saveDissable(true);//save Button Is dissable function
@@ -280,7 +275,7 @@ const GeneralMaster = (props) => {
                                                         <Row>
                                                             <Col md="4" >
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Type} </Label>
                                                                     <Col sm={12} >
                                                                         <Select
                                                                             name="Type"
@@ -288,7 +283,7 @@ const GeneralMaster = (props) => {
                                                                             isSearchable={true}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                            options={TypeDropdownValues}
+                                                                            options={TypeDropdownOptions}
                                                                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                                         />
@@ -324,7 +319,7 @@ const GeneralMaster = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">IsActive</Label>
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsActive}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
