@@ -417,6 +417,13 @@ export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
 
+
+// // Demand
+// export const DemandPage_GoButton_API = () => post(url.ORDER_Edit_API)//get api
+// export const DemandPage_Post_API = () => post(url.ORDER_PAGE_API)//get api
+// export const getDivision = () => get(url.ORDER_PAGE_API)//dropdown api
+
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
