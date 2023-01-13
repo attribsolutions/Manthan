@@ -432,7 +432,41 @@ const Invoice = (props) => {
         },
         {
             text: "Unit",
-            dataField: "UnitName",
+            dataField: "",
+            formatter: (value, row, key) => {
+
+                if (!row.UnitName) {
+                    row["Unit_id"] = row.UnitDetails[0].UnitID
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.UnitID,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["Unit_id"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '150px', textAlign: 'center' };
+            }
         },
         {
             text: "Batch Code",

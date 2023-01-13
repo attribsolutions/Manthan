@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { Party_Items, GetSupplier_API, get_Item_List, get_Party_Item_List, Items_Master_Get_API, GetPartyList_API, } from "../../../helpers/backend_helper";
+import { Party_Items, get_Party_Item_List, Items_Master_Get_API, GetPartyList_API, Supplier_Get_API, } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { PostPartyItemsSuccess, getSupplierSuccess, getPartyItemListSuccess, getPartyListSuccess, } from "./action";
@@ -55,7 +55,7 @@ function* getSupplierGenFunc() {
   const USER = JSON.parse(localStorage.getItem("roleId"))
   try {
     debugger
-    const response = yield call(GetSupplier_API, USER.Party_id);
+    const response = yield call(Supplier_Get_API, USER.Party_id);
     
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {

@@ -25,7 +25,7 @@ import {
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
+import { GetCustomer, getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
@@ -85,7 +85,7 @@ const SaleOrder = (props) => {
     const {
         goBtnOrderdata,
         postMsg,
-        supplier,
+        customer,
         userAccess,
         orderType,
         updateMsg,
@@ -93,7 +93,7 @@ const SaleOrder = (props) => {
         pageField
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
-        supplier: state.SupplierReducer.supplier,
+        customer: state.SupplierReducer.customer,
         supplierAddress: state.SupplierReducer.supplierAddress,
         orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
@@ -208,7 +208,7 @@ const SaleOrder = (props) => {
         const page_Id = pageId.BIllOf_MATERIALS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getSupplier())
+        dispatch(GetCustomer())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
         dispatch(getOrderType())
@@ -312,9 +312,9 @@ const SaleOrder = (props) => {
         setisOpen_TermsModal(true)
     };
 
-    const supplierOptions = supplier.map((i) => ({
+    const supplierOptions = customer.map((i) => ({
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
 
     const pagesListColumns = [
