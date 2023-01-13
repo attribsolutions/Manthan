@@ -97,7 +97,7 @@ export const ORDER_lIST = 54
 
 export const GRN_ADD = 55
 export const GRN_lIST = 56
-export const GRN_ADD_Mode_2 = 59
+export const GRN_ADD_Mode_2 = 124
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
@@ -108,15 +108,16 @@ export const WORK_ORDER_ADD_Mode_2 =79
 
 export const MATERIAL_ISSUE = 75
 export const MATERIAL_ISSUE_LIST = 76
-export const MATERIAL_ISSUE_ADD_Mode_2 = 81
+export const MATERIAL_ISSUE_ADD_Mode_2 = 125
 
 export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
-export const PRODUCTION_ADD_Mode_2 = 83
+export const PRODUCTION_ADD_Mode_2 = 123
 
 export const SALE_ORDER = 117
 export const SALE_ORDER_lIST = 118
 
-//******************************* Inter Branch ************************************//
-// export const DEMAND = 123
-// export const DEMANDLIST = 124
+
+export const INVOICE = 121
+export const INVOICE_LIST =122
+
