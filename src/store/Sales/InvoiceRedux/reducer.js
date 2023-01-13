@@ -1,8 +1,9 @@
-import { GO_BUTTON_POST_FOR_INVOICE_SUCCESS } from "./actionType"
+import { GO_BUTTON_POST_FOR_INVOICE_SUCCESS, POST_INVOICE_MASTER_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     GoButton: [],
-   }
+    postMsg:{ Status: false },
+}
 
 const InvoiceReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -13,10 +14,16 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 ...state,
                 GoButton: action.payload,
             }
-            default:
-                return state
+
+        case POST_INVOICE_MASTER_SUCCESS:
+            return {
+                ...state,
+                postMsg: action.payload,
+            }
+        default:
+            return state
     }
-    
+
 }
 
 export default InvoiceReducer

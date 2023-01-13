@@ -296,7 +296,7 @@ const ItemsMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: url.CATEGORY_lIST,
+                    RedirectPath: url.ITEM_lIST,
                 }))
             }
         }

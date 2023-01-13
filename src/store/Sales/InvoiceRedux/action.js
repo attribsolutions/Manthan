@@ -1,4 +1,4 @@
-import { GO_BUTTON_POST_FOR_INVOICE, GO_BUTTON_POST_FOR_INVOICE_SUCCESS } from "./actionType";
+import { GO_BUTTON_POST_FOR_INVOICE, GO_BUTTON_POST_FOR_INVOICE_SUCCESS, POST_INVOICE_MASTER, POST_INVOICE_MASTER_SUCCESS } from "./actionType";
 
 // Go Button Post API for Invoice Master
 export const GoButton_post_For_Invoice = (data,) => ({
@@ -11,16 +11,16 @@ export const GoButton_post_For_Invoice_Success = (data) => ({
     payload: data,
 });
 
-// // post api
-// export const postInvoiceMaster = (data) => ({
-//     type: POST_INVOICE_MASTER,
-//     data,
-// });
+// post api
+export const postInvoiceMaster = (data) => ({
+    type: POST_INVOICE_MASTER,
+    data,
+});
 
-// export const postInvoiceMasterSuccess = (data) => ({
-//     type: POST_INVOICE_MASTER_SUCCESS,
-//     payload: data,
-// });
+export const postInvoiceMasterSuccess = (data) => ({
+    type: POST_INVOICE_MASTER_SUCCESS,
+    payload: data,
+});
 
 // //get listpage api
 // export const getIssueListPage = (filters) => ({
