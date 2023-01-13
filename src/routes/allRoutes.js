@@ -102,8 +102,10 @@ import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_L
 
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
 import ProductionList from "../pages/Purchase/Production/ProductionList";
-import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
-import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
+import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder";
+import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList";
+// import Demand from "../pages/Inter Branch/Demand/Demand";
+// import DemandList from "../pages/Inter Branch/Demand/DemandList";
 
 const userRoutes = [
 
@@ -221,6 +223,10 @@ const userRoutes = [
 
   { path: path.SALE_ORDER, component: SaleOrder },
   { path: path.SALE_ORDER_lIST, component: SaleOrderList },
+
+ //************************************** Inter Branch ********************************//
+  // { path: path.DEMAND, component: Demand },
+  // { path: path.DEMAND_LIST, component: DemandList},
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

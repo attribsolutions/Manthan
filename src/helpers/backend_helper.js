@@ -357,12 +357,12 @@ export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)//
 export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
 // General API
-export const get_General_List_Api = () => get(url.GENERAL_API)// get api
+export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST,data)// get api
 export const Post_General_API = (data) => post(url.GENERAL_API, data)// post api
 export const detelet_General_List_Api = (id) => del(`${url.GENERAL_API}/${id}`)// delete api
 export const edit_General_List_Api = (id) => get(`${url.GENERAL_API}/${id}`)// edit api
 export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${id}`, data)// update api
-export const get_Type_API = () => get(url.TYPE_API)// Type DropDown API
+export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
 
 // Order Page api  
 
@@ -416,6 +416,11 @@ export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRO
 export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_LIST, filters)// go button postapi
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
+
+// // Demand
+// export const DemandPage_GoButton_API = () => post(url.ORDER_Edit_API)//get api
+// export const DemandPage_Post_API = () => post(url.ORDER_PAGE_API)//get api
+// export const getDivision = () => get(url.ORDER_PAGE_API)//dropdown api
 
 export {
   getLoggedInUser,

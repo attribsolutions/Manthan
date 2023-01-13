@@ -16,7 +16,7 @@ export const MaterialIssuelistfilters = filter => ({
 })
 
 // Go Button Post API
-export const postGoButtonForMaterialIssue_Master = (data,) => ({
+export const postGoButtonForMaterialIssue_Master = (data) => ({
     type: POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER,
     data,
 });
