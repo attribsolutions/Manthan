@@ -80,7 +80,7 @@ const Invoice = (props) => {
         Items: state.WorkOrderReducer.WorkOrderList,
         GoButton: state.InvoiceReducer.GoButton
     }));
-console.log(GoButton)
+    console.log(GoButton)
     useEffect(() => {
         const page_Id = pageId.INVOICE
         dispatch(GoButton_post_For_Invoice_Success([]))
@@ -302,7 +302,7 @@ console.log(GoButton)
     }
 
     const handleChange = (event, index) => {
-       
+
         index.Qty = event.target.value
     };
 
@@ -392,7 +392,7 @@ console.log(GoButton)
             text: "Item Name",
             dataField: "ItemName",
             style: (cellContent, user) => {
-             
+
                 let Stock = user.StockDetails.map((index) => {
                     return index.BaseUnitQuantity
                 })
@@ -400,7 +400,7 @@ console.log(GoButton)
                 Stock.forEach(x => {
                     TotalStock += parseFloat(x);
                 });
-                
+
                 var OrderQty = parseFloat(user.Quantity)
                 if (OrderQty > TotalStock) {
                     return {
@@ -414,6 +414,21 @@ console.log(GoButton)
         {
             text: "Order Qty",
             dataField: "Quantity",
+        },
+        {
+            text: "Quantity",
+            dataField: "Quantity",
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ width: "150px" }}>
+                        <Input type="text"
+                            style={{ textAlign: "right" }}
+                            defaultValue={cellContent}
+                            // onChange={(event) => handleChange(event, index)}
+                        ></Input>
+                    </div>
+                </>
+            )
         },
         {
             text: "Unit",

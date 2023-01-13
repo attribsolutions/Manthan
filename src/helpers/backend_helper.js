@@ -406,7 +406,7 @@ export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id
 
 // Material Issue
 export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
-export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
+export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_ISSUE, data)//  postapi
 export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
 export const Material_Issue_Delete_API = (id) => del(`${url.POST_API_FOR_MATERIAL_ISSUE}/${id}`)// delete api
 
@@ -419,6 +419,7 @@ export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DR
 
 // Invoice
 export const Invoice_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_INVOICE, data)// go button postapi
+export const Invoice_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_INVOICE, data)//  postapi
 
 // // Demand
 // export const DemandPage_GoButton_API = () => post(url.ORDER_Edit_API)//get api
