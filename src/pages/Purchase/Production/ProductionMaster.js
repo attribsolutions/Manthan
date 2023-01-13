@@ -43,7 +43,7 @@ const ProductionMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-
+    const [UnitNamefromPageMod_2, setUnitNamefromPageMod_2] = useState('');
     const fileds = {
         id: "",
         ProductionDate: currentDate,
@@ -96,11 +96,12 @@ const ProductionMaster = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-
+        debugger
         let mode2Data = props.location
         const MaterialProductionaData = Object.assign({}, mode2Data.MaterialProductionaData)
-
+     
         if (mode2Data.pageMode === "Mode2") {
+            setUnitNamefromPageMod_2(props.location.MaterialProductionaData[0].UnitName)
             setState(i => {
                 i.values.ItemName = {
                     label: MaterialProductionaData[0].ItemName,
@@ -292,7 +293,7 @@ const ProductionMaster = (props) => {
                                         </Col>
                                         <div className="col col-1">
                                             <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                {values.UnitName.label}
+                                                {UnitNamefromPageMod_2}
                                             </Label>
                                         </div>
                                     </FormGroup>

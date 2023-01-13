@@ -40,6 +40,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success } from "../../../store/Sales/InvoiceRedux/action";
 
 const Invoice = (props) => {
 
@@ -77,12 +78,12 @@ const Invoice = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Items: state.WorkOrderReducer.WorkOrderList,
-        GoButton: state.MaterialIssueReducer.GoButton
+        GoButton: state.InvoiceReducer.GoButton
     }));
-
+console.log(GoButton)
     useEffect(() => {
         const page_Id = pageId.INVOICE
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(GoButton_post_For_Invoice_Success([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -131,14 +132,14 @@ const Invoice = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-               
+
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
             if (hasEditVal) {
-                
+
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
@@ -269,22 +270,15 @@ const Invoice = (props) => {
     function goButtonHandler(event) {
         debugger
 
-        event.preventDefault();
-        if (state.values.LotQuantity == "0") {
-            alert("Quantity Can Not be 0")
-        } else
-            if (formValid(state, setState)) {
+        const jsonBody = JSON.stringify({
+            FromDate: "2023-01-10",
+            Customer: 22,
+            Party: 4,
+            OrderIDs: ""
+        });
 
-                const jsonBody = JSON.stringify({
-                    WorkOrder: values.ItemName.value,
-                    Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
-                    Quantity: parseInt(values.LotQuantity)
-                });
+        dispatch(GoButton_post_For_Invoice(jsonBody));
 
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
-            }
     }
 
     function ItemOnchange(e) {
@@ -307,58 +301,8 @@ const Invoice = (props) => {
         })
     }
 
-
-    function Quantitychange(event) {
-
-
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.Quantity :
-            Itemselect.Quantity, Number(event.target.value)));
-        event.target.value = value1
-        if (event.target.value === "NaN") {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.LotQuantity = value1
-            // i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
-
-    function NumberOfLotchange(event) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.NumberOfLot
-            : Itemselect.NumberOfLot, Number(event.target.value)));
-        event.target.value = value1
-        if ((event.target.value === "NaN")) {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.NumberOfLot = value1
-            i.hasValid.NumberOfLot.valid = true;
-            // i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
-
     const handleChange = (event, index) => {
-        // GoButton.map((index) => {
-        //     let Stock = index.BatchesData.map((i) => {
-        //         return i.BaseUnitQuantity
-        //     })       
-        // console.log(Stock)
-
-        // })
-
-        // var OrderQty = parseFloat(stockQty)
-        // console.log(Stock)
-
-
+       
         index.Qty = event.target.value
     };
 
@@ -447,15 +391,16 @@ const Invoice = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
-                debugger
-                let Stock = user.BatchesData.map((index) => {
+            style: (cellContent, user) => {
+             
+                let Stock = user.StockDetails.map((index) => {
                     return index.BaseUnitQuantity
                 })
                 var TotalStock = 0;
                 Stock.forEach(x => {
                     TotalStock += parseFloat(x);
                 });
+                
                 var OrderQty = parseFloat(user.Quantity)
                 if (OrderQty > TotalStock) {
                     return {
@@ -476,7 +421,7 @@ const Invoice = (props) => {
         },
         {
             text: "Batch Code",
-            dataField: "BatchesData",
+            dataField: "StockDetails",
 
             formatter: (cellContent, user) => (
                 <>
@@ -557,7 +502,7 @@ const Invoice = (props) => {
                 <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE} />
 
                 <div className="page-content" >
-                
+
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
@@ -605,7 +550,7 @@ const Invoice = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                 
+
                                 </Col>
                                 <Col sm={1} className="mt-2">
                                     <Button

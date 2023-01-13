@@ -50,9 +50,7 @@ import WorkOrderSaga from "./Purchase/WorkOrder/saga"
 import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
 import ProductionSaga from "./Purchase/ProductionRedux/saga"
 import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
-
-
-
+import InvoiceSaga from "./Sales/InvoiceRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -102,5 +100,6 @@ export default function* rootSaga() {
     fork(WorkOrderSaga),
     fork(MaterialIssueSaga),
     fork(ProductionSaga),
+    fork(InvoiceSaga)
   ])
 }
