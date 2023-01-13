@@ -412,7 +412,7 @@ console.log(GoButton)
         },
 
         {
-            text: "Work Order Qty",
+            text: "Order Qty",
             dataField: "Quantity",
         },
         {
