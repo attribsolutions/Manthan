@@ -780,7 +780,7 @@ const PageMaster = (props) => {
                                     }}
                                     autoComplete="off"
                                   />
-                                </FormGroup>
+                                </FormGroup>Show Count Label
                               </Col>
                             </Row>
 
@@ -793,12 +793,6 @@ const PageMaster = (props) => {
                                     value={EditData.ShowCountLabel}
                                     type="text"
                                     placeholder="Please Enter  Show Count Label"
-                                    validate={{
-                                      required: {
-                                        value: true,
-                                        errorMessage: "Please Enter ShowCountLabel",
-                                      },
-                                    }}
                                     autoComplete="off"
                                   />
                                 </FormGroup>
