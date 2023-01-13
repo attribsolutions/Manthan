@@ -5,7 +5,7 @@ import {
     deleteGeneralIDSuccess,
     delete_General_ID,
     editGeneralID,
-    getGenerallist,
+    PostGenerallist,
     PostMethodForGeneralSuccess,
     updateGeneralIDSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
@@ -15,6 +15,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew"
+import { userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const GeneralList = (props) => {
@@ -33,7 +34,7 @@ const GeneralList = (props) => {
     );
 
     const action = {
-        getList: getGenerallist,
+        postList: PostGenerallist,
         editId: editGeneralID,
         deleteId: delete_General_ID,
         postSucc: PostMethodForGeneralSuccess,
@@ -46,10 +47,21 @@ const GeneralList = (props) => {
         const page_Id = pageId.GENERAL_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getGenerallist());
+        dispatch(PostGenerallist());
     }, []);
 
     const { pageField, userAccess = [] } = reducers
+
+
+
+    useEffect(() => {
+     
+        const jsonBody = JSON.stringify({
+            TypeID: 2,
+            Company: userCompany(),
+        });
+        dispatch(PostGenerallist(jsonBody));
+    }, []);
 
     return (
         <React.Fragment>

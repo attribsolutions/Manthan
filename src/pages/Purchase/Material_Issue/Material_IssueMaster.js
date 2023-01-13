@@ -41,6 +41,8 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 const MaterialIssueMaster = (props) => {
 
@@ -71,7 +73,7 @@ const MaterialIssueMaster = (props) => {
         pageField,
         userAccess,
         Items,
-        GoButton
+        GoButton = []
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -349,7 +351,20 @@ const MaterialIssueMaster = (props) => {
         })
     }
 
-    const handleChange = (event, index) => {
+    const handleChange = (event, index, user) => {
+        debugger
+
+
+        // let x = document.getElementById("inputid").value;
+        // // If x is Not a Number or less than one or greater than 10
+        // let text;
+        // if (index.Qty <=  parseFloat(index.BaseUnitQuantity) ) {
+        //   text = "Input not valid";
+        // } else {
+        //   text = "Input OK";
+        // }
+        // document.getElementById("demo").innerHTML = text;
+
         // GoButton.map((index) => {
         //     let Stock = index.BatchesData.map((i) => {
         //         return i.BaseUnitQuantity
@@ -361,7 +376,40 @@ const MaterialIssueMaster = (props) => {
         // var OrderQty = parseFloat(stockQty)
         // console.log(Stock)
 
+        let input = event.target.value;
+        if (input == '') { input = 0 }
+        input = parseFloat(input);
+        let compareval = index.BaseUnitQuantity;
+        compareval = parseFloat(compareval);
 
+        if (input > compareval) {
+            try {
+                document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = "red"
+                user["StockInvalid"] = true
+            }
+            catch (e) { }
+        } else {
+            document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = ""
+        }
+        debugger
+        if (user.CompareStockQty === undefined) {
+            user["CompareStockQty"] = 0
+        }
+        user["CompareStockQty"] = user["CompareStockQty"] + input;
+        if (user.CompareStockQty === user.Quantity) {
+            user["StockInvalid"] = true
+        } else {
+            user["StockInvalid"] = false
+        }
+        if (!user.StockInvalid) {
+            try {
+                document.getElementById(`ItemName${user.id}`).style.color = "red"
+            } catch (e) { }
+        } else {
+            try {
+                document.getElementById(`ItemName${user.id}`).style.color = ""
+            } catch (e) { }
+        }
         index.Qty = event.target.value
     };
 
@@ -410,7 +458,7 @@ const MaterialIssueMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-            
+
             if (validMsg.length > 0) {
                 dispatch(AlertState({
                     Type: 4,
@@ -452,8 +500,13 @@ const MaterialIssueMaster = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
-                debugger
+            formatter: (cellContent, user) => {
+                return (
+                    <samp id={`ItemName${user.id}`}>{cellContent}</samp>
+                )
+            },
+            style: (cellContent, user,) => {
+
                 let Stock = user.BatchesData.map((index) => {
                     return index.BaseUnitQuantity
                 })
@@ -497,6 +550,7 @@ const MaterialIssueMaster = (props) => {
                         </Thead>
                         <Tbody  >
                             {cellContent.map((index) => {
+
                                 return (
                                     < tr >
                                         <td>
@@ -532,9 +586,11 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Input type="text"
+                                                    key={index.id}
+                                                    id={`stock${user.id}-${index.id}`}
                                                     style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
-                                                    onChange={(event) => handleChange(event, index)}
+                                                    onChange={(event) => handleChange(event, index, user)}
                                                 ></Input>
                                             </div>
                                         </td>
@@ -696,6 +752,8 @@ const MaterialIssueMaster = (props) => {
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />
+                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
+                                                        {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
                                                     </div>
                                                 </Col>
                                             </Row>

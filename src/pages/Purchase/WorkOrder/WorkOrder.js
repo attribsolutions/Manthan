@@ -48,6 +48,8 @@ import '../../Order/div.css'
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 
 const WorkOrder = (props) => {
@@ -145,7 +147,7 @@ const WorkOrder = (props) => {
 
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
-                    , Quantity, EstimatedOutputQty ,Bom} = hasEditVal
+                    , Quantity, EstimatedOutputQty, Bom } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.WorkOrderDate.valid = true;
@@ -163,16 +165,16 @@ const WorkOrder = (props) => {
                 values.ItemName = { label: ItemName, value: Item };
 
                 const jsonBody = JSON.stringify({
-                    Item:Item,
-                    Bom: Bom ,
+                    Item: Item,
+                    Bom: Bom,
                     Quantity: parseFloat(Quantity)
                 });
                 dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-                
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-               
+
             }
         }
     }, [])
@@ -257,7 +259,7 @@ const WorkOrder = (props) => {
             FromDate: "2022-12-01",
             ToDate: currentDate,
             Company: userCompany(),
-            Party:userParty()
+            Party: userParty()
         });
         dispatch(getBOMList(jsonBody));
     }, [])
@@ -322,7 +324,7 @@ const WorkOrder = (props) => {
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
             Quantity: parseFloat(values.Quantity),
-            Party:userParty()
+            Party: userParty()
         });
         dispatch(postGoButtonForWorkOrder_Master(jsonBody));
     }
@@ -495,7 +497,7 @@ const WorkOrder = (props) => {
                                                         }
                                                         disabled={true}
                                                         className="text-end"
-                                                        // placeholder="Please Enter Stock Quantity"
+                                                    // placeholder="Please Enter Stock Quantity"
                                                     />
                                                 </div>
                                                 <div className="col col-2">
@@ -515,7 +517,7 @@ const WorkOrder = (props) => {
                                                     <Input
                                                         value={pageMode === "edit" ?
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
-                                                                itemselect.EstimatedOutputQty : ""} 
+                                                                itemselect.EstimatedOutputQty : ""}
                                                         disabled={true}
                                                         className="text-end"
                                                         // placeholder="Please Enter Estimated Output Qty"
@@ -630,6 +632,8 @@ const WorkOrder = (props) => {
                                                                 {...toolkitProps.baseProps}
                                                                 {...paginationTableProps}
                                                             />
+                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch,   "WorkOrder")}
+                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
                                                             <div>
                                                                 <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
                                                             </div>

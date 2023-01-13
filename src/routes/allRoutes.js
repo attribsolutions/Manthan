@@ -102,9 +102,11 @@ import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_L
 
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
 import ProductionList from "../pages/Purchase/Production/ProductionList";
+
 import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
 import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
 import Invoice from "../pages/Sale/Invoice/Invoice";
+
 
 
 const userRoutes = [
@@ -225,6 +227,7 @@ const userRoutes = [
   { path: path.SALE_ORDER_lIST, component: SaleOrderList },
 
   { path: path.INVOICE, component: Invoice },
+
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
