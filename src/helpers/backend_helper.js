@@ -417,6 +417,9 @@ export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
 
+// Invoice
+export const Invoice_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_INVOICE, data)// go button postapi
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
