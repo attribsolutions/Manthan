@@ -25,7 +25,7 @@ import { MetaTags } from "react-meta-tags";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const WorkOrderList = () => {
-    debugger
+
     const dispatch = useDispatch();
     const history = useHistory();
 
