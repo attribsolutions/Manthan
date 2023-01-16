@@ -26,6 +26,7 @@ import {
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
+let party=userParty()
 
 function* getSupplierGenFunc() {
 debugger
@@ -98,9 +99,9 @@ function* getVendorGenFunc() {
 }
 
 function* getCustomerGenFunc() {
-
+debugger
   try {
-    const response = yield call(Customer_Get_API, userParty());
+    const response = yield call(Customer_Get_API, party);
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({

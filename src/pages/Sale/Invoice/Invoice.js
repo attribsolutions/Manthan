@@ -30,7 +30,6 @@ import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -40,7 +39,9 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success } from "../../../store/Sales/InvoiceRedux/action";
+import { GoButton_post_For_Invoice} from "../../../store/Sales/InvoiceRedux/action";
+import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import {postInvoiceMaster} from "../../../store/Sales/InvoiceRedux/action";
 
 const Invoice = (props) => {
 
@@ -50,12 +51,11 @@ const Invoice = (props) => {
     const fileds = {
         // id: "",
         MaterialIssueDate: currentDate,
-        ItemName: "",
+        CustomerName: "",
         NumberOfLot: "",
         LotQuantity: "",
-
     }
-
+debugger
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
@@ -70,20 +70,22 @@ const Invoice = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        Items,
+        customer,
         GoButton
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Items: state.WorkOrderReducer.WorkOrderList,
+        customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.GoButton
     }));
+
     console.log(GoButton)
+
     useEffect(() => {
         const page_Id = pageId.INVOICE
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -114,14 +116,6 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            FromDate: "2022-12-01",
-            ToDate: currentDate
-        });
-        dispatch(getWorkOrderListPage(jsonBody));
-    }, [])
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
@@ -141,13 +135,13 @@ const Invoice = (props) => {
             if (hasEditVal) {
 
                 setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
+                const { id, Item, CustomerName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
+                    i.values.CustomerName = { value: id, label: CustomerName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.ItemName.valid = true;
+                    i.hasValid.CustomerName.valid = true;
                     i.hasValid.MaterialIssueDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
                     i.hasValid.LotQuantity.valid = true;
@@ -242,66 +236,34 @@ const Invoice = (props) => {
         }
     }, [pageField])
 
-    const ItemDropdown_Options = Items.map((index) => ({
+    const CustomerDropdown_Options = customer.map((index) => ({
         value: index.id,
-        label: index.ItemName,
-        Quantity: index.Quantity,
-        Item: index.Item,
-        BomID: index.Bom,
-        Unit: index.Unit,
-        NumberOfLot: index.NumberOfLot
+        label: index.Name,
+
     }));
 
     function ItemOnchange(hasSelect, evn) {
+        debugger
         onChangeSelect({ hasSelect, evn, state, setState });
         dispatch(Breadcrumb_inputName(hasSelect.label))
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setState((i) => {
-            i.values.ItemName = hasSelect
-            i.values.NumberOfLot = hasSelect.NumberOfLot;
-            i.values.LotQuantity = hasSelect.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.MaterialIssueDate.valid = true;
+            i.values.CustomerName = hasSelect
             return i
         })
     }
 
     function goButtonHandler(event) {
-    
         const jsonBody = JSON.stringify({
-            FromDate: "2023-01-10",
-            Customer: 22,
-            Party: 4,
+            FromDate: currentDate,
+            Customer: values.CustomerName.value,
+            Party:userParty(),
             OrderIDs: ""
         });
-
         dispatch(GoButton_post_For_Invoice(jsonBody));
-
-    }
-
-    function ItemOnchange(e) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        setItemselectonchange(e)
-        setState((i) => {
-            i.values.ItemName = {
-                value: e.value,
-                label: e.label,
-                Item: e.Item,
-                NoLot: e.NumberOfLot,
-                lotQty: e.Quantity
-            };
-            i.values.NumberOfLot = e.NumberOfLot;
-            i.values.LotQuantity = e.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.ItemName.valid = true;
-            return i
-        })
     }
 
     const handleChange = (event, index) => {
-
         index.Qty = event.target.value
     };
 
@@ -311,9 +273,9 @@ const Invoice = (props) => {
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
-            let Stock = index.BatchesData.map((i) => {
-                return i.BaseUnitQuantity
-            })
+            let Stock = index.StockDetails.map((i) => {
+                    return i.BaseUnitQuantity
+                })
             var TotalStock = 0;
             Stock.forEach(x => {
                 TotalStock += parseFloat(x);
@@ -321,13 +283,13 @@ const Invoice = (props) => {
             var OrderQty = parseFloat(index.Quantity)
             if (OrderQty > TotalStock) {
                 {
-                    // alert(` ${index.ItemName} out of stock`)
-                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+                    // alert(` ${index.CustomerName} out of stock`)
+                    validMsg.push(`${index.CustomerName}:Item is Out Of Stock`);
 
                 };
             }
 
-            index.BatchesData.map((ele) => {
+            index.StockDetails.map((ele) => {
                 MaterialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
@@ -382,14 +344,15 @@ const Invoice = (props) => {
             if (pageMode === mode.edit) {
             }
             else {
-                dispatch(postMaterialIssue(jsonBody));
+                dispatch(postInvoiceMaster(jsonBody));
             }
         };
     }
+
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "ItemName",
+            dataField: "CustomerName",
             style: (cellContent, user) => {
 
                 let Stock = user.StockDetails.map((index) => {
@@ -580,20 +543,20 @@ const Invoice = (props) => {
 
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.CustomerName} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    isDisabled={values.ItemName ? true : null}
-                                                    name="ItemName"
-                                                    value={values.ItemName}
+                                                    isDisabled={values.CustomerName ? true : null}
+                                                    name="CustomerName"
+                                                    value={values.CustomerName}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={ItemDropdown_Options}
+                                                    options={CustomerDropdown_Options}
                                                     onChange={ItemOnchange}
                                                 />
-                                                {isError.ItemName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+                                                {isError.CustomerName.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.CustomerName}</small></span>
                                                 )}
                                             </Col>
                                         </FormGroup>
