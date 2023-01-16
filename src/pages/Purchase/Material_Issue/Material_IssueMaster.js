@@ -386,7 +386,7 @@ const MaterialIssueMaster = (props) => {
 
         let qtysum = 0
         let qtysum2 = 0
-        let isvalid = true
+        // let isvalid = true
         index1.BatchesData.forEach((i) => {
             if (!(i.BaseUnitQuantity)) {
                 i["BaseUnitQuantity"] = 0
@@ -423,12 +423,18 @@ const MaterialIssueMaster = (props) => {
             try {
                 document.getElementById(`ItemName${index1.id}`).style.color = ""
                 document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
+                index1["invalid"] = false
+                index1["invalidMsg"] = ''
 
             } catch (e) { }
         } else {
             try {
                 // document.getElementById(`ItemName${index1.id}`).style.color = "red"
-                document.getElementById(`ItemNameMsg${index1.id}`).innerText = `(${index1.Quantity - qtysum2} ${index1.UnitName} Stock require)`
+                const msg = `${index1.Quantity - qtysum2} ${index1.UnitName} Stock require.`;
+                index1["invalid"] = true;
+                index1["invalidMsg"] = msg;
+
+                document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
             } catch (e) { }
         }
 
@@ -493,12 +499,13 @@ const MaterialIssueMaster = (props) => {
             var OrderQty = parseFloat(index.Quantity)
             if (OrderQty > TotalStock) {
                 {
-                    // alert(` ${index.ItemName} out of stock`)
                     validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-
                 };
             }
-
+            if (index["invalid"]) {
+                validMsg.push( `${index.ItemName}:${index["invalidMsg"]}`);
+            };
+           
             index.BatchesData.map((ele) => {
                 MaterialIssueItems.push({
                     Item: index.Item,
@@ -525,7 +532,7 @@ const MaterialIssueMaster = (props) => {
                 dispatch(AlertState({
                     Type: 4,
                     Status: true,
-                    Message: (validMsg),
+                    Message: JSON.stringify(validMsg),
                     RedirectPath: false,
                     AfterResponseAction: false
                 }));
@@ -566,7 +573,7 @@ const MaterialIssueMaster = (props) => {
                 return (
                     <>
                         <div><samp id={`ItemName${user.id}`}>{cellContent}</samp></div>
-                        <div><samp id={`ItemNameMsg${user.id}`} style={{color:"red"}}></samp></div>
+                        <div><samp id={`ItemNameMsg${user.id}`} style={{ color: "red" }}></samp></div>
                     </>
 
                 )
@@ -606,7 +613,7 @@ const MaterialIssueMaster = (props) => {
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead  >
-                            <tr style={{ zIndex: "23" }} className="">
+                            <tr style={{ zIndex: "1" }} className="">
                                 <th className="">Batch Code </th>
                                 <th className="" >Supplier BatchCode</th>
                                 <th className="" >Batch Date</th>
