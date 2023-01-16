@@ -268,8 +268,7 @@ const Invoice = (props) => {
     }
 
     function goButtonHandler(event) {
-        debugger
-
+    
         const jsonBody = JSON.stringify({
             FromDate: "2023-01-10",
             Customer: 22,
@@ -424,7 +423,7 @@ const Invoice = (props) => {
                         <Input type="text"
                             style={{ textAlign: "right" }}
                             defaultValue={cellContent}
-                            // onChange={(event) => handleChange(event, index)}
+                        // onChange={(event) => handleChange(event, index)}
                         ></Input>
                     </div>
                 </>
@@ -434,9 +433,9 @@ const Invoice = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (value, row, key) => {
-
+                debugger
                 if (!row.UnitName) {
-                    row["Unit_id"] = row.UnitDetails[0].UnitID
+                    row["Unit_id"] = row.UnitDetails[0].Unit
                     row["UnitName"] = row.UnitDetails[0].UnitName
                     row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
                     row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
@@ -451,7 +450,7 @@ const Invoice = (props) => {
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
-                                value: i.UnitID,
+                                value: i.Unit,
                                 baseUnitQty: i.BaseUnitQuantity
                             }))
                         }
