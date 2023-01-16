@@ -78,6 +78,7 @@ const Order = (props) => {
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
+    const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
 
     const {
         goBtnOrderdata,
@@ -98,10 +99,6 @@ const Order = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
-    
-    let FindPartyItemAccess = userAccess.find((index) => {
-        return index.id === 62
-    })
 
     // userAccess useEffect
     useEffect(() => {
@@ -116,7 +113,15 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            let FindPartyItemAccess = userAccess.find((index) => {
+                return (index.id === 62)
+            })
+            if (FindPartyItemAccess) {
+                setFindPartyItemAccess(true)
+            }
         };
+
+
     }, [userAccess])
 
     const location = { ...history.location }
@@ -318,7 +323,7 @@ const Order = (props) => {
                         </div>
 
                         <div>
-                            <samp style={{ display: (supplierSelect.value > 0) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
+                            <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
                                 onClick={assignItem_onClick}>
                                 Assign-Items</samp>
                         </div>
