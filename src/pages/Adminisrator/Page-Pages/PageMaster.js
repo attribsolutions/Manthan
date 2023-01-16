@@ -780,7 +780,7 @@ const PageMaster = (props) => {
                                     }}
                                     autoComplete="off"
                                   />
-                                </FormGroup>Show Count Label
+                                </FormGroup>
                               </Col>
                             </Row>
 
