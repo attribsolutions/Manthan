@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
     Col,
@@ -39,9 +38,9 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { GoButton_post_For_Invoice} from "../../../store/Sales/InvoiceRedux/action";
+import { GoButton_post_For_Invoice} from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import {postInvoiceMaster} from "../../../store/Sales/InvoiceRedux/action";
+import {postInvoiceMaster} from "../../../store/Sales/Invoice/action";
 
 const Invoice = (props) => {
 
