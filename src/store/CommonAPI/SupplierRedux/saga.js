@@ -7,12 +7,9 @@ import {
   GetVenderSuccess,
 } from "./actions";
 import {
-  Customer_Get_API,
-  GetSupplier_API,
   get_OrderType_Api,
   Party_Master_Edit_API,
-  Supplier_Get_API,
-  Vendor_Get_API,
+  VendorSupplierCustomer,
 } from "../../../helpers/backend_helper";
 
 import {
@@ -26,17 +23,15 @@ import {
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-let party=userParty()
-
 function* getSupplierGenFunc() {
-debugger
+  debugger
   try {
-    const response = yield call(Supplier_Get_API, userParty());
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message for getSupplier ",
+      Status: true, Message: "500 Error Message for Supplier ",
     }));
   }
 }
@@ -88,25 +83,25 @@ function* OrderType_GenFunc() {
 function* getVendorGenFunc() {
 
   try {
-    const response = yield call(Vendor_Get_API, userParty());
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message for getSupplier ",
+      Status: true, Message: "500 Error Message for Vendor ",
     }));
   }
 }
 
 function* getCustomerGenFunc() {
-debugger
+  debugger
   try {
-    const response = yield call(Customer_Get_API, party);
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message for getSupplier ",
+      Status: true, Message: "500 Error Message for Customer ",
     }));
   }
 }

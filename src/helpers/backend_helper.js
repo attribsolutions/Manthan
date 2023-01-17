@@ -346,10 +346,8 @@ export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
 export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
-//suppiler 
-export const Supplier_Get_API = (party_id) => get(`${url.SUPPLIER}/${party_id}`)//get api
-export const Vendor_Get_API = (party_id) => get(`${url.VENDOR}/${party_id}`)//get api
-export const Customer_Get_API = (party_id) => get(`${url.CUSTOMER}/${party_id}`)//get api
+//Post api VendorSupplierCustomer 
+export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER,post_PartyId)//Post api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api

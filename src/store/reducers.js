@@ -52,7 +52,7 @@ import BOMReducer from "./Purchase/BOMRedux/reducer"
 import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
 import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
 import ProductionReducer from "./Purchase/ProductionRedux/reducer"
-import InvoiceReducer from "./Sales/InvoiceRedux/reducer"
+import InvoiceReducer from "./Sales/Invoice/reducer"
 
 const rootReducer = combineReducers({
   Layout,

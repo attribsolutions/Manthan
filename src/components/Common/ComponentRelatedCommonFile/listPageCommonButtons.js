@@ -23,9 +23,7 @@ export const listPageCommonButtonFunction = (props) => {
         downBtnFunc,
         editBodyfunc
     } = props;
-debugger
 
-console.log(userAccState)
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
