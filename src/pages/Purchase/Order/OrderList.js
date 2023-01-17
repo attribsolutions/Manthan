@@ -17,7 +17,7 @@ import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
-import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -40,7 +40,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.SupplierReducer.supplier,
+            vender: state.SupplierReducer.vender,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             deleteMsg: state.OrderReducer.deleteMsg,
@@ -52,8 +52,8 @@ const OrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
-    const { fromdate, todate, supplierSelect } = orderlistFilter;
+    const { userAccess, pageField, GRNitem, vender, tableList, orderlistFilter } = reducers;
+    const { fromdate, todate, venderSelect } = orderlistFilter;
     const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
  
     const action = {
@@ -71,17 +71,17 @@ const OrderList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
-        dispatch(getSupplier());
+        dispatch(GetVender())
         goButtonHandler(true)
 
     }, []);
 
-    const supplierOptions = supplier.map((i) => ({
+    const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
 
-    supplierOptions.unshift({
+    venderOptions.unshift({
         value: "",
         label: " All" 
     });
@@ -169,7 +169,7 @@ const OrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
+            Supplier: venderSelect === "" ? '' : venderSelect.value,
             Customer: userParty(),
         });
 
@@ -188,9 +188,9 @@ const OrderList = () => {
         dispatch(orderlistfilters(newObj))
     }
 
-    function supplierOnchange(e) {
+    function venderOnchange(e) {
         let newObj = { ...orderlistFilter }
-        newObj.supplierSelect = e
+        newObj.venderSelect = e
         dispatch(orderlistfilters(newObj))
     }
 
@@ -259,9 +259,9 @@ const OrderList = () => {
 
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        value={supplierSelect}
-                                        options={supplierOptions}
-                                        onChange={supplierOnchange}
+                                        value={venderSelect}
+                                        options={venderOptions}
+                                        onChange={venderOnchange}
                                     />
                                 </Col>
                             </FormGroup>

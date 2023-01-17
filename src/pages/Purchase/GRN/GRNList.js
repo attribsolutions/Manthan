@@ -17,7 +17,7 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
-import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
@@ -29,7 +29,7 @@ const GRNList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.SupplierReducer.supplier,
+            vender: state.SupplierReducer.vender,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -41,15 +41,15 @@ const GRNList = () => {
         })
     );
 
-    const { userAccess, pageField, supplier, tableList, grnlistFilter } = reducers;
-    const { fromdate, todate, supplierSelect } = grnlistFilter;
+    const { userAccess, pageField, vender, tableList, grnlistFilter } = reducers;
+    const { fromdate, todate, venderSelect } = grnlistFilter;
 
-    const supplierOptions = supplier.map((i) => ({
+    const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
 
-    supplierOptions.unshift({
+    venderOptions.unshift({
         value: "",
         label: " All"
     });
@@ -73,7 +73,7 @@ const GRNList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(56))
-        dispatch(getSupplier())
+        dispatch(GetVender())
         goButtonHandler()
     }, []);
 
@@ -82,7 +82,7 @@ const GRNList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
+            Supplier: venderSelect === "" ? '' : venderSelect.value,
             Party: userParty(),
         });
         dispatch(getGRNListPage(jsonBody));
@@ -100,9 +100,9 @@ const GRNList = () => {
         dispatch(grnlistfilters(newObj))
     }
 
-    function supplierOnchange(e) {
+    function venderOnchange(e) {
         let newObj = { ...grnlistFilter }
-        newObj.supplierSelect = e
+        newObj.venderSelect = e
         dispatch(grnlistfilters(newObj))
     }
 
@@ -172,10 +172,10 @@ const GRNList = () => {
                                         style={{ width: "115px" }}>Supplier Name</Label>
                                     <Col md="5">
                                         <Select
-                                            value={supplierSelect}
+                                            value={venderSelect}
                                             classNamePrefix="select2-Customer"
-                                            options={supplierOptions}
-                                            onChange={supplierOnchange}
+                                            options={venderOptions}
+                                            onChange={venderOnchange}
                                         />
                                     </Col>
                                 </FormGroup>
