@@ -20,7 +20,7 @@ const INIT_STATE = {
   GRNList: [],
   grnItemList: [],
   GRNitem: { Status: false, Data: [], },
-  grnlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: {value:'', label: "All" }}
+  grnlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: {value:'', label: "All" }}
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
