@@ -253,7 +253,7 @@ debugger
 
     function goButtonHandler(event) {
         const jsonBody = JSON.stringify({
-            FromDate: "2022-01-10",
+            FromDate: currentDate,
             Customer: values.CustomerName.value,
             Party:userParty(),
             OrderIDs: ""

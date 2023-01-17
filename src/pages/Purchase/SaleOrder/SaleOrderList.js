@@ -188,7 +188,7 @@ const SaleOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Customer: supplierSelect === "" ? 0 : supplierSelect.value,
+            Customer: !(supplierSelect.value > 0) ? 0 : supplierSelect.value,
             Supplier: userParty(),
         });
 

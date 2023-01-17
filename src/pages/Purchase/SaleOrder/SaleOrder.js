@@ -509,8 +509,8 @@ const SaleOrder = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
         const jsonBody = JSON.stringify({
-            Customer: supplierSelect.value,
-            Party: userParty(),
+            Party: !(supplierSelect.value > 0) ? 0 : supplierSelect.value,
+            Customer: userParty(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.save) ? 0 : editVal.id
         })
@@ -556,8 +556,8 @@ const SaleOrder = (props) => {
     };
 
     const saveHandeller = () => {
-        const division = userParty();
-        const supplier = supplierSelect.value;
+        const division =supplierSelect.value;
+        const supplier =  userParty();
         debugger
         const validMsg = []
         const itemArr = []
