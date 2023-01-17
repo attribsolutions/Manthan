@@ -19,20 +19,24 @@ import { useSelector, useDispatch } from "react-redux";
 import Navbar from "./Navbar";
 import Header from "./Header";
 import Footer from "./Footer";
+import BreadcrumbNew from '../Common/BreadcrumbNew';
 
 const Layout = (props) => {
 
   const dispatch = useDispatch();
 
   const {
-    topbarTheme, layoutWidth, isPreloader, layoutPosition, layoutMode
+    topbarTheme, layoutWidth, isPreloader, layoutPosition, layoutMode,
   } = useSelector(state => ({
     topbarTheme: state.Layout.topbarTheme,
     layoutWidth: state.Layout.layoutWidth,
     isPreloader: state.Layout.isPreloader,
     layoutPosition: state.Layout.layoutPosition,
-    layoutMode: state.Layout.layoutMode
+    layoutMode: state.Layout.layoutMode,
+    
   }));
+
+ 
 
   /*
   document title

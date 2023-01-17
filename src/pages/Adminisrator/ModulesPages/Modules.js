@@ -244,7 +244,7 @@ const Modules = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.MODULE} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MODULE} /> */}
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid  >
 

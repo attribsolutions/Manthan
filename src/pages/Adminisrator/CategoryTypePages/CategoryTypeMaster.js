@@ -225,7 +225,7 @@ const CategoryTypeMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORYTYPE} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORYTYPE} /> */}
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>

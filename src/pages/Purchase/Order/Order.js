@@ -724,7 +724,7 @@ const Order = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} /> */}
                 <div className="page-content">
 
                     {/* <Breadcrumb

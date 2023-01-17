@@ -221,6 +221,7 @@ export const commonListPageDelete_UpdateMsgFunction = (props) => {
 
 export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Data Function ++++++++++++++
     const { tableList = [], PageFieldMaster = [] } = props
+
     let downList = [];
     let listObj = {};
 
@@ -249,7 +250,6 @@ export const currentDate = currentDatefunc();
 
 export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++++++++++++++++++++
     const current = new Date(inp);
-    debugger
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;

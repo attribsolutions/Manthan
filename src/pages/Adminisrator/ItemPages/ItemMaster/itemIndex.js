@@ -760,9 +760,7 @@ const ItemsMaster = (props) => {
         }
     };
     React.useEffect(() => {
-
     }, [searchTerm]);
-
     React.useEffect(() => {
 
     }, [searchTerm1]);

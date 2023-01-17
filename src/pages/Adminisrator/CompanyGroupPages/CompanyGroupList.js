@@ -53,7 +53,7 @@ const CompanyGroupList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP_lIST} /> */}
 
       {
         (pageField) ?

@@ -388,7 +388,7 @@ const PartyMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY} /> */}
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
                             {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}

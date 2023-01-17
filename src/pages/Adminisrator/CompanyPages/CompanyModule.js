@@ -259,7 +259,7 @@ const CompanyModule = (props) => {
     return (
       <React.Fragment>
         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-        <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANY} />
+        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANY} /> */}
         <div className={"page-content"} style={{ marginTop: IsEditMode_Css }} >
 
           <Container fluid>
