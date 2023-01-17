@@ -55,7 +55,7 @@ const PartyItemsList = (props) => {
   return (
     <React.Fragment>
        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYITEM_LIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYITEM_LIST} /> */}
       {
         (pageField) ?
           <CommonListPage

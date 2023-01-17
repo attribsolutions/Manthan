@@ -108,16 +108,16 @@ const CommonListPage = (props) => {
         bredcrumbItemName: '',
         pageHeading: userAcc.PageHeading,
         filterSize: "showCount Axtxtxtxtxtddddddddddddddddddddddddddddd",
-        userAccess: {},
+        userAccess: userAccess,
         newBtnView: true,
         excelBtnView: true,
         showCount: true,
-        excelData: [],
+        excelData: tableList,
         masterPage: `/${MasterPagePath.ActualPagePath}`,
         breadShow: true
       }))
     }
-  }, [userAccess])
+  }, [userAccess,tableList])
 
   // this useEffect for MasterPagePath dynamically work 
   // useEffect(() => {

@@ -52,7 +52,7 @@ const PartySubPartyList = () => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_SUB_PARTY_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_SUB_PARTY_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

@@ -233,7 +233,7 @@ const GroupTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUPTYPE} />
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUPTYPE} /> */}
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
