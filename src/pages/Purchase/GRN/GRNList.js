@@ -46,7 +46,7 @@ const GRNList = () => {
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
 
     supplierOptions.unshift({
