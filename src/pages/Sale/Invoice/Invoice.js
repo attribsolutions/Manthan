@@ -80,7 +80,6 @@ debugger
         GoButton: state.InvoiceReducer.GoButton
     }));
 
-    console.log(GoButton)
 
     useEffect(() => {
         const page_Id = pageId.INVOICE
@@ -254,7 +253,7 @@ debugger
 
     function goButtonHandler(event) {
         const jsonBody = JSON.stringify({
-            FromDate: currentDate,
+            FromDate: "2022-01-10",
             Customer: values.CustomerName.value,
             Party:userParty(),
             OrderIDs: ""
