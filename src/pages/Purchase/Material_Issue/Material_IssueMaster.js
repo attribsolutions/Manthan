@@ -349,32 +349,6 @@ const MaterialIssueMaster = (props) => {
 
     const handleChange = (event, index1, index2) => {
 
-
-        // let x = document.getElementById("inputid").value;
-        // // If x is Not a Number or less than one or greater than 10
-        // let text;
-        // if (index.Qty <=  parseFloat(index.BaseUnitQuantity) ) {
-        //   text = "Input not valid";
-        // } else {
-        //   text = "Input OK";
-        // }
-        // document.getElementById("demo").innerHTML = text;
-
-        // GoButton.map((index) => {
-        //     let Stock = index.BatchesData.map((i) => {
-        //         return i.BaseUnitQuantity
-        //     })       
-        // console.log(Stock)
-
-        // })
-
-        // var OrderQty = parseFloat(stockQty)
-        // console.log(Stock)
-
-
-        debugger
-
-        // user.BatchesData.forEach()
         let input = event.target.value;
         let min = 0;
         let max = index2.BaseUnitQuantity;
@@ -385,41 +359,40 @@ const MaterialIssueMaster = (props) => {
         };
 
         let qtysum = 0
-        let qtysum2 = 0
-        // let isvalid = true
         index1.BatchesData.forEach((i) => {
             if (!(i.BaseUnitQuantity)) {
                 i["BaseUnitQuantity"] = 0
             }
             if (!(i.id === index2.id)) {
                 qtysum = qtysum + Number(i.Qty)
-                qtysum2 = qtysum2 + Number(i.Qty)
             }
         });
-
-        var requreVal = index1.Quantity - qtysum
         qtysum = qtysum + val1;
-        if (qtysum <= index1.Quantity) {
-            //   if(qtysome=== index1.Quantity)  {
-            //     isvalid=!isvalid
-            //   };
-            event.target.value = val1;
-            index2.Qty = val1
-        } else if (max >= requreVal) {
-            // if(requreVal=== index1.Quantity)  {
-            //     isvalid=!isvalid
-            //   };
-            event.target.value = requreVal;
-            index2.Qty = requreVal
-        }
-        else {
+        index2.Qty = val1;
 
-            event.target.value = max;
-            index2.Qty = max
-        }
-        qtysum2 = qtysum2 + Number(index2.Qty)
+        // var requreVal = index1.Quantity - qtysum
+
+        // if (qtysum <= index1.Quantity) {
+        //     //   if(qtysome=== index1.Quantity)  {
+        //     //     isvalid=!isvalid
+        //     //   };
+        //     event.target.value = val1;
+        //     index2.Qty = val1
+        // } else if (max >= requreVal) {
+        //     // if(requreVal=== index1.Quantity)  {
+        //     //     isvalid=!isvalid
+        //     //   };
+        //     event.target.value = requreVal;
+        //     index2.Qty = requreVal
+        // }
+        // else {
+
+        //     event.target.value = max;
+        //     index2.Qty = max
+        // }
+        // qtysum2 = qtysum2 + Number(index2.Qty)
         debugger
-        if ((qtysum2 === index1.Quantity)) {
+        if ((qtysum === index1.Quantity)) {
             try {
                 document.getElementById(`ItemName${index1.id}`).style.color = ""
                 document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
@@ -430,7 +403,7 @@ const MaterialIssueMaster = (props) => {
         } else {
             try {
                 // document.getElementById(`ItemName${index1.id}`).style.color = "red"
-                const msg = `${index1.Quantity - qtysum2} ${index1.UnitName} Stock require.`;
+                const msg = `Stock invalid.`;
                 index1["invalid"] = true;
                 index1["invalidMsg"] = msg;
 
@@ -503,9 +476,9 @@ const MaterialIssueMaster = (props) => {
                 };
             }
             if (index["invalid"]) {
-                validMsg.push( `${index.ItemName}:${index["invalidMsg"]}`);
+                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
             };
-           
+
             index.BatchesData.map((ele) => {
                 MaterialIssueItems.push({
                     Item: index.Item,
@@ -612,23 +585,23 @@ const MaterialIssueMaster = (props) => {
             formatter: (cellContent, user) => (
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
-                        <Thead  >
-                            <tr style={{ zIndex: "1" }} className="">
-                                <th className="">Batch Code </th>
-                                <th className="" >Supplier BatchCode</th>
-                                <th className="" >Batch Date</th>
-                                <th className="">Stock Quantity</th>
-                                <th className="" >Quantity</th>
+                        <Thead>
+                            <tr>
+                                <th>Batch Code </th>
+                                <th>Supplier BatchCode</th>
+                                <th>Batch Date</th>
+                                <th>Stock Quantity</th>
+                                <th>Quantity</th>
                             </tr>
                         </Thead>
-                        <Tbody  >
+                        <Tbody>
                             {cellContent.map((index) => {
 
                                 return (
                                     < tr >
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Label  >
+                                                <Label>
                                                     {index.SystemBatchCode}
                                                 </Label>
                                             </div>
