@@ -545,7 +545,7 @@ debugger
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.CustomerName} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    isDisabled={values.CustomerName ? true : null}
+                                                    // isDisabled={values.CustomerName ? true : null}
                                                     name="CustomerName"
                                                     value={values.CustomerName}
                                                     isSearchable={true}

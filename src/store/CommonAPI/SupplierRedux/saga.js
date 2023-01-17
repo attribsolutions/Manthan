@@ -23,18 +23,6 @@ import {
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-function* getSupplierGenFunc() {
-  debugger
-  try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
-    yield put(getSupplierSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for Supplier ",
-    }));
-  }
-}
 
 function* supplierAddressGenFunc() {
 
@@ -80,10 +68,23 @@ function* OrderType_GenFunc() {
   }
 }
 
+function* getSupplierGenFunc() {
+  debugger
+  try {
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    yield put(getSupplierSuccess(response.Data));
+  } catch (error) {
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message for Supplier ",
+    }));
+  }
+}
+
 function* getVendorGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({
