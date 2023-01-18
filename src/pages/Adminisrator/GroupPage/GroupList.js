@@ -51,11 +51,10 @@ const GroupList = (props) => {
   }, []);
 
   const { pageField,userAccess=[] } = reducers
-
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUP_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUP_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

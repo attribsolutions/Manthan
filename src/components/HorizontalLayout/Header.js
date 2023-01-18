@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import PropTypes from 'prop-types'
 import ReactDrawer from 'react-drawer';
 import 'react-drawer/lib/react-drawer.css';
-import { connect } from "react-redux"
+import { connect, useSelector } from "react-redux"
 
 import { Link } from "react-router-dom"
 
@@ -21,6 +21,7 @@ import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
 import RightSidebar from "../CommonForBoth/RightSidebar";
 import LightDark from "../CommonForBoth/Menus/LightDark";
 
+
 // import images
 import logo from "../../assets/images/logo-sm.svg";
 import github from "../../assets/images/brands/github.png"
@@ -32,8 +33,19 @@ import slack from "../../assets/images/brands/slack.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
+import BreadcrumbNew from "../Common/BreadcrumbNew";
 
 const Header = props => {
+
+
+  const reducers = useSelector(
+    (state) => ({
+      userAccess: state.Login.RoleAccessUpdateData,
+      pageField: state.CommonPageFieldReducer.pageFieldList
+    })
+  );
+  const { pageField,userAccess=[] } = reducers
+
   const { onChangeLayoutMode } = props;
   const [isSearch, setSearch] = useState(false)
   const [socialDrp, setsocialDrp] = useState(false)
@@ -48,6 +60,9 @@ const Header = props => {
   const onDrawerClose = () => {
     setOpen(false);
   }
+
+
+
   return (
     <React.Fragment>
       <header id="page-topbar">

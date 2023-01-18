@@ -223,7 +223,7 @@ const TermsAndConditionsMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION} />
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION} /> */}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

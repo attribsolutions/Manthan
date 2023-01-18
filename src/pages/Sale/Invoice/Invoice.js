@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
     Col,
@@ -30,7 +29,6 @@ import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -40,6 +38,9 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { GoButton_post_For_Invoice, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 
 const Invoice = (props) => {
 
@@ -48,11 +49,8 @@ const Invoice = (props) => {
 
     const fileds = {
         // id: "",
-        MaterialIssueDate: currentDate,
-        ItemName: "",
-        NumberOfLot: "",
-        LotQuantity: "",
-
+        InvoiceDate: currentDate,
+        CustomerName: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -61,7 +59,7 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
-    const [Itemselectonchange, setItemselectonchange] = useState("");
+    
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -69,20 +67,21 @@ const Invoice = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        Items,
+        customer,
         GoButton
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Items: state.WorkOrderReducer.WorkOrderList,
-        GoButton: state.MaterialIssueReducer.GoButton
+        customer: state.SupplierReducer.customer,
+        GoButton: state.InvoiceReducer.GoButton
     }));
+    console.log("GoButton", GoButton)
 
     useEffect(() => {
         const page_Id = pageId.INVOICE
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -113,14 +112,6 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            FromDate: "2022-12-01",
-            ToDate: currentDate
-        });
-        dispatch(getWorkOrderListPage(jsonBody));
-    }, [])
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
@@ -131,23 +122,23 @@ const Invoice = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-               
+
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
             if (hasEditVal) {
-                
+
                 setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
+                const { id, Item, CustomerName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
-                    i.values.MaterialIssueDate = currentDate
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
+                    i.values.InvoiceDate = currentDate
+                    i.values.CustomerName = { value: id, label: CustomerName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.ItemName.valid = true;
-                    i.hasValid.MaterialIssueDate.valid = true;
+                    i.hasValid.CustomerName.valid = true;
+                    i.hasValid.InvoiceDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
                     i.hasValid.LotQuantity.valid = true;
                     return i
@@ -170,9 +161,9 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postMaterialIssueSuccess({ Status: false }))
-            dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(postInvoiceMasterSuccess({ Status: false }))
+            // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
 
@@ -194,13 +185,13 @@ const Invoice = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MATERIAL_ISSUE_LIST,
+                    RedirectPath: url.INVOICE,
                 }))
             }
         }
         else if (postMsg.Status === true) {
 
-            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(postInvoiceMasterSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
             dispatch(postBOMSuccess({ Status: false }))
             dispatch(AlertState({
@@ -241,124 +232,38 @@ const Invoice = (props) => {
         }
     }, [pageField])
 
-    const ItemDropdown_Options = Items.map((index) => ({
+    const CustomerDropdown_Options = customer.map((index) => ({
         value: index.id,
-        label: index.ItemName,
-        Quantity: index.Quantity,
-        Item: index.Item,
-        BomID: index.Bom,
-        Unit: index.Unit,
-        NumberOfLot: index.NumberOfLot
+        label: index.Name,
+
     }));
 
     function ItemOnchange(hasSelect, evn) {
+        debugger
         onChangeSelect({ hasSelect, evn, state, setState });
         dispatch(Breadcrumb_inputName(hasSelect.label))
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setState((i) => {
-            i.values.ItemName = hasSelect
-            i.values.NumberOfLot = hasSelect.NumberOfLot;
-            i.values.LotQuantity = hasSelect.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.MaterialIssueDate.valid = true;
+            i.values.CustomerName = hasSelect
             return i
         })
     }
 
     function goButtonHandler(event) {
-        debugger
+        // event.preventDefault();
+        // if (formValid(state, setState)) {
+        const jsonBody = JSON.stringify({
+            FromDate: values.InvoiceDate,
+            Customer: values.CustomerName.value,
+            Party: userParty(),
+            OrderIDs: ""
+        });
 
-        event.preventDefault();
-        if (state.values.LotQuantity == "0") {
-            alert("Quantity Can Not be 0")
-        } else
-            if (formValid(state, setState)) {
-
-                const jsonBody = JSON.stringify({
-                    WorkOrder: values.ItemName.value,
-                    Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
-                    Quantity: parseInt(values.LotQuantity)
-                });
-
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
-            }
-    }
-
-    function ItemOnchange(e) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        setItemselectonchange(e)
-        setState((i) => {
-            i.values.ItemName = {
-                value: e.value,
-                label: e.label,
-                Item: e.Item,
-                NoLot: e.NumberOfLot,
-                lotQty: e.Quantity
-            };
-            i.values.NumberOfLot = e.NumberOfLot;
-            i.values.LotQuantity = e.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.ItemName.valid = true;
-            return i
-        })
-    }
-
-
-    function Quantitychange(event) {
-
-
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.Quantity :
-            Itemselect.Quantity, Number(event.target.value)));
-        event.target.value = value1
-        if (event.target.value === "NaN") {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.LotQuantity = value1
-            // i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
-
-    function NumberOfLotchange(event) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.NumberOfLot
-            : Itemselect.NumberOfLot, Number(event.target.value)));
-        event.target.value = value1
-        if ((event.target.value === "NaN")) {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.NumberOfLot = value1
-            i.hasValid.NumberOfLot.valid = true;
-            // i.hasValid.LotQuantity.valid = true;
-            return i
-        })
+        dispatch(GoButton_post_For_Invoice(jsonBody));
+        // }
     }
 
     const handleChange = (event, index) => {
-        // GoButton.map((index) => {
-        //     let Stock = index.BatchesData.map((i) => {
-        //         return i.BaseUnitQuantity
-        //     })       
-        // console.log(Stock)
-
-        // })
-
-        // var OrderQty = parseFloat(stockQty)
-        // console.log(Stock)
-
-
         index.Qty = event.target.value
     };
 
@@ -366,9 +271,9 @@ const Invoice = (props) => {
         debugger
         const validMsg = []
 
-        const MaterialIssueItems = []
+        const InvoiceItems = []
         GoButton.map((index) => {
-            let Stock = index.BatchesData.map((i) => {
+            let Stock = index.StockDetails.map((i) => {
                 return i.BaseUnitQuantity
             })
             var TotalStock = 0;
@@ -378,84 +283,85 @@ const Invoice = (props) => {
             var OrderQty = parseFloat(index.Quantity)
             if (OrderQty > TotalStock) {
                 {
-                    // alert(` ${index.ItemName} out of stock`)
                     validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-
                 };
             }
+            if (index["invalid"]) {
+                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
+            };
 
-            index.BatchesData.map((ele) => {
-                MaterialIssueItems.push({
+            index.StockDetails.map((ele) => {
+                InvoiceItems.push({
+                    BatchCode: ele.BatchCode,
+                    Quantity: index.Quantity,
+                    BaseUnitQuantity: index.BaseUnitQuantity,
+                    MRP: null,
+                    Rate: index.Rate,
+                    BasicAmount: index.BasicAmount,
+                    TaxType: "GST",
+                    GSTPercentage: index.GSTPercentage,
+                    GSTAmount: index.GSTAmount,
+                    Amount: index.Amount,
+                    DiscountType: "",
+                    Discount: "0",
+                    DiscountAmount: "0",
+                    CGST: index.CGST,
+                    SGST: index.SGST,
+                    IGST: index.IGST,
+                    CGSTPercentage: index.CGSTPercentage,
+                    SGSTPercentage: index.SGSTPercentage,
+                    IGSTPercentage: index.IGSTPercentage,
+                    CreatedOn: "",
                     Item: index.Item,
                     Unit: index.Unit,
-                    WorkOrderQuantity: index.Quantity,
-                    BatchCode: ele.BatchCode,
-                    BatchDate: ele.BatchDate,
-                    SystemBatchDate: ele.SystemBatchDate,
-                    SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty),
-                    BatchID: ele.id
+                    BatchDate: index.BatchDate,
+                    BatchID: ele.id,
+                    InvoicesReferences:[{"Order":index.OrderID}]
                 })
             })
         })
 
-        const FilterData = MaterialIssueItems.filter((index) => {
+        const FilterData = InvoiceItems.filter((index) => {
             return (index.IssueQuantity > 0)
         })
-
+       
         event.preventDefault();
         if (formValid(state, setState)) {
 
-            if (validMsg.length > 0) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: (validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
-                return
-            }
             const jsonBody = JSON.stringify({
-                MaterialIssueDate: values.MaterialIssueDate,
-                NumberOfLot: values.NumberOfLot,
-                LotQuantity: values.LotQuantity,
+                InvoiceDate: currentDate,
+                CustomerGSTTin: "2023-01-06",
+                GrandTotal: "6615.00",
+                RoundOffAmount: 1,
+                Customer: values.CustomerName.value,
+                Party: userParty(),
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
-                Item: Itemselect.Item,
-                Unit: Itemselect.Unit,
-                MaterialIssueItems: FilterData,
-                MaterialIssueWorkOrder: [
-                    {
-                        WorkOrder: Itemselect.id,
-                        Bom: Itemselect.Bom
-
-                    }
-                ]
+                InvoiceItems: InvoiceItems,
             }
             );
             if (pageMode === mode.edit) {
             }
             else {
-                dispatch(postMaterialIssue(jsonBody));
+                dispatch(postInvoiceMaster(jsonBody));
             }
         };
     }
+
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
-            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
-                debugger
-                let Stock = user.BatchesData.map((index) => {
+            style: (cellContent, user) => {
+
+                let Stock = user.StockDetails.map((index) => {
                     return index.BaseUnitQuantity
                 })
                 var TotalStock = 0;
                 Stock.forEach(x => {
                     TotalStock += parseFloat(x);
                 });
+
                 var OrderQty = parseFloat(user.Quantity)
                 if (OrderQty > TotalStock) {
                     return {
@@ -466,17 +372,66 @@ const Invoice = (props) => {
             },
         },
 
+        // {
+        //     text: "Order Qty",
+        //     dataField: "Quantity",
+        // },
         {
-            text: "Work Order Qty",
+            text: "Quantity",
             dataField: "Quantity",
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ width: "150px" }}>
+                        <Input type="text"
+                            style={{ textAlign: "right" }}
+                            defaultValue={cellContent}
+                        // onChange={(event) => handleChange(event, index)}
+                        ></Input>
+                    </div>
+                </>
+            )
         },
         {
             text: "Unit",
-            dataField: "UnitName",
+            dataField: "",
+            formatter: (value, row, key) => {
+                debugger
+                if (!row.UnitName) {
+                    row["Unit_id"] = row.UnitDetails[0].Unit
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.Unit,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["Unit_id"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '150px', textAlign: 'center' };
+            }
         },
         {
             text: "Batch Code",
-            dataField: "BatchesData",
+            dataField: "StockDetails",
 
             formatter: (cellContent, user) => (
                 <>
@@ -557,18 +512,18 @@ const Invoice = (props) => {
                 <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE} />
 
                 <div className="page-content" >
-                
+
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 mb-3  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
                                             <Col sm="7">
                                                 <Flatpickr
-                                                    name="MaterialIssueDate"
-                                                    value={values.MaterialIssueDate}
+                                                    name="InvoiceDate"
+                                                    value={values.InvoiceDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
@@ -578,8 +533,8 @@ const Invoice = (props) => {
                                                     }}
                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 />
-                                                {isError.MaterialIssueDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
+                                                {isError.InvoiceDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.InvoiceDate}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>
@@ -587,25 +542,25 @@ const Invoice = (props) => {
 
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.CustomerName} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    isDisabled={values.ItemName ? true : null}
-                                                    name="ItemName"
-                                                    value={values.ItemName}
+                                                    // isDisabled={values.CustomerName ? true : null}
+                                                    name="CustomerName"
+                                                    value={values.CustomerName}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={ItemDropdown_Options}
+                                                    options={CustomerDropdown_Options}
                                                     onChange={ItemOnchange}
                                                 />
-                                                {isError.ItemName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+                                                {isError.CustomerName.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.CustomerName}</small></span>
                                                 )}
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                 
+
                                 </Col>
                                 <Col sm={1} className="mt-2">
                                     <Button

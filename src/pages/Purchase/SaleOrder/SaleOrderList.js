@@ -82,7 +82,7 @@ const SaleOrderList = () => {
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
 
     supplierOptions.unshift({
@@ -177,8 +177,8 @@ const SaleOrderList = () => {
             const jsonBody = JSON.stringify({
                 FromDate: hasfilters.fromdate,
                 ToDate: hasfilters.todate,
-                Supplier: hasfilters.supplierSelect.value,
-                Customer: userParty(),
+                Customer: hasfilters.supplierSelect.value,
+                Supplier: userParty(),
             });
             setorderlistFilter(hasfilters)
             dispatch(getOrderListPage(jsonBody));
@@ -188,8 +188,8 @@ const SaleOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
-            Customer: userParty(),
+            Customer: !(supplierSelect.value > 0) ? 0 : supplierSelect.value,
+            Supplier: userParty(),
         });
 
         dispatch(getOrderListPage(jsonBody));

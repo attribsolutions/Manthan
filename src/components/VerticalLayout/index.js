@@ -20,8 +20,15 @@ import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
 
 import BreadcrumbFix from "./BradcrumbFix1";
+import BreadcrumbNew from "../Common/BreadcrumbNew";
+import * as pageId from "../../../src/routes/allPageID"
+import { useHistory } from "react-router-dom";
+import CommonListPage from "../Common/ComponentRelatedCommonFile/CommonMasterListPage";
+
 const Layout = props => {
   const dispatch = useDispatch();
+  const history = useHistory()
+
 
   const {
     isPreloader,
@@ -31,7 +38,9 @@ const Layout = props => {
     leftSideBarTheme,
     layoutMode,
     layoutType,
-    leftSidebarTypes
+    leftSidebarTypes,
+    userAccess,
+    pageField,
   } = useSelector(state => ({
     isPreloader: state.Layout.isPreloader,
     leftSideBarType: state.Layout.leftSideBarType,
@@ -40,7 +49,9 @@ const Layout = props => {
     leftSideBarTheme: state.Layout.leftSideBarTheme,
     layoutMode: state.Layout.layoutMode,
     layoutType: state.Layout.layoutType,
-    leftSidebarTypes: state.Layout.leftSidebarTypes
+    leftSidebarTypes: state.Layout.leftSidebarTypes,
+    userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageFieldList
   }));
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -125,6 +136,23 @@ const Layout = props => {
       dispatch(changelayoutMode(value, layoutType));
     }
   };
+
+  useEffect(() => {
+    // debugger
+    const locationPath = history.location.pathname
+    let userAcc = userAccess.find((inx) => {
+      return (`/${inx.RelatedPageIDPath}` === locationPath)
+      
+    });
+  
+     
+  }, []);
+  // pageId={pageId.GROUP_lIST}
+  console.log(pageId)
+
+ 
+  
+
   return (
     <React.Fragment>
       <div id="preloader">
@@ -142,10 +170,13 @@ const Layout = props => {
 
       <div id="layout-wrapper">
         <CustomAlert/>
-       
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         {/* <BreadcrumbFix toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} /> */}
+      {/* <BreadcrumbNew /> */}
+      <BreadcrumbNew />
+      
+
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}

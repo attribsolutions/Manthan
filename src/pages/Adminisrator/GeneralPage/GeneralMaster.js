@@ -255,7 +255,7 @@ const GeneralMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.GENERAL} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GENERAL} /> */}
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>

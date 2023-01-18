@@ -56,7 +56,7 @@ const TermsAndConditionsList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION_LIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION_LIST} /> */}
       {
         (pageField) ?
           <CommonListPage

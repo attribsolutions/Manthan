@@ -126,7 +126,7 @@ const MaterialIssueMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+        // debugger
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -272,8 +272,6 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        debugger
-
         event.preventDefault();
         if (state.values.LotQuantity == "0") {
             alert("Quantity Can Not be 0")
@@ -335,9 +333,7 @@ const MaterialIssueMaster = (props) => {
 
     function NumberOfLotchange(event) {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.NumberOfLot
-            : Itemselect.NumberOfLot, Number(event.target.value)));
+        let value1 = Math.max('', Math.min(Itemselect.NumberOfLot, Number(event.target.value)));
         event.target.value = value1
         if ((event.target.value === "NaN")) {
             value1 = 0
@@ -351,66 +347,111 @@ const MaterialIssueMaster = (props) => {
         })
     }
 
-    const handleChange = (event, index, user) => {
-        debugger
-
-
-        // let x = document.getElementById("inputid").value;
-        // // If x is Not a Number or less than one or greater than 10
-        // let text;
-        // if (index.Qty <=  parseFloat(index.BaseUnitQuantity) ) {
-        //   text = "Input not valid";
-        // } else {
-        //   text = "Input OK";
-        // }
-        // document.getElementById("demo").innerHTML = text;
-
-        // GoButton.map((index) => {
-        //     let Stock = index.BatchesData.map((i) => {
-        //         return i.BaseUnitQuantity
-        //     })       
-        // console.log(Stock)
-
-        // })
-
-        // var OrderQty = parseFloat(stockQty)
-        // console.log(Stock)
+    const handleChange = (event, index1, index2) => {
 
         let input = event.target.value;
-        if (input == '') { input = 0 }
-        input = parseFloat(input);
-        let compareval = index.BaseUnitQuantity;
-        compareval = parseFloat(compareval);
+        let min = 0;
+        let max = index2.BaseUnitQuantity;
+        let val1 = Math.max(Number(min), Math.min(Number(max), Number(input)));
+        event.target.value = input;
+        if ((event.target.value === "NaN")) {
+            val1 = 0
+        };
 
-        if (input > compareval) {
-            try {
-                document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = "red"
-                user["StockInvalid"] = true
+        let qtysum = 0
+        index1.BatchesData.forEach((i) => {
+            if (!(i.BaseUnitQuantity)) {
+                i["BaseUnitQuantity"] = 0
             }
-            catch (e) { }
-        } else {
-            document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = ""
-        }
+            if (!(i.id === index2.id)) {
+                qtysum = qtysum + Number(i.Qty)
+            }
+        });
+        qtysum = qtysum + val1;
+        index2.Qty = val1;
+
+        // var requreVal = index1.Quantity - qtysum
+
+        // if (qtysum <= index1.Quantity) {
+        //     //   if(qtysome=== index1.Quantity)  {
+        //     //     isvalid=!isvalid
+        //     //   };
+        //     event.target.value = val1;
+        //     index2.Qty = val1
+        // } else if (max >= requreVal) {
+        //     // if(requreVal=== index1.Quantity)  {
+        //     //     isvalid=!isvalid
+        //     //   };
+        //     event.target.value = requreVal;
+        //     index2.Qty = requreVal
+        // }
+        // else {
+
+        //     event.target.value = max;
+        //     index2.Qty = max
+        // }
+        // qtysum2 = qtysum2 + Number(index2.Qty)
         debugger
-        if (user.CompareStockQty === undefined) {
-            user["CompareStockQty"] = 0
-        }
-        user["CompareStockQty"] = user["CompareStockQty"] + input;
-        if (user.CompareStockQty === user.Quantity) {
-            user["StockInvalid"] = true
-        } else {
-            user["StockInvalid"] = false
-        }
-        if (!user.StockInvalid) {
+        if ((qtysum === index1.Quantity)) {
             try {
-                document.getElementById(`ItemName${user.id}`).style.color = "red"
+                document.getElementById(`ItemName${index1.id}`).style.color = ""
+                document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
+                index1["invalid"] = false
+                index1["invalidMsg"] = ''
+
             } catch (e) { }
         } else {
             try {
-                document.getElementById(`ItemName${user.id}`).style.color = ""
+                // document.getElementById(`ItemName${index1.id}`).style.color = "red"
+                const msg = `Stock invalid.`;
+                index1["invalid"] = true;
+                index1["invalidMsg"] = msg;
+
+                document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
             } catch (e) { }
         }
-        index.Qty = event.target.value
+
+        // let value2 = Math.max(Number(min), Math.min(Number(max), Number(value)));
+        // event.target.value = val1;
+        // index2.Qty = val1
+
+
+
+        // let input = event.target.value;
+        // if (input == '') { input = 0 }
+        // input = parseFloat(input);
+        // let compareval = index.BaseUnitQuantity;
+        // compareval = parseFloat(compareval);
+
+        // if (input > compareval) {
+        //     try {
+        //         document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = "red"
+        //         user["StockInvalid"] = true
+        //     }
+        //     catch (e) { }
+        // } else {
+        //     document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = ""
+        // }
+        // debugger
+        // if (user.CompareStockQty === undefined) {
+        //     user["CompareStockQty"] = 0
+        // }
+        // user["CompareStockQty"] = user["CompareStockQty"] + input;
+        // if (user.CompareStockQty === user.Quantity) {
+        //     user["StockInvalid"] = true
+        // } else {
+        //     user["StockInvalid"] = false
+        // }
+        // if (!user.StockInvalid) {
+        //     try {
+        //         document.getElementById(`ItemName${user.id}`).style.color = "red"
+        //     } catch (e) { }
+        // } else {
+        //     try {
+        //         document.getElementById(`ItemName${user.id}`).style.color = ""
+        //     } catch (e) { }
+        // }
+        // index.Qty = event.target.value
     };
 
 
@@ -431,11 +472,12 @@ const MaterialIssueMaster = (props) => {
             var OrderQty = parseFloat(index.Quantity)
             if (OrderQty > TotalStock) {
                 {
-                    // alert(` ${index.ItemName} out of stock`)
                     validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-
                 };
             }
+            if (index["invalid"]) {
+                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
+            };
 
             index.BatchesData.map((ele) => {
                 MaterialIssueItems.push({
@@ -463,7 +505,7 @@ const MaterialIssueMaster = (props) => {
                 dispatch(AlertState({
                     Type: 4,
                     Status: true,
-                    Message: (validMsg),
+                    Message: JSON.stringify(validMsg),
                     RedirectPath: false,
                     AfterResponseAction: false
                 }));
@@ -502,7 +544,11 @@ const MaterialIssueMaster = (props) => {
             dataField: "ItemName",
             formatter: (cellContent, user) => {
                 return (
-                    <samp id={`ItemName${user.id}`}>{cellContent}</samp>
+                    <>
+                        <div><samp id={`ItemName${user.id}`}>{cellContent}</samp></div>
+                        <div><samp id={`ItemNameMsg${user.id}`} style={{ color: "red" }}></samp></div>
+                    </>
+
                 )
             },
             style: (cellContent, user,) => {
@@ -539,23 +585,23 @@ const MaterialIssueMaster = (props) => {
             formatter: (cellContent, user) => (
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
-                        <Thead  >
-                            <tr style={{ zIndex: "23" }} className="">
-                                <th className="">Batch Code </th>
-                                <th className="" >Supplier BatchCode</th>
-                                <th className="" >Batch Date</th>
-                                <th className="">Stock Quantity</th>
-                                <th className="" >Quantity</th>
+                        <Thead>
+                            <tr>
+                                <th>Batch Code </th>
+                                <th>Supplier BatchCode</th>
+                                <th>Batch Date</th>
+                                <th>Stock Quantity</th>
+                                <th>Quantity</th>
                             </tr>
                         </Thead>
-                        <Tbody  >
+                        <Tbody>
                             {cellContent.map((index) => {
 
                                 return (
                                     < tr >
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Label  >
+                                                <Label>
                                                     {index.SystemBatchCode}
                                                 </Label>
                                             </div>
@@ -585,12 +631,14 @@ const MaterialIssueMaster = (props) => {
                                         </td>
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Input type="text"
+                                                <Input
+                                                    type="text"
                                                     key={index.id}
                                                     id={`stock${user.id}-${index.id}`}
                                                     style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
-                                                    onChange={(event) => handleChange(event, index, user)}
+                                                    autoComplete='off'
+                                                    onChange={(event) => handleChange(event, user, index)}
                                                 ></Input>
                                             </div>
                                         </td>
@@ -623,7 +671,7 @@ const MaterialIssueMaster = (props) => {
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
+                                <Col className=" mt-1 row" sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
@@ -652,7 +700,7 @@ const MaterialIssueMaster = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    isDisabled={values.ItemName ? true : null}
+                                                    // isDisabled={(values.ItemName) ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
                                                     isSearchable={true}
@@ -682,9 +730,9 @@ const MaterialIssueMaster = (props) => {
                                                     onChange={NumberOfLotchange}
                                                 />
 
-                                                <span className="text-danger">Note* :
+                                                {/* <span className="text-danger">Note* :
                                                     <span className="text-secondary">{`${fieldLabel.NumberOfLot} is less than (${values.ItemName.NoLot})`}
-                                                    </span></span>
+                                                    </span></span> */}
 
 
                                             </Col>
@@ -706,9 +754,9 @@ const MaterialIssueMaster = (props) => {
                                                     onChange={Quantitychange}
 
                                                 />
-                                                <span className="text-danger">Note* :
+                                                {/* <span className="text-danger">Note* :
                                                     <span className="text-secondary">{`${fieldLabel.LotQuantity} is less than (${values.ItemName.lotQty})`}
-                                                    </span></span>
+                                                    </span></span> */}
                                             </Col>
                                             <div className="col col-1">
                                                 <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>

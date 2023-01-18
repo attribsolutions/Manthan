@@ -177,7 +177,7 @@ const GSTList = (props) => {
             <React.Fragment>
                 <div className="page-content">
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST_LIST} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST_LIST} /> */}
 
                     {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}

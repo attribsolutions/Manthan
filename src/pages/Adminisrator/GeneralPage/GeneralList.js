@@ -65,7 +65,7 @@ const GeneralList = (props) => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            <BreadcrumbNew userAccess={userAccess} pageId={pageId.GENERAL_LIST} />
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GENERAL_LIST} /> */}
 
             {
                 (pageField) ?

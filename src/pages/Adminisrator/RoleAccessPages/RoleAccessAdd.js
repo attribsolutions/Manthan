@@ -519,7 +519,7 @@ const RoleAccessAdd = (props) => {
             <React.Fragment>
                 <div className="page-content text-black" >
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS} /> */}
                     {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 

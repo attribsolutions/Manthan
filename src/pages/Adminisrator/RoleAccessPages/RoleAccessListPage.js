@@ -226,7 +226,7 @@ const RoleAccessListPage = () => {
             <React.Fragment>
                 <div className="page-content">
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS_lIST} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS_lIST} /> */}
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                         keyField='id'

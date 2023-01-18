@@ -15,6 +15,7 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
     Breadcrumb_inputName,
+    CommonBreadcrumbDetails,
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
@@ -111,7 +112,6 @@ const GroupMaster = (props) => {
 
 
     useEffect(() => {
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -126,6 +126,7 @@ const GroupMaster = (props) => {
             }
 
             if (hasEditVal) {
+                debugger
                 setEditData(hasEditVal)
 
                 const { id, Name, GroupType, GroupTypeName } = hasEditVal
@@ -226,9 +227,7 @@ const GroupMaster = (props) => {
                 Name: values.Name,
                 GroupType: values.GroupTypeName.value,
                 CreatedBy: createdBy(),
-                CreatedOn: "0002-10-03T12:48:14.910491",
                 UpdatedBy: createdBy(),
-                UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 
             saveDissable(true);//save Button Is dissable function
@@ -247,16 +246,13 @@ const GroupMaster = (props) => {
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUP} />
-                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
-
+                    {/* < BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUP}/>  */}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

@@ -341,7 +341,7 @@ debugger
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYITEM} />
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYITEM} /> */}
 
                         {/* <Breadcrumb
                             pageHeading={userAccState.PageHeading}
