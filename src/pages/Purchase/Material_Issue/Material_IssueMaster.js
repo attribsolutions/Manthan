@@ -462,6 +462,7 @@ const MaterialIssueMaster = (props) => {
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
+            debugger
             let Stock = index.BatchesData.map((i) => {
                 return i.BaseUnitQuantity
             })
@@ -489,7 +490,8 @@ const MaterialIssueMaster = (props) => {
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
                     IssueQuantity: parseInt(ele.Qty),
-                    BatchID: ele.id
+                    BatchID: ele.id,
+                    LiveBatchID: ele.LiveBatchID
                 })
             })
         })

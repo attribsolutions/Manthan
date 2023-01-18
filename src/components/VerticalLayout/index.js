@@ -148,11 +148,6 @@ const Layout = props => {
      
   }, []);
   // pageId={pageId.GROUP_lIST}
-  console.log(pageId)
-
- 
-  
-
   return (
     <React.Fragment>
       <div id="preloader">
@@ -172,11 +167,7 @@ const Layout = props => {
         <CustomAlert/>
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-        {/* <BreadcrumbFix toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} /> */}
-      {/* <BreadcrumbNew /> */}
       <BreadcrumbNew />
-      
-
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}

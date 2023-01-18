@@ -26,7 +26,7 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
         debugger
         if ((count > qty) && !(count === 0)) {
           count = count - qty
-          i2.Qty = qty
+          i2.Qty = qty.toFixed(3)
         } else if ((count <= qty) && (count > 0)) {
           i2.Qty = count.toFixed(3)
           count = 0

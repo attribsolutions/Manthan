@@ -419,7 +419,7 @@ export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DR
 
 // Invoice
 export const Invoice_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_INVOICE, data)// go button postapi
-export const Invoice_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_INVOICE, data)//  postapi
+export const Invoice_Post_API = (data) => post(url.POST_API_FOR_INVOICE, data)//  postapi
 
 // // Demand
 export const DemandPage_GoButton_API = () => post(url.GO_BUTTON_POST_API_FOR_DEMAND)//get api
