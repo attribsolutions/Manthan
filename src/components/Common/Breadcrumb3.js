@@ -129,7 +129,6 @@ const Breadcrumb = props => {
         // e.preventDefault();
         const check = e.target
         // var chek = document.getElementById("checkAll").checked
-
         if (check.id === "checkAll") {
             debugger
             if (check.checked) {
@@ -161,7 +160,6 @@ const Breadcrumb = props => {
 
             const match = index.slice(0, 1);
             if (!(match === "$")) {
-
                 arrDiv.push(
                     <div className="row" >
                         <div className="col col-12"  >
@@ -187,8 +185,6 @@ const Breadcrumb = props => {
 
     return (
         <React.Fragment>
-
-
             <div className="mb-3 " style={{ Color: "F7F8F4", }}>
                 <div className=" d-flex  justify-content-between">
                     <div className="mb-1 ">

@@ -237,7 +237,7 @@ const EmployeeTypesMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE} /> */}
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid>
                         <Card className="text-black">

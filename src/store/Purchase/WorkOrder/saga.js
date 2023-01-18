@@ -37,6 +37,7 @@ function* Get_BOMList_GenratorFunction({ filters }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(BOMList_Get_API, filters);
+    
     yield put(getBOMListSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -56,6 +57,7 @@ function* GoButton_WorkOrder_post_genfun({ data }) {
 
     const response = yield call(WorkOrder_GoButton_Post_API, data);
     yield put(SpinnerState(false))
+    
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
     console.log(response.Data)
   } catch (error) {

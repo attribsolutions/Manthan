@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { Party_Items, GetSupplier_API, get_Item_List, get_Party_Item_List, Items_Master_Get_API, GetPartyList_API, } from "../../../helpers/backend_helper";
+import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { Party_Items, get_Party_Item_List, Items_Master_Get_API, GetPartyList_API, Supplier_Get_API, VendorSupplierCustomer, } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { PostPartyItemsSuccess, getSupplierSuccess, getPartyItemListSuccess, getPartyListSuccess, } from "./action";
@@ -7,7 +8,7 @@ import { POST_PARTYITEMS, GET_SUPPLIER, GET_PARTY_ITEM_LIST, GET_PARTY_LIST, } f
 
 // post api
 function* Post_PartyItems_GneratorFunction({ data }) {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(Party_Items, data);
@@ -27,13 +28,13 @@ function* getPartyItemGenFunc({ supplierId }) {
 
   //  Get ItemList
   try {
-   
+
     const itemList = yield call(Items_Master_Get_API);
-    const partyItem =  yield call(get_Party_Item_List, supplierId);
+    const partyItem = yield call(get_Party_Item_List, supplierId);
     const response = itemList.Data.map((item) => {
       item["itemCheck"] = false
       partyItem.Data.forEach((ele) => {
-        if (item.id ===ele.Item) { item["itemCheck"] = true }
+        if (item.id === ele.Item) { item["itemCheck"] = true }
       });
       return item
     });
@@ -52,11 +53,9 @@ function* getPartyItemGenFunc({ supplierId }) {
 
 function* getSupplierGenFunc() {
 
-  const USER = JSON.parse(localStorage.getItem("roleId"))
   try {
     debugger
-    const response = yield call(GetSupplier_API, USER.Party_id);
-    
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({

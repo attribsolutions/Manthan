@@ -348,7 +348,7 @@ const PriceMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE }/>
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE }/> */}
 
                 <Container fluid>
                     <Card className="text-black">

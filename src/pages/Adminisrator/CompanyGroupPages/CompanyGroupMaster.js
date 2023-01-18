@@ -227,7 +227,7 @@ const CompanyGroupMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP} /> */}
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>

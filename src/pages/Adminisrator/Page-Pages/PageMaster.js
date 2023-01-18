@@ -510,7 +510,7 @@ const PageMaster = (props) => {
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE} />
+          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE} /> */}
           <Container fluid>
             {/* Render Breadcrumbs */}
 
@@ -793,12 +793,6 @@ const PageMaster = (props) => {
                                     value={EditData.ShowCountLabel}
                                     type="text"
                                     placeholder="Please Enter  Show Count Label"
-                                    validate={{
-                                      required: {
-                                        value: true,
-                                        errorMessage: "Please Enter ShowCountLabel",
-                                      },
-                                    }}
                                     autoComplete="off"
                                   />
                                 </FormGroup>

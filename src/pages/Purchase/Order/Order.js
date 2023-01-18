@@ -25,7 +25,7 @@ import {
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
+import { getOrderType, getSupplier, getSupplierAddress, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
@@ -78,13 +78,12 @@ const Order = (props) => {
     const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
-
-
+    const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
 
     const {
         goBtnOrderdata,
         postMsg,
-        supplier,
+        vender,
         userAccess,
         orderType,
         updateMsg,
@@ -92,7 +91,7 @@ const Order = (props) => {
 
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
-        supplier: state.SupplierReducer.supplier,
+        vender: state.SupplierReducer.vender,
         supplierAddress: state.SupplierReducer.supplierAddress,
         orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
@@ -100,8 +99,6 @@ const Order = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -116,7 +113,15 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            let FindPartyItemAccess = userAccess.find((index) => {
+                return (index.id === 62)
+            })
+            if (FindPartyItemAccess) {
+                setFindPartyItemAccess(true)
+            }
         };
+
+
     }, [userAccess])
 
     const location = { ...history.location }
@@ -193,7 +198,7 @@ const Order = (props) => {
 
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess(null))
-        dispatch(getSupplier())
+        dispatch(GetVender())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
         dispatch(getOrderType())
@@ -275,7 +280,7 @@ const Order = (props) => {
         else {
             row["Rate"] = val
         }
-debugger
+     
         row["Amount"] = Amount(row)
 
         let sum = 0
@@ -296,9 +301,9 @@ debugger
         setisOpen_TermsModal(true)
     };
 
-    const supplierOptions = supplier.map((i) => ({
+    const supplierOptions = vender.map((i) => ({
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
 
     const orderTypeOptions = orderType.map((i) => ({
@@ -318,10 +323,11 @@ debugger
                         </div>
 
                         <div>
-                            <samp style={{ display: supplierSelect.value > 0 ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
+                            <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
                                 onClick={assignItem_onClick}>
                                 Assign-Items</samp>
                         </div>
+
                     </div>
                 )
             },
@@ -718,7 +724,7 @@ debugger
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} /> */}
                 <div className="page-content">
 
                     {/* <Breadcrumb

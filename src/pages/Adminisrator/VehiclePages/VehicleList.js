@@ -53,7 +53,7 @@ const VehicleList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.VEHICLE_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.VEHICLE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

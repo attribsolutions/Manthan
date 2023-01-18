@@ -168,7 +168,8 @@ export const PARTYITEMS = '/PartyItemList' // FOR Get
 
 //******** purchase modal *********************************************************************************************************************** */
 
-export const SUPPLIER = "/GetSupplier"
+export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
+
 
 //order 
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
@@ -204,4 +205,5 @@ export const POST_API_FOR_PRODUCTION_LIST ='/ProductionFilter'
 export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
 export const PRODUCTION_UNIT_DROPDOWN_API ='/MCUnitDetails'
 
-
+// Invoice
+export const GO_BUTTON_POST_API_FOR_INVOICE = '/GetOrderDetails'

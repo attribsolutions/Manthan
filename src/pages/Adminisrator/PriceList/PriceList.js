@@ -52,7 +52,7 @@ const PriceList = () => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

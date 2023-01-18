@@ -12,7 +12,6 @@ function* AlertControlFunction({ props }) {
       debugger
     }
 }
-
 function* Breadcrumb_Saga() {
   // yield takeEvery("COMMON_BREADCRUMB_ALL_DET", AlertControlFunction);
 }

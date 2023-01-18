@@ -237,7 +237,7 @@ const PartyType = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYTYPE} />
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYTYPE} /> */}
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid>
                         <Card className="text-black">

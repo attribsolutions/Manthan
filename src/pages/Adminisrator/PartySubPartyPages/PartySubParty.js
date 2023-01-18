@@ -295,7 +295,7 @@ const PartySubParty = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_SUB_PARTY} />
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_SUB_PARTY} /> */}
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">

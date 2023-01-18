@@ -10,9 +10,39 @@ import { DELETE_MATERIAL_ISSUE_LIST_PAGE, GET_MATERIAL_ISSUE_LIST_PAGE, POST_GO_
 function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
   yield put(SpinnerState(true))
   try {
+    debugger
     const response = yield call(Material_Issue_GoButton_Post_API, data);
+    response.Data.forEach(i1 => {
+      i1.BatchesData.forEach(i2 => {
+        i2.Qty = '';
+      });
+    })
+
+      var a = response.Data.map(i1 => {
+      let count = Number(i1.Quantity)
+      debugger
+      i1.BatchesData = i1.BatchesData.map(i2 => {
+        let qty = Number(i2.BaseUnitQuantity)
+        debugger
+        if ((count > qty) && !(count === 0)) {
+          count = count - qty
+          i2.Qty = qty
+        } else if ((count <= qty) && (count > 0)) {
+          i2.Qty = count.toFixed(3)
+          count = 0
+        }
+        else {
+          i2.Qty = 0;
+        }
+        return i2
+      });
+      count = 0
+      return i1
+    })
+
+    debugger
     yield put(SpinnerState(false))
-    yield put(postGoButtonForMaterialIssue_MasterSuccess(response.Data));
+    yield put(postGoButtonForMaterialIssue_MasterSuccess(a));
 
   } catch (error) {
     yield put(SpinnerState(false))

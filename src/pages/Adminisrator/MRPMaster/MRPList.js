@@ -188,7 +188,7 @@ const MRPList = (props) => {
       <React.Fragment>
         <div className="page-content">
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP_lIST} />
+          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP_lIST} /> */}
           {/* <Breadcrumb
             pageHeading={userAccState.PageHeading}
             newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}

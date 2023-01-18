@@ -51,7 +51,7 @@ export default function PageList() {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage
