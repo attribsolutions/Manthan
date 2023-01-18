@@ -25,7 +25,8 @@ import {
     updateGeneralID,
     updateGeneralIDSuccess,
     PostType,
-    PostTypeSuccess
+    PostTypeSuccess,
+    deleteGeneralIDSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -69,9 +70,11 @@ const GeneralMaster = (props) => {
         Type=[] ,
         pageField,
         updateMsg,
+        deleteMsg,
         userAccess } = useSelector((state) => ({
             postMsg: state.GeneralReducer.PostDataMessage,
             updateMsg: state.GeneralReducer.updateMessage,
+            deleteMsg: state.GeneralReducer.deleteMessage,
             Type: state.GeneralReducer.Type,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -212,6 +215,26 @@ const GeneralMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+
+
+    useEffect(() => {
+        if (deleteMsg.Status === true && deleteMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: url.GENERAL_LIST,
+            })
+        } else if (deleteMsg.Status === true && !modalCss) {
+            dispatch(deleteGeneralIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(deleteMsg.Message),
+                })
+            );
+        }
+    }, [deleteMsg, modalCss]);
+
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -219,7 +242,7 @@ const GeneralMaster = (props) => {
         }
     }, [pageField])
 
-    const TypeDropdownOptions = Type.map((i) => ({ label: i.Name, value: i.id }))
+    const TypeDropdownOptions = Type.map((i) =>  ({ label: i.Name, value: i.id }))
 
     const saveHandeller = (event) => {
      
@@ -281,6 +304,7 @@ const GeneralMaster = (props) => {
                                                                             name="TypeName"
                                                                             value={values.TypeName}
                                                                             isSearchable={true}
+                                                                            isDisabled={(pageMode === "edit") ? true : false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
                                                                             options={TypeDropdownOptions}
