@@ -8,64 +8,92 @@ import { GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER 
 
 // GO Botton Post API
 function* GoButtonInvoice_genfun({ data }) {
-    yield put(SpinnerState(true))
-    try {
-        const response = yield call(Invoice_GoButton_Post_API, data);
-        yield put(SpinnerState(false))
-        yield put(GoButton_post_For_Invoice_Success(response.Data));
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Invoice_GoButton_Post_API, data);
 
-    } catch (error) {
-        yield put(SpinnerState(false))
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message Go Button in Invoice ",
-        }));
-    }
+    let convResp = response.Data.OrderItemDetails.map(i1 => {
+      debugger
+      let count = Number(i1.Quantity);
+      i1["OrderQty"] = i1.Quantity
+      i1["UnitDrop"] = {value:i1.Unit,label:i1.UnitName,ConversionUnit:'1',Unitlabel:i1.UnitName}
+      i1["stokQtyTotal"] = `${i1.Quantity} ${i1.UnitName}`
+
+      i1.StockDetails = i1.StockDetails.map(i2 => {
+
+        let qty = Number(i2.BaseUnitQuantity);
+
+        if ((count > qty) && !(count === 0)) {
+          count = count - qty
+          i2.Qty = qty.toFixed(3)
+        } else if ((count <= qty) && (count > 0)) {
+          i2.Qty = count.toFixed(3)
+          count = 0
+        }
+        else {
+          i2.Qty = 0;
+        }
+        return i2
+      });
+      count = 0
+      return i1
+    })
+    response.Data.OrderItemDetails=  convResp 
+    yield put(SpinnerState(false))
+    yield put(GoButton_post_For_Invoice_Success(convResp));
+
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message Go Button in Invoice ",
+    }));
+  }
 }
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ data }) {
-    yield put(SpinnerState(true))
-    try {
-        const response = yield call(Invoice_Post_API, data);
-      yield put(SpinnerState(false))
-      yield put(postInvoiceMasterSuccess(response));
-    } catch (error) {
-      yield put(SpinnerState(false))
-      yield put(AlertState({
-        Type: 4,
-        Status: true, Message: "500 Error Message in Invoice",
-      }));
-    }
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Invoice_Post_API, data);
+    yield put(SpinnerState(false))
+    yield put(postInvoiceMasterSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message in Invoice",
+    }));
   }
+}
 
-  // Invoice List
-  function* InvoiceListGenFunc({ filters }) {
+// Invoice List
+function* InvoiceListGenFunc({ filters }) {
 
-    yield put(SpinnerState(true))
-    try {
-  
-      const response = yield call(Invoice_Get_API, filters);
-      const newList = yield response.Data.map((i) => {
-        i.InvoiceDate = i.InvoiceDate;
-        var date = convertDatefunc(i.InvoiceDate)
-        i.InvoiceDate = (date)
-        return i
-      })
-      yield put(getIssueListPageSuccess(newList));
-      yield put(SpinnerState(false))
-    } catch (error) {
-      yield put(SpinnerState(false))
-      yield put(AlertState({
-        Type: 4,
-        Status: true, Message: "500 Error Message in Work Order List ",
-      }));
-    }
+  yield put(SpinnerState(true))
+  try {
+
+    const response = yield call(Invoice_Get_API, filters);
+    const newList = yield response.Data.map((i) => {
+      i.InvoiceDate = i.InvoiceDate;
+      var date = convertDatefunc(i.InvoiceDate)
+      i.InvoiceDate = (date)
+      return i
+    })
+    yield put(getIssueListPageSuccess(newList));
+    yield put(SpinnerState(false))
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message in Work Order List ",
+    }));
   }
+}
 function* InvoiceSaga() {
-    yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonInvoice_genfun)
-    yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
-    yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
- }
+  yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonInvoice_genfun)
+  yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
+  yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
+}
 
 export default InvoiceSaga;
