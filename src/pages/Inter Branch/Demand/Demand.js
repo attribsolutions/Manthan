@@ -591,7 +591,7 @@ const Demand = (props) => {
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.Date}</Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}>Date</Label>
                                             <Col sm="7">
                                                 <Flatpickr
                                                     name="Date"
@@ -614,7 +614,7 @@ const Demand = (props) => {
 
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Division} </Label>
+                                            <Label className="mt-2" style={{ width: "100px" }}> Division </Label>
                                             <Col sm={7}>
                                                 <Select
                                                     isDisabled={values.Division ? true : null}
@@ -635,21 +635,20 @@ const Demand = (props) => {
 
                                     <Col sm="6">
                                         <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
-                                            <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.Comment} </Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}> Comment </Label>
                                             <Col sm={7}>
 
                                                 <Input
-                                                    style={{ textAlign: "right" }}
                                                     name="Comment"
                                                     value={values.Comment}
                                                     type="text"
                                                     className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter Number Of Lots"
+                                                    placeholder="Please Enter"
                                                     autoComplete='off'
                                                     onChange={NumberOfLotchange}
                                                 />
 
-                                                <span className="text-danger">Note* :
+                                                <span className="text-danger">
                                                     <span className="text-secondary">{fieldLabel.Comment}
                                                     </span></span>
                                             </Col>
