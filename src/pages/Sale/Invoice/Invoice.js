@@ -59,7 +59,7 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
-    
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -70,15 +70,14 @@ const Invoice = (props) => {
         customer,
         GoButton
     } = useSelector((state) => ({
-        postMsg: state.MaterialIssueReducer.postMsg,
+        postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.GoButton
     }));
-    console.log("GoButton", GoButton)
-
+  
     useEffect(() => {
         const page_Id = pageId.INVOICE
         dispatch(GetCustomer())
@@ -272,6 +271,7 @@ const Invoice = (props) => {
         const validMsg = []
 
         const InvoiceItems = []
+        const InvoicesReferences = []
         GoButton.map((index) => {
             let Stock = index.StockDetails.map((i) => {
                 return i.BaseUnitQuantity
@@ -316,15 +316,17 @@ const Invoice = (props) => {
                     Unit: index.Unit,
                     BatchDate: index.BatchDate,
                     BatchID: ele.id,
-                    InvoicesReferences:[{"Order":index.OrderID}]
+                    // 
                 })
+                InvoicesReferences.push({ Order: index.OrderID })
+
             })
         })
 
         const FilterData = InvoiceItems.filter((index) => {
             return (index.IssueQuantity > 0)
         })
-       
+
         event.preventDefault();
         if (formValid(state, setState)) {
 
@@ -338,6 +340,7 @@ const Invoice = (props) => {
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 InvoiceItems: InvoiceItems,
+                InvoicesReferences:InvoicesReferences
             }
             );
             if (pageMode === mode.edit) {
@@ -437,7 +440,7 @@ const Invoice = (props) => {
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead  >
-                            <tr style={{ zIndex: "23" }} className="">
+                            <tr className="">
                                 <th className="">Batch Code </th>
                                 <th className="" >Supplier BatchCode</th>
                                 <th className="" >Batch Date</th>
@@ -592,6 +595,11 @@ const Invoice = (props) => {
                                                             bordered={false}
                                                             striped={false}
                                                             classes={"table  table-bordered"}
+                                                            noDataIndication={
+                                                                <div className="text-danger text-center ">
+                                                                    Items Not available
+                                                                </div>
+                                                            }
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />

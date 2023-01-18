@@ -681,7 +681,7 @@ const SaleOrder = (props) => {
             ShippingAddress: shippAddr.value,
             OrderNo: 1,
             FullOrderNumber: "PO0001",
-            OrderType: 1,
+            OrderType: 2,
             POType: 1,
             Division: division,
             POType: orderTypeSelect.value,
