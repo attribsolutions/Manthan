@@ -317,7 +317,7 @@ const BOMMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS} /> */}
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
