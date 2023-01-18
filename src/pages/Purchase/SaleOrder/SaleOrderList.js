@@ -28,6 +28,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
 import SaleOrder from "./SaleOrder";
+import { order_Type } from "../../../components/Common/C-Varialbes";
 
 const SaleOrderList = () => {
 
@@ -179,6 +180,7 @@ const SaleOrderList = () => {
                 ToDate: hasfilters.todate,
                 Customer: hasfilters.supplierSelect.value,
                 Supplier: userParty(),
+                OrderType: order_Type.SaleOrder
             });
             setorderlistFilter(hasfilters)
             dispatch(getOrderListPage(jsonBody));
@@ -190,6 +192,7 @@ const SaleOrderList = () => {
             ToDate: todate,
             Customer: !(supplierSelect.value > 0) ? 0 : supplierSelect.value,
             Supplier: userParty(),
+            OrderType: order_Type.SaleOrder
         });
 
         dispatch(getOrderListPage(jsonBody));
