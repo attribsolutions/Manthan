@@ -115,7 +115,7 @@ const BOMList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS_LIST} />
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS_LIST} /> */}
 
             <div className="page-content">
                 {/* <Breadcrumb
