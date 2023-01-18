@@ -50,7 +50,7 @@ const Invoice = (props) => {
     const fileds = {
         // id: "",
         InvoiceDate: currentDate,
-        CustomerName: "",
+        Customer: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -77,7 +77,7 @@ const Invoice = (props) => {
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.GoButton
     }));
-  
+
     useEffect(() => {
         const page_Id = pageId.INVOICE
         dispatch(GetCustomer())
@@ -130,13 +130,13 @@ const Invoice = (props) => {
             if (hasEditVal) {
 
                 setItemselect(hasEditVal)
-                const { id, Item, CustomerName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
+                const { id, Item, Customer, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
                     i.values.InvoiceDate = currentDate
-                    i.values.CustomerName = { value: id, label: CustomerName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
+                    i.values.Customer = { value: id, label: Customer, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.CustomerName.valid = true;
+                    i.hasValid.Customer.valid = true;
                     i.hasValid.InvoiceDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
                     i.hasValid.LotQuantity.valid = true;
@@ -243,7 +243,7 @@ const Invoice = (props) => {
         dispatch(Breadcrumb_inputName(hasSelect.label))
         // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setState((i) => {
-            i.values.CustomerName = hasSelect
+            i.values.Customer = hasSelect
             return i
         })
     }
@@ -253,7 +253,7 @@ const Invoice = (props) => {
         // if (formValid(state, setState)) {
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: values.CustomerName.value,
+            Customer: values.Customer.value,
             Party: userParty(),
             OrderIDs: ""
         });
@@ -335,12 +335,12 @@ const Invoice = (props) => {
                 CustomerGSTTin: "2023-01-06",
                 GrandTotal: "6615.00",
                 RoundOffAmount: 1,
-                Customer: values.CustomerName.value,
+                Customer: values.Customer.value,
                 Party: userParty(),
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 InvoiceItems: InvoiceItems,
-                InvoicesReferences:InvoicesReferences
+                InvoicesReferences: InvoicesReferences
             }
             );
             if (pageMode === mode.edit) {
@@ -390,6 +390,7 @@ const Invoice = (props) => {
                             defaultValue={cellContent}
                         // onChange={(event) => handleChange(event, index)}
                         ></Input>
+                        <samp className="mt-1">Order Qty:{cellContent}</samp>
                     </div>
                 </>
             )
@@ -454,32 +455,31 @@ const Invoice = (props) => {
                                     < tr >
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Label  >
-                                                    {index.SystemBatchCode}
-                                                </Label>
+                                                {/* <Label  > */}
+                                                {index.SystemBatchCode}
+                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.BatchCode}
-                                                </Label>
+                                                {/* <Label> */}
+                                                {index.BatchCode}
+                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "100px" }}>
-                                                <Label>
-                                                    {convertDatefunc(index.BatchDate)}
-                                                </Label>
+                                                {/* <Label> */}
+                                                {convertDatefunc(index.BatchDate)}
+                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
-                                                <Label
-                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
-                                                >
-                                                    {index.BaseUnitQuantity}
-                                                </Label>
+                                                {/* <Label */}
+
+                                                {index.BaseUnitQuantity}
+                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
@@ -545,20 +545,20 @@ const Invoice = (props) => {
 
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.CustomerName} </Label>
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    // isDisabled={values.CustomerName ? true : null}
-                                                    name="CustomerName"
-                                                    value={values.CustomerName}
+                                                    // isDisabled={values.Customer ? true : null}
+                                                    name="Customer"
+                                                    value={values.Customer}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={CustomerDropdown_Options}
                                                     onChange={ItemOnchange}
                                                 />
-                                                {isError.CustomerName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.CustomerName}</small></span>
+                                                {isError.Customer.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
                                                 )}
                                             </Col>
                                         </FormGroup>
