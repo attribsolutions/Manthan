@@ -110,7 +110,7 @@ const GRNList = () => {
 
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_lIST} />
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_lIST} /> */}
 
             <div className="page-content">
                 {/* <Breadcrumb
