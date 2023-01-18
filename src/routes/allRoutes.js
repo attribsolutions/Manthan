@@ -107,6 +107,8 @@ import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
 import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
 import Invoice from "../pages/Sale/Invoice/Invoice";
 
+import Demand from "../pages/Inter Branch/Demand/Demand";
+import DemandList from "../pages/Inter Branch/Demand/DemandList";
 
 
 const userRoutes = [
@@ -226,7 +228,13 @@ const userRoutes = [
   { path: path.SALE_ORDER, component: SaleOrder },
   { path: path.SALE_ORDER_lIST, component: SaleOrderList },
 
+
   { path: path.INVOICE, component: Invoice },
+
+
+ //************************************** Inter Branch ********************************//
+  { path: path.DEMAND, component: Demand },
+  { path: path.DEMAND_LIST, component: DemandList},
 
 
   // ************************************ Utility **************************************//
