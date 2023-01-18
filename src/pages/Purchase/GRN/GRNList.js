@@ -23,6 +23,7 @@ import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
+import { order_Type } from "../../../components/Common/C-Varialbes";
 const GRNList = () => {
 
     const dispatch = useDispatch();
@@ -84,6 +85,7 @@ const GRNList = () => {
             ToDate: todate,
             Supplier: venderSelect === "" ? '' : venderSelect.value,
             Party: userParty(),
+            OrderType: order_Type.SaleOrder
         });
         dispatch(getGRNListPage(jsonBody));
     }

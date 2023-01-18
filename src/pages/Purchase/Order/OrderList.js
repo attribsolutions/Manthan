@@ -26,8 +26,10 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+
 import { MetaTags } from "react-meta-tags";
+import { order_Type } from "../../../components/Common/C-Varialbes";
+
 
 const OrderList = () => {
 
@@ -55,7 +57,7 @@ const OrderList = () => {
     const { userAccess, pageField, GRNitem, vender, tableList, orderlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = orderlistFilter;
     const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
- 
+
     const action = {
         getList: getOrderListPage,
         deleteId: deleteOrderId,
@@ -83,7 +85,7 @@ const OrderList = () => {
 
     venderOptions.unshift({
         value: "",
-        label: " All" 
+        label: " All"
     });
 
     const downList = useMemo(() => {
@@ -159,7 +161,7 @@ const OrderList = () => {
         var Mode = "edit"
         dispatch(editOrderId(jsonBody, Mode));
     }
-    
+
     function downBtnFunc(row) {
         var ReportType = report.order1;
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
@@ -171,6 +173,7 @@ const OrderList = () => {
             ToDate: todate,
             Supplier: venderSelect === "" ? '' : venderSelect.value,
             Customer: userParty(),
+            OrderType: order_Type.PurchaseOrder
         });
 
         dispatch(getOrderListPage(jsonBody));
