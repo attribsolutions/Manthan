@@ -491,7 +491,7 @@ const MaterialIssueMaster = (props) => {
                     SystemBatchCode: ele.SystemBatchCode,
                     IssueQuantity: parseInt(ele.Qty),
                     BatchID: ele.id,
-                    LiveBatchID: ele.id,
+                    LiveBatchID: ele.LiveBatchID
                 })
             })
         })
