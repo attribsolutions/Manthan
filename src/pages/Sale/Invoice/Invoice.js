@@ -38,9 +38,9 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { GoButton_post_For_Invoice} from "../../../store/Sales/Invoice/action";
+import { GoButton_post_For_Invoice, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import {postInvoiceMaster} from "../../../store/Sales/Invoice/action";
+import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 
 const Invoice = (props) => {
 
@@ -49,19 +49,17 @@ const Invoice = (props) => {
 
     const fileds = {
         // id: "",
-        MaterialIssueDate: currentDate,
+        InvoiceDate: currentDate,
         CustomerName: "",
-        NumberOfLot: "",
-        LotQuantity: "",
     }
-debugger
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
-    const [Itemselectonchange, setItemselectonchange] = useState("");
+    
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -79,7 +77,7 @@ debugger
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.GoButton
     }));
-
+    console.log("GoButton", GoButton)
 
     useEffect(() => {
         const page_Id = pageId.INVOICE
@@ -135,12 +133,12 @@ debugger
                 setItemselect(hasEditVal)
                 const { id, Item, CustomerName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
-                    i.values.MaterialIssueDate = currentDate
+                    i.values.InvoiceDate = currentDate
                     i.values.CustomerName = { value: id, label: CustomerName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
                     i.values.NumberOfLot = NumberOfLot;
                     i.values.LotQuantity = EstimatedOutputQty;
                     i.hasValid.CustomerName.valid = true;
-                    i.hasValid.MaterialIssueDate.valid = true;
+                    i.hasValid.InvoiceDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
                     i.hasValid.LotQuantity.valid = true;
                     return i
@@ -163,9 +161,9 @@ debugger
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postMaterialIssueSuccess({ Status: false }))
-            dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(postInvoiceMasterSuccess({ Status: false }))
+            // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
 
@@ -187,13 +185,13 @@ debugger
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MATERIAL_ISSUE_LIST,
+                    RedirectPath: url.INVOICE,
                 }))
             }
         }
         else if (postMsg.Status === true) {
 
-            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(postInvoiceMasterSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
             dispatch(postBOMSuccess({ Status: false }))
             dispatch(AlertState({
@@ -252,13 +250,17 @@ debugger
     }
 
     function goButtonHandler(event) {
+        // event.preventDefault();
+        // if (formValid(state, setState)) {
         const jsonBody = JSON.stringify({
-            FromDate: currentDate,
+            FromDate: values.InvoiceDate,
             Customer: values.CustomerName.value,
-            Party:userParty(),
+            Party: userParty(),
             OrderIDs: ""
         });
+
         dispatch(GoButton_post_For_Invoice(jsonBody));
+        // }
     }
 
     const handleChange = (event, index) => {
@@ -269,11 +271,11 @@ debugger
         debugger
         const validMsg = []
 
-        const MaterialIssueItems = []
+        const InvoiceItems = []
         GoButton.map((index) => {
             let Stock = index.StockDetails.map((i) => {
-                    return i.BaseUnitQuantity
-                })
+                return i.BaseUnitQuantity
+            })
             var TotalStock = 0;
             Stock.forEach(x => {
                 TotalStock += parseFloat(x);
@@ -281,62 +283,61 @@ debugger
             var OrderQty = parseFloat(index.Quantity)
             if (OrderQty > TotalStock) {
                 {
-                    // alert(` ${index.CustomerName} out of stock`)
-                    validMsg.push(`${index.CustomerName}:Item is Out Of Stock`);
-
+                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
                 };
             }
+            if (index["invalid"]) {
+                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
+            };
 
             index.StockDetails.map((ele) => {
-                MaterialIssueItems.push({
+                InvoiceItems.push({
+                    BatchCode: ele.BatchCode,
+                    Quantity: index.Quantity,
+                    BaseUnitQuantity: index.BaseUnitQuantity,
+                    MRP: null,
+                    Rate: index.Rate,
+                    BasicAmount: index.BasicAmount,
+                    TaxType: "GST",
+                    GSTPercentage: index.GSTPercentage,
+                    GSTAmount: index.GSTAmount,
+                    Amount: index.Amount,
+                    DiscountType: "",
+                    Discount: "0",
+                    DiscountAmount: "0",
+                    CGST: index.CGST,
+                    SGST: index.SGST,
+                    IGST: index.IGST,
+                    CGSTPercentage: index.CGSTPercentage,
+                    SGSTPercentage: index.SGSTPercentage,
+                    IGSTPercentage: index.IGSTPercentage,
+                    CreatedOn: "",
                     Item: index.Item,
                     Unit: index.Unit,
-                    WorkOrderQuantity: index.Quantity,
-                    BatchCode: ele.BatchCode,
-                    BatchDate: ele.BatchDate,
-                    SystemBatchDate: ele.SystemBatchDate,
-                    SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty),
-                    BatchID: ele.id
+                    BatchDate: index.BatchDate,
+                    BatchID: ele.id,
+                    InvoicesReferences:[{"Order":index.OrderID}]
                 })
             })
         })
 
-        const FilterData = MaterialIssueItems.filter((index) => {
+        const FilterData = InvoiceItems.filter((index) => {
             return (index.IssueQuantity > 0)
         })
-
+       
         event.preventDefault();
         if (formValid(state, setState)) {
 
-            if (validMsg.length > 0) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: (validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
-                return
-            }
             const jsonBody = JSON.stringify({
-                MaterialIssueDate: values.MaterialIssueDate,
-                NumberOfLot: values.NumberOfLot,
-                LotQuantity: values.LotQuantity,
+                InvoiceDate: currentDate,
+                CustomerGSTTin: "2023-01-06",
+                GrandTotal: "6615.00",
+                RoundOffAmount: 1,
+                Customer: values.CustomerName.value,
+                Party: userParty(),
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
-                Item: Itemselect.Item,
-                Unit: Itemselect.Unit,
-                MaterialIssueItems: FilterData,
-                MaterialIssueWorkOrder: [
-                    {
-                        WorkOrder: Itemselect.id,
-                        Bom: Itemselect.Bom
-
-                    }
-                ]
+                InvoiceItems: InvoiceItems,
             }
             );
             if (pageMode === mode.edit) {
@@ -350,7 +351,7 @@ debugger
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "CustomerName",
+            dataField: "ItemName",
             style: (cellContent, user) => {
 
                 let Stock = user.StockDetails.map((index) => {
@@ -371,10 +372,10 @@ debugger
             },
         },
 
-        {
-            text: "Order Qty",
-            dataField: "Quantity",
-        },
+        // {
+        //     text: "Order Qty",
+        //     dataField: "Quantity",
+        // },
         {
             text: "Quantity",
             dataField: "Quantity",
@@ -518,11 +519,11 @@ debugger
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 mb-3  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
                                             <Col sm="7">
                                                 <Flatpickr
-                                                    name="MaterialIssueDate"
-                                                    value={values.MaterialIssueDate}
+                                                    name="InvoiceDate"
+                                                    value={values.InvoiceDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
@@ -532,8 +533,8 @@ debugger
                                                     }}
                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 />
-                                                {isError.MaterialIssueDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
+                                                {isError.InvoiceDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.InvoiceDate}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>
