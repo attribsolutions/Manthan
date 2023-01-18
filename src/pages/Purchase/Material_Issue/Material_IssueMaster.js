@@ -663,7 +663,7 @@ const MaterialIssueMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} /> */}
 
                 <div className="page-content" >
                     {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
