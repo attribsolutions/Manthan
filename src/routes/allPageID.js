@@ -118,6 +118,12 @@ export const SALE_ORDER = 117
 export const SALE_ORDER_lIST = 118
 
 
+
 export const INVOICE = 121
 export const INVOICE_LIST =122
+
+
+//******************************* Inter Branch ************************************//
+export const DEMAND = 123
+export const DEMANDLIST = 124
 
