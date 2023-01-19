@@ -35,7 +35,8 @@ import {
     get_PriceList_ForDropDown,
     postItemData,
     PostItemDataSuccess,
-    updateItemID
+    updateItemID,
+    updateItemSuccess
 } from "../../../../store/Administrator/ItemsRedux/action";
 import { AlertState, Breadcrumb_inputName, getCategoryTypelist } from "../../../../store/actions";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
@@ -59,9 +60,7 @@ const ItemsMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [activeTab1, setactiveTab1] = useState("1")
 
-    const [searchTerm, setSearchTerm] = React.useState("");
     const [searchResults, setSearchResults] = React.useState([]);
-    const [searchTerm1, setSearchTerm1] = React.useState("");
     const [searchResults1, setSearchResults1] = React.useState([]);
 
     let initial = {
@@ -119,18 +118,20 @@ const ItemsMaster = (props) => {
     const {
         companyList,
         BaseUnit,
-        PostAPIResponse,
+        postMsg,
         userAccess,
         Division,
         CategoryTypeList,
         CategoryList,
         ItemTagList,
-        BrandTagList
+        BrandTagList,
+        updateMsg
     } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         userAccess: state.Login.RoleAccessUpdateData,
-        PostAPIResponse: state.ItemMastersReducer.postMessage,
+        postMsg: state.ItemMastersReducer.postMsg,
+        updateMsg: state.ItemMastersReducer.updateMsg,
         Division: state.ItemMastersReducer.Division,
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
         CategoryList: state.ItemMastersReducer.Category,
@@ -248,13 +249,15 @@ const ItemsMaster = (props) => {
 
                 const UnitDetails = []
                 hasEditVal.ItemUnitDetails.forEach((index) => {
-                    if (!index.IsBase) {
-                        UnitDetails.push({
-                            Unit: { label: index.UnitName, value: index.UnitID },
-                            Conversion: index.BaseUnitQuantity,
-                            IsBase: false
-                        })
-                    }
+                    // if (!index.IsBase) {
+                    UnitDetails.push({
+                        Unit: { label: index.UnitName, value: index.UnitID },
+                        Conversion: index.BaseUnitQuantity,
+                        IsBase: index.IsBase,
+                        POUnit:index.PODefaultUnit,
+                        SOUnit:index.SODefaultUnit
+                    })
+                    // }
                 })
 
                 if ((UnitDetails.length === 0)) {
@@ -262,6 +265,8 @@ const ItemsMaster = (props) => {
                         Unit: '',
                         Conversion: '',
                         IsBase: false,
+                        POUnit:false,
+                        SOUnit:false
                     })
                 };
 
@@ -279,40 +284,6 @@ const ItemsMaster = (props) => {
         }
 
     }, [])
-
-    useEffect(() => {
-
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(PostItemDataSuccess({ Status: false }))
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: PostAPIResponse.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: url.ITEM_lIST,
-                }))
-            }
-        }
-
-        else if (PostAPIResponse.Status === true) {
-            dispatch(PostItemDataSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [PostAPIResponse])
-
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
@@ -328,7 +299,61 @@ const ItemsMaster = (props) => {
         dispatch(getBrandTagName())
 
 
-    }, [dispatch]);
+    }, []);
+    useEffect(() => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+            dispatch(PostItemDataSuccess({ Status: false }))
+            if (pageMode === "dropdownAdd") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                    RedirectPath: url.ITEM_lIST,
+                }))
+            }
+        }
+
+        else if (postMsg.Status === true) {
+            dispatch(PostItemDataSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(postMsg.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [postMsg])
+
+
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            //   saveDissable(false);//Update Button Is enable function
+            //   setState(() => resetFunction(fileds, state))// Clear form values 
+            history.push({
+                pathname: url.ITEM_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            //   saveDissable(false);//Update Button Is enable function
+            dispatch(updateItemSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -489,7 +514,7 @@ const ItemsMaster = (props) => {
             // ====================== Unit conversion *****start ======================
 
             const itemUnitDetails = []
-
+// debugger
             baseUnitTableData.forEach((index, key) => {
                 let val1 = index.Conversion
                 const unit1 = index.Unit.value;
@@ -503,26 +528,22 @@ const ItemsMaster = (props) => {
                     if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
                     return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
                 });
+
                 const found2 = itemUnitDetails.find((i, k) => {
                     return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
                 });
 
+                // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
 
-                if (
-                    ((found === undefined) || (found2 === undefined))
-                    && !(val1 === '')
-                    && !(unit1 === ''))
-
-                    if (
-                        ((found === undefined) || (found2 === undefined))
-                        && !(index.Conversion === '')
-                        && !(index.Unit === '')) {
-                        itemUnitDetails.push({
-                            BaseUnitQuantity: index.Conversion,
-                            UnitID: index.Unit.value,
-                            IsBase: index.IsBase
-                        })
-                    }
+                if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === '')) {
+                    itemUnitDetails.push({
+                        BaseUnitQuantity: index.Conversion,
+                        UnitID: index.Unit.value,
+                        IsBase: index.IsBase,
+                        SODefaultUnit: index.SOUnit,
+                        PODefaultUnit: index.POUnit
+                    })
+                }
 
             });
 
@@ -532,7 +553,9 @@ const ItemsMaster = (props) => {
                 itemUnitDetails.push({
                     BaseUnitQuantity: 1,
                     UnitID: formValue.BaseUnit.value,
-                    IsBase: true
+                    IsBase: true,
+                    SODefaultUnit: true,
+                    PODefaultUnit: true
                 })
 
             //  ======================   ItemCategoryDetails *****start   ====================== 
@@ -652,7 +675,6 @@ const ItemsMaster = (props) => {
 
     };
 
-    var modal = document.getElementById('itemtag');
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
@@ -672,7 +694,7 @@ const ItemsMaster = (props) => {
     })
 
     const handleChange = event => {
-        debugger
+        // debugger
         dispatch(Breadcrumb_inputName(event.target.value));
         CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
         var searchtext = event.target.value
@@ -759,11 +781,7 @@ const ItemsMaster = (props) => {
             hasNone.display = "none";
         }
     };
-    React.useEffect(() => {
-    }, [searchTerm]);
-    React.useEffect(() => {
 
-    }, [searchTerm1]);
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 

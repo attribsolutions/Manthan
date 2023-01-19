@@ -14,14 +14,20 @@ function* GoButtonInvoice_genfun({ data }) {
 
     let convResp = response.Data.OrderItemDetails.map(i1 => {
       debugger
-      let count = Number(i1.Quantity);
       i1["OrderQty"] = i1.Quantity
-      i1["UnitDrop"] = {value:i1.Unit,label:i1.UnitName,ConversionUnit:'1',Unitlabel:i1.UnitName}
-      i1["stokQtyTotal"] = `${i1.Quantity} ${i1.UnitName}`
+      i1["UnitDrop"] = { value: i1.Unit, label: i1.UnitName, ConversionUnit: '1', Unitlabel: i1.UnitName }
+      i1["InpStockQtyTotal"] = `${Number(i1.Quantity) * Number(i1.ConversionUnit)}`
+      i1["StockTotal"] = 0
+      i1["StockUnit"] = ''
+
+      let f1 = i1.UnitDetails.find(e1 => (e1.Unit === i1.Unit));
+
+      let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
 
       i1.StockDetails = i1.StockDetails.map(i2 => {
+        i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
 
-        let qty = Number(i2.BaseUnitQuantity);
+        let qty = Number(i2.BaseUnitQuantity) * Number(i1.ConversionUnit);
 
         if ((count > qty) && !(count === 0)) {
           count = count - qty
@@ -35,10 +41,12 @@ function* GoButtonInvoice_genfun({ data }) {
         }
         return i2
       });
+
       count = 0
       return i1
     })
-    response.Data.OrderItemDetails=  convResp 
+    response.Data.OrderItemDetails = convResp
+
     yield put(SpinnerState(false))
     yield put(GoButton_post_For_Invoice_Success(convResp));
 

@@ -6,7 +6,7 @@ import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row, Table } from
 export default function UnitConverstion(props) {
 
     const { pageMode, formValue, TableData = [], BaseUnit = [], } = props.state;
-    
+
     const { settable, setFormValue } = props
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
@@ -15,7 +15,7 @@ export default function UnitConverstion(props) {
     }));
 
     function baseunitOnchange(event) {
-  
+
         const val = { ...formValue }
         val["BaseUnit"] = event
         setFormValue(val)
@@ -23,7 +23,9 @@ export default function UnitConverstion(props) {
         if (TableData[0]) {
             settable([{
                 Conversion: '1',
-                Unit: { value: event.value, label: event.label },
+                Unit: event,
+                SOUnit: false,
+                IsBase: false
             }])
         }
     }
@@ -49,61 +51,22 @@ export default function UnitConverstion(props) {
     }
 
     function baseUnit2_onChange(event, type = '', key) {
-        debugger
+
         const found = TableData.find((i, k) => {
             return (k === key)
         })
 
-        let newSelectValue = ''
+        found.type = event;
 
-        switch (type) {
-            case 'Conversion':
-                // var conv = event.target.value
-                newSelectValue = {
-                    Conversion: event,
-                    Unit: found.Unit,
-                    POUnit: found.POUnit,
-                    SOUnit: found.SOUnit,
-                    IsBase: found.IsBase
-                }
-                break;
-
-            case 'Unit':
-                newSelectValue = {
-                    Conversion: found.Conversion,
-                    Unit: event,
-                    POUnit: found.POUnit,
-                    SOUnit: found.SOUnit,
-                    IsBase: found.IsBase
-                }
-                break;
-
-            case 'POUnit':
-                newSelectValue = {
-                    Conversion: found.Conversion,
-                    Unit: found.Unit,
-                    POUnit: event,
-                    SOUnit: found.SOUnit,
-                    IsBase: found.IsBase
-                }
-                break;
-
-            case 'SOUnit':
-                newSelectValue = {
-                    Conversion: found.Conversion,
-                    Unit: found.Unit,
-                    POUnit: found.POUnit,
-                    SOUnit: event,
-                    IsBase: found.IsBase
-                }
-                break;
-        }
-
-        let newTabArr = TableData.map((index, k) => {
-            debugger
-            return (k === key) ? newSelectValue : index
-        })
-        settable(newTabArr)
+        settable(e1 => (e1.map((index, k) => {
+            if ((type === 'POUnit') && !(k === key)) {
+                index.SOUnit = false
+            };
+            if ((type === 'SOUnit') && !(k === key)) {
+                index.POUnit = false
+            }
+            return (k === key) ? found : index
+        })))
     }
 
     let BaseUnit_DropdownOptions2 = []
@@ -123,7 +86,6 @@ export default function UnitConverstion(props) {
         const newarr = []
 
         TableData.forEach((index, key) => {
-
             newarr.push(
                 (
                     <tr >
@@ -167,6 +129,7 @@ export default function UnitConverstion(props) {
                                 <Input
                                     type="radio"
                                     id={`POUnit-${key}`}
+                                    key={`POUnit-${key}`}
                                     name="btnradio"
                                     value={index.POUnit}
                                     checked={TableData[key].POUnit}
@@ -182,6 +145,7 @@ export default function UnitConverstion(props) {
                                     type="radio"
                                     id={`SOUnit-${key}`}
                                     name="btnradio1"
+                                    key={`SOUnit-${key}`}
                                     value={index.SOUnit}
                                     checked={TableData[key].SOUnit}
                                     onChange={(e) => baseUnit2_onChange(e.target.checked, "SOUnit", key)}
@@ -203,7 +167,7 @@ export default function UnitConverstion(props) {
 
                                     </Col>
 
-                                    <Col md={6} style={{ marginRight: ""}}>
+                                    <Col md={6} style={{ marginRight: "" }}>
                                         <Button
                                             style={{ marginLeft: "-0.6cm" }}
                                             className=" button_add"

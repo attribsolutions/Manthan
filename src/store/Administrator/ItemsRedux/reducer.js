@@ -24,11 +24,11 @@ import {
 
 const INIT_STATE = {
     pages: [],
-    postMessage: { Status: false },
+    postMsg: { Status: false },
     deleteRoleID: [],
-    deleteMessage: { Status: false },
+    deleteMsg: { Status: false },
     editData: { Status: false },
-    updateMessage: { Status: false },
+    updateMsg: { Status: false },
     ItemGroupList: [],
     BaseUnit: [],
     CategoryType: [],
@@ -84,14 +84,14 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case POST_ITEM_DATA_SUCCESS:
             return {
                 ...state,
-                postMessage: action.payload,
+                postMsg: action.payload,
             };
 
         // delete api
         case DELETE_ITEM_ID_SUCCESS:
             return {
                 ...state,
-                deleteMessage: action.payload,
+                deleteMsg: action.payload,
             };
 
         // edit api
@@ -105,7 +105,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case UPDATE_ITEM_ID_SUCCESS:
             return {
                 ...state,
-                updateMessage: action.payload,
+                updateMsg: action.payload,
             };
 
         case GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:

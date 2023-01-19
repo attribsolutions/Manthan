@@ -23,10 +23,10 @@ const ItemsList = (props) => {
     (state) => ({
       tableList: state.ItemMastersReducer.pages,
       editData: state.ItemMastersReducer.editData,
-      updateMsg: state.ItemMastersReducer.updateMessage,
-      deleteMsg: state.ItemMastersReducer.deleteMessage,
+      updateMsg: state.ItemMastersReducer.updateMsg,
+      deleteMsg: state.ItemMastersReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.ItemMastersReducer.postMessage,
+      postMsg: state.ItemMastersReducer.postMsg,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
