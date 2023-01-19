@@ -350,7 +350,44 @@ const Invoice = (props) => {
             }
         };
     }
+    function orderQuantityOnChange(event, index) {
+        // let convResp = []
+        // convResp = index.map(i1 => {
+        const v1 = event.target.value
+        index.OrderQty = v1
+        let count = Number(v1);
 
+        index.StockDetails = index.StockDetails.map(i2 => {
+
+            let qty = Number(i2.BaseUnitQuantity);
+
+            if ((count > qty) && !(count === 0)) {
+                count = count - qty
+                i2.Qty = qty.toFixed(3)
+            } else if ((count <= qty) && (count > 0)) {
+                i2.Qty = count.toFixed(3)
+                count = 0
+            }
+            else {
+                i2.Qty = 0;
+            }
+            try {
+
+                document.getElementById(`batchQty${i2.id}`).value = i2.Qty
+            } catch (e) { }
+            return i2
+        });
+
+        const v2 = index.UnitDrop
+        const t1 = (v1 * v2.ConversionUnit);
+        const t2 = v2.Unitlabel;
+        debugger
+        try {
+            document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
+        } catch (e) { }
+        // return i1
+        // })
+    }
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -381,16 +418,17 @@ const Invoice = (props) => {
         // },
         {
             text: "Quantity",
-            dataField: "Quantity",
+            dataField: "",
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ width: "150px" }}>
                         <Input type="text"
                             style={{ textAlign: "right" }}
-                            defaultValue={cellContent}
-                        // onChange={(event) => handleChange(event, index)}
+                            key={user.id}
+                            defaultValue={user.OrderQty}
+                            onChange={(event) => orderQuantityOnChange(event, user)}
                         ></Input>
-                        <samp className="mt-1">Order Qty:{cellContent}</samp>
+                        <samp className="mt-1">Order Qty:{user.Quantity} {user.UnitName}</samp>
                     </div>
                 </>
             )
@@ -400,30 +438,38 @@ const Invoice = (props) => {
             dataField: "",
             formatter: (value, row, key) => {
                 debugger
-                if (!row.UnitName) {
-                    row["Unit_id"] = row.UnitDetails[0].Unit
-                    row["UnitName"] = row.UnitDetails[0].UnitName
-                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
-                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
-                }
+                // if (!row.UnitName) {
+                //     row["Unit_id"] = row.UnitDetails[0].Unit
+                //     row["UnitName"] = row.UnitDetails[0].UnitName
+                //     // row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
+                //     // row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                // }
 
                 return (
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
-                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
                                 value: i.Unit,
-                                baseUnitQty: i.BaseUnitQuantity
+                                ConversionUnit: i.ConversionUnit,
+                                Unitlabel: i.Unitlabel
                             }))
                         }
                         onChange={e => {
-                            row["Unit_id"] = e.value;
-                            row["UnitName"] = e.label
-                            row["BaseUnitQuantity"] = e.baseUnitQty
+                            debugger
+                            row.UnitDrop = e;
+                            var n1 = Number(row.OrderQty);
+                            var n2 = Number(e.ConversionUnit);
+                            const t1 = (n1 * n2).toFixed(2);
+                            const t2 = e.Unitlabel
+                            // de
+                            try {
+                                document.getElementById(`stocktotal${row.id}`).innerText = `Total:${t1} ${t2}`
+                            } catch (e) { }
                         }}
                     >
                     </Select >
@@ -437,7 +483,7 @@ const Invoice = (props) => {
             text: "Batch Code",
             dataField: "StockDetails",
 
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, row) => (
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead  >
@@ -446,46 +492,44 @@ const Invoice = (props) => {
                                 <th className="" >Supplier BatchCode</th>
                                 <th className="" >Batch Date</th>
                                 <th className="">Stock Quantity</th>
-                                <th className="" >Quantity</th>
+                                <th className="" >
+                                    <div>
+                                        <samp >Quantity</samp>
+                                    </div>
+                                    <samp id={`stocktotal${row.id}`}>{`Total:${row.stokQtyTotal}`} </samp>
+                                </th>
                             </tr>
                         </Thead>
                         <Tbody  >
                             {cellContent.map((index) => {
                                 return (
-                                    < tr >
+                                    < tr key={row.id} >
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                {/* <Label  > */}
                                                 {index.SystemBatchCode}
-                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                {/* <Label> */}
                                                 {index.BatchCode}
-                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "100px" }}>
-                                                {/* <Label> */}
                                                 {convertDatefunc(index.BatchDate)}
-                                                {/* </Label> */}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
-                                                {/* <Label */}
-
-                                                {index.BaseUnitQuantity}
-                                                {/* </Label> */}
+                                                {`${index.BaseUnitQuantity} ${row.UnitName}`}
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Input type="text"
                                                     style={{ textAlign: "right" }}
+                                                    key={`batchQty${index.id}`}
+                                                    id={`batchQty${index.id}`}
                                                     defaultValue={index.Qty}
                                                     onChange={(event) => handleChange(event, index)}
                                                 ></Input>
