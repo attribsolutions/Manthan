@@ -250,11 +250,13 @@ const ItemsMaster = (props) => {
                 const UnitDetails = []
                 hasEditVal.ItemUnitDetails.forEach((index) => {
                     // if (!index.IsBase) {
-                        UnitDetails.push({
-                            Unit: { label: index.UnitName, value: index.UnitID },
-                            Conversion: index.BaseUnitQuantity,
-                            IsBase: false
-                        })
+                    UnitDetails.push({
+                        Unit: { label: index.UnitName, value: index.UnitID },
+                        Conversion: index.BaseUnitQuantity,
+                        IsBase: index.IsBase,
+                        POUnit:index.PODefaultUnit,
+                        SOUnit:index.SODefaultUnit
+                    })
                     // }
                 })
 
@@ -263,6 +265,8 @@ const ItemsMaster = (props) => {
                         Unit: '',
                         Conversion: '',
                         IsBase: false,
+                        POUnit:false,
+                        SOUnit:false
                     })
                 };
 
@@ -329,27 +333,27 @@ const ItemsMaster = (props) => {
         }
     }, [postMsg])
 
-   
+
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-        //   saveDissable(false);//Update Button Is enable function
-        //   setState(() => resetFunction(fileds, state))// Clear form values 
-          history.push({
-            pathname: url.ITEM_lIST,
-          })
-        } else if (updateMsg.Status === true && !modalCss) {
-        //   saveDissable(false);//Update Button Is enable function
-          dispatch(updateItemSuccess({ Status: false }));
-          dispatch(
-            AlertState({
-              Type: 3,
-              Status: true,
-              Message: JSON.stringify(updateMsg.Message),
+            //   saveDissable(false);//Update Button Is enable function
+            //   setState(() => resetFunction(fileds, state))// Clear form values 
+            history.push({
+                pathname: url.ITEM_lIST,
             })
-          );
+        } else if (updateMsg.Status === true && !modalCss) {
+            //   saveDissable(false);//Update Button Is enable function
+            dispatch(updateItemSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
         }
-      }, [updateMsg, modalCss]);
+    }, [updateMsg, modalCss]);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -510,7 +514,7 @@ const ItemsMaster = (props) => {
             // ====================== Unit conversion *****start ======================
 
             const itemUnitDetails = []
-
+// debugger
             baseUnitTableData.forEach((index, key) => {
                 let val1 = index.Conversion
                 const unit1 = index.Unit.value;
@@ -529,21 +533,17 @@ const ItemsMaster = (props) => {
                     return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
                 });
 
-                if (
-                    ((found === undefined) || (found2 === undefined))
-                    && !(val1 === '')
-                    && !(unit1 === ''))
+                // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
 
-                    if (
-                        ((found === undefined) || (found2 === undefined))
-                        && !(index.Conversion === '')
-                        && !(index.Unit === '')) {
-                        itemUnitDetails.push({
-                            BaseUnitQuantity: index.Conversion,
-                            UnitID: index.Unit.value,
-                            IsBase: index.IsBase
-                        })
-                    }
+                if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === '')) {
+                    itemUnitDetails.push({
+                        BaseUnitQuantity: index.Conversion,
+                        UnitID: index.Unit.value,
+                        IsBase: index.IsBase,
+                        SODefaultUnit: index.SOUnit,
+                        PODefaultUnit: index.POUnit
+                    })
+                }
 
             });
 
@@ -553,7 +553,9 @@ const ItemsMaster = (props) => {
                 itemUnitDetails.push({
                     BaseUnitQuantity: 1,
                     UnitID: formValue.BaseUnit.value,
-                    IsBase: true
+                    IsBase: true,
+                    SODefaultUnit: true,
+                    PODefaultUnit: true
                 })
 
             //  ======================   ItemCategoryDetails *****start   ====================== 
@@ -673,7 +675,6 @@ const ItemsMaster = (props) => {
 
     };
 
-    var modal = document.getElementById('itemtag');
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
@@ -693,7 +694,7 @@ const ItemsMaster = (props) => {
     })
 
     const handleChange = event => {
-        debugger
+        // debugger
         dispatch(Breadcrumb_inputName(event.target.value));
         CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
         var searchtext = event.target.value
@@ -780,7 +781,7 @@ const ItemsMaster = (props) => {
             hasNone.display = "none";
         }
     };
-  
+
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 

@@ -23,7 +23,9 @@ export default function UnitConverstion(props) {
         if (TableData[0]) {
             settable([{
                 Conversion: '1',
-                Unit: { value: event.value, label: event.label },
+                Unit: event,
+                SOUnit: false,
+                IsBase: false
             }])
         }
     }
@@ -49,38 +51,19 @@ export default function UnitConverstion(props) {
     }
 
     function baseUnit2_onChange(event, type = '', key) {
-        debugger
+
         const found = TableData.find((i, k) => {
             return (k === key)
         })
 
-        let newSelectValue = ''
+        found.type = event;
 
-        switch (type) {
-            case 'Conversion':
-                found.Conversion = event;
-                break;
-
-            case 'Unit':
-                found.Unit = event;
-                break;
-
-            case 'POUnit':
-                found.POUnit = event;
-                break;
-
-            case 'SOUnit':
-                found.SOUnit = event;
-                break;
-        }
-
-        // let newTabArr =
         settable(e1 => (e1.map((index, k) => {
             if ((type === 'POUnit') && !(k === key)) {
                 index.SOUnit = false
             };
             if ((type === 'SOUnit') && !(k === key)) {
-                index.SOUnit = false
+                index.POUnit = false
             }
             return (k === key) ? found : index
         })))
@@ -103,7 +86,6 @@ export default function UnitConverstion(props) {
         const newarr = []
 
         TableData.forEach((index, key) => {
-
             newarr.push(
                 (
                     <tr >
