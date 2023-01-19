@@ -152,7 +152,7 @@ function* UnitIDForProduction_saga({ data }) {
   try {
     const response = yield call(production_UnitDropdown_API, data);
     const UnitDropdown = response.Data.map((index) => ({
-      value: index.UnitID,
+      value: index.id,
       label: index.UnitName,
   }));
     yield put(getUnitIDForProdunctionSuccess(UnitDropdown));
