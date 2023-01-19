@@ -129,7 +129,6 @@ function* Update_Items_GenratorFunction({ updateData, ID }) {
     const response = yield call(apiCall.Items_Master_Update_API, updateData, ID);
     yield put(SpinnerState(false))
     yield put(updateItemSuccess(response))
-    console.log("response", response)
   }
   catch (error) {
     yield put(SpinnerState(false))

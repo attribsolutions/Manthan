@@ -6,7 +6,7 @@ import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row, Table } from
 export default function UnitConverstion(props) {
 
     const { pageMode, formValue, TableData = [], BaseUnit = [], } = props.state;
-    
+
     const { settable, setFormValue } = props
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
@@ -15,7 +15,7 @@ export default function UnitConverstion(props) {
     }));
 
     function baseunitOnchange(event) {
-  
+
         const val = { ...formValue }
         val["BaseUnit"] = event
         setFormValue(val)
@@ -58,52 +58,32 @@ export default function UnitConverstion(props) {
 
         switch (type) {
             case 'Conversion':
-                // var conv = event.target.value
-                newSelectValue = {
-                    Conversion: event,
-                    Unit: found.Unit,
-                    POUnit: found.POUnit,
-                    SOUnit: found.SOUnit,
-                    IsBase: found.IsBase
-                }
+                found.Conversion = event;
                 break;
 
             case 'Unit':
-                newSelectValue = {
-                    Conversion: found.Conversion,
-                    Unit: event,
-                    POUnit: found.POUnit,
-                    SOUnit: found.SOUnit,
-                    IsBase: found.IsBase
-                }
+                found.Unit = event;
                 break;
 
             case 'POUnit':
-                newSelectValue = {
-                    Conversion: found.Conversion,
-                    Unit: found.Unit,
-                    POUnit: event,
-                    SOUnit: found.SOUnit,
-                    IsBase: found.IsBase
-                }
+                found.POUnit = event;
                 break;
 
             case 'SOUnit':
-                newSelectValue = {
-                    Conversion: found.Conversion,
-                    Unit: found.Unit,
-                    POUnit: found.POUnit,
-                    SOUnit: event,
-                    IsBase: found.IsBase
-                }
+                found.SOUnit = event;
                 break;
         }
 
-        let newTabArr = TableData.map((index, k) => {
-            debugger
-            return (k === key) ? newSelectValue : index
-        })
-        settable(newTabArr)
+        // let newTabArr =
+        settable(e1 => (e1.map((index, k) => {
+            if ((type === 'POUnit') && !(k === key)) {
+                index.SOUnit = false
+            };
+            if ((type === 'SOUnit') && !(k === key)) {
+                index.SOUnit = false
+            }
+            return (k === key) ? found : index
+        })))
     }
 
     let BaseUnit_DropdownOptions2 = []
@@ -167,6 +147,7 @@ export default function UnitConverstion(props) {
                                 <Input
                                     type="radio"
                                     id={`POUnit-${key}`}
+                                    key={`POUnit-${key}`}
                                     name="btnradio"
                                     value={index.POUnit}
                                     checked={TableData[key].POUnit}
@@ -182,6 +163,7 @@ export default function UnitConverstion(props) {
                                     type="radio"
                                     id={`SOUnit-${key}`}
                                     name="btnradio1"
+                                    key={`SOUnit-${key}`}
                                     value={index.SOUnit}
                                     checked={TableData[key].SOUnit}
                                     onChange={(e) => baseUnit2_onChange(e.target.checked, "SOUnit", key)}
@@ -203,7 +185,7 @@ export default function UnitConverstion(props) {
 
                                     </Col>
 
-                                    <Col md={6} style={{ marginRight: ""}}>
+                                    <Col md={6} style={{ marginRight: "" }}>
                                         <Button
                                             style={{ marginLeft: "-0.6cm" }}
                                             className=" button_add"
