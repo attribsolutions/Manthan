@@ -206,8 +206,9 @@ export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
 export const PRODUCTION_UNIT_DROPDOWN_API ='/MCUnitDetails'
 
 // Invoice
-export const GO_BUTTON_POST_API_FOR_INVOICE = '/GetOrderDetails'
-export const POST_API_FOR_INVOICE = '/Invoice'
+export const INVOICE_GO_BUTTON_POST_API = '/GetOrderDetails'
+export const INVOICE_POST_API = '/Invoice'
+export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
 // Demand
 export const GO_BUTTON_POST_API_FOR_DEMAND = '/ghfg'
