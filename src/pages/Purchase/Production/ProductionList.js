@@ -6,27 +6,18 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { PRODUCTION_LIST, PRODUCTION_MASTER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-
 import {
-    deleteWorkOrderId,
-    deleteWorkOrderIdSuccess,
     editWorkOrderList,
     getWorkOrderListPage,
     updateWorkOrderListSuccess
 } from "../../../store/Purchase/WorkOrder/action";
 import ProductionMaster from "./ProductionMaster";
-
-import * as url from "../../../routes/route_url"
-import * as pageId from "../../../routes/allPageID"
-
-import { getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { delete_ProductionId, delete_ProductionIdSuccess, getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
 import { MetaTags } from "react-meta-tags";
-
+import * as pageId from "../../../routes/allPageID"
 
 const ProductionList = () => {
 
@@ -38,24 +29,23 @@ const ProductionList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReducer.ProductionList,
-            deleteMsg: state.WorkOrderReducer.deleteMsg,
+            deleteMsg: state.ProductionReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
             productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-
         })
     );
 
     const action = {
         getList: getWorkOrderListPage,
         editId: editWorkOrderList,
-        deleteId: deleteWorkOrderId,
+        deleteId: delete_ProductionId,
         postSucc: postMessage,
         updateSucc: updateWorkOrderListSuccess,
-        deleteSucc: deleteWorkOrderIdSuccess
+        deleteSucc: delete_ProductionIdSuccess
     }
 
     // Featch Modules List data  First Rendering
@@ -76,7 +66,7 @@ const ProductionList = () => {
     }, [tableList]);
 
     useEffect(() => {
-        const pageId = 78
+        const pageId =78
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -115,17 +105,9 @@ const ProductionList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRODUCTION_LIST} /> */}
-
+            
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={true}
-                    showCount={true}
-                    excelBtnView={true}
-                    pageMode={url.PRODUCTION_ADD_Mode_2}
-                    newBtnPagePath={url.PRODUCTION_ADD_Mode_2}
-                    excelData={downList} /> */}
+               
                 <div className="px-2  c_card_header"  >
                     <div className="row" >
                         <Col sm="5" >

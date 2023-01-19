@@ -59,7 +59,7 @@ function* GoButton_WorkOrder_post_genfun({ data }) {
     yield put(SpinnerState(false))
     
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
-    console.log(response.Data)
+    
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({

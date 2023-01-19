@@ -105,7 +105,9 @@ import ProductionList from "../pages/Purchase/Production/ProductionList";
 
 import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
 import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
+
 import Invoice from "../pages/Sale/Invoice/Invoice";
+import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
 import Demand from "../pages/Inter Branch/Demand/Demand";
 import DemandList from "../pages/Inter Branch/Demand/DemandList"
@@ -229,7 +231,7 @@ const userRoutes = [
 
 
   { path: path.INVOICE, component: Invoice },
-
+  { path: path.INVOICE_LIST, component: InvoiceList },
 
  //************************************** Inter Branch ********************************//
   { path: path.DEMAND, component: Demand },
