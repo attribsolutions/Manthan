@@ -87,7 +87,7 @@ const Demand = (props) => {
         updateMsg: state.DemandReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Division: state.DemandReducer.InterBranches,
+        InterBranches: state.DemandReducer.InterBranches,
         GoButton: state.DemandReducer.GoButton
     }));
 
@@ -264,8 +264,8 @@ const Demand = (props) => {
         }
     }, [pageField])
 
-    // const divisiondropdown_Options = InterBranches.map((i) => ({ label: i.Name, value: i.id }))
-
+      const divisiondropdown_Options = InterBranches.map((i) => ({ label:i.Name, value: i.id }))
+console.log(InterBranches)
 
     function goButtonHandler(event) {
 
@@ -594,7 +594,7 @@ const Demand = (props) => {
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    // options={divisiondropdown_Options}
+                                                     options={divisiondropdown_Options}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                 />

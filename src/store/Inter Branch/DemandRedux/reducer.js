@@ -19,7 +19,7 @@ const INIT_STATE = {
     updateMsg: { Status: false },
     deleteMsg: { Status: false },
     demandList: [],
-    demandlistFilter: { fromdate: currentDate, todate: currentDate }
+    demandlistFilter: { fromdate: currentDate, todate: currentDate, }
 }
 
 const DemandReducer = (state = INIT_STATE, action) => {
