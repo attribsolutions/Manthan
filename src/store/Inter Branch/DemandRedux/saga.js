@@ -68,12 +68,12 @@ function* Post_Demand_Genfun({ data }) {
 
 //division  api
 function* post_Division_Genfun({ data }) {
-
+debugger
     yield put(SpinnerState(true))
     try {
         const response = yield call(Division, data);
         yield put(SpinnerState(false))
-      yield put(postDivisionSuccess(response));
+      yield put(postDivisionSuccess(response.Data));
     } catch (error) {
         yield put(SpinnerState(false))
         yield put(AlertState({
@@ -140,7 +140,6 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
     try {
       const response = yield call(DemandList_get_Filter_API, filters);
       const newList = yield response.Data.map((i) => {
-  
         var date = convertDatefunc(i.OrderDate)
         var time = convertTimefunc(i.CreatedOn)
         var DeliveryDate = convertDatefunc(i.DeliveryDate);
