@@ -348,15 +348,17 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
-
+        debugger
         let input = event.target.value;
         let min = 0;
         let max = index2.BaseUnitQuantity;
         let val1 = Math.max(Number(min), Math.min(Number(max), Number(input)));
-        event.target.value = input;
-        if ((event.target.value === "NaN")) {
+       
+        if ((event.target.value === "NaN")||!(val1)) {
             val1 = 0
-        };
+        }
+       
+        event.target.value = val1;
 
         let qtysum = 0
         index1.BatchesData.forEach((i) => {
@@ -367,9 +369,11 @@ const MaterialIssueMaster = (props) => {
                 qtysum = qtysum + Number(i.Qty)
             }
         });
+
         qtysum = qtysum + val1;
         index2.Qty = val1;
 
+        let diffrence = Math.abs(index1.Quantity - qtysum);
         // var requreVal = index1.Quantity - qtysum
 
         // if (qtysum <= index1.Quantity) {
@@ -391,7 +395,7 @@ const MaterialIssueMaster = (props) => {
         //     index2.Qty = max
         // }
         // qtysum2 = qtysum2 + Number(index2.Qty)
-        debugger
+
         if ((qtysum === index1.Quantity)) {
             try {
                 document.getElementById(`ItemName${index1.id}`).style.color = ""
@@ -402,8 +406,10 @@ const MaterialIssueMaster = (props) => {
             } catch (e) { }
         } else {
             try {
+
                 // document.getElementById(`ItemName${index1.id}`).style.color = "red"
-                const msg = `Stock invalid.`;
+                const msg = (qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
+                    : (`Short Quantity = ${diffrence} ${index1.UnitName}`)
                 index1["invalid"] = true;
                 index1["invalidMsg"] = msg;
 

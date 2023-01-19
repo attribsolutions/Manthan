@@ -9,6 +9,7 @@ import {
   update_ProductionIdSuccess,
 } from "./actions";
 import {
+  Production_Delete_API,
   production_get_API,
   production_Make_API,
   Production_Post_API,
@@ -49,16 +50,24 @@ function* postProductionGenFunc({ data }) {
 function* DeleteProductionGenFunc({ id }) {
   yield put(SpinnerState(true));
   try {
-    const response = yield call(id);
+    const response = yield call(Production_Delete_API,id);
     yield put(SpinnerState(false));
-    yield put(delete_ProductionIdSuccess(response));
+    
+    if (response.StatusCode === 204) yield put(AlertState({
+      Type: 4,
+      Status: true, Message:response.Message,
+    }));
+    else{
+      yield put(delete_ProductionIdSuccess(response));
+    }
+   
   } catch (error) {
     yield put(SpinnerState(false));
     yield put(
       AlertState({
         Type: 4,
         Status: true,
-        Message: "500 Error DeleteGRN API",
+        Message: "500 Error Delete Production API",
       })
     );
   }
