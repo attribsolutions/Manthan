@@ -210,5 +210,8 @@ export const GO_BUTTON_POST_API_FOR_INVOICE = '/GetOrderDetails'
 export const POST_API_FOR_INVOICE = '/Invoice'
 
 // Demand
-export const GO_BUTTON_POST_API_FOR_DEMAND = '/ghfg'
+export const GO_BUTTON_POST_API_FOR_DEMAND = '/'
+export const DIVISION_DROPDOWN = '/InterBranches'
+export const POST_API_FOR_DEMAND = '/Demands'
+export const DEMAND_LiST_BY_FILTERS ='/DemandsFilter'
 

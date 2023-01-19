@@ -44,6 +44,7 @@ import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import {
     postDemand,
     postDemandSuccess,
+    postDivision,
     postGoButtonForDemand,
     postGoButtonForDemandSuccess
 } from "../../../store/Inter Branch/DemandRedux/action";
@@ -57,32 +58,36 @@ const Demand = (props) => {
 
         Date: currentDate,
         Division: "",
-        Comment: "", 
+        Comment: "",
 
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.save);
+    const [pageMode, setPageMode] = useState("save");
+    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [Itemselect, setItemselect] = useState([])
-    const [Itemselectonchange, setItemselectonchange] = useState("");
-
+    const [deliverydate, setdeliverydate] = useState(currentDate)
+    const [demanddate, setdemanddate] = useState(currentDate)
+    const [poFromDate, setpoFromDate] = useState(currentDate);
+    const [poToDate, setpoToDate] = useState(currentDate);
+    const [demandAmount, setdemandAmount] = useState(0);
+    const [orderTypeSelect, setorderTypeSelect] = useState('');
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
         pageField,
         userAccess,
-        Division,
+        InterBranches,
         GoButton
     } = useSelector((state) => ({
         postMsg: state.DemandReducer.postMsg,
-        updateMsg:state.DemandReducer.updateMsg,
+        updateMsg: state.DemandReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Division: state.DemandReducer.Division,
+        Division: state.DemandReducer.InterBranches,
         GoButton: state.DemandReducer.GoButton
     }));
 
@@ -119,6 +124,17 @@ const Demand = (props) => {
         };
     }, [userAccess])
 
+
+    useEffect(() => {
+
+        const jsonBody = JSON.stringify({
+            Company: userCompany(),
+            Party: userParty()
+        });
+        dispatch(postDivision(jsonBody));
+    }, []);
+
+
     // useEffect(() => {
     //     const jsonBody = JSON.stringify({
     //         // FromDate: "2022-12-01",
@@ -129,8 +145,7 @@ const Demand = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
-
+    
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -147,7 +162,7 @@ const Demand = (props) => {
 
             if (hasEditVal) {
 
-                setItemselect(hasEditVal)
+                // setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate
@@ -169,8 +184,8 @@ const Demand = (props) => {
                     Party: userParty(),
                     Quantity: parseInt(EstimatedOutputQty)
                 });
-
                 dispatch(postGoButtonForDemand(jsonBody));
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
@@ -181,8 +196,8 @@ const Demand = (props) => {
             dispatch(postDemandSuccess({ Status: false }))
             dispatch(postGoButtonForDemandSuccess([]))
             // dispatch(postBOMSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
 
             // dispatch(AlertState({
             //     Type: 1,
@@ -249,26 +264,8 @@ const Demand = (props) => {
         }
     }, [pageField])
 
-    // const divisiondropdown_Options = Division.map((index) => ({
-    //     value: index.id,
-    //     label: index.Division,
-        
-    // }));
+    // const divisiondropdown_Options = InterBranches.map((i) => ({ label: i.Name, value: i.id }))
 
-    function DivisionOnchange(hasSelect, evn) {
-        onChangeSelect({ hasSelect, evn, state, setState });
-        dispatch(Breadcrumb_inputName(hasSelect.label))
-        dispatch(postGoButtonForDemandSuccess([]))
-        setState((i) => {
-            i.values.ItemName = hasSelect
-            i.values.NumberOfLot = hasSelect.NumberOfLot;
-            i.values.LotQuantity = hasSelect.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.MaterialIssueDate.valid = true;
-            return i
-        })
-    }
 
     function goButtonHandler(event) {
 
@@ -293,7 +290,7 @@ const Demand = (props) => {
 
     function DivisionOnchange(e) {
         dispatch(postGoButtonForDemandSuccess([]))
-        setItemselectonchange(e)
+        // setItemselectonchange(e)
         setState((i) => {
             i.values.ItemName = {
                 value: e.value,
@@ -312,43 +309,43 @@ const Demand = (props) => {
     }
 
 
-    function Quantitychange(event) {
+    // function Quantitychange(event) {
 
 
-        dispatch(postGoButtonForDemandSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.Quantity :
-            Itemselect.Quantity, Number(event.target.value)));
-        event.target.value = value1
-        if (event.target.value === "NaN") {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.LotQuantity = value1
-            // i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
+    //     dispatch(postGoButtonForDemandSuccess([]))
+    //     let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
+    //         Itemselectonchange.Quantity :
+    //         Itemselect.Quantity, Number(event.target.value)));
+    //     event.target.value = value1
+    //     if (event.target.value === "NaN") {
+    //         value1 = 0
+    //     }
+    //     // onChangeText({ event, state, setState });
+    //     setState((i) => {
+    //         i.values.LotQuantity = value1
+    //         // i.hasValid.NumberOfLot.valid = true;
+    //         i.hasValid.LotQuantity.valid = true;
+    //         return i
+    //     })
+    // }
 
-    function NumberOfLotchange(event) {
-        //  dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.NumberOfLot
-            : Itemselect.NumberOfLot, Number(event.target.value)));
-        event.target.value = value1
-        if ((event.target.value === "NaN")) {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.NumberOfLot = value1
-            i.hasValid.NumberOfLot.valid = true;
-            // i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
+    // function NumberOfLotchange(event) {
+    //     //  dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+    //     let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
+    //         Itemselectonchange.NumberOfLot
+    //         : Itemselect.NumberOfLot, Number(event.target.value)));
+    //     event.target.value = value1
+    //     if ((event.target.value === "NaN")) {
+    //         value1 = 0
+    //     }
+    //     // onChangeText({ event, state, setState });
+    //     setState((i) => {
+    //         i.values.NumberOfLot = value1
+    //         i.hasValid.NumberOfLot.valid = true;
+    //         // i.hasValid.LotQuantity.valid = true;
+    //         return i
+    //     })
+    // }
 
     const handleChange = (event, index) => {
         // GoButton.map((index) => {
@@ -366,89 +363,65 @@ const Demand = (props) => {
         index.Qty = event.target.value
     };
 
-
-
     const SaveHandler = (event) => {
 
-        const validMsg = []
+        const jsonBody = JSON.stringify({
 
-        const MaterialIssueItems = []
-        GoButton.map((index) => {
-            let Stock = index.BatchesData.map((i) => {
-                return i.BaseUnitQuantity
-            })
-            var TotalStock = 0;
-            Stock.forEach(x => {
-                TotalStock += parseFloat(x);
-            });
-            var OrderQty = parseFloat(index.Quantity)
-            if (OrderQty > TotalStock) {
+            DemandDate: demanddate,
+            DeliveryDate: deliverydate,
+            Customer: 4,
+            Supplier: 5,
+            DemandAmount: demandAmount,
+            Description: "",
+            BillingAddress: 4,
+            ShippingAddress: 4,
+            OrderNo: 1,
+            FullOrderNumber: "PO0001",
+            OrderType: 1,
+            POType: 1,
+            Division: 4,
+            POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
+            POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            DemandItem: [
                 {
-                    // alert(` ${index.ItemName} out of stock`)
-                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+                    Item: 62,
+                    // Quantity: isdel ? 0 : i.Quantity,
+                    // Rate: i.Rate,
+                    Unit: 362,
+                    // BaseUnitQuantity: i.BaseUnitQuantity,
+                    Margin: "",
+                    // BasicAmount: basicAmt.toFixed(2),
+                    // GSTAmount: cgstAmt.toFixed(2),
+                    GST: 61,
+                    // CGST: (cgstAmt / 2).toFixed(2),
+                    // SGST: (cgstAmt / 2).toFixed(2),
+                    IGST: 0,
+                    CGSTPercentage: 1,
+                    SGSTPercentage: 1,
+                    IGSTPercentage: 0,
+                    // Amount: i.Amount,
+                    IsDeleted: 0,
+                    // Comment: i.Comment
+                }
+            ],
+            DemandReferences: [
+                {
+                    MaterialIssue: ""
+                }
 
-                };
-            }
+            ]
 
-            index.BatchesData.map((ele) => {
-                MaterialIssueItems.push({
-                    Item: index.Item,
-                    Unit: index.Unit,
-                    WorkOrderQuantity: index.Quantity,
-                    BatchCode: ele.BatchCode,
-                    BatchDate: ele.BatchDate,
-                    SystemBatchDate: ele.SystemBatchDate,
-                    SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty),
-                    BatchID: ele.id
-                })
-            })
-        })
+        }
+        );
+        if (pageMode === mode.edit) {
+        }
+        else {
+            dispatch(postDemand(jsonBody));
+        }
+    };
 
-        const FilterData = MaterialIssueItems.filter((index) => {
-            return (index.IssueQuantity > 0)
-        })
-
-        event.preventDefault();
-        if (formValid(state, setState)) {
-
-            if (validMsg.length > 0) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: (validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
-                return
-            }
-            const jsonBody = JSON.stringify({
-                MaterialIssueDate: values.MaterialIssueDate,
-                NumberOfLot: values.NumberOfLot,
-                LotQuantity: values.LotQuantity,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
-                Item: Itemselect.Item,
-                Unit: Itemselect.Unit,
-                MaterialIssueItems: FilterData,
-                MaterialIssueWorkOrder: [
-                    {
-                        WorkOrder: Itemselect.id,
-                        Bom: Itemselect.Bom
-
-                    }
-                ]
-            }
-            );
-            if (pageMode === mode.edit) {
-            }
-            else {
-                dispatch(postDemand(jsonBody));
-            }
-        };
-    }
     const pagesListColumns = [
         {
             text: "Item Group",
@@ -583,8 +556,6 @@ const Demand = (props) => {
                 <BreadcrumbNew userAccess={userAccess} pageId={pageId.DEMAND} />
 
                 <div className="page-content" >
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    /> */}
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
@@ -595,7 +566,7 @@ const Demand = (props) => {
                                             <Col sm="7">
                                                 <Flatpickr
                                                     name="Date"
-                                                    value={values.Date}
+                                                    value={demanddate}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
@@ -624,7 +595,8 @@ const Demand = (props) => {
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     // options={divisiondropdown_Options}
-                                                    // onChange={DivisionOnchange}
+                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
                                                 />
                                                 {isError.Division.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Division}</small></span>
@@ -637,20 +609,20 @@ const Demand = (props) => {
                                         <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
                                             <Label className="mt-1" style={{ width: "150px" }}> Comment </Label>
                                             <Col sm={7}>
-
                                                 <Input
                                                     name="Comment"
                                                     value={values.Comment}
                                                     type="text"
                                                     className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter"
+                                                    placeholder="Please Enter Comment"
                                                     autoComplete='off'
-                                                    onChange={NumberOfLotchange}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+                                                    }}
                                                 />
-
-                                                <span className="text-danger">
-                                                    <span className="text-secondary">{fieldLabel.Comment}
-                                                    </span></span>
+                                                {isError.Comment.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.Comment}</span>
+                                                )}
                                             </Col>
                                         </FormGroup>
                                     </Col>
@@ -701,17 +673,17 @@ const Demand = (props) => {
                                     )}
                                 </ToolkitProvider>
                             )}
-
                         </PaginationProvider>
 
-                        {GoButton.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                        <FormGroup>
+                            <Col sm={2} style={{ marginLeft: "9px" }}>
                                 <SaveButton pageMode={pageMode}
                                     userAcc={userPageAccessState}
+                                    editCreatedBy={editCreatedBy}
                                     module={"Demand"}
                                 />
                             </Col>
-                        </FormGroup > : null}
+                        </FormGroup>
                     </form>
                 </div>
             </React.Fragment>
