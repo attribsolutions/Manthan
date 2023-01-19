@@ -380,7 +380,7 @@ const Invoice = (props) => {
 
         const v2 = index.UnitDrop
         const t1 = (v1 * v2.ConversionUnit);
-        const t2 = v2.Unitlabel;
+        const t2 = index.StockUnit;
         debugger
         try {
             document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
@@ -465,7 +465,7 @@ const Invoice = (props) => {
                             var n1 = Number(row.OrderQty);
                             var n2 = Number(e.ConversionUnit);
                             const t1 = (n1 * n2).toFixed(2);
-                            const t2 = e.Unitlabel
+                            const t2 = row.StockUnit
                             // de
                             try {
                                 document.getElementById(`stocktotal${row.id}`).innerText = `Total:${t1} ${t2}`
@@ -496,7 +496,7 @@ const Invoice = (props) => {
                                     <div>
                                         <samp >Quantity</samp>
                                     </div>
-                                    <samp id={`stocktotal${row.id}`}>{`Total:${row.stokQtyTotal}`} </samp>
+                                    <samp id={`stocktotal${row.id}`}>{`Total:${row.InpStockQtyTotal} ${row.StockUnit}`} </samp>
                                 </th>
                             </tr>
                         </Thead>
