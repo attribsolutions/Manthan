@@ -71,11 +71,8 @@ export default function UnitConverstion(props) {
     //end Table BaseUnit dropdown option ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const tbodyfunction = () => {
-
         const newarr = []
-
         TableData.forEach((index, key) => {
-            debugger
             newarr.push(
                 (
                     <tr >
