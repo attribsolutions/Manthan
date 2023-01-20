@@ -310,9 +310,7 @@ const MaterialIssueMaster = (props) => {
         })
     }
 
-
     function Quantitychange(event) {
-
 
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
@@ -348,55 +346,36 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
-        debugger
-        let input = event.target.value;
-        let min = 0;
-        let max = index2.BaseUnitQuantity;
-        let val1 = Math.max(Number(min), Math.min(Number(max), Number(input)));
-       
-        if ((event.target.value === "NaN")||!(val1)) {
+
+        let input = event.target.value
+        let result = /^\d*(\.\d{0,3})?$/.test(input);
+        let val1 = 0;
+        if (result) {
+            let v1 = Number(index2.BaseUnitQuantity);
+            let v2 = Number(input)
+            if (v1 >= v2) { val1 = input }
+            else { val1 = v1 };
+
+        } else if (((index2.Qty >= 0) && (!(input === '')))) {
+            val1 = index2.Qty
+        } else {
             val1 = 0
         }
-       
+
         event.target.value = val1;
 
-        let qtysum = 0
+        let Qtysum = 0
         index1.BatchesData.forEach((i) => {
-            if (!(i.BaseUnitQuantity)) {
-                i["BaseUnitQuantity"] = 0
-            }
             if (!(i.id === index2.id)) {
-                qtysum = qtysum + Number(i.Qty)
+                Qtysum = Number(Qtysum) + Number(i.Qty)
             }
         });
 
-        qtysum = qtysum + val1;
+        Qtysum = Number(Qtysum) + Number(val1);
         index2.Qty = val1;
+        let diffrence = Math.abs(index1.Quantity - Qtysum);
 
-        let diffrence = Math.abs(index1.Quantity - qtysum);
-        // var requreVal = index1.Quantity - qtysum
-
-        // if (qtysum <= index1.Quantity) {
-        //     //   if(qtysome=== index1.Quantity)  {
-        //     //     isvalid=!isvalid
-        //     //   };
-        //     event.target.value = val1;
-        //     index2.Qty = val1
-        // } else if (max >= requreVal) {
-        //     // if(requreVal=== index1.Quantity)  {
-        //     //     isvalid=!isvalid
-        //     //   };
-        //     event.target.value = requreVal;
-        //     index2.Qty = requreVal
-        // }
-        // else {
-
-        //     event.target.value = max;
-        //     index2.Qty = max
-        // }
-        // qtysum2 = qtysum2 + Number(index2.Qty)
-
-        if ((qtysum === index1.Quantity)) {
+        if ((Qtysum === index1.Quantity)) {
             try {
                 document.getElementById(`ItemName${index1.id}`).style.color = ""
                 document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
@@ -406,60 +385,15 @@ const MaterialIssueMaster = (props) => {
             } catch (e) { }
         } else {
             try {
-
-                // document.getElementById(`ItemName${index1.id}`).style.color = "red"
-                const msg = (qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
-                    : (`Short Quantity = ${diffrence} ${index1.UnitName}`)
+                const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
+                    : (`Short Quantity ${diffrence} ${index1.UnitName}`)
                 index1["invalid"] = true;
                 index1["invalidMsg"] = msg;
 
                 document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
             } catch (e) { }
         }
-
-        // let value2 = Math.max(Number(min), Math.min(Number(max), Number(value)));
-        // event.target.value = val1;
-        // index2.Qty = val1
-
-
-
-        // let input = event.target.value;
-        // if (input == '') { input = 0 }
-        // input = parseFloat(input);
-        // let compareval = index.BaseUnitQuantity;
-        // compareval = parseFloat(compareval);
-
-        // if (input > compareval) {
-        //     try {
-        //         document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = "red"
-        //         user["StockInvalid"] = true
-        //     }
-        //     catch (e) { }
-        // } else {
-        //     document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = ""
-        // }
-        // debugger
-        // if (user.CompareStockQty === undefined) {
-        //     user["CompareStockQty"] = 0
-        // }
-        // user["CompareStockQty"] = user["CompareStockQty"] + input;
-        // if (user.CompareStockQty === user.Quantity) {
-        //     user["StockInvalid"] = true
-        // } else {
-        //     user["StockInvalid"] = false
-        // }
-        // if (!user.StockInvalid) {
-        //     try {
-        //         document.getElementById(`ItemName${user.id}`).style.color = "red"
-        //     } catch (e) { }
-        // } else {
-        //     try {
-        //         document.getElementById(`ItemName${user.id}`).style.color = ""
-        //     } catch (e) { }
-        // }
-        // index.Qty = event.target.value
     };
-
 
 
     const SaveHandler = (event) => {
