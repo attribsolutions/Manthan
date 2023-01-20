@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -49,6 +49,8 @@ import {
     postGoButtonForDemandSuccess
 } from "../../../store/Inter Branch/DemandRedux/action";
 
+let editVal = {}
+
 const Demand = (props) => {
 
     const dispatch = useDispatch();
@@ -74,6 +76,10 @@ const Demand = (props) => {
     const [poToDate, setpoToDate] = useState(currentDate);
     const [demandAmount, setdemandAmount] = useState(0);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
+
+    const [orderItemTable, setorderItemTable] = useState([])
+    const [divisionSelect, setdivisionSelect] = useState('');
+    const [orderdate, setorderdate] = useState(currentDate);
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -145,7 +151,7 @@ const Demand = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-    
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -264,103 +270,70 @@ const Demand = (props) => {
         }
     }, [pageField])
 
-      const divisiondropdown_Options = InterBranches.map((i) => ({ label:i.Name, value: i.id }))
-console.log(InterBranches)
+    const divisiondropdown_Options = InterBranches.map((i) => ({ label: i.Name, value: i.id }))
+    console.log(InterBranches)
 
-    function goButtonHandler(event) {
+    const goButtonHandler = () => {
+        // debugger
+        if (!divisionSelect > 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please select division",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
+        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
-
-        event.preventDefault();
-        if (state.values.LotQuantity == "0") {
-            alert("Quantity Can Not be 0")
-        } else
-            if (formValid(state, setState)) {
-
-                const jsonBody = JSON.stringify({
-                    WorkOrder: values.ItemName.value,
-                    Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
-                    Quantity: parseInt(values.LotQuantity)
-                });
-
-                dispatch(postGoButtonForDemand(jsonBody));
-            }
-    }
-
-    function DivisionOnchange(e) {
-        dispatch(postGoButtonForDemandSuccess([]))
-        // setItemselectonchange(e)
-        setState((i) => {
-            i.values.ItemName = {
-                value: e.value,
-                label: e.label,
-                Item: e.Item,
-                NoLot: e.NumberOfLot,
-                lotQty: e.Quantity
-            };
-            i.values.NumberOfLot = e.NumberOfLot;
-            i.values.LotQuantity = e.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.ItemName.valid = true;
-            return i
+        const jsonBody = JSON.stringify({
+            Party: divisionSelect.value,
+            Customer: userParty(),
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.save) ? 0 : editVal.id
         })
+
+        dispatch(postGoButtonForDemand(jsonBody))
+    };
+
+    function demanddateOnchange(e, date) {
+        setdemanddate(date)
+    };
+
+    function permissionfunc(istrue) {
+        if (istrue) {
+            setdivisionSelect(istrue)// **istrue is == event value
+            setorderItemTable([])
+        }
     }
 
+    function divisionOnchange(e) {
+        var isfind = orderItemTable.find(i => (i.Quantity > 0))
+        if (isfind) {
+            dispatch(
+                AlertState({
+                    Type: 7,
+                    Status: true,
+                    Message: "If you are change Supplier Name then All Item Data is Clear",
+                    RedirectPath: false,
+                    PermissionFunction: permissionfunc,
+                    permissionValueReturn: e
 
-    // function Quantitychange(event) {
+                })
+            );
+            return;
+        } else {
+            setdivisionSelect(e)
+            setorderItemTable([])
+            // setTermsAndConTable([])
+        }
 
-
-    //     dispatch(postGoButtonForDemandSuccess([]))
-    //     let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-    //         Itemselectonchange.Quantity :
-    //         Itemselect.Quantity, Number(event.target.value)));
-    //     event.target.value = value1
-    //     if (event.target.value === "NaN") {
-    //         value1 = 0
-    //     }
-    //     // onChangeText({ event, state, setState });
-    //     setState((i) => {
-    //         i.values.LotQuantity = value1
-    //         // i.hasValid.NumberOfLot.valid = true;
-    //         i.hasValid.LotQuantity.valid = true;
-    //         return i
-    //     })
-    // }
-
-    // function NumberOfLotchange(event) {
-    //     //  dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-    //     let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-    //         Itemselectonchange.NumberOfLot
-    //         : Itemselect.NumberOfLot, Number(event.target.value)));
-    //     event.target.value = value1
-    //     if ((event.target.value === "NaN")) {
-    //         value1 = 0
-    //     }
-    //     // onChangeText({ event, state, setState });
-    //     setState((i) => {
-    //         i.values.NumberOfLot = value1
-    //         i.hasValid.NumberOfLot.valid = true;
-    //         // i.hasValid.LotQuantity.valid = true;
-    //         return i
-    //     })
-    // }
-
-    const handleChange = (event, index) => {
-        // GoButton.map((index) => {
-        //     let Stock = index.BatchesData.map((i) => {
-        //         return i.BaseUnitQuantity
-        //     })       
-        // console.log(Stock)
-
-        // })
-
-        // var OrderQty = parseFloat(stockQty)
-        // console.log(Stock)
-
-
-        index.Qty = event.target.value
+        // let newObj = { ...orderAddFilter }
+        // newObj.supplierSelect = e
+        // dispatch(orderAddfilters(newObj))
     };
 
     const SaveHandler = (event) => {
@@ -508,7 +481,7 @@ console.log(InterBranches)
                                                 <Input type="text"
                                                     style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
-                                                    onChange={(event) => handleChange(event, index)}
+                                                    // onChange={(event) => handleChange(event, index)}
                                                 ></Input>
                                             </div>
                                         </td>
@@ -545,7 +518,7 @@ console.log(InterBranches)
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: GoButton.length,
+        totalSize: (orderItemTable.length + 2),
         custom: true,
     };
 
@@ -564,7 +537,7 @@ console.log(InterBranches)
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>Date</Label>
                                             <Col sm="7">
-                                                <Flatpickr
+                                                {/* <Flatpickr
                                                     name="Date"
                                                     value={demanddate}
                                                     className="form-control d-block bg-white text-dark"
@@ -578,7 +551,23 @@ console.log(InterBranches)
                                                 />
                                                 {isError.Date.length > 0 && (
                                                     <span className="invalid-feedback">{isError.Date}</span>
-                                                )}
+                                                )} */}
+
+                                                <Flatpickr
+                                                    style={{ userselect: "all" }}
+                                                    id="demanddate"
+                                                    name="Date"
+                                                    value={demanddate}
+                                                    disabled={pageMode === "edit" ? true : false}
+                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                    placeholder="Select..."
+                                                    options={{
+                                                        altInput: true,
+                                                        altFormat: "d-m-Y",
+                                                        dateFormat: "Y-m-d",
+                                                    }}
+                                                    onChange={demanddateOnchange}
+                                                />
                                             </Col>
                                         </FormGroup>
                                     </Col>
@@ -594,7 +583,7 @@ console.log(InterBranches)
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                     options={divisiondropdown_Options}
+                                                    options={divisiondropdown_Options}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                 />
