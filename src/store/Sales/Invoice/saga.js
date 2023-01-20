@@ -24,11 +24,12 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
       let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
 
       i1.StockDetails = i1.StockDetails.map(i2 => {
+    
         i1.StockUnit = i2.UnitName;
 
         i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
 
-        let qty = Number(i2.BaseUnitQuantity) * Number(i1.ConversionUnit);
+        let qty = Number(i2.BaseUnitQuantity) ;
 
         if ((count > qty) && !(count === 0)) {
           count = count - qty
