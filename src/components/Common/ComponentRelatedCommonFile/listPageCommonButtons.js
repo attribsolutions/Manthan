@@ -317,6 +317,16 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
     //     //alert("Save button dissable error") 
     // }
 }
+export function mainSppinerOnOff( {id='',state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+    try {
+        document.getElementById("overlay").style.display = state ? "block" : "none";
+    } catch (e) { alert("button sppiner error") }
+    try {
+        document.getElementById(`${id}`).disabled = state;
+    } catch (e) {
+        // alert("Go btn dissable  error") 
+    }
+}
 
 export function GoBtnDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {

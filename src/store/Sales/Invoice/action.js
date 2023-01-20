@@ -1,9 +1,9 @@
 import { GET_INVOICE_LIST_PAGE, GET_INVOICE_LIST_PAGE_SUCCESS, GO_BUTTON_POST_FOR_INVOICE, GO_BUTTON_POST_FOR_INVOICE_SUCCESS, POST_INVOICE_MASTER, POST_INVOICE_MASTER_SUCCESS } from "./actionType";
 
 // Go Button Post API for Invoice Master
-export const GoButton_post_For_Invoice = (data,) => ({
+export const GoButton_post_For_Invoice = (data,goBtnId) => ({
     type: GO_BUTTON_POST_FOR_INVOICE,
-    data,
+    data,goBtnId
 });
 
 export const GoButton_post_For_Invoice_Success = (data) => ({
@@ -12,9 +12,9 @@ export const GoButton_post_For_Invoice_Success = (data) => ({
 });
 
 // post api
-export const postInvoiceMaster = (data) => ({
+export const postInvoiceMaster = (data,saveBtnid) => ({
     type: POST_INVOICE_MASTER,
-    data,
+    data,saveBtnid
 });
 
 export const postInvoiceMasterSuccess = (data) => ({

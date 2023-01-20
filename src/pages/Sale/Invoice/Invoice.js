@@ -28,7 +28,7 @@ import {
     postBOMSuccess,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, mainSppinerOnOff, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -38,14 +38,17 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { GoButton_post_For_Invoice, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
+import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 const Invoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const goBtnId = `ADDGoBtn${pageId.INVOICE}`
+    const saveBtnid = `saveBtn${pageId.INVOICE}`
 
     const fileds = {
         // id: "",
@@ -68,7 +71,7 @@ const Invoice = (props) => {
         pageField,
         userAccess,
         customer,
-        GoButton
+        GoButton = ''
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -77,12 +80,15 @@ const Invoice = (props) => {
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.GoButton
     }));
+    const { OrderItemDetails = [], OrderIDs = [] } = GoButton
 
     useEffect(() => {
         const page_Id = pageId.INVOICE
         dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(GoButton_post_For_Invoice_Success([]))
+
     }, []);
 
     const location = { ...history.location }
@@ -161,6 +167,7 @@ const Invoice = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInvoiceMasterSuccess({ Status: false }))
+            dispatch(GoButton_post_For_Invoice_Success([]))
             // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
             // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
@@ -191,8 +198,8 @@ const Invoice = (props) => {
         else if (postMsg.Status === true) {
 
             dispatch(postInvoiceMasterSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(GoButton_post_For_Invoice_Success([]))
+
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -237,173 +244,26 @@ const Invoice = (props) => {
 
     }));
 
-    function ItemOnchange(hasSelect, evn) {
-        debugger
-        onChangeSelect({ hasSelect, evn, state, setState });
-        dispatch(Breadcrumb_inputName(hasSelect.label))
-        // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        setState((i) => {
-            i.values.Customer = hasSelect
-            return i
-        })
-    }
 
-    function goButtonHandler(event) {
-        // event.preventDefault();
-        // if (formValid(state, setState)) {
-        const jsonBody = JSON.stringify({
-            FromDate: values.InvoiceDate,
-            Customer: values.Customer.value,
-            Party: userParty(),
-            OrderIDs: ""
-        });
-
-        dispatch(GoButton_post_For_Invoice(jsonBody));
-        // }
-    }
-
-    const handleChange = (event, index) => {
-        index.Qty = event.target.value
-    };
-
-    const SaveHandler = (event) => {
-        debugger
-        const validMsg = []
-
-        const InvoiceItems = []
-        const InvoicesReferences = []
-        GoButton.map((index) => {
-            let Stock = index.StockDetails.map((i) => {
-                return i.BaseUnitQuantity
-            })
-            var TotalStock = 0;
-            Stock.forEach(x => {
-                TotalStock += parseFloat(x);
-            });
-            var OrderQty = parseFloat(index.Quantity)
-            if (OrderQty > TotalStock) {
-                {
-                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-                };
-            }
-            if (index["invalid"]) {
-                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
-            };
-
-            index.StockDetails.map((ele) => {
-                InvoiceItems.push({
-                    BatchCode: ele.BatchCode,
-                    Quantity: index.Quantity,
-                    BaseUnitQuantity: index.BaseUnitQuantity,
-                    MRP: null,
-                    Rate: index.Rate,
-                    BasicAmount: index.BasicAmount,
-                    TaxType: "GST",
-                    GSTPercentage: index.GSTPercentage,
-                    GSTAmount: index.GSTAmount,
-                    Amount: index.Amount,
-                    DiscountType: "",
-                    Discount: "0",
-                    DiscountAmount: "0",
-                    CGST: index.CGST,
-                    SGST: index.SGST,
-                    IGST: index.IGST,
-                    CGSTPercentage: index.CGSTPercentage,
-                    SGSTPercentage: index.SGSTPercentage,
-                    IGSTPercentage: index.IGSTPercentage,
-                    CreatedOn: "",
-                    Item: index.Item,
-                    Unit: index.Unit,
-                    BatchDate: index.BatchDate,
-                    BatchID: ele.id,
-                    // 
-                })
-                InvoicesReferences.push({ Order: index.OrderID })
-
-            })
-        })
-
-        const FilterData = InvoiceItems.filter((index) => {
-            return (index.IssueQuantity > 0)
-        })
-
-        event.preventDefault();
-        if (formValid(state, setState)) {
-
-            const jsonBody = JSON.stringify({
-                InvoiceDate: currentDate,
-                CustomerGSTTin: "2023-01-06",
-                GrandTotal: "6615.00",
-                RoundOffAmount: 1,
-                Customer: values.Customer.value,
-                Party: userParty(),
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                InvoiceItems: InvoiceItems,
-                InvoicesReferences: InvoicesReferences
-            }
-            );
-            if (pageMode === mode.edit) {
-            }
-            else {
-                dispatch(postInvoiceMaster(jsonBody));
-            }
-        };
-    }
-    function orderQuantityOnChange(event, index) {
-        // let convResp = []
-        // convResp = index.map(i1 => {
-        const v1 = event.target.value
-        index.OrderQty = v1
-        let count = Number(v1);
-
-        index.StockDetails = index.StockDetails.map(i2 => {
-
-            let qty = Number(i2.BaseUnitQuantity);
-
-            if ((count > qty) && !(count === 0)) {
-                count = count - qty
-                i2.Qty = qty.toFixed(3)
-            } else if ((count <= qty) && (count > 0)) {
-                i2.Qty = count.toFixed(3)
-                count = 0
-            }
-            else {
-                i2.Qty = 0;
-            }
-            try {
-
-                document.getElementById(`batchQty${i2.id}`).value = i2.Qty
-            } catch (e) { }
-            return i2
-        });
-
-        const v2 = index.UnitDrop
-        const t1 = (v1 * v2.ConversionUnit);
-        const t2 = index.StockUnit;
-        debugger
-        try {
-            document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
-        } catch (e) { }
-        // return i1
-        // })
-    }
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
             style: (cellContent, user) => {
 
-                let Stock = user.StockDetails.map((index) => {
-                    return index.BaseUnitQuantity
-                })
-                var TotalStock = 0;
-                Stock.forEach(x => {
-                    TotalStock += parseFloat(x);
-                });
+                // let Stock = user.StockDetails.map((index) => {
+                //     return index.BaseUnitQuantity
+                // })
+                // var TotalStock = 0;
+                // Stock.forEach(x => {
+                //     TotalStock += parseFloat(x);
+                // });
 
-                var OrderQty = parseFloat(user.Quantity)
-                if (OrderQty > TotalStock) {
+                // var OrderQty = parseFloat(user.Quantity)
+                var t1 = Number(user.StockTotal);
+                var t2 = Number(user.Quantity) * user.ConversionUnit;
+                if (t1 < t2) {
+                    user.StockValid = false
                     return {
                         color: "red",
 
@@ -412,10 +272,7 @@ const Invoice = (props) => {
             },
         },
 
-        // {
-        //     text: "Order Qty",
-        //     dataField: "Quantity",
-        // },
+
         {
             text: "Quantity",
             dataField: "",
@@ -425,10 +282,10 @@ const Invoice = (props) => {
                         <Input type="text"
                             style={{ textAlign: "right" }}
                             key={user.id}
-                            defaultValue={user.OrderQty}
-                            onChange={(event) => orderQuantityOnChange(event, user)}
+                            defaultValue={user.Quantity}
+                            onChange={(event) => orderQtyOnChange(event, user)}
                         ></Input>
-                        <samp className="mt-1">Order Qty:{user.Quantity} {user.UnitName}</samp>
+                        <samp className="mt-1">Order Qty:{user.OrderQty} {user.UnitName}</samp>
                     </div>
                 </>
             )
@@ -437,13 +294,6 @@ const Invoice = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (value, row, key) => {
-                debugger
-                // if (!row.UnitName) {
-                //     row["Unit_id"] = row.UnitDetails[0].Unit
-                //     row["UnitName"] = row.UnitDetails[0].UnitName
-                //     // row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
-                //     // row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
-                // }
 
                 return (
                     <Select
@@ -459,18 +309,7 @@ const Invoice = (props) => {
                                 Unitlabel: i.Unitlabel
                             }))
                         }
-                        onChange={e => {
-                            debugger
-                            row.UnitDrop = e;
-                            var n1 = Number(row.OrderQty);
-                            var n2 = Number(e.ConversionUnit);
-                            const t1 = (n1 * n2).toFixed(2);
-                            const t2 = row.StockUnit
-                            // de
-                            try {
-                                document.getElementById(`stocktotal${row.id}`).innerText = `Total:${t1} ${t2}`
-                            } catch (e) { }
-                        }}
+                        onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
                     >
                     </Select >
                 )
@@ -491,7 +330,11 @@ const Invoice = (props) => {
                                 <th className="">Batch Code </th>
                                 <th className="" >Supplier BatchCode</th>
                                 <th className="" >Batch Date</th>
-                                <th className="">Stock Quantity</th>
+                                <th className="">
+                                    <div>
+                                        <samp >Stock Quantity</samp>
+                                    </div>
+                                    <samp >{`(${row.StockTotal} ${row.StockUnit})`} </samp></th>
                                 <th className="" >
                                     <div>
                                         <samp >Quantity</samp>
@@ -521,7 +364,7 @@ const Invoice = (props) => {
                                         </td>
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
-                                                {`${index.BaseUnitQuantity} ${row.UnitName}`}
+                                                {`${index.BaseUnitQuantity} ${row.StockUnit}`}
                                             </div>
                                         </td>
                                         <td>
@@ -544,14 +387,217 @@ const Invoice = (props) => {
             ),
         },
 
-    ]
+    ];
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: GoButton.length,
+        totalSize: OrderItemDetails.length,
         custom: true,
     };
 
+    function CustomerOnchange(hasSelect, evn) {
+        setState((i) => {
+            const v1 = { ...i }
+            v1.values.Customer = hasSelect
+            v1.hasValid.Customer.valid = true
+            return v1
+        })
+        dispatch(GoButton_post_For_Invoice_Success([]))
+    }
+
+    const handleChange = (event, index) => {
+        index.Qty = event.target.value
+    };
+
+    function stockDistributeFunc(index) {
+        const v1 = index.Quantity;
+        let count = Number(v1) * Number(index.ConversionUnit);
+
+        index.StockDetails = index.StockDetails.map(i2 => {
+
+            let qty = Number(i2.BaseUnitQuantity);
+
+            if ((count > qty) && !(count === 0)) {
+                count = count - qty
+                i2.Qty = qty.toFixed(3)
+            } else if ((count <= qty) && (count > 0)) {
+                i2.Qty = count.toFixed(3)
+                count = 0
+            }
+            else {
+                i2.Qty = 0;
+            }
+            try {
+                document.getElementById(`batchQty${i2.id}`).value = i2.Qty
+            } catch (e) { }
+            return i2
+        });
+
+        const t1 = (v1 * index.ConversionUnit);
+        const t2 = index.StockUnit;
+
+        try {
+            document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
+        } catch (e) { }
+
+    }
+    function orderQtyOnChange(event, index) {
+        index.Quantity = event.target.value
+        stockDistributeFunc(index)
+    }
+    function orderQtyUnit_SelectOnchange(event, index) {
+        debugger
+        index.UnitDrop = event;
+        index.ConversionUnit = event.ConversionUnit;
+        // var n1 = Number(index.Quantity);
+        // var n2 = Number(e.ConversionUnit);
+        // const t1 = (n1 * n2).toFixed(2);
+        // const t2 = index.StockUnit
+
+        // try {
+        //     document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
+        // } catch (e) { }
+        stockDistributeFunc(index)
+    };
+    function goButtonHandler(event) {
+        // event.preventDefault();
+        // if (formValid(state, setState)) {
+        // debugger
+        const jsonBody = JSON.stringify({
+            FromDate: values.InvoiceDate,
+            Customer: values.Customer.value,
+            Party: userParty(),
+            OrderIDs: ""
+        });
+        mainSppinerOnOff({ id: goBtnId, state: true })
+        dispatch(GoButton_post_For_Invoice(jsonBody, goBtnId));
+        // }
+    };
+
+    const SaveHandler = (event) => {
+        event.preventDefault();
+
+        const validMsg = []
+        // var a = {
+        //     BatchCode: "A001",
+        //     Quantity: "10.00",
+        //     BaseUnitQuantity: "1.000",
+        //     MRP: null,
+        //     Rate: "100.00",
+        //     BasicAmount: "1000.00",
+        //     TaxType: "GST",
+        //     GSTPercentage: "5.00",
+        //     GSTAmount: "50.00",
+        //     Amount: "1050.00",
+        //     DiscountType: "",
+        //     Discount: "0",
+        //     DiscountAmount: "0",
+        //     CGST: "25.00",
+        //     SGST: "25.00",
+        //     IGST: "0.00",
+        //     CGSTPercentage: "2.50",
+        //     SGSTPercentage: "2.50",
+        //     IGSTPercentage: "0.00",
+        //     CreatedOn: "",
+        //     Item: 44,
+        //     Unit: 302,
+        //     BatchDate: "2023-01-01",
+        //     BatchID: 59
+        // }
+        const InvoiceItems = []
+        debugger
+        const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
+        let grandtotal = 0
+        OrderItemDetails.map((index) => {
+
+            // let Stock = index.StockDetails.map((i) => {
+            //     return i.BaseUnitQuantity
+            // })
+            // var TotalStock = 0;
+            // Stock.forEach(x => {
+            //     TotalStock += parseFloat(x);
+            // });
+            // var OrderQty = parseFloat(index.Quantity)
+            // if (OrderQty > TotalStock) {
+            //     {
+            //         validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+            //     };
+            // }
+            // if (index["invalid"]) {
+            //     validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
+            // };
+
+            index.StockDetails.forEach((ele) => {
+
+                if (ele.Qty > 0) {
+                    var demo = {
+                        Rate: index.Rate,
+                        GSTPercentage: index.GSTPercentage,
+                        Quantity: ele.Qty
+                    }
+                    const basicAmt = parseFloat(basicAmount(demo))
+                    const cgstAmt = (GstAmount(demo))
+                    const amount = Amount(demo)
+                    grandtotal = grandtotal + Number(amount)
+                    InvoiceItems.push({
+                        Item: index.Item,
+                        Unit: index.UnitDrop.value,
+                        BatchCode: ele.BatchCode,
+                        Quantity: ele.Qty,
+                        BatchDate: ele.BatchDate,
+                        BatchID: ele.id,
+                        BaseUnitQuantity: ele.BaseUnitQuantity,
+                        LiveBatch: ele.LiveBatche,
+                        MRP: null,
+                        Rate: index.Rate,
+                        BasicAmount: basicAmt.toFixed(2),
+                        GSTAmount: cgstAmt.toFixed(2),
+                        GST: index.GST,
+                        CGST: (cgstAmt / 2).toFixed(2),
+                        SGST: (cgstAmt / 2).toFixed(2),
+                        IGST: 0,
+                        GSTPercentage: index.GSTPercentage,
+                        CGSTPercentage: (index.GSTPercentage / 2),
+                        SGSTPercentage: (index.GSTPercentage / 2),
+                        IGSTPercentage: 0,
+                        Amount: amount,
+                        TaxType: 'GST',
+                        DiscountType: "",
+                        Discount: "0",
+                        DiscountAmount: "0",
+                    })
+                }
+            })
+        })
+
+
+        // if (formValid(state, setState)) {
+
+        const jsonBody = JSON.stringify({
+            InvoiceDate: values.InvoiceDate,
+            CustomerGSTTin: '41',
+            GrandTotal: Math.round(grandtotal),
+            RoundOffAmount: (grandtotal - Math.trunc(grandtotal)).toFixed(2),
+            Customer: values.Customer.value,
+            Party: userParty(),
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            InvoiceItems: InvoiceItems,
+            InvoicesReferences: InvoicesReferences
+        }
+        );
+
+        if (pageMode === mode.edit) {
+        }
+
+        else {
+
+            mainSppinerOnOff({ id: saveBtnid, state: true })
+            dispatch(postInvoiceMaster(jsonBody, saveBtnid));
+        }
+        // };
+        debugger
+    }
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -599,7 +645,7 @@ const Invoice = (props) => {
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={CustomerDropdown_Options}
-                                                    onChange={ItemOnchange}
+                                                    onChange={CustomerOnchange}
                                                 />
                                                 {isError.Customer.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -624,7 +670,7 @@ const Invoice = (props) => {
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
                                     keyField={"id"}
-                                    data={GoButton}
+                                    data={OrderItemDetails}
                                     columns={pagesListColumns}
                                     search
                                 >
@@ -662,10 +708,11 @@ const Invoice = (props) => {
 
                         </PaginationProvider>
 
-                        {GoButton.length > 0 ? <FormGroup>
+                        {OrderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
                                     //   onClick={onsave}
+                                    id={saveBtnid}
                                     userAcc={userPageAccessState}
                                     module={"Material Issue"}
                                 />
