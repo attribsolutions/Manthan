@@ -139,18 +139,9 @@ const MaterialIssueList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
-
+           
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    pageMode={url.MATERIAL_ISSUE_ADD_Mode_2}
-                    newBtnPagePath={url.MATERIAL_ISSUE_ADD_Mode_2}
-                    excelData={downList} /> */}
-
+            
                 <div className="px-2  c_card_header text-black" >
                     <div className=" row" >
                         <Col sm="5" >
