@@ -506,6 +506,7 @@ const Order = (props) => {
     }
 
     const goButtonHandler = () => {
+        debugger
         if (!supplierSelect > 0) {
             dispatch(
                 AlertState({

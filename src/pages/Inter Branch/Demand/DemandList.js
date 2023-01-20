@@ -235,7 +235,7 @@ const DemandList = () => {
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>Delivery date </Label>
+                                    style={{ width: "110px" }}>Delivery Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
