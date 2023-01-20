@@ -51,6 +51,14 @@ import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
 
+export const unitConversionInitial = {
+    id: 1,
+    Conversion: '',
+    Unit: '',
+    POUnit: false,
+    SOUnit: false,
+    IsBase: false
+};
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
@@ -101,13 +109,7 @@ const ItemsMaster = (props) => {
         ImageUpload: ''
     }]);
 
-    const [baseUnitTableData, setBaseUnitTableData] = useState([{
-        Conversion: '',
-        Unit: '',
-        POUnit: false,
-        SOUnit: false,
-        IsBase: false
-    }]);
+    const [baseUnitTableData, setBaseUnitTableData] = useState([unitConversionInitial]);
 
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
@@ -248,26 +250,21 @@ const ItemsMaster = (props) => {
                 // ====================== Unit Conversion tab  start ======================
 
                 const UnitDetails = []
-                hasEditVal.ItemUnitDetails.forEach((index) => {
+                hasEditVal.ItemUnitDetails.forEach((index, key) => {
                     // if (!index.IsBase) {
                     UnitDetails.push({
+                        id: key + 1,
                         Unit: { label: index.UnitName, value: index.UnitID },
                         Conversion: index.BaseUnitQuantity,
                         IsBase: index.IsBase,
-                        POUnit:index.PODefaultUnit,
-                        SOUnit:index.SODefaultUnit
+                        POUnit: index.PODefaultUnit,
+                        SOUnit: index.SODefaultUnit
                     })
                     // }
                 })
 
                 if ((UnitDetails.length === 0)) {
-                    UnitDetails.push({
-                        Unit: '',
-                        Conversion: '',
-                        IsBase: false,
-                        POUnit:false,
-                        SOUnit:false
-                    })
+                    UnitDetails.push(unitConversionInitial)
                 };
 
                 setBaseUnitTableData(UnitDetails)
@@ -397,13 +394,8 @@ const ItemsMaster = (props) => {
             inValidDrop[type] = false
 
         }
-        setpageRefresh(!pageRefresh)
-
-        if (baseUnitTableData[0]) {
-            setBaseUnitTableData([{
-                Conversion: '1',
-                Unit: { value: event.value, label: event.label },
-            }])
+        if (type === "BaseUnit") {
+            setBaseUnitTableData([{ ...unitConversionInitial, IsBase: true, Conversion: 1, Unit: event }])
         }
 
     }
@@ -514,7 +506,7 @@ const ItemsMaster = (props) => {
             // ====================== Unit conversion *****start ======================
 
             const itemUnitDetails = []
-// debugger
+            // debugger
             baseUnitTableData.forEach((index, key) => {
                 let val1 = index.Conversion
                 const unit1 = index.Unit.value;
@@ -535,7 +527,7 @@ const ItemsMaster = (props) => {
 
                 // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
 
-                if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === '')) {
+                if (((found === undefined) || (found2 === undefined)) && !(val1 === '') && !(unit1 === '')) {
                     itemUnitDetails.push({
                         BaseUnitQuantity: index.Conversion,
                         UnitID: index.Unit.value,
@@ -549,14 +541,14 @@ const ItemsMaster = (props) => {
 
 
 
-            if (pageMode === 'save')
-                itemUnitDetails.push({
-                    BaseUnitQuantity: 1,
-                    UnitID: formValue.BaseUnit.value,
-                    IsBase: true,
-                    SODefaultUnit: true,
-                    PODefaultUnit: true
-                })
+            // if (pageMode === 'save')
+            //     itemUnitDetails.push({
+            //         BaseUnitQuantity: 1,
+            //         UnitID: formValue.BaseUnit.value,
+            //         IsBase: true,
+            //         SODefaultUnit: true,
+            //         PODefaultUnit: true
+            //     })
 
             //  ======================   ItemCategoryDetails *****start   ====================== 
 
