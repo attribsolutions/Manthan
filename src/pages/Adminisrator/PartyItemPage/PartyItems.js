@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
-    Button,
     Card,
     CardBody,
     CardHeader,
@@ -38,36 +37,23 @@ import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-n
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { PARTYITEM_LIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import * as pageId from "../../../routes/allPageID"
+import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const PartyItems = (props) => {
-debugger
+    debugger
     const history = useHistory()
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-    const [supplierSelect, setSupplierSelect] = useState('');
     const [userAccState, setUserPageAccessState] = useState("");
     const [itemArr, setitemArr] = useState([]);
-
-    // get method for dropdown
-    useEffect(() => {
-        dispatch(getSupplier());
-    }, [dispatch]);
-
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
         SupplierName: "",
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -79,6 +65,8 @@ debugger
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(36))
+        dispatch(GetCustomer())
+        dispatch(getGroupList());
     }, []);
 
     const location = { ...history.location }
@@ -86,29 +74,21 @@ debugger
     const hasShowModal = props.hasOwnProperty("editValue")
     const hasDropMode = props.hasOwnProperty("dropMode")
 
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
         supplier,
-        partyItem,
         pageField,
         tableList,
         userAccess } = useSelector((state) => ({
-
             postMsg: state.PartyItemsReducer.postMsg,
             updateMsg: state.PartyItemsReducer.updateMsg,
             tableList: state.PartyItemsReducer.partyItem,
-            supplier: state.PartyItemsReducer.supplier,
+            supplier: state.SupplierReducer.customer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
-    useEffect(() => {
-        dispatch(getSupplier())
-        dispatch(getGroupList());
-    }, []);
 
     useEffect(() => {
         setitemArr(tableList)
@@ -136,8 +116,6 @@ debugger
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-
-
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
@@ -152,11 +130,6 @@ debugger
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
             }
-            // else if (hasDropMode) {
-            //     setModalCss(true)
-            //     hasEditVal = props.editValue
-            // };
-
             if (hasEditVal) {
 
                 const { id, SupplierName } = hasEditVal
@@ -174,7 +147,6 @@ debugger
             dispatch(editGroupIDSuccess({ Status: false }))
         }
     }, [])
-
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -207,11 +179,10 @@ debugger
         }
     }, [postMsg])
 
-
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             history.push({
-                pathname: PARTYITEM_LIST,
+                pathname: url.PARTYITEM_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updategroupIDSuccess({ Status: false }));
@@ -233,17 +204,10 @@ debugger
         }
     }, [pageField])
 
-
     const supplierOptions = supplier.map((i) => ({
-
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
-
-    // supplierOptions.unshift({
-    //     value: "",
-    //     label: " All"
-    // });
 
     const tableColumns = [
         {
@@ -288,16 +252,13 @@ debugger
         }
     ];
 
-
     const pageOptions = {
         sizePerPage: 15,
         custom: true,
     };
 
-
     const GoButton_Handler = (e) => {
         let supplier = e.value
-        setSupplierSelect(e)
         if (!supplier > 0) {
             alert("Please Select Supplier")
             return
@@ -312,7 +273,6 @@ debugger
         }
         dispatch(getpartyItemList(supplier))
     };
-
 
     const SubmitHandler = (e) => {
         e.preventDefault();
@@ -329,8 +289,6 @@ debugger
         dispatch(PostPartyItems(jsonBody));
     };
 
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -341,11 +299,6 @@ debugger
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYITEM} /> */}
-
-                        {/* <Breadcrumb
-                            pageHeading={userAccState.PageHeading}
-                        /> */}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -368,6 +321,7 @@ debugger
                                                                     <Select
                                                                         name="SupplierName"
                                                                         value={values.SupplierName}
+                                                                        isDisabled={props.dropMode === "dropdownAdd" ? true : false}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
