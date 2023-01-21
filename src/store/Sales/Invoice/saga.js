@@ -1,10 +1,10 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { convertDatefunc, convertTimefunc, mainSppinerOnOff } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
+import { Invoice_Delete_API, Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
-import { GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
+import { deleteInvoiceIdSuccess, getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
+import { DELETE_INVOICE_LIST_PAGE, GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
 
 // GO Botton Post API
 function* GoButtonInvoice_genfun({ data, goBtnId }) {
@@ -105,10 +105,29 @@ function* InvoiceListGenFunc({ filters }) {
     }));
   }
 }
+
+// Invoice List delete List page
+function* DeleteInvoiceGenFunc({ id }) {
+
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Invoice_Delete_API, id);
+    yield put(SpinnerState(false))
+    yield put(deleteInvoiceIdSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Merssage in Work Order List Delete Method "
+    }));
+  }
+}
+
 function* InvoiceSaga() {
   yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonInvoice_genfun)
   yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
   yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
+  yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
 }
 
 export default InvoiceSaga;
