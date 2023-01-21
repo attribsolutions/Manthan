@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
     Col,
@@ -21,7 +20,6 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-    onChangeText,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -36,13 +34,10 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { handleKeyDown } from "../Order/OrderPageCalulation";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 const MaterialIssueMaster = (props) => {
 
@@ -50,12 +45,10 @@ const MaterialIssueMaster = (props) => {
     const history = useHistory()
 
     const fileds = {
-        // id: "",
         MaterialIssueDate: currentDate,
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -348,6 +341,7 @@ const MaterialIssueMaster = (props) => {
     const handleChange = (event, index1, index2) => {
 
         let input = event.target.value
+
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
         if (result) {
@@ -397,12 +391,12 @@ const MaterialIssueMaster = (props) => {
 
 
     const SaveHandler = (event) => {
-        debugger
+
         const validMsg = []
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
-            debugger
+
             let Stock = index.BatchesData.map((i) => {
                 return i.BaseUnitQuantity
             })

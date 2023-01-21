@@ -421,7 +421,7 @@ export const Production_Delete_API = (id) => del(`${url.POST_API_FOR_PRODUCTION}
 export const Invoice_GoButton_Post_API = (data) => post(url.INVOICE_GO_BUTTON_POST_API, data)// go button postapi
 export const Invoice_Post_API = (data) => post(url.INVOICE_POST_API, data)//  postapi
 export const Invoice_Get_API = (data) => post(url.INVOICE_LIST_API, data)//  postapi
-
+export const Invoice_Delete_API = (id) => del(`${url.INVOICE_POST_API}/${id}`)// delete api
 // // Demand
 export const DemandPage_GoButton_API = () => post(url.GO_BUTTON_POST_API_FOR_DEMAND)//get api
 export const DemandPage_Post_API = () => post(url.POST_API_FOR_DEMAND)//get api
