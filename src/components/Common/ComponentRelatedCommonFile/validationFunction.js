@@ -14,6 +14,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
+
     
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };

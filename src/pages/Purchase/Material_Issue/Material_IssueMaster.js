@@ -173,6 +173,7 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     useEffect(() => {
+        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
