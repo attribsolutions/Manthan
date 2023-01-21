@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -27,20 +26,20 @@ import { useHistory } from "react-router-dom";
 import {
     getpartyItemList,
     getPartyItemListSuccess,
-    getSupplier,
     PostPartyItems,
     PostPartyItemsSuccess
 } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import BootstrapTable from "react-bootstrap-table-next";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 const PartyItems = (props) => {
     debugger
@@ -62,12 +61,6 @@ const PartyItems = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(36))
-        dispatch(GetCustomer())
-        dispatch(getGroupList());
-    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -85,10 +78,17 @@ const PartyItems = (props) => {
             postMsg: state.PartyItemsReducer.postMsg,
             updateMsg: state.PartyItemsReducer.updateMsg,
             tableList: state.PartyItemsReducer.partyItem,
-            supplier: state.SupplierReducer.customer,
+            supplier:state.PartyMasterReducer.partyList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(36))
+        dispatch(getPartyListAPI())
+        dispatch(getGroupList());
+    }, []);
 
     useEffect(() => {
         setitemArr(tableList)
