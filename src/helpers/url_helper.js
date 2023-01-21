@@ -211,7 +211,7 @@ export const INVOICE_POST_API = '/Invoice'
 export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
 // Demand
-export const GO_BUTTON_POST_API_FOR_DEMAND = '/OrderEdit'
+export const GO_BUTTON_POST_API_FOR_DEMAND = '/InterBranchesItems'
 export const DIVISION_DROPDOWN = '/InterBranches'
 export const POST_API_FOR_DEMAND = '/Demands'
 export const DEMAND_LiST_BY_FILTERS ='/DemandsFilter'

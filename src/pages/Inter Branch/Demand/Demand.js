@@ -24,7 +24,7 @@ import {
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     convertDatefunc,
     createdBy,
@@ -46,9 +46,12 @@ import {
     postDemandSuccess,
     postDivision,
     postGoButtonForDemand,
-    postGoButtonForDemandSuccess
+    postGoButtonForDemandSuccess,
+    updateDemandId
 } from "../../../store/Inter Branch/DemandRedux/action";
-
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { Amount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+let comment = ''
 let editVal = {}
 
 const Demand = (props) => {
@@ -69,17 +72,16 @@ const Demand = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [demanddate, setdemanddate] = useState(currentDate)
     const [poFromDate, setpoFromDate] = useState(currentDate);
     const [poToDate, setpoToDate] = useState(currentDate);
-    const [demandAmount, setdemandAmount] = useState(0);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
 
-    const [orderItemTable, setorderItemTable] = useState([])
-    const [divisionSelect, setdivisionSelect] = useState('');
-    const [orderdate, setorderdate] = useState(currentDate);
+    const [demandItemTable, setdemandItemTable] = useState([])
+    const [demandAmount, setDemandAmount] = useState(0);
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -87,15 +89,17 @@ const Demand = (props) => {
         pageField,
         userAccess,
         InterBranches,
-        GoButton
+        GoButton,
     } = useSelector((state) => ({
         postMsg: state.DemandReducer.postMsg,
         updateMsg: state.DemandReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         InterBranches: state.DemandReducer.InterBranches,
-        GoButton: state.DemandReducer.GoButton
+        GoButton: state.DemandReducer.GoButton,
     }));
+
+    // const { DemandItems = [] } = GoButton
 
     useEffect(() => {
         const page_Id = pageId.DEMAND
@@ -107,7 +111,6 @@ const Demand = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -141,13 +144,6 @@ const Demand = (props) => {
     }, []);
 
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         // FromDate: "2022-12-01",
-    //         ToDate: currentDate
-    //     });
-    //     // dispatch(getWorkOrderListPage(jsonBody));
-    // }, [])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -168,27 +164,27 @@ const Demand = (props) => {
 
             if (hasEditVal) {
 
-                // setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
-                setState((i) => {
-                    i.values.MaterialIssueDate = currentDate
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
-                    i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.ItemName.valid = true;
-                    i.hasValid.MaterialIssueDate.valid = true;
-                    i.hasValid.NumberOfLot.valid = true;
-                    i.hasValid.LotQuantity.valid = true;
-                    return i
-                })
+                // // setItemselect(hasEditVal)
+                // const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
+                // setState((i) => {
+                //     i.values.MaterialIssueDate = currentDate
+                //     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
+                //     i.values.NumberOfLot = NumberOfLot;
+                //     i.values.LotQuantity = EstimatedOutputQty;
+                //     i.hasValid.ItemName.valid = true;
+                //     i.hasValid.MaterialIssueDate.valid = true;
+                //     i.hasValid.NumberOfLot.valid = true;
+                //     i.hasValid.LotQuantity.valid = true;
+                //     return i
+                // })
+           // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
                 const jsonBody = JSON.stringify({
-                    WorkOrder: id,
-                    Item: Item,
-                    Company: userCompany(),
-                    Party: userParty(),
-                    Quantity: parseInt(EstimatedOutputQty)
+                   
+                    Supplier:values.Division.value,
+                    Customer: userParty(),
+                    EffectiveDate: demanddate,
+                    DemandID: (pageMode === mode.save) ? 0 : editVal.id
                 });
                 dispatch(postGoButtonForDemand(jsonBody));
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -196,21 +192,14 @@ const Demand = (props) => {
         }
     }, [])
 
-    useEffect(() => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    useEffect(() => {
+              if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postDemandSuccess({ Status: false }))
             dispatch(postGoButtonForDemandSuccess([]))
-            // dispatch(postBOMSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
 
-            // dispatch(AlertState({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: "Item is out of stock",
-            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
-            // }))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -228,10 +217,8 @@ const Demand = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-
-            dispatch(postDemandSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
-            // dispatch(postBOMSuccess({ Status: false }))
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
+             dispatch(postDemandSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -242,17 +229,18 @@ const Demand = (props) => {
         }
     }, [postMsg])
 
+
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
+             setState(() => resetFunction(fileds, state))// Clear form values 
+             saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.DEMAND_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
-            // dispatch(updateBOMListSuccess({ Status: false }));
+            //  dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -263,6 +251,34 @@ const Demand = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+
+
+    function val_onChange(val, row, type) {
+
+        if (type === "qty") {
+            row["Quantity"] = val;
+        }
+        else {
+            row["Rate"] = val
+        }
+
+        row["Amount"] = Amount(row)
+
+        let sum = 0
+        demandItemTable.forEach(ind => {
+            if (ind.Amount === null) {
+                ind.Amount = 0
+            }
+            var amt = parseFloat(ind.Amount)
+            sum = sum + amt
+        });
+        setDemandAmount(sum.toFixed(2))
+        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
+    };
+
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -270,30 +286,27 @@ const Demand = (props) => {
         }
     }, [pageField])
 
+
     const divisiondropdown_Options = InterBranches.map((i) => ({ label: i.Name, value: i.id }))
-    console.log(InterBranches)
+
+
+    useEffect(() => {
+        if (GoButton) {
+            let { DemandItems = [] } = GoButton
+            setdemandItemTable(DemandItems)
+            dispatch(postGoButtonForDemandSuccess(''))
+        }
+    }, [GoButton]);
+
+
 
     const goButtonHandler = () => {
-        // debugger
-        if (!divisionSelect > 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please select division",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
-            return;
-        }
-        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
-
+    
         const jsonBody = JSON.stringify({
-            Party: divisionSelect.value,
+            Supplier: values.Division.value,
             Customer: userParty(),
-            EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.save) ? 0 : editVal.id
+            EffectiveDate: demanddate,
+             DemandID: (pageMode === mode.save) ? 0 : editVal.id  
         })
 
         dispatch(postGoButtonForDemand(jsonBody))
@@ -303,233 +316,254 @@ const Demand = (props) => {
         setdemanddate(date)
     };
 
-    function permissionfunc(istrue) {
-        if (istrue) {
-            setdivisionSelect(istrue)// **istrue is == event value
-            setorderItemTable([])
-        }
-    }
-
-    function divisionOnchange(e) {
-        var isfind = orderItemTable.find(i => (i.Quantity > 0))
-        if (isfind) {
-            dispatch(
-                AlertState({
-                    Type: 7,
-                    Status: true,
-                    Message: "If you are change Supplier Name then All Item Data is Clear",
-                    RedirectPath: false,
-                    PermissionFunction: permissionfunc,
-                    permissionValueReturn: e
-
-                })
-            );
-            return;
-        } else {
-            setdivisionSelect(e)
-            setorderItemTable([])
-            // setTermsAndConTable([])
-        }
-
-        // let newObj = { ...orderAddFilter }
-        // newObj.supplierSelect = e
-        // dispatch(orderAddfilters(newObj))
-    };
-
+   
     const SaveHandler = (event) => {
-
+        event.preventDefault();
         const jsonBody = JSON.stringify({
 
-            DemandDate: demanddate,
-            DeliveryDate: deliverydate,
-            Customer: 4,
-            Supplier: 5,
-            DemandAmount: demandAmount,
-            Description: "",
-            BillingAddress: 4,
-            ShippingAddress: 4,
-            OrderNo: 1,
-            FullOrderNumber: "PO0001",
-            OrderType: 1,
-            POType: 1,
-            Division: 4,
-            POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
-            POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
-            DemandItem: [
-                {
-                    Item: 62,
-                    // Quantity: isdel ? 0 : i.Quantity,
-                    // Rate: i.Rate,
-                    Unit: 362,
-                    // BaseUnitQuantity: i.BaseUnitQuantity,
-                    Margin: "",
-                    // BasicAmount: basicAmt.toFixed(2),
-                    // GSTAmount: cgstAmt.toFixed(2),
-                    GST: 61,
-                    // CGST: (cgstAmt / 2).toFixed(2),
-                    // SGST: (cgstAmt / 2).toFixed(2),
-                    IGST: 0,
-                    CGSTPercentage: 1,
-                    SGSTPercentage: 1,
-                    IGSTPercentage: 0,
-                    // Amount: i.Amount,
-                    IsDeleted: 0,
-                    // Comment: i.Comment
-                }
-            ],
-            DemandReferences: [
-                {
-                    MaterialIssue: ""
-                }
-
-            ]
-
-        }
+                DemandDate: demanddate,
+                DemandAmount: "102.00",
+                Description: "",
+                Customer: 4,
+                Supplier: 5,
+                Division:4,
+                BillingAddressID: 4,
+                ShippingAddressID: 4,
+                Inward: 0,
+                MaterialIssue: null,
+                CreatedBy:1,
+                UpdatedBy:1,
+                DemandItem: [
+                    {
+                        Item: 62,
+                        Quantity: "10",
+                        Rate: "10.00",
+                        Unit: 362,
+                        BaseUnitQuantity: "1.000",
+                        Margin: "",
+                        BasicAmount: "100.00",
+                        GSTAmount: "2.00",
+                        GST: 61,
+                        CGST: "1.00",
+                        SGST: "1.00",
+                        IGST: 0,
+                        CGSTPercentage: 1,
+                        SGSTPercentage: 1,
+                        IGSTPercentage: 0,
+                        Amount: "102.00",
+                        IsDeleted: 0,
+                        Comment: "asdasdas"
+                    }
+                ]
+            }
         );
+        saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
+debugger
         if (pageMode === mode.edit) {
+            dispatch(updateDemandId(jsonBody, editVal.id))
         }
         else {
             dispatch(postDemand(jsonBody));
         }
+
     };
 
     const pagesListColumns = [
-        {
-            text: "Item Group",
-            dataField: "ItemGroup",
-            style: (cellContent, user, cell, row, rowIndex, colIndex) => {
+        {//------------- ItemName column ----------------------------------
+            text: "Item Name",
+            dataField: "ItemName",
+            // headerFormatter: (value, row, k) => {
+            //     return (
+            //         <div className="d-flex justify-content-between">
+            //             <div>
+            //                 Item Name
+            //             </div>
 
-                let Stock = user.BatchesData.map((index) => {
-                    return index.BaseUnitQuantity
-                })
-                var TotalStock = 0;
-                Stock.forEach(x => {
-                    TotalStock += parseFloat(x);
-                });
-                var OrderQty = parseFloat(user.Quantity)
-                if (OrderQty > TotalStock) {
-                    return {
-                        color: "red",
+            //             <div>
+            //                 <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
+            //                     onClick={assignItem_onClick}>
+            //                     Assign-Items</samp>
+            //             </div>
 
-                    };
-                }
+            //         </div>
+            //     )
+            // },
+        },
+
+        {//------------- Stock Quantity column ----------------------------------
+            text: "Stock Qty",
+            dataField: "StockQuantity",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <div className="text-end">
+                        <span>{row.StockQuantity}</span>
+                    </div>
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
             },
         },
 
-        {
-            text: "ItemName",
-            dataField: "ItemName",
-        },
-        {
-            text: "Stock Qty",
-            dataField: "StockQty",
-        },
-        {
-            text: "Consolidation Qty",
-            dataField: "ConsolidationQty",
+        { //------------- Quantity column ----------------------------------
+            text: "Quantity",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Quantity${k}`}
+                            defaultValue={row.Quantity}
+                            key={row.Quantity}
+                            className="text-end"
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "qty")
+                                } else {
+                                    document.getElementById(`Quantity${k}`).value = row.Quantity
+                                }
+                                handleKeyDown(e, demandItemTable)
+                            }}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        />
+                    </span>
 
-            formatter: (cellContent, user) => (
-                <>
-                    <Table className="table table-bordered table-responsive mb-1">
-                        <Thead  >
-                            {/* <tr style={{ zIndex: "23" }} className="">
-                                <th className="">Batch Code </th>
-                                <th className="" >Supplier BatchCode</th>
-                                <th className="" >Batch Date</th>
-                                <th className="">Stock Quantity</th>
-                                <th className="" >Quantity</th>
-                            </tr> */}
-                        </Thead>
-                        <Tbody  >
-                            {cellContent.map((index) => {
-                                return (
-                                    < tr >
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label  >
-                                                    {index.SystemBatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.BatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "100px" }}>
-                                                <Label>
-                                                    {convertDatefunc(index.BatchDate)}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "120px", textAlign: "right" }}>
-                                                <Label
-                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
-                                                >
-                                                    {index.BaseUnitQuantity}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Input type="text"
-                                                    style={{ textAlign: "right" }}
-                                                    defaultValue={index.Qty}
-                                                    // onChange={(event) => handleChange(event, index)}
-                                                ></Input>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </>
-            ),
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+
+
         },
 
-        {
-            text: "Demanded Qty",
-            dataField: "DemandedQty",
-        },
-
-        {
-            text: "Qty",
-            dataField: "Qty",
-        },
-
-        {
+        {  //------------- Unit column ----------------------------------
             text: "Unit",
-            dataField: "UnitName",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, key) => {
+
+                if (!row.UnitName) {
+                    row["Unit_id"] = row.UnitDetails[0].UnitID
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.UnitID,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["Unit_id"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '150px', textAlign: 'center' };
+            }
+
         },
 
-        {
+        {//------------- Rate column ----------------------------------
+            text: "Rate/Unit",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <span className="text-right" >
+                        <Input
+                            type="text"
+                            id={`Ratey${k}`}
+                            defaultValue={row.Rate}
+                            autoComplete="off"
+                            className="text-end"
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    // val_onChange(val, row, "rate")
+                                } else {
+                                    document.getElementById(`Ratey${k}`).value = row.Rate
+                                }
+                            }}
+                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
+        { //------------- Comment column ----------------------------------
             text: "Comment",
-            dataField: "Comment",
-        },
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Comment${k}`}
+                            defaultValue={row.Comment}
+                            autoComplete="off"
+                            onChange={(e) => { row["Comment"] = e.target.value }}
+                        />
+                    </span>
 
-    ]
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+
+        },
+    ];
+
+    const defaultSorted = [
+        {
+            dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
 
     const pageOptions = {
-        sizePerPage: 10,
-        totalSize: (orderItemTable.length + 2),
+        sizePerPage: (demandItemTable.length + 2),
+        totalSize: 0,
         custom: true,
     };
-
-    if (!(userPageAccessState === '')) {
+    if (!(userAccState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <BreadcrumbNew userAccess={userAccess} pageId={pageId.DEMAND} />
 
                 <div className="page-content" >
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
@@ -537,22 +571,6 @@ const Demand = (props) => {
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}>Date</Label>
                                             <Col sm="7">
-                                                {/* <Flatpickr
-                                                    name="Date"
-                                                    value={demanddate}
-                                                    className="form-control d-block bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
-                                                    options={{
-                                                        altInput: true,
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
-                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                />
-                                                {isError.Date.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.Date}</span>
-                                                )} */}
-
                                                 <Flatpickr
                                                     style={{ userselect: "all" }}
                                                     id="demanddate"
@@ -577,7 +595,7 @@ const Demand = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> Division </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    isDisabled={values.Division ? true : null}
+                                                    isDisabled={pageMode === "edit" ? true : false}
                                                     name="Division"
                                                     value={values.Division}
                                                     isSearchable={true}
@@ -585,11 +603,10 @@ const Demand = (props) => {
                                                     classNamePrefix="dropdown"
                                                     options={divisiondropdown_Options}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
-                                                />
-                                                {isError.Division.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Division}</small></span>
-                                                )}
+                                                    />
+                                                    {isError.Division.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.Division}</small></span>
+                                                    )}
                                             </Col>
                                         </FormGroup>
                                     </Col >
@@ -631,25 +648,32 @@ const Demand = (props) => {
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-                                    keyField={"id"}
-                                    data={GoButton}
+                                    keyField="id"
+                                    defaultSorted={defaultSorted}
+                                    data={demandItemTable}
                                     columns={pagesListColumns}
                                     search
                                 >
-                                    {(toolkitProps) => (
+                                    {(toolkitProps,) => (
                                         <React.Fragment>
                                             <Row>
                                                 <Col xl="12">
-                                                    <div className="table-responsive">
+                                                    <div className="table table-Rresponsive ">
                                                         <BootstrapTable
                                                             keyField={"id"}
                                                             responsive
                                                             bordered={false}
                                                             striped={false}
-                                                            classes={"table  table-bordered"}
+                                                            classes={"table  table-bordered table-hover"}
+                                                            noDataIndication={
+                                                                <div className="text-danger text-center ">
+                                                                    Items Not available
+                                                                </div>
+                                                            }
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />
+                                                        {mySearchProps(toolkitProps.searchProps)}
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -662,9 +686,10 @@ const Demand = (props) => {
                                     )}
                                 </ToolkitProvider>
                             )}
+
                         </PaginationProvider>
 
-                        <FormGroup>
+                        {/* <FormGroup>
                             <Col sm={2} style={{ marginLeft: "9px" }}>
                                 <SaveButton pageMode={pageMode}
                                     userAcc={userPageAccessState}
@@ -672,7 +697,16 @@ const Demand = (props) => {
                                     module={"Demand"}
                                 />
                             </Col>
-                        </FormGroup>
+                        </FormGroup> */}
+
+                        {
+                            ((demandItemTable.length > 0)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                <SaveButton pageMode={pageMode} userAcc={userAccState}
+                                    module={"Demand"} onClick={SaveHandler}
+                                />
+                            </div>
+                                : <div className="row save1"></div>
+                        }
                     </form>
                 </div>
             </React.Fragment>
