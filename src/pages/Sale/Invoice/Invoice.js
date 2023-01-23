@@ -81,7 +81,7 @@ const Invoice = (props) => {
         GoButton: state.InvoiceReducer.GoButton
     }));
     const { OrderItemDetails = [], OrderIDs = [] } = GoButton
-
+    debugger
     useEffect(() => {
         const page_Id = pageId.INVOICE
         dispatch(GetCustomer())
@@ -394,13 +394,14 @@ const Invoice = (props) => {
     };
 
     function CustomerOnchange(hasSelect, evn) {
+
         setState((i) => {
             const v1 = { ...i }
             v1.values.Customer = hasSelect
             v1.hasValid.Customer.valid = true
             return v1
         })
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        // dispatch(GoButton_post_For_Invoice_Success([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -530,6 +531,7 @@ const Invoice = (props) => {
     };
 
     function goButtonHandler(event) {
+        // document.getElementById("customerselect").isDisabled = true
         event.preventDefault();
         // if (formValid(state, setState)) {
         // debugger
@@ -541,6 +543,7 @@ const Invoice = (props) => {
         });
         mainSppinerOnOff({ id: goBtnId, state: true })
         dispatch(GoButton_post_For_Invoice(jsonBody, goBtnId));
+
         // }
     };
 
@@ -701,13 +704,16 @@ const Invoice = (props) => {
                                                 <Flatpickr
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
+                                                    disabled={OrderItemDetails.length > 0 ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
                                                         altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
+
                                                     }}
+
                                                     onChange={InvoiceDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (
@@ -726,10 +732,13 @@ const Invoice = (props) => {
                                                     name="Customer"
                                                     value={values.Customer}
                                                     isSearchable={true}
+                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={CustomerDropdown_Options}
                                                     onChange={CustomerOnchange}
+
                                                 />
                                                 {isError.Customer.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -749,6 +758,7 @@ const Invoice = (props) => {
                                         <Button
                                             color="btn btn-outline-info border-1 font-size-12 " style={{ marginTop: '3px' }}
                                             onClick={(e) => {
+                                                // document.getElementById("customerselect").isDisabled = false
                                                 dispatch(GoButton_post_For_Invoice_Success([]))
                                             }}
                                         >Change</Button>
