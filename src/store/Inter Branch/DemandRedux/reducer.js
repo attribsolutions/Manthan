@@ -14,7 +14,7 @@ import {
 const INIT_STATE = {
     
     GoButton:null,
-    InterBranches: [],
+    division: [],
     editData: { Status: false, Items: [] },
     postMsg: { Status: false },
     updateMsg: { Status: false },
@@ -43,7 +43,7 @@ const DemandReducer = (state = INIT_STATE, action) => {
         case POST_DIVISION_SUCCESS:
             return {
                 ...state,
-                InterBranches: action.payload,
+                division: action.payload,
             }
 
         // filter list
