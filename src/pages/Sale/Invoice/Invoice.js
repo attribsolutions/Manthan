@@ -10,26 +10,23 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
     onChangeDate,
-    onChangeSelect,
-    onChangeText,
+
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
-    postBOMSuccess,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, mainSppinerOnOff, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
+import { postGoButtonForMaterialIssue_Master, } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -37,11 +34,11 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+
 
 const Invoice = (props) => {
 
@@ -80,16 +77,8 @@ const Invoice = (props) => {
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.GoButton
     }));
-    const { OrderItemDetails = [], OrderIDs = [] } = GoButton
-    debugger
-    useEffect(() => {
-        const page_Id = pageId.INVOICE
-        dispatch(GetCustomer())
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(GoButton_post_For_Invoice_Success([]))
 
-    }, []);
+    const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -98,6 +87,15 @@ const Invoice = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+
+    useEffect(() => {
+        const page_Id = pageId.INVOICE
+        dispatch(GetCustomer())
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(GoButton_post_For_Invoice_Success([]))
+
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -161,7 +159,7 @@ const Invoice = (props) => {
                 dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
             }
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
 
@@ -313,66 +311,66 @@ const Invoice = (props) => {
             dataField: "StockDetails",
 
             formatter: (cellContent, index1) => (
-
-                <Table className="table table-bordered table-responsive mb-1">
-                    <Thead  >
-                        <tr className="">
-                            <th className="">Batch Code </th>
-                            <th className="" >Supplier BatchCode</th>
-                            <th className="" >Batch Date</th>
-                            <th className="">
-                                <div>
-                                    <samp >Stock Quantity</samp>
-                                </div>
-                                <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
-                            <th className="" >
-                                <div>
-                                    <samp >Quantity</samp>
-                                </div>
-                                <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
-                            </th>
-                        </tr>
-                    </Thead>
-                    <Tbody  >
-                        {cellContent.map((index2) => {
-                            return (
-                                < tr key={index1.id} >
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            {index2.SystemBatchCode}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            {index2.BatchCode}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "100px" }}>
-                                            {convertDatefunc(index2.BatchDate)}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "120px", textAlign: "right" }}>
-                                            {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <Input type="text"
-                                                style={{ textAlign: "right" }}
-                                                key={`batchQty${index1.id}-${index2.id}`}
-                                                id={`batchQty${index1.id}-${index2.id}`}
-                                                defaultValue={index2.Qty}
-                                                onChange={(event) => StockQtyOnChange(event, index1, index2)}
-                                            ></Input>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </Tbody>
-                </Table>
+<></>
+                // <Table className="table table-bordered table-responsive mb-1">
+                //     <Thead  >
+                //         <tr className="">
+                //             <th className="">Batch Code </th>
+                //             <th className="" >Supplier BatchCode</th>
+                //             <th className="" >Batch Date</th>
+                //             <th className="">
+                //                 <div>
+                //                     <samp >Stock Quantity</samp>
+                //                 </div>
+                //                 <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
+                //             <th className="" >
+                //                 <div>
+                //                     <samp >Quantity</samp>
+                //                 </div>
+                //                 <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
+                //             </th>
+                //         </tr>
+                //     </Thead>
+                //     <Tbody  >
+                //         {cellContent.map((index2) => {
+                //             return (
+                //                 < tr key={index1.id} >
+                //                     <td>
+                //                         <div style={{ width: "150px" }}>
+                //                             {index2.SystemBatchCode}
+                //                         </div>
+                //                     </td>
+                //                     <td>
+                //                         <div style={{ width: "150px" }}>
+                //                             {index2.BatchCode}
+                //                         </div>
+                //                     </td>
+                //                     <td>
+                //                         <div style={{ width: "100px" }}>
+                //                             {convertDatefunc(index2.BatchDate)}
+                //                         </div>
+                //                     </td>
+                //                     <td>
+                //                         <div style={{ width: "120px", textAlign: "right" }}>
+                //                             {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
+                //                         </div>
+                //                     </td>
+                //                     <td>
+                //                         <div style={{ width: "150px" }}>
+                //                             <Input type="text"
+                //                                 style={{ textAlign: "right" }}
+                //                                 key={`batchQty${index1.id}-${index2.id}`}
+                //                                 id={`batchQty${index1.id}-${index2.id}`}
+                //                                 defaultValue={index2.Qty}
+                //                                 onChange={(event) => StockQtyOnChange(event, index1, index2)}
+                //                             ></Input>
+                //                         </div>
+                //                     </td>
+                //                 </tr>
+                //             )
+                //         })}
+                //     </Tbody>
+                // </Table>
             ),
         },
         {//***************Rate********************************************************************* */
@@ -387,7 +385,76 @@ const Invoice = (props) => {
         totalSize: OrderItemDetails.length,
         custom: true,
     };
-
+    const expandRow = {
+        renderer: (index1)=> (
+            <Table className="table table-bordered table-responsive mb-1">
+            <Thead  >
+                <tr className="">
+                    <th className="">Batch Code </th>
+                    <th className="" >Supplier BatchCode</th>
+                    <th className="" >Batch Date</th>
+                    <th className="">
+                        <div>
+                            <samp >Stock Quantity</samp>
+                        </div>
+                        <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
+                    <th className="" >
+                        <div>
+                            <samp >Quantity</samp>
+                        </div>
+                        <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
+                    </th>
+                </tr>
+            </Thead>
+            <Tbody  >
+                {index1.StockDetails.map((index2) => {
+                    return (
+                        < tr key={index1.id} >
+                            <td>
+                                <div style={{ width: "150px" }}>
+                                    {index2.SystemBatchCode}
+                                </div>
+                            </td>
+                            <td>
+                                <div style={{ width: "150px" }}>
+                                    {index2.BatchCode}
+                                </div>
+                            </td>
+                            <td>
+                                <div style={{ width: "100px" }}>
+                                    {convertDatefunc(index2.BatchDate)}
+                                </div>
+                            </td>
+                            <td>
+                                <div style={{ width: "120px", textAlign: "right" }}>
+                                    {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
+                                </div>
+                            </td>
+                            <td>
+                                <div style={{ width: "150px" }}>
+                                    <Input type="text"
+                                        style={{ textAlign: "right" }}
+                                        key={`batchQty${index1.id}-${index2.id}`}
+                                        id={`batchQty${index1.id}-${index2.id}`}
+                                        defaultValue={index2.Qty}
+                                        onChange={(event) => StockQtyOnChange(event, index1, index2)}
+                                    ></Input>
+                                </div>
+                            </td>
+                        </tr>
+                    )
+                })}
+            </Tbody>
+        </Table>
+        //   <div>
+        //     <p>{ `This Expand row is belong to rowKey ${row.id}` }</p>
+        //     <p>You can render anything here, also you can add additional data on every row object</p>
+        //     <p>expandRow.renderer callback will pass the origin row object to you</p>
+        //   </div>
+        ),
+        showExpandColumn: true,
+        expandByColumnOnly: true
+      };
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
@@ -531,10 +598,15 @@ const Invoice = (props) => {
     };
 
     function goButtonHandler(event) {
-        // document.getElementById("customerselect").isDisabled = true
-        event.preventDefault();
+        document.getElementById("myInput11").flatpickr({
+            minDate: values.InvoiceDate,
+            maxDate: values.InvoiceDate,
+            defaultDate: values.InvoiceDate,
+            dateFormat: "Y-m-d",
+        });
+        // }catch(e){}
         // if (formValid(state, setState)) {
-        // debugger
+        debugger
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
             Customer: values.Customer.value,
@@ -704,17 +776,12 @@ const Invoice = (props) => {
                                                 <Flatpickr
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
-                                                    disabled={OrderItemDetails.length > 0 ? true : false}
                                                     className="form-control d-block bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
+                                                    id="myInput11"
                                                     options={{
-                                                        altInput: true,
-                                                        altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
-
                                                     }}
-
-                                                    onChange={InvoiceDateOnchange}
+                                                // onChange={InvoiceDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (
                                                     <span className="invalid-feedback">{isError.InvoiceDate}</span>
@@ -758,7 +825,11 @@ const Invoice = (props) => {
                                         <Button
                                             color="btn btn-outline-info border-1 font-size-12 " style={{ marginTop: '3px' }}
                                             onClick={(e) => {
-                                                // document.getElementById("customerselect").isDisabled = false
+                                                document.getElementById("myInput11").flatpickr({
+                                                    maxDate: currentDate,
+                                                    defaultDate: values.InvoiceDate,
+                                                    dateFormat: "Y-m-d",
+                                                });
                                                 dispatch(GoButton_post_For_Invoice_Success([]))
                                             }}
                                         >Change</Button>
@@ -775,6 +846,7 @@ const Invoice = (props) => {
                                     keyField={"id"}
                                     data={OrderItemDetails}
                                     columns={pagesListColumns}
+                                   
                                     search
                                 >
                                     {(toolkitProps) => (
@@ -787,6 +859,7 @@ const Invoice = (props) => {
                                                             responsive
                                                             bordered={false}
                                                             striped={false}
+                                                            expandRow={expandRow}
                                                             classes={"table  table-bordered"}
                                                             noDataIndication={
                                                                 <div className="text-danger text-center ">

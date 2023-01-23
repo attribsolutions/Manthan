@@ -95,7 +95,6 @@ function* getVendorGenFunc() {
 }
 
 function* getCustomerGenFunc() {
-  debugger
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     yield put(GetCustomerSuccess(response.Data));
