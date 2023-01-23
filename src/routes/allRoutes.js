@@ -112,6 +112,8 @@ import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 import Demand from "../pages/Inter Branch/Demand/Demand";
 import DemandList from "../pages/Inter Branch/Demand/DemandList"
 
+import Inward from "../pages/Inter Branch/Inward/Inward";
+
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -237,7 +239,7 @@ const userRoutes = [
   { path: path.DEMAND, component: Demand },
   { path: path.DEMAND_LIST, component: DemandList},
 
-
+  { path: path.INWARD, component: Inward },
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
