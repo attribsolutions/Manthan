@@ -410,21 +410,21 @@ export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_
 export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
 export const Material_Issue_Delete_API = (id) => del(`${url.POST_API_FOR_MATERIAL_ISSUE}/${id}`)// delete api
 
-
 // Production 
-export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION, data)// go button postapi
+export const Production_Post_API = (data) => post(url.POST_API_FOR_PRODUCTION, data)// go button postapi
 export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_LIST, filters)// go button postapi
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
+export const Production_Delete_API = (id) => del(`${url.POST_API_FOR_PRODUCTION}/${id}`)// delete api
 
 // Invoice
 export const Invoice_GoButton_Post_API = (data) => post(url.INVOICE_GO_BUTTON_POST_API, data)// go button postapi
 export const Invoice_Post_API = (data) => post(url.INVOICE_POST_API, data)//  postapi
 export const Invoice_Get_API = (data) => post(url.INVOICE_LIST_API, data)//  postapi
-
+export const Invoice_Delete_API = (id) => del(`${url.INVOICE_POST_API}/${id}`)// delete api
 // // Demand
-export const DemandPage_GoButton_API = () => post(url.GO_BUTTON_POST_API_FOR_DEMAND)//get api
-export const DemandPage_Post_API = () => post(url.POST_API_FOR_DEMAND)//get api
+export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND,data)//get api
+export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND,data)//get api
 export const DemandList_get_Filter_API = (filters) => post(url.DEMAND_LiST_BY_FILTERS, filters)
 export const Division = (data) => post(url.DIVISION_DROPDOWN,data)//dropdown api
 export const DemandPage_Edit_API = (data) => post(url.POST_API_FOR_DEMAND, data)

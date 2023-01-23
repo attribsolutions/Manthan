@@ -1,33 +1,34 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
+import { convertDatefunc, convertTimefunc, mainSppinerOnOff } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { Invoice_Delete_API, Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
-import { GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
+import { deleteInvoiceIdSuccess, getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
+import { DELETE_INVOICE_LIST_PAGE, GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
 
 // GO Botton Post API
-function* GoButtonInvoice_genfun({ data }) {
+function* GoButtonInvoice_genfun({ data, goBtnId }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Invoice_GoButton_Post_API, data);
 
     let convResp = response.Data.OrderItemDetails.map(i1 => {
-      debugger
+
       i1["OrderQty"] = i1.Quantity
       i1["UnitDrop"] = { value: i1.Unit, label: i1.UnitName, ConversionUnit: '1', Unitlabel: i1.UnitName }
       i1["InpStockQtyTotal"] = `${Number(i1.Quantity) * Number(i1.ConversionUnit)}`
       i1["StockTotal"] = 0
-      i1["StockUnit"] = ''
-
-      let f1 = i1.UnitDetails.find(e1 => (e1.Unit === i1.Unit));
+      i1["StockUnit"] = '';
+      i1["StockInValid"] = false;
+      i1["StockInvalidMsg"] = '';
 
       let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
 
       i1.StockDetails = i1.StockDetails.map(i2 => {
-        i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
 
-        let qty = Number(i2.BaseUnitQuantity) * Number(i1.ConversionUnit);
+        i1.StockUnit = i2.UnitName;
+        i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
+        let qty = Number(i2.BaseUnitQuantity);
 
         if ((count > qty) && !(count === 0)) {
           count = count - qty
@@ -42,16 +43,29 @@ function* GoButtonInvoice_genfun({ data }) {
         return i2
       });
 
-      count = 0
+      let t1 = Number(i1.StockTotal);
+      let t2 = Number(i1.Quantity) * i1.ConversionUnit;
+      if (t1 < t2) {
+        i1.StockInValid = true
+        let diffrence = Math.abs(i1.Quantity * i1.ConversionUnit - i1.StockTotal);
+        var msg1 = `Short Stock Quantity ${i1.Quantity} ${i1.UnitName}`
+        var msg2 = `Short Stock Quantity ${diffrence} ${i1.StockUnit}`
+        i1.StockInvalidMsg = (i1.StockTotal === 0) ? msg1 : msg2
+      };
+
+
       return i1
     })
+
     response.Data.OrderItemDetails = convResp
 
-    yield put(SpinnerState(false))
-    yield put(GoButton_post_For_Invoice_Success(convResp));
+    yield mainSppinerOnOff({ id: goBtnId, state: false })
+    // yield put(SpinnerState(false))
+    yield put(GoButton_post_For_Invoice_Success(response.Data));
 
   } catch (error) {
-    yield put(SpinnerState(false))
+    mainSppinerOnOff({ id: goBtnId, state: false })
+    // yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Go Button in Invoice ",
@@ -60,13 +74,16 @@ function* GoButtonInvoice_genfun({ data }) {
 }
 
 //post api for Invoice Master
-function* save_Invoice_Genfun({ data }) {
+function* save_Invoice_Genfun({ data, saveBtnid }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Invoice_Post_API, data);
     yield put(SpinnerState(false))
+
+    mainSppinerOnOff({ id: saveBtnid, state: false })
     yield put(postInvoiceMasterSuccess(response));
   } catch (error) {
+    mainSppinerOnOff({ id: saveBtnid, state: false })
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
@@ -98,10 +115,29 @@ function* InvoiceListGenFunc({ filters }) {
     }));
   }
 }
+
+// Invoice List delete List page
+function* DeleteInvoiceGenFunc({ id }) {
+
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Invoice_Delete_API, id);
+    yield put(SpinnerState(false))
+    yield put(deleteInvoiceIdSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Merssage in Work Order List Delete Method "
+    }));
+  }
+}
+
 function* InvoiceSaga() {
   yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonInvoice_genfun)
   yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
   yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
+  yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
 }
 
 export default InvoiceSaga;

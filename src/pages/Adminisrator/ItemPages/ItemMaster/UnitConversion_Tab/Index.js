@@ -2,6 +2,7 @@ import React from 'react'
 import Select from 'react-select'
 import { Tbody, Thead } from 'react-super-responsive-table'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row, Table } from 'reactstrap'
+import { unitConversionInitial } from '../itemIndex';
 
 export default function UnitConverstion(props) {
 
@@ -17,61 +18,47 @@ export default function UnitConverstion(props) {
     function baseunitOnchange(event) {
 
         const val = { ...formValue }
+        const a1 = { ...unitConversionInitial, Unit: event, Conversion: 1, IsBase: true }
         val["BaseUnit"] = event
         setFormValue(val)
-
-        if (TableData[0]) {
-            settable([{
-                Conversion: '1',
-                Unit: event,
-                SOUnit: false,
-                IsBase: false
-            }])
-        }
+        settable([a1])
     }
 
-    function addRow_Handler() {
-
-        const newarr = [...TableData, {
-            Conversion: '',
-            Unit: '',
-            POUnit: false,
-            SOUnit: false,
-            IsBase: false
-        }]
+    function addRow_Handler(ID) {
+        let a1 = { ...unitConversionInitial, id: ID + 1 }
+        const newarr = [...TableData, a1]
+        debugger
         settable(newarr)
     }
 
-    function deleteRow_Handler(key) {
-
-        const found = TableData.filter((i, k) => {
-            return !(k === key)
+    function deleteRow_Handler(Id) {
+        const found = TableData.filter((i) => {
+            return !(i.id === Id)
         })
+        debugger
         settable(found)
     }
 
-    function baseUnit2_onChange(event, type = '', key) {
+    function baseUnit2_onChange(event, type = '', Id) {
+        settable(e1 => {
+            const newarr = e1.map((index) => {
 
-        const found = TableData.find((i, k) => {
-            return (k === key)
+                if (((type === 'POUnit') && !(index.id === Id))) {
+                    index.POUnit = false
+                };
+                if (((type === 'SOUnit') && !(index.id === Id))) {
+                    index.SOUnit = false
+                };
+                if (index.id === Id) { index[type] = event };
+                return index
+            })
+            return (newarr)
         })
+    };
 
-        found.type = event;
-
-        settable(e1 => (e1.map((index, k) => {
-            if ((type === 'POUnit') && !(k === key)) {
-                index.SOUnit = false
-            };
-            if ((type === 'SOUnit') && !(k === key)) {
-                index.POUnit = false
-            }
-            return (k === key) ? found : index
-        })))
-    }
-
+    //start  => BaseUnit DropDown select id(array value) ,Table BaseUnit dropdown option filter is notinclude BaseUnit DropDown select +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     let BaseUnit_DropdownOptions2 = []
     BaseUnit.forEach(myFunction);
-
     function myFunction(item, index, arr) {
 
         if (!(formValue.BaseUnit.label === item.Name)) {
@@ -81,10 +68,10 @@ export default function UnitConverstion(props) {
             };
         }
     }
+    //end Table BaseUnit dropdown option ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     const tbodyfunction = () => {
-
         const newarr = []
-
         TableData.forEach((index, key) => {
             newarr.push(
                 (
@@ -99,7 +86,7 @@ export default function UnitConverstion(props) {
                                         placeholder="Select..."
                                         value={index.Unit}
                                         options={BaseUnit_DropdownOptions2}
-                                        onChange={(e) => baseUnit2_onChange(e, "Unit", key)}
+                                        onChange={(e) => baseUnit2_onChange(e, "Unit", index.id)}
                                     />
                                 </Col>
                                 < Label className=" col-sm-2 col-form-label">=</Label>
@@ -115,8 +102,8 @@ export default function UnitConverstion(props) {
                                         placeholder="Select"
                                         disabled={(key === 0) ? true : false}
                                         autoComplete="off"
-                                        defaultValue={index.Conversion}
-                                        onChange={(event) => baseUnit2_onChange(event.target.value, "Conversion", key,)}
+                                        value={index.Conversion}
+                                        onChange={(event) => baseUnit2_onChange(event.target.value, "Conversion", index.id)}
                                     >
                                     </Input>
                                 </Col>
@@ -124,16 +111,16 @@ export default function UnitConverstion(props) {
                             </Row>
                         </td>
 
-                        <td>
+                        <td >
                             <div>
                                 <Input
                                     type="radio"
-                                    id={`POUnit-${key}`}
-                                    key={`POUnit-${key}`}
-                                    name="btnradio"
-                                    value={index.POUnit}
-                                    checked={TableData[key].POUnit}
-                                    onChange={(e) => baseUnit2_onChange(e.target.checked, "POUnit", key)}
+                                    // id={`POUnit-${key}`}
+                                    key={`POUnit-${index.id}`}
+                                    // name={"btnPOUnit"}
+                                    checked={index.POUnit}
+                                    // value={TableData[key].POUnit}
+                                    onChange={(e) => baseUnit2_onChange(e.target.checked, "POUnit", index.id)}
                                 >
                                 </Input>
                             </div>
@@ -143,12 +130,12 @@ export default function UnitConverstion(props) {
                             <div>
                                 <Input
                                     type="radio"
-                                    id={`SOUnit-${key}`}
-                                    name="btnradio1"
-                                    key={`SOUnit-${key}`}
-                                    value={index.SOUnit}
-                                    checked={TableData[key].SOUnit}
-                                    onChange={(e) => baseUnit2_onChange(e.target.checked, "SOUnit", key)}
+                                    // id={`SOUnit-${key}`}
+                                    // name={'btnSOUnit'}
+                                    key={`SOUnit-${index.id}`}
+                                    checked={index.SOUnit}
+                                    // value={TableData[key].SOUnit}
+                                    onChange={(e) => baseUnit2_onChange(e.target.checked, "SOUnit", index.id)}
                                 >
                                 </Input>
                             </div>
@@ -156,14 +143,18 @@ export default function UnitConverstion(props) {
 
                         <td>
                             {(TableData.length === key + 1) ?
+                                //Table show Only length is greter than =1
+
                                 <Row className="">
                                     <Col md={6} className=" mt-3">
-                                        {(TableData.length > 1) ? <>
-                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                deleteRow_Handler(key)
-                                            }} >
-                                            </i>
-                                        </> : <Col md={6} ></Col>}
+                                        {(TableData.length > 1) ?
+                                            //(Add New RowButton and delete Button) vissible Last Index Of The table row
+                                            <>
+                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                    deleteRow_Handler(index.id)
+                                                }} >
+                                                </i>
+                                            </> : <Col md={6} ></Col>}
 
                                     </Col>
 
@@ -173,18 +164,19 @@ export default function UnitConverstion(props) {
                                             className=" button_add"
                                             color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
-                                            onClick={() => { addRow_Handler(key) }}
+                                            onClick={() => { addRow_Handler(index.id) }}
                                         >
                                             <i className="dripicons-plus "></i>
                                         </Button>
                                     </Col>
                                 </Row>
                                 :
-
-                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                    deleteRow_Handler(key)
+                                //if BaseUnit Id and table-Unit id same then Selete Button hide
+                                (!(index.IsBase)) ? < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                    deleteRow_Handler(index.id)
                                 }} >
                                 </i>
+                                    : <></>
                             }
                         </td>
                     </tr>

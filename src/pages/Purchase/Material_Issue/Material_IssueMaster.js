@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
     Col,
@@ -21,7 +20,6 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-    onChangeText,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -36,13 +34,10 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { handleKeyDown } from "../Order/OrderPageCalulation";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 const MaterialIssueMaster = (props) => {
 
@@ -50,12 +45,10 @@ const MaterialIssueMaster = (props) => {
     const history = useHistory()
 
     const fileds = {
-        // id: "",
         MaterialIssueDate: currentDate,
         ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -173,6 +166,7 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     useEffect(() => {
+        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
@@ -244,7 +238,7 @@ const MaterialIssueMaster = (props) => {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
-    }, [pageField])
+    }, [pageField]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
@@ -256,290 +250,6 @@ const MaterialIssueMaster = (props) => {
         NumberOfLot: index.NumberOfLot
     }));
 
-    function ItemOnchange(hasSelect, evn) {
-        onChangeSelect({ hasSelect, evn, state, setState });
-        dispatch(Breadcrumb_inputName(hasSelect.label))
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        setState((i) => {
-            i.values.ItemName = hasSelect
-            i.values.NumberOfLot = hasSelect.NumberOfLot;
-            i.values.LotQuantity = hasSelect.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.MaterialIssueDate.valid = true;
-            return i
-        })
-    }
-
-    function goButtonHandler(event) {
-        event.preventDefault();
-        if (state.values.LotQuantity == "0") {
-            alert("Quantity Can Not be 0")
-        } else
-            if (formValid(state, setState)) {
-
-                const jsonBody = JSON.stringify({
-                    WorkOrder: values.ItemName.value,
-                    Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
-                    Quantity: parseInt(values.LotQuantity)
-                });
-
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
-            }
-    }
-
-    function ItemOnchange(e) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        setItemselectonchange(e)
-        setState((i) => {
-            i.values.ItemName = {
-                value: e.value,
-                label: e.label,
-                Item: e.Item,
-                NoLot: e.NumberOfLot,
-                lotQty: e.Quantity
-            };
-            i.values.NumberOfLot = e.NumberOfLot;
-            i.values.LotQuantity = e.Quantity;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            i.hasValid.ItemName.valid = true;
-            return i
-        })
-    }
-
-
-    function Quantitychange(event) {
-
-
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-            Itemselectonchange.Quantity :
-            Itemselect.Quantity, Number(event.target.value)));
-        event.target.value = value1
-        if (event.target.value === "NaN") {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.LotQuantity = value1
-            // i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
-
-    function NumberOfLotchange(event) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselect.NumberOfLot, Number(event.target.value)));
-        event.target.value = value1
-        if ((event.target.value === "NaN")) {
-            value1 = 0
-        }
-        // onChangeText({ event, state, setState });
-        setState((i) => {
-            i.values.NumberOfLot = value1
-            i.hasValid.NumberOfLot.valid = true;
-            // i.hasValid.LotQuantity.valid = true;
-            return i
-        })
-    }
-
-    const handleChange = (event, index1, index2) => {
-
-        let input = event.target.value;
-        let min = 0;
-        let max = index2.BaseUnitQuantity;
-        let val1 = Math.max(Number(min), Math.min(Number(max), Number(input)));
-        event.target.value = input;
-        if ((event.target.value === "NaN")) {
-            val1 = 0
-        };
-
-        let qtysum = 0
-        index1.BatchesData.forEach((i) => {
-            if (!(i.BaseUnitQuantity)) {
-                i["BaseUnitQuantity"] = 0
-            }
-            if (!(i.id === index2.id)) {
-                qtysum = qtysum + Number(i.Qty)
-            }
-        });
-        qtysum = qtysum + val1;
-        index2.Qty = val1;
-
-        // var requreVal = index1.Quantity - qtysum
-
-        // if (qtysum <= index1.Quantity) {
-        //     //   if(qtysome=== index1.Quantity)  {
-        //     //     isvalid=!isvalid
-        //     //   };
-        //     event.target.value = val1;
-        //     index2.Qty = val1
-        // } else if (max >= requreVal) {
-        //     // if(requreVal=== index1.Quantity)  {
-        //     //     isvalid=!isvalid
-        //     //   };
-        //     event.target.value = requreVal;
-        //     index2.Qty = requreVal
-        // }
-        // else {
-
-        //     event.target.value = max;
-        //     index2.Qty = max
-        // }
-        // qtysum2 = qtysum2 + Number(index2.Qty)
-        debugger
-        if ((qtysum === index1.Quantity)) {
-            try {
-                document.getElementById(`ItemName${index1.id}`).style.color = ""
-                document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
-                index1["invalid"] = false
-                index1["invalidMsg"] = ''
-
-            } catch (e) { }
-        } else {
-            try {
-                // document.getElementById(`ItemName${index1.id}`).style.color = "red"
-                const msg = `Stock invalid.`;
-                index1["invalid"] = true;
-                index1["invalidMsg"] = msg;
-
-                document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
-            } catch (e) { }
-        }
-
-        // let value2 = Math.max(Number(min), Math.min(Number(max), Number(value)));
-        // event.target.value = val1;
-        // index2.Qty = val1
-
-
-
-        // let input = event.target.value;
-        // if (input == '') { input = 0 }
-        // input = parseFloat(input);
-        // let compareval = index.BaseUnitQuantity;
-        // compareval = parseFloat(compareval);
-
-        // if (input > compareval) {
-        //     try {
-        //         document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = "red"
-        //         user["StockInvalid"] = true
-        //     }
-        //     catch (e) { }
-        // } else {
-        //     document.getElementById(`stock${user.id}-${index.id}`).style.borderColor = ""
-        // }
-        // debugger
-        // if (user.CompareStockQty === undefined) {
-        //     user["CompareStockQty"] = 0
-        // }
-        // user["CompareStockQty"] = user["CompareStockQty"] + input;
-        // if (user.CompareStockQty === user.Quantity) {
-        //     user["StockInvalid"] = true
-        // } else {
-        //     user["StockInvalid"] = false
-        // }
-        // if (!user.StockInvalid) {
-        //     try {
-        //         document.getElementById(`ItemName${user.id}`).style.color = "red"
-        //     } catch (e) { }
-        // } else {
-        //     try {
-        //         document.getElementById(`ItemName${user.id}`).style.color = ""
-        //     } catch (e) { }
-        // }
-        // index.Qty = event.target.value
-    };
-
-
-
-    const SaveHandler = (event) => {
-        debugger
-        const validMsg = []
-
-        const MaterialIssueItems = []
-        GoButton.map((index) => {
-            debugger
-            let Stock = index.BatchesData.map((i) => {
-                return i.BaseUnitQuantity
-            })
-            var TotalStock = 0;
-            Stock.forEach(x => {
-                TotalStock += parseFloat(x);
-            });
-            var OrderQty = parseFloat(index.Quantity)
-            if (OrderQty > TotalStock) {
-                {
-                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-                };
-            }
-            if (index["invalid"]) {
-                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
-            };
-
-            index.BatchesData.map((ele) => {
-                MaterialIssueItems.push({
-                    Item: index.Item,
-                    Unit: index.Unit,
-                    WorkOrderQuantity: index.Quantity,
-                    BatchCode: ele.BatchCode,
-                    BatchDate: ele.BatchDate,
-                    SystemBatchDate: ele.SystemBatchDate,
-                    SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty),
-                    BatchID: ele.id,
-                    LiveBatchID: ele.LiveBatchID
-                })
-            })
-        })
-
-        const FilterData = MaterialIssueItems.filter((index) => {
-            return (index.IssueQuantity > 0)
-        })
-
-        event.preventDefault();
-        if (formValid(state, setState)) {
-
-            if (validMsg.length > 0) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: JSON.stringify(validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
-                return
-            }
-            const jsonBody = JSON.stringify({
-                MaterialIssueDate: values.MaterialIssueDate,
-                NumberOfLot: values.NumberOfLot,
-                LotQuantity: values.LotQuantity,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
-                Item: Itemselect.Item,
-                Unit: Itemselect.Unit,
-                MaterialIssueItems: FilterData,
-                MaterialIssueWorkOrder: [
-                    {
-                        WorkOrder: Itemselect.id,
-                        Bom: Itemselect.Bom
-
-                    }
-                ]
-            }
-            );
-            if (pageMode === mode.edit) {
-            }
-            else {
-                dispatch(postMaterialIssue(jsonBody));
-            }
-        };
-    }
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -660,6 +370,230 @@ const MaterialIssueMaster = (props) => {
         totalSize: GoButton.length,
         custom: true,
     };
+
+    function ItemOnchange(hasSelect, evn) {
+        onChangeSelect({ hasSelect, evn, state, setState });
+        dispatch(Breadcrumb_inputName(hasSelect.label))
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        setState((i) => {
+            i.values.ItemName = hasSelect
+            i.values.NumberOfLot = hasSelect.NumberOfLot;
+            i.values.LotQuantity = hasSelect.Quantity;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.LotQuantity.valid = true;
+            i.hasValid.MaterialIssueDate.valid = true;
+            return i
+        })
+    }
+
+    function goButtonHandler(event) {
+        event.preventDefault();
+        if (state.values.LotQuantity == "0") {
+            alert("Quantity Can Not be 0")
+        } else
+            if (formValid(state, setState)) {
+
+                const jsonBody = JSON.stringify({
+                    WorkOrder: values.ItemName.value,
+                    Item: values.ItemName.Item,
+                    Company: userCompany(),
+                    Party: userParty(),
+                    Quantity: parseInt(values.LotQuantity)
+                });
+
+                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+            }
+    }
+
+    function ItemOnchange(e) {
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        setItemselectonchange(e)
+        setState((i) => {
+            i.values.ItemName = {
+                value: e.value,
+                label: e.label,
+                Item: e.Item,
+                NoLot: e.NumberOfLot,
+                lotQty: e.Quantity
+            };
+            i.values.NumberOfLot = e.NumberOfLot;
+            i.values.LotQuantity = e.Quantity;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.LotQuantity.valid = true;
+            i.hasValid.ItemName.valid = true;
+            return i
+        })
+    }
+
+    function Quantitychange(event) {
+
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
+            Itemselectonchange.Quantity :
+            Itemselect.Quantity, Number(event.target.value)));
+        event.target.value = value1
+        if (event.target.value === "NaN") {
+            value1 = 0
+        }
+        // onChangeText({ event, state, setState });
+        setState((i) => {
+            i.values.LotQuantity = value1
+            // i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.LotQuantity.valid = true;
+            return i
+        })
+    }
+
+    function NumberOfLotchange(event) {
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        let value1 = Math.max('', Math.min(Itemselect.NumberOfLot, Number(event.target.value)));
+        event.target.value = value1
+        if ((event.target.value === "NaN")) {
+            value1 = 0
+        }
+        // onChangeText({ event, state, setState });
+        setState((i) => {
+            i.values.NumberOfLot = value1
+            i.hasValid.NumberOfLot.valid = true;
+            // i.hasValid.LotQuantity.valid = true;
+            return i
+        })
+    }
+
+    const handleChange = (event, index1, index2) => {
+
+        let input = event.target.value
+
+        let result = /^\d*(\.\d{0,3})?$/.test(input);
+        let val1 = 0;
+        if (result) {
+            let v1 = Number(index2.BaseUnitQuantity);
+            let v2 = Number(input)
+            if (v1 >= v2) { val1 = input }
+            else { val1 = v1 };
+
+        } else if (((index2.Qty >= 0) && (!(input === '')))) {
+            val1 = index2.Qty
+        } else {
+            val1 = 0
+        }
+
+        event.target.value = val1;
+
+        let Qtysum = 0
+        index1.BatchesData.forEach((i) => {
+            if (!(i.id === index2.id)) {
+                Qtysum = Number(Qtysum) + Number(i.Qty)
+            }
+        });
+
+        Qtysum = Number(Qtysum) + Number(val1);
+        index2.Qty = val1;
+        let diffrence = Math.abs(index1.Quantity - Qtysum);
+
+        if ((Qtysum === index1.Quantity)) {
+            try {
+                document.getElementById(`ItemName${index1.id}`).style.color = ""
+                document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
+                index1["invalid"] = false
+                index1["invalidMsg"] = ''
+
+            } catch (e) { }
+        } else {
+            try {
+                const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
+                    : (`Short Quantity ${diffrence} ${index1.UnitName}`)
+                index1["invalid"] = true;
+                index1["invalidMsg"] = msg;
+
+                document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
+            } catch (e) { }
+        }
+    };
+
+    const SaveHandler = (event) => {
+        event.preventDefault();
+        const validMsg = []
+
+        const MaterialIssueItems = []
+        GoButton.map((index) => {
+
+
+            var TotalStock = 0;
+            index.BatchesData.forEach(i => {
+                TotalStock += Number(i.BaseUnitQuantity);
+            });
+
+            var OrderQty = Number(index.Quantity)
+            if (OrderQty > TotalStock) {
+                {
+                    validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+                };
+            }
+            if (index["invalid"]) {
+                validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
+            };
+
+            index.BatchesData.map((ele) => {
+                MaterialIssueItems.push({
+                    Item: index.Item,
+                    Unit: index.Unit,
+                    WorkOrderQuantity: index.Quantity,
+                    BatchCode: ele.BatchCode,
+                    BatchDate: ele.BatchDate,
+                    SystemBatchDate: ele.SystemBatchDate,
+                    SystemBatchCode: ele.SystemBatchCode,
+                    IssueQuantity: parseInt(ele.Qty),
+                    BatchID: ele.id,
+                    LiveBatchID: ele.LiveBatchID
+                })
+            })
+        })
+
+        const FilterData = MaterialIssueItems.filter((index) => {
+            return (index.IssueQuantity > 0)
+        })
+
+
+        if (formValid(state, setState)) {
+
+            if (validMsg.length > 0) {
+                dispatch(AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: JSON.stringify(validMsg),
+                    RedirectPath: false,
+                    AfterResponseAction: false
+                }));
+                return
+            }
+            const jsonBody = JSON.stringify({
+                MaterialIssueDate: values.MaterialIssueDate,
+                NumberOfLot: values.NumberOfLot,
+                LotQuantity: values.LotQuantity,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy(),
+                Company: userCompany(),
+                Party: userParty(),
+                Item: Itemselect.Item,
+                Unit: Itemselect.Unit,
+                MaterialIssueItems: FilterData,
+                MaterialIssueWorkOrder: [
+                    {
+                        WorkOrder: Itemselect.id,
+                        Bom: Itemselect.Bom
+
+                    }
+                ]
+            }
+            );
+            if (pageMode === mode.edit) {
+            }
+            else {
+                dispatch(postMaterialIssue(jsonBody));
+            }
+        };
+    }
 
     if (!(userPageAccessState === '')) {
         return (

@@ -29,7 +29,7 @@ import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import Invoice from "./Invoice";
-import { getIssueListPage } from "../../../store/Sales/Invoice/action";
+import { deleteInvoiceId, deleteInvoiceIdSuccess, getIssueListPage } from "../../../store/Sales/Invoice/action";
 
 const InvoiceList = () => {
 
@@ -49,7 +49,7 @@ const InvoiceList = () => {
             customer: state.SupplierReducer.customer,
             tableList: state.InvoiceReducer.Invoicelist,
             GRNitem: state.GRNReducer.GRNitem,
-            deleteMsg: state.OrderReducer.deleteMsg,
+            deleteMsg: state.InvoiceReducer.deleteMsg,
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
@@ -66,10 +66,10 @@ const InvoiceList = () => {
 
     const action = {
         getList: getIssueListPage,
-        deleteId: deleteOrderId,
+        deleteId: deleteInvoiceId,
         postSucc: postMessage,
         updateSucc: updateOrderIdSuccess,
-        deleteSucc: deleteOrderIdSuccess
+        deleteSucc: deleteInvoiceIdSuccess
     }
 
     // Featch Modules List data  First Rendering

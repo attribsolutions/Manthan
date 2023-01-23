@@ -1,7 +1,6 @@
 import {
   GET_PARTY_ITEM_LIST_SUCCESS,
   GET_PARTY_LIST_SUCCESS,
-  GET_SUPPLIER_SUCCESS,
   POST_PARTYITEMS_SUCCESS,
 } from "./actionType"
 const INIT_STATE = {
@@ -10,9 +9,8 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
-  supplier: [],
   partyItem: [],
-  partyList:[]
+  partyList: []
 }
 
 const PartyItemsReducer = (state = INIT_STATE, action) => {
@@ -31,11 +29,6 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
         partyList: action.payload,
       }
 
-    case GET_SUPPLIER_SUCCESS:
-      return {
-        ...state,
-        supplier: action.payload,
-      }
     case GET_PARTY_ITEM_LIST_SUCCESS:
       return {
         ...state,

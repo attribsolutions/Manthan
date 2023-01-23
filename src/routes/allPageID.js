@@ -117,12 +117,13 @@ export const PRODUCTION_ADD_Mode_2 = 123
 export const SALE_ORDER = 117
 export const SALE_ORDER_lIST = 118
 
-
 export const INVOICE = 121
 export const INVOICE_LIST =122
 
-
 //******************************* Inter Branch ************************************//
-export const DEMAND = 126
-export const DEMANDLIST = 127
 
+export const DEMAND = 126
+export const DEMAND_LIST = 127
+
+export const INWARD = 128
+export const INWARD_LIST = 129
