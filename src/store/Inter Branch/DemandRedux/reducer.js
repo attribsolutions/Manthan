@@ -12,6 +12,7 @@ import {
 } from "./actionType"
 
 const INIT_STATE = {
+    
     GoButton:null,
     InterBranches: [],
     editData: { Status: false, Items: [] },
@@ -21,7 +22,6 @@ const INIT_STATE = {
     demandList: [],
     demandlistFilter: { fromdate: currentDate, todate: currentDate,divisionSelect: {value:'', label:""} },
 }
-
 const DemandReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 

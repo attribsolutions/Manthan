@@ -18,13 +18,10 @@ import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { excelDownCommonFunc,  userCompany,  userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { MetaTags } from "react-meta-tags";
-import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { MetaTags } from "react-meta-tags";
 
 
 
@@ -50,7 +47,6 @@ const DemandList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    debugger
     const { userAccess, pageField, InterBranches, tableList, DemandlistFilter } = reducers;
     //  const {fromdate, todate, InterbranchesSelect} = demandlistFilter;
     const page_Id = ( pageId.DEMAND_LIST);
@@ -66,11 +62,9 @@ const DemandList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-         const page_Id = ( pageId.DEMAND_LIST);
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Demand Count"} :0`))
-        // goButtonHandler(true)
 
     }, []);
 
@@ -106,50 +100,6 @@ const DemandList = () => {
         }
     }, [userAccess])
 
-    // useEffect(() => {
-    //     if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-    //         history.push({
-    //             pathname: GRNitem.path,
-    //             pageMode: GRNitem.pageMode,
-    //         })
-    //     }
-    // }, [GRNitem])
-
-    // const makeBtnFunc = (list = []) => {
-
-    //     var isGRNSelect = ''
-    //     var challanNo = ''
-    //     const grnRef = []
-    //     if (list.length > 0) {
-    //         list.forEach(ele => {
-    //             if (ele.hasSelect) {
-    //                 grnRef.push({
-    //                     Invoice: null,
-    //                     Order: ele.id,
-    //                     ChallanNo: ele.FullOrderNumber,
-    //                     Inward: false
-    //                 });
-    //                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-    //                 challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-    //             }
-    //         });
-
-    //         if (isGRNSelect) {
-
-    //             isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-    //             challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
-    //             const jsonBody = JSON.stringify({
-    //                 OrderIDs: isGRNSelect
-    //             })
-
-    //             dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
-
-    //         } else {
-    //             alert("Please Select Order1")
-    //         }
-    //     }
-    // }
 
     function editBodyfunc(rowData) {
 
@@ -163,10 +113,7 @@ const DemandList = () => {
         dispatch(editDemandId(jsonBody, Mode));
     }
 
-    // function downBtnFunc(row) {
-    //     var ReportType = report.order1;
-    //     dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
-    // }
+   
 
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
