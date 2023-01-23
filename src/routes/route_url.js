@@ -122,5 +122,5 @@ export const INVOICE_LIST = "/InvoiceList"
 export const DEMAND= "/Demand"
 export const DEMAND_LIST= "/DemandList"
 
-export const INWARD ="/InterBranchInward"
-export const INWARD_LIST = "/InterBranchInwardList"
+export const INWARD ="/Inward"
+export const INWARD_LIST = "/InwardList"
