@@ -74,9 +74,6 @@ const Demand = (props) => {
     const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [demanddate, setdemanddate] = useState(currentDate)
-    const [poFromDate, setpoFromDate] = useState(currentDate);
-    const [poToDate, setpoToDate] = useState(currentDate);
-    const [orderTypeSelect, setorderTypeSelect] = useState('');
     const [divisionSelect, setdivisionSelect] = useState('');
     const [demandItemTable, setdemandItemTable] = useState([])
     const [demandAmount, setDemandAmount] = useState(0);
@@ -87,18 +84,17 @@ const Demand = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        InterBranches,
+        division,
         GoButton,
     } = useSelector((state) => ({
         postMsg: state.DemandReducer.postMsg,
         updateMsg: state.DemandReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        InterBranches: state.DemandReducer.InterBranches,
+        division: state.DemandReducer.division,
         GoButton: state.DemandReducer.GoButton,
     }));
 
-    // const { DemandItems = [] } = GoButton
 
     useEffect(() => {
         const page_Id = pageId.DEMAND
@@ -188,7 +184,7 @@ const Demand = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            // dispatch(postDemandSuccess({ Status: false }))
+             dispatch(postDemandSuccess({ Status: false }))
             dispatch(postGoButtonForDemandSuccess([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
@@ -281,7 +277,7 @@ const Demand = (props) => {
     }, [pageField])
 
 
-    const divisiondropdown_Options = InterBranches.map((i) => ({ label: i.Name, value: i.id }))
+    const divisiondropdown_Options = division.map((i) => ({ label: i.Name, value: i.id }))
 
 
     useEffect(() => {
