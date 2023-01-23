@@ -6,27 +6,23 @@ import {
     Input,
     Label,
     Row,
-    Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
-    onChangeDate,
     onChangeSelect,
     onChangeText,
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
-    convertDatefunc,
     createdBy,
     currentDate,
     saveDissable,
@@ -36,22 +32,25 @@ import {
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
-import * as url from "../../../routes/route_url"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+ import * as url from "../../../routes/route_url"
+ import { DEMAND_LIST } from "../../../routes/route_url";
 import {
+    editDemandIdSuccess,
     postDemand,
     postDemandSuccess,
     postDivision,
     postGoButtonForDemand,
     postGoButtonForDemandSuccess,
-    updateDemandId
+    updateDemandId,
+    updateDemandIdSuccess
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { Amount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+
 let comment = ''
+let description = ''
 let editVal = {}
 
 const Demand = (props) => {
@@ -78,10 +77,10 @@ const Demand = (props) => {
     const [poFromDate, setpoFromDate] = useState(currentDate);
     const [poToDate, setpoToDate] = useState(currentDate);
     const [orderTypeSelect, setorderTypeSelect] = useState('');
-
+    const [divisionSelect, setdivisionSelect] = useState('');
     const [demandItemTable, setdemandItemTable] = useState([])
     const [demandAmount, setDemandAmount] = useState(0);
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -103,7 +102,7 @@ const Demand = (props) => {
 
     useEffect(() => {
         const page_Id = pageId.DEMAND
-        dispatch(postGoButtonForDemandSuccess([]))
+         dispatch(postGoButtonForDemandSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -145,7 +144,6 @@ const Demand = (props) => {
 
 
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
@@ -156,46 +154,41 @@ const Demand = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
+                dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${hasEditVal.DemandAmount}`))
 
-                // // setItemselect(hasEditVal)
-                // const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
-                // setState((i) => {
-                //     i.values.MaterialIssueDate = currentDate
-                //     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
-                //     i.values.NumberOfLot = NumberOfLot;
-                //     i.values.LotQuantity = EstimatedOutputQty;
-                //     i.hasValid.ItemName.valid = true;
-                //     i.hasValid.MaterialIssueDate.valid = true;
-                //     i.hasValid.NumberOfLot.valid = true;
-                //     i.hasValid.LotQuantity.valid = true;
-                //     return i
-                // })
-           // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+                setdemanddate(hasEditVal.DemandDate)
+                setdivisionSelect({
+                    label: hasEditVal.Division,
+                    value: hasEditVal.Division
+                })
+                comment = hasEditVal.Comment
+                editVal = {}
+                editVal = hasEditVal
+                setDemandAmount(hasEditVal.DemandAmount)
 
-                const jsonBody = JSON.stringify({
-                   
-                    Supplier:values.Division.value,
-                    Customer: userParty(),
-                    EffectiveDate: demanddate,
-                    DemandID: (pageMode === mode.save) ? 0 : editVal.id
+                const demandItems = hasEditVal.demandItems.map((ele, k) => {
+                    ele["id"] = k + 1
+
+                    return ele
                 });
-                dispatch(postGoButtonForDemand(jsonBody));
-                seteditCreatedBy(hasEditVal.CreatedBy)
+                setdemandItemTable(demandItems)
             }
+            dispatch(editDemandIdSuccess({ Status: false }))
+        } else {
+            dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :0`))
+            
         }
     }, [])
 
 
     useEffect(() => {
-              if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postDemandSuccess({ Status: false }))
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            // dispatch(postDemandSuccess({ Status: false }))
             dispatch(postGoButtonForDemandSuccess([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
@@ -218,7 +211,7 @@ const Demand = (props) => {
         }
         else if (postMsg.Status === true) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
-             dispatch(postDemandSuccess({ Status: false }))
+            dispatch(postDemandSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -233,14 +226,15 @@ const Demand = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-             setState(() => resetFunction(fileds, state))// Clear form values 
-             saveDissable(false);//save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
+            comment=''
             history.push({
-                pathname: url.DEMAND_LIST,
+                pathname: DEMAND_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
-            //  dispatch(updateBOMListSuccess({ Status: false }));
+            dispatch(updateDemandIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -273,9 +267,9 @@ const Demand = (props) => {
             sum = sum + amt
         });
         setDemandAmount(sum.toFixed(2))
-        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
-        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
         dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
+        //  dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
     };
 
 
@@ -301,12 +295,12 @@ const Demand = (props) => {
 
 
     const goButtonHandler = () => {
-    
+
         const jsonBody = JSON.stringify({
             Supplier: values.Division.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
-             DemandID: (pageMode === mode.save) ? 0 : editVal.id  
+            DemandID: (pageMode === mode.save) ? 0 : editVal.id
         })
 
         dispatch(postGoButtonForDemand(jsonBody))
@@ -316,78 +310,126 @@ const Demand = (props) => {
         setdemanddate(date)
     };
 
-   
-    const SaveHandler = (event) => {
-        event.preventDefault();
-        const jsonBody = JSON.stringify({
 
-                DemandDate: demanddate,
-                DemandAmount: "102.00",
-                Description: "",
-                Customer: 4,
-                Supplier: 5,
-                Division:4,
-                BillingAddressID: 4,
-                ShippingAddressID: 4,
-                Inward: 0,
-                MaterialIssue: null,
-                CreatedBy:1,
-                UpdatedBy:1,
-                DemandItem: [
-                    {
-                        Item: 62,
-                        Quantity: "10",
-                        Rate: "10.00",
-                        Unit: 362,
-                        BaseUnitQuantity: "1.000",
-                        Margin: "",
-                        BasicAmount: "100.00",
-                        GSTAmount: "2.00",
-                        GST: 61,
-                        CGST: "1.00",
-                        SGST: "1.00",
-                        IGST: 0,
-                        CGSTPercentage: 1,
-                        SGSTPercentage: 1,
-                        IGSTPercentage: 0,
-                        Amount: "102.00",
-                        IsDeleted: 0,
-                        Comment: "asdasdas"
-                    }
-                ]
+    const SaveHandler = () => {
+        debugger
+        const validMsg = []
+        const itemArr = []
+        function isChanged({ i, isedit, isdel }) {
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
+            const arr = {
+                id: i.editrowId,
+                Item: i.Item_id,
+                Quantity: isdel ? 0 : i.Quantity,
+                Rate: i.Rate,
+                Unit: i.Unit_id,
+                BaseUnitQuantity: i.BaseUnitQuantity,
+                Margin: "",
+                BasicAmount: basicAmt.toFixed(2),
+                GSTAmount: cgstAmt.toFixed(2),
+                GST: i.GST_id,
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
+                IGSTPercentage: 0,
+                Amount: i.Amount,
+                IsDeleted: isedit,
+                Comment: i.Comment
             }
+            itemArr.push(arr)
+        };
+
+        function demandItem({ i, isedit }) {
+            if ((i.Quantity > 0) && (i.Rate > 0)) {
+                var isdel = false;
+                isChanged({ i, isedit, isdel })
+            }
+            else if ((i.Quantity < 1) && (i.editrowId)) {
+                var isdel = true;
+                isChanged({ i, isedit, isdel })
+            };
+        }
+        demandItemTable.forEach(i => {
+
+            if ((i.Quantity > 0) && !(i.Rate > 0)) {
+                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+            }
+        
+             if (pageMode === "edit") {
+                var ischange = (!(i.poQty === i.Quantity) ||
+                    !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
+                if (ischange && (i.poQty === 0)) {
+                    var isedit = 0;
+                    demandItem({ i, isedit })
+                }
+                else if (ischange) {
+                    var isedit = 1;
+                    demandItem({ i, isedit })
+                } else {
+                    var isedit = 0;
+                    demandItem({ i, isedit })
+                }
+            }
+            else {
+                var isedit = 0;
+                demandItem({ i, isedit })
+            };
+        })
+
+        if (validMsg.length > 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: validMsg,
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
+        if (itemArr.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Enter One  Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
+        const jsonBody = JSON.stringify({
+            DemandDate: demanddate,
+            DemandAmount: demandAmount,
+            Description: description,
+            Customer: userParty(),
+            Supplier: values.Division.value,
+            Division: userParty(),
+            BillingAddressID: 4,
+            ShippingAddressID: 4,
+            Inward: 0,
+            MaterialIssue: null,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            DemandItem: itemArr,
+        }
         );
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
-debugger
+      
         if (pageMode === mode.edit) {
             dispatch(updateDemandId(jsonBody, editVal.id))
         }
         else {
             dispatch(postDemand(jsonBody));
         }
-
-    };
+    }
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
-            // headerFormatter: (value, row, k) => {
-            //     return (
-            //         <div className="d-flex justify-content-between">
-            //             <div>
-            //                 Item Name
-            //             </div>
 
-            //             <div>
-            //                 <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
-            //                     onClick={assignItem_onClick}>
-            //                     Assign-Items</samp>
-            //             </div>
-
-            //         </div>
-            //     )
-            // },
         },
 
         {//------------- Stock Quantity column ----------------------------------
@@ -503,7 +545,7 @@ debugger
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
-                                    // val_onChange(val, row, "rate")
+                                     val_onChange(val, row, "rate")
                                 } else {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
@@ -560,7 +602,7 @@ debugger
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <BreadcrumbNew userAccess={userAccess} pageId={pageId.DEMAND} />
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.DEMAND} /> */}
 
                 <div className="page-content" >
                     <form>
@@ -603,10 +645,10 @@ debugger
                                                     classNamePrefix="dropdown"
                                                     options={divisiondropdown_Options}
                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                    />
-                                                    {isError.Division.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.Division}</small></span>
-                                                    )}
+                                                />
+                                                {isError.Division.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Division}</small></span>
+                                                )}
                                             </Col>
                                         </FormGroup>
                                     </Col >
@@ -688,21 +730,11 @@ debugger
                             )}
 
                         </PaginationProvider>
-
-                        {/* <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "9px" }}>
-                                <SaveButton pageMode={pageMode}
-                                    userAcc={userPageAccessState}
-                                    editCreatedBy={editCreatedBy}
-                                    module={"Demand"}
-                                />
-                            </Col>
-                        </FormGroup> */}
-
                         {
                             ((demandItemTable.length > 0)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                 <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                    module={"Demand"} onClick={SaveHandler}
+                                    module={"Demand"}
+                                    onClick={SaveHandler}
                                 />
                             </div>
                                 : <div className="row save1"></div>

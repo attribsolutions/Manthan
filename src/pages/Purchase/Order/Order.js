@@ -506,7 +506,6 @@ const Order = (props) => {
     }
 
     const goButtonHandler = () => {
-        debugger
         if (!supplierSelect > 0) {
             dispatch(
                 AlertState({
@@ -576,6 +575,7 @@ const Order = (props) => {
         const itemArr = []
 
         function isChanged({ i, isedit, isdel }) {
+            debugger
 
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
@@ -618,6 +618,7 @@ const Order = (props) => {
         }
 
         orderItemTable.forEach(i => {
+            debugger
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
@@ -650,7 +651,7 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-        // }
+      
 
         if (validMsg.length > 0) {
             dispatch(AlertState({

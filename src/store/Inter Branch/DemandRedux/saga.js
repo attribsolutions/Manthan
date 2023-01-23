@@ -55,12 +55,11 @@ function* GoButton_Demand_genfun({ data }) {
 
 //post api
 function* Post_Demand_Genfun({ data }) {
-debugger
+  
     yield put(SpinnerState(true))
     try {
-
-        const response = yield call(DemandPage_Post_API, data);
-        debugger
+      debugger
+        const response = yield call(DemandPage_Post_API,data);
         yield put(SpinnerState(false))
         yield put(postDemandSuccess(response));
     } catch (error) {
@@ -74,7 +73,6 @@ debugger
 
 //division  api
 function* post_Division_Genfun({ data }) {
-
     yield put(SpinnerState(true))
     try {
         const response = yield call(Division, data);
