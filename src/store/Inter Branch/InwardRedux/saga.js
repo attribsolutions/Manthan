@@ -41,13 +41,13 @@ function* get_InwardList_GenFunc({ filters }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error  Get BOMList",
+      Status: true, Message: "500 Error Inward List",
     }));
   }
 }
 function* InwardSaga() {
-  yield takeEvery(GET_INWARD_LIST_PAGE, Post_Inward_GenratorFunction)
-  yield takeEvery(POST_INWARD, get_InwardList_GenFunc)
+  yield takeEvery(POST_INWARD, Post_Inward_GenratorFunction)
+  yield takeEvery(GET_INWARD_LIST_PAGE, get_InwardList_GenFunc)
 }
 
 export default InwardSaga;
