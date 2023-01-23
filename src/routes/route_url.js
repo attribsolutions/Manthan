@@ -115,13 +115,12 @@ export const PRODUCTION_ADD_Mode_2 = "/Production_Add_Mode"
 export const SALE_ORDER = "/SaleOrder"
 export const SALE_ORDER_lIST = "/SaleOrderList"
 
-
-
 export const INVOICE = "/Invoice"
 export const INVOICE_LIST = "/InvoiceList"
-
 
 //******************************* Inter Branch  ************************************//
 export const DEMAND= "/Demand"
 export const DEMAND_LIST= "/DemandList"
 
+export const INWARD ="/InterBranchInward"
+export const INWARD_LIST = "/InterBranchInwardList"
