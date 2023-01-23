@@ -14,13 +14,16 @@ import { useHistory } from "react-router-dom";
 import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
+import * as url from "../../../routes/route_url";
+import { AlertState } from "../../../store/actions";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
-
-const Inward = () => {
+const Inward = (props) => {
 
     const data = {
         IBChallanDate: "2023-01-06",
@@ -94,25 +97,113 @@ const Inward = () => {
     const history = useHistory();
     const [userAccState, setUserAccState] = useState('');
     const [InwardDate, setInwardDate] = useState(currentDate);
-
+    const [pageMode, setPageMode] = useState("save");
     const {
+        postMsg,
         userAccess,
     } = useSelector((state) => ({
+        postMsg: state.InwardReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
+    // userAccess useEffect
     useEffect(() => {
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.INWARD)
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) { locationPath = props.masterPath; };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
         })
-        if (!(userAcc === undefined)) {
+
+        if (userAcc) {
             setUserAccState(userAcc)
-        }
+        };
     }, [userAccess])
+
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+    useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(postInwardSuccess({ Status: false }))
+            // saveDissable(false);//save Button Is enable function
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: postMsg.Message,
+                RedirectPath: url.GRN_lIST,
+            }))
+
+        } else if (postMsg.Status === true) {
+            // saveDissable(false);//save Button Is enable function
+            dispatch(postInwardSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(postMsg.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [postMsg])
 
     function InwardDateOnchange(e, date) {
         setInwardDate(date)
     };
+
+    const saveHandeller = (e, values) => {
+
+        const arr = IBChallanItems.map(i => ({
+            Item: i.Item.id,
+            Quantity: i.Quantity,
+            MRP: i.MRP,
+            ReferenceRate: i.Rate,
+            Rate: i.Rate,
+            Unit: i.Unit.id,
+            BaseUnitQuantity: i.BaseUnitQuantity,
+            GST: i.LiveBatch.GST,
+            BasicAmount: i.BasicAmount,
+            GSTAmount: parseFloat(i.GSTAmount).toFixed(2),
+            Amount: i.Amount,
+            CGST: i.CGST,
+            SGST: i.SGST,
+            IGST: i.IGST,
+            CGSTPercentage: i.CGSTPercentage,
+            SGSTPercentage: i.SGSTPercentage,
+            IGSTPercentage: i.IGSTPercentage,
+            BatchDate: i.BatchDate,
+            BatchCode: i.BatchCode,
+            DiscountType: i.DiscountType,
+            Discount: i.Discount,
+            DiscountAmount: i.DiscountAmount,
+            TaxType: i.TaxType
+        }))
+
+        const jsonBody = JSON.stringify({
+            IBInwardDate: InwardDate,
+            IBInwardNumber: data.IBChallanNumber,
+            FullIBInwardNumber: data.FullIBInwardNumber,
+            GrandTotal: data.GrandTotal,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            Customer: data.Customer.id,
+            Supplier: data.Party.id,
+            InterBranchInwardItems: arr,
+            InterBranchInwardReferences: [{
+                IBChallan: 1
+            }]
+        });
+
+        // saveDissable(true);//save Button Is dissable function
+
+        if (pageMode === "edit") {
+        } else {
+
+            dispatch(postInward(jsonBody))
+        }
+    }
 
     const pagesListColumns = [
         {
@@ -129,13 +220,13 @@ const Inward = () => {
                         <Thead>
                             <tr>
                                 <th>Batch Code </th>
-                                <th>SystemBatchCode</th>
+                                <th>System Batch Code</th>
                                 <th>Quantity</th>
                             </tr>
                         </Thead>
                         <Tbody>
                             {IBChallanItems.map((index) => {
-                               debugger
+
                                 return (
                                     < tr >
                                         <td>
@@ -175,7 +266,7 @@ const Inward = () => {
             dataField: "Quantity",
         },
         {
-            text: "UnitName",
+            text: "Unit",
             dataField: "Unit.UnitID",
         },
     ];
@@ -286,6 +377,12 @@ const Inward = () => {
                         )}
 
                     </PaginationProvider>
+                </div>
+                <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
+                    <SaveButton pageMode={pageMode}
+                        userAcc={userAccState}
+                        module={"Inward"} onClick={saveHandeller}
+                    />
                 </div>
             </div>
         </React.Fragment>
