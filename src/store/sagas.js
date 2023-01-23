@@ -52,6 +52,8 @@ import ProductionSaga from "./Purchase/ProductionRedux/saga"
 import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 import InvoiceSaga from "./Sales/Invoice/saga"
 import DemandSaga from "./Inter Branch/DemandRedux/saga"
+import InwardSaga from "./Inter Branch/InwardRedux/saga"
+
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
@@ -64,7 +66,6 @@ export default function* rootSaga() {
     fork(Breadcrumb_Saga),
     fork(CommonPageField_Saga),
     fork(pdfReport_Saga),
-
     fork(Alert_Saga),
     fork(SupplierSaga),
     fork(ModulesSaga),
@@ -101,6 +102,8 @@ export default function* rootSaga() {
     fork(MaterialIssueSaga),
     fork(ProductionSaga),
     fork(DemandSaga),
-    fork(InvoiceSaga)
+    fork(InvoiceSaga),
+    fork(InwardSaga)
+
   ])
 }
