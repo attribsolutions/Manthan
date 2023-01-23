@@ -1,4 +1,4 @@
-import { GET_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, POST_INWARD, POST_INWARD_SUCCESS } from "./actionType";
+import { DELETE_INWARD_LIST_PAGE, DELETE_INWARD_LIST_PAGE_SUCCESS, GET_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, POST_INWARD, POST_INWARD_SUCCESS } from "./actionType";
 
 export const Inwardlistfilters = filter => ({
   type: INWARD_LIST_FILTERS,
@@ -24,5 +24,14 @@ export const getInwardListPage = (filters) => ({
 
 export const getInwardListPageSuccess = (data) => ({
   type: GET_INWARD_LIST_PAGE_SUCCESS,
+  payload: data,
+});
+
+export const deleteInwardId = (id) => ({
+  type: DELETE_INWARD_LIST_PAGE,
+  id,
+});
+export const deleteInwardIdSuccess = (data) => ({
+  type: DELETE_INWARD_LIST_PAGE_SUCCESS,
   payload: data,
 });

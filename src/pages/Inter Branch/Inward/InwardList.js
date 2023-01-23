@@ -18,7 +18,7 @@ import Inward from "./Inward";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import * as pageId from "../../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
+import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
 import { currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import Select from "react-select";
@@ -38,7 +38,7 @@ const InwardList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.InwardReducer.InwardList,
-            deleteMsg: state.BOMReducer.deleteMsg,
+            deleteMsg: state.InwardReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
@@ -49,21 +49,21 @@ const InwardList = () => {
         })
     );
 
-    const { userAccess, pageField, InwardlistFilter,supplier } = reducers;
-    const { fromdate, todate,SupplierSelect } = InwardlistFilter;
-
+    const { userAccess, pageField, InwardlistFilter, supplier } = reducers;
+    const { fromdate, todate, SupplierSelect } = InwardlistFilter;
+    const page_Id = pageId.INWARD_LIST
+    
     const action = {
         getList: getInwardListPage,
         editId: editBOMList,
-        deleteId: deleteBOMId,
+        deleteId: deleteInwardId,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteBOMIdSuccess
+        deleteSucc: deleteInwardIdSuccess
     }
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.INWARD_LIST
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -84,12 +84,13 @@ const InwardList = () => {
     });
 
     useEffect(() => {
-        const pageId = 70
+
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
+
         }
     }, [userAccess])
 
@@ -98,7 +99,7 @@ const InwardList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Customer: userParty(),
-            Supplier:SupplierSelect.value === "" ? '' : SupplierSelect.value,
+            Supplier: SupplierSelect.value === "" ? '' : SupplierSelect.value,
         });
         dispatch(getInwardListPage(jsonBody));
     }
@@ -200,11 +201,12 @@ const InwardList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Inward}
-                            masterPath={url.BIllOf_MATERIALS}
-                            ButtonMsgLable={"BOM"}
-                            deleteName={"ItemName"}
+                            masterPath={url.INWARD}
+                            ButtonMsgLable={"Inward"}
+                            deleteName={"IBInwardNumber"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
+                            filters={inwardlistFilter}
                         />
                         : null
                 }
