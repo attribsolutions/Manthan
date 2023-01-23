@@ -34,8 +34,8 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
- import * as url from "../../../routes/route_url"
- import { DEMAND_LIST } from "../../../routes/route_url";
+import * as url from "../../../routes/route_url"
+import { DEMAND_LIST } from "../../../routes/route_url";
 import {
     editDemandIdSuccess,
     postDemand,
@@ -98,7 +98,7 @@ const Demand = (props) => {
 
     useEffect(() => {
         const page_Id = pageId.DEMAND
-         dispatch(postGoButtonForDemandSuccess([]))
+        dispatch(postGoButtonForDemandSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -177,14 +177,14 @@ const Demand = (props) => {
             dispatch(editDemandIdSuccess({ Status: false }))
         } else {
             dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :0`))
-            
+
         }
     }, [])
 
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-             dispatch(postDemandSuccess({ Status: false }))
+            dispatch(postDemandSuccess({ Status: false }))
             dispatch(postGoButtonForDemandSuccess([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
@@ -224,7 +224,7 @@ const Demand = (props) => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
-            comment=''
+            comment = ''
             history.push({
                 pathname: DEMAND_LIST,
             })
@@ -307,10 +307,12 @@ const Demand = (props) => {
     };
 
 
-    const SaveHandler = () => {
-        debugger
+    const SaveHandler = (event) => {
+        event.preventDefault();
         const validMsg = []
         const itemArr = []
+
+
         function isChanged({ i, isedit, isdel }) {
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
@@ -347,16 +349,18 @@ const Demand = (props) => {
                 var isdel = true;
                 isChanged({ i, isedit, isdel })
             };
-        }
+        };
+
         demandItemTable.forEach(i => {
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
             }
-        
-             if (pageMode === "edit") {
-                var ischange = (!(i.poQty === i.Quantity) ||
+
+            if (pageMode === "edit") {
+                const ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
+
                 if (ischange && (i.poQty === 0)) {
                     var isedit = 0;
                     demandItem({ i, isedit })
@@ -373,8 +377,8 @@ const Demand = (props) => {
                 var isedit = 0;
                 demandItem({ i, isedit })
             };
-        })
-
+        });
+        
         if (validMsg.length > 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -384,7 +388,8 @@ const Demand = (props) => {
                 AfterResponseAction: false
             }));
             return
-        }
+        };
+
         if (itemArr.length === 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -394,7 +399,8 @@ const Demand = (props) => {
                 AfterResponseAction: false
             }));
             return
-        }
+        };
+
         const jsonBody = JSON.stringify({
             DemandDate: demanddate,
             DemandAmount: demandAmount,
@@ -411,10 +417,10 @@ const Demand = (props) => {
             DemandItem: itemArr,
         }
         );
-        saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
-      
+        // saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
+
         if (pageMode === mode.edit) {
-            dispatch(updateDemandId(jsonBody, editVal.id))
+            // dispatch(updateDemandId(jsonBody, editVal.id))
         }
         else {
             dispatch(postDemand(jsonBody));
@@ -541,7 +547,7 @@ const Demand = (props) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
-                                     val_onChange(val, row, "rate")
+                                    val_onChange(val, row, "rate")
                                 } else {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }

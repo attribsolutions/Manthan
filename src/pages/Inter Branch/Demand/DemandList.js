@@ -61,9 +61,9 @@ const DemandList = () => {
 
     const fileds = {
 
-        Date: currentDate,
-        Division: "",
-
+        FormDate: currentDate,
+        ToDate:currentDate
+      
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -132,22 +132,6 @@ const DemandList = () => {
         dispatch(editDemandId(jsonBody, Mode));
     }
 
-
-
-    // useEffect(() => {
-     
-    //     const jsonBody = JSON.stringify({
-
-    //             FromDate:currentDate,
-    //             ToDate:currentDate,
-    //             Customer: userParty(),
-    //             Supplier: values.Division.value,
-            
-    //     });
-    //     dispatch(postDemandListPage(jsonBody));
-    // }, []);
-
-
     const goButtonHandler = () => {
 
         const jsonBody = JSON.stringify({
@@ -184,23 +168,16 @@ const DemandList = () => {
             {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === url.ORDER_lIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} /> */}
-
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>Demand Date</Label>
+                                    style={{ width: "110px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
-                                        value={demandlistFilter.fromdate}
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -216,11 +193,11 @@ const DemandList = () => {
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>Delivery Date </Label>
+                                    style={{ width: "110px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
-                                        value={demandlistFilter.todate}
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
