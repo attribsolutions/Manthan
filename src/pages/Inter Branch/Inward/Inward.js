@@ -133,7 +133,7 @@ const Inward = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: url.INVOICE_LIST,
+                RedirectPath: url.INWARD_LIST,
             }))
 
         } else if (postMsg.Status === true) {

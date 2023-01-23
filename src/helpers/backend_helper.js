@@ -435,7 +435,8 @@ export const DemandPage_Update_API = (data,id) => put(`${url.DEMAND_LiST_BY_FILT
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
-export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// go button postapi
+export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// List Api
+export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
 
 export {
   getLoggedInUser,
