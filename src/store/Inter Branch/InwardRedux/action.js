@@ -1,4 +1,9 @@
-import { GET_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE_SUCCESS, POST_INWARD, POST_INWARD_SUCCESS } from "./actionType";
+import { GET_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, POST_INWARD, POST_INWARD_SUCCESS } from "./actionType";
+
+export const Inwardlistfilters = filter => ({
+  type: INWARD_LIST_FILTERS,
+  payload: filter,
+})
 
 // post api
 export const postInward = (data) => ({

@@ -15,7 +15,6 @@ export const COMPANY_lIST = 2
 export const USER = 13
 export const USER_lIST = 14
 
-
 export const ROLE = 19
 export const ROLE_lIST = 20
 
