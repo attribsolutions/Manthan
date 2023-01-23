@@ -19,17 +19,16 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
       i1["InpStockQtyTotal"] = `${Number(i1.Quantity) * Number(i1.ConversionUnit)}`
       i1["StockTotal"] = 0
       i1["StockUnit"] = '';
-      i1["StockValid"] = true;
+      i1["StockInValid"] = false;
+      i1["StockInvalidMsg"] = '';
 
       let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
 
       i1.StockDetails = i1.StockDetails.map(i2 => {
-    
+
         i1.StockUnit = i2.UnitName;
-
         i1.StockTotal = (Number(i2.BaseUnitQuantity) + Number(i1.StockTotal));
-
-        let qty = Number(i2.BaseUnitQuantity) ;
+        let qty = Number(i2.BaseUnitQuantity);
 
         if ((count > qty) && !(count === 0)) {
           count = count - qty
@@ -44,12 +43,23 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
         return i2
       });
 
-      count = 0
+      let t1 = Number(i1.StockTotal);
+      let t2 = Number(i1.Quantity) * i1.ConversionUnit;
+      if (t1 < t2) {
+        i1.StockInValid = true
+        let diffrence = Math.abs(i1.Quantity * i1.ConversionUnit - i1.StockTotal);
+        var msg1 = `Short Stock Quantity ${i1.Quantity} ${i1.UnitName}`
+        var msg2 = `Short Stock Quantity ${diffrence} ${i1.StockUnit}`
+        i1.StockInvalidMsg = (i1.StockTotal === 0) ? msg1 : msg2
+      };
+
+
       return i1
     })
+
     response.Data.OrderItemDetails = convResp
 
-    yield  mainSppinerOnOff({ id: goBtnId, state: false })
+    yield mainSppinerOnOff({ id: goBtnId, state: false })
     // yield put(SpinnerState(false))
     yield put(GoButton_post_For_Invoice_Success(response.Data));
 
@@ -64,12 +74,12 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
 }
 
 //post api for Invoice Master
-function* save_Invoice_Genfun({ data,saveBtnid }) {
+function* save_Invoice_Genfun({ data, saveBtnid }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Invoice_Post_API, data);
     yield put(SpinnerState(false))
-    
+
     mainSppinerOnOff({ id: saveBtnid, state: false })
     yield put(postInvoiceMasterSuccess(response));
   } catch (error) {
