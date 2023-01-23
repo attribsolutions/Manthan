@@ -11,17 +11,20 @@ import {
     updateDemandIdSuccess,
     demandlistfilters,
     postDivision,
+    postGoButtonForDemand,
+    postGoButtonForDemandSuccess,
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Demand from "./Demand";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc,  userCompany,  userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { MetaTags } from "react-meta-tags";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 
@@ -33,23 +36,39 @@ const DemandList = () => {
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(url.DEMAND_LIST)
     const [userAccState, setUserAccState] = useState('');
+    const [demanddate, setdemanddate] = useState(currentDate)
+
 
     const reducers = useSelector(
         (state) => ({
-            InterBranches: state.DemandReducer.InterBranches,
+
+            division:state.DemandReducer.division,
             tableList: state.DemandReducer.demandList,
             deleteMsg: state.DemandReducer.deleteMsg,
             updateMsg: state.DemandReducer.updateMsg,
             postMsg: state.DemandReducer.postMsg,
             editData: state.DemandReducer.editData,
-            DemandlistFilter: state.DemandReducer.demandlistFilter,
+            demandlistFilter: state.DemandReducer.demandlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            GoButton:state.DemandReducer.GoButton,
         })
     );
-    const { userAccess, pageField, InterBranches, tableList, DemandlistFilter } = reducers;
-    //  const {fromdate, todate, InterbranchesSelect} = demandlistFilter;
-    const page_Id = ( pageId.DEMAND_LIST);
+
+    const { userAccess, pageField, division, tableList, demandlistFilter } = reducers;
+    const { fromdate, todate, divisionSelect } = demandlistFilter;
+    const page_Id = (pageId.DEMAND_LIST);
+
+    const fileds = {
+
+        FormDate: currentDate,
+        ToDate:currentDate
+      
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const values = { ...state.values }
 
     const action = {
         getList: postDemandListPage,
@@ -68,7 +87,7 @@ const DemandList = () => {
 
     }, []);
 
-    const divisiondropdown_Options = InterBranches.map((i) => ({ label:i.Name, value: i.id }))
+    const divisiondropdown_Options = division.map((i) => ({ label: i.Name, value: i.id }))
 
 
     const downList = useMemo(() => {
@@ -77,7 +96,7 @@ const DemandList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
- 
+
 
     useEffect(() => {
 
@@ -106,41 +125,40 @@ const DemandList = () => {
         const jsonBody = JSON.stringify({
             Party: rowData.SupplierID,
             Customer: rowData.CustomerID,
-            EffectiveDate: rowData.preOrderDate,
+            EffectiveDate: rowData.preDemandDate,
             OrderID: rowData.id
         })
         var Mode = "edit"
         dispatch(editDemandId(jsonBody, Mode));
     }
 
-   
+    const goButtonHandler = () => {
 
-    function goButtonHandler() {
         const jsonBody = JSON.stringify({
-            FromDate: DemandlistFilter.fromdate,
-            ToDate: DemandlistFilter.todate,
-            // supplier:
+            Supplier: values.Division.value,
             Customer: userParty(),
-        });
+            EffectiveDate: demanddate,
+            DemandID: 0
+        })
 
-        dispatch(postDemandListPage(jsonBody));
-    }
+        dispatch(postDemandListPage(jsonBody))
+    };
 
     function FromdateOnchange(e, date) {
-        let newObj = { ...DemandlistFilter }
+        let newObj = { ...demandlistFilter }
         newObj.fromdate = date
         dispatch(demandlistfilters(newObj))
     }
 
     function TodateOnchange(e, date) {
-        let newObj = { ...DemandlistFilter }
+        let newObj = { ...demandlistFilter }
         newObj.todate = date
         dispatch(demandlistfilters(newObj))
     }
 
-    function InterBranchesOnchange(e) {
-        let newObj = { ...DemandlistFilter }
-        newObj.InterbranchesSelect = e
+    function divisionOnchange(e) {
+        let newObj = { ...demandlistFilter }
+        newObj.divisionSelect = e
         dispatch(demandlistfilters(newObj))
     }
 
@@ -150,23 +168,16 @@ const DemandList = () => {
             {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === url.ORDER_lIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} /> */}
-
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>Demand Date</Label>
+                                    style={{ width: "110px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
-                                         value={DemandlistFilter.fromdate}
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -182,11 +193,11 @@ const DemandList = () => {
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>Delivery Date </Label>
+                                    style={{ width: "110px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
-                                         value={DemandlistFilter.todate}
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -208,9 +219,9 @@ const DemandList = () => {
                                 <Col sm="6">
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        //  value={InterbranchesSelect}
+                                        value={divisionSelect}
                                         options={divisiondropdown_Options}
-                                        onChange={InterBranchesOnchange}
+                                        onChange={divisionOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -232,13 +243,9 @@ const DemandList = () => {
                             MasterModal={Demand}
                             masterPath={url.DEMAND}
                             ButtonMsgLable={"Demand"}
-                            // deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.DEMAND_LIST ? false : true}
-                            // makeBtnFunc={makeBtnFunc}
-                            // makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
-                            // downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
                         />
                         : null
