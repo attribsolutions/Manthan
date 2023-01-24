@@ -238,7 +238,7 @@ const MaterialIssueMaster = (props) => {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
-    }, [pageField])
+    }, [pageField]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
@@ -249,6 +249,127 @@ const MaterialIssueMaster = (props) => {
         Unit: index.Unit,
         NumberOfLot: index.NumberOfLot
     }));
+
+    const pagesListColumns = [
+        {
+            text: "Item Name",
+            dataField: "ItemName",
+            formatter: (cellContent, user) => {
+                return (
+                    <>
+                        <div><samp id={`ItemName${user.id}`}>{cellContent}</samp></div>
+                        <div><samp id={`ItemNameMsg${user.id}`} style={{ color: "red" }}></samp></div>
+                    </>
+
+                )
+            },
+            style: (cellContent, user,) => {
+
+                let Stock = user.BatchesData.map((index) => {
+                    return index.BaseUnitQuantity
+                })
+                var TotalStock = 0;
+                Stock.forEach(x => {
+                    TotalStock += parseFloat(x);
+                });
+                var OrderQty = parseFloat(user.Quantity)
+                if (OrderQty > TotalStock) {
+                    return {
+                        color: "red",
+
+                    };
+                }
+            },
+        },
+
+        {
+            text: "Work Order Qty",
+            dataField: "Quantity",
+        },
+        {
+            text: "Unit",
+            dataField: "UnitName",
+        },
+        {
+            text: "Batch Code",
+            dataField: "BatchesData",
+
+            formatter: (cellContent, user) => (
+                <>
+                    <Table className="table table-bordered table-responsive mb-1">
+                        <Thead>
+                            <tr>
+                                <th>Batch Code </th>
+                                <th>Supplier BatchCode</th>
+                                <th>Batch Date</th>
+                                <th>Stock Quantity</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </Thead>
+                        <Tbody>
+                            {cellContent.map((index) => {
+
+                                return (
+                                    < tr >
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.SystemBatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.BatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "100px" }}>
+                                                <Label>
+                                                    {convertDatefunc(index.BatchDate)}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
+                                                <Label
+                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
+                                                >
+                                                    {index.BaseUnitQuantity}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Input
+                                                    type="text"
+                                                    key={index.id}
+                                                    id={`stock${user.id}-${index.id}`}
+                                                    style={{ textAlign: "right" }}
+                                                    defaultValue={index.Qty}
+                                                    autoComplete='off'
+                                                    onChange={(event) => handleChange(event, user, index)}
+                                                ></Input>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </Tbody>
+                    </Table>
+                </>
+            ),
+        },
+
+    ]
+
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: GoButton.length,
+        custom: true,
+    };
 
     function ItemOnchange(hasSelect, evn) {
         onChangeSelect({ hasSelect, evn, state, setState });
@@ -390,22 +511,20 @@ const MaterialIssueMaster = (props) => {
         }
     };
 
-
     const SaveHandler = (event) => {
-
+        event.preventDefault();
         const validMsg = []
 
         const MaterialIssueItems = []
         GoButton.map((index) => {
 
-            let Stock = index.BatchesData.map((i) => {
-                return i.BaseUnitQuantity
-            })
+
             var TotalStock = 0;
-            Stock.forEach(x => {
-                TotalStock += parseFloat(x);
+            index.BatchesData.forEach(i => {
+                TotalStock += Number(i.BaseUnitQuantity);
             });
-            var OrderQty = parseFloat(index.Quantity)
+
+            var OrderQty = Number(index.Quantity)
             if (OrderQty > TotalStock) {
                 {
                     validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
@@ -435,7 +554,7 @@ const MaterialIssueMaster = (props) => {
             return (index.IssueQuantity > 0)
         })
 
-        event.preventDefault();
+
         if (formValid(state, setState)) {
 
             if (validMsg.length > 0) {
@@ -475,126 +594,6 @@ const MaterialIssueMaster = (props) => {
             }
         };
     }
-    const pagesListColumns = [
-        {
-            text: "Item Name",
-            dataField: "ItemName",
-            formatter: (cellContent, user) => {
-                return (
-                    <>
-                        <div><samp id={`ItemName${user.id}`}>{cellContent}</samp></div>
-                        <div><samp id={`ItemNameMsg${user.id}`} style={{ color: "red" }}></samp></div>
-                    </>
-
-                )
-            },
-            style: (cellContent, user,) => {
-
-                let Stock = user.BatchesData.map((index) => {
-                    return index.BaseUnitQuantity
-                })
-                var TotalStock = 0;
-                Stock.forEach(x => {
-                    TotalStock += parseFloat(x);
-                });
-                var OrderQty = parseFloat(user.Quantity)
-                if (OrderQty > TotalStock) {
-                    return {
-                        color: "red",
-
-                    };
-                }
-            },
-        },
-
-        {
-            text: "Work Order Qty",
-            dataField: "Quantity",
-        },
-        {
-            text: "Unit",
-            dataField: "UnitName",
-        },
-        {
-            text: "Batch Code",
-            dataField: "BatchesData",
-
-            formatter: (cellContent, user) => (
-                <>
-                    <Table className="table table-bordered table-responsive mb-1">
-                        <Thead>
-                            <tr>
-                                <th>Batch Code </th>
-                                <th>Supplier BatchCode</th>
-                                <th>Batch Date</th>
-                                <th>Stock Quantity</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </Thead>
-                        <Tbody>
-                            {cellContent.map((index) => {
-
-                                return (
-                                    < tr >
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.SystemBatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.BatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "100px" }}>
-                                                <Label>
-                                                    {convertDatefunc(index.BatchDate)}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "120px", textAlign: "right" }}>
-                                                <Label
-                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
-                                                >
-                                                    {index.BaseUnitQuantity}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Input
-                                                    type="text"
-                                                    key={index.id}
-                                                    id={`stock${user.id}-${index.id}`}
-                                                    style={{ textAlign: "right" }}
-                                                    defaultValue={index.Qty}
-                                                    autoComplete='off'
-                                                    onChange={(event) => handleChange(event, user, index)}
-                                                ></Input>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </>
-            ),
-        },
-
-    ]
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: GoButton.length,
-        custom: true,
-    };
 
     if (!(userPageAccessState === '')) {
         return (

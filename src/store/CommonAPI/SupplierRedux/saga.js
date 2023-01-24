@@ -69,7 +69,7 @@ function* OrderType_GenFunc() {
 }
 
 function* getSupplierGenFunc() {
-  debugger
+
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
     yield put(getSupplierSuccess(response.Data));
@@ -95,7 +95,7 @@ function* getVendorGenFunc() {
 }
 
 function* getCustomerGenFunc() {
-  debugger
+
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     yield put(GetCustomerSuccess(response.Data));

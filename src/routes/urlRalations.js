@@ -124,14 +124,13 @@ export const Production_Add_Mode = url.PRODUCTION_LIST
 export const SaleOrderList = url.SALE_ORDER
 export const SaleOrder = url.SALE_ORDER_lIST
 
-
-
 export const InvoiceList = url.INVOICE
 export const Invoice = url.INVOICE_LIST
 
-
-
 //******************************* Inter Branch ************************************//
+
 export const DemandList = url.DEMAND
 export const Demand = url.DEMAND_LIST
 
+export const InwardList = url.INWARD
+export const Inward = url.INWARD_LIST

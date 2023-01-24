@@ -15,7 +15,6 @@ export const COMPANY_lIST = 2
 export const USER = 13
 export const USER_lIST = 14
 
-
 export const ROLE = 19
 export const ROLE_lIST = 20
 
@@ -117,12 +116,13 @@ export const PRODUCTION_ADD_Mode_2 = 123
 export const SALE_ORDER = 117
 export const SALE_ORDER_lIST = 118
 
-
 export const INVOICE = 121
 export const INVOICE_LIST =122
 
-
 //******************************* Inter Branch ************************************//
+
 export const DEMAND = 126
 export const DEMAND_LIST = 127
 
+export const INWARD = 128
+export const INWARD_LIST = 129
