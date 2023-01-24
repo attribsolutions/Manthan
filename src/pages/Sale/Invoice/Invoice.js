@@ -250,7 +250,36 @@ const Invoice = (props) => {
 
     }));
 
+    function showAllStockOnclick(isplus = false) {
+        try {
+            if (isplus) {
+                document.getElementById("allplus-circle").style.display = "none";
+                document.getElementById("allminus-circle").style.display = "block";
+            } else {
+                document.getElementById("allplus-circle").style.display = "block";
+                document.getElementById("allminus-circle").style.display = "none";
+            }
+        } catch (w) { }
 
+        OrderItemDetails.forEach(index1 => {
+            if (!index1.StockTotal > 0) {
+                return
+            }
+            try {
+                if (isplus) {
+                    document.getElementById(`view${index1.id}`).style.display = "block";
+                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+                } else {
+                    document.getElementById(`view${index1.id}`).style.display = "none";
+                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+                }
+            } catch (w) { }
+        })
+
+
+    }
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -317,6 +346,35 @@ const Invoice = (props) => {
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
+            headerFormatter: (cell, index1 = [], k) => {
+
+                return (
+                    <div className="d-flex flex-content-start">
+                        <div>
+                            <samp id="allplus-circle" >
+                                <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
+                                    style={{
+                                        position: "", zIndex: 2,
+                                        display: OrderItemDetails.length > 0 ? "block" : "none"
+                                    }}
+                                    onClick={(e) => { showAllStockOnclick(true) }}>
+                                </i>
+                            </samp>
+                            <samp id="allminus-circle" style={{ display: "none" }}>
+                                <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
+                                    style={{ position: "", zIndex: 2 }}
+                                    onClick={(e) => { showAllStockOnclick(false) }}
+                                ></i>
+                            </samp>
+                        </div>
+
+                        <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
+                            <samp > Stock Details</samp>
+                        </div>
+
+                    </div>
+                )
+            },
 
             formatter: (cellContent, index1) => (
                 <div>
