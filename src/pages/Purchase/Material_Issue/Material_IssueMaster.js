@@ -383,8 +383,8 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        event.preventDefault();
-        if (state.values.LotQuantity == "0") {
+        // event.preventDefault();
+        if (state.values.LotQuantity === "0") {
             alert("Quantity Can Not be 0")
         } else
             if (formValid(state, setState)) {
@@ -611,10 +611,11 @@ const MaterialIssueMaster = (props) => {
                                                 <Flatpickr
                                                     name="MaterialIssueDate"
                                                     value={values.MaterialIssueDate}
+                                                    disabled={(GoButton.length > 0) ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
-                                                        altInput: true,
+                                                        // altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
                                                     }}
@@ -635,6 +636,7 @@ const MaterialIssueMaster = (props) => {
                                                     // isDisabled={(values.ItemName) ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
+                                                    isDisabled={GoButton.length > 0 ? true : false}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -655,6 +657,7 @@ const MaterialIssueMaster = (props) => {
                                                     style={{ textAlign: "right" }}
                                                     name="NumberOfLot"
                                                     value={values.NumberOfLot}
+                                                    disabled={(GoButton.length > 0) ? true : false}
                                                     type="text"
                                                     className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Number Of Lots"
@@ -679,6 +682,7 @@ const MaterialIssueMaster = (props) => {
                                                     style={{ textAlign: "right" }}
                                                     name="LotQuantity"
                                                     value={values.LotQuantity}
+                                                    disabled={(GoButton.length > 0) ? true : false}
                                                     type="text"
                                                     className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter LotQuantity"

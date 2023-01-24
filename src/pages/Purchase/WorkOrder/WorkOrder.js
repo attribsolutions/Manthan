@@ -453,9 +453,9 @@ const WorkOrder = (props) => {
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
-                                                        disabled={pageMode === "edit" ? true : false}
+                                                        disabled={(BOMItems.length > 0)||(pageMode === "edit") ? true : false}
                                                         options={{
-                                                            altInput: true,
+                                                            // altInput: true,
                                                             altFormat: "d-m-Y",
                                                             dateFormat: "Y-m-d",
                                                             defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
@@ -478,6 +478,7 @@ const WorkOrder = (props) => {
                                                         name="ItemName"
                                                         value={values.ItemName}
                                                         isSearchable={true}
+                                                        isDisabled={(BOMItems.length > 0) ? true : false}
                                                         className="react-dropdown"
                                                         classNamePrefix="dropdown"
                                                         options={ItemDropdown_Options}
@@ -557,6 +558,7 @@ const WorkOrder = (props) => {
                                                         name="NumberOfLot"
                                                         value={values.NumberOfLot}
                                                         type="text"
+                                                        disabled={(BOMItems.length > 0) ? true : false}
                                                         className={isError.NumberOfLot.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Number Of Lot"
                                                         autoComplete='off'
@@ -581,6 +583,7 @@ const WorkOrder = (props) => {
                                                         style={{ textAlign: "right" }}
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
+                                                        disabled={(BOMItems.length > 0) ? true : false}
                                                         type="text"
                                                         className={isError.Quantity.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Quantity"
