@@ -234,7 +234,19 @@ const Invoice = (props) => {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
-    }, [pageField])
+    }, [pageField]);
+    
+    useEffect(() => {
+        if (OrderItemDetails.length > 0) {
+            document.getElementById("myInput11").flatpickr({
+                minDate: values.InvoiceDate,
+                maxDate: values.InvoiceDate,
+                defaultDate: values.InvoiceDate,
+                dateFormat: "Y-m-d",
+            });
+        }
+        }, [OrderItemDetails])
+
 
     const CustomerDropdown_Options = customer.map((index) => ({
         value: index.id,
@@ -306,73 +318,73 @@ const Invoice = (props) => {
                 return { width: '150px', textAlign: 'center' };
             }
         },
-        {//***************StockDetails********************************************************************* */
-            text: "Batch Code",
-            dataField: "StockDetails",
+        // {//***************StockDetails********************************************************************* */
+        //     text: "Batch Code",
+        //     dataField: "StockDetails",
 
-            formatter: (cellContent, index1) => (
-<></>
-                // <Table className="table table-bordered table-responsive mb-1">
-                //     <Thead  >
-                //         <tr className="">
-                //             <th className="">Batch Code </th>
-                //             <th className="" >Supplier BatchCode</th>
-                //             <th className="" >Batch Date</th>
-                //             <th className="">
-                //                 <div>
-                //                     <samp >Stock Quantity</samp>
-                //                 </div>
-                //                 <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
-                //             <th className="" >
-                //                 <div>
-                //                     <samp >Quantity</samp>
-                //                 </div>
-                //                 <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
-                //             </th>
-                //         </tr>
-                //     </Thead>
-                //     <Tbody  >
-                //         {cellContent.map((index2) => {
-                //             return (
-                //                 < tr key={index1.id} >
-                //                     <td>
-                //                         <div style={{ width: "150px" }}>
-                //                             {index2.SystemBatchCode}
-                //                         </div>
-                //                     </td>
-                //                     <td>
-                //                         <div style={{ width: "150px" }}>
-                //                             {index2.BatchCode}
-                //                         </div>
-                //                     </td>
-                //                     <td>
-                //                         <div style={{ width: "100px" }}>
-                //                             {convertDatefunc(index2.BatchDate)}
-                //                         </div>
-                //                     </td>
-                //                     <td>
-                //                         <div style={{ width: "120px", textAlign: "right" }}>
-                //                             {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
-                //                         </div>
-                //                     </td>
-                //                     <td>
-                //                         <div style={{ width: "150px" }}>
-                //                             <Input type="text"
-                //                                 style={{ textAlign: "right" }}
-                //                                 key={`batchQty${index1.id}-${index2.id}`}
-                //                                 id={`batchQty${index1.id}-${index2.id}`}
-                //                                 defaultValue={index2.Qty}
-                //                                 onChange={(event) => StockQtyOnChange(event, index1, index2)}
-                //                             ></Input>
-                //                         </div>
-                //                     </td>
-                //                 </tr>
-                //             )
-                //         })}
-                //     </Tbody>
-                // </Table>
-            ),
-        },
+        //     // formatter: (cellContent, index1) => (
+
+        //     //     <Table className="table table-bordered table-responsive mb-1">
+        //     //         <Thead  >
+        //     //             <tr className="">
+        //     //                 <th className="">Batch Code </th>
+        //     //                 <th className="" >Supplier BatchCode</th>
+        //     //                 <th className="" >Batch Date</th>
+        //     //                 <th className="">
+        //     //                     <div>
+        //     //                         <samp >Stock Quantity</samp>
+        //     //                     </div>
+        //     //                     <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
+        //     //                 <th className="" >
+        //     //                     <div>
+        //     //                         <samp >Quantity</samp>
+        //     //                     </div>
+        //     //                     <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
+        //     //                 </th>
+        //     //             </tr>
+        //     //         </Thead>
+        //     //         <Tbody  >
+        //     //             {cellContent.map((index2) => {
+        //     //                 return (
+        //     //                     < tr key={index1.id} >
+        //     //                         <td>
+        //     //                             <div style={{ width: "150px" }}>
+        //     //                                 {index2.SystemBatchCode}
+        //     //                             </div>
+        //     //                         </td>
+        //     //                         <td>
+        //     //                             <div style={{ width: "150px" }}>
+        //     //                                 {index2.BatchCode}
+        //     //                             </div>
+        //     //                         </td>
+        //     //                         <td>
+        //     //                             <div style={{ width: "100px" }}>
+        //     //                                 {convertDatefunc(index2.BatchDate)}
+        //     //                             </div>
+        //     //                         </td>
+        //     //                         <td>
+        //     //                             <div style={{ width: "120px", textAlign: "right" }}>
+        //     //                                 {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
+        //     //                             </div>
+        //     //                         </td>
+        //     //                         <td>
+        //     //                             <div style={{ width: "150px" }}>
+        //     //                                 <Input type="text"
+        //     //                                     style={{ textAlign: "right" }}
+        //     //                                     key={`batchQty${index1.id}-${index2.id}`}
+        //     //                                     id={`batchQty${index1.id}-${index2.id}`}
+        //     //                                     defaultValue={index2.Qty}
+        //     //                                     onChange={(event) => StockQtyOnChange(event, index1, index2)}
+        //     //                                 ></Input>
+        //     //                             </div>
+        //     //                         </td>
+        //     //                     </tr>
+        //     //                 )
+        //     //             })}
+        //     //         </Tbody>
+        //     //     </Table>
+        //     // ),
+        // },
         {//***************Rate********************************************************************* */
             text: "Rate",
             dataField: "Rate",
@@ -385,78 +397,87 @@ const Invoice = (props) => {
         totalSize: OrderItemDetails.length,
         custom: true,
     };
+
     const expandRow = {
-        renderer: (index1)=> (
-            <Table className="table table-bordered table-responsive mb-1">
-            <Thead  >
-                <tr className="">
-                    <th className="">Batch Code </th>
-                    <th className="" >Supplier BatchCode</th>
-                    <th className="" >Batch Date</th>
-                    <th className="">
-                        <div>
-                            <samp >Stock Quantity</samp>
-                        </div>
-                        <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
-                    <th className="" >
-                        <div>
-                            <samp >Quantity</samp>
-                        </div>
-                        <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
-                    </th>
-                </tr>
-            </Thead>
-            <Tbody  >
-                {index1.StockDetails.map((index2) => {
-                    return (
-                        < tr key={index1.id} >
-                            <td>
-                                <div style={{ width: "150px" }}>
-                                    {index2.SystemBatchCode}
+        // parentClassName: 'parent-expand-foo',
+        renderer: (index1) => (
+            // <div style={{backgroundColor:"#9CC6FF"}}>
+            <div className="row " style={{ backgroundColor: "#b9be511a", paddingTop: "-12px", paddingBottom: "-12px" }} >
+                <Col ms={6}></Col>
+                <Col ms={6} >
+                    <table className="" style={{ backgroundColor: "#b9be511a" }}>
+                        {/* <Thead  > */}
+                        <tr className="">
+                            <th className="">Batch Code </th>
+                            <th className="" >Supplier BatchCode</th>
+                            <th className="" >Batch Date</th>
+                            <th className="">
+                                <div>
+                                    <samp >Stock Quantity</samp>
                                 </div>
-                            </td>
-                            <td>
-                                <div style={{ width: "150px" }}>
-                                    {index2.BatchCode}
+                                <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
+                            <th className="" >
+                                <div>
+                                    <samp >Quantity</samp>
                                 </div>
-                            </td>
-                            <td>
-                                <div style={{ width: "100px" }}>
-                                    {convertDatefunc(index2.BatchDate)}
-                                </div>
-                            </td>
-                            <td>
-                                <div style={{ width: "120px", textAlign: "right" }}>
-                                    {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
-                                </div>
-                            </td>
-                            <td>
-                                <div style={{ width: "150px" }}>
-                                    <Input type="text"
-                                        style={{ textAlign: "right" }}
-                                        key={`batchQty${index1.id}-${index2.id}`}
-                                        id={`batchQty${index1.id}-${index2.id}`}
-                                        defaultValue={index2.Qty}
-                                        onChange={(event) => StockQtyOnChange(event, index1, index2)}
-                                    ></Input>
-                                </div>
-                            </td>
+                                <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
+                            </th>
                         </tr>
-                    )
-                })}
-            </Tbody>
-        </Table>
-        //   <div>
-        //     <p>{ `This Expand row is belong to rowKey ${row.id}` }</p>
-        //     <p>You can render anything here, also you can add additional data on every row object</p>
-        //     <p>expandRow.renderer callback will pass the origin row object to you</p>
-        //   </div>
+                        {/* </Thead> */}
+
+                        {index1.StockDetails.map((index2) => {
+                            return (
+                                < tr key={index1.id} >
+                                    <td>
+                                        <div style={{ width: "150px" }}>
+                                            {index2.SystemBatchCode}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "150px" }}>
+                                            {index2.BatchCode}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "100px" }}>
+                                            {convertDatefunc(index2.BatchDate)}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "120px", textAlign: "right" }}>
+                                            {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style={{ width: "150px" }}>
+                                            <Input type="text"
+                                                style={{ textAlign: "right" }}
+                                                key={`batchQty${index1.id}-${index2.id}`}
+                                                id={`batchQty${index1.id}-${index2.id}`}
+                                                defaultValue={index2.Qty}
+                                                onChange={(event) => StockQtyOnChange(event, index1, index2)}
+                                            ></Input>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </table>
+                </Col>
+
+            </div>
+
+            //   <div>
+            //     <p>{ `This Expand row is belong to rowKey ${row.id}` }</p>
+            //     <p>You can render anything here, also you can add additional data on every row object</p>
+            //     <p>expandRow.renderer callback will pass the origin row object to you</p>
+            //   </div>
         ),
         showExpandColumn: true,
         expandByColumnOnly: true
-      };
+    };
     function InvoiceDateOnchange(y, v, e) {
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        // dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
     };
 
@@ -583,7 +604,7 @@ const Invoice = (props) => {
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
-        debugger
+       
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
@@ -597,13 +618,9 @@ const Invoice = (props) => {
         stockDistributeFunc(index)
     };
 
+
     function goButtonHandler(event) {
-        document.getElementById("myInput11").flatpickr({
-            minDate: values.InvoiceDate,
-            maxDate: values.InvoiceDate,
-            defaultDate: values.InvoiceDate,
-            dateFormat: "Y-m-d",
-        });
+
         // }catch(e){}
         // if (formValid(state, setState)) {
         debugger
@@ -781,7 +798,7 @@ const Invoice = (props) => {
                                                     options={{
                                                         dateFormat: "Y-m-d",
                                                     }}
-                                                // onChange={InvoiceDateOnchange}
+                                                onChange={InvoiceDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (
                                                     <span className="invalid-feedback">{isError.InvoiceDate}</span>
@@ -825,11 +842,11 @@ const Invoice = (props) => {
                                         <Button
                                             color="btn btn-outline-info border-1 font-size-12 " style={{ marginTop: '3px' }}
                                             onClick={(e) => {
-                                                document.getElementById("myInput11").flatpickr({
-                                                    maxDate: currentDate,
-                                                    defaultDate: values.InvoiceDate,
-                                                    dateFormat: "Y-m-d",
-                                                });
+                                                // document.getElementById("myInput11").flatpickr({
+                                                //     maxDate: currentDate,
+                                                //     defaultDate: values.InvoiceDate,
+                                                //     dateFormat: "Y-m-d",
+                                                // });
                                                 dispatch(GoButton_post_For_Invoice_Success([]))
                                             }}
                                         >Change</Button>
@@ -846,7 +863,7 @@ const Invoice = (props) => {
                                     keyField={"id"}
                                     data={OrderItemDetails}
                                     columns={pagesListColumns}
-                                   
+
                                     search
                                 >
                                     {(toolkitProps) => (
