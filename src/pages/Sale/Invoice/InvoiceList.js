@@ -23,7 +23,7 @@ import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { Invoice_Edit_API_Singel_Get, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
@@ -58,7 +58,6 @@ const InvoiceList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    debugger
     const { userAccess, pageField, GRNitem, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 
@@ -169,8 +168,8 @@ const InvoiceList = () => {
     }
 
     function downBtnFunc(row) {
-        var ReportType = report.order1;
-        dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
+        var ReportType = report.invoice;
+        dispatch(getpdfReportdata(Invoice_Edit_API_Singel_Get, ReportType, row.id))
     }
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
