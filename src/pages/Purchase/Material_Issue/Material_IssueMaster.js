@@ -22,7 +22,7 @@ import {
     onChangeSelect,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     postBOMSuccess,
     updateBOMListSuccess
@@ -119,8 +119,6 @@ const MaterialIssueMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        // debugger
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -129,14 +127,13 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-                // debugger
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
             if (hasEditVal) {
-                debugger
+
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
@@ -166,7 +163,6 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     useEffect(() => {
-        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
@@ -704,11 +700,23 @@ const MaterialIssueMaster = (props) => {
 
                                 </Col>
                                 <Col sm={1} className="mt-2">
-                                    <Button
-                                        color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                        onClick={(e) => goButtonHandler(e)}
-                                    >Go</Button>
+                                    {pageMode === "save" ?
+                                        (GoButton.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))} />
+                                        : null
+                                    }
                                 </Col>
+                                {/* <Col sm="1" className="mx-4 ">
+                                    {pageMode === "save" ?
+                                        (GoButton.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))} />
+                                        : null
+                                    }
+                                </Col> */}
                                 <Col>
                                 </Col>
                             </Row>
