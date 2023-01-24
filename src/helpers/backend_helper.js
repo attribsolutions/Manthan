@@ -423,15 +423,18 @@ export const Invoice_Post_API = (data) => post(url.INVOICE_POST_API, data)//  po
 export const Invoice_Get_API = (data) => post(url.INVOICE_LIST_API, data)//  postapi
 export const Invoice_Delete_API = (id) => del(`${url.INVOICE_POST_API}/${id}`)// delete api
 
+
 //************************************Inter Branch ************************************/
+
+
 // Demand
 export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND,data)//get api
 export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND,data)//get api
 export const DemandList_get_Filter_API = (filters) => post(url.DEMAND_LiST_BY_FILTERS, filters)
 export const Division = (data) => post(url.DIVISION_DROPDOWN,data)//dropdown api
 export const DemandPage_Edit_API = (data) => post(url.POST_API_FOR_DEMAND, data)
-export const DemandPage_Delete_API = (id) =>del(`${url.DEMAND_LiST_BY_FILTERS}/${id}`)
-export const DemandPage_Update_API = (data,id) => put(`${url.DEMAND_LiST_BY_FILTERS}/${id}`, data)
+export const DemandPage_Delete_API = (id) =>del(`${url.POST_API_FOR_DEMAND}/${id}`)
+export const DemandPage_Update_API = (data,id) => put(`${url.POST_API_FOR_DEMAND}/${id}`, data)
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
