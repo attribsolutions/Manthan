@@ -203,10 +203,9 @@ const ProductionMaster = (props) => {
     }));
 
     const SaveHandler = (event) => {
-        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+
             const jsonBody = JSON.stringify({
                 ProductionMaterialIssue: [
                     {
