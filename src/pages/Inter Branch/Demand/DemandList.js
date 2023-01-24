@@ -10,9 +10,7 @@ import {
     postDemandListPage,
     updateDemandIdSuccess,
     demandlistfilters,
-    postDivision,
-    postGoButtonForDemand,
-    postGoButtonForDemandSuccess,
+    postDivision
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Demand from "./Demand";
@@ -38,10 +36,10 @@ const DemandList = () => {
     const [userAccState, setUserAccState] = useState('');
     const [demanddate, setdemanddate] = useState(currentDate)
 
-
+debugger
     const reducers = useSelector(
+        
         (state) => ({
-
             division:state.DemandReducer.division,
             tableList: state.DemandReducer.demandList,
             deleteMsg: state.DemandReducer.deleteMsg,
@@ -62,8 +60,8 @@ const DemandList = () => {
     const fileds = {
 
         FormDate: currentDate,
-        ToDate:currentDate
-      
+        ToDate: currentDate,
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -84,7 +82,7 @@ const DemandList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Demand Count"} :0`))
-
+           //  goButtonHandler(true)
     }, []);
 
     const divisiondropdown_Options = division.map((i) => ({ label: i.Name, value: i.id }))
@@ -110,6 +108,23 @@ const DemandList = () => {
 
     useEffect(() => {
 
+        const jsonBody = JSON.stringify({
+            FromDate:demanddate,
+            ToDate:currentDate,
+            Supplier: "",
+            Customer: userParty(),     
+        
+        });
+        dispatch(postDemandListPage(jsonBody));
+    }, []);
+
+    divisiondropdown_Options.unshift({
+        value: "",
+        label: " All"
+    });
+
+    useEffect(() => {
+
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
         })
@@ -132,13 +147,13 @@ const DemandList = () => {
         dispatch(editDemandId(jsonBody, Mode));
     }
 
-    const goButtonHandler = () => {
 
+    const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
-            Supplier: values.Division.value,
+             Supplier: values.Division.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
-            DemandID: 0
+            DemandID:0
         })
 
         dispatch(postDemandListPage(jsonBody))
@@ -212,7 +227,7 @@ const DemandList = () => {
                         </Col>
 
                         <Col sm="4">
-                            <FormGroup className="mb-2 row mt-3 " >
+                            <FormGroup className="mb-2 row mt-3">
                                 <Label className="col-md-4 p-2"
 
                                     style={{ width: "80px" }}>Division</Label>
@@ -243,6 +258,7 @@ const DemandList = () => {
                             MasterModal={Demand}
                             masterPath={url.DEMAND}
                             ButtonMsgLable={"Demand"}
+                            deleteName={"id"}
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.DEMAND_LIST ? false : true}
                             goButnFunc={goButtonHandler}
