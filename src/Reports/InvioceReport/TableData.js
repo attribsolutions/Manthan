@@ -1,89 +1,89 @@
 
 export const columns = [
     "HSNCode Item Name",
-    "Quantity", "Rate",
-    "Amount ", "Disc.Amt",
-    "TaxbleAmt.", "GST%", "GST.AMT", "Total Amt"];
+    "Quantity",
+    "Rate",
+    "Basic Amt",
+    "SGST %",
+    "SGSTAmt",
+    "CGST %",
+    "CGSTAmt",
+    "Total Amt"];
 
 export const PageHedercolumns = [
-    "Billed by",
+    "Bill by",
     "Billed to",
-    ''
+    "Invoice Detail"
+    
+
 ]
 
 export const Rows = (data) => {
-    const { InvoiceServiceItems = [] } = data
+    const { InvoiceItems = [] } = data
     var a = [];
-    var Amount = 0
+    var BasicAmount = 0
     var TotalCGst = 0
     var TotalSGst = 0
     var TotalValue = 0
+    var Quantity = 0
     var Gst = 0
-    InvoiceServiceItems.forEach(element => {
-
+    InvoiceItems.forEach(element => { 
+        debugger
         if (Gst === 0) { Gst = element.GSTPercentage };
         if ((Gst === element.GSTPercentage)) {
-            Amount = Amount + element.BasicAmount;
+            BasicAmount = BasicAmount + element.BasicAmount;
+            Quantity = Quantity + element.Quantity
             TotalCGst = TotalCGst + element.CGST
             TotalSGst = TotalSGst + element.SGST
             TotalValue = TotalValue + element.Value
-
             const TableListData = [
-                element.InvoiceID,
+                element.ItemName,
                 element.Quantity,
                 element.Rate,
                 element.BasicAmount,
-                element.DiscountAmount,
-                element.Amount,
-                element.GSTPercentage,
-                element.GSTAmount,
-                element.CGST,
+                element.SGSTPercentage,
                 element.SGST,
-                element.Value,
+                element.CGSTPercentage,
+                element.CGST,
+                element.Amount,
             ];
             a.push(TableListData);
-            Gst = element.GSTPercentage
+            // Gst = element.GSTPercentage
         } else {
-
-            Amount = Amount + element.BasicAmount;
             const tableTotalRow = [
                 "",
-                "Total GST",
-                "% ",
-                parseFloat(Amount).toFixed(2),
-                ,
+                `Qty: ${parseFloat(Quantity).toFixed(2)}`,
                 "",
+                `Amt:${parseFloat(BasicAmount).toFixed(2)}`,
                 "",
+                `CGST:${parseFloat(TotalCGst).toFixed(2)}`,
                 "",
-                "",
-                parseFloat(TotalCGst).toFixed(2),
-                parseFloat(TotalSGst).toFixed(2),
-                parseFloat(TotalValue).toFixed(2),
+                `SGST:${parseFloat(TotalSGst).toFixed(2)}`,
+
+                `Totalvalue:${parseFloat(TotalValue).toFixed(2)}`
             ];
             a.push(tableTotalRow);
-
-            Amount = 0;
+            BasicAmount = 0;
             TotalCGst = 0
             TotalSGst = 0
             TotalValue = 0
-
-            Amount = Amount + element.BasicAmount;
+            Quantity=0
+            Quantity = Quantity + element.Quantity
+            BasicAmount = BasicAmount + element.BasicAmount;
             TotalCGst = TotalCGst + element.CGST
             TotalSGst = TotalSGst + element.SGST
             TotalValue = TotalValue + element.Value
 
             const tableTotalRowNew = [
-                element.InvoiceID,
+                element.ItemName,
                 element.Quantity,
                 element.Rate,
                 element.BasicAmount,
-                element.DiscountAmount,
-                element.Amount,
-                element.GSTPercentage,
-                element.GSTAmount,
-                element.CGST,
+                element.SGSTPercentage,
                 element.SGST,
-                element.Value,
+                element.CGSTPercentage,
+                element.CGST,
+                element.Amount,
             ];
 
             a.push(tableTotalRowNew);
@@ -93,19 +93,22 @@ export const Rows = (data) => {
     })
     const tableTotalRowLast = [
         "",
-        "Total GST",
-        "% ",
-        parseFloat(Amount).toFixed(2),
+        ` ${parseFloat(Quantity).toFixed(2)}`,
+        "",
+        `${parseFloat(BasicAmount).toFixed(2)}`,
+        "",
+        `${parseFloat(TotalCGst).toFixed(2)}`,
+        "",
+        `${parseFloat(TotalSGst).toFixed(2)}`,
+
+        `${parseFloat(TotalValue).toFixed(2)}`
         ,
-        "",
-        "",
-        "",
-        "",
-        parseFloat(TotalCGst).toFixed(2),
-        parseFloat(TotalSGst).toFixed(2),
-        parseFloat(TotalValue).toFixed(2),
     ];
+    // const subtotal = BasicAmount+TotalCGst+TotalSGst
+    // const Total = { "BasicAmount": BasicAmount, "TotalGGst": TotalCGst, "TotalSGst": TotalSGst ,"TotalAmount":subtotal }
+    // data["Total"] = Total
     a.push(tableTotalRowLast);
+
     return a;
 }
 export const ReportFotterColumns = [
@@ -134,7 +137,7 @@ export const ReportFotterColumns2 = [
     "SGST",
 ];
 
-export const ReportFooterRow2 = (element) => {
+export const ReportFooterRow2 = ( data) => {
     var th = ['', 'thousand', 'million', 'billion', 'trillion'];
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -182,14 +185,15 @@ export const ReportFooterRow2 = (element) => {
         }
         return str.replace(/\s+/g, ' ');
     }
-    let stringNumber = toWords(67674168.45)
-    var TableArray = [[`${stringNumber}`
+    console.log(data)
+    let stringNumber = toWords(data.Total.TotalAmount)
+    var TableArray = [['I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and quantity whitch it/these purports to be '
     ],
-    ['I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and quantity whitch it/these purports to be '
+    [,
     ],
-    ['Bank details ·sdSVvDsdgbvzdfbBzdf'
+    ['Bank details ·sdSVvDsdgbvzdfbBzdf',
     ],
-    ['A/C No: 2715500356 IFSC Code:BKID00015422',
+    [`Rupees: ${stringNumber}`,
     ],
     ]
     return TableArray
@@ -197,20 +201,20 @@ export const ReportFooterRow2 = (element) => {
 export const ReportFotterColumns4 = [
     "SGST", "a "
 ];
-export const ReportFooterRow4 = (element) => {
-
-    var TableArray = [[`Total.Amt:`, "67674168.45"
+export const ReportFooterRow4 = (data) => {
+    var TableArray = [[
+     "Total Amount", data.Total.BasicAmount
     ],
-    ['Total GST: ', '124855.25'
+    ["Total SGST", data.Total.TotalGGst
     ],
-    ['Total CTCS:', '45742.635'
+    ['Total CGTS:', data.Total.TotalSGst
     ],
-    ['Round Off:', '46464.253',
-    ],
-    [`Amount:`, `7654214463.53`]
+    // [`Amount:`, data.Total.TotalAmount]
     ]
+    // console.log(data.Total.TotalAmount)
     return TableArray
 }
+
 
 export const columns1 = ["Total", "abc", "ayk", "Amount "];
 
@@ -237,11 +241,11 @@ export const Rows1 = (data) => {
 }
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.BilByName}`, `${data.BilToName}`, `Invoice NO :${data.InvoiceID}`],
-        [`${data.BilByAdr}`, `${data.BilToAdr}`, `${data.InvoiceDate}`,],
-        [`${data.BilByState}`, `${data.BilToState}`, `E-way Bill :${data.EWaYBill}`],
-        [`GSTIN :${data.BilByGSTIN}`, `GSTIN :${data.BilToGSTIN}`, "e-way-Bill : 36454454"],
-        [`FSSAI :${data.BilByFSSAI}`, `FSSAI :${data.BilToFSSAI}`, "IRN : 36454454", ""],
+        [, ,  `E-way Bill :${data.EWaYBill}`   ],
+        [`${data.CustomerName}`, `${data.PartyName}`,              `Full Invoice NO :${data.FullInvoiceNumber}`],
+        [`${data.BilByAdr}`,  `${data.BilToAdr}`,               `${data.InvoiceDate}`,],
+        [`${data.BilByState}`, `${data.BilToState}`,             "Vehical No : MH 273587  " ],
+        [`FSSAI :${data.BilByFSSAI}`,`FSSAI :${data.BilToFSSAI}` , `Driver Name: Abcd`],
     ]
     return reportArray;
 }
