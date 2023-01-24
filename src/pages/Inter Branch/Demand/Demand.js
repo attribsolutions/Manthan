@@ -378,7 +378,7 @@ const Demand = (props) => {
                 demandItem({ i, isedit })
             };
         });
-        
+
         if (validMsg.length > 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -562,6 +562,57 @@ const Demand = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
+
+        {//------------- Demand No column ----------------------------------
+            text: "Demand No",
+            dataField: "DemandNo",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <span className="text-right" >
+                        <Input
+                            type="text"
+
+
+                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
+
+
+        {//------------- FullDemand No column ----------------------------------
+            text: "FullDemand No",
+            dataField: "FullDemandNo",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <span className="text-right" >
+                        <Input
+                            type="text"
+
+
+                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
+
+
 
         { //------------- Comment column ----------------------------------
             text: "Comment",

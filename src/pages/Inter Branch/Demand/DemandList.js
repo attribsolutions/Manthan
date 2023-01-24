@@ -10,7 +10,8 @@ import {
     postDemandListPage,
     updateDemandIdSuccess,
     demandlistfilters,
-    postDivision
+    postDivision,
+    postGoButtonForDemand
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Demand from "./Demand";
@@ -36,11 +37,10 @@ const DemandList = () => {
     const [userAccState, setUserAccState] = useState('');
     const [demanddate, setdemanddate] = useState(currentDate)
 
-debugger
     const reducers = useSelector(
-        
+
         (state) => ({
-            division:state.DemandReducer.division,
+            division: state.DemandReducer.division,
             tableList: state.DemandReducer.demandList,
             deleteMsg: state.DemandReducer.deleteMsg,
             updateMsg: state.DemandReducer.updateMsg,
@@ -49,7 +49,7 @@ debugger
             demandlistFilter: state.DemandReducer.demandlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            GoButton:state.DemandReducer.GoButton,
+            GoButton: state.DemandReducer.GoButton,
         })
     );
 
@@ -61,7 +61,6 @@ debugger
 
         FormDate: currentDate,
         ToDate: currentDate,
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -82,7 +81,7 @@ debugger
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Demand Count"} :0`))
-           //  goButtonHandler(true)
+        goButtonHandler(true)
     }, []);
 
     const divisiondropdown_Options = division.map((i) => ({ label: i.Name, value: i.id }))
@@ -107,15 +106,14 @@ debugger
 
 
     useEffect(() => {
-
+        debugger
         const jsonBody = JSON.stringify({
-            FromDate:demanddate,
-            ToDate:currentDate,
-            Supplier: "",
-            Customer: userParty(),     
-        
+            Supplier: divisionSelect === "" ? '' : divisionSelect.value,
+            Customer: userParty(),
+            EffectiveDate: demanddate,
+            DemandID: 0,
         });
-        dispatch(postDemandListPage(jsonBody));
+        dispatch(postGoButtonForDemand(jsonBody));
     }, []);
 
     divisiondropdown_Options.unshift({
@@ -135,25 +133,14 @@ debugger
     }, [userAccess])
 
 
-    function editBodyfunc(rowData) {
-
-        const jsonBody = JSON.stringify({
-            Party: rowData.SupplierID,
-            Customer: rowData.CustomerID,
-            EffectiveDate: rowData.preDemandDate,
-            OrderID: rowData.id
-        })
-        var Mode = "edit"
-        dispatch(editDemandId(jsonBody, Mode));
-    }
-
+   
 
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
-             Supplier: values.Division.value,
+            FromDate: fromdate,
+            ToDate: todate,
+            Supplier: "",
             Customer: userParty(),
-            EffectiveDate: demanddate,
-            DemandID:0
         })
 
         dispatch(postDemandListPage(jsonBody))
@@ -262,7 +249,6 @@ debugger
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.DEMAND_LIST ? false : true}
                             goButnFunc={goButtonHandler}
-                            editBodyfunc={editBodyfunc}
                         />
                         : null
                 }

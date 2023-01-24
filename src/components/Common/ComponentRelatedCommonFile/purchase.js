@@ -184,6 +184,7 @@ const PurchaseListPage = (props) => {
     }, [deleteMsg]);
 
     useEffect(() => {
+        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postSucc({ Status: false }))

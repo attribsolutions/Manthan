@@ -422,6 +422,7 @@ export const Invoice_GoButton_Post_API = (data) => post(url.INVOICE_GO_BUTTON_PO
 export const Invoice_Post_API = (data) => post(url.INVOICE_POST_API, data)//  postapi
 export const Invoice_Get_API = (data) => post(url.INVOICE_LIST_API, data)//  postapi
 export const Invoice_Delete_API = (id) => del(`${url.INVOICE_POST_API}/${id}`)// delete api
+export const Invoice_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_POST_API}/${id}`)// delete api
 
 
 //************************************Inter Branch ************************************/

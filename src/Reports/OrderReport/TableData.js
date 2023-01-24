@@ -133,7 +133,7 @@ export const ReportFooterRow4 = (element) => {
 
     var TableArray = [[`Total.Amt:`, "67674168.45"
     ],
-    ['Total GST: ', '124855.25'
+    ['Total GST: ','124855.25'
     ],
     ['Total CTCS:', '45742.635'
     ],
@@ -150,6 +150,7 @@ export const Rows1 = (data) => {
     var a1 = [];
     var c = 0;
     data.InvoiceServiceItems.forEach(element => {
+        debugger
         if (c < 2) {
             c = c + 1;
             const ticketData = [
@@ -173,7 +174,7 @@ export const ReportHederRows = (data) => {
         [`${data.BilByAdr}`, `${data.BilToAdr}`, `${data.InvoiceDate}`,],
         [`${data.BilByState}`, `${data.BilToState}`, `E-way Bill :${data.EWaYBill}`],
         [`GSTIN :${data.BilByGSTIN}`, `GSTIN :${data.BilToGSTIN}`, "e-way-Bill : 36454454"],
-        [`FSSAI :${data.BilByFSSAI}`, `FSSAI :${data.BilToFSSAI}`, "IRN : 36454454", ""],
+        [`FSSAI :${data.BilByFSSAI}`, `FSSAI :${data.BilToFSSAI}`, ],
     ]
     return reportArray;
 }
