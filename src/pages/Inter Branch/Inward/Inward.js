@@ -55,7 +55,7 @@ const Inward = (props) => {
               Rate: "11.00",
               ItemExpiryDate: "2023-01-10",
               OriginalBatchBaseUnitQuantity: "1.000",
-              GST: 54
+              GST: 5454
             },
             Item: {
               id: 44,
@@ -88,6 +88,7 @@ const Inward = (props) => {
             CreatedOn: "2023-01-20T17:47:30.681143",
             IBChallan: 2
           }
+          
         ]
       }
 
