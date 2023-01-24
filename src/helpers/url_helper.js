@@ -210,9 +210,13 @@ export const INVOICE_GO_BUTTON_POST_API = '/GetOrderDetails'
 export const INVOICE_POST_API = '/Invoice'
 export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
+//********************************** Inter Branch  **************************************/
 // Demand
 export const GO_BUTTON_POST_API_FOR_DEMAND = '/InterBranchesItems'
 export const DIVISION_DROPDOWN = '/InterBranches'
 export const POST_API_FOR_DEMAND = '/Demands'
 export const DEMAND_LiST_BY_FILTERS ='/DemandsFilter'
 
+// Inward
+export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api
+export const INWARD_LIST_API = '/InterBranchInwardFilter'//List Api

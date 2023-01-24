@@ -113,6 +113,7 @@ import Demand from "../pages/Inter Branch/Demand/Demand";
 import DemandList from "../pages/Inter Branch/Demand/DemandList"
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
+import InwardList from "../pages/Inter Branch/Inward/InwardList";
 
 const userRoutes = [
 
@@ -240,6 +241,7 @@ const userRoutes = [
   { path: path.DEMAND_LIST, component: DemandList},
 
   { path: path.INWARD, component: Inward },
+  { path: path.INWARD_LIST, component: InwardList },
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
