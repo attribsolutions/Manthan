@@ -175,7 +175,7 @@ const InwardList = () => {
                                 <FormGroup className="mb-2 row mt-3 " >
                                     <Label className="col-md-4 p-2"
 
-                                        style={{ width: "115px" }}>Customer</Label>
+                                        style={{ width: "115px" }}>Supplier</Label>
                                     <Col sm="5">
 
                                         <Select

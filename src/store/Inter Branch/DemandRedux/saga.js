@@ -58,7 +58,6 @@ function* Post_Demand_Genfun({ data }) {
   
     yield put(SpinnerState(true))
     try {
-      debugger
         const response = yield call(DemandPage_Post_API,data);
         yield put(SpinnerState(false))
         yield put(postDemandSuccess(response));
@@ -100,7 +99,7 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
       yield put(SpinnerState(false))
       yield put(AlertState({
         Type: 4,
-        Status: true, Message: "500 Error Edit Order",
+        Status: true, Message: "500 Error Edit Demand",
       }));
     }
   }
@@ -115,7 +114,7 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
       yield put(SpinnerState(false))
       yield put(AlertState({
         Type: 4,
-        Status: true, Message: "500 Error DeleteOrder",
+        Status: true, Message: "500 Error Delete Demand",
       }));
     }
   }
@@ -132,38 +131,34 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
       yield saveDissable(false)
       yield put(AlertState({
         Type: 4,
-        Status: true, Message: "500 Error UpdateOrder",
+        Status: true, Message: "500 Error UpdateDemand",
       }));
     }
   }
   
   // List Page API
-  function* Post_OrderList_GenFunc({ filters }) {
-    yield GoBtnDissable(true)
-    // yield delay(400)
-    try {
-      const response = yield call(DemandList_get_Filter_API, filters);
-      const newList = yield response.Data.map((i) => {
-        var date = convertDatefunc(i.OrderDate)
-        var time = convertTimefunc(i.CreatedOn)
-        var DeliveryDate = convertDatefunc(i.DeliveryDate);
-        i["preOrderDate"] = i.OrderDate
-        i.OrderDate = (`${date} ${time}`)
-        i.DeliveryDate = (`${DeliveryDate}`)
-        i.Inward === 0 ? i.Inward = "Open" : i.Inward = "Close";
-        return i
-      })
-      yield put(postDemandListPageSuccess(newList))
-      yield GoBtnDissable(false)
-  
-    } catch (error) {
-      yield GoBtnDissable(false)
-      yield put(AlertState({
-        Type: 4,
-        Status: true, Message: "500 Error  Get DemandList",
-      }));
-    }
+  function* Post_DemandList_GenFunc({ filters }) {
+    yield put(SpinnerState(true))
+  try {
+
+    const response = yield call(DemandList_get_Filter_API, filters);
+    const newList = yield response.Data.map((i) => {
+      i.DemandDate = i.DemandDate;
+      var date = convertDatefunc(i.DemandDate)
+      i.DemandDate = (date)
+      return i
+    })
+    yield put(postDemandListPageSuccess(newList));
+    yield put(SpinnerState(false))
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message in DemandList ",
+    }));
   }
+}
+  
 
 function* DemandSaga() {
     yield takeEvery(POST_GO_BUTTON_FOR_DEMAND, GoButton_Demand_genfun)
@@ -171,7 +166,7 @@ function* DemandSaga() {
     yield takeEvery(POST_DIVISION, post_Division_Genfun)
     yield takeEvery(EDIT_DEMAND_FOR_DEMAND_PAGE, editDemandGenFunc)
     yield takeEvery(DELETE_DEMAND_FOR_DEMAND_PAGE, DeleteDemand_GenFunc)
-    yield takeEvery(POST_DEMAND_LIST_PAGE, Post_OrderList_GenFunc)
+    yield takeEvery(POST_DEMAND_LIST_PAGE, Post_DemandList_GenFunc)
     yield takeEvery(UPDATE_DEMAND_ID_FROM_DEMAND_PAGE, UpdateDemand_ID_GenFunc)
 }
 

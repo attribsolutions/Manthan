@@ -39,7 +39,7 @@ const OrderList = () => {
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(url.ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
-
+debugger
     const reducers = useSelector(
         (state) => ({
             vender: state.SupplierReducer.vender,
@@ -60,7 +60,7 @@ const OrderList = () => {
 
     const action = {
         getList: getOrderListPage,
-        deleteId: deleteOrderId,
+         deleteId: deleteOrderId,
         postSucc: postMessage,
         updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteOrderIdSuccess

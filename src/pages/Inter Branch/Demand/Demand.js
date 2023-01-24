@@ -613,7 +613,7 @@ const Demand = (props) => {
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>Date</Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}> Demand Date</Label>
                                             <Col sm="7">
                                                 <Flatpickr
                                                     style={{ userselect: "all" }}
