@@ -52,3 +52,14 @@ export function Go_Button(props) {
     >Go</Button>
   )
 }
+
+export function Change_Button(props) {
+  const { onClick } = props
+  return (
+    <Button
+      id="changebtn_submmit" type="button"
+      color="btn btn-outline-info border-1 font-size-12 "
+      onClick={onClick}
+    >Change</Button>
+  )
+}
