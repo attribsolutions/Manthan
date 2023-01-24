@@ -259,7 +259,6 @@ const OrderList = () => {
 
                                     style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col sm="5">
-
                                     <Select
                                         classNamePrefix="select2-Customer"
                                         value={venderSelect}
