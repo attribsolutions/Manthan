@@ -30,7 +30,7 @@ import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails, commonPa
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 import { ORDER_lIST } from "../../../routes/route_url";
-import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -556,8 +556,8 @@ const SaleOrder = (props) => {
     };
 
     const saveHandeller = () => {
-        const division =supplierSelect.value;
-        const supplier =  userParty();
+        const division = supplierSelect.value;
+        const supplier = userParty();
         debugger
         const validMsg = []
         const itemArr = []
@@ -731,11 +731,11 @@ const SaleOrder = (props) => {
                                             id="orderdate"
                                             name="orderdate"
                                             value={orderdate}
-                                            disabled={pageMode === "edit" ? true : false}
+                                            disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
-                                                altInput: true,
+                                                // altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                             }}
@@ -753,15 +753,24 @@ const SaleOrder = (props) => {
                                         <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
-                                            isDisabled={pageMode === "edit" ? true : false}
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             options={supplierOptions}
                                             onChange={supplierOnchange}
                                         />
                                     </Col>
-                                    <Col sm="1" className="mx-4 ">
+                                    {/* <Col sm="1" className="mx-4 ">
                                         {pageMode === "save" ?
                                             <Go_Button onClick={(e) => goButtonHandler()} />
                                             : null}
+                                    </Col> */}
+                                    <Col sm="1" className="mx-4 ">
+                                        {pageMode === "save" ?
+                                            (orderItemTable.length === 0) ?
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                :
+                                                <Change_Button onClick={(e) => dispatch(goButtonForOrderAddSuccess([]))} />
+                                            : null
+                                        }
                                     </Col>
                                 </FormGroup>
                             </Col >
