@@ -19,7 +19,7 @@ export const ModuleList = url.MODULE
 export const CompanyMaster = url.COMPANY_lIST
 export const CompanyList = url.COMPANY
 
-export const UserMaster= url.USER_lIST
+export const UserMaster = url.USER_lIST
 export const UserList = url.USER
 
 export const RoleMaster = url.ROLE_lIST
@@ -65,7 +65,7 @@ export const CategoryList = url.CATEGORY
 export const VehicleMaster = url.VEHICLE_lIST
 export const VehicleList = url.VEHICLE
 
-export const GroupTypeMaster =url.GROUPTYPE_lIST
+export const GroupTypeMaster = url.GROUPTYPE_lIST
 export const GroupTypeList = url.GROUPTYPE
 
 export const GroupMaster = url.GROUP_lIST
@@ -83,13 +83,13 @@ export const MarginList = url.MARGIN
 export const PageMaster = url.PAGE_lIST
 export const PageList = url.PAGE
 
-export const TermsAndCondtionsMaster =url.TERMS_AND_CONDITION_LIST
-export const TermsAndCondtionsList =url.TERMS_AND_CONDITION
+export const TermsAndCondtionsMaster = url.TERMS_AND_CONDITION_LIST
+export const TermsAndCondtionsList = url.TERMS_AND_CONDITION
 
 export const PartySubParty = url.PARTY_SUB_PARTY_lIST
 export const PartySubPartyList = url.PARTY_SUB_PARTY
 
-export const PartyItems =  url.PARTYITEM_LIST
+export const PartyItems = url.PARTYITEM_LIST
 export const PartyItemsList = url.PARTYITEM
 
 export const SubGroupList = url.SUBGROUP
@@ -134,3 +134,6 @@ export const Demand = url.DEMAND_LIST
 
 export const InwardList = url.INWARD
 export const Inward = url.INWARD_LIST
+
+export const ChallanList = url.CHALLAN
+export const Challan = url.CHALLAN_LIST

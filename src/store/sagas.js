@@ -53,6 +53,7 @@ import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 import InvoiceSaga from "./Sales/Invoice/saga"
 import DemandSaga from "./Inter Branch/DemandRedux/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
+import ChallanSaga from "./Inter Branch/ChallanRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -103,7 +104,7 @@ export default function* rootSaga() {
     fork(ProductionSaga),
     fork(DemandSaga),
     fork(InvoiceSaga),
-    fork(InwardSaga)
-
+    fork(InwardSaga),
+    fork(ChallanSaga)
   ])
 }

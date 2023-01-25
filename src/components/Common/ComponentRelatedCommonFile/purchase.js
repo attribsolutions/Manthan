@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState,  BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { AlertState, BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
@@ -84,6 +84,9 @@ const PurchaseListPage = (props) => {
         makeBtnFunc = () => { },
         makeBtnShow,
         makeBtnName,
+        InwardMakeBtnFunc = () => { },
+        InwardMakeBtnShow,
+        InwardMakeBtnName,
         downBtnFunc = () => { },
     } = props;
 
@@ -116,7 +119,7 @@ const PurchaseListPage = (props) => {
             downList.push(listObj)
             listObj = {}
         })
-        
+
         // dispatch(BreadcrumbDownBtndata(downList))
 
     }, [props.reducers.tableList])
@@ -132,7 +135,7 @@ const PurchaseListPage = (props) => {
         }
     }, [userAccess])
 
-   
+
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
 
@@ -239,8 +242,18 @@ const PurchaseListPage = (props) => {
     function onSaveBtnClick() {
 
         makeBtnFunc(tableList);
-
     }
+
+    function InwardMakeBtnHandler(rowData) {
+        rowData["hasSelect"] = true;
+        let arr = []
+        arr.push(rowData)
+        InwardMakeBtnFunc(arr)
+    }
+
+    // function onSaveBtnClick() {
+    //     InwardMakeBtnFunc(tableList);
+    // }
 
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
@@ -265,7 +278,7 @@ const PurchaseListPage = (props) => {
         tableList.map((ele, k) => {
             if (found.length === 1 && isEvent) {
                 // validation only show checkbox =supplier and same 
-                if (!(ele.SupplierID === rowData.SupplierID)||!(ele.POType === rowData.POType)) {
+                if (!(ele.SupplierID === rowData.SupplierID) || !(ele.POType === rowData.POType)) {
                     try {
                         document.getElementById(`checkhasSelect${ele.id}`).disabled = true
                         document.getElementById(`checkhasSelect${ele.id}`).style.border = "white"
@@ -363,6 +376,30 @@ const PurchaseListPage = (props) => {
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-invoice" ></span> </Button>
+                        </div>)
+                }
+            })
+        }
+
+        else if ((InwardMakeBtnShow) && (fileds.length - 1 === k)) {
+
+            columns.push({
+                text: "Select",
+                dataField: "hasSelect",
+                sort: true,
+                formatter: (cellContent, rowData, key) => {
+                    rowData["hasSelect"] = false
+                    return (
+                        <div>
+
+                            <Button
+                                type="button"
+                                className={makeBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={InwardMakeBtnName}
+                                onClick={() => { InwardMakeBtnHandler(rowData) }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                ></span> Inward</Button>
                         </div>)
                 }
             })
