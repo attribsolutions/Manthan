@@ -40,7 +40,7 @@ const DemandList = () => {
     const reducers = useSelector(
 
         (state) => ({
-            division: state.DemandReducer.division,
+            Supplier: state.DemandReducer.Supplier,
             tableList: state.DemandReducer.demandList,
             deleteMsg: state.DemandReducer.deleteMsg,
             updateMsg: state.DemandReducer.updateMsg,
@@ -53,8 +53,8 @@ const DemandList = () => {
         })
     );
 
-    const { userAccess, pageField, division, tableList, demandlistFilter } = reducers;
-    const { fromdate, todate, divisionSelect } = demandlistFilter;
+    const { userAccess, pageField, Supplier, tableList, demandlistFilter } = reducers;
+    const { fromdate, todate, SupplierSelect } = demandlistFilter;
     const page_Id = (pageId.DEMAND_LIST);
 
     const fileds = {
@@ -84,7 +84,7 @@ const DemandList = () => {
         goButtonHandler(true)
     }, []);
 
-    const divisiondropdown_Options = division.map((i) => ({ label: i.Name, value: i.id }))
+    const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
 
 
     const downList = useMemo(() => {
@@ -106,9 +106,9 @@ const DemandList = () => {
 
 
     useEffect(() => {
-        debugger
+     
         const jsonBody = JSON.stringify({
-            Supplier: divisionSelect === "" ? '' : divisionSelect.value,
+            Supplier: SupplierSelect === "" ? '' : SupplierSelect.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
             DemandID: 0,
@@ -116,7 +116,7 @@ const DemandList = () => {
         dispatch(postGoButtonForDemand(jsonBody));
     }, []);
 
-    divisiondropdown_Options.unshift({
+    SupplierDropdown_Options.unshift({
         value: "",
         label: " All"
     });
@@ -133,7 +133,18 @@ const DemandList = () => {
     }, [userAccess])
 
 
-   
+    function editBodyfunc(rowData) {
+        debugger
+        const jsonBody = JSON.stringify({
+            Supplier: rowData.SupplierID,
+            Customer: rowData.CustomerID,
+            EffectiveDate: rowData.DemandDate,
+            DemandID: rowData.id
+        })
+        var Mode = "edit"
+        dispatch(editDemandId(jsonBody, Mode));
+    }
+
 
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
@@ -158,7 +169,7 @@ const DemandList = () => {
         dispatch(demandlistfilters(newObj))
     }
 
-    function divisionOnchange(e) {
+    function SupplierOnchange(e) {
         let newObj = { ...demandlistFilter }
         newObj.divisionSelect = e
         dispatch(demandlistfilters(newObj))
@@ -221,9 +232,9 @@ const DemandList = () => {
                                 <Col sm="6">
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        value={divisionSelect}
-                                        options={divisiondropdown_Options}
-                                        onChange={divisionOnchange}
+                                        value={SupplierSelect}
+                                        options={SupplierDropdown_Options}
+                                        onChange={SupplierOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -249,6 +260,7 @@ const DemandList = () => {
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.DEMAND_LIST ? false : true}
                             goButnFunc={goButtonHandler}
+                            editBodyfunc={editBodyfunc}
                         />
                         : null
                 }

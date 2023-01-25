@@ -429,13 +429,13 @@ export const Invoice_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_POST_API}/
 
 
 // Demand
-export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND,data)//get api
-export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND,data)//get api
-export const DemandList_get_Filter_API = (filters) => post(url.DEMAND_LiST_BY_FILTERS, filters)
+export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND,data)//go button api
+export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND,data)//post api
+export const DemandList_get_Filter_API = (filters) => post(url.DEMAND_LiST_BY_FILTERS, filters)//list page
 export const Division = (data) => post(url.DIVISION_DROPDOWN,data)//dropdown api
-export const DemandPage_Edit_API = (data) => post(url.POST_API_FOR_DEMAND, data)
-export const DemandPage_Delete_API = (id) =>del(`${url.POST_API_FOR_DEMAND}/${id}`)
-export const DemandPage_Update_API = (data,id) => put(`${url.POST_API_FOR_DEMAND}/${id}`, data)
+export const DemandPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND, data)//edit
+export const DemandPage_Delete_API = (id) =>del(`${url.POST_API_FOR_DEMAND}/${id}`)//delete
+export const DemandPage_Update_API = (data,id) => put(`${url.POST_API_FOR_DEMAND}/${id}`, data)//update
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
