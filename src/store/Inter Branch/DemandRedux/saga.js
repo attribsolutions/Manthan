@@ -34,18 +34,10 @@ import {
 
 // GO Botton Post API
 function* GoButton_Demand_genfun({ data }) {
-
-  yield GoBtnDissable(true)
-  yield delay(400)
   try {
     const response = yield call(DemandPage_GoButton_API, data);
-    yield response.Data.DemandItems.forEach((ele, k) => {
-      ele["id"] = k + 1
-    });
     yield put(postGoButtonForDemandSuccess(response.Data));
-    yield GoBtnDissable(false)
   } catch (error) {
-    yield GoBtnDissable(false)
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Go Button-Demand Page",
@@ -92,6 +84,7 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
     yield put(SpinnerState(true))
     try {
       const response = yield call(DemandPage_Edit_API, jsonBody);
+
       response.pageMode = pageMode
       yield put(SpinnerState(false))
       yield put(editDemandIdSuccess(response));

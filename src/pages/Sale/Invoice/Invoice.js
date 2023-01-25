@@ -132,7 +132,7 @@ const Invoice = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 setItemselect(hasEditVal)
                 const { id, Item, Customer, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {

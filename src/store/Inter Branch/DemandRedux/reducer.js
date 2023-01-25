@@ -14,13 +14,13 @@ import {
 const INIT_STATE = {
     
     GoButton:null,
-    division: [],
+    Supplier: [],
     editData: { Status: false, Items: [] },
     postMsg: { Status: false },
     updateMsg: { Status: false },
     deleteMsg: { Status: false },
     demandList: [],
-    demandlistFilter: { fromdate: currentDate, todate: currentDate,divisionSelect: {value:'', label:"All"} },
+    demandlistFilter: { fromdate: currentDate, todate: currentDate,SupplierSelect: {value:'', label:"All"} },
 }
 const DemandReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -43,7 +43,7 @@ const DemandReducer = (state = INIT_STATE, action) => {
         case POST_DIVISION_SUCCESS:
             return {
                 ...state,
-                division: action.payload,
+                Supplier: action.payload,
             }
 
         // filter list
