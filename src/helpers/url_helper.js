@@ -220,3 +220,7 @@ export const DEMAND_LiST_BY_FILTERS ='/DemandsFilter'
 // Inward
 export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//List Api
+
+// Challan
+export const CHALLAN_LIST_API = '/InterBranchChallanFilter'//List Api
+export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward Button Api Api
