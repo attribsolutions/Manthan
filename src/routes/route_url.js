@@ -124,3 +124,6 @@ export const DEMAND_LIST= "/DemandList"
 
 export const INWARD ="/Inward"
 export const INWARD_LIST = "/InwardList"
+
+export const CHALLAN ="/Challan"
+export const CHALLAN_LIST = "/ChallanList"

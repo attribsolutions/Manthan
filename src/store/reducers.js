@@ -55,6 +55,7 @@ import ProductionReducer from "./Purchase/ProductionRedux/reducer"
 import InvoiceReducer from "./Sales/Invoice/reducer"
 import DemandReducer from "./Inter Branch/DemandRedux/reducer"
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
+import ChallanReducer from "./Inter Branch/ChallanRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -120,6 +121,7 @@ const rootReducer = combineReducers({
   ProductionReducer,
   DemandReducer,
   InvoiceReducer,
-  InwardReducer
+  InwardReducer,
+  ChallanReducer
 })
 export default rootReducer

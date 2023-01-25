@@ -442,6 +442,10 @@ export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// I
 export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// List Api
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
 
+// Challan
+export const Challan_List_API = (filters) => post(url.CHALLAN_LIST_API, filters)// List Api
+export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

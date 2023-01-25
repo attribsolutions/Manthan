@@ -126,3 +126,6 @@ export const DEMAND_LIST = 127
 
 export const INWARD = 128
 export const INWARD_LIST = 129
+
+export const CHALLAN = 130
+export const CHALLAN_LIST = 131

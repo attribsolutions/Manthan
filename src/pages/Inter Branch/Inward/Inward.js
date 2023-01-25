@@ -22,77 +22,9 @@ import { postInward, postInwardSuccess } from "../../../store/Inter Branch/Inwar
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { InwardButtonId } from "../../../store/Inter Branch/ChallanRedux/action";
 
 const Inward = (props) => {
-
-    const data = {
-        IBChallanDate: "2023-01-06",
-        IBChallanNumber: 2,
-        FullIBChallanNumber: "IBC2",
-        CustomerGSTTin: "2023-01-06",
-        GrandTotal: "6615.00",
-        RoundOffAmount: "1.00",
-        CreatedBy: 1,
-        UpdatedBy: 1,
-        Customer: {
-          id: 4,
-          Name: "Shade No-44"
-        },
-        Party: {
-          id: 5,
-          Name: "Shade.No-25"
-        },
-        IBChallanItems: [
-          {
-            id: 2,
-            LiveBatch: {
-              id: 1,
-              BatchDate: "2023-01-10",
-              BatchCode: "hgf",
-              SystemBatchDate: "2023-01-10",
-              SystemBatchCode: "jygyj",
-              MRP: "1.00",
-              Rate: "11.00",
-              ItemExpiryDate: "2023-01-10",
-              OriginalBatchBaseUnitQuantity: "1.000",
-              GST: 5454
-            },
-            Item: {
-              id: 44,
-              Name: "Khawa"
-            },
-            Unit: {
-              id: 302,
-              UnitID: "Kg"
-            },
-            Quantity: "10.000",
-            BaseUnitQuantity: "1.000",
-            MRP: null,
-            Rate: "100.00",
-            BasicAmount: "1000.00",
-            TaxType: "GST",
-            GSTPercentage: "5.00",
-            GSTAmount: "50.00",
-            Amount: "1050.00",
-            DiscountType: "",
-            Discount: "0.00",
-            DiscountAmount: "0.00",
-            CGST: "25.00",
-            SGST: "25.00",
-            IGST: "0.00",
-            CGSTPercentage: "2.50",
-            SGSTPercentage: "2.50",
-            IGSTPercentage: "0.00",
-            BatchDate: "2023-01-01",
-            BatchCode: "A001",
-            CreatedOn: "2023-01-20T17:47:30.681143",
-            IBChallan: 2
-          }
-          
-        ]
-      }
-
-    const { IBChallanItems = [] } = data
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -102,10 +34,18 @@ const Inward = (props) => {
     const {
         postMsg,
         userAccess,
+        InwardData
     } = useSelector((state) => ({
+        InwardData: state.ChallanReducer.InwardData,
         postMsg: state.InwardReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
+
+    const { IBChallanItems = [], Party = '',IBChallanNumber='' } = InwardData
+
+    useEffect(() => {
+        dispatch(InwardButtonId())
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -183,18 +123,18 @@ const Inward = (props) => {
         }))
 
         const jsonBody = JSON.stringify({
-            IBInwardDate: InwardDate,
-            IBInwardNumber: data.IBChallanNumber,
-            FullIBInwardNumber: data.FullIBInwardNumber,
-            GrandTotal: data.GrandTotal,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
-            Customer: data.Customer.id,
-            Supplier: data.Party.id,
-            InterBranchInwardItems: arr,
-            InterBranchInwardReferences: [{
-                IBChallan: 1
-            }]
+            // IBInwardDate: InwardDate,
+            // IBInwardNumber: data.IBChallanNumber,
+            // FullIBInwardNumber: data.FullIBInwardNumber,
+            // GrandTotal: data.GrandTotal,
+            // CreatedBy: createdBy(),
+            // UpdatedBy: createdBy(),
+            // Customer: data.Customer.id,
+            // Supplier: data.Party.id,
+            // InterBranchInwardItems: arr,
+            // InterBranchInwardReferences: [{
+            //     IBChallan: 1
+            // }]
         });
 
         // saveDissable(true);//save Button Is dissable function
@@ -314,7 +254,7 @@ const Inward = (props) => {
                                     style={{ width: "83px" }}>Division</Label>
                                 <Col sm="7">
                                     <Input type="text"
-                                        defaultValue={data.Party.Name}
+                                        defaultValue={Party.Name}
                                         placeholder='Enter Division'
                                     // onChange={e => description = e.target.value}
                                     />
@@ -328,7 +268,7 @@ const Inward = (props) => {
                                     style={{ width: "83px" }}>Challan No.</Label>
                                 <Col sm="7">
                                     <Input type="text"
-                                        defaultValue={data.IBChallanNumber}
+                                        defaultValue={IBChallanNumber}
                                         placeholder='Enter Challan No.'
                                     // onChange={e => description = e.target.value}
                                     />

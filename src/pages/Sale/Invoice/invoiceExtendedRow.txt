@@ -40,7 +40,6 @@ import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 import "./css.css"
-import { Data } from "./demodata";
 const Invoice = (props) => {
 
     const dispatch = useDispatch();
@@ -133,7 +132,7 @@ const Invoice = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 setItemselect(hasEditVal)
                 const { id, Item, Customer, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
@@ -285,9 +284,17 @@ const Invoice = (props) => {
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div className="width-100">Item Name</div>)
+            style: (cell, row, rowIndex, colIndex) => {
+                return {
+                    width: '10%',
+                    width: '10%'
+                };
+            },
+            headerStyle: (colum, colIndex) => {
+                return {
+                    width: '10%',
+                    width: '10%'
+                };
             },
             formatter: (cellContent, index1) => {
 
@@ -305,16 +312,23 @@ const Invoice = (props) => {
         {//***************Quantity********************************************************************* */
             text: "Quantity",
             dataField: "",
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div className="width-100">Quantity</div>)
+            style: (cell, row, rowIndex, colIndex) => {
+                return {
+                    width: '10%',
+                    width: '10%'
+                };
+            },
+            headerStyle: (colum, colIndex) => {
+                return {
+                    width: '10%',
+                    width: '10%'
+                };
             },
             formatter: (cellContent, user) => (
                 <div >
                     <Input type="text"
                         id={`OrderQty${user.id}`}
                         style={{ textAlign: "right" }}
-                        className=" width-100"
                         key={user.id}
                         autoComplete="off"
                         defaultValue={user.Quantity}
@@ -327,11 +341,18 @@ const Invoice = (props) => {
         },
         {//***************Unit Dropdown********************************************************************* */
             text: "Unit",
-            dataField: "id",
-
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div className="width-100">Unit</div>)
+            dataField: "",
+            style: (cell, row, rowIndex, colIndex) => {
+                return {
+                    width: '10%',
+                    width: '10%'
+                };
+            },
+            headerStyle: (colum, colIndex) => {
+                return {
+                    width: '10%',
+                    width: '10%'
+                };
             },
             formatter: (value, row, key) => {
 
@@ -341,7 +362,6 @@ const Invoice = (props) => {
                         id={"ddlUnit"}
                         defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
-                        className=" width-100"
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -355,6 +375,12 @@ const Invoice = (props) => {
                     </Select >
                 )
             },
+            headerStyle: (colum, colIndex) => {
+                return {
+                    maxWidth: "150px",
+                    minWidth: "150px", textAlign: 'center'
+                };
+            },
         },
 
         {//***************StockDetails********************************************************************* */
@@ -365,7 +391,7 @@ const Invoice = (props) => {
                 return (
                     <div className="d-flex flex-content-start">
                         <div>
-                            <samp id="allplus-circle" style={{ display: "none" }}>
+                            <samp id="allplus-circle" >
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
                                         position: "",
@@ -374,12 +400,9 @@ const Invoice = (props) => {
                                     onClick={(e) => { showAllStockOnclick(true) }}>
                                 </i>
                             </samp>
-                            <samp id="allminus-circle" >
+                            <samp id="allminus-circle" style={{ display: "none" }}>
                                 <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{
-                                        position: "",
-                                        display: OrderItemDetails.length > 0 ? "block" : "none"
-                                    }}
+                                    style={{ position: "" }}
                                     onClick={(e) => { showAllStockOnclick(false) }}
                                 ></i>
                             </samp>
@@ -396,21 +419,20 @@ const Invoice = (props) => {
             formatter: (cellContent, index1) => (
                 <div>
                     <div >
-                        {
-                            (index1.StockTotal > 0) ?
-                                <>
-                                    <samp id={`plus-circle${index1.id}`} style={{ display: "none" }}>
-                                        <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
-                                            style={{ position: "absolute", }}
-                                            onClick={(e) => { showStockOnclick(index1, true) }}>
-                                        </i>
-                                        <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
-                                            {`Total Stock:${index1.StockTotal}`}</samp>
-                                    </samp>
-                                </>
-                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
+                        {(index1.StockTotal > 0) ?
+                            <>
+                                <samp id={`plus-circle${index1.id}`} >
+                                    <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
+                                        style={{ position: "absolute", }}
+                                        onClick={(e) => { showStockOnclick(index1, true) }}>
+                                    </i>
+                                    <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
+                                        {`Total Stock:${index1.StockTotal}`}</samp>
+                                </samp>
+                            </>
+                            : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
 
-                        <samp id={`minus-circle${index1.id}`} >
+                        <samp id={`minus-circle${index1.id}`} style={{ display: "none" }}>
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                 style={{ position: "absolute", }}
                                 onClick={(e) => { showStockOnclick(index1, false) }}
@@ -420,7 +442,7 @@ const Invoice = (props) => {
 
                     </div >
 
-                    <div id={`view${index1.id}`} style={{ backgroundColor: "#b9be511a" }}>
+                    <div id={`view${index1.id}`} style={{ display: "none", backgroundColor: "#b9be511a" }}>
                         <Table className="table table-bordered table-responsive mb-1" >
 
                             <Thead  >
@@ -500,7 +522,7 @@ const Invoice = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        // totalSize: OrderItemDetails.length,
+        totalSize: OrderItemDetails.length,
         custom: true,
     };
 
@@ -610,11 +632,8 @@ const Invoice = (props) => {
             index.StockInValid = false
             index.StockInvalidMsg = null
             document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
-        } catch (e) { };
-        try {
             document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
         } catch (e) { };
-
 
 
 
@@ -652,7 +671,7 @@ const Invoice = (props) => {
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
-        // var n2 = Number(event.ConversionUnit);
+        // var n2 = Number(e.ConversionUnit);
         // const t1 = (n1 * n2).toFixed(2);
         // const t2 = index.StockUnit
 
@@ -684,7 +703,32 @@ const Invoice = (props) => {
         event.preventDefault();
 
         const validMsg = []
-
+        // var a = {
+        //     BatchCode: "A001",
+        //     Quantity: "10.00",
+        //     BaseUnitQuantity: "1.000",
+        //     MRP: null,
+        //     Rate: "100.00",
+        //     BasicAmount: "1000.00",
+        //     TaxType: "GST",
+        //     GSTPercentage: "5.00",
+        //     GSTAmount: "50.00",
+        //     Amount: "1050.00",
+        //     DiscountType: "",
+        //     Discount: "0",
+        //     DiscountAmount: "0",
+        //     CGST: "25.00",
+        //     SGST: "25.00",
+        //     IGST: "0.00",
+        //     CGSTPercentage: "2.50",
+        //     SGSTPercentage: "2.50",
+        //     IGSTPercentage: "0.00",
+        //     CreatedOn: "",
+        //     Item: 44,
+        //     Unit: 302,
+        //     BatchDate: "2023-01-01",
+        //     BatchID: 59
+        // }
         const InvoiceItems = []
         debugger
         const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
@@ -793,9 +837,116 @@ const Invoice = (props) => {
         // };
         debugger
     }
+    const [state1, setState1] = useState({ expanded: [] })
+    const OrderItemDetails1 = [{
+        id: 1, name: "212"
+    }, {
+        id: 2, name: "212"
+    }, {
+        id: 3, name: "212"
+    }, {
+        id: 4, name: "212"
+    }];
+    const columns = [{
+        dataField: "id",
+        headerFormatter: (cell, index1 = [], k) => {
+            return (<div>
+                <samp>rate</samp>
+                <samp><i className="mdi mdi-minus-circle-outline text-primary font-size-16"
+                    style={{ position: "absolute", }}
+                    onClick={handleBtnClick}
+                ></i></samp>
+            </div>)
+        }
+
+    },
+    {
+        text: "name",
+        dataField: "name",
+        expandHeaderColumnRenderer: ({ isAnyExpands }) => {
+            if (isAnyExpands) {
+                return <b>-</b>;
+            }
+            return <b>+</b>;
+        },
+    },
+    {
+        text: "name",
+        dataField: "id",
+    }
+    ]
 
 
+    function handleBtnClick() {
+        debugger
+        if (!state1.expanded.includes(2)) {
+            setState1(() => ({
+                expanded: [...state1.expanded, 2]
+            }));
+        } else {
+            setState1(() => ({
+                expanded: state1.expanded.filter(x => x !== 2)
+            }));
+        }
+    };
+    const handleOnExpand = (row, isExpand, rowIndex, e) => {
+        debugger
+        if (isExpand) {
+            setState1(() => ({
+                expanded: [...state1.expanded, row.id]
+            }));
+        } else {
+            setState1(() => ({
+                expanded: state1.expanded.filter(x => x !== row.id)
+            }));
+        }
+    }
 
+    const expandRow1 = {
+        // showExpandColumn: true,
+        expandByColumnOnly: true,
+        showExpandColumn: true,
+        expanded: state1.expanded,
+        onExpand: handleOnExpand,
+        // expandHeaderColumnRenderer: ({ isAnyExpands }) => {
+        //   if (isAnyExpands) {
+        //     return <b>-</b>;
+        //   }
+        //   return <b>+</b>;
+        // },
+        expandColumnRenderer: ({ expanded }) => {
+
+            if (expanded) {
+                return (
+                    <b>-</b>
+                );
+            }
+            return (
+                <b>...</b>
+            );
+        },
+        className: (a, b, c) => {
+            if (c % 2 == 0) {
+                return 'expanding-even'
+            };
+            return 'expanding-odd'
+        },
+
+        parentClassName: (a, b, c) => {
+            if (c % 2 == 0) {
+                return 'expandparent-even'
+            };
+            return 'expandparent-odd'
+        },
+        renderer: (row, a, v, c) => {
+            debugger
+            return (
+                <div id="expand-body1">
+                    <div id="expand-body2">gjgjgsfjgfgjdgfdccccccccccccccccccccccccccccccccccccccccc</div>
+                </div>
+            )
+        },
+    };
 
 
 
@@ -803,8 +954,15 @@ const Invoice = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE} /> */}
 
                 <div className="page-content" >
+                    <BootstrapTable
+                        keyField='id'
+                        data={OrderItemDetails1}
+                        columns={columns}
+                        expandRow={expandRow1}
+                    />
 
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
