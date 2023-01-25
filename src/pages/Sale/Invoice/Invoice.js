@@ -39,7 +39,8 @@ import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
-
+import "./css.css"
+import { Data } from "./demodata";
 const Invoice = (props) => {
 
     const dispatch = useDispatch();
@@ -284,6 +285,10 @@ const Invoice = (props) => {
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-100">Item Name</div>)
+            },
             formatter: (cellContent, index1) => {
 
 
@@ -300,11 +305,16 @@ const Invoice = (props) => {
         {//***************Quantity********************************************************************* */
             text: "Quantity",
             dataField: "",
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-100">Quantity</div>)
+            },
             formatter: (cellContent, user) => (
-                <div style={{ maxWidth: "150px" }}>
+                <div >
                     <Input type="text"
                         id={`OrderQty${user.id}`}
                         style={{ textAlign: "right" }}
+                        className=" width-100"
                         key={user.id}
                         autoComplete="off"
                         defaultValue={user.Quantity}
@@ -317,7 +327,12 @@ const Invoice = (props) => {
         },
         {//***************Unit Dropdown********************************************************************* */
             text: "Unit",
-            dataField: "",
+            dataField: "id",
+         
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-100">Unit</div>)
+            },
             formatter: (value, row, key) => {
 
                 return (
@@ -326,6 +341,7 @@ const Invoice = (props) => {
                         id={"ddlUnit"}
                         defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
+                       className=" width-100"
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -339,10 +355,8 @@ const Invoice = (props) => {
                     </Select >
                 )
             },
-            headerStyle: (colum, colIndex) => {
-                return { width: '150px', textAlign: 'center' };
-            }
         },
+
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
@@ -351,18 +365,18 @@ const Invoice = (props) => {
                 return (
                     <div className="d-flex flex-content-start">
                         <div>
-                            <samp id="allplus-circle" >
+                            <samp id="allplus-circle"  style={{ display: "none" }}>
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
-                                        position: "", zIndex: 2,
+                                        position: "",
                                         display: OrderItemDetails.length > 0 ? "block" : "none"
                                     }}
                                     onClick={(e) => { showAllStockOnclick(true) }}>
                                 </i>
                             </samp>
-                            <samp id="allminus-circle" style={{ display: "none" }}>
+                            <samp id="allminus-circle" >
                                 <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{ position: "", zIndex: 2 }}
+                                    style={{ position: "" }}
                                     onClick={(e) => { showAllStockOnclick(false) }}
                                 ></i>
                             </samp>
@@ -379,22 +393,23 @@ const Invoice = (props) => {
             formatter: (cellContent, index1) => (
                 <div>
                     <div >
-                        {(index1.StockTotal > 0) ?
+                        {
+                        (index1.StockTotal > 0) ?
                             <>
-                                <samp id={`plus-circle${index1.id}`} >
+                                <samp id={`plus-circle${index1.id}`}  style={{ display: "none" }}>
                                     <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
-                                        style={{ position: "absolute", zIndex: 2 }}
+                                        style={{ position: "absolute", }}
                                         onClick={(e) => { showStockOnclick(index1, true) }}>
                                     </i>
-                                    <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
+                                    <samp style={{    fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
                                         {`Total Stock:${index1.StockTotal}`}</samp>
                                 </samp>
                             </>
                             : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
 
-                        <samp id={`minus-circle${index1.id}`} style={{ display: "none" }}>
+                        <samp id={`minus-circle${index1.id}`} >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                style={{ position: "absolute", zIndex: 2 }}
+                                style={{ position: "absolute", }}
                                 onClick={(e) => { showStockOnclick(index1, false) }}
                             ></i>
                         </samp>
@@ -402,15 +417,18 @@ const Invoice = (props) => {
 
                     </div >
 
-                    <div id={`view${index1.id}`} style={{ display: "none", backgroundColor: "#b9be511a" }}>
+                    <div id={`view${index1.id}`} style={{  backgroundColor: "#b9be511a" }}>
                         <Table className="table table-bordered table-responsive mb-1" >
 
                             <Thead  >
 
-                                <tr className="">
+                                <tr className="" style={{ zIndex: -3 }}>
                                     <th className="">Batch Code </th>
                                     <th className="" >Supplier BatchCode</th>
                                     <th className="" >Batch Date</th>
+                                    <th className="" >Batch Date</th>
+
+
                                     <th className="">
                                         <div>
                                             <samp >Stock Quantity</samp>
@@ -479,7 +497,7 @@ const Invoice = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: OrderItemDetails.length,
+        // totalSize: OrderItemDetails.length,
         custom: true,
     };
 
@@ -589,8 +607,11 @@ const Invoice = (props) => {
             index.StockInValid = false
             index.StockInvalidMsg = null
             document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
+        } catch (e) { };
+        try {
             document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
         } catch (e) { };
+
 
 
 
@@ -628,7 +649,7 @@ const Invoice = (props) => {
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
-        // var n2 = Number(e.ConversionUnit);
+        // var n2 = Number(event.ConversionUnit);
         // const t1 = (n1 * n2).toFixed(2);
         // const t2 = index.StockUnit
 
@@ -660,32 +681,7 @@ const Invoice = (props) => {
         event.preventDefault();
 
         const validMsg = []
-        // var a = {
-        //     BatchCode: "A001",
-        //     Quantity: "10.00",
-        //     BaseUnitQuantity: "1.000",
-        //     MRP: null,
-        //     Rate: "100.00",
-        //     BasicAmount: "1000.00",
-        //     TaxType: "GST",
-        //     GSTPercentage: "5.00",
-        //     GSTAmount: "50.00",
-        //     Amount: "1050.00",
-        //     DiscountType: "",
-        //     Discount: "0",
-        //     DiscountAmount: "0",
-        //     CGST: "25.00",
-        //     SGST: "25.00",
-        //     IGST: "0.00",
-        //     CGSTPercentage: "2.50",
-        //     SGSTPercentage: "2.50",
-        //     IGSTPercentage: "0.00",
-        //     CreatedOn: "",
-        //     Item: 44,
-        //     Unit: 302,
-        //     BatchDate: "2023-01-01",
-        //     BatchID: 59
-        // }
+       
         const InvoiceItems = []
         debugger
         const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
@@ -797,11 +793,13 @@ const Invoice = (props) => {
 
 
 
+
+
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE} /> */}
 
                 <div className="page-content" >
 
