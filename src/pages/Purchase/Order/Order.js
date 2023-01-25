@@ -30,7 +30,7 @@ import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from ".
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 import { ORDER_lIST } from "../../../routes/route_url";
-import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -43,6 +43,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { Button } from "bootstrap";
 
 let description = ''
 let editVal = {}
@@ -280,7 +281,7 @@ const Order = (props) => {
         else {
             row["Rate"] = val
         }
-     
+
         row["Amount"] = Amount(row)
 
         let sum = 0
@@ -651,7 +652,7 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-      
+
 
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -745,11 +746,11 @@ const Order = (props) => {
                                             id="orderdate"
                                             name="orderdate"
                                             value={orderdate}
-                                            disabled={pageMode === "edit" ? true : false}
+                                            disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
-                                                altInput: true,
+                                                // altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                             }}
@@ -768,15 +769,19 @@ const Order = (props) => {
                                         <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
-                                            isDisabled={pageMode === "edit" ? true : false}
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             options={supplierOptions}
                                             onChange={supplierOnchange}
                                         />
                                     </Col>
                                     <Col sm="1" className="mx-4 ">
                                         {pageMode === "save" ?
-                                            <Go_Button onClick={(e) => goButtonHandler()} />
-                                            : null}
+                                            (orderItemTable.length === 0) ?
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                :
+                                                <Change_Button onClick={(e) => dispatch(goButtonForOrderAddSuccess([]))} />
+                                            : null
+                                        }
                                     </Col>
                                 </FormGroup>
                             </Col >
@@ -815,7 +820,6 @@ const Order = (props) => {
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
-                                                altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                                 // minDate: pageMode === "edit" ? orderdate : "today",
@@ -828,6 +832,7 @@ const Order = (props) => {
                                 </FormGroup>
                             </div >
                         </div>
+
                         <div className="row  ">
                             <div className="col col-6">
                                 <FormGroup className="row  " >

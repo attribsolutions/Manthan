@@ -22,7 +22,7 @@ import {
     onChangeSelect,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     postBOMSuccess,
     updateBOMListSuccess
@@ -119,8 +119,6 @@ const MaterialIssueMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        // debugger
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -129,14 +127,13 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
-                // debugger
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
             if (hasEditVal) {
-                debugger
+
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
                 setState((i) => {
@@ -166,7 +163,6 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     useEffect(() => {
-        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
@@ -387,8 +383,8 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        event.preventDefault();
-        if (state.values.LotQuantity == "0") {
+        // event.preventDefault();
+        if (state.values.LotQuantity === "0") {
             alert("Quantity Can Not be 0")
         } else
             if (formValid(state, setState)) {
@@ -615,10 +611,11 @@ const MaterialIssueMaster = (props) => {
                                                 <Flatpickr
                                                     name="MaterialIssueDate"
                                                     value={values.MaterialIssueDate}
+                                                    disabled={(GoButton.length > 0) ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
-                                                        altInput: true,
+                                                        // altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
                                                     }}
@@ -639,6 +636,7 @@ const MaterialIssueMaster = (props) => {
                                                     // isDisabled={(values.ItemName) ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
+                                                    isDisabled={GoButton.length > 0 ? true : false}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -659,6 +657,7 @@ const MaterialIssueMaster = (props) => {
                                                     style={{ textAlign: "right" }}
                                                     name="NumberOfLot"
                                                     value={values.NumberOfLot}
+                                                    disabled={(GoButton.length > 0) ? true : false}
                                                     type="text"
                                                     className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Number Of Lots"
@@ -683,6 +682,7 @@ const MaterialIssueMaster = (props) => {
                                                     style={{ textAlign: "right" }}
                                                     name="LotQuantity"
                                                     value={values.LotQuantity}
+                                                    disabled={(GoButton.length > 0) ? true : false}
                                                     type="text"
                                                     className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter LotQuantity"
@@ -704,11 +704,23 @@ const MaterialIssueMaster = (props) => {
 
                                 </Col>
                                 <Col sm={1} className="mt-2">
-                                    <Button
-                                        color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                        onClick={(e) => goButtonHandler(e)}
-                                    >Go</Button>
+                                    {pageMode === "save" ?
+                                        (GoButton.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))} />
+                                        : null
+                                    }
                                 </Col>
+                                {/* <Col sm="1" className="mx-4 ">
+                                    {pageMode === "save" ?
+                                        (GoButton.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))} />
+                                        : null
+                                    }
+                                </Col> */}
                                 <Col>
                                 </Col>
                             </Row>

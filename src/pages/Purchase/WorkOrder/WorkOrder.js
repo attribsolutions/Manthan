@@ -23,7 +23,7 @@ import {
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     convertNumber,
     createdBy,
@@ -173,7 +173,6 @@ const WorkOrder = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-
             }
         }
     }, [])
@@ -360,12 +359,13 @@ const WorkOrder = (props) => {
             dispatch(postWorkOrderMaster(jsonBody));
         }
     };
+
     const QuantityHandler = (event, user) => {
-        debugger
+
         // user["Quantity"] = event.target.value
         let val = event.target.value;
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
-        if ((result)&&(parseFloat(event.target.value).toFixed(3))) {
+        if ((result) && (parseFloat(event.target.value).toFixed(3))) {
             user.Quantity = event.target.value;
         }
         else if (val === "") {
@@ -374,319 +374,328 @@ const WorkOrder = (props) => {
         else {
             event.target.value = user.Quantity
         }
-    
-}
-const pagesListColumns = [
-    {
-        text: "Item Name",
-        dataField: "ItemName",
-    },
-    {
-        text: "Stock Quantity",
-        dataField: "StockQuantity",
-    },
-    {
-        text: "BomQuantity",
-        dataField: "BomQuantity",
-    },
-    {
-        text: "Quantity",
-        dataField: "Quantity",
 
-        formatter: (cellContent, user) => (
-            <>
-                <div style={{ justifyContent: 'center' }} >
-                    <Col>
-                        <FormGroup className=" col col-sm-4 ">
-                            <Input
-                                id=""
-                                type="text"
-                                // disabled={true}
-                                // defaultValue={cellContent.toPrecision(5)}
-                                defaultValue={parseFloat(cellContent).toFixed(3)}
-                                className="col col-sm text-center"
-                                onChange={(e) => QuantityHandler(e, user)}
-                            />
-                        </FormGroup>
-                    </Col>
-                </div>
+    }
 
-            </>
-        ),
-    },
-    {
-        text: "UnitName",
-        dataField: "UnitName",
+    const pagesListColumns = [
+        {
+            text: "Item Name",
+            dataField: "ItemName",
+        },
+        {
+            text: "Stock Quantity",
+            dataField: "StockQuantity",
+        },
+        {
+            text: "BomQuantity",
+            dataField: "BomQuantity",
+        },
+        {
+            text: "Quantity",
+            dataField: "Quantity",
 
-    },
-];
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                    // disabled={true}
+                                    // defaultValue={cellContent.toPrecision(5)}
+                                    defaultValue={parseFloat(cellContent).toFixed(3)}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => QuantityHandler(e, user)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
 
-const pageOptions = {
-    sizePerPage: 10,
-    totalSize: GoButton.length,
-    custom: true,
-};
+                </>
+            ),
+        },
+        {
+            text: "UnitName",
+            dataField: "UnitName",
 
-if (!(userPageAccessState === '')) {
-    return (
-        <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.WORK_ORDER} /> */}
+        },
+    ];
 
-            <div className="page-content" style={{ marginBottom: "200px" }}>
-                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
-                <form onSubmit={SaveHandler} noValidate>
-                    <div className="px-2 mb-1 c_card_filter text-black" >
-                        <Row>
-                            <Col sm={11}>
-                                <div className="row">
-                                    <div className="col col-6">
-                                        <FormGroup className=" row  mt-2" >
-                                            <Label className="mt-1"
-                                                style={{ width: "130px" }}>{fieldLabel.WorkOrderDate}</Label>
-                                            <div className="col-6">
-                                                <Flatpickr
-                                                    style={{ userselect: "all" }}
-                                                    name="WorkOrderDate"
-                                                    value={values.WorkOrderDate}
-                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
-                                                    autoComplete="0,''"
-                                                    disabled={pageMode === "edit" ? true : false}
-                                                    options={{
-                                                        altInput: true,
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                        defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
-                                                    }}
-                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                    onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                />
-                                                {isError.WorkOrderDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.WorkOrderDate}</span>
-                                                )}
-                                            </div>
-                                        </FormGroup>
-                                    </div >
-                                    <div className="col col-6" >
-                                        <FormGroup className=" row  mt-2" >
-                                            <Label className="mt-1"
-                                                style={{ width: "150px" }}>{fieldLabel.ItemName} </Label>
-                                            <div className="col col-6 sm-1">
-                                                <Select
-                                                    name="ItemName"
-                                                    value={values.ItemName}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={ItemDropdown_Options}
-                                                    onChange={(hasSelect, evn) => {
-                                                        onChangeSelect({ hasSelect, evn, state, setState });
-                                                        ItemOnchange(hasSelect)
-                                                        dispatch(Breadcrumb_inputName(hasSelect.label))
-                                                    }
-                                                    }
-                                                />
-                                                {isError.ItemName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
-                                                )}
-                                            </div>
-                                        </FormGroup>
-                                    </div >
-                                </div>
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: GoButton.length,
+        custom: true,
+    };
 
-                                <div className="row">
-                                    <div className="col col-6">
-                                        <FormGroup className=" row mt-1" >
-                                            <Label className="mt-1"
-                                                style={{ width: "130px" }}>{fieldLabel.StockQuantity}
-                                            </Label>
-                                            <div className="col-6 ">
-                                                <Input
-                                                    value={pageMode === "edit" ?
-                                                        EditData.Stock : itemselect.StockQty
-                                                    }
-                                                    disabled={true}
-                                                    className="text-end"
-                                                // placeholder="Please Enter Stock Quantity"
-                                                />
-                                            </div>
-                                            <div className="col col-2">
-                                                <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-15px' }}>
-                                                    {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
-                                            </div>
-                                        </FormGroup>
-                                    </div >
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.WORK_ORDER} /> */}
 
-                                    <div className="col col-6" >
-                                        <FormGroup className=" row mt-1" >
-                                            <Label className="mt-1"
-                                                style={{ width: "150px" }}>
-                                                {fieldLabel.EstimatedOutputQty}
-                                            </Label>
-                                            <div className="col-6">
-                                                <Input
-                                                    value={pageMode === "edit" ?
-                                                        EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
-                                                            itemselect.EstimatedOutputQty : ""}
-                                                    disabled={true}
-                                                    className="text-end"
-                                                    // placeholder="Please Enter Estimated Output Qty"
-                                                    autoComplete='off'
-                                                />
-                                            </div>
-                                            <div className="col col-1">
-                                                <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                    {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
-                                            </div>
-                                        </FormGroup>
+                <div className="page-content" style={{ marginBottom: "200px" }}>
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
+                    <form onSubmit={SaveHandler} noValidate>
+                        <div className="px-2 mb-1 c_card_filter text-black" >
+                            <Row>
+                                <Col sm={11}>
+                                    <div className="row">
+                                        <div className="col col-6">
+                                            <FormGroup className=" row  mt-2" >
+                                                <Label className="mt-1"
+                                                    style={{ width: "130px" }}>{fieldLabel.WorkOrderDate}</Label>
+                                                <div className="col-6">
+                                                    <Flatpickr
+                                                        style={{ userselect: "all" }}
+                                                        name="WorkOrderDate"
+                                                        value={values.WorkOrderDate}
+                                                        className="form-control d-block p-2 bg-white text-dark"
+                                                        placeholder="YYYY-MM-DD"
+                                                        autoComplete="0,''"
+                                                        disabled={(BOMItems.length > 0)||(pageMode === "edit") ? true : false}
+                                                        options={{
+                                                            // altInput: true,
+                                                            altFormat: "d-m-Y",
+                                                            dateFormat: "Y-m-d",
+                                                            defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
+                                                        }}
+                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                        onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                    />
+                                                    {isError.WorkOrderDate.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.WorkOrderDate}</span>
+                                                    )}
+                                                </div>
+                                            </FormGroup>
+                                        </div >
+                                        <div className="col col-6" >
+                                            <FormGroup className=" row  mt-2" >
+                                                <Label className="mt-1"
+                                                    style={{ width: "150px" }}>{fieldLabel.ItemName} </Label>
+                                                <div className="col col-6 sm-1">
+                                                    <Select
+                                                        name="ItemName"
+                                                        value={values.ItemName}
+                                                        isSearchable={true}
+                                                        isDisabled={(BOMItems.length > 0) ? true : false}
+                                                        className="react-dropdown"
+                                                        classNamePrefix="dropdown"
+                                                        options={ItemDropdown_Options}
+                                                        onChange={(hasSelect, evn) => {
+                                                            onChangeSelect({ hasSelect, evn, state, setState });
+                                                            ItemOnchange(hasSelect)
+                                                            dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                        }
+                                                        }
+                                                    />
+                                                    {isError.ItemName.length > 0 && (
+                                                        <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+                                                    )}
+                                                </div>
+                                            </FormGroup>
+                                        </div >
+                                    </div>
+
+                                    <div className="row">
+                                        <div className="col col-6">
+                                            <FormGroup className=" row mt-1" >
+                                                <Label className="mt-1"
+                                                    style={{ width: "130px" }}>{fieldLabel.StockQuantity}
+                                                </Label>
+                                                <div className="col-6 ">
+                                                    <Input
+                                                        value={pageMode === "edit" ?
+                                                            EditData.Stock : itemselect.StockQty
+                                                        }
+                                                        disabled={true}
+                                                        className="text-end"
+                                                    // placeholder="Please Enter Stock Quantity"
+                                                    />
+                                                </div>
+                                                <div className="col col-2">
+                                                    <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-15px' }}>
+                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                </div>
+                                            </FormGroup>
+                                        </div >
+
+                                        <div className="col col-6" >
+                                            <FormGroup className=" row mt-1" >
+                                                <Label className="mt-1"
+                                                    style={{ width: "150px" }}>
+                                                    {fieldLabel.EstimatedOutputQty}
+                                                </Label>
+                                                <div className="col-6">
+                                                    <Input
+                                                        value={pageMode === "edit" ?
+                                                            EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
+                                                                itemselect.EstimatedOutputQty : ""}
+                                                        disabled={true}
+                                                        className="text-end"
+                                                        // placeholder="Please Enter Estimated Output Qty"
+                                                        autoComplete='off'
+                                                    />
+                                                </div>
+                                                <div className="col col-1">
+                                                    <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
+                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                </div>
+                                            </FormGroup>
 
 
-                                    </div >
+                                        </div >
 
-                                </div>
+                                    </div>
 
-                                <div className="row  ">
-                                    <div className="col col-6">
-                                        <FormGroup className=" row  mt-1 mb-2 " >
-                                            <Label className="mt-1"
-                                                style={{ width: "130px" }}>{fieldLabel.NumberOfLot}</Label>
-                                            <div className="col col-6">
-                                                <Input
-                                                    name="NumberOfLot"
-                                                    value={values.NumberOfLot}
-                                                    type="text"
-                                                    className={isError.NumberOfLot.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
-                                                    placeholder="Please Enter Number Of Lot"
-                                                    autoComplete='off'
-                                                    onChange={(event) => {
-                                                        onChangeText({ event, state, setState })
-                                                        NumberOfLotchange(event.target.value)
-                                                    }}
-                                                />
-                                                {isError.NumberOfLot.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.NumberOfLot}</span>
-                                                )}
-                                            </div>
-                                        </FormGroup>
-                                    </div >
+                                    <div className="row  ">
+                                        <div className="col col-6">
+                                            <FormGroup className=" row  mt-1 mb-2 " >
+                                                <Label className="mt-1"
+                                                    style={{ width: "130px" }}>{fieldLabel.NumberOfLot}</Label>
+                                                <div className="col col-6">
+                                                    <Input
+                                                        name="NumberOfLot"
+                                                        value={values.NumberOfLot}
+                                                        type="text"
+                                                        disabled={(BOMItems.length > 0) ? true : false}
+                                                        className={isError.NumberOfLot.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
+                                                        placeholder="Please Enter Number Of Lot"
+                                                        autoComplete='off'
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                            NumberOfLotchange(event.target.value)
+                                                        }}
+                                                    />
+                                                    {isError.NumberOfLot.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.NumberOfLot}</span>
+                                                    )}
+                                                </div>
+                                            </FormGroup>
+                                        </div >
 
-                                    <div className="col col-6">
-                                        <FormGroup className=" row mt-1 mb-2" >
-                                            <Label className="mt-1"
-                                                style={{ width: "150px" }}>{fieldLabel.Quantity}</Label>
-                                            <div className="col col-6 ">
-                                                <Input
-                                                    style={{ textAlign: "right" }}
-                                                    name="Quantity"
-                                                    value={`${values.Quantity}`}
-                                                    type="text"
-                                                    className={isError.Quantity.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
-                                                    placeholder="Please Enter Quantity"
-                                                    autoComplete='off'
-                                                    onChange={(event) => {
-                                                        onChangeText({ event, state, setState })
-                                                        Quantitychange(event.target.value)
-                                                    }}
+                                        <div className="col col-6">
+                                            <FormGroup className=" row mt-1 mb-2" >
+                                                <Label className="mt-1"
+                                                    style={{ width: "150px" }}>{fieldLabel.Quantity}</Label>
+                                                <div className="col col-6 ">
+                                                    <Input
+                                                        style={{ textAlign: "right" }}
+                                                        name="Quantity"
+                                                        value={`${values.Quantity}`}
+                                                        disabled={(BOMItems.length > 0) ? true : false}
+                                                        type="text"
+                                                        className={isError.Quantity.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
+                                                        placeholder="Please Enter Quantity"
+                                                        autoComplete='off'
+                                                        onChange={(event) => {
+                                                            onChangeText({ event, state, setState })
+                                                            Quantitychange(event.target.value)
+                                                        }}
 
-                                                />
-                                                {isError.Quantity.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.Quantity}</span>
-                                                )}
-                                            </div>
-                                            <div className="col col-1">
-                                                <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                    {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
-                                            </div>
-                                            {/* <div className="col col-1">
+                                                    />
+                                                    {isError.Quantity.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Quantity}</span>
+                                                    )}
+                                                </div>
+                                                <div className="col col-1">
+                                                    <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
+                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                </div>
+                                                {/* <div className="col col-1">
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
                                                 onClick={(e) => goButtonHandler(e)}
                                             >Go</Button>
                                         </div> */}
-                                        </FormGroup>
-                                    </div >
-                                </div>
-                            </Col>
 
-                            <Col sm={1}>
-                                <div className="col col-1 mt-1">
-                                    <Button
-                                        color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                        onClick={(e) => goButtonHandler(e)}
-                                    >Go</Button>
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
+                                            </FormGroup>
+                                        </div >
+                                    </div>
+                                </Col>
 
-                    {BOMItems.length > 0 ?
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={BOMItems}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            classes={"table  table-bordered"}
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                        {mySearchProps(toolkitProps.searchProps, pageField.id)}
-                                                        <div>
-                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                <Col sm={1}>
+                                    <div className="col col-1 mt-2">
+                                        {pageMode === "save" ?
+                                            (BOMItems.length === 0) ?
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                :
+                                                <Change_Button onClick={(e) => dispatch(postGoButtonForWorkOrder_MasterSuccess([]))} />
+                                            : null
+                                        }
+                                    </div>
+                                </Col>
+
+                            </Row>
+                        </div>
+
+                        {BOMItems.length > 0 ?
+                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                {({ paginationProps, paginationTableProps }) => (
+                                    <ToolkitProvider
+                                        keyField={"id"}
+                                        data={BOMItems}
+                                        columns={pagesListColumns}
+                                        search
+                                    >
+                                        {(toolkitProps) => (
+                                            <React.Fragment>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive">
+                                                            <BootstrapTable
+                                                                keyField={"id"}
+                                                                responsive
+                                                                bordered={false}
+                                                                striped={false}
+                                                                classes={"table  table-bordered"}
+                                                                {...toolkitProps.baseProps}
+                                                                {...paginationTableProps}
+                                                            />
+                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
+                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
+                                                            <div>
+                                                                <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
+                                                    </Col>
+                                                </Row>
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone {...paginationProps} />
+                                                    </Col>
+                                                </Row>
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                )}
 
-                        </PaginationProvider>
-                        : <></>}
+                            </PaginationProvider>
+                            : <></>}
 
-                    {BOMItems.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                        <Row >
-                            <Col sm={2} className="mt-n4">
-                                <SaveButton pageMode={pageMode}
-                                    userAcc={userPageAccessState}
-                                    module={"WorkOrder"}
-                                />
-                            </Col>
-                        </Row>
-                    </FormGroup >
-                        : null
-                    }
+                        {BOMItems.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
+                            <Row >
+                                <Col sm={2} className="mt-n4">
+                                    <SaveButton pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        module={"WorkOrder"}
+                                    />
+                                </Col>
+                            </Row>
+                        </FormGroup >
+                            : null
+                        }
 
-                </form>
-            </div>
-        </React.Fragment>
-    );
-}
-else {
-    return (
-        <React.Fragment></React.Fragment>
-    )
-}
+                    </form>
+                </div>
+            </React.Fragment>
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
 };
 
 export default WorkOrder
