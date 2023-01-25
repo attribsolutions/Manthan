@@ -328,7 +328,7 @@ const Invoice = (props) => {
         {//***************Unit Dropdown********************************************************************* */
             text: "Unit",
             dataField: "id",
-         
+
             headerFormatter: (cell, index1 = [], k) => {
                 return (
                     <div className="width-100">Unit</div>)
@@ -341,7 +341,7 @@ const Invoice = (props) => {
                         id={"ddlUnit"}
                         defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
-                       className=" width-100"
+                        className=" width-100"
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -365,7 +365,7 @@ const Invoice = (props) => {
                 return (
                     <div className="d-flex flex-content-start">
                         <div>
-                            <samp id="allplus-circle"  style={{ display: "none" }}>
+                            <samp id="allplus-circle" style={{ display: "none" }}>
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
                                         position: "",
@@ -376,7 +376,10 @@ const Invoice = (props) => {
                             </samp>
                             <samp id="allminus-circle" >
                                 <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{ position: "" }}
+                                    style={{
+                                        position: "",
+                                        display: OrderItemDetails.length > 0 ? "block" : "none"
+                                    }}
                                     onClick={(e) => { showAllStockOnclick(false) }}
                                 ></i>
                             </samp>
@@ -394,18 +397,18 @@ const Invoice = (props) => {
                 <div>
                     <div >
                         {
-                        (index1.StockTotal > 0) ?
-                            <>
-                                <samp id={`plus-circle${index1.id}`}  style={{ display: "none" }}>
-                                    <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
-                                        style={{ position: "absolute", }}
-                                        onClick={(e) => { showStockOnclick(index1, true) }}>
-                                    </i>
-                                    <samp style={{    fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
-                                        {`Total Stock:${index1.StockTotal}`}</samp>
-                                </samp>
-                            </>
-                            : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
+                            (index1.StockTotal > 0) ?
+                                <>
+                                    <samp id={`plus-circle${index1.id}`} style={{ display: "none" }}>
+                                        <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
+                                            style={{ position: "absolute", }}
+                                            onClick={(e) => { showStockOnclick(index1, true) }}>
+                                        </i>
+                                        <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
+                                            {`Total Stock:${index1.StockTotal}`}</samp>
+                                    </samp>
+                                </>
+                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
 
                         <samp id={`minus-circle${index1.id}`} >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
@@ -417,7 +420,7 @@ const Invoice = (props) => {
 
                     </div >
 
-                    <div id={`view${index1.id}`} style={{  backgroundColor: "#b9be511a" }}>
+                    <div id={`view${index1.id}`} style={{ backgroundColor: "#b9be511a" }}>
                         <Table className="table table-bordered table-responsive mb-1" >
 
                             <Thead  >
@@ -681,7 +684,7 @@ const Invoice = (props) => {
         event.preventDefault();
 
         const validMsg = []
-       
+
         const InvoiceItems = []
         debugger
         const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
