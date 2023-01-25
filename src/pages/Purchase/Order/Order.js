@@ -131,7 +131,6 @@ const Order = (props) => {
 
 
     useEffect(() => {
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -171,12 +170,13 @@ const Order = (props) => {
                 }))
 
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
+
                     ele["id"] = k + 1
 
                     return ele
                 });
                 setorderItemTable(orderItems)
-                setTermsAndConTable(termsAndCondition)
+                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(editOrderIdSuccess({ Status: false }))
         } else {
@@ -576,8 +576,6 @@ const Order = (props) => {
         const itemArr = []
 
         function isChanged({ i, isedit, isdel }) {
-            debugger
-
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
             const arr = {
@@ -619,7 +617,6 @@ const Order = (props) => {
         }
 
         orderItemTable.forEach(i => {
-            debugger
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
@@ -719,7 +716,6 @@ const Order = (props) => {
 
             dispatch(postOrder(jsonBody))
         }
-
 
     }
 

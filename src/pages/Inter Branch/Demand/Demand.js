@@ -21,7 +21,7 @@ import {
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     createdBy,
     currentDate,
@@ -48,9 +48,8 @@ import {
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
-
 let comment = ''
-let description = ''
+let descripton = ''
 let editVal = {}
 
 const Demand = (props) => {
@@ -59,11 +58,12 @@ const Demand = (props) => {
     const history = useHistory()
 
     const fileds = {
-
-        Date: currentDate,
-        Division: "",
+        id:"",
+        DemandDate:"",
+        SupplierName: "",
         Comment: "",
-
+        DemandNo: "",
+        FullDemandNumber: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -74,7 +74,7 @@ const Demand = (props) => {
     const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [demanddate, setdemanddate] = useState(currentDate)
-    const [divisionSelect, setdivisionSelect] = useState('');
+    const [SupplierSelect, setSuppierSelect] = useState('');
     const [demandItemTable, setdemandItemTable] = useState([])
     const [demandAmount, setDemandAmount] = useState(0);
 
@@ -84,17 +84,16 @@ const Demand = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        division,
+        Supplier,
         GoButton,
     } = useSelector((state) => ({
         postMsg: state.DemandReducer.postMsg,
         updateMsg: state.DemandReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        division: state.DemandReducer.division,
+        Supplier: state.DemandReducer.Supplier,
         GoButton: state.DemandReducer.GoButton,
     }));
-
 
     useEffect(() => {
         const page_Id = pageId.DEMAND
@@ -108,8 +107,8 @@ const Demand = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
     const values = { ...state.values }
     const { isError } = state;
-    const { fieldLabel } = state;
-
+    const { fieldLabe} = state;
+       
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -141,7 +140,6 @@ const Demand = (props) => {
 
 
     useEffect(() => {
-
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -150,37 +148,42 @@ const Demand = (props) => {
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
+
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${hasEditVal.DemandAmount}`))
+                debugger
+                setSuppierSelect(hasEditVal)
 
-                setdemanddate(hasEditVal.DemandDate)
-                setdivisionSelect({
-                    label: hasEditVal.Division,
-                    value: hasEditVal.Division
+                const { id, SupplierName, Supplier, Comment, currentDate, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
+                setState((i) => {
+                    i.values.DemandDate = currentDate
+                    i.values.SupplierName = { value: Supplier, label: SupplierName };
+                    i.values.Comment = Comment
+                    i.values.DemandNo = DemandNo
+                    i.values.FullDemandNumber = FullDemandNumber
+                    i.hasValid.SupplierName.valid = true;
+                    i.hasValid.DemandDate.valid = true;
+                    i.hasValid.Comment.valid = true;
+                    i.hasValid.DemandNo.valid = true;
+                    i.hasValid.FullDemandNumber.valid = true;
+                    return i
                 })
-                comment = hasEditVal.Comment
-                editVal = {}
-                editVal = hasEditVal
-                setDemandAmount(hasEditVal.DemandAmount)
 
-                const demandItems = hasEditVal.demandItems.map((ele, k) => {
-                    ele["id"] = k + 1
+                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                    return ele
-                });
-                setdemandItemTable(demandItems)
+                const jsonBody = JSON.stringify({
+                    Supplier: hasEditVal.Supplier,
+                    Customer: userParty(),
+                    EffectiveDate: hasEditVal.DemandDate,
+                    DemandID: hasEditVal.id
+                })
+                dispatch(postGoButtonForDemand(jsonBody));
             }
-            dispatch(editDemandIdSuccess({ Status: false }))
-        } else {
-            dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :0`))
-
         }
     }, [])
-
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -224,7 +227,7 @@ const Demand = (props) => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
-            comment = ''
+            descripton = ''
             history.push({
                 pathname: DEMAND_LIST,
             })
@@ -264,8 +267,6 @@ const Demand = (props) => {
         });
         setDemandAmount(sum.toFixed(2))
         dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
-        //  dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
-        // dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
     };
 
 
@@ -277,7 +278,7 @@ const Demand = (props) => {
     }, [pageField])
 
 
-    const divisiondropdown_Options = division.map((i) => ({ label: i.Name, value: i.id }))
+    const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
 
 
     useEffect(() => {
@@ -291,9 +292,20 @@ const Demand = (props) => {
 
 
     const goButtonHandler = () => {
-
+        if (!SupplierSelect > 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please select Division",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
         const jsonBody = JSON.stringify({
-            Supplier: values.Division.value,
+            Supplier: SupplierSelect.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
             DemandID: (pageMode === mode.save) ? 0 : editVal.id
@@ -306,6 +318,33 @@ const Demand = (props) => {
         setdemanddate(date)
     };
 
+    function permissionfunc(istrue) {
+        if (istrue) {
+            setSuppierSelect(istrue)// **istrue is == event value
+            setdemandItemTable([])
+        }
+    }
+
+
+    function SupplierOnchange(e) {
+        var isfind = demandItemTable.find(i => (i.Quantity > 0))
+        if (isfind) {
+            dispatch(
+                AlertState({
+                    Type: 7,
+                    Status: true,
+                    Message: "If you are change Division Name then All Item Data is Clear",
+                    RedirectPath: false,
+                    PermissionFunction: permissionfunc,
+                    permissionValueReturn: e
+                })
+            );
+            return;
+        } else {
+            setSuppierSelect(e)
+            setdemandItemTable([])
+        }
+    };
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -404,9 +443,9 @@ const Demand = (props) => {
         const jsonBody = JSON.stringify({
             DemandDate: demanddate,
             DemandAmount: demandAmount,
-            Description: description,
+            Comment: comment,
             Customer: userParty(),
-            Supplier: values.Division.value,
+            Supplier: SupplierSelect.value,
             Division: userParty(),
             BillingAddressID: 4,
             ShippingAddressID: 4,
@@ -417,10 +456,10 @@ const Demand = (props) => {
             DemandItem: itemArr,
         }
         );
-        // saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
+        //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
         if (pageMode === mode.edit) {
-            // dispatch(updateDemandId(jsonBody, editVal.id))
+            dispatch(updateDemandId(jsonBody, editVal.id))
         }
         else {
             dispatch(postDemand(jsonBody));
@@ -532,7 +571,6 @@ const Demand = (props) => {
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
@@ -566,16 +604,19 @@ const Demand = (props) => {
         {//------------- Demand No column ----------------------------------
             text: "Demand No",
             dataField: "DemandNo",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
                     <span className="text-right" >
-                        <Input
-                            type="text"
-
-
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        <Input type="text"
+                            key={row.id}
+                            id={`Demand${row.id}`}
+                            placeholder="Demand No..."
+                            className="text-end "
+                            isDisabled={(pageMode === "edit") ? true : false}
+                            defaultValue={row.DemandNo}
+                            onChange={e => { row["DemandNo"] = e.target.value }}
+                            autoComplete="off"
                         />
                     </span>
                 )
@@ -591,16 +632,18 @@ const Demand = (props) => {
         {//------------- FullDemand No column ----------------------------------
             text: "FullDemand No",
             dataField: "FullDemandNo",
-            // sort: true,
             formatter: (value, row, k) => {
 
                 return (
                     <span className="text-right" >
-                        <Input
-                            type="text"
-
-
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        <Input type="text"
+                            key={row.id}
+                            id={`FullDemand${row.id}`}
+                            placeholder="FullDemand No..."
+                            className="text-end "
+                            defaultValue={row.FullDemandNo}
+                            onChange={e => { row["FullDemandNo"] = e.target.value }}
+                            autoComplete="off"
                         />
                     </span>
                 )
@@ -612,12 +655,9 @@ const Demand = (props) => {
         },
 
 
-
-
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
-            // sort: true,
             formatter: (value, row, k) => {
                 return (
                     <span >
@@ -655,7 +695,7 @@ const Demand = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.DEMAND} /> */}
+
 
                 <div className="page-content" >
                     <form>
@@ -691,17 +731,15 @@ const Demand = (props) => {
                                             <Col sm={7}>
                                                 <Select
                                                     isDisabled={pageMode === "edit" ? true : false}
-                                                    name="Division"
-                                                    value={values.Division}
+                                                    name="SupplierName"
+                                                    value={SupplierSelect}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={divisiondropdown_Options}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                    options={SupplierDropdown_Options}
+                                                    onChange={SupplierOnchange}
                                                 />
-                                                {isError.Division.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Division}</small></span>
-                                                )}
+
                                             </Col>
                                         </FormGroup>
                                     </Col >
@@ -729,13 +767,10 @@ const Demand = (props) => {
                                     </Col>
                                 </Col>
 
-                                <Col sm={1} className="mt-2">
-                                    <Button
-                                        color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                        onClick={(e) => goButtonHandler(e)}
-                                    >Go</Button>
-                                </Col>
-                                <Col>
+                                <Col sm="1" className="mx-2 mt-3">
+                                    {pageMode === "save" ?
+                                        <Go_Button onClick={(e) => goButtonHandler()} />
+                                        : null}
                                 </Col>
                             </Row>
                         </Col>
