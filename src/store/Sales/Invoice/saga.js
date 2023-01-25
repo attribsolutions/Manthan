@@ -59,7 +59,7 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
     })
 
     response.Data.OrderItemDetails = convResp
-
+console.log("aksj",JSON.stringify(response.Data))
     yield mainSppinerOnOff({ id: goBtnId, state: false })
     // yield put(SpinnerState(false))
     yield put(GoButton_post_For_Invoice_Success(response.Data));

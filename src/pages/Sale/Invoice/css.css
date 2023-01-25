@@ -1,0 +1,40 @@
+.expanding-odd {
+    color: rgb(221, 62, 173);
+    background-color: hsl(91, 70%, 55%) !important;
+    border: "" !important;
+    margin-top: -1px;
+
+}
+
+.expanding-even {
+    color: rgb(139, 221, 62);
+    background-color: rgb(62, 158, 221) !important;
+    border: "" !important;
+    /* margin-top: -1px !important; */
+}
+
+.expandparent-odd {
+    color: rgb(221, 62, 173);
+    background-color: rgb(205, 221, 62) !important;
+    border: "" !important;
+    border-color: rgb(139, 221, 62) !important;
+}
+
+.expandparent-even {
+    color: rgb(139, 221, 62) !important;
+    background-color: rgb(221, 62, 173) !important;
+    border-color: rgb(221, 62, 173) !important;
+
+}
+
+
+
+.width-150{
+    width: 150px !important;
+    max-width: 150px !important;
+}
+
+.width-100{
+    width: 100px !important;
+    max-width: 100px !important;
+}
