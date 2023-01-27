@@ -155,7 +155,7 @@ export const listPageCommonButtonFunction = (props) => {
                 <Button
                     type="button"
                     className={downBtnCss}
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
                     onClick={() => { downHandler(rowData) }}
                 >
                     <i className="bx bx-printer font-size-18"></i>

@@ -45,7 +45,6 @@ import * as mode from "../../../routes/PageMode";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { Button } from "bootstrap";
 
-let description = ''
 let editVal = {}
 
 const Order = (props) => {
@@ -61,7 +60,7 @@ const Order = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userAccState, setUserPageAccessState] = useState("");
-
+    const  [description, setDescription] = useState('')
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     // const [podate, setpoDate] = useState(currentDate);
@@ -129,6 +128,13 @@ const Order = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
+    useEffect(() => {
+        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(GetVender())
+        dispatch(getSupplierAddress())
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+    }, [])
 
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
@@ -154,7 +160,7 @@ const Order = (props) => {
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
-                description = hasEditVal.Description
+                setDescription( hasEditVal.Description)
                 editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
@@ -176,7 +182,7 @@ const Order = (props) => {
                     return ele
                 });
                 setorderItemTable(orderItems)
-                 setTermsAndConTable(termsAndCondition)
+                setTermsAndConTable(termsAndCondition)
             }
             dispatch(editOrderIdSuccess({ Status: false }))
         } else {
@@ -197,15 +203,7 @@ const Order = (props) => {
         }
     }, [goBtnOrderdata]);
 
-    useEffect(() => {
-        dispatch(goButtonForOrderAddSuccess(null))
-        dispatch(GetVender())
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
-        description = ''
-    }, [])
-
+   
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
             setbillAddr(supplierAddress[0]);
@@ -254,10 +252,8 @@ const Order = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
-            description = ''
             history.push({
                 pathname: ORDER_lIST,
-                // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
@@ -723,16 +719,11 @@ const Order = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ORDER} /> */}
                 <div className="page-content">
 
-                    {/* <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        showCount={true}
-                    /> */}
-                    <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
-                        <div className=" mt-1 row ">
-                            <Col sm="6">
+                    <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name*/}
+                        <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name*/}
+                            <Col sm="6">{/* Order Date*/}
                                 <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "115px" }}>Order Date</Label>
@@ -757,7 +748,7 @@ const Order = (props) => {
                             </Col>
 
 
-                            <Col sm="6">
+                            <Col sm="6">{/*Supplier Name */}
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
@@ -785,25 +776,24 @@ const Order = (props) => {
                         </div>
                     </div>
 
-                    <div className="px-2  mb-1 c_card_body text-black" >
-
-                        <div className="row">
-                            <div className="col col-6">
+                    <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
+                        <div className="row">                                         {/*  Description and Delivery Date  field */}
+                            <div className="col col-6">                               {/*  Description field */}
                                 <FormGroup className=" row  mt-3" >
                                     <Label className="   p-2"
                                         style={{ width: "115px" }}>Description</Label>
                                     <div className="col-6">
                                         <Input type="text"
-                                            defaultValue={description}
+                                            value={description}
                                             placeholder='Enter Order Description'
-                                            onChange={e => description = e.target.value}
+                                            onChange={e => setDescription(e.target.value)}
                                         />
 
                                     </div>
 
                                 </FormGroup>
                             </div >
-                            <div className="col col-6" >
+                            <div className="col col-6" >{/*  Delivery Date field */}
                                 <FormGroup className=" row mt-3 " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Delivery Date</Label>
@@ -829,8 +819,9 @@ const Order = (props) => {
                             </div >
                         </div>
 
-                        <div className="row  ">
-                            <div className="col col-6">
+                        <div className="row  ">                                       {/*  Billing Address   and Shipping Address*/}
+
+                            <div className="col col-6">{/* Billing Address */}
                                 <FormGroup className="row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
@@ -853,7 +844,7 @@ const Order = (props) => {
                                 </FormGroup>
                             </div >
 
-                            <div className="col col-6">
+                            <div className="col col-6">{/*  Billing Shipping Address */}
                                 <FormGroup className=" row " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
@@ -877,8 +868,8 @@ const Order = (props) => {
                             </div >
                         </div>
 
-                        <div className="row" >
-                            <div className="col col-6" >
+                        <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
+                            <div className="col col-6" >                              {/**PO Type */}
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>PO Type</Label>
@@ -894,53 +885,52 @@ const Order = (props) => {
                             </div >
                         </div>
 
-                        {orderTypeSelect.label === 'Open PO' ? <div className="row" >
-                            <div className="col col-6" >
-                                <FormGroup className=" row  " >
-                                    <Label className=" p-2"
-                                        style={{ width: "115px" }}>PO From Date</Label>
-                                    <div className="col col-6 ">
-                                        <Flatpickr
-                                            id="pofromdate"
-                                            name="pofromdate"
-                                            value={poFromDate}
-                                            // disabled={pageMode === "edit" ? true : false}
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
-                                            onChange={(e, date) => { setpoFromDate(date) }}
-                                        />
-                                    </div>
-                                </FormGroup>
-                            </div >
+                        {orderTypeSelect.label === 'Open PO' ?
+                            <div className="row" >                                    {/*PO From Date */}
+                                <div className="col col-6" >
+                                    <FormGroup className=" row  " >
+                                        <Label className=" p-2"
+                                            style={{ width: "115px" }}>PO From Date</Label>
+                                        <div className="col col-6 ">
+                                            <Flatpickr
+                                                id="pofromdate"
+                                                name="pofromdate"
+                                                value={poFromDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                                onChange={(e, date) => { setpoFromDate(date) }}
+                                            />
+                                        </div>
+                                    </FormGroup>
+                                </div >
 
-                            <div className="col col-6" >
-                                <FormGroup className=" row  " >
-                                    <Label className=" p-2"
-                                        style={{ width: "130px" }}>PO To Date</Label>
-                                    <div className="col col-6 ">
-                                        <Flatpickr
-                                            id="potodate"
-                                            name="potodate"
-                                            value={poToDate}
-                                            // disabled={pageMode === "edit" ? true : false}
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
-                                            onChange={(e, date) => { setpoToDate(date) }}
-                                        />
-                                    </div>
-                                </FormGroup>
-                            </div >
-                        </div> : <></>}
+                                <div className="col col-6" >                        {/*PO To Date */}
+                                    <FormGroup className=" row  " >                   
+                                        <Label className=" p-2"
+                                            style={{ width: "130px" }}>PO To Date</Label>
+                                        <div className="col col-6 ">
+                                            <Flatpickr
+                                                id="potodate"
+                                                name="potodate"
+                                                value={poToDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                                onChange={(e, date) => { setpoToDate(date) }}
+                                            />
+                                        </div>
+                                    </FormGroup>
+                                </div >
+                            </div> : <></>}
 
                     </div>
 
@@ -990,7 +980,7 @@ const Order = (props) => {
 
                     {
                         orderItemTable.length > 0 ?
-                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.OrderTermsAndCondition} />
+                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} />
                             : null
                     }
 
