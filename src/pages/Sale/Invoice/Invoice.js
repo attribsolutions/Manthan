@@ -60,7 +60,7 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
-
+    const [showAllStockState, setShowAllStockState] = useState(true);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -79,7 +79,7 @@ const Invoice = (props) => {
         GoButton: state.InvoiceReducer.GoButton
     }));
 
-    const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
+    const { OrderItemDetails = [], OrderIDs = [] } = Data;
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -244,6 +244,9 @@ const Invoice = (props) => {
         }
     }, [pageField]);
 
+    useEffect(() => {
+        showAllStockOnclick(showAllStockState)
+    }, [showAllStockState]);
 
     const CustomerDropdown_Options = customer.map((index) => ({
         value: index.id,
@@ -251,36 +254,7 @@ const Invoice = (props) => {
 
     }));
 
-    function showAllStockOnclick(isplus = false) {
-        try {
-            if (isplus) {
-                document.getElementById("allplus-circle").style.display = "none";
-                document.getElementById("allminus-circle").style.display = "block";
-            } else {
-                document.getElementById("allplus-circle").style.display = "block";
-                document.getElementById("allminus-circle").style.display = "none";
-            }
-        } catch (w) { }
 
-        OrderItemDetails.forEach(index1 => {
-            if (!index1.StockTotal > 0) {
-                return
-            }
-            try {
-                if (isplus) {
-                    document.getElementById(`view${index1.id}`).style.display = "block";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-                } else {
-                    document.getElementById(`view${index1.id}`).style.display = "none";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-                }
-            } catch (w) { }
-        })
-
-
-    }
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
@@ -356,7 +330,6 @@ const Invoice = (props) => {
                 )
             },
         },
-
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
@@ -364,26 +337,36 @@ const Invoice = (props) => {
 
                 return (
                     <div className="d-flex flex-content-start">
-                        <div>
-                            <samp id="allplus-circle" style={{ display: "none" }}>
+                        {OrderItemDetails.length > 0 ? <div>
+                            <samp id="allplus-circle">
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
                                         position: "",
-                                        display: OrderItemDetails.length > 0 ? "block" : "none"
+                                        display: showAllStockState ? "none" : "block"
                                     }}
-                                    onClick={(e) => { showAllStockOnclick(true) }}>
+                                    onClick={(e) => {
+                                        setShowAllStockState(!showAllStockState)
+                                        // showAllStockOnclick(true) 
+                                    }}
+                                >
                                 </i>
                             </samp>
-                            <samp id="allminus-circle" >
+                            <samp id="allminus-circle"  >
                                 <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                     style={{
                                         position: "",
-                                        display: OrderItemDetails.length > 0 ? "block" : "none"
+                                        // display: "none"
+                                        display: showAllStockState ? "block" : "none"
                                     }}
-                                    onClick={(e) => { showAllStockOnclick(false) }}
+                                    onClick={(e) => {
+                                        setShowAllStockState(!showAllStockState)
+                                        // showAllStockOnclick(false)
+                                    }}
                                 ></i>
                             </samp>
                         </div>
+                            : null
+                        }
 
                         <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
                             <samp > Stock Details</samp>
@@ -395,11 +378,15 @@ const Invoice = (props) => {
 
             formatter: (cellContent, index1) => (
                 <div>
-                    <div >
+                    <div key={`plus-circle-icon${index1.id}`}>
                         {
                             (index1.StockTotal > 0) ?
                                 <>
-                                    <samp id={`plus-circle${index1.id}`} style={{ display: "none" }}>
+                                    <samp key={`plus-circle${index1.id}`} id={`plus-circle${index1.id}`}
+                                        style={{
+                                            display: showAllStockState ? "none" : "block"
+                                        }}
+                                    >
                                         <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
                                             style={{ position: "absolute", }}
                                             onClick={(e) => { showStockOnclick(index1, true) }}>
@@ -408,19 +395,27 @@ const Invoice = (props) => {
                                             {`Total Stock:${index1.StockTotal}`}</samp>
                                     </samp>
                                 </>
-                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
+                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
+                        }
 
-                        <samp id={`minus-circle${index1.id}`} >
+                        <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
+                            style={{ display: showAllStockState ? "block" : "none" }}
+                        >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                 style={{ position: "absolute", }}
                                 onClick={(e) => { showStockOnclick(index1, false) }}
                             ></i>
                         </samp>
 
-
                     </div >
 
-                    <div id={`view${index1.id}`} style={{ backgroundColor: "#b9be511a" }}>
+                    <div id={`view${index1.id}`}
+                        style={{
+                            backgroundColor: "#b9be511a",
+                            display: showAllStockState ? "bolck" : "none"
+                        }}
+                    // style={{ display: showAllStockState ? "none" : "block" }}
+                    >
                         <Table className="table table-bordered table-responsive mb-1" >
 
                             <Thead  >
@@ -488,8 +483,6 @@ const Invoice = (props) => {
                 </div >
             ),
 
-
-
         },
         {//***************Rate********************************************************************* */
             text: "Rate",
@@ -503,7 +496,36 @@ const Invoice = (props) => {
         // totalSize: OrderItemDetails.length,
         custom: true,
     };
+    function showAllStockOnclick(isplus = false) {
+        try {
+            if (isplus) {
+                document.getElementById("allplus-circle").style.display = "none";
+                document.getElementById("allminus-circle").style.display = "block";
+            } else {
+                document.getElementById("allplus-circle").style.display = "block";
+                document.getElementById("allminus-circle").style.display = "none";
+            }
+        } catch (w) { }
 
+        OrderItemDetails.forEach(index1 => {
+            if (!index1.StockTotal > 0) {
+                return
+            }
+            try {
+                if (isplus) {
+                    document.getElementById(`view${index1.id}`).style.display = "block";
+                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+                } else {
+                    document.getElementById(`view${index1.id}`).style.display = "none";
+                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+                }
+            } catch (w) { }
+        })
+
+
+    }
     function showStockOnclick(index1, isplus = false) {
         try {
             if (isplus) {
@@ -517,6 +539,7 @@ const Invoice = (props) => {
             }
         } catch (w) { }
     }
+
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
@@ -615,10 +638,6 @@ const Invoice = (props) => {
             document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
         } catch (e) { };
 
-
-
-
-
     };
 
     function orderQtyOnChange(event, index) {
@@ -642,8 +661,6 @@ const Invoice = (props) => {
         event.target.value = val1;
         index.Quantity = val1
 
-
-
         stockDistributeFunc(index)
     };
 
@@ -661,7 +678,6 @@ const Invoice = (props) => {
         // } catch (e) { }
         stockDistributeFunc(index)
     };
-
 
     function goButtonHandler(event) {
 
@@ -794,11 +810,6 @@ const Invoice = (props) => {
         debugger
     }
 
-
-
-
-
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -819,6 +830,8 @@ const Invoice = (props) => {
                                                     value={values.InvoiceDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
+                                                    disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+
                                                     options={{
                                                         dateFormat: "Y-m-d",
                                                     }}
