@@ -130,6 +130,7 @@ const WorkOrder = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        debugger
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -143,7 +144,6 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom } = hasEditVal

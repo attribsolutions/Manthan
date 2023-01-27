@@ -134,7 +134,7 @@ const DemandList = () => {
 
 
     function editBodyfunc(rowData) {
-        debugger
+
         const jsonBody = JSON.stringify({
             Supplier: rowData.SupplierID,
             Customer: rowData.CustomerID,
@@ -261,6 +261,7 @@ const DemandList = () => {
                             makeBtnShow={pageMode === url.DEMAND_LIST ? false : true}
                             goButnFunc={goButtonHandler}
                             editBodyfunc={editBodyfunc}
+                            filters={demandlistFilter}
                         />
                         : null
                 }

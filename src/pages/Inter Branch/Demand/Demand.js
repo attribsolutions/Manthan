@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -37,6 +37,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { DEMAND_LIST } from "../../../routes/route_url";
 import {
+    editDemandId,
     editDemandIdSuccess,
     postDemand,
     postDemandSuccess,
@@ -49,7 +50,6 @@ import {
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 let comment = ''
-let descripton = ''
 let editVal = {}
 
 const Demand = (props) => {
@@ -58,8 +58,8 @@ const Demand = (props) => {
     const history = useHistory()
 
     const fileds = {
-        id:"",
-        DemandDate:"",
+        id: "",
+        DemandDate: currentDate,
         SupplierName: "",
         Comment: "",
         DemandNo: "",
@@ -67,14 +67,14 @@ const Demand = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    const [demandDetail, setDemandDetail] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [demanddate, setdemanddate] = useState(currentDate)
-    const [SupplierSelect, setSuppierSelect] = useState('');
+    // const [SupplierSelect, setSupplierSelect] = useState('');
     const [demandItemTable, setdemandItemTable] = useState([])
     const [demandAmount, setDemandAmount] = useState(0);
 
@@ -107,8 +107,8 @@ const Demand = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
     const values = { ...state.values }
     const { isError } = state;
-    const { fieldLabe} = state;
-       
+    const { fieldLabe } = state;
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -154,23 +154,23 @@ const Demand = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                debugger
-                setSuppierSelect(hasEditVal)
+                console.log("hasEditVal", hasEditVal)
+                // setSupplierSelect(hasEditVal);
+                const { id, SupplierName, Supplier, Comment, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.DemandDate = DemandDate;
+                values.SupplierName = { value: hasEditVal.Supplier, label: hasEditVal.SupplierName };
+                values.Comment = hasEditVal.Comment;
+                values.DemandNo = DemandNo;
+                values.FullDemandNumber = FullDemandNumber;
+                values.id = id;
 
-                const { id, SupplierName, Supplier, Comment, currentDate, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
-                setState((i) => {
-                    i.values.DemandDate = currentDate
-                    i.values.SupplierName = { value: Supplier, label: SupplierName };
-                    i.values.Comment = Comment
-                    i.values.DemandNo = DemandNo
-                    i.values.FullDemandNumber = FullDemandNumber
-                    i.hasValid.SupplierName.valid = true;
-                    i.hasValid.DemandDate.valid = true;
-                    i.hasValid.Comment.valid = true;
-                    i.hasValid.DemandNo.valid = true;
-                    i.hasValid.FullDemandNumber.valid = true;
-                    return i
-                })
+                hasValid.SupplierName.valid = true;
+                hasValid.DemandDate.valid = true;
+                hasValid.Comment.valid = true;
+                hasValid.DemandNo.valid = true;
+                hasValid.FullDemandNumber.valid = true;
+                hasValid.id.valid = true
 
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
@@ -181,6 +181,9 @@ const Demand = (props) => {
                     DemandID: hasEditVal.id
                 })
                 dispatch(postGoButtonForDemand(jsonBody));
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editDemandIdSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
             }
         }
     }, [])
@@ -227,7 +230,7 @@ const Demand = (props) => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
-            descripton = ''
+            Comment = ''
             history.push({
                 pathname: DEMAND_LIST,
             })
@@ -292,20 +295,20 @@ const Demand = (props) => {
 
 
     const goButtonHandler = () => {
-        if (!SupplierSelect > 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please select Division",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
-            return;
-        }
+        // if (!SupplierSelect > 0) {
+        //     dispatch(
+        //         AlertState({
+        //             Type: 4,
+        //             Status: true,
+        //             Message: "Please select Division",
+        //             RedirectPath: false,
+        //             PermissionAction: false,
+        //         })
+        //     );
+        //     return;
+        // }
         const jsonBody = JSON.stringify({
-            Supplier: SupplierSelect.value,
+            Supplier: values.SupplierName.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
             DemandID: (pageMode === mode.save) ? 0 : editVal.id
@@ -320,7 +323,7 @@ const Demand = (props) => {
 
     function permissionfunc(istrue) {
         if (istrue) {
-            setSuppierSelect(istrue)// **istrue is == event value
+            // setSupplierSelect(istrue)// **istrue is == event value
             setdemandItemTable([])
         }
     }
@@ -341,7 +344,11 @@ const Demand = (props) => {
             );
             return;
         } else {
-            setSuppierSelect(e)
+            // setSupplierSelect(e)
+            setState((i) => {
+                i.values.SupplierName = e;
+                return i
+            })
             setdemandItemTable([])
         }
     };
@@ -445,11 +452,13 @@ const Demand = (props) => {
             DemandAmount: demandAmount,
             Comment: comment,
             Customer: userParty(),
-            Supplier: SupplierSelect.value,
+            Supplier: values.SupplierName.value,
             Division: userParty(),
             BillingAddressID: 4,
             ShippingAddressID: 4,
             Inward: 0,
+            // DemandNo: pageMode === 'edit' ? : '',
+            // FullDemandNumber: pageMode === 'edit' ? : '',
             MaterialIssue: null,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
@@ -600,83 +609,6 @@ const Demand = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-
-        {//------------- Demand No column ----------------------------------
-            text: "Demand No",
-            dataField: "DemandNo",
-            formatter: (value, row, k) => {
-
-                return (
-                    <span className="text-right" >
-                        <Input type="text"
-                            key={row.id}
-                            id={`Demand${row.id}`}
-                            placeholder="Demand No..."
-                            className="text-end "
-                            isDisabled={(pageMode === "edit") ? true : false}
-                            defaultValue={row.DemandNo}
-                            onChange={e => { row["DemandNo"] = e.target.value }}
-                            autoComplete="off"
-                        />
-                    </span>
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
-
-
-
-        {//------------- FullDemand No column ----------------------------------
-            text: "FullDemand No",
-            dataField: "FullDemandNo",
-            formatter: (value, row, k) => {
-
-                return (
-                    <span className="text-right" >
-                        <Input type="text"
-                            key={row.id}
-                            id={`FullDemand${row.id}`}
-                            placeholder="FullDemand No..."
-                            className="text-end "
-                            defaultValue={row.FullDemandNo}
-                            onChange={e => { row["FullDemandNo"] = e.target.value }}
-                            autoComplete="off"
-                        />
-                    </span>
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
-
-
-        { //------------- Comment column ----------------------------------
-            text: "Comment",
-            dataField: "",
-            formatter: (value, row, k) => {
-                return (
-                    <span >
-                        <Input type="text"
-                            id={`Comment${k}`}
-                            defaultValue={row.Comment}
-                            autoComplete="off"
-                            onChange={(e) => { row["Comment"] = e.target.value }}
-                        />
-                    </span>
-
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-
-        },
     ];
 
     const defaultSorted = [
@@ -732,21 +664,20 @@ const Demand = (props) => {
                                                 <Select
                                                     isDisabled={pageMode === "edit" ? true : false}
                                                     name="SupplierName"
-                                                    value={SupplierSelect}
+                                                    value={values.SupplierName}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={SupplierDropdown_Options}
                                                     onChange={SupplierOnchange}
                                                 />
-
                                             </Col>
                                         </FormGroup>
                                     </Col >
 
                                     <Col sm="6">
                                         <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
-                                            <Label className="mt-1" style={{ width: "150px" }}> Comment </Label>
+                                            <Label className="mt-1 " style={{ width: "150px" }}> Comment </Label>
                                             <Col sm={7}>
                                                 <Input
                                                     name="Comment"
@@ -765,6 +696,34 @@ const Demand = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col>
+                                    {
+                                        pageMode === 'edit' ?
+                                            <Col sm="6">
+                                                <FormGroup className="mb-2 mt-2 row" style={{ marginTop: "" }}>
+                                                    <Label className="mt-1" style={{ width: "150px" }}>Demand No</Label>
+                                                    <Col sm={7}>
+                                                        <Input
+                                                            name="DemandNo"
+                                                            value={values.DemandNo}
+                                                            type="text"
+                                                            disabled={pageMode === "edit" ? true : false}
+                                                            className={isError.DemandNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Challan No"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.DemandNo.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.DemandNo}</span>
+                                                        )}
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            :
+                                            <></>
+                                    }
+
                                 </Col>
 
                                 <Col sm="1" className="mx-2 mt-3">
