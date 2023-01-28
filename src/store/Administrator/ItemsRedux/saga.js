@@ -20,7 +20,8 @@ import {
   get_Sub_Category_By_CategoryType_ForDropDown_Success,
   get_Sub_Group_By_Group_ForDropDown_Success,
   PostItemDataSuccess,
-  updateItemSuccess
+  updateItemSuccess,
+  post_BrandName_dropdown_Success
 } from "./action";
 import {
   DELETE_ITEM_ID, EDIT_ITEM_ID,
@@ -41,6 +42,7 @@ import {
   GET_PRICE_LIST_FOR_DROPDOWN,
   GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
+  POST_BRAND_NAME_DROPDOWN,
   POST_ITEM_DATA,
   UPDATE_ITEM_ID
 } from "./actionType";
@@ -273,6 +275,21 @@ function* Category_DropDown_API_GenratorFunction({ id }) {
   }
 }
 
+function* BrandName_GenratorFunction({ data }) {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(apiCall.Brand_Name_Post_API, data);
+    yield put(SpinnerState(false))
+    yield put(post_BrandName_dropdown_Success(response.Data));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
+
 function* ItemsMastersSaga() {
   yield takeEvery(GET_ITEM_LIST_API, Get_Items_GenratorFunction);
   yield takeEvery(GET_ITEM_GROUP_FOR_DROPDOWN, Items_Group_GenratorFunction);
@@ -293,7 +310,8 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenratorFunction);
   yield takeEvery(GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenratorFunction);
   yield takeEvery(GET_ITEMTAG_API, Item_tagname_GenratorFunction);
-  yield takeEvery(GET_BRANDTAG_API, Brand_tagname_GenratorFunction);
+  yield takeEvery(POST_BRAND_NAME_DROPDOWN, BrandName_GenratorFunction);
+
 
 
 }
