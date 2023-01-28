@@ -4,12 +4,8 @@ import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import {
-    deleteOrderId,
-    deleteOrderIdSuccess,
     editOrderId,
-    getOrderListPage,
     updateOrderIdSuccess,
-    orderlistfilters,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
@@ -23,11 +19,9 @@ import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { Invoice_Edit_API_Singel_Get, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { Invoice_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
-import { order_Type } from "../../../components/Common/C-Varialbes";
 import Invoice from "./Invoice";
 import { deleteInvoiceId, deleteInvoiceIdSuccess, getIssueListPage } from "../../../store/Sales/Invoice/action";
 
@@ -156,7 +150,6 @@ const InvoiceList = () => {
     }
 
     function editBodyfunc(rowData) {
-
         const jsonBody = JSON.stringify({
             Party: rowData.SupplierID,
             Customer: rowData.CustomerID,
@@ -171,6 +164,7 @@ const InvoiceList = () => {
         var ReportType = report.invoice;
         dispatch(getpdfReportdata(Invoice_Edit_API_Singel_Get, ReportType, row.id))
     }
+
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
@@ -275,6 +269,7 @@ const InvoiceList = () => {
                         </Col>
                     </div>
                 </div>
+
                 {
                     (pageField) ?
                         <PurchaseListPage
