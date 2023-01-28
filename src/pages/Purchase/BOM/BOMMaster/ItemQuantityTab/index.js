@@ -55,38 +55,53 @@ function ItemTab(props) {
         setUnitSelect(event);
     };
     const addRowsHandler = (data) => {
-        debugger
-        const val = {
-            Item: contentItemSelect === "" ? "" : contentItemSelect.value,
-            ItemName: contentItemSelect.label,
-            Unit: unitSelect === "" ? "" : unitSelect.value,
-            UnitName: unitSelect.label,
-            Quantity: Quantity,
-        };
+        const invalidMsg1 = []
 
-        if (!(contentItemSelect === "")
-            && !(unitSelect === "")
-            && !(Quantity === "")
-        ) {
-            const totalTableData = props.tableData.length;
-            val.id = totalTableData + 1;
-            const updatedTableData = [...props.tableData];
-            updatedTableData.push(val);
-            props.func(updatedTableData)
-            clearState();
+        if ((contentItemSelect === "")) {
+            invalidMsg1.push(`Content Item Is Required`)
         }
-        else {
+        if (Quantity === "") {
+            invalidMsg1.push(`Item Quantity Is Required`)
+        };
+        if ((unitSelect === "")) {
+            invalidMsg1.push(`Unit Is Required`)
+        };
+        debugger
+        if ((contentItemSelect === "")
+            || (unitSelect === "")
+            || (Quantity === "")
+        ) {
+
             dispatch(
                 AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "Please Enter Value",
+                    Message: JSON.stringify(invalidMsg1),
                     RedirectPath: false,
                     PermissionAction: false,
                 })
             );
+            return;
         }
-    };
+        const val = {
+            Item: contentItemSelect.value,
+            ItemName: contentItemSelect.label,
+            Unit: unitSelect.value,
+            UnitName: unitSelect.label,
+            Quantity: Quantity,
+        };
+
+
+        const totalTableData = props.tableData.length;
+        val.id = totalTableData + 1;
+        const updatedTableData = [...props.tableData];
+        updatedTableData.push(val);
+        props.func(updatedTableData)
+        clearState();
+
+
+
+    }
     const clearState = () => {
         setContentItemSelect('');
         setQuantity('');
