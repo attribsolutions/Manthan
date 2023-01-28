@@ -312,7 +312,7 @@ const Demand = (props) => {
             Supplier: values.SupplierName.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
-            DemandID: (pageMode === mode.save) ? 0 : editVal.id
+            DemandID: (pageMode === mode.save) ? 0 : EditData.id
         })
 
         dispatch(postGoButtonForDemand(jsonBody))
@@ -467,9 +467,9 @@ debugger
         }
         );
         //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
-
+debugger
         if (pageMode === mode.edit) {
-            dispatch(updateDemandId(jsonBody, editVal.id))
+            dispatch(updateDemandId(jsonBody, EditData.id))
         }
         else {
             dispatch(postDemand(jsonBody));
@@ -477,7 +477,7 @@ debugger
     }
 
     const pagesListColumns = [
-        
+
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
