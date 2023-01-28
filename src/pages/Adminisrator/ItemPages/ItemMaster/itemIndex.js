@@ -46,10 +46,11 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
+import { PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -86,7 +87,7 @@ const ItemsMaster = (props) => {
         HSN: '',
         isActive: true,
         Tag: '',
-        BrandName: '',
+        BrandName: [],
         ShelfLife: ''
     }
     const initialInValid = ["txtName0", "txtShortName0",]
@@ -127,7 +128,8 @@ const ItemsMaster = (props) => {
         CategoryList,
         ItemTagList,
         BrandTagList,
-        updateMsg
+        updateMsg,
+        BrandName
     } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
@@ -139,14 +141,16 @@ const ItemsMaster = (props) => {
         CategoryList: state.ItemMastersReducer.Category,
         ItemTagList: state.ItemMastersReducer.ItemTagList,
         BrandTagList: state.ItemMastersReducer.BrandTagList,
-
-
+        BrandName: state.GeneralReducer.GeneralList,
     }));
+
+    console.log(BrandName)
+
+    
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -167,7 +171,13 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: userCompany(),
+        });
+        dispatch(PostGenerallist(jsonBody));
+    }, []);
 
+    useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -281,6 +291,7 @@ const ItemsMaster = (props) => {
         }
 
     }, [])
+    
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
@@ -381,6 +392,11 @@ const ItemsMaster = (props) => {
     const Division_DropdownOptions = Division.map((data) => ({
         value: data.id,
         label: data.Name
+    }));
+
+    const BrandName_DropdownOptions = CategoryList.map((data) => ({
+        value: data.id,
+        label: data.Name,
     }));
 
     function dropDownValidation(event, type,) {
@@ -1058,7 +1074,8 @@ const ItemsMaster = (props) => {
                                                                             classNamePrefix="select2-selection"
                                                                         />
                                                                     </FormGroup>
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+
+                                                                    {/* <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">Brand Name</Label>
                                                                         <Input
                                                                             id='txtBrandName0'
@@ -1076,6 +1093,24 @@ const ItemsMaster = (props) => {
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
+                                                                    </FormGroup> */}
+                                                                    <FormGroup className="mb-3 col col-sm-4 ">
+                                                                        <Label className="form-label font-size-13 ">Brand Name</Label>
+                                                                        <Select
+                                                                            defaultValue={formValue.Category}
+                                                                            isMulti={true}
+                                                                            className="basic-multi-select"
+                                                                            options={CategoryList_DropdownOptions}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: inValidDrop.Category ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                            onChange={(e) => { Category_Handler(e) }}
+                                                                            classNamePrefix="select2-selection"
+                                                                        />
                                                                     </FormGroup>
                                                                 </Row>
 

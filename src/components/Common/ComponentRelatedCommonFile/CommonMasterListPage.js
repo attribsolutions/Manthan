@@ -117,7 +117,7 @@ const CommonListPage = (props) => {
         breadShow: true
       }))
     }
-  }, [userAccess,tableList])
+  }, [userAccess, tableList])
 
   // this useEffect for MasterPagePath dynamically work 
   // useEffect(() => {
@@ -229,7 +229,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-
+ 
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({

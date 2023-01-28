@@ -20,10 +20,9 @@ import {
 import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
-import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
+
 const GRNList = () => {
 
     const dispatch = useDispatch();
@@ -43,6 +42,7 @@ const GRNList = () => {
     );
 
     const { userAccess, pageField, vender, tableList, grnlistFilter } = reducers;
+
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
     const venderOptions = vender.map((i) => ({
@@ -199,7 +199,7 @@ const GRNList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            masterPath={url.GRN_ADD_Mode_2}
+                            masterPath={ url.GRN_ADD }
                             ButtonMsgLable={"GRN"}
                             deleteName={"FullGRNNumber"}
                             pageMode={"List"}

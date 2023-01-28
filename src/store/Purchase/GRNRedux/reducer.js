@@ -14,13 +14,13 @@ import {
 
 const INIT_STATE = {
   postMsg: { Status: false },
-  editData: { Status: false, Items: [] },
+  editData: { Status: false },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   GRNList: [],
   grnItemList: [],
   GRNitem: { Status: false, Data: [], },
-  grnlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: {value:'', label: "All" }}
+  grnlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: { value: '', label: "All" } }
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
