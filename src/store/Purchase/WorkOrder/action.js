@@ -34,9 +34,9 @@ export const getBOMListSuccess = (data) => ({
 });
 
 // Go Button Post API
-export const postGoButtonForWorkOrder_Master = (data,) => ({
+export const postGoButtonForWorkOrder_Master = (jsonbody,btnId) => ({
     type: POST_GO_BUTTON_FOR_WORK_ORDER_MASTER,
-    data,
+    jsonbody,btnId
 });
 
 export const postGoButtonForWorkOrder_MasterSuccess = (data) => ({
@@ -46,9 +46,9 @@ export const postGoButtonForWorkOrder_MasterSuccess = (data) => ({
 
 
 // Go Button Post API
-export const postWorkOrderMaster = (Data) => ({
+export const postWorkOrderMaster = (jsonbody,btnId) => ({
     type: POST_WORK_ORDER_MASTER,
-    Data,
+    jsonbody,btnId
 });
 
 export const postWorkOrderMasterSuccess = (data) => ({

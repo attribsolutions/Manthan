@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, convertTimefunc, GoBtnDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
   BOMList_Get_API,
   Post_WorkOrder_Master_API,
@@ -50,18 +50,18 @@ function* Get_BOMList_GenratorFunction({ filters }) {
 }
 
 // GO Botton Post API
-function* GoButton_WorkOrder_post_genfun({ data }) {
-
-  yield put(SpinnerState(true))
+function* GoButton_WorkOrder_post_genfun({ jsonbody,btnId }) {
+debugger
+  // yield put(SpinnerState(true))
   try {
 
-    const response = yield call(WorkOrder_GoButton_Post_API, data);
-    yield put(SpinnerState(false))
+    const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
+    GoBtnDissable({ id: btnId, state: false })
     
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
     
   } catch (error) {
-    yield put(SpinnerState(false))
+      GoBtnDissable({ id: btnId, state: false })
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Go Button in Work Order ",
@@ -70,15 +70,15 @@ function* GoButton_WorkOrder_post_genfun({ data }) {
 }
 
 // WOrk Order Post API
-function* Post_WorkOrder_GenratorFunction({ Data }) {
+function* Post_WorkOrder_GenratorFunction({ jsonbody,btnId }) {
 
-  yield put(SpinnerState(true))
+  // yield put(SpinnerState(true))
   try {
-    const response = yield call(Post_WorkOrder_Master_API, Data);
-    yield put(SpinnerState(false))
+    const response = yield call(Post_WorkOrder_Master_API, jsonbody);
+    // yield put(SpinnerState(false))
     yield put(postWorkOrderMasterSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+    // yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message post error in Work Order",
