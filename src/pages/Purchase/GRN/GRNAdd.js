@@ -24,14 +24,12 @@ import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../.
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID";
+import * as edit from "../../../routes/PageMode"
 
 let initialTableData = []
 
@@ -141,7 +139,6 @@ const GRNAdd = (props) => {
             if (hasEditVal) {
 
                 setEditData(hasEditVal);
-
                 const { GRNItems = [], GRNReferences = [] } = hasEditVal;
                 let ChallanNo1 = ''
 
@@ -152,7 +149,6 @@ const GRNAdd = (props) => {
                 setGrnDetail(ChallanNo1);
 
                 setgrnItemList(GRNItems)
-                debugger
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -215,19 +211,18 @@ const GRNAdd = (props) => {
             text: "Item Name",
             dataField: "ItemName",
             // sort: true,
-            hiddenColumns:true,
+
             formatter: (value, row) => (
                 <div className=" mt-2">
                     <span key={row.id}>{value}</span>
                 </div>
             ),
         },
-        
+
         {//------------- Quntity first column ----------------------------------
             text: "PO-Qty",
             dataField: "poQuantity",
-            // style={{ display: pageMode === 'edit' ? "none" : "block" }}
-            // sort: true,
+            hidden: edit ? true : false,
             formatter: (value, row, k) => {
                 debugger
                 return (
@@ -257,6 +252,7 @@ const GRNAdd = (props) => {
                             defaultValue={row.Quantity}
                             className="text-end"
                             autoComplete="off"
+                            disabled={edit ? true : false}
                             key={row.id}
                             onChange={(e) => {
                                 const val = e.target.value
@@ -296,6 +292,7 @@ const GRNAdd = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         key={row.id}
+                        isDisabled={edit ? true : false}
                         defaultValue={{ value: row.Unit, label: row.UnitName }}
                         options={
                             row.UnitDetails.map(i => ({
@@ -335,7 +332,7 @@ const GRNAdd = (props) => {
                             className=" text-end"
                             defaultValue={row.Rate}
                             autoComplete="off"
-                            disabled={(row.GST === '') ? true : false}
+                            disabled={(row.GST === '') || (edit) ? true : false}
                             onChange={e => {
                                 row["Rate"] = e.target.value;
                                 const qty = document.getElementById(`Quantity${k}`)
@@ -395,7 +392,6 @@ const GRNAdd = (props) => {
             dataField: "",
             // sort: true,
             formatter: (value, row, k) => {
-                debugger
                 try {
                     document.getElementById(`Batch${row.id}`).value = row.BatchCode
                 } catch (e) { }
@@ -405,6 +401,7 @@ const GRNAdd = (props) => {
                         id={`Batch${row.id}`}
                         placeholder="Batch Code..."
                         className="text-end "
+                        disabled={edit ? true : false}
                         defaultValue={row.BatchCode}
                         onChange={e => { row["BatchCode"] = e.target.value }}
                         autoComplete="off"
@@ -430,10 +427,11 @@ const GRNAdd = (props) => {
                         placeholder="Batch Date..."
                         id={`BatchDate${k}`}
                         key={row.id}
+                        disabled={edit ? true : false}
                         value={row.BatchDate}
                         data-enable-time
                         options={{
-                            altInput: true,
+                            // altInput: true,
                             altFormat: "d-m-Y",
                             dateFormat: "Y-m-d",
                         }}
@@ -449,6 +447,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
+            hidden: edit ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -667,8 +666,9 @@ const GRNAdd = (props) => {
                                             name="grndate"
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
+                                            disabled={edit ? true : false}
                                             options={{
-                                                altInput: true,
+
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                                 defaultDate: "today"
@@ -687,6 +687,7 @@ const GRNAdd = (props) => {
                                         < Input
                                             style={{ backgroundColor: "white" }}
                                             type="text"
+                                            placeholder="Enter Supplier Name "
                                             // value={grnDetail.SupplierName}
                                             value={pageMode === 'edit' ? EditData.CustomerName : grnDetail.SupplierName}
                                             disabled={true} />
@@ -712,8 +713,9 @@ const GRNAdd = (props) => {
                                         <Flatpickr
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
+                                            disabled={edit ? true : false}
                                             options={{
-                                                altInput: true,
+                                                // altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                                 defaultDate: "today"
@@ -766,6 +768,7 @@ const GRNAdd = (props) => {
                                                     <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
                                                         <Row className="row  g-0 " >
                                                             {openPOdata.map((index, key) => {
+                                                                debugger
                                                                 return (
                                                                     <Col className="col col-6 dropdown-icon-item-custom  text-black "
                                                                     >
