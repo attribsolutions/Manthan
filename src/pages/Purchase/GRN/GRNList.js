@@ -40,26 +40,8 @@ const GRNList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-
     const { userAccess, pageField, vender, tableList, grnlistFilter } = reducers;
-
     const { fromdate, todate, venderSelect } = grnlistFilter;
-
-    const venderOptions = vender.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
-
-    venderOptions.unshift({
-        value: "",
-        label: " All"
-    });
-
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
 
     const action = {
         getList: getGRNListPage,
@@ -78,8 +60,23 @@ const GRNList = () => {
         goButtonHandler()
     }, []);
 
-    function goButtonHandler() {
+    const venderOptions = vender.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
 
+    venderOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
+    const downList = useMemo(() => {
+        let PageFieldMaster = []
+        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
+        return excelDownCommonFunc({ tableList, PageFieldMaster })
+    }, [tableList])
+
+    function goButtonHandler() {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -199,7 +196,7 @@ const GRNList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            masterPath={ url.GRN_ADD }
+                            masterPath={url.GRN_ADD}
                             ButtonMsgLable={"GRN"}
                             deleteName={"FullGRNNumber"}
                             pageMode={"List"}
