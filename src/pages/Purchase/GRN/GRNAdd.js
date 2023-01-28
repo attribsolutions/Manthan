@@ -20,13 +20,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
-
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";
@@ -52,6 +51,9 @@ const GRNAdd = (props) => {
     const [openPOdrp, setopenPOdrp] = useState(false);
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
+    const [modalCss, setModalCss] = useState(false);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [EditData, setEditData] = useState({});
 
     useEffect(() => {
         dispatch(getSupplierAddress())
@@ -87,6 +89,7 @@ const GRNAdd = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
@@ -96,7 +99,6 @@ const GRNAdd = (props) => {
                 ele.id = k + 1;
                 ele["poQuantity"] = ele.Quantity
                 ele["Quantity"] = ''
-
                 ele["poAmount"] = ele.Amount
                 ele["Amount"] = 0
                 ele["BatchDate"] = currentDate
@@ -122,6 +124,41 @@ const GRNAdd = (props) => {
         }
 
     }, [items])
+
+    useEffect(() => {
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+
+                setEditData(hasEditVal);
+
+                const { GRNItems = [], GRNReferences = [] } = hasEditVal;
+                let ChallanNo1 = ''
+
+                GRNReferences.forEach(ele => {
+                    ChallanNo1 = ChallanNo1.concat(`${ele.ChallanNo},`)
+                });
+                ChallanNo1 = ChallanNo1.replace(/,*$/, '');
+                setGrnDetail(ChallanNo1);
+
+                setgrnItemList(GRNItems)
+                debugger
+                dispatch(editGRNIdSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+        }
+    }, [])
 
     useEffect(() => {
 
@@ -178,20 +215,25 @@ const GRNAdd = (props) => {
             text: "Item Name",
             dataField: "ItemName",
             // sort: true,
+            hiddenColumns:true,
             formatter: (value, row) => (
                 <div className=" mt-2">
                     <span key={row.id}>{value}</span>
                 </div>
             ),
         },
+        
         {//------------- Quntity first column ----------------------------------
             text: "PO-Qty",
             dataField: "poQuantity",
+            // style={{ display: pageMode === 'edit' ? "none" : "block" }}
             // sort: true,
             formatter: (value, row, k) => {
+                debugger
                 return (
-                    <div className="text-end">
-                        <samp key={row.id} className="font-asian">{value}</samp>
+                    <div className="text-end" >
+
+                        <samp key={row.id} className="font-asian">{pageMode === 'edit' ? 0 : value}</samp>
                     </div>
                 )
             },
@@ -199,6 +241,7 @@ const GRNAdd = (props) => {
                 return { width: '100px', textAlign: 'center', text: "end" };
             }
         },
+
         {//  ------------Quntity column -----------------------------------  
             text: "GRN-Qty",
             dataField: "",
@@ -239,6 +282,10 @@ const GRNAdd = (props) => {
             dataField: "",
             // sort: true,
             formatter: (value, row, key) => {
+
+                if (row.UnitDetails === undefined) {
+                    row["UnitDetails"] = []
+                }
                 if (row.UnitName === undefined) {
                     row["Unit"] = row.UnitDetails[0].Unit
                     row["UnitName"] = row.UnitDetails[0].UnitName
@@ -342,11 +389,13 @@ const GRNAdd = (props) => {
                 return { width: '100px', textAlign: 'center', text: "center" };
             }
         },
+
         {//------------- Batch Code column ----------------------------------
             text: "BatchCode",
             dataField: "",
             // sort: true,
             formatter: (value, row, k) => {
+                debugger
                 try {
                     document.getElementById(`Batch${row.id}`).value = row.BatchCode
                 } catch (e) { }
@@ -366,6 +415,7 @@ const GRNAdd = (props) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
         },
+
         {//------------- Batch Date column ----------------------------------
             text: "Batch Date",
             dataField: "",
@@ -395,6 +445,7 @@ const GRNAdd = (props) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
         },
+
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
@@ -413,6 +464,8 @@ const GRNAdd = (props) => {
                     <div >
                         {row.delbtn ? <div >
                             <Button
+                                // style={pageMode==='edit'? 'Block' :"None"}
+
                                 type="button"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top"
                                 onClick={(e) => deletebtnOnclick(row)}
@@ -476,6 +529,7 @@ const GRNAdd = (props) => {
         setgrnItemList(newArr)
 
     }
+
     const deletebtnOnclick = (r) => {
         const list = [...initialTableData];
         const newArr = list.filter(i => { return (!(i.id === r.id)) })
@@ -483,7 +537,6 @@ const GRNAdd = (props) => {
         setgrnItemList(newArr)
 
     }
-
 
     const saveHandeller = (e, values) => {
         // debugger
@@ -633,7 +686,10 @@ const GRNAdd = (props) => {
                                     <Col md="7">
                                         < Input
                                             style={{ backgroundColor: "white" }}
-                                            type="text" value={grnDetail.SupplierName} disabled={true} />
+                                            type="text"
+                                            // value={grnDetail.SupplierName}
+                                            value={pageMode === 'edit' ? EditData.CustomerName : grnDetail.SupplierName}
+                                            disabled={true} />
                                     </Col>
                                 </FormGroup>
 
@@ -643,7 +699,7 @@ const GRNAdd = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
-                                            value={grnDetail.challanNo}
+                                            value={pageMode === 'edit' ? grnDetail : grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>
                                 </FormGroup>
@@ -671,6 +727,7 @@ const GRNAdd = (props) => {
                                     <Col md="7">
                                         <Input
                                             type="text"
+                                            value={EditData.InvoiceNumber}
                                             placeholder="Enter Invoice No"
                                             onChange={(e) => setInvoiceNo(e.target.value)} />
                                     </Col>
