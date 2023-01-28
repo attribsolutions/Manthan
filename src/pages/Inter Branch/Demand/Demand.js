@@ -282,9 +282,6 @@ const Demand = (props) => {
     }, [pageField])
 
 
-    const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
-
-
     useEffect(() => {
         if (GoButton) {
             let { DemandItems = [] } = GoButton
@@ -294,6 +291,156 @@ const Demand = (props) => {
     }, [GoButton]);
 
 
+    const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
+
+    const pagesListColumns = [
+
+        {//------------- ItemName column ----------------------------------
+            text: "Item Name",
+            dataField: "ItemName",
+        },
+
+        {//------------- Stock Quantity column ----------------------------------
+            text: "Stock Qty",
+            dataField: "StockQuantity",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <div className="text-end">
+                        <span>{row.StockQuantity}</span>
+                    </div>
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            },
+        },
+
+        { //------------- Quantity column ----------------------------------
+            text: "Quantity",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span>
+                        <Input type="text"
+                            id={`Quantity${k}`}
+                            defaultValue={row.Quantity}
+                            key={row.Quantity}
+                            className="text-end"
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "qty")
+                                } else {
+                                    document.getElementById(`Quantity${k}`).value = row.Quantity
+                                }
+                                handleKeyDown(e, demandItemTable)
+                            }}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+
+
+        },
+
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, key) => {
+
+                if (!row.UnitName) {
+                    row["Unit_id"] = row.UnitDetails[0].UnitID
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.UnitID,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["Unit_id"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '150px', textAlign: 'center' };
+            }
+
+        },
+
+        {//------------- Rate column ----------------------------------
+            text: "Rate/Unit",
+            dataField: "",
+            formatter: (value, row, k) => {
+
+                return (
+                    <span className="text-right" >
+                        <Input
+                            type="text"
+                            id={`Ratey${k}`}
+                            defaultValue={row.Rate}
+                            autoComplete="off"
+                            className="text-end"
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "rate")
+                                } else {
+                                    document.getElementById(`Ratey${k}`).value = row.Rate
+                                }
+                            }}
+                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center'};
+            }
+        },
+    ];
+
+    const defaultSorted = [
+        {
+            dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
+
+    const pageOptions = {
+        sizePerPage: (demandItemTable.length + 2),
+        totalSize: 0,
+        custom: true,
+    };
+    
 
     const goButtonHandler = () => {
         // if (!SupplierSelect > 0) {
@@ -447,7 +594,7 @@ const Demand = (props) => {
             }));
             return
         };
-debugger
+
         const jsonBody = JSON.stringify({
             DemandDate: demanddate,
             DemandAmount: demandAmount,
@@ -467,7 +614,6 @@ debugger
         }
         );
         //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
-debugger
         if (pageMode === mode.edit) {
             dispatch(updateDemandId(jsonBody, EditData.id))
         }
@@ -476,154 +622,6 @@ debugger
         }
     }
 
-    const pagesListColumns = [
-
-        {//------------- ItemName column ----------------------------------
-            text: "Item Name",
-            dataField: "ItemName",
-        },
-
-        {//------------- Stock Quantity column ----------------------------------
-            text: "Stock Qty",
-            dataField: "StockQuantity",
-            // sort: true,
-            formatter: (value, row, k) => {
-
-                return (
-                    <div className="text-end">
-                        <span>{row.StockQuantity}</span>
-                    </div>
-                )
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            },
-        },
-
-        { //------------- Quantity column ----------------------------------
-            text: "Quantity",
-            dataField: "",
-            // sort: true,
-            formatter: (value, row, k) => {
-                return (
-                    <span>
-                        <Input type="text"
-                            id={`Quantity${k}`}
-                            defaultValue={row.Quantity}
-                            key={row.Quantity}
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "qty")
-                                } else {
-                                    document.getElementById(`Quantity${k}`).value = row.Quantity
-                                }
-                                handleKeyDown(e, demandItemTable)
-                            }}
-                            autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
-                        />
-                    </span>
-
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-
-
-        },
-
-        {  //------------- Unit column ----------------------------------
-            text: "Unit",
-            dataField: "",
-            // sort: true,
-            formatter: (value, row, key) => {
-
-                if (!row.UnitName) {
-                    row["Unit_id"] = row.UnitDetails[0].UnitID
-                    row["UnitName"] = row.UnitDetails[0].UnitName
-                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
-                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
-                }
-
-                return (
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
-                        // value={{value:row.Unit,label:row.UnitName}}
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.UnitID,
-                                baseUnitQty: i.BaseUnitQuantity
-                            }))
-                        }
-                        onChange={e => {
-                            row["Unit_id"] = e.value;
-                            row["UnitName"] = e.label
-                            row["BaseUnitQuantity"] = e.baseUnitQty
-                        }}
-                    >
-                    </Select >
-                )
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '150px', textAlign: 'center' };
-            }
-
-        },
-
-        {//------------- Rate column ----------------------------------
-            text: "Rate/Unit",
-            dataField: "",
-            formatter: (value, row, k) => {
-
-                return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-                            id={`Ratey${k}`}
-                            defaultValue={row.Rate}
-                            autoComplete="off"
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
-                                } else {
-                                    document.getElementById(`Ratey${k}`).value = row.Rate
-                                }
-                            }}
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
-                        />
-                    </span>
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center'};
-            }
-        },
-    ];
-
-    const defaultSorted = [
-        {
-            dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
-            order: "asc", // desc or asc
-        },
-    ];
-
-    const pageOptions = {
-        sizePerPage: (demandItemTable.length + 2),
-        totalSize: 0,
-        custom: true,
-    };
     if (!(userAccState === '')) {
         return (
             <React.Fragment>
