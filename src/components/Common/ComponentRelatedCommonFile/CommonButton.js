@@ -3,8 +3,8 @@ import { createdBy } from "./listPageCommonButtons";
 
 export function SaveButton(props) {
 
-  const { pageMode, userAcc, module, onClick, editCreatedBy = {}, id=''} = props
-  
+  const { pageMode, userAcc, module, onClick, editCreatedBy = {}, id = '' } = props
+
   const isCreated = (createdBy() === editCreatedBy)
 
   return (
@@ -43,21 +43,26 @@ export function SaveButton(props) {
 
 
 export function Go_Button(props) {
-  const { onClick } = props
+  const { onClick, id } = props
   return (
-    <Button
-      id="gobtn_submmit" type="button"
-      color="btn btn-outline-success border-2 font-size-12 mb-2 "
-      onClick={onClick}
-    >Go</Button>
+    // <div className="spinner-grow t"   role="status" >
+      <Button
+        id={id} type="button"
+      
+        color="btn btn-outline-success border-1 font-size-12 mb-2 "
+        onClick={onClick}
+      >
+        
+        Go</Button>
+    // </div>
   )
 }
 
 export function Change_Button(props) {
-  const { onClick } = props
+  const { onClick, id } = props
   return (
     <Button
-      id="changebtn_submmit" type="button"
+      id={id} type="button"
       color="btn btn-outline-info border-1 font-size-12 "
       onClick={onClick}
     >Change</Button>

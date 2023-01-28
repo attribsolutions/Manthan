@@ -156,7 +156,7 @@ export const listPageCommonButtonFunction = (props) => {
                 <Button
                     type="button"
                     className={downBtnCss}
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
                     onClick={() => { downHandler(rowData) }}
                 >
                     <i className="bx bx-printer font-size-18"></i>
@@ -329,14 +329,22 @@ export function mainSppinerOnOff({ id = '', state = false }) {//++++++++++++++++
     }
 }
 
-export function GoBtnDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+    // try {
+    //     document.getElementById("overlay").style.display = state ? "block" : "none";
+    // } catch (e) {
+    //     alert("Go btn dissable overlay error")
+    // }
     try {
-        document.getElementById("overlay").style.display = state ? "block" : "none";
-    } catch (e) {
-        alert("Go btn dissable overlay error")
-    }
-    try {
-        document.getElementById('gobtn_submmit').disabled = state;
+        const btn = document.getElementById(id);
+        btn.disabled = state;
+        debugger
+        if (state) {
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
+        } else {
+            btn.innerHTML = `<span> Go</span>`
+            btn.text = "Go"
+        }
     } catch (e) {
         // alert("Go btn dissable  error") 
     }

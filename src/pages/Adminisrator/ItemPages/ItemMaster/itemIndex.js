@@ -145,9 +145,10 @@ const ItemsMaster = (props) => {
         CategoryList: state.ItemMastersReducer.Category,
         ItemTagList: state.ItemMastersReducer.ItemTagList,
         BrandTagList: state.ItemMastersReducer.BrandTagList,
+
         BrandName: state.ItemMastersReducer.BrandName,
     }));
-
+  
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -171,6 +172,12 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: userCompany(),
+        });
+        dispatch(PostGenerallist(jsonBody));
+    }, []);
+
 
         const jsonBody = JSON.stringify({
             Company: userCompany(),
@@ -393,6 +400,7 @@ const ItemsMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
+
 
     const BrandName_DropdownOptions = BrandName.map((data) => ({
         value: data.id,
@@ -1106,19 +1114,21 @@ const ItemsMaster = (props) => {
                                                                     </FormGroup> */}
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Brand Name</Label>
-                                                                        <Select
+
                                                                             defaultValue={formValue.BrandName}
                                                                             isMulti={true}
                                                                             className="basic-multi-select"
                                                                             options={BrandName_DropdownOptions}
+
                                                                             styles={{
                                                                                 control: base => ({
                                                                                     ...base,
                                                                                     border: inValidDrop.Category ? '1px solid red' : '',
 
                                                                                 })
-                                                                            }}
+
                                                                             onChange={(e) => { BrandName_Handler(e) }}
+
                                                                             classNamePrefix="select2-selection"
                                                                         />
                                                                     </FormGroup>

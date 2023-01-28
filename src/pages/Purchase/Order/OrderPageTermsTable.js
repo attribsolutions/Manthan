@@ -5,7 +5,7 @@ import { Table } from 'reactstrap';
 
 export default function OrderPageTermsTable(props) {
     const { tableList, setfunc, privious = [] } = props;
-
+    
     const { termsAndConditions = [] } = useSelector((state) => ({
         termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditionsList,
     }));

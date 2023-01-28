@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -37,6 +37,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { DEMAND_LIST } from "../../../routes/route_url";
 import {
+    editDemandId,
     editDemandIdSuccess,
     postDemand,
     postDemandSuccess,
@@ -48,18 +49,15 @@ import {
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
-let comment = ''
-let descripton = ''
 let editVal = {}
-
 const Demand = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
     const fileds = {
-        id:"",
-        DemandDate:"",
+        id: "",
+        DemandDate: currentDate,
         SupplierName: "",
         Comment: "",
         DemandNo: "",
@@ -67,14 +65,17 @@ const Demand = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    const [demandDetail, setDemandDetail] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
+    const [DemandNo, setDemandNo] = useState();
+    const [EditData, setEditData] = useState({});
+    const [FullDemandNumber, setFullDemandNumber] = useState();
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [demanddate, setdemanddate] = useState(currentDate)
-    const [SupplierSelect, setSuppierSelect] = useState('');
+    // const [SupplierSelect, setSupplierSelect] = useState('');
     const [demandItemTable, setdemandItemTable] = useState([])
     const [demandAmount, setDemandAmount] = useState(0);
 
@@ -107,8 +108,8 @@ const Demand = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
     const values = { ...state.values }
     const { isError } = state;
-    const { fieldLabe} = state;
-       
+    const { fieldLabe } = state;
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -154,23 +155,23 @@ const Demand = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                debugger
-                setSuppierSelect(hasEditVal)
+                // console.log("hasEditVal", hasEditVal)
+                 setEditData(hasEditVal);
+                const { id, SupplierName, Supplier, Comment, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.DemandDate = DemandDate;
+                values.SupplierName = { value: hasEditVal.Supplier, label: hasEditVal.SupplierName };
+                values.Comment = Comment;
+                values.DemandNo = DemandNo;
+                values.FullDemandNumber = FullDemandNumber;
+                values.id = id;
 
-                const { id, SupplierName, Supplier, Comment, currentDate, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
-                setState((i) => {
-                    i.values.DemandDate = currentDate
-                    i.values.SupplierName = { value: Supplier, label: SupplierName };
-                    i.values.Comment = Comment
-                    i.values.DemandNo = DemandNo
-                    i.values.FullDemandNumber = FullDemandNumber
-                    i.hasValid.SupplierName.valid = true;
-                    i.hasValid.DemandDate.valid = true;
-                    i.hasValid.Comment.valid = true;
-                    i.hasValid.DemandNo.valid = true;
-                    i.hasValid.FullDemandNumber.valid = true;
-                    return i
-                })
+                hasValid.SupplierName.valid = true;
+                hasValid.DemandDate.valid = true;
+                hasValid.Comment.valid = true;
+                hasValid.DemandNo.valid = true;
+                hasValid.FullDemandNumber.valid = true;
+                hasValid.id.valid = true
 
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
@@ -181,6 +182,9 @@ const Demand = (props) => {
                     DemandID: hasEditVal.id
                 })
                 dispatch(postGoButtonForDemand(jsonBody));
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editDemandIdSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
             }
         }
     }, [])
@@ -227,7 +231,7 @@ const Demand = (props) => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
-            descripton = ''
+            // Comment = ''
             history.push({
                 pathname: DEMAND_LIST,
             })
@@ -278,9 +282,6 @@ const Demand = (props) => {
     }, [pageField])
 
 
-    const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
-
-
     useEffect(() => {
         if (GoButton) {
             let { DemandItems = [] } = GoButton
@@ -290,187 +291,13 @@ const Demand = (props) => {
     }, [GoButton]);
 
 
-
-    const goButtonHandler = () => {
-        if (!SupplierSelect > 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please select Division",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
-            return;
-        }
-        const jsonBody = JSON.stringify({
-            Supplier: SupplierSelect.value,
-            Customer: userParty(),
-            EffectiveDate: demanddate,
-            DemandID: (pageMode === mode.save) ? 0 : editVal.id
-        })
-
-        dispatch(postGoButtonForDemand(jsonBody))
-    };
-
-    function demanddateOnchange(e, date) {
-        setdemanddate(date)
-    };
-
-    function permissionfunc(istrue) {
-        if (istrue) {
-            setSuppierSelect(istrue)// **istrue is == event value
-            setdemandItemTable([])
-        }
-    }
-
-
-    function SupplierOnchange(e) {
-        var isfind = demandItemTable.find(i => (i.Quantity > 0))
-        if (isfind) {
-            dispatch(
-                AlertState({
-                    Type: 7,
-                    Status: true,
-                    Message: "If you are change Division Name then All Item Data is Clear",
-                    RedirectPath: false,
-                    PermissionFunction: permissionfunc,
-                    permissionValueReturn: e
-                })
-            );
-            return;
-        } else {
-            setSuppierSelect(e)
-            setdemandItemTable([])
-        }
-    };
-
-    const SaveHandler = (event) => {
-        event.preventDefault();
-        const validMsg = []
-        const itemArr = []
-
-
-        function isChanged({ i, isedit, isdel }) {
-            const basicAmt = parseFloat(basicAmount(i))
-            const cgstAmt = (GstAmount(i))
-            const arr = {
-                id: i.editrowId,
-                Item: i.Item_id,
-                Quantity: isdel ? 0 : i.Quantity,
-                Rate: i.Rate,
-                Unit: i.Unit_id,
-                BaseUnitQuantity: i.BaseUnitQuantity,
-                Margin: "",
-                BasicAmount: basicAmt.toFixed(2),
-                GSTAmount: cgstAmt.toFixed(2),
-                GST: i.GST_id,
-                CGST: (cgstAmt / 2).toFixed(2),
-                SGST: (cgstAmt / 2).toFixed(2),
-                IGST: 0,
-                CGSTPercentage: (i.GSTPercentage / 2),
-                SGSTPercentage: (i.GSTPercentage / 2),
-                IGSTPercentage: 0,
-                Amount: i.Amount,
-                IsDeleted: isedit,
-                Comment: i.Comment
-            }
-            itemArr.push(arr)
-        };
-
-        function demandItem({ i, isedit }) {
-            if ((i.Quantity > 0) && (i.Rate > 0)) {
-                var isdel = false;
-                isChanged({ i, isedit, isdel })
-            }
-            else if ((i.Quantity < 1) && (i.editrowId)) {
-                var isdel = true;
-                isChanged({ i, isedit, isdel })
-            };
-        };
-
-        demandItemTable.forEach(i => {
-
-            if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
-            }
-
-            if (pageMode === "edit") {
-                const ischange = (!(i.poQty === i.Quantity) ||
-                    !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
-
-                if (ischange && (i.poQty === 0)) {
-                    var isedit = 0;
-                    demandItem({ i, isedit })
-                }
-                else if (ischange) {
-                    var isedit = 1;
-                    demandItem({ i, isedit })
-                } else {
-                    var isedit = 0;
-                    demandItem({ i, isedit })
-                }
-            }
-            else {
-                var isedit = 0;
-                demandItem({ i, isedit })
-            };
-        });
-
-        if (validMsg.length > 0) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: validMsg,
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-            return
-        };
-
-        if (itemArr.length === 0) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Please Enter One  Quantity",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-            return
-        };
-
-        const jsonBody = JSON.stringify({
-            DemandDate: demanddate,
-            DemandAmount: demandAmount,
-            Comment: comment,
-            Customer: userParty(),
-            Supplier: SupplierSelect.value,
-            Division: userParty(),
-            BillingAddressID: 4,
-            ShippingAddressID: 4,
-            Inward: 0,
-            MaterialIssue: null,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
-            DemandItem: itemArr,
-        }
-        );
-        //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
-
-        if (pageMode === mode.edit) {
-            dispatch(updateDemandId(jsonBody, editVal.id))
-        }
-        else {
-            dispatch(postDemand(jsonBody));
-        }
-    }
+    const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
 
     const pagesListColumns = [
+
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
-
         },
 
         {//------------- Stock Quantity column ----------------------------------
@@ -496,7 +323,7 @@ const Demand = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    <span >
+                    <span>
                         <Input type="text"
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
@@ -516,7 +343,6 @@ const Demand = (props) => {
                             onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
                         />
                     </span>
-
                 )
             },
 
@@ -597,85 +423,8 @@ const Demand = (props) => {
             },
 
             headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '140px', textAlign: 'center'};
             }
-        },
-
-        {//------------- Demand No column ----------------------------------
-            text: "Demand No",
-            dataField: "DemandNo",
-            formatter: (value, row, k) => {
-
-                return (
-                    <span className="text-right" >
-                        <Input type="text"
-                            key={row.id}
-                            id={`Demand${row.id}`}
-                            placeholder="Demand No..."
-                            className="text-end "
-                            isDisabled={(pageMode === "edit") ? true : false}
-                            defaultValue={row.DemandNo}
-                            onChange={e => { row["DemandNo"] = e.target.value }}
-                            autoComplete="off"
-                        />
-                    </span>
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
-
-
-
-        {//------------- FullDemand No column ----------------------------------
-            text: "FullDemand No",
-            dataField: "FullDemandNo",
-            formatter: (value, row, k) => {
-
-                return (
-                    <span className="text-right" >
-                        <Input type="text"
-                            key={row.id}
-                            id={`FullDemand${row.id}`}
-                            placeholder="FullDemand No..."
-                            className="text-end "
-                            defaultValue={row.FullDemandNo}
-                            onChange={e => { row["FullDemandNo"] = e.target.value }}
-                            autoComplete="off"
-                        />
-                    </span>
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
-
-
-        { //------------- Comment column ----------------------------------
-            text: "Comment",
-            dataField: "",
-            formatter: (value, row, k) => {
-                return (
-                    <span >
-                        <Input type="text"
-                            id={`Comment${k}`}
-                            defaultValue={row.Comment}
-                            autoComplete="off"
-                            onChange={(e) => { row["Comment"] = e.target.value }}
-                        />
-                    </span>
-
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-
         },
     ];
 
@@ -691,6 +440,188 @@ const Demand = (props) => {
         totalSize: 0,
         custom: true,
     };
+    
+
+    const goButtonHandler = () => {
+        // if (!SupplierSelect > 0) {
+        //     dispatch(
+        //         AlertState({
+        //             Type: 4,
+        //             Status: true,
+        //             Message: "Please select Division",
+        //             RedirectPath: false,
+        //             PermissionAction: false,
+        //         })
+        //     );
+        //     return;
+        // }
+        const jsonBody = JSON.stringify({
+            Supplier: values.SupplierName.value,
+            Customer: userParty(),
+            EffectiveDate: demanddate,
+            DemandID: (pageMode === mode.save) ? 0 : EditData.id
+        })
+
+        dispatch(postGoButtonForDemand(jsonBody))
+    };
+
+    function demanddateOnchange(e, date) {
+        setdemanddate(date)
+    };
+
+    function permissionfunc(istrue) {
+        if (istrue) {
+            // setSupplierSelect(istrue)// **istrue is == event value
+            setdemandItemTable([])
+        }
+    }
+
+
+    function SupplierOnchange(e) {
+        var isfind = demandItemTable.find(i => (i.Quantity > 0))
+        if (isfind) {
+            dispatch(
+                AlertState({
+                    Type: 7,
+                    Status: true,
+                    Message: "If you are change Division Name then All Item Data is Clear",
+                    RedirectPath: false,
+                    PermissionFunction: permissionfunc,
+                    permissionValueReturn: e
+                })
+            );
+            return;
+        } else {
+            // setSupplierSelect(e)
+            setState((i) => {
+                i.values.SupplierName = e;
+                return i
+            })
+            setdemandItemTable([])
+        }
+    };
+
+    const SaveHandler = (event) => {
+        event.preventDefault();
+        const validMsg = []
+        const itemArr = []
+
+
+        function isChanged({ i, isedit, isdel }) {
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
+            const arr = {
+                id: i.editrowId,
+                Item: i.Item_id,
+                Quantity: isdel ? 0 : i.Quantity,
+                Rate: i.Rate,
+                Unit: i.Unit_id,
+                BaseUnitQuantity: i.BaseUnitQuantity,
+                Margin: "",
+                BasicAmount: basicAmt.toFixed(2),
+                GSTAmount: cgstAmt.toFixed(2),
+                GST: i.GST_id,
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
+                IGSTPercentage: 0,
+                Amount: i.Amount,
+                IsDeleted: isedit,
+                //  Comment: i.Comment
+            }
+            itemArr.push(arr)
+        };
+
+        function demandItem({ i, isedit }) {
+            if ((i.Quantity > 0) && (i.Rate > 0)) {
+                var isdel = false;
+                isChanged({ i, isedit, isdel })
+            }
+            else if ((i.Quantity < 1) && (i.editrowId)) {
+                var isdel = true;
+                isChanged({ i, isedit, isdel })
+            };
+        };
+
+        demandItemTable.forEach(i => {
+
+            if ((i.Quantity > 0) && !(i.Rate > 0)) {
+                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+            }
+
+            if (pageMode === "edit") {
+                const ischange = (!(i.poQty === i.Quantity) ||
+                    !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
+
+                if (ischange && (i.poQty === 0)) {
+                    var isedit = 0;
+                    demandItem({ i, isedit })
+                }
+                else if (ischange) {
+                    var isedit = 1;
+                    demandItem({ i, isedit })
+                } else {
+                    var isedit = 0;
+                    demandItem({ i, isedit })
+                }
+            }
+            else {
+                var isedit = 0;
+                demandItem({ i, isedit })
+            };
+        });
+
+        if (validMsg.length > 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: validMsg,
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        };
+
+        if (itemArr.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Enter One  Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        };
+
+        const jsonBody = JSON.stringify({
+            DemandDate: demanddate,
+            DemandAmount: demandAmount,
+            Comment: values.Comment,
+            Customer: userParty(),
+            Supplier: values.SupplierName.value,
+            Division: userParty(),
+            BillingAddressID: 4,
+            ShippingAddressID: 4,
+            Inward: 0,
+            DemandNo: (pageMode === "edit" ? EditData.DemandNo : values.DemandNo),
+            FullDemandNumber: (pageMode === "edit" ? EditData.FullDemandNumber : values.FullDemandNumber),
+            MaterialIssue: null,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            DemandItem: itemArr
+        }
+        );
+        //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
+        if (pageMode === mode.edit) {
+            dispatch(updateDemandId(jsonBody, EditData.id))
+        }
+        else {
+            dispatch(postDemand(jsonBody));
+        }
+    }
+
     if (!(userAccState === '')) {
         return (
             <React.Fragment>
@@ -732,21 +663,20 @@ const Demand = (props) => {
                                                 <Select
                                                     isDisabled={pageMode === "edit" ? true : false}
                                                     name="SupplierName"
-                                                    value={SupplierSelect}
+                                                    value={values.SupplierName}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={SupplierDropdown_Options}
                                                     onChange={SupplierOnchange}
                                                 />
-
                                             </Col>
                                         </FormGroup>
                                     </Col >
 
                                     <Col sm="6">
                                         <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
-                                            <Label className="mt-1" style={{ width: "150px" }}> Comment </Label>
+                                            <Label className="mt-1 " style={{ width: "150px" }}> Comment </Label>
                                             <Col sm={7}>
                                                 <Input
                                                     name="Comment"
@@ -765,6 +695,34 @@ const Demand = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col>
+                                    {
+                                        pageMode === 'edit' ?
+                                            <Col sm="6">
+                                                <FormGroup className="mb-2 mt-2 row" style={{ marginTop: "" }}>
+                                                    <Label className="mt-1" style={{ width: "150px" }}>Demand No</Label>
+                                                    <Col sm={7}>
+                                                        <Input
+                                                            name="DemandNo"
+                                                            value={values.DemandNo}
+                                                            type="text"
+                                                            disabled={pageMode === "edit" ? true : false}
+                                                            className={isError.DemandNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Challan No"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.DemandNo.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.DemandNo}</span>
+                                                        )}
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            :
+                                            <></>
+                                    }
+
                                 </Col>
 
                                 <Col sm="1" className="mx-2 mt-3">

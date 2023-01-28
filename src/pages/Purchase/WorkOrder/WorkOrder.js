@@ -1,7 +1,5 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
-    Button,
     Col,
     FormGroup,
     Input,
@@ -20,7 +18,6 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-    resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -28,6 +25,7 @@ import {
     convertNumber,
     createdBy,
     currentDate,
+    GoBtnDissable,
     saveDissable,
     userCompany,
     userParty
@@ -47,10 +45,16 @@ import BootstrapTable from "react-bootstrap-table-next";
 import '../../Order/div.css'
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
+
+
+const goBtnID1 = "workOrdergoBtnID1"
+const changeBtnID1 = "workOrderchangeBtnID1"
+const saveBtnID1 = "workOrdersaveBtnID1"
+const updateBtnID1 = "workOrderupdateBtnID1"
 
 const WorkOrder = (props) => {
 
@@ -95,14 +99,6 @@ const WorkOrder = (props) => {
 
     const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
 
-    useEffect(() => {
-        const page_Id = pageId.WORK_ORDER
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-
-    }, []);
-
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -110,6 +106,14 @@ const WorkOrder = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+
+    useEffect(() => {
+        const page_Id = pageId.WORK_ORDER
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -130,6 +134,7 @@ const WorkOrder = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -143,10 +148,9 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
-                    , Quantity, EstimatedOutputQty, Bom } = hasEditVal
+                    , Quantity, EstimatedOutputQty, Bom, Party } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.WorkOrderDate.valid = true;
@@ -166,7 +170,8 @@ const WorkOrder = (props) => {
                 const jsonBody = JSON.stringify({
                     Item: Item,
                     Bom: Bom,
-                    Quantity: parseFloat(Quantity)
+                    Quantity: parseFloat(Quantity),
+                    Party: Party
                 });
                 dispatch(postGoButtonForWorkOrder_Master(jsonBody));
 
@@ -242,16 +247,6 @@ const WorkOrder = (props) => {
         return index.IsActive === true
     })
 
-    const ItemDropdown_Options = filterItems.map((index) => ({
-        value: index.id,
-        label: index.ItemName,
-        ItemID: index.Item,
-        Unit: index.Unit,
-        UnitName: index.UnitName,
-        EstimatedOutputQty: index.EstimatedOutputQty,
-        StockQty: index.StockQty
-    }));
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
@@ -262,120 +257,15 @@ const WorkOrder = (props) => {
         dispatch(getBOMList(jsonBody));
     }, [])
 
-    function ItemOnchange(e) {
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        setItemselect(e)
-        setState((i) => {
-            i.values.NumberOfLot = "1";
-            i.values.Quantity = e.EstimatedOutputQty;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.Quantity.valid = true;
-            return i
-        })
-    }
-
-    function NumberOfLotchange(e) {
-
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        let qty = ''
-        if (pageMode === "edit") {
-            qty = e * EditData.EstimatedOutputQty;
-        }
-        else {
-            qty = e * itemselect.EstimatedOutputQty
-        }
-        setState((i) => {
-            i.values.NumberOfLot = e;
-            i.values.Quantity = qty;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.Quantity.valid = true;
-            return i
-        })
-    }
-
-    function Quantitychange(e) {
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        state.hasValid.Quantity.valid = true
-        let NumberLot = e / itemselect.EstimatedOutputQty
-        if (Number.isInteger(NumberLot)) {
-            setState((i) => {
-                i.values.NumberOfLot = NumberLot;
-                i.values.Quantity = e;
-                i.hasValid.NumberOfLot.valid = true;
-                i.hasValid.Quantity.valid = true;
-                return i
-            })
-        }
-        else {
-            setState((i) => {
-                i.values.NumberOfLot = "1.000";
-                i.values.Quantity = e;
-                i.hasValid.NumberOfLot.valid = true;
-                i.hasValid.Quantity.valid = true;
-                return i
-            })
-        }
-    }
-
-    const goButtonHandler = (event) => {
-        const jsonBody = JSON.stringify({
-            Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
-            Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
-            Quantity: parseFloat(values.Quantity),
-            Party: userParty()
-        });
-        dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-    }
-
-    const SaveHandler = (event) => {
-        const WorkOrderItems = BOMItems.map((index) => ({
-            Item: index.Item,
-            Unit: index.Unit,
-            BomQuantity: index.BomQuantity,
-            Quantity: index.Quantity,
-        }))
-        event.preventDefault();
-
-        const jsonBody = JSON.stringify({
-            WorkOrderDate: values.WorkOrderDate,
-            Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
-            Bom: (pageMode === "edit" ? id : values.ItemName.value),
-            Unit: (pageMode === "edit" ? Unit : values.ItemName.Unit),
-            NumberOfLot: values.NumberOfLot,
-            Quantity: convertNumber(values.Quantity),
-            Company: userCompany(),
-            Party: userParty(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
-            WorkOrderItems: WorkOrderItems
-        });
-
-        // saveDissable(true);//save Button Is dissable function
-
-        if (pageMode === 'edit') {
-            dispatch(updateWorkOrderList(jsonBody, EditData.id));
-        }
-        else {
-            dispatch(postWorkOrderMaster(jsonBody));
-        }
-    };
-
-    const QuantityHandler = (event, user) => {
-
-        // user["Quantity"] = event.target.value
-        let val = event.target.value;
-        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
-        if ((result) && (parseFloat(event.target.value).toFixed(3))) {
-            user.Quantity = event.target.value;
-        }
-        else if (val === "") {
-            user.Quantity = event.target.value;
-        }
-        else {
-            event.target.value = user.Quantity
-        }
-
-    }
+    const ItemDropdown_Options = filterItems.map((index) => ({
+        value: index.id,
+        label: index.ItemName,
+        ItemID: index.Item,
+        Unit: index.Unit,
+        UnitName: index.UnitName,
+        EstimatedOutputQty: index.EstimatedOutputQty,
+        StockQty: index.StockQty
+    }));
 
     const pagesListColumns = [
         {
@@ -428,14 +318,133 @@ const WorkOrder = (props) => {
         custom: true,
     };
 
+    const QuantityHandler = (event, user) => {
+
+        // user["Quantity"] = event.target.value
+        let val = event.target.value;
+        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
+        if ((result) && (parseFloat(event.target.value).toFixed(3))) {
+            user.Quantity = event.target.value;
+        }
+        else if (val === "") {
+            user.Quantity = event.target.value;
+        }
+        else {
+            event.target.value = user.Quantity
+        }
+
+    }
+
+    function ItemOnchange(e) {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        setItemselect(e)
+        setState((i) => {
+            i.values.NumberOfLot = "1";
+            i.values.Quantity = e.EstimatedOutputQty;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.Quantity.valid = true;
+            return i
+        })
+    }
+
+    function NumberOfLotchange(e) {
+
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        let qty = ''
+        if (pageMode === mode.edit) {
+            qty = e * EditData.EstimatedOutputQty;
+        }
+        else {
+            qty = e * itemselect.EstimatedOutputQty
+        }
+        setState((i) => {
+            i.values.NumberOfLot = e;
+            i.values.Quantity = qty;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.Quantity.valid = true;
+            return i
+        })
+    }
+
+    function Quantitychange(e) {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        state.hasValid.Quantity.valid = true
+        let NumberLot = e / itemselect.EstimatedOutputQty
+        if (Number.isInteger(NumberLot)) {
+            setState((i) => {
+                i.values.NumberOfLot = NumberLot;
+                i.values.Quantity = e;
+                i.hasValid.NumberOfLot.valid = true;
+                i.hasValid.Quantity.valid = true;
+                return i
+            })
+        }
+        else {
+            setState((i) => {
+                i.values.NumberOfLot = "1.000";
+                i.values.Quantity = e;
+                i.hasValid.NumberOfLot.valid = true;
+                i.hasValid.Quantity.valid = true;
+                return i
+            })
+        }
+    }
+
+    const goButtonHandler = (event) => {
+        const jsonBody = JSON.stringify({
+            Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
+            Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
+            Quantity: parseFloat(values.Quantity),
+            Party: userParty()
+        });
+        GoBtnDissable({ id: goBtnID1, state: true })
+        dispatch(postGoButtonForWorkOrder_Master(jsonBody,goBtnID1));
+    }
+
+    const SaveHandler = (event) => {
+        event.preventDefault();
+
+        const WorkOrderItems = BOMItems.map((index) => ({
+            Item: index.Item,
+            Unit: index.Unit,
+            BomQuantity: index.BomQuantity,
+            Quantity: index.Quantity,
+        }))
+
+        const jsonBody = JSON.stringify({
+            WorkOrderDate: values.WorkOrderDate,
+            Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
+            Bom: (pageMode === mode.edit ? id : values.ItemName.value),
+            Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
+            NumberOfLot: values.NumberOfLot,
+            Quantity: convertNumber(values.Quantity),
+            Company: userCompany(),
+            Party: userParty(),
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            WorkOrderItems: WorkOrderItems
+        });
+
+        // saveDissable(true);//save Button Is dissable function
+
+        if (pageMode === mode.edit) {
+            GoBtnDissable({ id: updateBtnID1, state: true })
+            dispatch(updateWorkOrderList(jsonBody, EditData.id, updateBtnID1));
+        }
+        else {
+            GoBtnDissable({ id: saveBtnID1, state: true })
+            dispatch(postWorkOrderMaster(jsonBody, saveBtnID1));
+        }
+    };
+
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.WORK_ORDER} /> */}
 
                 <div className="page-content" style={{ marginBottom: "200px" }}>
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
+
                     <form onSubmit={SaveHandler} noValidate>
                         <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
@@ -453,12 +462,12 @@ const WorkOrder = (props) => {
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
-                                                        disabled={(BOMItems.length > 0)||(pageMode === "edit") ? true : false}
+                                                        disabled={(BOMItems.length > 0) || (pageMode === mode.edit) ? true : false}
                                                         options={{
                                                             // altInput: true,
                                                             altFormat: "d-m-Y",
                                                             dateFormat: "Y-m-d",
-                                                            defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
+                                                            defaultDate: pageMode === mode.edit ? values.WorkOrderDate : "today"
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                         onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
@@ -505,7 +514,7 @@ const WorkOrder = (props) => {
                                                 </Label>
                                                 <div className="col-6 ">
                                                     <Input
-                                                        value={pageMode === "edit" ?
+                                                        value={pageMode === mode.edit ?
                                                             EditData.Stock : itemselect.StockQty
                                                         }
                                                         disabled={true}
@@ -515,7 +524,7 @@ const WorkOrder = (props) => {
                                                 </div>
                                                 <div className="col col-2">
                                                     <Label style={{ marginTop: '5px', width: "72px", marginLeft: '-15px' }}>
-                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                        {pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                             </FormGroup>
                                         </div >
@@ -528,7 +537,7 @@ const WorkOrder = (props) => {
                                                 </Label>
                                                 <div className="col-6">
                                                     <Input
-                                                        value={pageMode === "edit" ?
+                                                        value={pageMode === mode.edit ?
                                                             EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty ?
                                                                 itemselect.EstimatedOutputQty : ""}
                                                         disabled={true}
@@ -539,7 +548,7 @@ const WorkOrder = (props) => {
                                                 </div>
                                                 <div className="col col-1">
                                                     <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                        {pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                             </FormGroup>
 
@@ -600,7 +609,7 @@ const WorkOrder = (props) => {
                                                 </div>
                                                 <div className="col col-1">
                                                     <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
-                                                        {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                                        {pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                                 {/* <div className="col col-1">
                                             <Button
@@ -618,9 +627,10 @@ const WorkOrder = (props) => {
                                     <div className="col col-1 mt-2">
                                         {pageMode === "save" ?
                                             (BOMItems.length === 0) ?
-                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                < Go_Button id={goBtnID1} onClick={(e) => goButtonHandler()} />
                                                 :
-                                                <Change_Button onClick={(e) => dispatch(postGoButtonForWorkOrder_MasterSuccess([]))} />
+                                                <Change_Button id={changeBtnID1}
+                                                    onClick={(e) => dispatch(postGoButtonForWorkOrder_MasterSuccess([]))} />
                                             : null
                                         }
                                     </div>
@@ -655,7 +665,11 @@ const WorkOrder = (props) => {
                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
                                                             {mySearchProps(toolkitProps.searchProps, pageField.id)}
                                                             <div>
-                                                                <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                                <label >EstimatedOutputQty :&nbsp;&nbsp;
+                                                                    <span style={{ color: "#000000" }}>
+                                                                        {`${EstimatedOutputQty} ${pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}`}
+                                                                    </span>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </Col>

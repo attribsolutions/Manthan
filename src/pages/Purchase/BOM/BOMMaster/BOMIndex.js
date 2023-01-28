@@ -276,7 +276,7 @@ const BOMMaster = (props) => {
             if ((pageMode === 'edit') && mode) {
                 BOMrefID = EditData.id
             };
-
+            
             const jsonBody = JSON.stringify({
                 BomDate: values.BomDate,
                 EstimatedOutputQty: values.EstimatedOutputQty,
