@@ -49,9 +49,7 @@ import {
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
-let comment = ''
 let editVal = {}
-
 const Demand = (props) => {
 
     const dispatch = useDispatch();
@@ -70,6 +68,9 @@ const Demand = (props) => {
     const [demandDetail, setDemandDetail] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
+    const [DemandNo, setDemandNo] = useState();
+    const [EditData, setEditData] = useState({});
+    const [FullDemandNumber, setFullDemandNumber] = useState();
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
@@ -154,13 +155,13 @@ const Demand = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                console.log("hasEditVal", hasEditVal)
-                // setSupplierSelect(hasEditVal);
+                // console.log("hasEditVal", hasEditVal)
+                 setEditData(hasEditVal);
                 const { id, SupplierName, Supplier, Comment, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.DemandDate = DemandDate;
                 values.SupplierName = { value: hasEditVal.Supplier, label: hasEditVal.SupplierName };
-                values.Comment = hasEditVal.Comment;
+                values.Comment = Comment;
                 values.DemandNo = DemandNo;
                 values.FullDemandNumber = FullDemandNumber;
                 values.id = id;
@@ -230,7 +231,7 @@ const Demand = (props) => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
-            Comment = ''
+            // Comment = ''
             history.push({
                 pathname: DEMAND_LIST,
             })
@@ -381,7 +382,7 @@ const Demand = (props) => {
                 IGSTPercentage: 0,
                 Amount: i.Amount,
                 IsDeleted: isedit,
-                Comment: i.Comment
+                //  Comment: i.Comment
             }
             itemArr.push(arr)
         };
@@ -446,23 +447,23 @@ const Demand = (props) => {
             }));
             return
         };
-
+debugger
         const jsonBody = JSON.stringify({
             DemandDate: demanddate,
             DemandAmount: demandAmount,
-            Comment: comment,
+            Comment: values.Comment,
             Customer: userParty(),
             Supplier: values.SupplierName.value,
             Division: userParty(),
             BillingAddressID: 4,
             ShippingAddressID: 4,
             Inward: 0,
-            // DemandNo: pageMode === 'edit' ? : '',
-            // FullDemandNumber: pageMode === 'edit' ? : '',
+            DemandNo: (pageMode === "edit" ? EditData.DemandNo : values.DemandNo),
+            FullDemandNumber: (pageMode === "edit" ? EditData.FullDemandNumber : values.FullDemandNumber),
             MaterialIssue: null,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            DemandItem: itemArr,
+            DemandItem: itemArr
         }
         );
         //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
@@ -476,10 +477,10 @@ const Demand = (props) => {
     }
 
     const pagesListColumns = [
+        
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
-
         },
 
         {//------------- Stock Quantity column ----------------------------------
@@ -505,7 +506,7 @@ const Demand = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    <span >
+                    <span>
                         <Input type="text"
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
@@ -606,7 +607,7 @@ const Demand = (props) => {
             },
 
             headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '140px', textAlign: 'center'};
             }
         },
     ];
