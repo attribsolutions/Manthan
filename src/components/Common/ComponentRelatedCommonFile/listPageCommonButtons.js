@@ -33,16 +33,17 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData) {
+      
         if (editBodyfunc) { editBodyfunc(rowData) }
         else {
             dispatch(editActionFun(rowData.id, "edit",));
         }
-
     }
 
     function copyHandler(rowData) {
         dispatch(editActionFun(rowData.id, "copy",));
     }
+
     function downHandler(rowData) {
         downBtnFunc(rowData);
     }
@@ -155,7 +156,7 @@ export const listPageCommonButtonFunction = (props) => {
                 <Button
                     type="button"
                     className={downBtnCss}
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
                     onClick={() => { downHandler(rowData) }}
                 >
                     <i className="bx bx-printer font-size-18"></i>
@@ -317,7 +318,7 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
     //     //alert("Save button dissable error") 
     // }
 }
-export function mainSppinerOnOff( {id='',state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+export function mainSppinerOnOff({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
         document.getElementById("overlay").style.display = state ? "block" : "none";
     } catch (e) { alert("button sppiner error") }

@@ -54,7 +54,6 @@ export const postGRNSuccess = (msg) => ({
   payload: msg
 });
 
-
 export const editGRNId = (id, pageMode) => ({
   type: EDIT_GRN_FOR_GRN_PAGE,
   id, pageMode
