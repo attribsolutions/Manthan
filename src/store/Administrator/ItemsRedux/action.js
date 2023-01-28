@@ -31,6 +31,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, 
      GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS, 
+     POST_BRAND_NAME_DROPDOWN, 
+     POST_BRAND_NAME_DROPDOWN_SUCCESS, 
      POST_ITEM_DATA, POST_ITEM_DATA_SUCCESS, 
      UPDATE_ITEM_ID, UPDATE_ITEM_ID_SUCCESS } from "./actionType";
 
@@ -249,3 +251,14 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
     type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
     payload:data,
   });
+
+  // post api for Brand Name dropdown
+export const post_BrandName_dropdown = (data) => ({
+  type: POST_BRAND_NAME_DROPDOWN,
+  data,
+});
+
+export const post_BrandName_dropdown_Success = (data) => ({
+  type: POST_BRAND_NAME_DROPDOWN_SUCCESS,
+  payload: data,
+});

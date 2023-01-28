@@ -17,6 +17,7 @@ import {
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
     GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
+    POST_BRAND_NAME_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
@@ -43,7 +44,8 @@ const INIT_STATE = {
     SubGroupList: [],
     Category: [],
     ItemTagList: [],
-    BrandTagList: []
+    BrandTagList: [],
+    BrandName:[]
 
 };
 
@@ -168,6 +170,12 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Category: action.payload,
             }
+
+            case POST_BRAND_NAME_DROPDOWN_SUCCESS:
+                return {
+                    ...state,
+                    BrandName: action.payload,
+                }
 
         case "RESET_ALL":
             return state = INIT_STATE;
