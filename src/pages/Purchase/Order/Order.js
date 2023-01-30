@@ -227,7 +227,6 @@ const Order = (props) => {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
-            description = ''
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
