@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb"
+import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -17,36 +17,41 @@ import {
   delete_MarginListSuccess,
   getMarginListPage,
 } from "../../../store/Administrator/MarginMasterRedux/action";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const MarginList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
+  const [userAccState, setUserAccState] = useState('');
 
-  const [userPageAccessState, setUserPageAccessState] = useState('');
+
 
   // get Access redux data
   const {
     TableListData,
     deleteMessage,
-    RoleAccessModifiedinSingleArray,
+    userAccess,
   } = useSelector(
     (state) => ({
       TableListData: state.MarginMasterReducer.MarginList,
       deleteMessage: state.MarginMasterReducer.deleteMsg,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      userAccess: state.Login.RoleAccessUpdateData,
     })
   );
 
   useEffect(() => {
     const locationPath = history.location.pathname
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
     }
-  }, [RoleAccessModifiedinSingleArray])
+  }, [userAccess])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -54,7 +59,7 @@ const MarginList = (props) => {
   }, []);
 
   useEffect(() => {
-    
+
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
       dispatch(delete_MarginListSuccess({ Status: false }));
       dispatch(
@@ -93,9 +98,9 @@ const MarginList = (props) => {
 
   const EditPageHandler = (rowData) => {
 
-    let RelatedPageID = userPageAccessState.RelatedPageID
+    let RelatedPageID = userAccState.RelatedPageID
 
-    const found = RoleAccessModifiedinSingleArray.find((element) => {
+    const found = userAccess.find((element) => {
       return element.id === RelatedPageID
     })
 
@@ -133,16 +138,16 @@ const MarginList = (props) => {
     {
       text: "Action",
       hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+        !(userAccState.RoleAccess_IsEdit)
+        && !(userAccState.RoleAccess_IsView)
+        && !(userAccState.RoleAccess_IsDelete)) ? true : false,
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
+          {((userAccState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Effective Date"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
@@ -151,10 +156,10 @@ const MarginList = (props) => {
             :
             null}
 
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
+          {(!(userAccState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userAccState.RoleAccess_IsView)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Effective Date"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -162,11 +167,11 @@ const MarginList = (props) => {
               <i className="bx bxs-show font-size-18 "></i>
             </Button> : null}
 
-          {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
+          {((userAccState.RoleAccess_IsDelete) && (Role.CommonID > 0))
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Effective Date"
               onClick={() => { deleteHandeler(Role.CommonID) }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
@@ -179,72 +184,63 @@ const MarginList = (props) => {
     },
   ];
 
-  if (!(userPageAccessState === '')) {
+  if (!(userAccState === '')) {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags>
-            <title>MarginList| FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <div className="container-fluid">
-            <PaginationProvider
-              pagination={paginationFactory(pageOptions)}
-            >
-              {({ paginationProps, paginationTableProps }) => (
-                <ToolkitProvider
-                  keyField='id'
-                  columns={pagesListColumns}
-                  data={TableListData}
-                  search
-                >
-                  {toolkitProps => (
-                    <React.Fragment>
-                      <Breadcrumb
-                        title={"Count :"}
-                        breadcrumbItem={userPageAccessState.PageHeading}
-                        IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                        SearchProps={toolkitProps.searchProps}
-                        breadcrumbCount={`Margin Count: ${TableListData.length}`}
-                        IsSearchVissible={true}
-                        isExcelButtonVisible={true}
-                        ExcelData={TableListData}
-                        RedirctPath={"/MarginMaster"}
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MARGIN_lIST} /> */}
+          {/* <Breadcrumb
+            pageHeading={userAccState.PageHeading}
+            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
+            showCount={true}
+            excelBtnView={true}
+            excelData={TableListData}
+          /> */}
+          <PaginationProvider
+            pagination={paginationFactory(pageOptions)}
+          >
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField='id'
+                columns={pagesListColumns}
+                data={TableListData}
+                search
+              >
+                {toolkitProps => (
+                  <React.Fragment>
+                    <div className="table-responsive">
+                      <BootstrapTable
+                        keyField={"id"}
+                        responsive
+                        bordered={true}
+                        striped={false}
+                        classes={"table align-middle table-nowrap table-hover"}
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        headerWrapperClasses={"thead-light"}
+                        {...toolkitProps.baseProps}
+                        {...paginationTableProps}
                       />
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "Margin")}
+                      {mySearchProps(toolkitProps.searchProps)}
+                    </div>
 
-                      <Row>
-                        <Col xl="12">
-                          <div className="table-responsive">
-                            <BootstrapTable
-                              keyField={"id"}
-                              responsive
-                              bordered={true}
-                              striped={false}
-                              classes={"table align-middle table-nowrap table-hover"}
-                              noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                              headerWrapperClasses={"thead-light"}
-                              {...toolkitProps.baseProps}
-                              {...paginationTableProps}
-                            />
-                          </div>
-                        </Col>
-                      </Row>
-
-                      <Row className="align-items-md-center mt-30">
-                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                          <PaginationListStandalone
-                            {...paginationProps}
-                          />
-                        </Col>
-                      </Row>
-                    </React.Fragment>
-                  )
-                  }
-                </ToolkitProvider>
-              )
-              }
-            </PaginationProvider>
-          </div>
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone
+                          {...paginationProps}
+                        />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )
+                }
+              </ToolkitProvider>
+            )
+            }
+          </PaginationProvider>
         </div>
+
       </React.Fragment>
     );
   }

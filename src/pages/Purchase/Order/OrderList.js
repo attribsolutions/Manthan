@@ -1,289 +1,306 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Modal, Row } from "reactstrap";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomTable2/datatables.scss"
-import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
+import Select from "react-select";
+import "flatpickr/dist/themes/material_blue.css"
+import Flatpickr from "react-flatpickr";
 import {
-    deleteOrderID_From_OrderPage,
-    deleteOrderID_From_OrderPageSuccess,
-    getOrderListPage
+    deleteOrderId,
+    deleteOrderIdSuccess,
+    editOrderId,
+    getOrderListPage,
+    updateOrderIdSuccess,
+    orderlistfilters,
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { AlertState } from "../../../store/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { InvoiceFakeData } from "../../Order/InvioceFakedata";
-import generate from "../../../Reports/InvioceReport/Page";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import Order from "./Order";
+import { Col, FormGroup, Label } from "reactstrap";
+import { useHistory } from "react-router-dom";
+import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { useMemo } from "react";
+import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import * as report from '../../../Reports/ReportIndex'
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
-const OrderList = (props) => {
+import { MetaTags } from "react-meta-tags";
+import { order_Type } from "../../../components/Common/C-Varialbes";
+
+
+const OrderList = () => {
 
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
 
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const hasPagePath = history.location.pathname
+    const [pageMode, setpageMode] = useState(url.ORDER_lIST)
+    const [userAccState, setUserAccState] = useState('');
 
-    // get Access redux data
-    const {
-        tableList,
-        deleteMsg,
-        userAccess, } = useSelector(
-            (state) => ({
-                tableList: state.OrderPageReducer.OrderListPage,
-                deleteMsg: state.OrderPageReducer.deleteMessage,
-                userAccess: state.Login.RoleAccessUpdateData,
-                pageField: state.CommonPageFieldReducer.pageFieldList
-            })
-        );
-    console.log(userAccess)
+
+    const reducers = useSelector(
+        (state) => ({
+            vender: state.SupplierReducer.vender,
+            tableList: state.OrderReducer.orderList,
+            GRNitem: state.GRNReducer.GRNitem,
+            deleteMsg: state.OrderReducer.deleteMsg,
+            updateMsg: state.OrderReducer.updateMsg,
+            postMsg: state.OrderReducer.postMsg,
+            editData: state.OrderReducer.editData,
+            orderlistFilter: state.OrderReducer.orderlistFilter,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+        })
+    );
+    const { userAccess, pageField, GRNitem, vender, tableList, orderlistFilter } = reducers;
+    const { fromdate, todate, venderSelect } = orderlistFilter;
+    const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+
+    const action = {
+        getList: getOrderListPage,
+        deleteId: deleteOrderId,
+        postSucc: postMessage,
+        updateSucc: updateOrderIdSuccess,
+        deleteSucc: deleteOrderIdSuccess
+    }
+
+    // Featch Modules List data  First Rendering
+    useEffect(() => {
+        setpageMode(hasPagePath)
+        // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+        dispatch(commonPageFieldListSuccess(null))
+        dispatch(commonPageFieldList(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
+        dispatch(GetVender())
+        goButtonHandler(true)
+
+    }, []);
+
+    const venderOptions = vender.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
+    venderOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
+    const downList = useMemo(() => {
+        let PageFieldMaster = []
+        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
+        return excelDownCommonFunc({ tableList, PageFieldMaster })
+    }, [tableList])
 
     useEffect(() => {
-        const locationPath = history.location.pathname
+
         let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
+
         }
     }, [userAccess])
 
-    //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(getOrderListPage());
-    }, []);
-
-    useEffect(() => {
-
-        if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
-            dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMsg.Message,
-                    AfterResponseAction: getOrderListPage,
-                })
-            );
-        } else if (deleteMsg.Status === true) {
-            dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                })
-            );
-        }
-    }, [deleteMsg]);
-
-    //select id for delete row
-    const deleteHandeler = (id, name) => {
-        debugger
-        dispatch(
-            AlertState({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this Order : ${name}`,
-                RedirectPath: false,
-                PermissionAction: deleteOrderID_From_OrderPage,
-                ID: id,
-            })
-        );
-    };
-
-    const EditPageHandler = (rowData) => {
-        debugger
-        let RelatedPageID = userPageAccessState.RelatedPageID
-
-        const found = userAccess.find((element) => {
-            return element.id === RelatedPageID
-        })
-
-        if (!(found === undefined)) {
+        if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
-                pathname: `/${found.ActualPagePath}`,
-                editValue: rowData,
-                pageMode: 'edit'
+                pathname: GRNitem.path,
+                pageMode: GRNitem.pageMode,
             })
+        }
+    }, [GRNitem])
+
+    const makeBtnFunc = (list = []) => {
+
+        var isGRNSelect = ''
+        var challanNo = ''
+        const grnRef = []
+        if (list.length > 0) {
+            list.forEach(ele => {
+                if (ele.hasSelect) {
+                    grnRef.push({
+                        Invoice: null,
+                        Order: ele.id,
+                        ChallanNo: ele.FullOrderNumber,
+                        Inward: false
+                    });
+                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                }
+            });
+
+            if (isGRNSelect) {
+
+                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+
+                const jsonBody = JSON.stringify({
+                    OrderIDs: isGRNSelect
+                })
+
+                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+
+            } else {
+                alert("Please Select Order1")
+            }
         }
     }
 
-    function onPrintHandeler(id) {
-        // dispatch(editOrder_forOrderPage(id));
-        // if (!(editOrderData.length === 0)) {
-        //   console.log("datataat", editOrderData)
-        generate(InvoiceFakeData)
+    function editBodyfunc(rowData) {
+        debugger
+        const jsonBody = JSON.stringify({
+            Party: rowData.SupplierID,
+            Customer: rowData.CustomerID,
+            EffectiveDate: rowData.preOrderDate,
+            OrderID: rowData.id
+        })
+        var Mode = "edit"
+        dispatch(editOrderId(jsonBody, Mode));
     }
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: tableList.length,
-        custom: true,
-    };
 
-    const pagesListColumns = [
-        {
-            text: "Customer",
-            dataField: "Customer",
-            sort: true,
-        },
-        {
-            text: "OrderAmount",
-            dataField: "OrderAmount",
-            sort: true,
-        },
-        {
-            text: "OrderDate",
-            dataField: "OrderDate",
-            sort: true,
-        },
+    function downBtnFunc(row) {
+        var ReportType = report.order1;
+        dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
+    }
 
-        {
-            text: "Action",
-            dataField: "",
-            hidden: (
-                !(userPageAccessState.RoleAccess_IsEdit)
-                && !(userPageAccessState.RoleAccess_IsView)
-                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+    function goButtonHandler() {
 
-            formatter: (cellContent, Role) => (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    {((userPageAccessState.RoleAccess_IsEdit)) ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Order"
-                            onClick={() => { EditPageHandler(Role); }}
-                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-                        >
-                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </Button>
-                        :
-                        null}
+        const jsonBody = JSON.stringify({
+            FromDate: fromdate,
+            ToDate: todate,
+            Supplier: venderSelect.value,
+            Customer: userParty(),
+            OrderType: order_Type.PurchaseOrder
+        });
 
-                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Order"
-                            onClick={() => { EditPageHandler(Role); }}
-                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+        dispatch(getOrderListPage(jsonBody));
+    }
 
-                        >
-                            <i className="bx bxs-show font-size-18 "></i>
-                        </Button> : null}
+    function fromdateOnchange(e, date) {
+        let newObj = { ...orderlistFilter }
+        newObj.fromdate = date
+        dispatch(orderlistfilters(newObj))
+    }
 
-                    {((userPageAccessState.RoleAccess_IsDelete))
-                        ?
-                        <Button
-                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Order"
-                            onClick={() => { deleteHandeler(Role.id, Role.Customer) }}
-                        >
-                            <i className="mdi mdi-delete font-size-18"></i>
-                        </Button>
-                        : null
-                    }
-                    {((userPageAccessState.RoleAccess_IsPrint))
-                        ?
-                        <Button
-                            className="badge badge-soft-info font-size-12 btn
-                         btn-info waves-effect waves-light w-xxs border border-light"
-                            onClick={onPrintHandeler}
-                        >
-                            <i class="mdi mdi-shredder font-size-18"></i>
-                        </Button>
-                        : null
-                    }
+    function todateOnchange(e, date) {
+        let newObj = { ...orderlistFilter }
+        newObj.todate = date
+        dispatch(orderlistfilters(newObj))
+    }
 
-                </div>
-            ),
-        },
-    ];
+    function venderOnchange(e) {
+        let newObj = { ...orderlistFilter }
+        newObj.venderSelect = e
+        dispatch(orderlistfilters(newObj))
+    }
 
-    if (!(userPageAccessState === '')) {
-        return (
-            <React.Fragment>
-                <div className="page-content">
-                    <MetaTags>
-                        <title>Orders| FoodERP-React FrontEnd</title>
-                    </MetaTags>
-                    <div className="container-fluid">
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField='id'
-                                    columns={pagesListColumns}
-                                    data={tableList}
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <Breadcrumb
-                                                title={"Count :"}
-                                                breadcrumbItem={userPageAccessState.PageHeading}
-                                                IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                                SearchProps={toolkitProps.searchProps}
-                                                breadcrumbCount={`GST Count: ${tableList.length}`}
-                                                IsSearchVissible={true}
-                                                isExcelButtonVisible={true}
-                                                ExcelData={tableList}
-                                                RedirctPath={"/Order"}
-                                            />
+    return (
+        <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
+            <div className="page-content">
+                {/* <Breadcrumb
+                    pageHeading={userAccState.PageHeading}
+                    newBtnView={(pageMode === url.ORDER_lIST) ? true : false}
+                    showCount={true}
+                    excelBtnView={true}
+                    excelData={downList} /> */}
 
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            responsive
-                                                            bordered={true}
-                                                            striped={false}
-                                                            // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
-                                                            // defaultSorted={commonDefaultSorted("Name")}
-                                                            classes={"table align-middle table-nowrap table-hover"}
-                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            headerWrapperClasses={"thead-light"}
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {mySearchProps(toolkitProps.searchProps)}
-                                                    </div>
-                                                </Col>
-                                            </Row>
+                <div className="px-2   c_card_filter text-black" >
+                    <div className="row" >
+                        <Col sm="3" className="">
+                            <FormGroup className="mb- row mt-3 " >
+                                <Label className="col-sm-5 p-2"
+                                    style={{ width: "83px" }}>From Date</Label>
+                                <Col sm="7">
+                                    <Flatpickr
+                                        name='fromdate'
+                                        value={fromdate}
+                                        className="form-control d-block p-2 bg-white text-dark"
+                                        placeholder="Select..."
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col sm="3" className="">
+                            <FormGroup className="mb- row mt-3 " >
+                                <Label className="col-sm-5 p-2"
+                                    style={{ width: "65px" }}>To Date</Label>
+                                <Col sm="7">
+                                    <Flatpickr
+                                        name="todate"
+                                        value={todate}
+                                        className="form-control d-block p-2 bg-white text-dark"
+                                        placeholder="Select..."
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
-                            )
-                            }
+                        <Col sm="5">
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
 
-                        </PaginationProvider>
+                                    style={{ width: "115px" }}>Supplier Name</Label>
+                                <Col sm="5">
+                                    <Select
+                                        classNamePrefix="select2-Customer"
+                                        value={venderSelect}
+                                        options={venderOptions}
+                                        onChange={venderOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
+
+                        <Col sm="1" className="mt-3 ">
+                            <Go_Button onClick={goButtonHandler} />
+                        </Col>
                     </div>
                 </div>
-            </React.Fragment>
-        );
-    }
-    else {
-        return (
-            <React.Fragment></React.Fragment>
-        )
-    }
+                {
+                    (pageField) ?
+                        <PurchaseListPage
+                            action={action}
+                            reducers={reducers}
+                            showBreadcrumb={false}
+                            MasterModal={Order}
+                            masterPath={url.ORDER}
+                            ButtonMsgLable={"Order"}
+                            deleteName={"FullOrderNumber"}
+                            pageMode={pageMode}
+                            makeBtnShow={pageMode === url.ORDER_lIST ? false : true}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnName={"Make GRN"}
+                            goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
+                            editBodyfunc={editBodyfunc}
+                        />
+                        : null
+                }
+            </div>
+
+
+        </React.Fragment>
+    )
 }
 
 export default OrderList;
-
-

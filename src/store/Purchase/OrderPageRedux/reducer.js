@@ -1,95 +1,85 @@
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import {
-  GET_ORDER_LIST_SUCCESS,
-  GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
-  SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  GET_DIVISIONORDER_LIST_SUCCESS,
-  GET_ORDER_LIST_MESSAGE,
-  EDIT_ORDER_SUCCESS,
+
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
   EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
-  GET_SUPPLIER_SUCCESS,
-  GO_BUTTON_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
+  ORDER_LIST_FILTERS,
+  // ORDER_ADD_FILTERS,
 } from "./actionType"
 
-const INIT_STATE = {
-  supplier:[],
-  orderItem:[],
-  OrderItemsOld: [],
-  postMsg: { Status: false },
-  ordersList: [],
-  orderListMessage: [],
-  editOrderData: { Status: false, Items: [] },
-  updateMessage: { Status: false },
-  deleteMessage: { Status: false },
-  OrderListPage:[]
+// const date = currentDate;
 
+const INIT_STATE = {
+  goBtnOrderAdd: null,
+  postMsg: { Status: false },
+  editData: { Status: false, Items: [] },
+  updateMsg: { Status: false },
+  deleteMsg: { Status: false },
+  orderList: [],
+  orderlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: {value:'', label:"All"} },
+  // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
 
 }
 
-const OrderPageReducer = (state = INIT_STATE, action) => {
+const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case GET_SUPPLIER_SUCCESS:
+    // case ORDER_ADD_FILTERS:
+    //   return {
+    //     ...state,
+    //     orderAddFilter: action.payload,
+    //   }
+
+    case ORDER_LIST_FILTERS:
       return {
         ...state,
-        supplier: action.payload,
+        orderlistFilter: action.payload,
       }
-      case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
+
+    case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        orderItem: action.payload,
+        goBtnOrderAdd: action.payload,
       }
-      case GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS:
-      return {
-        ...state,
-        OrderItemsOld: action.payload,
-      }
+
     case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       }
 
-    case GET_ORDER_LIST_SUCCESS:
-      return {
-        ...state,
-        ordersList: action.payload,
-      }
-    case GET_ORDER_LIST_MESSAGE:
-      return {
-        ...state,
-        orderListMessage: action.payload,
-      }
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        editOrderData: action.payload,
+        editData: action.payload,
       }
+
     case UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        updateMessage: action.payload,
+        updateMsg: action.payload,
       }
+
     case DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        deleteMessage: action.payload,
+        deleteMsg: action.payload,
       }
 
-      // Order List Page 
-      case GET_ORDER_LIST_PAGE_SUCCESS:
-        return {
-          ...state,
-          OrderListPage: action.payload,
-        }
+    // Order List Page 
+    case GET_ORDER_LIST_PAGE_SUCCESS:
+      return {
+        ...state,
+        orderList: action.payload,
+      }
     default:
       return state
   }
 
 }
 
-export default OrderPageReducer
+export default OrderReducer

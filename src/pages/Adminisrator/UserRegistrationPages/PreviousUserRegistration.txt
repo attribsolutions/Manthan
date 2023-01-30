@@ -17,7 +17,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
@@ -142,7 +142,7 @@ const AddUser = (props) => {
       }
 
       if (hasEditVal) {
-        dispatch(BreadcrumbShow(hasEditVal.LoginName))
+        dispatch(Breadcrumb_inputName(hasEditVal.LoginName))
         setEditData(hasEditVal)
 
         setEmployeeSelect({
@@ -384,7 +384,7 @@ const AddUser = (props) => {
                                 validate={{
                                   required: { value: true, errorMessage: 'Please Enter Name' },
                                 }}
-                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                               />
                             </FormGroup>
                           </Row>

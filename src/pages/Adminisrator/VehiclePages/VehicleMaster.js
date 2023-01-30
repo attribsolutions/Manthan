@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import React, { useEffect, useState, } from "react";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -13,14 +13,16 @@ import {
     Button,
     Input,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import {
     PostMethodForVehicleMaster,
     getMethodForVehicleList,
@@ -34,46 +36,43 @@ import {
 } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
-// import { actionChannel } from "redux-saga/effects";
-import { SaveButton } from "../../../components/CommonSaveButton";
-import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
     onChangeSelect,
-    onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
+    onChangeText,
+    resetFunction
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../routes/allPageID";
+import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const VehicleMaster = (props) => {
 
-
     const dispatch = useDispatch();
     const history = useHistory()
-    const formRef = useRef(null);
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    const [EditData, setEditData] = useState({});
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-
-    const [divisionData, setDivisionData] = useState([]);
-
-    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-   
-    const initialFiled = {
+    const fileds = {
         id: "",
         VehicleNumber: "",
         Description: "",
         Driver: "",
         VehicleType: "",
         VehicleDivisions: ""
-      }
-    
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
-   
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [divisionData, setDivisionData] = useState([]);
+    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -93,27 +92,23 @@ const VehicleMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+    useEffect(() => {
+        const page_Id = pageId.VEHICLE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(getMethodForVehicleList());
+        dispatch(getMethod_DriverList_ForDropDown());
+        dispatch(getMethod_VehicleTypes_ForDropDown());
+        dispatch(get_Division_ForDropDown());
+    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(29))
-    }, []);
-
-
-
-    useEffect(() => {
-        //  dispatch(PostMethodForVehicleMaster());
-        dispatch(getMethodForVehicleList());
-        dispatch(getMethod_DriverList_ForDropDown());
-        dispatch(getMethod_VehicleTypes_ForDropDown());
-        dispatch(get_Division_ForDropDown());
-    }, [dispatch]);
-
-
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -133,10 +128,10 @@ const VehicleMaster = (props) => {
         };
     }, [userAccess])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -151,13 +146,13 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 const divisionTable = hasEditVal.VehicleDivisions.map((data) => ({
                     value: data.Division,
                     label: data.DivisionName
                 }))
 
-                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName , VehicleDivisions, } = hasEditVal
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
@@ -176,22 +171,19 @@ const VehicleMaster = (props) => {
 
                 setDivisionData(divisionTable)
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
+                dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
-
-
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
-
     }, []);
 
-
     useEffect(() => {
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -205,11 +197,12 @@ const VehicleMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: VEHICLE_lIST,
+                    RedirectPath: url.VEHICLE_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//save Button Is enable function
             dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -223,10 +216,13 @@ const VehicleMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
-                pathname: VEHICLE_lIST,
+                pathname: url.VEHICLE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateVehicleTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -246,11 +242,17 @@ const VehicleMaster = (props) => {
         }
     }, [pageField])
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
     const DivisionType_DropdownOptions = Divisions.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    const DriverList_DropdownOptions = DriverList_redux.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
         value: data.id,
         label: data.Name
     }));
@@ -259,55 +261,14 @@ const VehicleMaster = (props) => {
         setDivisionType_dropdown_Select(e)
     }
 
-    const DriverList_DropdownOptions = DriverList_redux.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
-
-    const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
-
-
-    const formSubmitHandler = (event) => {
-debugger
-        event.preventDefault();
-        const leng = divisionData.length
-        if (leng === 0) {
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: "Select Atleast One Division..!",
-            }));
-            return
-        }
-        if (formValid(state, setState)) {
-            var division = divisionData.map(i => ({ Division: i.value }))
-            const jsonBody = JSON.stringify({
-                VehicleNumber: values.VehicleNumber,
-                Description: values.Description,
-                Driver: values.Driver.value,
-                VehicleType: values.VehicleType.value,
-                VehicleDivisions: division,
-            });
-
-
-            if (pageMode === 'edit') {
-                dispatch(updateVehicleTypeID(jsonBody, values.id));
-                console.log("update jsonBody", jsonBody)
-            }
-            else {
-                dispatch(PostMethodForVehicleMaster(jsonBody));
-                console.log("post jsonBody", jsonBody)
-            }
-        }
-    };
-
-
+    // For Delete Button in table
+    function UserRoles_DeleteButton_Handller(tableValue) {
+        setDivisionData(divisionData.filter(
+            (item) => !(item.value === tableValue)
+        )
+        )
+    }
     function AddDivisionHandler() {
-
         const find = divisionData.find((element) => {
             return element.value === divisionType_dropdown_Select.value
         });
@@ -329,7 +290,6 @@ debugger
         }
     }
 
-
     // For Delete Button in table
     function UserRoles_DeleteButton_Handller(tableValue) {
         setDivisionData(divisionData.filter(
@@ -337,6 +297,40 @@ debugger
         )
         )
     }
+
+    const SaveHandler = (event) => {
+        event.preventDefault();
+        const leng = divisionData.length
+        if (leng === 0) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Atleast One Division..!",
+            }));
+            return
+        }
+        if (formValid(state, setState)) {
+            var division = divisionData.map(i => ({ Division: i.value }))
+            const jsonBody = JSON.stringify({
+                VehicleNumber: values.VehicleNumber,
+                Description: values.Description,
+                Driver: values.Driver.value,
+                VehicleType: values.VehicleType.value,
+                VehicleDivisions: division,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
+            });
+
+            saveDissable(true);//save Button Is dissable function
+
+            if (pageMode === 'edit') {
+                dispatch(updateVehicleTypeID(jsonBody, values.id));
+            }
+            else {
+                dispatch(PostMethodForVehicleMaster(jsonBody));
+            }
+        }
+    };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -347,23 +341,21 @@ debugger
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading}  | FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.VEHICLE} /> */}
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
@@ -371,7 +363,6 @@ debugger
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="DriverDropDown "
-                                                                        // disabled={true}
                                                                         name="Driver"
                                                                         value={values.Driver}
                                                                         isSearchable={false}
@@ -379,7 +370,6 @@ debugger
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                       
                                                                     />
                                                                     {isError.Driver.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Driver}</small></span>
@@ -388,15 +378,13 @@ debugger
                                                             </FormGroup>
                                                         </Col>
 
-
-                                                        <Col md="1">  </Col>
+                                                        <Col md="1" className="mx-n1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.VehicleType}</Label>
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="VehicleDropDown "
-                                                                        // disabled={true}
                                                                         name="VehicleType"
                                                                         value={values.VehicleType}
                                                                         isSearchable={false}
@@ -414,7 +402,7 @@ debugger
 
                                                         <Row>
                                                             <Col md="4">
-                                                                <FormGroup className="mb-2 col col-sm-8 ">
+                                                                <FormGroup className="mb-2 col col-sm-9 ">
                                                                     <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
                                                                     <Input
                                                                         name="VehicleNumber"
@@ -426,7 +414,7 @@ debugger
                                                                         autoComplete='off'
                                                                         onChange={(event) => {
                                                                             onChangeText({ event, state, setState })
-                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                            dispatch(Breadcrumb_inputName(event.target.value))
                                                                         }}
                                                                     />
                                                                     {isError.VehicleNumber.length > 0 && (
@@ -448,7 +436,7 @@ debugger
                                                                         autoComplete='off'
                                                                         onChange={(event) => {
                                                                             onChangeText({ event, state, setState })
-                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                            dispatch(Breadcrumb_inputName(event.target.value))
                                                                         }}
                                                                     />
                                                                     {isError.Description.length > 0 && (
@@ -463,7 +451,6 @@ debugger
                                                                 <Label htmlFor="validationCustom21">{fieldLabel.VehicleDivisions}</Label>
                                                                 <Select
                                                                     id="DivisionDropDown "
-                                                                    // disabled={true}
                                                                     name="VehicleDivisions"
                                                                     value={values.VehicleDivisions}
                                                                     isSearchable={false}
@@ -480,11 +467,11 @@ debugger
                                                                 )}
 
                                                             </FormGroup>
-                                                            <Col sm={1} style={{ marginTop: '28px' }} >
+                                                            <Col sm={1} style={{ marginTop: '17px' }} >
                                                                 {" "}
                                                                 <Button
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary"
+                                                                    className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
                                                                     onClick={() =>
                                                                         AddDivisionHandler()
                                                                     }
@@ -531,7 +518,11 @@ debugger
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2} className="mt-3">
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
+                                                                        module={"VehicleMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >

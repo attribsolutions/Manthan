@@ -2,10 +2,12 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
     deletePartySubPartySuccess,
-    getPartySubPartySuccess,
+    editPartySubPartySuccess,
+    getPartySubPartylistSuccess,
     postPartySubPartySuccess,
     updatePartySubPartySuccess,
 } from "./action";
+
 import {
     PartySubParty_Delete_API,
     PartySubParty_Edit_API,
@@ -17,17 +19,48 @@ import {
 import {
     DELETE_PARTY_SUB_PARTY,
     EDIT_PARTY_SUB_PARTY,
-    EDIT_PARTY_SUB_PARTY_SUCCESS,
+    UPDATE_PARTY_SUB_PARTY,
     GET_PARTY_SUB_PARTY_LIST,
     POST_PARTY_SUB_PARTY,
+  
 } from "./actionType"
+
 import { AlertState } from "../../actions";
 
 function* getListGenFunc() {
     yield put(SpinnerState(true))
     try {
         const response = yield call(PartySubParty_Get_API);
-        yield put(getPartySubPartySuccess(response.Data));
+
+        // const data = response.Data.map((index) => ({
+        //     StateId: index.State.id,
+        //     State: index.State.Name,
+        //     DistrictId: index.District.id,
+        //     District: index.District.Name,
+        //     CompanyId: index.Company.id,
+        //     Company: index.Company.Name,
+        //     PartyTypeId: index.PartyType.id,
+        //     PartyTypeName: index.PartyType.Name,
+        //     PriceListId: index.PriceList.id,
+        //     PriceListName: index.PriceList.Name,
+        //     SubPartyId: index.SubParty.id,
+        //     SubPartyName: index.SubParty.Name,
+        //     Name: index.Name,
+        //     Email: index.Email,
+        //     MobileNo: index.MobileNo,
+        //     AlternateContactNo: index.AlternateContactNo,
+        //     GSTIN: index.GSTIN,
+        //     PAN: index.PAN,
+        //     IsDivision: index.IsDivision,
+        //     MkUpMkDn: index.MkUpMkDn,
+        //     isActive: index.isActive,
+        //     id: index.id
+
+        // }));
+
+        // yield put(getPartySubPartylistSuccess(data));
+        // console.log("response in saga", response)
+      yield put(getPartySubPartylistSuccess(response.Data));
         yield put(SpinnerState(false))
     } catch (error) {
         yield put(SpinnerState(false))
@@ -37,6 +70,8 @@ function* getListGenFunc() {
         }));
     }
 }
+
+
 function* postGenFunc({ data }) {
     yield put(SpinnerState(true))
     try {
@@ -51,6 +86,7 @@ function* postGenFunc({ data }) {
         }));
     }
 }
+
 
 function* deleteGenFunc({ id }) {
     try {
@@ -67,13 +103,12 @@ function* deleteGenFunc({ id }) {
     }
 }
 
+
 function* editGenFunc({ id, pageMode }) {
     try {
         const response = yield call(PartySubParty_Edit_API, id);
         response.pageMode = pageMode
-        yield put(deletePartySubPartySuccess(response));
-        console.log("response in saga", response)
-
+        yield put(editPartySubPartySuccess(response));
     } catch (error) {
         yield put(AlertState({
             Type: 4,
@@ -81,6 +116,7 @@ function* editGenFunc({ id, pageMode }) {
         }));
     }
 }
+
 
 function* updateGenFunc({ updateData, ID }) {
     try {
@@ -103,7 +139,7 @@ function* PartySubPartysaga() {
     yield takeEvery(GET_PARTY_SUB_PARTY_LIST, getListGenFunc)
     yield takeEvery(POST_PARTY_SUB_PARTY, postGenFunc)
     yield takeEvery(EDIT_PARTY_SUB_PARTY, editGenFunc)
-    yield takeEvery(EDIT_PARTY_SUB_PARTY_SUCCESS, updateGenFunc)
+    yield takeEvery(UPDATE_PARTY_SUB_PARTY, updateGenFunc)
     yield takeEvery(DELETE_PARTY_SUB_PARTY, deleteGenFunc)
 }
 

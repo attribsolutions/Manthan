@@ -9,9 +9,12 @@ import {
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { useSelector, useDispatch } from "react-redux";
 import RoleMaster from "./RoleMaster";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { ROLE } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const RoleList = (props) => {
 
@@ -39,22 +42,25 @@ const RoleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.ROLE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(13))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getRole());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField ,userAccess=[]} = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLE_lIST} />
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={RoleMaster}
-            masterPath={ROLE}
+            masterPath={url.ROLE}
             ButtonMsgLable={"Role"}
             deleteName={"Name"}
           />

@@ -22,7 +22,7 @@ import {
 } from "../../../store/Administrator/DriverRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
-    from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+    from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import Select from "react-select";

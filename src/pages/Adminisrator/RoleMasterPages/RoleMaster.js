@@ -1,15 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input, } from "reactstrap";
-import { AvInput } from "availity-reactstrap-validation";
+import React, { useEffect, useState } from "react";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Label,
+  CardHeader,
+  FormGroup,
+  Input
+} from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
-  postRole, updateID, PostSuccess
+  postRole,
+  updateID,
+  PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
-import { AlertState, commonPageField, commonPageFieldSuccess, updateSuccess } from "../../../store/actions";
+import {
+  AlertState,
+  commonPageField,
+  commonPageFieldSuccess,
+  updateSuccess
+} from "../../../store/actions";
 import Select from "react-select";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName, CommonBreadcrumbDetails } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
@@ -19,33 +35,36 @@ import {
   initialFiledFunc,
   onChangeSelect,
   onChangeText,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { ROLE_lIST } from "../../../routes/route_url";
+  resetFunction,
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const RoleMaster = (props) => {
 
-  const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
 
-  //SetState  Edit data Geting From Modules List component
-  const [EditData, setEditData] = useState([]);
-  const [pageMode, setPageMode] = useState("save");
-  const [modalCss, setModalCss] = useState(false);
-
-  const [userPageAccessState, setUserPageAccessState] = useState('');
-  const initialFiled = {
+  const fileds = {
     id: "",
     Name: "",
     Description: "",
     Dashboard: "",
     RoleEmployeeTypes: "",
-    isActive: "",
-    isSCMRole: '',
-    IsPartyConnection: ""
+    isActive: true,
+    isSCMRole: false,
+    IsPartyConnection: false
   }
 
-  const [state, setState] = useState(initialFiledFunc(initialFiled))
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+  const [pageMode, setPageMode] = useState("");
+  const [modalCss, setModalCss] = useState(false);
+  const [userPageAccessState, setUserPageAccessState] = useState(123);
+  const [editCreatedBy, seteditCreatedBy] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -59,19 +78,22 @@ const RoleMaster = (props) => {
       EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
-
     }));
+
+  useEffect(() => {
+    const page_Id = pageId.ROLE
+    dispatch(commonPageFieldSuccess());
+    dispatch(commonPageField(page_Id))
+    dispatch(getEmployeeTypelist());
+  }, []);
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
 
-
-  useEffect(() => {
-    dispatch(commonPageFieldSuccess());
-    dispatch(commonPageField(12))
-    dispatch(getEmployeeTypelist());
-  }, []);
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
 
   // userAccess useEffect
   useEffect(() => {
@@ -88,20 +110,20 @@ const RoleMaster = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
+      dispatch(CommonBreadcrumbDetails({
+        // bredcrumbItemName: '',
+        pageHeading: userAcc.PageHeading,
+        userAccess: {},
+        newBtnView: false,
+        showCount: false,
+        excelData: [],
+        breadShow: true
+      }))
     };
   }, [userAccess])
 
   useEffect(() => {
 
-    if (pageField) {
-      const fieldArr = pageField.PageFieldMaster
-      comAddPageFieldFunc({ state, setState, fieldArr })// new change
-    }
-  }, [pageField])
-
-  useEffect(() => {
-    debugger
-    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -116,7 +138,6 @@ const RoleMaster = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
         const listItems = hasEditVal.RoleEmployeeTypes.map((data) => ({
           value: data.EmployeeType,
           label: data.EmployeeTypeName
@@ -143,19 +164,20 @@ const RoleMaster = (props) => {
         values.RoleEmployeeTypes = listItems;
 
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
-
+        dispatch(Breadcrumb_inputName(hasEditVal.Name))
+        seteditCreatedBy(hasEditVal.CreatedBy)
       }
       dispatch(editSuccess({ Status: false }))
-
     }
-
   }, [])
 
   useEffect(() => {
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
-      formRef.current.reset();
+      setState(() => resetFunction(fileds, state))// Clear form values  
+      saveDissable(false);//save Button Is enable function
+      dispatch(Breadcrumb_inputName(''))
+
       if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
@@ -168,12 +190,13 @@ const RoleMaster = (props) => {
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: ROLE_lIST,
+          RedirectPath: url.ROLE_lIST,
 
         }))
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+      saveDissable(false);//save Button Is enable function
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -187,10 +210,13 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      saveDissable(false);//Update Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values  
       history.push({
-        pathname: ROLE_lIST,
+        pathname: url.ROLE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
+      saveDissable(false);//Update Button Is enable function
       dispatch(updateSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -202,21 +228,22 @@ const RoleMaster = (props) => {
     }
   }, [updateMsg, modalCss]);
 
+  useEffect(() => {
+
+    if (pageField) {
+      const fieldArr = pageField.PageFieldMaster
+      comAddPageFieldFunc({ state, setState, fieldArr })
+    }
+  }, [pageField])
+
   const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
     value: data.id,
     label: data.Name
   }));
 
-
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
-
-  const formSubmitHandler = (event) => {
-    debugger
+  const SaveHandler = (event) => {
     event.preventDefault();
     if (formValid(state, setState)) {
-
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Description: values.Description,
@@ -225,25 +252,19 @@ const RoleMaster = (props) => {
         isSCMRole: values.isSCMRole,
         IsPartyConnection: values.IsPartyConnection,
         RoleEmployeeTypes: values.RoleEmployeeTypes.map((i) => { return ({ EmployeeType: i.value }) }),
-        // RoleEmployeeTypes: [
-        //   {
-        //     EmployeeType: 1
-        //   }
-        // ],
-        CreatedBy: 1,
+        CreatedBy: createdBy(),
         CreatedOn: "2022-05-20T11:22:55.711483Z",
-        UpdatedBy: 1,
+        UpdatedBy: createdBy(),
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       });
 
+      saveDissable(true);//save Button Is dissable function
+
       if (pageMode === 'edit') {
         dispatch(updateID(jsonBody, values.id));
-        console.log("update jsonBody", jsonBody)
       }
-
       else {
         dispatch(postRole(jsonBody));
-        console.log("jsonBody", jsonBody)
       }
     }
   };
@@ -255,31 +276,25 @@ const RoleMaster = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content" >
           <Container fluid>
-            <MetaTags>
-              <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-            </MetaTags>
-            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
-
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLE} />
             <Card className="text-black">
-              <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+              <CardHeader className="card-header  text-black c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
 
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-
-                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
-
+                <form onSubmit={SaveHandler} noValidate>
                   <Row className="">
                     <Col md={12}>
                       <Card>
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <CardBody className="c_card_body">
                           <Row>
-
-                            <FormGroup className="mb-2 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label>{fieldLabel.Name} </Label>
                               <Input
                                 name="Name"
                                 id="txtName"
@@ -288,9 +303,10 @@ const RoleMaster = (props) => {
                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                 placeholder="Please Enter Name"
                                 autoComplete='off'
+                                autoFocus={true}
                                 onChange={(event) => {
                                   onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
+                                  dispatch(Breadcrumb_inputName(event.target.value))
                                 }}
                               />
                               {isError.Name.length > 0 && (
@@ -299,37 +315,32 @@ const RoleMaster = (props) => {
                             </FormGroup>
 
 
-                            <Col md="1"> </Col>
-
-                            <div className="col-lg-4 col-md-6">
-                              <div className="mb-3">
-                                <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
-                                <Select
-                                  name="RoleEmployeeTypes"
-                                  // defaultValue={EmployeeType_DropdownOptions[0]}
-                                  value={values.RoleEmployeeTypes}
-                                  isSearchable={false}
-                                  isMulti={true}
-                                  className="react-dropdown"
-                                  options={EmployeeType_DropdownOptions}
-                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                  classNamePrefix="dropdown"
-
-                                />
-                                {isError.RoleEmployeeTypes.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
-                                )}
-                              </div>
-                            </div>
+                            <Col md={1} className="mx-n1"> </Col>
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
+                              <Select
+                                name="RoleEmployeeTypes"
+                                value={values.RoleEmployeeTypes}
+                                isSearchable={false}
+                                isMulti={true}
+                                options={EmployeeType_DropdownOptions}
+                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                classNamePrefix="dropdown"
+                              />
+                              {isError.RoleEmployeeTypes.length > 0 && (
+                                <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
+                              )}
+                            </FormGroup>
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
                                 <Input
                                   type="text"
-                                  defaultValue={values.Description}
+                                  value={values.Description}
                                   className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Description"
+                                  autoComplete="off"
                                   placeholder="Please Enter description"
                                   onChange={(event) => onChangeText({ event, state, setState })}
                                 />
@@ -346,6 +357,7 @@ const RoleMaster = (props) => {
                                   value={values.Dashboard}
                                   className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Dashboard"
+                                  autoComplete="off"
                                   placeholder="Please Enter dashboard"
                                   onChange={(event) => onChangeText({ event, state, setState })}
                                 />
@@ -359,13 +371,19 @@ const RoleMaster = (props) => {
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
                                   <Label className="col-sm-4 col-form-label" >{fieldLabel.isSCMRole}</Label>
-                                  <Col md={2} style={{ marginTop: '9px' }} >
+                                  <Col md={2} style={{ marginTop: '9px', marginLeft: "1cm" }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"
-                                        value={values.isSCMRole}
+                                        checked={values.isSCMRole}
                                         name="isSCMRole"
-                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                        onChange={(e) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.isSCMRole = e.target.checked;
+                                            return a
+                                          })
+                                        }}
                                       />
                                     </div>
                                   </Col>
@@ -380,9 +398,14 @@ const RoleMaster = (props) => {
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={values.isActive}
-                                        defaultChecked={true}
                                         name="isActive"
-                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                        onChange={(e) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.isActive = e.target.checked;
+                                            return a
+                                          })
+                                        }}
                                       />
                                     </div>
                                   </Col>
@@ -391,14 +414,20 @@ const RoleMaster = (props) => {
 
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-4 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
-                                  <Col md={2} style={{ marginTop: '9px' }} >
+                                  <Label className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
+                                  <Col md={1} style={{ marginTop: '9px' }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        defaultChecked={values.IsPartyConnection}
+                                        checked={values.IsPartyConnection}
                                         name="IsPartyConnection"
-                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                        onChange={(e) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.IsPartyConnection = e.target.checked;
+                                            return a
+                                          })
+                                        }}
                                       />
                                     </div>
                                   </Col>
@@ -409,47 +438,22 @@ const RoleMaster = (props) => {
                             <FormGroup>
                               <Row>
                                 <Col sm={2}>
-                                  <div>
-                                    {
-                                      pageMode === "edit" ?
-                                        userPageAccessState.RoleAccess_IsEdit ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                            className="btn btn-success w-md mt-3"
-                                          >
-                                            <i class="fas fa-edit me-2"></i>Update
-                                          </button>
-                                          :
-                                          <></>
-                                        : (
-
-                                          userPageAccessState.RoleAccess_IsSave ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                              className="btn btn-primary w-md mt-3 "
-                                            > <i className="fas fa-save me-2"></i> Save
-                                            </button>
-                                            :
-                                            <></>
-                                        )
-                                    }
-                                  </div>
+                                  <SaveButton pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    editCreatedBy={editCreatedBy}
+                                    module={"RoleMaster"}
+                                  />
                                 </Col>
                               </Row>
-                            </FormGroup>
+                            </FormGroup >
                           </Row>
-
                         </CardBody>
                       </Card>
                     </Col>
                   </Row>
-
                 </form>
               </CardBody>
             </Card>
-
           </Container>
         </div>
       </React.Fragment>

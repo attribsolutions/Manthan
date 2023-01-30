@@ -17,6 +17,7 @@ import {
     get_Sub_Group_By_Group_ForDropDown,
     get_Sub_Group_By_Group_ForDropDown_Success
 } from "../../../../../store/Administrator/ItemsRedux/action";
+import { AlertState } from "../../../../../store/actions";
 
 function GroupTab(props) {
     const dispatch = useDispatch();
@@ -71,6 +72,7 @@ function GroupTab(props) {
     };
 
     const Group_Handler = (event) => {
+        debugger
         const found = props.tableData.find(element => {
             return element.Group == event.value
         });
@@ -90,16 +92,38 @@ function GroupTab(props) {
 
     const addRowsHandler = (e) => {
 
+        debugger
         const val = {
-            GroupType: groupTypeDropdownSelect.value,
+            GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
             Group: groupDropdownSelect === "" ? "" : groupDropdownSelect.value,
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
         };
-        if (val.Group == '') {
-            alert("Please Select GroupType or Group value...!")
+        if ((groupTypeDropdownSelect.value === undefined)) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select GroupType value...!",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
+         if ((groupDropdownSelect.value === undefined) ){
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select Group value...!",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
         }
         else {
             const totalTableData = props.tableData.length;
@@ -119,16 +143,19 @@ function GroupTab(props) {
     };
 
     return (
-        <Row>
-            <Col md={12}>
-                <Card className="text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                        <Row className="mt-3">
-                            <Col className=" col col-11 ">
+
+        <Row style={{ marginBottom: "" }}>
+
+            <Col md={12} >
+                <Card className="text-black" >
+                    <CardBody className="c_card_body">
+                        <Row className="mt-6">
+                            <Col className="col-11 ">
                                 <Row>
-                                    <FormGroup className=" col col-sm-4 ">
+                                    <FormGroup className="col-sm-4 ">
                                         <Label>Group Type</Label>
                                         <Select
+
                                             // id={`dropGroupType-${0}`}
                                             value={groupTypeDropdownSelect}
                                             options={GroupType_DropdownOptions}
@@ -136,7 +163,7 @@ function GroupTab(props) {
                                         />
                                     </FormGroup>
 
-                                    <FormGroup className="mb-3 col col-sm-4 ">
+                                    <FormGroup className=" col col-sm-4 ">
                                         <Label>Group</Label>
                                         <Select
                                             // id={`dropGroup-${0}`}
@@ -159,15 +186,16 @@ function GroupTab(props) {
                                 </Row>
                             </Col>
                             <Col md={1}>
-
-                                <Row className=" mt-3">
+                                <Row className="mt-3 ">
                                     <Col >
                                         <Button
-                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                                             className=" button_add"
+                                             color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus mt-3"> </i> Add
+                                            <i className="dripicons-plus"></i>
+
                                         </Button>
                                     </Col>
                                 </Row>

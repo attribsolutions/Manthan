@@ -11,18 +11,16 @@ import {
  
 } from "reactstrap";
 
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvField, AvForm,AvInput, } from "availity-reactstrap-validation";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import {  useHistory } from "react-router-dom";
 
 
-import { BreadcrumbShow,AlertState } from "../../../store/actions";
+import { Breadcrumb_inputName,AlertState } from "../../../store/actions";
 
 import {
   editPartyTypeSuccess,
@@ -31,7 +29,8 @@ import {
   updatePartyTypeID,
   PostPartyTypeAPI,
 } from "../../../store/Administrator/PartyTypeRedux/action";
-import { SaveButton } from "../../../components/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+
 
 
 const PartyType = (props) => {
@@ -94,7 +93,7 @@ const PartyType = (props) => {
       setEditData(editDataGatingFromList);
       setPageMode("edit");
       dispatch(editPartyTypeSuccess({ Status: false }));
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name));
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name));
     } else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode);
     }
@@ -199,7 +198,7 @@ if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { Is
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
                                                         </FormGroup>
                                                         

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -17,13 +16,17 @@ import {
   delete_MRPListSuccess,
   getMRPListPage,
 } from "../../../store/Administrator/MRPMasterRedux/action";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const MRPList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
+  const [userAccState, setUserAccState] = useState('');
 
-  const [userPageAccessState, setUserPageAccessState] = useState('');
 
   // get Access redux data
   const {
@@ -45,7 +48,7 @@ const MRPList = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
     }
   }, [userAccess])
 
@@ -94,7 +97,7 @@ const MRPList = (props) => {
   };
 
   const EditPageHandler = (rowData) => {
-    let RelatedPageID = userPageAccessState.RelatedPageID
+    let RelatedPageID = userAccState.RelatedPageID
 
     const found = userAccess.find((element) => {
       return element.id === RelatedPageID
@@ -134,16 +137,16 @@ const MRPList = (props) => {
     {
       text: "Action",
       hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+        !(userAccState.RoleAccess_IsEdit)
+        && !(userAccState.RoleAccess_IsView)
+        && !(userAccState.RoleAccess_IsDelete)) ? true : false,
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
+          {((userAccState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Effective Date"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
@@ -152,10 +155,10 @@ const MRPList = (props) => {
             :
             null}
 
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
+          {(!(userAccState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userAccState.RoleAccess_IsView)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Effective Date"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -163,11 +166,11 @@ const MRPList = (props) => {
               <i className="bx bxs-show font-size-18 "></i>
             </Button> : null}
 
-          {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
+          {((userAccState.RoleAccess_IsDelete) && (Role.CommonID > 0))
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Effective Date"
               onClick={() => { deleteHandeler(Role.CommonID) }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
@@ -180,81 +183,66 @@ const MRPList = (props) => {
     },
   ];
 
-  if (!(userPageAccessState === '')) {
+  if (!(userAccState === '')) {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags>
-            <title>MRP List| FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <div className="container-fluid">
-            <PaginationProvider
-              pagination={paginationFactory(pageOptions)}
-            >
-              {({ paginationProps, paginationTableProps }) => (
-                <ToolkitProvider
-                  keyField='id'
-                  columns={pagesListColumns}
-                  data={tableList}
-                 
-                  search
-                >
-                  {toolkitProps => (
-                    <React.Fragment>
-                      <Breadcrumb
-                        title={"Count :"}
-                        breadcrumbItem={userPageAccessState.PageHeading}
-                        IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                        SearchProps={toolkitProps.searchProps}
-                        breadcrumbCount={`MRP Count: ${tableList.length}`}
-                        IsSearchVissible={true}
-                        isExcelButtonVisible={true}
-                        ExcelData={tableList}
-                        RedirctPath={"/MRPMaster"}
-                       
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP_lIST} /> */}
+          {/* <Breadcrumb
+            pageHeading={userAccState.PageHeading}
+            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
+            showCount={true}
+            excelBtnView={true}
+            excelData={tableList}
+          /> */}
+          <PaginationProvider
+            pagination={paginationFactory(pageOptions)}
+          >
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField='id'
+                columns={pagesListColumns}
+                data={tableList}
+                search
+              >
+                {toolkitProps => (
+                  <React.Fragment>
+                    <div className="table-responsive">
+                      <BootstrapTable
+                        keyField={"id"}
+                        responsive
+                        bordered={true}
+                        striped={false}
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        classes={"table align-middle table-nowrap table-hover"}
+                        headerWrapperClasses={"thead-light"}
+
+                        {...toolkitProps.baseProps}
+                        {...paginationTableProps}
                       />
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                      {mySearchProps(toolkitProps.searchProps)}
+                    </div>
 
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone
+                          {...paginationProps}
 
-                      <Row>
-                        <Col xl="12">
-                          <div className="table-responsive">
-                            <BootstrapTable
-                              keyField={"id"}
-                              responsive
-                              bordered={true}
-                              striped={false}
-                              noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                              classes={"table align-middle table-nowrap table-hover"}
-                              headerWrapperClasses={"thead-light"}
-                              
-                              {...toolkitProps.baseProps}
-                              {...paginationTableProps}
-                             
-                            />
+                        />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )
+                }
+              </ToolkitProvider>
+            )
+            }
 
-                          </div>
-                         
-                        </Col>
-                      </Row>
-
-                      <Row className="align-items-md-center mt-30">
-                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                          <PaginationListStandalone
-                            {...paginationProps}
-                          
-                          />
-                        </Col>
-                      </Row>
-                    </React.Fragment>
-                  )
-                  }
-                </ToolkitProvider>
-              )
-              }
-
-            </PaginationProvider>
-          </div>
+          </PaginationProvider>
         </div>
+
       </React.Fragment>
     );
   }

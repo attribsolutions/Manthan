@@ -1,0 +1,287 @@
+#color {
+  width: 5.5cm;
+  border: 15px;
+  padding: 50px;
+  margin: 12px;
+  background-color: white;
+  min-width: auto;
+  // height: 9cm;
+  min-height: auto;
+  margin-left: 0cm;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 0%, 80%);
+  // overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  float: left;
+  position: absolute;
+  z-index: 1;
+  padding-top: 0;
+  display: none;
+}
+
+#Input:hover+.color {
+  display: block;
+}
+
+
+#img {
+  // height: 2cm;
+  // width: 1cm;
+  border-radius: 10px;
+  transition: transform .2s;
+  /* Animation */
+  margin-top: 18px;
+  height: 35px;
+  width: 35px;
+  padding: -3cm;
+  // -webkit-transition: width .35s ease-in-out;
+  // transition: width .35s ease-in-out;
+}
+
+// #add-img {
+//   border-radius: 10px;
+//   transition: transform .2s;
+
+//   margin-top: 18px;
+//   height: 70px;
+//   width: 70px;
+//   padding: -3cm
+// }
+
+#img:focus {
+  transform: scale(2.0);
+  margin-bottom: 10px;
+
+}
+
+#add-img:focus {
+  transform: scale(2.0);
+  margin-bottom: 10px;
+
+}
+
+#images:hover {
+  cursor: pointer;
+}
+
+#images {
+  width: 1.3cm;
+  height: 1.3cm;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#add-img {
+  width: 7cm;
+  height: 7cm;
+  margin-left: 9cm;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  // margin-top: -px;
+  z-index: 435445 !important;
+}
+
+.abc1{
+  width: 7cm;
+  height: 7cm;
+  // margin-block: 100px;
+  z-index: 435445 !important;
+  background-color:burlywood;
+  position: absolute;
+  margin-top: -7cm;
+margin-left: 8cm;
+border-radius: 5%;
+border: #4CAF50;
+display: none;
+
+
+
+
+}
+.imgs{
+width: 9cm;
+height: 9cm;
+}
+
+.button_add {
+  width: 30px !important;
+  height: 30px !important;
+  //  background-color:#b3e7c0 !important; 
+  border-radius: 10% !important;
+  margin-top: 15px !important;
+  padding-bottom: 3px !important;
+  padding-top: 5px !important;
+  padding-left: 7px !important;
+}
+
+.button_save {
+  margin-top: -1cm;
+  position: fixed;
+
+
+  // margin-bottom: 0 !important;
+
+  // margin-top: -2cm;
+  // position: -webkit-sticky;
+
+}
+
+.bt_save {
+  margin-bottom: 1cm;
+  // position: static;
+  // bottom: 8;
+}
+
+
+
+
+.c_card_body {
+  // rgb(225 225 237)
+  // background-color:rgb(237, 237, 242) !important ;
+  background-color: whitesmoke !important;
+  border-radius: 5px;
+}
+
+.c_card_header {
+  background-color: rgb(221, 221, 221) !important;
+  border-radius: 5px;
+}
+
+
+.c_card_filter {
+  background-color: rgb(218, 218, 219) !important;
+  border-radius: 5px;
+}
+
+
+.Flatpickr {
+  border-color: red !important;
+}
+
+
+
+// image
+
+
+
+
+#myImg {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#myImg:hover {
+  opacity: 0.7;
+}
+
+
+
+.dropdown-menu-custom[style] {
+  left: 11px !important;
+  right: 10px !important;
+  top: -7.2px !important;
+}
+
+// Dropdown with Icons
+.dropdown-icon-item-custom {
+  display: block;
+  border-radius: 3px;
+  line-height: 34px;
+  text-align: center;
+  padding: 15px 0 9px;
+  display: block;
+  color: $gray-600;
+
+  img {
+      height: 24px;
+  }
+
+  span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+  }
+
+  &:hover {
+      background-color: rgb(218, 218, 219) !important;
+  }
+}
+
+
+#itemtag {
+  width: 94%;
+  display: inline-block;
+  // width: 8cm;
+  border: 15px;
+  // padding: 50px;
+  margin: 12px;
+  background-color: white;
+  min-width: auto;
+  height: 50px;
+  min-height: auto;
+  margin-left: 0cm;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 0%, 80%);
+  // overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // float: left;
+  position: absolute;
+  z-index: 1;
+  padding-top: 0;
+  display: none;
+  padding-left: 0px;
+  // padding-bottom: -10px;
+  
+  
+}
+
+#Input:hover+.itemtag {
+  display: block;
+}
+
+#brandtag {
+  width: 94%;
+  display: inline-block;
+  // width: 8cm;
+  border: 15px;
+  // padding: 50px;
+  margin: 12px;
+  background-color: white;
+  min-width: auto;
+  height: 4cm;
+  min-height: auto;
+  margin-left: 0cm;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 0%, 80%);
+  // overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // float: left;
+  position: absolute;
+  z-index: 1;
+  padding-top: 0;
+  display: none;
+
+}
+
+#Input:hover+.brandtag {
+  display: block;
+}
+
+.liitem:hover{
+background-color: rgb(206, 223, 244);
+cursor: pointer;
+}
+.liitem{
+  margin-bottom: 10px;
+  width: 300%;
+  margin-left: -32px;
+}
+
+ .savebtn{
+  position: fixed;
+ }

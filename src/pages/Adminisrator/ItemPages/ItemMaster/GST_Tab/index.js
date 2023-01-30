@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import GSTTable from './Table';
+import { createdBy, userCompany } from '../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 
 function GSTTab(props) {
 
@@ -27,12 +28,12 @@ function GSTTab(props) {
             GSTPercentage: GST,
             HSNCode: HSNCode,
             EffectiveDate: effectiveDate,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            Company: 1,
-            CommonID:0,
-            IsDeleted:0,
-            IsAdd:true,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            Company: userCompany(),
+            CommonID: 0,
+            IsDeleted: 0,
+            IsAdd: true,
         };
 
         if (!(GST === "")
@@ -62,7 +63,7 @@ function GSTTab(props) {
         <Row>
             <Col md={12}  >
                 <Card className="text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className='c_card_body'>
                         <Row>
 
                             <FormGroup className="mb-3 col col-sm-3 ">
@@ -114,11 +115,12 @@ function GSTTab(props) {
                                 <Row className=" mt-3">
                                     <Col >
                                         <Button
-                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                                              className=" button_add"
+                                              color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus mt-3"> </i> Add
+                                            <i className="dripicons-plus mt-3"> </i>
                                         </Button>
                                     </Col>
                                 </Row>

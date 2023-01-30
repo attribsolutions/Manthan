@@ -2,19 +2,21 @@ import React, { useEffect } from "react";
 import {
     deleteCompany_ID,
     editCompanyID,
-    fetchCompanyList,
     updateCompanyIDSuccess,
     deleteCompanyIDSuccess,
     PostCompanySubmitSuccess,
+    fetchCompanyList,
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { COMPANY } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 
 const CompanyList = () => {
-
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
@@ -28,7 +30,6 @@ const CompanyList = () => {
         })
     );
 
-
     const action = {
         getList: fetchCompanyList,
         editId: editCompanyID,
@@ -38,25 +39,27 @@ const CompanyList = () => {
         deleteSucc: deleteCompanyIDSuccess
     }
 
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = pageId.COMPANY_lIST
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(1))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(fetchCompanyList());
     }, []);
 
-    const { pageField } = reducers;
+    const { pageField,userAccess=[] } = reducers;
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANY_lIST} /> */}
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={CompanyModule}
-                        masterPath={COMPANY}
+                        masterPath={url.COMPANY}
                         ButtonMsgLable={"Company"}
                         deleteName={"Name"}
                     />
@@ -68,6 +71,7 @@ const CompanyList = () => {
 }
 
 export default CompanyList;
+
 
 
 

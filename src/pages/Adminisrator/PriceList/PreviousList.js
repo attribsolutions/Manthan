@@ -24,7 +24,7 @@ import {
 } from "../../../store/Administrator/PriceList/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
-from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PriceList = (props) => {
 debugger

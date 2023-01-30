@@ -6,8 +6,9 @@ import {
   deleteItemIdSuccess,
   editItemSuccess,
   getBaseUnit_ForDropDownSuccess,
+  getBrandtagSuccess,
   getItemGroup_ForDropDownSuccess,
-  getItemListSuccess, get_CategoryTypes_ForDropDown_Success,
+  getItemListSuccess, getItemtagSuccess, get_CategoryTypes_ForDropDown_Success,
   get_Category_By_CategoryType_ForDropDownAPI_Success,
   get_Category_By_CategoryType_ForDropDown_Success,
   get_Division_ForDropDown_Success,
@@ -19,7 +20,7 @@ import {
   get_Sub_Category_By_CategoryType_ForDropDown_Success,
   get_Sub_Group_By_Group_ForDropDown_Success,
   PostItemDataSuccess,
-  updateItemSuccess
+  updateItemSuccess,
 } from "./action";
 import {
   DELETE_ITEM_ID, EDIT_ITEM_ID,
@@ -27,10 +28,10 @@ import {
   GET_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
-  GET_CATEGORY_FOR_DROPDOWN,
   GET_DIVISION_FOR_DROPDOWN,
   GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
   GET_IMAGETYPE_FOR_DROPDOWN,
+  GET_ITEMTAG_API,
   GET_ITEM_GROUP_FOR_DROPDOWN,
   GET_ITEM_LIST_API,
   GET_MRPTYPE_FOR_DROPDOWN,
@@ -49,15 +50,11 @@ function* Get_Items_GenratorFunction() {
     const response = yield call(apiCall.Items_Master_Get_API);
     yield put(SpinnerState(false))
     if (response.StatusCode === 200) yield put(getItemListSuccess(response.Data))
-    else yield put(AlertState({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error for Item Master",
     }));
   }
 }
@@ -130,7 +127,6 @@ function* Update_Items_GenratorFunction({ updateData, ID }) {
     const response = yield call(apiCall.Items_Master_Update_API, updateData, ID);
     yield put(SpinnerState(false))
     yield put(updateItemSuccess(response))
-    console.log("response", response)
   }
   catch (error) {
     yield put(SpinnerState(false))
@@ -181,6 +177,7 @@ function* SubCategory_DropDown_GenratorFunction({ id, key }) {
 }
 
 function* ImageType_DropDown_GenratorFunction() {
+
   try {
     const response = yield call(apiCall.ImageType_Get_DropDown_API);
     yield put(get_ImageType_ForDropDown_Success(response.Data));
@@ -225,11 +222,32 @@ function* PriceList_DropDown_GenratorFunction() {
   }
 }
 
+// Item tag Name 
+function* Item_tagname_GenratorFunction() {
+  try {
+    const response = yield call(apiCall.Get_Item_Tag);
+    yield put(getItemtagSuccess(response.Data));
+  } catch (error) {
+    console.log("Item tag name Api error", error);
+  }
+}
+
+// Brand tag Name 
+function* Brand_tagname_GenratorFunction() {
+  try {
+    const response = yield call(apiCall.Get_Brand_Tag);
+    yield put(getBrandtagSuccess(response.Data));
+  } catch (error) {
+    console.log("Brand tag name Api error", error);
+  }
+}
+
+
 function* Group_DropDown_GenratorFunction({ id }) {
   try {
     const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API, id);
     yield put(get_Group_By_GroupType_ForDropDown_Success(response.Data));
-   } catch (error) {
+  } catch (error) {
     console.log("Group saga page error", error);
   }
 }
@@ -244,7 +262,7 @@ function* SubGroup_DropDown_GenratorFunction({ id }) {
 }
 
 // Category  API dependent on CategoryType api
-function* Category_DropDown_API_GenratorFunction({ id}) {
+function* Category_DropDown_API_GenratorFunction({ id }) {
   try {
     const response = yield call(apiCall.Category_By_CategoryTypes_DropDown_API, id);
     yield put(get_Category_By_CategoryType_ForDropDownAPI_Success(response.Data));
@@ -272,6 +290,7 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenratorFunction);
   yield takeEvery(GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenratorFunction);
   yield takeEvery(GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenratorFunction);
+  yield takeEvery(GET_ITEMTAG_API, Item_tagname_GenratorFunction);
 }
 
 export default ItemsMastersSaga;

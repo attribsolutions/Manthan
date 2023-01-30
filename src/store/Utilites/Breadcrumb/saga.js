@@ -1,12 +1,18 @@
-import { put, takeEvery } from "redux-saga/effects";
-import { AlertState } from "./actions";
-import { ALERT_SHOW } from "./actionType";
+import { Breadcrumb } from "reactstrap";
+import { put, takeEvery, select } from "redux-saga/effects";
 
-function* AlertControlFunction({ state }) {
-  yield put(AlertState(state));
+function* AlertControlFunction({ props }) {
+  debugger
+  try{
+    const selectAllState = (state) => state.BreadcrumbReducer;
+    const tmp = yield select(selectAllState);
+    console.log(tmp);
+      // yield put(CommonBreadcrumbDetails_reducer( props ))
+    } catch(e){
+      debugger
+    }
 }
-
-function* Alert_Saga() {
-  yield takeEvery(ALERT_SHOW, AlertControlFunction);
+function* Breadcrumb_Saga() {
+  // yield takeEvery("COMMON_BREADCRUMB_ALL_DET", AlertControlFunction);
 }
-export default Alert_Saga;
+export default Breadcrumb_Saga;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -11,10 +11,8 @@ import {
   Input,
 } from "reactstrap";
 import Select from "react-select";
-import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
-import AvField from "availity-reactstrap-validation/lib/AvField";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
   editCompanyIDSuccess,
   PostCompanySubmit,
@@ -25,45 +23,28 @@ import {
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import {
   comAddPageFieldFunc,
-  formValChange,
   formValid,
   initialFiledFunc,
   onChangeSelect,
   onChangeText,
-
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { COMPANY_lIST } from "../../../routes/route_url";
+  resetFunction,
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const CompanyModule = (props) => {
 
-  const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-
-  const [EditData, setEditData] = useState({});
-  const [modalCss, setModalCss] = useState(false);
-  const [pageMode, setPageMode] = useState("save");
-  const [userPageAccessState, setUserPageAccessState] = useState('');
-
-  const [CompanyGroupselect, setCompanyGroup] = useState("");
-
-  //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg,updateMsg, userAccess, pageField } = useSelector((state) => ({
-    postMsg: state.Company.postMsg,
-    updateMsg: state.Company.updateMessage,
-    userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageField
-  }));
-
-  {/** Dyanamic Page access state and OnChange function */ }
-  const initialFiled = {
+  const fileds = {
     id: "",
     Name: "",
     Address: "",
@@ -71,21 +52,39 @@ const CompanyModule = (props) => {
     PhoneNo: "",
     CompanyAbbreviation: "",
     EmailID: "",
-    CompanyGroup: ""
+    CompanyGroupName: ""
   }
 
-const [state, setState] = useState(initialFiledFunc(initialFiled))
- 
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+  const [modalCss, setModalCss] = useState(false);
+  const [pageMode, setPageMode] = useState("save");
+  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [editCreatedBy, seteditCreatedBy] = useState("");
+
+  //Access redux store Data /  'save_ModuleSuccess' action data
+  const { postMsg,
+    updateMsg,
+    CompanyGroup,
+    userAccess,
+    pageField } = useSelector((state) => ({
+      postMsg: state.Company.postMsg,
+      updateMsg: state.Company.updateMessage,
+      CompanyGroup: state.Company.CompanyGroup,
+      userAccess: state.Login.RoleAccessUpdateData,
+      pageField: state.CommonPageFieldReducer.pageField
+    }));
+
+  useEffect(() => {
+    const page_Id = pageId.COMPANY
+    dispatch(commonPageFieldSuccess(null));
+    dispatch(commonPageField(page_Id))
+    dispatch(getCompanyGroup());
+  }, [dispatch]);
 
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-
-  useEffect(() => {
-    dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(2))
-    dispatch(getCompanyGroup());
-  }, [dispatch]);
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -111,7 +110,6 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
 
   useEffect(() => {
 
-    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -126,7 +124,8 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
       }
 
       if (hasEditVal) {
-        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup ,CompanyGroupName} = hasEditVal
+
+        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -135,7 +134,7 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
         hasValid.PhoneNo.valid = true;
         hasValid.CompanyAbbreviation.valid = true;
         hasValid.EmailID.valid = true;
-        hasValid.CompanyGroup.valid = true;
+        hasValid.CompanyGroupName.valid = true;
 
         values.id = id
         values.Name = Name
@@ -144,9 +143,10 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
         values.PhoneNo = PhoneNo;
         values.CompanyAbbreviation = CompanyAbbreviation;
         values.EmailID = EmailID;
-        values.CompanyGroup = { label: CompanyGroupName, value: CompanyGroup };
+        values.CompanyGroupName = { label: CompanyGroupName, value: CompanyGroup };
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(BreadcrumbShow(hasEditVal.Name))
+        dispatch(Breadcrumb_inputName(hasEditVal.Name))
+        seteditCreatedBy(hasEditVal.CreatedBy)
       }
       dispatch(editCompanyIDSuccess({ Status: false }))
     }
@@ -158,8 +158,10 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
-      setCompanyGroup('')
-      formRef.current.reset();
+      setState(() => resetFunction(fileds, state))// Clear form values 
+      saveDissable(false);//save Button Is enable function
+      dispatch(Breadcrumb_inputName(''))
+
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -172,11 +174,12 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: COMPANY_lIST,
+          RedirectPath: url.COMPANY_lIST,
         }))
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+      saveDissable(false);//save Button Is enable function
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -190,40 +193,40 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-        history.push({
-            pathname: COMPANY_lIST,
-        })
+
+      setState(() => resetFunction(fileds, state))// Clear form values 
+      saveDissable(false);//save Button Is enable function
+
+      history.push({
+        pathname: url.COMPANY_lIST,
+      })
     } else if (updateMsg.Status === true && !modalCss) {
-        dispatch(updateCompanyIDSuccess({ Status: false }));
-        dispatch(
-            AlertState({
-                Type: 3,
-                Status: true,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        );
+      saveDissable(false);//Update Button Is enable function
+      dispatch(updateCompanyIDSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
     }
-}, [updateMsg, modalCss]);
-
-  const { CompanyGroup } = useSelector((state) => ({
-    CompanyGroup: state.Company.CompanyGroup
-  }));
-
-  const CompanyGroupValues = CompanyGroup.map((Data) => ({
-    value: Data.id,
-    label: Data.Name
-  }));
+  }, [updateMsg, modalCss]);
 
   useEffect(() => {
-
     if (pageField) {
       const fieldArr = pageField.PageFieldMaster
       comAddPageFieldFunc({ state, setState, fieldArr })
     }
   }, [pageField])
 
-  const formSubmitHandler = (event) => {
-    debugger
+  const CompanyGroupValues = CompanyGroup.map((Data) => ({
+    value: Data.id,
+    label: Data.Name
+  }));
+
+  const saveHandeller = (event) => {
+
     event.preventDefault();
     if (formValid(state, setState)) {
       const jsonBody = JSON.stringify({
@@ -233,48 +236,21 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
         PhoneNo: values.PhoneNo,
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
-        CompanyGroup: values.CompanyGroup.value,
-        CreatedBy: 1,
-        UpdatedBy: 1,
+        CompanyGroup: values.CompanyGroupName.value,
+        CreatedBy: createdBy(),
+        UpdatedBy: createdBy(),
       });
+
+      saveDissable(true);//save Button Is dissable function
 
       if (pageMode === "edit") {
         dispatch(updateCompanyID(jsonBody, values.id,));
-        console.log("Update jsonBody", jsonBody)
       }
       else {
         dispatch(PostCompanySubmit(jsonBody));
-        console.log("post jsonBody", jsonBody)
-
       }
     }
   };
-
-  // //'Save' And 'Update' Button Handller
-  // const handleValidSubmit = (event, values) => {
-  //   debugger
-  //   const jsonBody = JSON.stringify({
-  //     Name: values.Name,
-  //     Address: values.Address,
-  //     GSTIN: values.GSTIN,
-  //     PhoneNo: values.PhoneNo,
-  //     CompanyAbbreviation: values.CompanyAbbreviation,
-  //     EmailID: values.EmailID,
-  //     CompanyGroup: values.CompanyGroupselect,
-  //     CreatedBy: 1,
-  //     UpdatedBy: 1,
-  //   });
-
-  //   if (pageMode === 'edit') {
-  //     dispatch(updateCompanyID(jsonBody, EditData.id));
-  //     console.log("Update jsonBody", jsonBody)
-  //   }
-
-  //   else {
-  //     dispatch(PostCompanySubmit(jsonBody));
-  //     console.log("Post jsonBody", jsonBody)
-  //   }
-  // };
 
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -282,26 +258,25 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
+        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANY} /> */}
         <div className={"page-content"} style={{ marginTop: IsEditMode_Css }} >
-          <MetaTags>
-            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+
           <Container fluid>
             <Row>
               <Col lg={12}>
                 <Card className="text-black" >
-                  <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                  <CardHeader className="card-header   text-black c_card_header" >
                     <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                   </CardHeader>
 
                   <CardBody>
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <form onSubmit={saveHandeller} noValidate>
                       <Card >
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                          <Row>
+                        <CardBody className="c_card_body">
 
+                          <Row>
                             <FormGroup className="mb-2 col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                               <Input
@@ -312,9 +287,10 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                 placeholder="Please Enter Name"
                                 autoComplete='off'
+                                autoFocus={true}
                                 onChange={(event) => {
                                   onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
+                                  dispatch(Breadcrumb_inputName(event.target.value))
                                 }}
                               />
                               {isError.Name.length > 0 && (
@@ -338,12 +314,10 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                                 <span className="invalid-feedback">{isError.Address}</span>
                               )}
                             </FormGroup>
-
                           </Row>
 
                           <Row className="mb-1">
-
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.PhoneNo} </Label>
                               <Input
                                 name="PhoneNo"
@@ -362,7 +336,7 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                             </FormGroup>
 
                             <Col md="1">  </Col>
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.EmailID} </Label>
                               <Input
                                 name="EmailID"
@@ -380,14 +354,15 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                               )}
                             </FormGroup>
                           </Row>
+
                         </CardBody>
                       </Card>
 
                       <Card className="mt-n2">
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <CardBody className="c_card_body">
 
                           <Row>
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className="mb-1 col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.GSTIN} </Label>
                               <Input
                                 name="GSTIN"
@@ -426,38 +401,40 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                           </Row>
 
                           <Row className=" mb-3">
-
                             <Col md="4">
-
-                              <FormGroup className="mb-3 ">
-                                <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroup} </Label>
+                              <FormGroup className="mb-2 ">
+                                <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroupName} </Label>
                                 <Select
-                                  name="CompanyGroup"
-                                  value={values.CompanyGroup}
-                                  //   value={{label:"abc",value:1}}//default value set
-                                  isSearchable={false}
+                                  name="CompanyGroupName"
+                                  value={values.CompanyGroupName}
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}
-                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                                 />
-                                {isError.CompanyGroup.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.CompanyGroup}</small></span>
+                                {isError.CompanyGroupName.length > 0 && (
+                                  <span className="text-danger f-8"><small>{isError.CompanyGroupName}</small></span>
                                 )}
                               </FormGroup>
                             </Col>
                           </Row>
 
-
-                          <FormGroup >
+                          <FormGroup className="mt-2">
                             <Row >
                               <Col sm={2}>
-                                {SaveButton({ pageMode, userPageAccessState, module: "Company" })}
+                                <SaveButton
+                                  pageMode={pageMode}
+                                  userAcc={userPageAccessState}
+                                  editCreatedBy={editCreatedBy}
+                                  module={"Company"}
+                                />
                               </Col>
                             </Row>
                           </FormGroup >
+
                         </CardBody>
                       </Card>
+
                     </form>
                   </CardBody>
                 </Card>

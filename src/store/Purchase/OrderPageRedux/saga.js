@@ -1,74 +1,126 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, delay, put, takeEvery } from "redux-saga/effects";
 
 import {
-  getOrderListSuccess,
-  updateOrderID_From_OrderPageSuccess,
-  editOrder_forOrderPage_Success,
-  deleteOrderID_From_OrderPageSuccess,
-  getSupplierSuccess,
-  goButtonSuccess,
+  deleteOrderIdSuccess,
   postOrderSuccess,
+  editOrderIdSuccess,
+  updateOrderIdSuccess,
   getOrderListPageSuccess,
+  goButtonForOrderAddSuccess,
 } from "./actions";
 import {
-
-  editOrderID_forOrderPage_ApiCall,
-  UpdateOrder_ID_ApiCall,
-  deleteOrderID_forOrderPage_ApiCall,
+  OrderPage_Update_API,
+  OrderPage_Delete_API,
   OrderPage_Post_API,
-  OrderPage_GetSupplier_API,
   OrderPage_GoButton_API,
-  OrderPage_get_API,
-  getOrderList_For_Listpage,
+  OrderList_get_Filter_API,
+  OrderPage_Edit_API,
 } from "../../../helpers/backend_helper";
+
 import {
-  GET_ORDER_LIST,
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
   EDIT_ORDER_FOR_ORDER_PAGE,
   DELETE_ORDER_FOR_ORDER_PAGE,
-  GET_SUPPLIER,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE,
-  GET_ORDER_LIST_PAGE,
+  GET_ORDER_LIST_PAGE
 } from "./actionType";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
+import { convertDatefunc, convertTimefunc, GoBtnDissable, mainSppinerOnOff, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-
-function* getSupplierGenFunc() {
-
-  const USER = JSON.parse(localStorage.getItem("roleId"))
-  try {
-    const response = yield call(OrderPage_GetSupplier_API, USER.Party_id
-    );
-    yield put(getSupplierSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for getSupplier ",
-    }));
-  }
-}
 
 function* goButtonGenFunc({ data }) {
-  debugger
-  yield put(SpinnerState(true))
+
+
+  yield mainSppinerOnOff(true)
+  yield delay(400)
   try {
+
     const response = yield call(OrderPage_GoButton_API, data);
-    yield put(goButtonSuccess(response.Data));
-    yield put(SpinnerState(false))
+
+    yield response.Data.OrderItems.forEach((ele, k) => {
+      ele["id"] = k + 1
+    });
+    const termArr = []
+    var term = response.Data.TermsAndConditions
+    // if (term === undefined) { term = response.Data.TermsAndConditions }
+    yield term.forEach((ele, k) => {
+      termArr.push({
+        value: ele.id,
+        label: ele.TermsAndCondition,
+        IsDeleted: 0
+      })
+    });
+    yield response.Data.TermsAndConditions = termArr;
+
+    yield put(goButtonForOrderAddSuccess(response.Data));
+    yield mainSppinerOnOff(false)
   } catch (error) {
-    yield put(SpinnerState(false))
+    yield mainSppinerOnOff(false)
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Go Button-Order Page",
     }));
   }
+
+
+
+
+
+
+
+
+  // yield GoBtnDissable(true)
+  // yield delay(400)
+  // try {
+  //   const response = yield call(OrderPage_GoButton_API, data);
+  //   debugger
+  //   if (hasEditVal) {
+  //     yield response.Data.forEach(element => {
+  //       hasEditVal.OrderItem.forEach(ele => {
+  //         if (element.id === ele.Item) {
+  //           element["Rate"] = ele.Rate
+  //           element["Quantity"] = ele.Quantity
+  //           element["Amount"] = ele.Amount
+  //           element["Unit"] = ele.Unit
+  //           element["UnitName"] = ele.UnitName
+  //           element["BaseUnitQuantity"] = ele.BaseUnitQuantity
+  //           // **======== update mode required  variables======********
+  //           element["poRate"] = ele.Rate
+  //           element["poQty"] = ele.Quantity
+  //           element["poBaseUnitQty"] = ele.BaseUnitQuantity
+  //           element["editrowId"] = ele.id
+  //         }
+  //       })
+  //     });
+  //   }
+
+  //   yield response.Data.forEach(row => {
+
+  //     if (row.poRate === undefined) { row["poRate"] = '' }
+  //     if (row.poQty === undefined) { row["poQty"] = 0 }
+  //     if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
+
+  //     if (row["Rate"] === undefined) { row["Rate"] = '' }
+  //     if (row["Quantity"] === undefined) { row["Quantity"] = '' }
+  //     if (row["Amount"] === undefined) { row["Amount"] = 0 }
+  //   });
+
+  //   yield put(goButtonSuccess(response.Data));
+  //   yield GoBtnDissable(false)
+  // } catch (error) {
+  //   yield GoBtnDissable(false)
+  //   yield put(AlertState({
+  //     Type: 4,
+  //     Status: true, Message: "500 Error Go Button-Order Page",
+  //   }));
+  // }
 }
 
 function* postOrder_GenFunc({ data }) {
-  debugger
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_Post_API, data);
@@ -78,102 +130,97 @@ function* postOrder_GenFunc({ data }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Post Order",
     }));
   }
 }
 
-function* fetchOrderList(data) {
+function* editOrderGenFunc({ jsonBody, pageMode }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(OrderPage_get_API, data);
-    if (response.StatusCode === 200) yield put(getOrderListSuccess(response.Data));
-    else alert(" response error")
+    const response = yield call(OrderPage_Edit_API, jsonBody);
+    response.pageMode = pageMode
     yield put(SpinnerState(false))
+    yield put(editOrderIdSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Edit Order",
     }));
   }
 }
 
-function* EditOrder_GenratorFunction({ id }) {
-  debugger
+function* DeleteOrder_GenFunc({ id }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(editOrderID_forOrderPage_ApiCall, id);
+    const response = yield call(OrderPage_Delete_API, id);
     yield put(SpinnerState(false))
-    debugger
-    yield put(editOrder_forOrderPage_Success(response));
+    yield put(deleteOrderIdSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error DeleteOrder",
     }));
   }
 }
 
-function* DeleteOrder_GenratorFunction({ id }) {
-  yield put(SpinnerState(true))
-  try {
-    const response = yield call(deleteOrderID_forOrderPage_ApiCall, id);
-    yield put(SpinnerState(false))
-    yield put(deleteOrderID_From_OrderPageSuccess(response));
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
-}
+function* UpdateOrder_ID_GenFunc({ data, id }) {
 
-function* UpdateOrder_ID_GenratorFunction({ data, id }) {
-  debugger
   try {
-    yield put(SpinnerState(true))
-    const response = yield call(UpdateOrder_ID_ApiCall, data, id);
-    yield put(SpinnerState(false))
-    yield put(updateOrderID_From_OrderPageSuccess(response))
+    yield saveDissable(true)
+    const response = yield call(OrderPage_Update_API, data, id);
+    yield put(updateOrderIdSuccess(response))
+    yield saveDissable(false)
   }
   catch (error) {
-    yield put(SpinnerState(false))
+    yield saveDissable(false)
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error UpdateOrder",
     }));
   }
 }
 
 // List Page API
-function* get_OrderListPage_GenratorFunction() {
-  yield put(SpinnerState(true))
+function* get_OrderList_GenFunc({ filters }) {
+  yield mainSppinerOnOff(true)
+  // yield delay(400)
   try {
-    const response = yield call(getOrderList_For_Listpage);
-    yield put(SpinnerState(false))
-    yield put(getOrderListPageSuccess(response.Data))
-  
+    const response = yield call(OrderList_get_Filter_API, filters);
+    const newList = yield response.Data.map((i) => {
+
+      var date = convertDatefunc(i.OrderDate)
+      var time = convertTimefunc(i.CreatedOn)
+      var DeliveryDate = convertDatefunc(i.DeliveryDate);
+      i["preOrderDate"] = i.OrderDate
+      i.OrderDate = (`${date} ${time}`)
+      i.DeliveryDate = (`${DeliveryDate}`)
+      i.Inward === 0 ? i.Inward = "Open" : i.Inward = "Close";
+      return i
+    })
+    yield put(getOrderListPageSuccess(newList))
+    yield mainSppinerOnOff(false)
+
   } catch (error) {
-    yield put(SpinnerState(false))
+    yield mainSppinerOnOff(false)
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error  Get OrderList",
     }));
   }
 }
 
 function* OrderPageSaga() {
-  yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
+
   yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
   yield takeEvery(POST_ORDER_FROM_ORDER_PAGE, postOrder_GenFunc);
-  yield takeEvery(GET_ORDER_LIST, fetchOrderList);
-  yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, EditOrder_GenratorFunction);
-  yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenratorFunction)
-  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenratorFunction);
-  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderListPage_GenratorFunction);
+  yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
+  yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
+  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
+  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderList_GenFunc);
 }
 
 export default OrderPageSaga;
+

@@ -10,15 +10,14 @@ import {
 } from "../../../store/Administrator/HPagesRedux/actions";
 import HPageMaster from "./PageMaster";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import { useHistory } from "react-router-dom";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { PAGE } from "../../../routes/route_url";
-
-
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 export default function PageList() {
 
   const dispatch = useDispatch();
-
   const reducers = useSelector(
     (state) => ({
       tableList: state.H_Pages.HPagesListData,
@@ -43,14 +42,16 @@ export default function PageList() {
   // Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(5))
+    dispatch(commonPageFieldList(8))
     dispatch(GetHpageListData());
   }, []);
 
-  const { pageField } = reducers;
+  const { pageField ,userAccess=[]} = reducers;
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

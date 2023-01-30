@@ -27,7 +27,7 @@ export const getPartySubPartylist = () => ({
   type: GET_PARTY_SUB_PARTY_LIST,
 });
 
-export const getPartySubPartySuccess = (list) => ({
+export const getPartySubPartylistSuccess = (list) => ({
   type: GET_PARTY_SUB_PARTY_LIST_SUCCESS,
   payload: list,
 });

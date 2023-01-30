@@ -1,25 +1,38 @@
-import { BREADCRUMB_FILTER_SIZE, BREADCRUMB_SEARCH_PROPS, BREADCRUMB_SHOW } from "./actionType";
+import {
+  BREADCRUMB_SHOW_COUNT_LABLE,
+  COMMON_BREADCRUMB_ALL_DETAIL,
+  BREADCRUMB_ITEM_NAME,
+  BREADCRUMB_DOWN_BTN_DATA,
+} from "./actionType";
 
-export const BreadcrumbShow = (data) => ({
-  type: BREADCRUMB_SHOW,
+
+export const Breadcrumb_inputName = (data) => ({
+  type: BREADCRUMB_ITEM_NAME,
   payload: data,
 });
 
-export const BreadcrumbFilterSize = (label) => ({
-  type: BREADCRUMB_FILTER_SIZE,
+export const BreadcrumbShowCountlabel = (label) => ({
+  type: BREADCRUMB_SHOW_COUNT_LABLE,
   payload: label,
 });
 
-export const BreadcrumbSearchProps = (props) => ({
-  type: BREADCRUMB_SEARCH_PROPS,
+export const CommonBreadcrumbDetails = (props) => ({
+  type: COMMON_BREADCRUMB_ALL_DETAIL,
   payload: props,
 });
 
+export const BreadcrumbDownBtndata = (data) => ({
+  type: BREADCRUMB_DOWN_BTN_DATA,
+  payload: data,
+});
 
 
-// export const BreadcrumbFilterSizeSuccess = (label) => ({
-//   type: BREADCRUMB_FILTER_SIZE_SUCEESS,
-//   payload:label,
+// export const CommonBreadcrumbDetails_reducer = (props) => ({
+//   type: COMMON_BREADCRUMB_ALL_DETAIL_redux,
+//   payload: props,
 // });
+
+
+
 
 

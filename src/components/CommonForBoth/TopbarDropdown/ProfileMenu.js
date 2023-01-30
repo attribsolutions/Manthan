@@ -10,11 +10,12 @@ import {
 //i18n
 import { withTranslation } from "react-i18next"
 // Redux
-import { connect } from "react-redux"
+import { connect, useSelector } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
 
 // users
 import user1 from "../../../assets/images/users/avatar-1.jpg"
+
 
 const ProfileMenu = props => {
 
@@ -23,24 +24,20 @@ const ProfileMenu = props => {
 
   const [username, setusername] = useState("Admin")
 
+
+  const { user } = useSelector((state) => ({
+    user: state.Login.afterLoginUserDetails
+  }))
+
   useEffect(() => {
-   
+
     if (localStorage.getItem("UserName")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(localStorage.getItem("roleId"))
-        setusername(obj.displayName)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        // const obj = JSON.parse(localStorage.getItem("UserName"))
-        // setusername(obj.username)
-        const obj = localStorage.getItem("UserName")
-        setusername(obj)
-      }
+      const obj = localStorage.getItem("UserName")
+      setusername(obj)
     }
-   
-  }, [props.success])
+
+
+  }, [props.success, user])
 
   return (
     <React.Fragment>
@@ -64,7 +61,7 @@ const ProfileMenu = props => {
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem tag="a" href="/profile">
-            
+
             <i className="bx bx-user font-size-16 align-middle me-1" />
             {props.t("Profile")}
           </DropdownItem>

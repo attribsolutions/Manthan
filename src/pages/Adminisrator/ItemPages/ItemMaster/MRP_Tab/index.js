@@ -17,6 +17,7 @@ import {
   get_Division_ForDropDown,
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
+import { createdBy, userCompany } from "../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function MRPTab(props) {
   const dispatch = useDispatch();
@@ -70,9 +71,9 @@ function MRPTab(props) {
       Party: partyName === "" ? "" : partyName.value,
       EffectiveDate: effectiveDate,
       MRP: MRP,
-      CreatedBy: 1,
-      UpdatedBy: 1,
-      Company: 1,
+      CreatedBy:createdBy(),
+      UpdatedBy:createdBy(),
+      Company: userCompany(),
       IsDeleted:0,
       CommonID:0,
       IsAdd:true
@@ -100,7 +101,7 @@ function MRPTab(props) {
     <Row>
       <Col md={12}>
         <Card className="text-black">
-          <CardBody style={{ backgroundColor: "whitesmoke" }}>
+          <CardBody className="c_card_body">
             <Row className="mt-3">
               <Col className=" col col-11 ">
                 <Row>
@@ -155,15 +156,17 @@ function MRPTab(props) {
                   </FormGroup>
                 </Row>
               </Col>
-              <Col md={1}>
+              <Col sm={1}>
                 <Row className=" mt-3">
                   <Col >
                     <Button
-                     className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                  
+                    //  className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                    className=" button_add"
+                    color="btn btn-outline-primary border-2 font-size-12"
                       type="button"
-                      onClick={addRowsHandler}
-                    >
-                      <i className="dripicons-plus"></i> Add
+                      onClick={addRowsHandler} >
+                      <i className="dripicons-plus"></i>
                     </Button>
                   </Col>
                 </Row>

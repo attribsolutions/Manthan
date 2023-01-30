@@ -5,6 +5,7 @@ import Select from "react-select";
 import { useDispatch, useSelector } from 'react-redux';
 import MarginTable from './Table';
 import { get_Party_ForDropDown, get_PriceList_ForDropDown } from '../../../../../store/Administrator/ItemsRedux/action';
+import { createdBy, userCompany } from '../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 
 function Margin_Tab(props) {
 
@@ -65,9 +66,9 @@ function Margin_Tab(props) {
             Party: partyName === "" ? "" : partyName.value,
             EffectiveDate: effectiveDate,
             Margin: margin,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            Company: 1,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            Company: userCompany(),
             CommonID:0,
             IsDeleted:0,
             IsAdd:true
@@ -99,7 +100,7 @@ function Margin_Tab(props) {
         <Row>
             <Col md={12}  >
                 <Card className="text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className='c_card_body'>
                         <Row className="mt-3">
                             <Col className=" col col-11 ">
                                 <Row>
@@ -162,11 +163,12 @@ function Margin_Tab(props) {
                                 <Row className=" mt-3">
                                     <Col >
                                         <Button
-                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                                            className=" button_add"
+                                            color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus mt-3"> </i> Add
+                                            <i className="dripicons-plus mt-3"> </i>
                                         </Button>
                                     </Col>
                                 </Row>

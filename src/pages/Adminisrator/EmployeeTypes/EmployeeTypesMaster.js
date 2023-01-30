@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -10,7 +10,7 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
 import {
     editEmployeeTypeSuccess,
@@ -26,55 +26,62 @@ import {
     commonPageField,
     commonPageFieldSuccess
 } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/actions";
-import { SaveButton } from "../../../components/CommonSaveButton";
+import { Breadcrumb_inputName } from "../../../store/actions";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
-
+    onChangeText,
+    resetFunction
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const EmployeeTypesMaster = (props) => {
 
-    const formRef = useRef(null);
     const dispatch = useDispatch();
-    const history  = useHistory()
+    const history = useHistory()
 
-    const [pageMode, setPageMode] = useState();
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [modalCss, setModalCss] = useState(false);
-
-    const initialFiled = {
+    const fileds = {
         id: "",
         Name: "",
         IsPartyConnection: false,
         IsSCM: false
-      }
-    
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
-  
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [pageMode, setPageMode] = useState();
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [modalCss, setModalCss] = useState(false);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess, } = useSelector((state) => ({
-        postMsg: state.EmployeeTypeReducer.PostEmployeeType,
-        updateMsg: state.EmployeeTypeReducer.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
+    const { postMsg,
+        updateMsg,
+        pageField,
+        userAccess, } = useSelector((state) => ({
+            postMsg: state.EmployeeTypeReducer.PostEmployeeType,
+            updateMsg: state.EmployeeTypeReducer.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
+
+    useEffect(() => {
+        const page_Id = pageId.EMPLOYEETYPE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(115))
-    }, []);
-
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -98,8 +105,6 @@ const EmployeeTypesMaster = (props) => {
 
     useEffect(() => {
 
-
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -124,17 +129,20 @@ const EmployeeTypesMaster = (props) => {
                 hasValid.IsSCM.valid = true;
                 hasValid.IsPartyConnection.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editEmployeeTypeSuccess({ Status: false }))
         }
     }, [])
 
     useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
 
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -147,12 +155,13 @@ const EmployeeTypesMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: EMPLOYEETYPE_lIST,
+                    RedirectPath: url.EMPLOYEETYPE_lIST,
 
                 }))
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            saveDissable(false);//save Button Is enable function
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -165,11 +174,15 @@ const EmployeeTypesMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))//Clear form values  
             history.push({
-                pathname: EMPLOYEETYPE_lIST,
+                pathname: url.EMPLOYEETYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateEmployeeTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -190,12 +203,7 @@ const EmployeeTypesMaster = (props) => {
     }, [pageField])
 
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -203,11 +211,13 @@ const EmployeeTypesMaster = (props) => {
                 IsPartyConnection: values.IsPartyConnection,
                 IsSCM: values.IsSCM,
                 Description: "sfasfgasd",
-                CreatedBy: 1,
+                CreatedBy: createdBy(),
                 CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: 1,
+                UpdatedBy: createdBy(),
                 UpdatedOn: "2022-07-18T00:00:00"
             });
+
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === "edit") {
                 dispatch(updateEmployeeTypeID(jsonBody, values.id));
@@ -226,23 +236,22 @@ const EmployeeTypesMaster = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags>
-                        <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                    </MetaTags>
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE} /> */}
+                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid>
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                            <CardBody className=" vh-10 0 text-black">
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
@@ -254,9 +263,10 @@ const EmployeeTypesMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
+                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (
@@ -271,9 +281,15 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }}>
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsPartyConnection}
+                                                                                checked={values.IsPartyConnection}
                                                                                 name="IsPartyConnection"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsPartyConnection = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
@@ -286,27 +302,36 @@ const EmployeeTypesMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsSCM = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
                                                                 </Row>
                                                             </FormGroup>
-
                                                         </Row>
-                                                        <FormGroup >
-                                                            <Row >
+
+                                                        <FormGroup>
+                                                            <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "EmployeeTypesMaster" })}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
+                                                                        module={"EmployeeTypesMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
                                                     </Row>
-
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -314,7 +339,6 @@ const EmployeeTypesMaster = (props) => {
                                 </form>
                             </CardBody>
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>

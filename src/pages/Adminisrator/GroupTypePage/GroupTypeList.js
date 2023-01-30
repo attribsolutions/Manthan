@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { GROUPTYPE } from "../../../routes/route_url";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import {
+  commonPageFieldList,
+  commonPageFieldListSuccess
+} from "../../../store/actions";
 import {
   deleteGroupType_ID,
   deleteGroupType_IDSuccess,
@@ -12,10 +14,13 @@ import {
   updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import GroupTypeMaster from "./GroupTypeMaster";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const GroupTypeList = (props) => {
   const dispatch = useDispatch();
-
 
   const reducers = useSelector(
     (state) => ({
@@ -29,7 +34,6 @@ const GroupTypeList = (props) => {
     })
   );
 
-
   const action = {
     getList: getGroupTypeslist,
     editId: editGroupTypeId,
@@ -37,34 +41,32 @@ const GroupTypeList = (props) => {
     postSucc: PostGroupTypeSubmitSuccess,
     updateSucc: updateGroupTypeIDSuccess,
     deleteSucc: deleteGroupType_IDSuccess
-
   }
   useEffect(() => {
-
+    const page_Id = pageId.GROUPTYPE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(107))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getGroupTypeslist())
-
   }, []);
 
-  const { pageField } = reducers
+  const { pageField ,userAccess=[]} = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUPTYPE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={GroupTypeMaster}
-            masterPath={GROUPTYPE}
-            ButtonMsgLable={"Role"}
+            masterPath={url.GROUPTYPE}
+            ButtonMsgLable={"Group Type"}
             deleteName={"Name"}
-
           />
           : null
       }
-
     </React.Fragment>
   )
 }

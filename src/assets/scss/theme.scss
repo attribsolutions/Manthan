@@ -166,3 +166,18 @@ textarea:focus {
   border-color: #ce7171;
   box-shadow: 0 0 10px #ce7176;
 }
+
+
+::-webkit-input-placeholder {
+  text-align: left;
+}
+
+:-moz-placeholder {
+  text-align: center;
+}
+.user-select {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */      
+}

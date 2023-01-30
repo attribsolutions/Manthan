@@ -12,16 +12,18 @@ import Profile from "./auth/profile/reducer"
 //Administrator
 import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
+import CommonError from './Utilites/CommonError/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
+import PdfReportReducers from './Utilites/PdfReport/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
-
 import H_Pages from './Administrator/HPagesRedux/reducer'
-import OrderPageReducer from "./Purchase/OrderPageRedux/reducer"
-
+import OrderReducer from "./Purchase/OrderPageRedux/reducer"
+import GRNReducer from "./Purchase/GRNRedux/reducer"
+import SupplierReducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
 import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
@@ -32,25 +34,30 @@ import EmployeeTypeReducer from "./Administrator/EmployeeTypeRedux/reducer"
 import PartyTypeReducer from "./Administrator/PartyTypeRedux/reducer"
 import categoryTypeReducer from "./Administrator/CategoryTypeRedux/reducer"
 import CategoryReducer from "./Administrator/CategoryRedux/reducer"
-import SubCategoryReducer from "./Administrator/SubCategoryRedux/reducer"
 import VehicleReducer from "./Administrator/VehicleRedux/reducer"
 import DriverReducer from "./Administrator/DriverRedux/reducer"
 import CompanyGroupReducer from "./Administrator/CompanyGroupRedux/reducer"
 import PriceListReducer from "./Administrator/PriceList/reducer"
 import MRPMasterReducer from "./Administrator/MRPMasterRedux/reducer"
 import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
-import TermsAndCondtionsReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
+import TermsAndConditionsReducer from "./Administrator/TermsAndConditionsRedux/reducer"
 import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
-import  GroupReducer from "./Administrator/GroupRedux/reducer"
+import GroupReducer from "./Administrator/GroupRedux/reducer"
+import SubGroupReducer from "./Administrator/SubGroupsRedux/reducer"
+import GeneralReducer from "./Administrator/GeneralRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
-
- 
-
-
+import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
+import BOMReducer from "./Purchase/BOMRedux/reducer"
+import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
+import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
+import ProductionReducer from "./Purchase/ProductionRedux/reducer"
+import InvoiceReducer from "./Sales/Invoice/reducer"
+import DemandReducer from "./Inter Branch/DemandRedux/reducer"
+import InwardReducer from "./Inter Branch/InwardRedux/reducer"
+import ChallanReducer from "./Inter Branch/ChallanRedux/reducer"
 
 const rootReducer = combineReducers({
-
   Layout,
   Login,
   Account,
@@ -58,9 +65,11 @@ const rootReducer = combineReducers({
   Profile,
   SpinnerReducer,
   AlertReducer,
+  CommonError,
   CustomSearchReducer,
   BreadcrumbReducer,
   CommonPageFieldReducer,
+  PdfReportReducers,
   // Administator
   Modules,
   Company,
@@ -68,9 +77,12 @@ const rootReducer = combineReducers({
   H_Pages,
   // PageList,
   User_Registration_Reducer,
+  // suppiler
+  SupplierReducer,
   M_EmployeesReducer,
-  // Purchase
-  OrderPageReducer,
+  // order
+  OrderReducer,
+  GRNReducer,
   // Master
   RoleMaster_Reducer,
   ItemMastersReducer,
@@ -79,31 +91,37 @@ const rootReducer = combineReducers({
   EmployeeTypeReducer,
   PartyTypeReducer,
   categoryTypeReducer,
-   CategoryReducer,
-   SubCategoryReducer,
-   VehicleReducer,
-   DriverReducer,
-   CompanyGroupReducer,
-   PriceListReducer,
-   MRPMasterReducer,
-   MarginMasterReducer,
-   TermsAndCondtionsReducer,
-   GroupTypeReducer,
-   GroupReducer,
-   GSTReducer,
-  PartySubPartyReducer,
-  SubCategoryReducer,
+  CategoryReducer,
   VehicleReducer,
   DriverReducer,
   CompanyGroupReducer,
   PriceListReducer,
   MRPMasterReducer,
   MarginMasterReducer,
-  TermsAndCondtionsReducer,
+  TermsAndConditionsReducer,
+  GroupTypeReducer,
+  GroupReducer,
+  SubGroupReducer,
+  GeneralReducer,
+  GSTReducer,
+  PartySubPartyReducer,
+  VehicleReducer,
+  DriverReducer,
+  CompanyGroupReducer,
+  PriceListReducer,
+  MRPMasterReducer,
+  MarginMasterReducer,
+  TermsAndConditionsReducer,
   GroupTypeReducer,
   GSTReducer,
-
-
+  PartyItemsReducer,
+  BOMReducer,
+  WorkOrderReducer,
+  MaterialIssueReducer,
+  ProductionReducer,
+  DemandReducer,
+  InvoiceReducer,
+  InwardReducer,
+  ChallanReducer
 })
-
 export default rootReducer

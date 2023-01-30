@@ -9,11 +9,14 @@ import {
   updatePriceListSuccess,
   getPriceListPage
 } from "../../../store/Administrator/PriceList/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { PRICE } from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
+import * as pageId from "../../../routes/allPageID"
 
-const PriceList = (props) => {
+const PriceList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -39,15 +42,17 @@ const PriceList = (props) => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(94))
+    dispatch(commonPageFieldList(35))
     dispatch(getPriceListPage());
   }, []);
 
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage
@@ -55,7 +60,7 @@ const PriceList = (props) => {
             reducers={reducers}
             MasterModal={PriceMaster}
             masterPath={PRICE}
-            ButtonMsgLable={"price"}
+            ButtonMsgLable={"Price"}
             deleteName={"Name"}
           />
           : null
@@ -63,5 +68,5 @@ const PriceList = (props) => {
 
     </React.Fragment>
   )
-    }
-  export default PriceList;
+}
+export default PriceList;

@@ -3,12 +3,23 @@ import { Link } from "react-router-dom"
 import { Container, Row, Col } from "reactstrap"
 
 const Footer = () => {
+ 
+  let user
+  try {
+  let  user1 = JSON.parse(localStorage.getItem("roleId"))
+  user=user1.PartyName
+  
+  } catch (e) {
+
+  }
   return (
     <React.Fragment>
       <footer className="footer">
         <Container fluid={true}>
-          <Row>
-            <Col md={6}>{new Date().getFullYear()} © FoodERP</Col>
+          <Row style={{ height: "1cm" }}>
+            <Col md={6}>{new Date().getFullYear()} © FoodERP  <samp className="pl-4 text-primary">
+              <samp className="text-black">Party :</samp>
+              {user}</samp></Col>
             <Col md={6}>
               <div className="text-sm-end d-none d-sm-block">
                 Design & Develop by

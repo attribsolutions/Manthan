@@ -5,85 +5,50 @@ import './Tree.scss'
 
 
 export default function Tree(props) {
-    // const data = props.data
+    const onchange = (e) => {
+        debugger
+        try {
+            let targetDiv = document.getElementById("color")
+            targetDiv.style.display = "none";
+        } catch { }
+    }
+
     const TreeNode = (node) => {
-        
-        // const node = props.node
-        // const [childVisible, setchildVisible] = useState(false);
-        // const haschild = node.children ? true : false;
+
 
         return (
             <li >
-                <div
-                    //  className='d-flex'
-                    // className="mt-1"
-                    className="classmt"
-
-
-                //  onClick={e => {
-                //     // setTreeValue(node.Name)
-                //     setchildVisible(v => !v)}}
-                >
-                    {/* {haschild && (
-                        <div className={`d-inline d-tree-toggler ${childVisible ? "active" : ''}`}>
-                            <i class=" fa-edit me-2"></i>
-                        </div>
-                    )} */}
-                    <div >
-                        {/* <i className={`mr-1${"fa fa-file"}`}/> */}
-
-                    </div>
-                    {/* <DropdownItem
-                        key={node.value}
-                        onClick={(e) => { props.func1(node) }
-                        }
-                    > */}
-                     <span className="align-middle text-black list-group-ite  form-control" 
-                     
-                 /* <span className="treeclass"  */
-
+                <div className="classmt">
+                    <span id="span" className="align-middle text-black list-group-ite  form-control"
+                        style={{ marginLeft: "-1.9cm" }}
                         onClick={(e) => {
                             props.func1(node);
-                            props.func2(false)
-                        }
-                        }>{node.label}</span>
-                    {/* </DropdownItem> */}
+                            onchange(e);
+                        }}>{node.label}</span>
+
                 </div>
-                {/* {
-                    haschild && childVisible && 
-    
-                } */}
+
                 <div >
                     <ul >
-                        {/* <Tree data={node.children} func1={props.func1} /> */}
                         {tree(node.children)}
                     </ul>
                 </div>
             </li>
         )
-
     }
 
     const tree = (tree1) => {
-        
+
         return (
             <ul className='list-group'>
                 {tree1.map((tree) => (
-                    // <TreeNode node={tree} func1={props.func1} />
                     TreeNode(tree)
                 ))}
-
             </ul>
         )
     }
 
-    
-    return (
-        <><ul className='treestructure'>
-            {tree(props.data)}
-            </ul>
-        </>
-    )
+    return (<ul className='treestructure'> {tree(props.data)}</ul>)
 }
 
 

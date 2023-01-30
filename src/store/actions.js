@@ -10,9 +10,6 @@ export * from "./Utilites/PageFiled/actions"
 export * from "./Utilites/Breadcrumb/actions"
 export * from "./Utilites/Spinner/actions"
 
-
-
-
 //administrator  ** modules and list
 export * from "./Administrator/ModulesRedux/actions"
 export *from "./Utilites/Breadcrumb/actions"
@@ -24,6 +21,9 @@ export *from './Administrator/UserRegistrationRedux/actions'
 
 export *from './Administrator/CategoryTypeRedux/actions'
 export *from './Administrator/GroupRedux/action'
+export *from './Administrator/ItemsRedux/action'
+export *from './Administrator/SubGroupsRedux/action'
+
  
  
 
