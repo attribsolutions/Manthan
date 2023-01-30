@@ -52,7 +52,7 @@ const InwardList = () => {
     const { userAccess, pageField, InwardlistFilter, supplier } = reducers;
     const { fromdate, todate, SupplierSelect } = InwardlistFilter;
     const page_Id = pageId.INWARD_LIST
-    
+
     const action = {
         getList: getInwardListPage,
         editId: editBOMList,
@@ -99,7 +99,7 @@ const InwardList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Customer: userParty(),
-            Supplier: SupplierSelect.value === "" ? '' : SupplierSelect.value,
+            Supplier: SupplierSelect.value,
         });
         dispatch(getInwardListPage(jsonBody));
     }
