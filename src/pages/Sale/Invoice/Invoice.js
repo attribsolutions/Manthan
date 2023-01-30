@@ -34,7 +34,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
@@ -59,9 +59,8 @@ const Invoice = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [Itemselect, setItemselect] = useState([])
+    const [EditData, setEditData] = useState({})
     const [showAllStockState, setShowAllStockState] = useState(true);
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -133,31 +132,24 @@ const Invoice = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
-                setItemselect(hasEditVal)
-                const { id, Item, Customer, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
-                setState((i) => {
-                    i.values.InvoiceDate = currentDate
-                    i.values.Customer = { value: id, label: Customer, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
-                    i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.Customer.valid = true;
-                    i.hasValid.InvoiceDate.valid = true;
-                    i.hasValid.NumberOfLot.valid = true;
-                    i.hasValid.LotQuantity.valid = true;
-                    return i
-                })
 
-                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+                setEditData(hasEditVal)
+                const { Customer, CustomerName, } = hasEditVal
+                const { values, hasValid, } = { ...state }
+                hasValid.Customer.valid = true;
+
+                values.Customer = { label: CustomerName, value: Customer };
+
+                //++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
                 const jsonBody = JSON.stringify({
-                    WorkOrder: id,
-                    Item: Item,
-                    Company: userCompany(),
+                    FromDate: hasEditVal.InvoiceDate,
+                    Customer: hasEditVal.Customer,
                     Party: userParty(),
-                    Quantity: parseInt(EstimatedOutputQty)
+                    OrderIDs: ""
                 });
 
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+                dispatch(GoButton_post_For_Invoice(jsonBody));
+                dispatch(editInvoiceListSuccess({ Status: false }))
             }
         }
     }, []);
@@ -496,6 +488,7 @@ const Invoice = (props) => {
         // totalSize: OrderItemDetails.length,
         custom: true,
     };
+
     function showAllStockOnclick(isplus = false) {
         try {
             if (isplus) {
