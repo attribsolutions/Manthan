@@ -66,6 +66,8 @@ const PageMaster = (props) => {
   const [modal_center, setmodal_center] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
   const [pageAccessData, setPageAccessData] = useState([]);
+  const [PageAccessArray, setPageAccessArray] = useState([]);
+  console.log(PageAccessArray)
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -247,6 +249,7 @@ const PageMaster = (props) => {
   const pageAccessval = useMemo(() => {
     const arr = []
     PageAccess.forEach(i => {
+
       i["hascheck"] = false;
       pageAccessData.forEach(ele => {
         if (ele.AccessName === i.Name) {
@@ -255,6 +258,7 @@ const PageMaster = (props) => {
       })
       arr.push(i)
     })
+    setPageAccessArray(arr)
     return arr
   }, [pageAccessData, PageAccess]);
 
@@ -364,7 +368,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-    
+
     let Access = []
     PageAccess.forEach((element, key) => {
       if (element.hascheck) {
@@ -499,6 +503,17 @@ const PageMaster = (props) => {
   }
   function DropDownAddHandler() {
     tog_center()
+  }
+
+  function PageAccessOnChange(e, index, key) {
+    debugger
+    pageAccessval[key].hascheck = e.target.checked
+    PageAccessArray.map((i) => {
+      if ((index.id === 4) && (index.hascheck === true)) {
+        return 
+      }
+    })
+
   }
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -953,8 +968,9 @@ const PageMaster = (props) => {
                                               className="col col-2 text-black "
                                               type="checkbox"
                                               defaultChecked={index.hascheck}
-                                              onChange={e => {
-                                                pageAccessval[key].hascheck = e.target.checked
+                                              onChange={(e) => {
+                                                PageAccessOnChange(e, index, key)
+
                                               }}
                                             />
                                           </Col>
