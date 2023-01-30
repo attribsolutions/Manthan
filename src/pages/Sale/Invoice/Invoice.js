@@ -25,7 +25,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, mainSppinerOnOff, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, GoBtnDissable, mainSppinerOnOff, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { postGoButtonForMaterialIssue_Master, } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -690,7 +690,7 @@ const Invoice = (props) => {
             Party: userParty(),
             OrderIDs: ""
         });
-        mainSppinerOnOff({ id: goBtnId, state: true })
+        GoBtnDissable({ id: goBtnId, state: true })
         dispatch(GoButton_post_For_Invoice(jsonBody, goBtnId));
 
         // }
@@ -803,7 +803,7 @@ const Invoice = (props) => {
 
         else {
 
-            mainSppinerOnOff({ id: saveBtnid, state: true })
+            saveDissable({ id: saveBtnid, state: true })
             dispatch(postInvoiceMaster(jsonBody, saveBtnid));
         }
         // };

@@ -308,14 +308,19 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
 }
 
 export function saveDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    // try {
-    //     document.getElementById("overlay").style.display = state ? "block" : "none";
-    // } catch (e) { alert("button sppiner error") }
-    // try {
-    //     document.getElementById(`form_submmit${id}`).disabled = state;
-    // } catch (e) {
-    //     //alert("Save button dissable error") 
-    // }
+    try {
+        const btn = document.getElementById(id);
+        btn.disabled = state;
+        debugger
+        if (state) {
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
+        } else {
+            btn.innerHTML = `<span> Save</span>`
+            // btn.text = "save"
+        }
+    } catch (e) {
+        // alert("Go btn dissable  error") 
+    }
 }
 export function mainSppinerOnOff( state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
