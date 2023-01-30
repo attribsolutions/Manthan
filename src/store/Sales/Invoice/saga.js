@@ -113,7 +113,6 @@ function* InvoiceListGenFunc({ filters }) {
 
 // edit List page
 function* editInvoiceListGenFunc({ id, pageMode }) {
-  debugger
   yield put(SpinnerState(true))
   try {
     let response = yield call(Invoice_Edit_API_Singel_Get, id);
