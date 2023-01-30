@@ -127,7 +127,7 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
 }
 
 function* Edit_GRN_GenratorFunction({ id, pageMode }) {
-
+debugger
   try {
     const response = yield call(GRN_Edit_API, id);
     response.pageMode = pageMode
