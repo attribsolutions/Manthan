@@ -252,13 +252,3 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
     payload:data,
   });
 
-  // post api for Brand Name dropdown
-export const post_BrandName_dropdown = (data) => ({
-  type: POST_BRAND_NAME_DROPDOWN,
-  data,
-});
-
-export const post_BrandName_dropdown_Success = (data) => ({
-  type: POST_BRAND_NAME_DROPDOWN_SUCCESS,
-  payload: data,
-});

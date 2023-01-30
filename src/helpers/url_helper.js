@@ -64,7 +64,7 @@ export const GET_GROUP_BY_GROUPTYPES_ID = "/GetGroupByGroupTypeID"
 export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
 export const GET_BRAND_TAG = "/ItemBrand"
-export const GET_BRAND_NAME = "/GeneralMasterSubType"
+export const GENERAL_MASTER_SUB_TYPE = "/GeneralMasterSubType"
 
 
 // M_Items_group Api

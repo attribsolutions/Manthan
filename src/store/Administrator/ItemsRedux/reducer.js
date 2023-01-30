@@ -45,7 +45,6 @@ const INIT_STATE = {
     Category: [],
     ItemTagList: [],
     BrandTagList: [],
-    BrandName:[]
 
 };
 
@@ -170,12 +169,6 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Category: action.payload,
             }
-
-            case POST_BRAND_NAME_DROPDOWN_SUCCESS:
-                return {
-                    ...state,
-                    BrandName: action.payload,
-                }
 
         case "RESET_ALL":
             return state = INIT_STATE;

@@ -190,7 +190,7 @@ export const Group_By_GroupTypes_DropDown_API = (id) => get(`${url.GET_GROUP_BY_
 export const SubGroup_By_Group_DropDown_API = (id) => get(`${url.GET_SUBGROUP_BY_GROUP_ID}/${id}`)// GetSubGroupByGroupID DropDown API
 export const Get_Item_Tag = () => get(url.GET_ITEM_TAG)// Get Item Tag Api
 export const Get_Brand_Tag = () => get(url.GET_BRAND_TAG)// Get Item Tag Api
-export const Brand_Name_Post_API = (data) => post(url.GET_BRAND_NAME, data)// post api
+export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_SUB_TYPE, data)// post api
 
 
 
@@ -347,7 +347,7 @@ export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_
 export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
 //Post api VendorSupplierCustomer 
-export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER,post_PartyId)//Post api
+export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
@@ -429,13 +429,13 @@ export const Invoice_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_POST_API}/
 
 
 // Demand
-export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND,data)//go button api
-export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND,data)//post api
+export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND, data)//go button api
+export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND, data)//post api
 export const DemandList_get_Filter_API = (filters) => post(url.DEMAND_LiST_BY_FILTERS, filters)//list page
-export const Division = (data) => post(url.DIVISION_DROPDOWN,data)//dropdown api
+export const Division = (data) => post(url.DIVISION_DROPDOWN, data)//dropdown api
 export const DemandPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND, data)//edit
-export const DemandPage_Delete_API = (id) =>del(`${url.POST_API_FOR_DEMAND}/${id}`)//delete
-export const DemandPage_Update_API = (data,id) => put(`${url.POST_API_FOR_DEMAND}/${id}`, data)//update
+export const DemandPage_Delete_API = (id) => del(`${url.POST_API_FOR_DEMAND}/${id}`)//delete
+export const DemandPage_Update_API = (data, id) => put(`${url.POST_API_FOR_DEMAND}/${id}`, data)//update
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api

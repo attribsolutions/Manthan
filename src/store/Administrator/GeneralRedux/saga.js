@@ -5,7 +5,8 @@ import {
     EDIT_GENERAL_ID,
     POST_GENERAL_LIST,
     UPDATE_GENERAL_ID,
-    POST_TYPE
+    POST_TYPE,
+    GENERAL_MASTER_SUB_TYPE
 } from "./actionType";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -16,7 +17,8 @@ import {
     edit_General_List_Api,
     Post_General_List_Api,
     update_General_List_Api,
-   
+    GeneralMasterSubType_API,
+
 } from "../../../helpers/backend_helper";
 import {
     PostMethodForGeneralSuccess,
@@ -24,7 +26,8 @@ import {
     editGeneralIDSuccess,
     updateGeneralIDSuccess,
     PostTypeSuccess,
-    PostGenerallistSuccess
+    PostGenerallistSuccess,
+    GeneralMasterSubType_Success
 } from "./action";
 
 // post api
@@ -45,11 +48,11 @@ function* Post_Method_ForGeneral_GenFun({ data }) {
 
 
 // get api
-function* Post_General_List_GenratorFunction({data}) {
- 
+function* Post_General_List_GenratorFunction({ data }) {
+
     yield put(SpinnerState(true))
     try {
-        const response = yield call(Post_General_List_Api,data);
+        const response = yield call(Post_General_List_Api, data);
         yield put(PostGenerallistSuccess(response.Data));
         yield put(SpinnerState(false))
     } catch (error) {
@@ -113,7 +116,7 @@ function* Update_General_ID_GenratorFunction({ updateData, ID }) {
 /// Type Dropdown
 
 function* Post_Type_GenFun({ data }) {
-    
+
     yield put(SpinnerState(true))
     try {
         const response = yield call(post_Type_API, data);
@@ -128,7 +131,20 @@ function* Post_Type_GenFun({ data }) {
     }
 }
 
-
+function* GeneralMasterSubType_Genfun({ data }) {
+    yield put(SpinnerState(true))
+    try {
+        const response = yield call(GeneralMasterSubType_API, data);
+        yield put(SpinnerState(false))
+        yield put(GeneralMasterSubType_Success(response.Data));
+    } catch (error) {
+        yield put(SpinnerState(false))
+        yield put(AlertState({
+            Type: 4,
+            Status: true, Message: "500 Error Message",
+        }));
+    }
+}
 
 function* GeneralSaga() {
     yield takeEvery(POST_METHOD_FOR_GENERAL_API, Post_Method_ForGeneral_GenFun)
@@ -136,7 +152,8 @@ function* GeneralSaga() {
     yield takeEvery(DELETE_GENERAL_ID, Delete_General_ID_GenratorFunction)
     yield takeEvery(EDIT_GENERAL_ID, Edit_General_ID_GenratorFunction)
     yield takeEvery(UPDATE_GENERAL_ID, Update_General_ID_GenratorFunction)
-    yield takeEvery(POST_TYPE,Post_Type_GenFun)
+    yield takeEvery(POST_TYPE, Post_Type_GenFun)
+    yield takeEvery(GENERAL_MASTER_SUB_TYPE, GeneralMasterSubType_Genfun)
 }
 
 export default GeneralSaga;
