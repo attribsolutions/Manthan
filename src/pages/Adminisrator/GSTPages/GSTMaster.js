@@ -11,9 +11,8 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -24,14 +23,24 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvField, AvForm } from "availity-reactstrap-validation";
-import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, getGSTListPage, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
+import { AvForm } from "availity-reactstrap-validation";
+import {
+    deleteGSTForMasterPage,
+    deleteGSTForMasterPageSuccess,
+    getGSTListPage,
+    postGoButtonForGST_Master,
+    postGoButtonForGST_Master_Success,
+    postGSTMasterData,
+    postGSTMasterDataSuccess
+} from "../../../store/Administrator/GSTRedux/action";
+import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editMode = history.location.pageMode;
 
     //SetState  Edit data Geting From Modules List component
@@ -107,8 +116,8 @@ const GSTMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postGSTMasterDataSuccess({ Status: false }))
-            formRef.current.reset();
             setEffectiveDate('')
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -167,19 +176,19 @@ const GSTMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const GSTPercentageHandler = (e, cellContent, user, abd) => {
+    const GSTPercentageHandler = (e, user) => {
         user["GSTPercentage"] = e.target.value
     }
 
-    const CurrentGSTPercentageHandler = (e, cellContent, user, key) => {
+    const CurrentGSTPercentageHandler = (e, user) => {
         user["CurrentGSTPercentage"] = e.target.value
     }
 
-    const CurrentHSNCodeHandler = (e, cellContent, user, abd) => {
+    const CurrentHSNCodeHandler = (e, user) => {
         user["GSTPercentage"] = e.target.value
     }
 
-    const HSNCodeHandler = (e, cellContent, user, key) => {
+    const HSNCodeHandler = (e, user) => {
         user["HSNCode"] = e.target.value
     }
     //select id for delete row
@@ -225,7 +234,7 @@ const GSTMaster = (props) => {
             text: "Current GSTPercentage",
             dataField: "CurrentGSTPercentage",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -235,9 +244,9 @@ const GSTMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={TableData[key].CurrentGSTPercentage}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => CurrentGSTPercentageHandler(e, cellContent, user, key)}
+                                    defaultValue={cellContent}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => CurrentGSTPercentageHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -263,10 +272,10 @@ const GSTMaster = (props) => {
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={TableData[key].GSTPercentage}
+                                    defaultValue={cellContent}
                                     disabled={user.GSTPerDis}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => GSTPercentageHandler(e, cellContent, user, key)}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => GSTPercentageHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -279,7 +288,7 @@ const GSTMaster = (props) => {
             text: "Current HSNCode",
             dataField: "CurrentHSNCode",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -289,9 +298,9 @@ const GSTMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={TableData[key].CurrentHSNCode}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => CurrentHSNCodeHandler(e, cellContent, user, key)}
+                                    defaultValue={cellContent}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => CurrentHSNCodeHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -319,8 +328,8 @@ const GSTMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.hsncodeDis}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => HSNCodeHandler(e, cellContent, user, key)}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => HSNCodeHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -361,13 +370,12 @@ const GSTMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
-            Company: 1,
-            CreatedBy: 1,
+            Company: userCompany(),
+            CreatedBy: createdBy(),
             IsDeleted: 0,
-            UpdatedBy: 1,
+            UpdatedBy: createdBy(),
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,
@@ -383,12 +391,6 @@ const GSTMaster = (props) => {
         const jsonBody = JSON.stringify(Find)
 
         if (!(Find.length > 0) && !(editMode)) {
-            // dispatch(AlertState({
-            //     Type: 4, Status: true,
-            //     Message: "At Least one MRP add",
-            //     RedirectPath: false,
-            //     PermissionAction: false,
-            // }));
             alert("At Least one MRP add")
         }
 
@@ -396,6 +398,7 @@ const GSTMaster = (props) => {
             dispatch(postGSTMasterData(jsonBody));
             console.log("jsonBody", jsonBody)
         }
+
 
     };
 
@@ -407,10 +410,9 @@ const GSTMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST} /> */}
+                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -420,7 +422,7 @@ const GSTMaster = (props) => {
                     >
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -431,7 +433,7 @@ const GSTMaster = (props) => {
                                     <Col md={12}>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
+                                            <CardHeader className="card-header   text-black c_card_body"  >
                                                 <Row className="mt-2">
                                                     <Col md="6">
                                                         <FormGroup className="mb-4 row">
@@ -487,7 +489,6 @@ const GSTMaster = (props) => {
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
-                                                                        // defaultSorted={defaultSorted}
                                                                         classes={"table  table-bordered"}
                                                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}

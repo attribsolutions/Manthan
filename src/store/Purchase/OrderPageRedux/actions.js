@@ -13,26 +13,35 @@ import {
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
   POST_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
-  GET_ORDER_LIST_PAGE_SUCCESS
+  GET_ORDER_LIST_PAGE_SUCCESS,
+  ORDER_LIST_FILTERS,
+  // ORDER_ADD_FILTERS
 } from './actionType'
 
 
+// export const orderAddfilters = filter => ({
+//   type: ORDER_ADD_FILTERS,
+//   payload: filter,
+// })
+export const orderlistfilters = filter => ({
+  type: ORDER_LIST_FILTERS,
+  payload: filter,
+})
 
-
-export const goButton = (data,hasEditVal) => ({
+export const goButtonForOrderAdd = (data ) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
-  data,hasEditVal,
+  data,
 });
 
-export const goButtonSuccess = list => ({
+export const goButtonForOrderAddSuccess = list => ({
   type: GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   payload: list,
 })
 
 //get listpage api
-export const getOrderListPage = () => ({
+export const getOrderListPage = (filters) => ({
   type: GET_ORDER_LIST_PAGE,
-
+  filters,
 });
 
 export const getOrderListPageSuccess = (data) => ({
@@ -51,9 +60,9 @@ export const postOrderSuccess = (msg) => ({
 });
 
 
-export const editOrderId = (id,pageMode) => ({
+export const editOrderId = (jsonBody, pageMode) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE,
-  id,pageMode
+  jsonBody, pageMode
 });
 export const editOrderIdSuccess = (data) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,

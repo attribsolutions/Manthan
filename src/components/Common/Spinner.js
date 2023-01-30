@@ -23,19 +23,44 @@ const Spinner = () => {
         }
     }, [error500])
 
+    useEffect(() => {
+        if (!SpinnerState) {
+            setTimeout(() => {
+                try {
+                    // document.getElementById("overlay").style.display = "none";
+                } catch (e) { }
+            }, )
+        } else {
+            try {
+                // document.getElementById("overlay").style.display = "block";
+            } catch (e) { }
+        }
+    }, [SpinnerState])
+
+
     return (
         <React.Fragment>
-            <Modal
+            {/* <div id="overlay" style={{ display: SpinnerState ? "block1" : "none" }}> */}
+                <div id="overlay" >
+                <div className="cv-spinner">
+                    <span className="spinner"></span>
+                    {/* <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
+                    Loading...
+                </button> */}
+                </div>
+            </div>
+            {/* <Modal
                 isOpen={SpinnerState}
                 centered={true}
-                scrollable={true}
+                scrollable={false}
                 size="sm"
             >
                 <button className="btn btn-primary" type="button" disabled>
                     <span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                     Loading...
                 </button>
-            </Modal>
+            </Modal> */}
         </React.Fragment>
     )
 }

@@ -9,10 +9,12 @@ import {
   updateItemSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
 import ItemsMaster from "./ItemMaster/itemIndex";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
-
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as pageId from "../../../routes/allPageID"
 
 const ItemsList = (props) => {
 
@@ -21,10 +23,10 @@ const ItemsList = (props) => {
     (state) => ({
       tableList: state.ItemMastersReducer.pages,
       editData: state.ItemMastersReducer.editData,
-      updateMsg: state.ItemMastersReducer.updateMessage,
-      deleteMsg: state.ItemMastersReducer.deleteMessage,
+      updateMsg: state.ItemMastersReducer.updateMsg,
+      deleteMsg: state.ItemMastersReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.ItemMastersReducer.postMessage,
+      postMsg: state.ItemMastersReducer.postMsg,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
@@ -41,14 +43,16 @@ const ItemsList = (props) => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(21))
+    dispatch(commonPageFieldList(26))
     dispatch(getItemList());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ITEM_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

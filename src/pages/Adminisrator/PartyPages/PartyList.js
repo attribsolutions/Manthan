@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -9,13 +10,16 @@ import {
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { PARTY } from '../../../routes/route_url';
+import { MetaTags } from 'react-meta-tags';
+import BreadcrumbNew from '../../../components/Common/BreadcrumbNew';
+import * as pageId from "../../../routes/allPageID"
 
 const PartyList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
+
         (state) => ({
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
@@ -23,7 +27,7 @@ const PartyList = () => {
             deleteMsg: state.PartyMasterReducer.deleteMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.PartyMasterReducer.PartySaveSuccess,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
@@ -36,25 +40,25 @@ const PartyList = () => {
         postSucc: postPartyDataSuccess
     }
 
-
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(11))
+        dispatch(commonPageFieldList(18))
         dispatch(getPartyListAPI());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField ,userAccess=[]} = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} /> */}
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={PartyMaster}
-                        masterPath={PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
                     />

@@ -17,9 +17,10 @@ import {
     deleteGSTListPageSuccess,
     getGSTListPage
 } from "../../../store/Administrator/GSTRedux/action";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 const GSTList = (props) => {
 
     const dispatch = useDispatch();
@@ -175,17 +176,16 @@ const GSTList = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags>
-                        <title>GST List| FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST_LIST} /> */}
 
-                    <Breadcrumb
+                    {/* <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
                         showCount={true}
                         excelBtnView={true}
                         excelData={tableList}
-                    />
+                    /> */}
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >

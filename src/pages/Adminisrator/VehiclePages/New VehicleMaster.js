@@ -20,7 +20,6 @@ import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from ".
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import {
     PostMethodForVehicleMaster,
     getMethodForVehicleList,
@@ -35,7 +34,7 @@ import {
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
-import { SaveButton } from "../../../components/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
@@ -43,7 +42,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 const VehicleMaster = (props) => {

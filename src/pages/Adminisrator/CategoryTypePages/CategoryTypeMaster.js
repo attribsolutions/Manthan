@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import React, { useEffect, useState, } from "react";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -13,9 +13,8 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,40 +29,48 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { CATEGORYTYPE_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+    onChangeText,
+    resetFunction
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const CategoryTypeMaster = (props) => {
-    const formRef = useRef(null);
+
     const history = useHistory()
     const dispatch = useDispatch();
-    const [modalCss, setModalCss] = useState(false);
 
-    const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
-        postMsg: state.categoryTypeReducer.PostData,
-        updateMsg: state.categoryTypeReducer.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
-
-    useEffect(() => {
-        dispatch(commonPageField(21))
-    }, []);
-
-    {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
+    const fileds = {
+        id: "",
         Name: "",
-        id: ""
     }
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("");
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { postMsg,
+        updateMsg,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            postMsg: state.categoryTypeReducer.PostData,
+            updateMsg: state.categoryTypeReducer.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
+
+    useEffect(() => {
+        const page_Id = pageId.CATEGORYTYPE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
@@ -73,7 +80,6 @@ const CategoryTypeMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    //userAccess useEffect
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -91,6 +97,7 @@ const CategoryTypeMaster = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -119,7 +126,7 @@ const CategoryTypeMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
         }
@@ -129,8 +136,9 @@ const CategoryTypeMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
-
-
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -138,17 +146,17 @@ const CategoryTypeMaster = (props) => {
                     Message: postMsg.Message,
                 }))
             }
-
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: CATEGORYTYPE_lIST,
+                    RedirectPath: url.CATEGORYTYPE_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//save Button Is enable function
             dispatch(getCategoryTypelistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -162,10 +170,13 @@ const CategoryTypeMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname: CATEGORYTYPE_lIST,
+                pathname: url.CATEGORYTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateCategoryTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -176,7 +187,7 @@ const CategoryTypeMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
-  
+
 
     useEffect(() => {
 
@@ -186,19 +197,23 @@ const CategoryTypeMaster = (props) => {
         }
     }, [pageField])
 
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
             });
+
+            saveDissable(true);//save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(updateCategoryTypeID(jsonBody, values.id));
             }
             else {
                 dispatch(PostMethodForCategoryTypeMaster(jsonBody))
             }
-
         }
     };
 
@@ -209,25 +224,24 @@ const CategoryTypeMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORYTYPE} /> */}
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
@@ -253,13 +267,14 @@ const CategoryTypeMaster = (props) => {
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"CategoryTypeMaster"}
                                                                     />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
-
                                                     </Row>
                                                 </CardBody>
                                             </Card>

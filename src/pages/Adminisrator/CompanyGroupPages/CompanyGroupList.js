@@ -9,13 +9,15 @@ import {
   delete_CompanyGroupType_ID,
   PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { COMPANYGROUP } from "../../../routes/route_url";
-
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const CompanyGroupList = (props) => {
-debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -32,7 +34,7 @@ debugger
   const action = {
     getList: getMethodForCompanyGroupList,
     editId: editCompanyGroupTypeId,
-    deleteId:delete_CompanyGroupType_ID,
+    deleteId: delete_CompanyGroupType_ID,
     postSucc: PostMethod_ForCompanyGroupMasterSuccess,
     updateSucc: updateCompanyGroupTypeIDSuccess,
     deleteSucc: deleteCompanyGroupTypeIDSuccess,
@@ -40,23 +42,27 @@ debugger
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.COMPANYGROUP_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(4))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getMethodForCompanyGroupList());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField, userAccess } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP_lIST} /> */}
+
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={CompanyGroupMaster}
-            masterPath={COMPANYGROUP}
-            ButtonMsgLable={"CompanyGroup"}
+            masterPath={url.COMPANYGROUP}
+            ButtonMsgLable={"Company Group"}
             deleteName={"Name"}
           />
           : null

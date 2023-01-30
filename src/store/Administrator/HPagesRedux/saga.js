@@ -8,6 +8,7 @@ import {
   getH_ModulesSuccess,
   getPageAccess_DropDown_API_Success,
   getPageListSuccess,
+  getPageTypeSuccess,
   saveHPagesSuccess,
   updateHPagesSuccess,
 } from "./actions";
@@ -22,6 +23,7 @@ import {
   get_Module_HPages,
   saveHPagesAPI,
   showPagesListOnPageAccess_DropDown_List,
+  get_PageType_HPages,
   showPagesListOnPageType_DropDown_List,
   updateHPages
 } from "../../../helpers/backend_helper";
@@ -34,6 +36,7 @@ import {
   GET_H_SUB_MODULES,
   GET_PAGEACCESS_DROPDOWN_API,
   GET_PAGELIST,
+  GET_PAGETYPE,
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
@@ -140,6 +143,16 @@ function* PageList_DropDown_GenratorFunction() {
   }
 }
 
+//  PageType dropdown list
+function* PageType_DropDown_GenratorFunction() {
+  try {
+    const response = yield call(get_PageType_HPages);
+    yield put(getPageTypeSuccess(response.Data));
+  } catch (error) {
+    console.log("PageType_saga page error", error);
+  }
+}
+
 //  PageAccess dropdown list
 function* PageAccess_DropDown_GenratorFunction() {
   try {
@@ -175,6 +188,7 @@ function* HPageSaga() {
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
   yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
+  yield takeEvery(GET_PAGETYPE, PageType_DropDown_GenratorFunction)
   yield takeEvery(GET_PAGEACCESS_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
   yield takeEvery(GET_CONTROL_TYPES, ControlTypes_DropDown_GenratorFunction)
   yield takeEvery(GET_FIELD_VALIDATIONS, FieldValidations_DropDown_GenratorFunction)

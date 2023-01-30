@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import React, { useEffect, useState, } from "react";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -21,7 +21,8 @@ import {
     formValid,
     initialFiledFunc,
     onChangeText,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+    resetFunction,
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
     editGroupTypeIdSuccess,
     getGroupTypeslistSuccess,
@@ -30,27 +31,30 @@ import {
     updateGroupTypeID,
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
-import { GROUPTYPE_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+
 
 const GroupTypeMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const formRef = useRef(null);
+    const fileds = {
+        id: "",
+        Name: "",
+        IsReserved: false
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-
-    const initialFiled = {
-        id: "",
-        Name: "",
-        IsReserved: ""
-    }
-
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -66,13 +70,18 @@ const GroupTypeMaster = (props) => {
     }));
 
     useEffect(() => {
+        const page_Id = pageId.GROUPTYPE
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(105))
+        dispatch(commonPageField(page_Id))
     }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -121,7 +130,8 @@ const GroupTypeMaster = (props) => {
                 values.IsReserved = IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.GroupTypeMaster))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
@@ -129,7 +139,10 @@ const GroupTypeMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => resetFunction(fileds, state))//Clear form values
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -142,11 +155,12 @@ const GroupTypeMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: GROUPTYPE_lIST,
+                    RedirectPath: url.GROUPTYPE_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//save Button Is enable function
             dispatch(getGroupTypeslistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -159,11 +173,15 @@ const GroupTypeMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))//Clear form values
             history.push({
-                pathname: GROUPTYPE_lIST,
+                pathname: url.GROUPTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateGroupTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -178,28 +196,23 @@ const GroupTypeMaster = (props) => {
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    const formSubmitHandler = (event) => {
-
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 IsReserved: values.IsReserved,
-                CreatedBy: 1,
+                CreatedBy: createdBy(),
                 CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy: 1,
+                UpdatedBy: createdBy(),
                 UpdatedOn: "0002-10-03T12:48:14.910491"
-
             });
+
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateGroupTypeID(jsonBody, EditData.id));
@@ -219,25 +232,24 @@ const GroupTypeMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUPTYPE} /> */}
+                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <CardBody className=" vh-10 0 text-black"  >
 
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
@@ -249,11 +261,11 @@ const GroupTypeMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoFocus={true}
+                                                                autoComplete='off'
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
@@ -270,7 +282,13 @@ const GroupTypeMaster = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 checked={values.IsReserved}
                                                                                 name="IsReserved"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsReserved = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
@@ -281,7 +299,9 @@ const GroupTypeMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"GroupTypeMaster"}
                                                                     />
                                                                 </Col>

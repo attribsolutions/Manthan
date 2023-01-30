@@ -13,34 +13,36 @@ const CustomAlert = () => {
   const { AlertData } = useSelector((state) => ({
     AlertData: state.AlertReducer.AlertState,
   }))
+  const {
+    Message = "-",
+    Type,
+    AfterResponseAction = false,
+    PermissionAction = false,
+    RedirectPath = false,
+    PermissionFunction = () => { },
+    permissionValueReturn
+  } = AlertData;
 
   //  Alert Modal Show and Hide Controller
   function tog_standard() {
     dispatch(AlertShow({ Status: false }));
-    removeBodyCss()
-    if (!AlertData.AfterResponseAction === false) {
-      let Action = AlertData.AfterResponseAction;
-      dispatch(Action());
+
+    if (AfterResponseAction) {
+      dispatch(AfterResponseAction());
     };
   }
-  // console.log("test1",AlertData)
-  // console.log("test1",AlertData.hasOwnProperty('myProperty'))
 
-  //remove Css when modul hide Mode 
-  function removeBodyCss() {
-    // document.body.classList.add("no_padding")
-  }
 
   // Success Alert Ok button Hnadller
   function Success_Ok_Button_Handeler() {
+
     dispatch(AlertShow({ Status: false }));
-    removeBodyCss()
-    if (!AlertData.AfterResponseAction === false) {
-      let Action = AlertData.AfterResponseAction;
-      dispatch(Action());
+
+    if (AfterResponseAction) {
+      dispatch(AfterResponseAction());
     };
-    if (!AlertData.RedirectPath === false) {
-    
+
+    if (RedirectPath) {
       history.push({
         pathname: AlertData.RedirectPath,
         state: history.location.state
@@ -50,15 +52,15 @@ const CustomAlert = () => {
 
   function Ok_handeler() {
     dispatch(AlertShow({ Status: false }));
-    removeBodyCss()
+
   }
 
   //Permission Alert Ok button handller
   function Permission_Ok_handeler() {
     dispatch(AlertShow({ Status: false }));
-    if (!AlertData.PermissionAction === false) {
+    if (PermissionAction) {
       let DeleteId = AlertData.ID
-      dispatch(AlertData.PermissionAction(DeleteId))
+      dispatch(PermissionAction(DeleteId))
     };
   }
 
@@ -67,19 +69,33 @@ const CustomAlert = () => {
     tog_standard();
   }
 
+  function Permission_Ok_handeler6() {
+    dispatch(AlertShow({ Status: false }));
+    if (PermissionFunction) {
+      PermissionFunction()
+    };
+  }
+  function Permission_Ok_handeler7() {
+    dispatch(AlertShow({ Status: false }));
+    if (PermissionFunction) {
+      PermissionFunction(permissionValueReturn)
+    };
+  }
+  function cancel_handeler7() {
+    PermissionFunction(false)
+    tog_standard();
+  }
   return (
     <React.Fragment>
       <Modal
         isOpen={AlertData.Status}
         toggle={() => { tog_standard() }}
-        // scrollable={true}
-      // centered={true} 
-      // size={"sm"}
+        centered
       >
-        {(AlertData.Type === 1) &&
+        {(Type === 1) &&
           <UncontrolledAlert color="success" className="px-6 mb-0 text-center">
             <i className="mdi mdi-check-all d-block display-6 mt-2 mb-3  text-success"></i>
-            <p> <h5 className="text-success">{AlertData.Message}</h5></p>
+            <p> <h5 className="text-success">{Message}</h5></p>
             <button
               type="button"
               className="btn btn-primary "
@@ -92,10 +108,10 @@ const CustomAlert = () => {
           </UncontrolledAlert>
         }
 
-        {(AlertData.Type === 2) &&
+        {(Type === 2) &&
           <UncontrolledAlert color="danger" className="px-4 mb-0 text-center">
             <i className="mdi mdi-block-helper d-block display-4 mt-2 mb-3  text-danger"></i>
-            <p> <h5 className="text-danger">{AlertData.Message}</h5></p>
+            <p> <h5 className="text-danger">{Message}</h5></p>
             <button
               type="button"
               className="btn btn-primary "
@@ -107,10 +123,10 @@ const CustomAlert = () => {
             </button>
           </UncontrolledAlert>
         }
-        {(AlertData.Type === 3) &&
+        {(Type === 3) &&
           <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
             <i className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
-            <p> <h5 className="text-">{AlertData.Message}</h5></p>
+            <p> <h5 className="text-">{Message}</h5></p>
             <button
               type="button"
               className="btn btn-primary "
@@ -122,10 +138,10 @@ const CustomAlert = () => {
             </button>
           </UncontrolledAlert>
         }
-        {(AlertData.Type === 4) &&
+        {(Type === 4) &&
           <UncontrolledAlert color="warning" className="px-4 mb-0 text-center">
             <i className="mdi mdi-alert-outline  d-block display-4 mt-2 mb-3 text-warning"></i>
-            <p> <h5 className="text-">{AlertData.Message}</h5></p>
+            <p> <h5 className="text-">{Message}</h5></p>
             <button
               type="button"
               className="btn btn-primary "
@@ -137,17 +153,45 @@ const CustomAlert = () => {
             </button>
           </UncontrolledAlert>
         }
-        {(AlertData.Type === 5) &&
+        {(Type === 5) &&
           <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
             <i className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
             <p>
-              <h5>{AlertData.Message}</h5></p>
+              <h5>{Message}</h5></p>
+            <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
+              <button
+                type="button"
+                className="btn btn-danger "
+                onClick={() => {
+                  Permission_Ok_handeler()
+                }}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+
+                className="btn btn-success w-xm waves-effect waves-light"
+                onClick={() => {
+                  cancel_handeler()
+                }}
+              >
+                No
+              </button>
+            </div>
+          </UncontrolledAlert>
+        }
+        {(Type === 6) &&
+          <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
+            <i className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
+            <p>
+              <h5>{Message}</h5></p>
             <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
               <button
                 type="button"
                 className="btn btn-success"
                 onClick={() => {
-                  Permission_Ok_handeler()
+                  Permission_Ok_handeler6()
                 }}
               >
                 Yes
@@ -157,6 +201,34 @@ const CustomAlert = () => {
                 className="btn btn-danger w-xm waves-effect waves-light"
                 onClick={() => {
                   cancel_handeler()
+                }}
+              >
+                No
+              </button>
+            </div>
+          </UncontrolledAlert>
+        }
+        {(Type === 7) &&
+          <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
+            <i className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
+            <p>
+              <h5>{Message}</h5></p>
+            <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
+              <button
+                type="button"
+                className="btn btn-danger "
+                onClick={() => {
+                  Permission_Ok_handeler7()
+                }}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+
+                className="btn btn-success w-xm waves-effect waves-light"
+                onClick={() => {
+                  cancel_handeler7()
                 }}
               >
                 No

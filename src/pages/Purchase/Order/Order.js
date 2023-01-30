@@ -1,48 +1,50 @@
 import {
-    Button,
     Col,
     FormGroup,
     Input,
     Label,
+    Modal,
     Row,
 } from "reactstrap";
-import Flatpickr from "react-flatpickr";
-import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
-
-
-import React, { useEffect, useState, useRf, useRef } from "react";
+import Flatpickr from "react-flatpickr";
+import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
-
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
-    goButton,
-    goButtonSuccess,
+    goButtonForOrderAdd,
+    goButtonForOrderAddSuccess,
     postOrder,
     postOrderSuccess,
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
+import { getOrderType, getSupplier, getSupplierAddress, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions"
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
-
 import { ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
-
-import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
-
-import OrderPageTemsTable from "./OrderPageTemsTable";
+import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import OrderPageTermsTable from "./OrderPageTermsTable";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
-let description = ''
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID";
+import * as mode from "../../../routes/PageMode";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { Button } from "bootstrap";
+
 let editVal = {}
 
 const Order = (props) => {
@@ -50,49 +52,53 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const fileds = {
+        id: "",
+        Name: "",
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userAccState, setUserPageAccessState] = useState("");
-
+    const  [description, setDescription] = useState('')
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [podate, setpoDate] = useState("today");
-    const [deliverydate, setdeliverydate] = useState("today")
+    // const [podate, setpoDate] = useState(currentDate);
+    const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
-    const [shippAddr, setshippAddr] = useState('')
+    const [shippAddr, setshippAddr] = useState('');
 
+    const [poFromDate, setpoFromDate] = useState(currentDate);
+    const [poToDate, setpoToDate] = useState(currentDate);
+    const [orderdate, setorderdate] = useState(currentDate);
     const [supplierSelect, setsupplierSelect] = useState('');
+
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
-
-
-    useEffect(() => {
-        dispatch(getSupplier())
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-
-    }, [])
+    const [orderTypeSelect, setorderTypeSelect] = useState('');
+    const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
+    const [orderItemTable, setorderItemTable] = useState([])
+    const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
 
     const {
-        items,
+        goBtnOrderdata,
         postMsg,
-        supplier,
+        vender,
         userAccess,
+        orderType,
         updateMsg,
-        supplierAddress,
-        termsAndCondtions,
-        pageField
+        supplierAddress = [],
+
     } = useSelector((state) => ({
-        items: state.OrderReducer.orderItem,
-        supplier: state.SupplierReducer.supplier,
+        goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
+        vender: state.SupplierReducer.vender,
         supplierAddress: state.SupplierReducer.supplierAddress,
+        orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -107,7 +113,15 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            let FindPartyItemAccess = userAccess.find((index) => {
+                return (index.id === 62)
+            })
+            if (FindPartyItemAccess) {
+                setFindPartyItemAccess(true)
+            }
         };
+
+
     }, [userAccess])
 
     const location = { ...history.location }
@@ -115,9 +129,14 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
-        dispatch(goButtonSuccess([]))
+        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(GetVender())
+        dispatch(getSupplierAddress())
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+    }, [])
 
+    useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -130,37 +149,61 @@ const Order = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
+                dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
 
-                const jsonBody = JSON.stringify({
-                    Supplier: hasEditVal.Supplier,
-                    EffectiveDate: hasEditVal.OrderDate
-                }
-                );
-                dispatch(goButton(jsonBody, hasEditVal))
-                dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-
-                setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-                setpoDate(hasEditVal.OrderDate)
+                setorderdate(hasEditVal.OrderDate)
+                setsupplierSelect({
+                    label: hasEditVal.SupplierName,
+                    value: hasEditVal.Supplier
+                })
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
-                description = hasEditVal.Description
+                setDescription( hasEditVal.Description)
+                editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
-                const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
+                setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
+
+                setpoToDate(hasEditVal.POToDate)
+                setpoFromDate(hasEditVal.POFromDate)
+
+                const termsAndCondition = hasEditVal.TermsAndConditions.map(i => ({
                     value: i.id,
-                    label: i.TermsAndCondition
+                    label: i.TermsAndCondition,
+                    IsDeleted: 0
                 }))
+
+                const orderItems = hasEditVal.OrderItems.map((ele, k) => {
+
+                    ele["id"] = k + 1
+
+                    return ele
+                });
+                setorderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(editOrderIdSuccess({ Status: false }))
+        } else {
+            dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0`))
+            // dispatch(orderAddfilters({
+            //     orderdate: currentDate,
+            //     supplierSelect: ''
+            // }));
         }
-
-
     }, [])
 
+    useEffect(() => {
+        if (goBtnOrderdata) {
+            let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
+            setorderItemTable(OrderItems)
+            setTermsAndConTable(TermsAndConditions)
+            dispatch(goButtonForOrderAddSuccess(''))
+        }
+    }, [goBtnOrderdata]);
+
+   
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
             setbillAddr(supplierAddress[0]);
@@ -169,10 +212,21 @@ const Order = (props) => {
     }, [supplierAddress])
 
     useEffect(() => {
+        if ((orderType.length > 0) && (!((hasShowloction || hasShowModal)))) {
+            setorderTypeSelect({
+                value: orderType[0].id,
+                label: orderType[0].Name,
+            });
+        }
+    }, [orderType])
+
+    useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            dispatch(goButtonSuccess([]))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
+            dispatch(goButtonForOrderAddSuccess([]))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -181,25 +235,27 @@ const Order = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
     }, [postMsg])
 
-
-
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: ORDER_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -215,129 +271,137 @@ const Order = (props) => {
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
-            row["inpQty"] = val;
+            row["Quantity"] = val;
         }
         else {
-            row["inpRate"] = val
+            row["Rate"] = val
         }
-        row["totalAmount"] = totalAmount(row)
+
+        row["Amount"] = Amount(row)
 
         let sum = 0
-        items.forEach(ind => {
-            sum = sum + parseFloat(ind.totalAmount)
+        orderItemTable.forEach(ind => {
+            if (ind.Amount === null) {
+                ind.Amount = 0
+            }
+            var amt = parseFloat(ind.Amount)
+            sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
-    }
+        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+    };
 
-    const supplierOptions = supplier.map((i) => ({
+    function assignItem_onClick() {
+        setisOpen_TermsModal(true)
+    };
+
+    const supplierOptions = vender.map((i) => ({
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
 
+    const orderTypeOptions = orderType.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
 
     const pagesListColumns = [
-        {
-            text: "Item Name",
-            dataField: "Name",
-            sort: true,
-        },
-        {
-            text: "Rate",
-            dataField: "Rate",
-            sort: true,
-            formatter: (value, row, k) => {
-                if (row.inpRate === undefined) { row["inpRate"] = 0 }
-                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
-                return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-                            id={`inpRatey${k}`}
-                            defaultValue={row.inpRate}
-                            disabled={(row.GST === '') ? true : false}
-                            onChange={e => {
-                                row["inpRate"] = e.target.value;
-                                const qty = document.getElementById(`inpQty${k}`)
-                                const val = e.target.value
-                                if (val > 0) {
+        {//------------- ItemName column ----------------------------------
 
-                                    val_onChange(val, row, "rate")
-                                    qty.disabled = false
+            dataField: "ItemName",
+            headerFormatter: (value, row, k) => {
+                return (
+                    <div className="d-flex justify-content-between">
+                        <div>
+                            Item Name
+                        </div>
+
+                        <div>
+                            <samp style={{ display: (supplierSelect.value > 0) && (findPartyItemAccess) ? "block" : "none" }} className="text-primary fst-italic text-decoration-underline"
+                                onClick={assignItem_onClick}>
+                                Assign-Items</samp>
+                        </div>
+
+                    </div>
+                )
+            },
+        },
+
+        {//------------- Stock Quantity column ----------------------------------
+            text: "Stock Qty",
+            dataField: "StockQuantity",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <div className="text-end">
+                        <span>{row.StockQuantity}</span>
+                    </div>
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            },
+        },
+
+        { //------------- Quantity column ----------------------------------
+            text: "Quantity",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Quantity${k}`}
+                            defaultValue={row.Quantity}
+                            key={row.Quantity}
+                            className="text-end"
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "qty")
                                 } else {
-                                    qty.value = ''
-                                    row["inpQty"] = 0;
-                                    val_onChange(0, row, "rate")
-                                    qty.disabled = true
+                                    document.getElementById(`Quantity${k}`).value = row.Quantity
                                 }
+                                handleKeyDown(e, orderItemTable)
                             }}
-                            onKeyDown={(e) => handleKeyDown(e, items)}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
+
                 )
             },
 
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
-        },
-        {
-            text: "GST %",
-            dataField: "GST",
-            sort: true,
-            formatter: (value, row) => (
 
-                <span >
-                    {value}
-                </span>
-
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center', text: "left" };
-            }
 
         },
-        {
-            text: "Quntity",
+
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
             dataField: "",
-            sort: true,
-            formatter: (value, row, k) => (
-
-                <span >
-                    <Input type="text"
-                        id={`inpQty${k}`}
-                        defaultValue={row.inpQty}
-                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
-                        onChange={(e) => {
-                            val_onChange(e.target.value, row, "qty")
-                        }}
-                        autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, items)} />
-                </span>
-
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-
-
-        },
-        {
-            text: "UOM",
-            dataField: "",
-            sort: true,
+            // sort: true,
             formatter: (value, row, key) => {
-                if (row.UOMLabel === undefined) {
-                    row["UOM"] = row.UnitDetails[0].UnitID
-                    row["UOMLabel"] = row.UnitDetails[0].UnitName
-                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+
+                if (!row.UnitName) {
+                    row["Unit_id"] = row.UnitDetails[0].UnitID
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
                 }
+
                 return (
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
-                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
-                        // value={{value:row.UOM,label:row.UOMLabel}}
+                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -346,9 +410,9 @@ const Order = (props) => {
                             }))
                         }
                         onChange={e => {
-                            row["UOM"] = e.value;
-                            row["UOMLabel"] = e.label
-                            row["inpBaseUnitQty"] = e.baseUnitQty
+                            row["Unit_id"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
                         }}
                     >
                     </Select >
@@ -360,6 +424,63 @@ const Order = (props) => {
 
         },
 
+        {//------------- Rate column ----------------------------------
+            text: "Rate/Unit",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <span className="text-right" >
+                        <Input
+                            type="text"
+                            id={`Ratey${k}`}
+                            defaultValue={row.Rate}
+                            autoComplete="off"
+                            className="text-end"
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "rate")
+                                } else {
+                                    document.getElementById(`Ratey${k}`).value = row.Rate
+                                }
+                            }}
+                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+        },
+
+        { //------------- Comment column ----------------------------------
+            text: "Comment",
+            dataField: "",
+            // sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`Comment${k}`}
+                            defaultValue={row.Comment}
+                            autoComplete="off"
+                            onChange={(e) => { row["Comment"] = e.target.value }}
+                        />
+                    </span>
+
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+
+        },
     ];
 
     const defaultSorted = [
@@ -370,90 +491,171 @@ const Order = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: (items.length + 2),
+        sizePerPage: (orderItemTable.length + 2),
         totalSize: 0,
         custom: true,
     };
 
+    function Open_TermsModal_func() {
+        setisOpen_TermsModal(false)
+        goButtonHandler()
+    }
 
-    const GoButton_Handler = () => {
-        let supplier = supplierSelect.value
-
-        if (!supplier > 0) {
-            alert("Please Select Customer")
-            return
+    const goButtonHandler = () => {
+        if (!supplierSelect > 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please select supplier",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
         }
+        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
-        if (items.length > 0) {
-            if (window.confirm("Refresh Order Item...!")) {
-                dispatch(goButtonSuccess([]))
-            } else {
-                return
-            }
-        }
-
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
         const jsonBody = JSON.stringify({
-            Supplier: supplier,
-            EffectiveDate: podate
-        }
-        );
+            Party: supplierSelect.value,
+            Customer: userParty(),
+            EffectiveDate: orderdate,
+            OrderID: (pageMode === mode.save) ? 0 : editVal.id
+        })
 
-        dispatch(goButton(jsonBody))
-        console.log("jsonBody", jsonBody)
+        dispatch(goButtonForOrderAdd(jsonBody))
+    };
+
+    function orderdateOnchange(e, date) {
+        setorderdate(date)
+    };
+
+    function permissionfunc(istrue) {
+        if (istrue) {
+            setsupplierSelect(istrue)// **istrue is == event value
+            setorderItemTable([])
+        }
+    }
+
+    function supplierOnchange(e) {
+        var isfind = orderItemTable.find(i => (i.Quantity > 0))
+        if (isfind) {
+            dispatch(
+                AlertState({
+                    Type: 7,
+                    Status: true,
+                    Message: "If you are change Supplier Name then All Item Data is Clear",
+                    RedirectPath: false,
+                    PermissionFunction: permissionfunc,
+                    permissionValueReturn: e
+
+                })
+            );
+            return;
+        } else {
+            setsupplierSelect(e)
+            setorderItemTable([])
+            setTermsAndConTable([])
+        }
+
+        // let newObj = { ...orderAddFilter }
+        // newObj.supplierSelect = e
+        // dispatch(orderAddfilters(newObj))
     };
 
     const saveHandeller = () => {
-        let division = 0
-        let orderDate =''
-        let delDate =''
-        const supplier = supplierSelect.value
+        const division = userParty();
+        const supplier = supplierSelect.value;
 
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-            orderDate=document.getElementById("orderdate").value
-            delDate=document.getElementById("deliverydate").value
-        } catch (e) {
-            alert(e)
-            return
+        const validMsg = []
+        const itemArr = []
+
+        function isChanged({ i, isedit, isdel }) {
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
+            const arr = {
+                id: i.editrowId,
+                Item: i.Item_id,
+                Quantity: isdel ? 0 : i.Quantity,
+                MRP: i.MRP,
+                Rate: i.Rate,
+                Unit: i.Unit_id,
+                BaseUnitQuantity: i.BaseUnitQuantity,
+                Margin: "",
+                BasicAmount: basicAmt.toFixed(2),
+                GSTAmount: cgstAmt.toFixed(2),
+                GST: i.GST_id,
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
+                IGSTPercentage: 0,
+                Amount: i.Amount,
+                IsDeleted: isedit,
+                Comment: i.Comment
+            }
+            itemArr.push(arr)
+        };
+
+        function orderItem({ i, isedit }) {
+
+            if ((i.Quantity > 0) && (i.Rate > 0)) {
+                var isdel = false;
+
+                isChanged({ i, isedit, isdel })
+            }
+            else if ((i.Quantity < 1) && (i.editrowId)) {
+                var isdel = true;
+                isChanged({ i, isedit, isdel })
+            };
         }
 
-        const itemArr = []
-        items.forEach(i => {
-            if ((i.inpQty > 0)) {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+        orderItemTable.forEach(i => {
 
-                const arr = {
-                    Item: i.id,
-                    Quantity: i.inpQty,
-                    MRP: i.MRP,
-                    Rate: i.inpRate,
-                    Unit: i.UOM,
-                    BaseUnitQuantity: i.inpBaseUnitQty,
-                    Margin: "",
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    GST: i.Gstid,
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
-                    IGST: 0,
-                    CGSTPercentage: (i.GST / 2),
-                    SGSTPercentage: (i.GST / 2),
-                    IGSTPercentage: 0,
-                    Amount: i.totalAmount,
+            if ((i.Quantity > 0) && !(i.Rate > 0)) {
+                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+            }
+            //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
+            //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
+            // }
+
+            else if (pageMode === "edit") {
+                var ischange = (!(i.poQty === i.Quantity) ||
+                    !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
+                if (ischange && (i.poQty === 0)) {
+                    var isedit = 0;
+                    orderItem({ i, isedit })
                 }
-
-                itemArr.push(arr)
+                else if (ischange) {
+                    var isedit = 1;
+                    orderItem({ i, isedit })
+                } else {
+                    var isedit = 0;
+                    orderItem({ i, isedit })
+                }
+            }
+            else {
+                var isedit = 0;
+                orderItem({ i, isedit })
             };
         })
-        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+        const termsAndCondition = termsAndConTable.map(i => ({
+            TermsAndCondition: i.value,
+            IsDeleted: i.IsDeleted
+        }))
 
+
+        if (validMsg.length > 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: validMsg,
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
         if (itemArr.length === 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -476,8 +678,8 @@ const Order = (props) => {
             return
         }
         const jsonBody = JSON.stringify({
-            OrderDate: orderDate,
-            DeliveryDate: delDate,
+            OrderDate: orderdate,
+            DeliveryDate: deliverydate,
             Customer: division,
             Supplier: supplier,
             OrderAmount: orderAmount,
@@ -489,119 +691,123 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
-            CreatedBy: 1,
-            UpdatedBy: 1,
+            POType: orderTypeSelect.value,
+            POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
+            POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
             OrderItem: itemArr,
-            OrderTermsAndConditions: termsAndCondition
+            OrderTermsAndConditions: termsAndCondition,
+
+
         });
+
+        saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))
-            console.log("orderEdit", jsonBody)
 
         } else {
 
             dispatch(postOrder(jsonBody))
-            console.log("ordersave", jsonBody)
         }
-
 
     }
 
     if (!(userAccState === "")) {
         return (
             <React.Fragment>
-                <MetaTags>
-                    <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content">
-                    <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        showCount={true}
-                    />
-                    <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
-                        <div className=" mt-1 row">
-                            <Col md="3" className="">
-                                <FormGroup className="mb- row mt-3 " >
+
+                    <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name*/}
+                        <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name*/}
+                            <Col sm="6">{/* Order Date*/}
+                                <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "100px" }}>Order Date</Label>
-                                    <Col md="7">
+                                        style={{ width: "115px" }}>Order Date</Label>
+                                    <Col sm="6">
                                         <Flatpickr
+                                            style={{ userselect: "all" }}
                                             id="orderdate"
                                             name="orderdate"
-                                            value={podate}
+                                            value={orderdate}
+                                            disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
-                                                altInput: true,
+                                                // altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: pageMode === "edit" ? podate : "today",
-                                                // maxDate: pageMode === "edit" ? podate : "",
-                                                // defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
-                                            onChange={(e, date) => { setpoDate(date) }}
+                                            onChange={orderdateOnchange}
                                         />
                                     </Col>
                                 </FormGroup>
                             </Col>
 
-                            <Col md="3">
-                                <FormGroup className="mb-2 row mt-3 " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Supplier Name</Label>
-                                    <Col md="7">
+
+                            <Col sm="6">{/*Supplier Name */}
+                                <FormGroup className="mb-1 row mt-3 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
+                                    <Col sm="6">
                                         <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
-                                            isDisabled={pageMode === "edit" ? true : false}
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                             options={supplierOptions}
-                                            onChange={(e) => { setsupplierSelect(e) }}
+                                            onChange={supplierOnchange}
                                         />
+                                    </Col>
+                                    <Col sm="1" className="mx-4 ">
+                                        {pageMode === "save" ?
+                                            (orderItemTable.length === 0) ?
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                :
+                                                <Change_Button onClick={(e) => dispatch(goButtonForOrderAddSuccess([]))} />
+                                            : null
+                                        }
                                     </Col>
                                 </FormGroup>
                             </Col >
 
-                            <Col md="1" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={GoButton_Handler}>Go</Button>
-                            </Col>
                         </div>
                     </div>
 
-                    <div className="px-2  mb-1" style={{ backgroundColor: "#dddddd" }} >
-
-                        <div className="row">
-                            <div className="col col-6">
-                                <FormGroup className=" row mt-3 mt-3" >
-                                    <Label className="  col col-3 mt-2"
-                                        style={{ width: "130px" }}>Description</Label>
-                                    <div className=" col ">
+                    <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
+                        <div className="row">                                         {/*  Description and Delivery Date  field */}
+                            <div className="col col-6">                               {/*  Description field */}
+                                <FormGroup className=" row  mt-3" >
+                                    <Label className="   p-2"
+                                        style={{ width: "115px" }}>Description</Label>
+                                    <div className="col-6">
                                         <Input type="text"
-                                            defaultValue={description}
-                                            onChange={e => description = e.target.value}
-                                            style={{ backgroundColor: "#dddddd" }} />
+                                            value={description}
+                                            placeholder='Enter Order Description'
+                                            onChange={e => setDescription(e.target.value)}
+                                        />
+
                                     </div>
 
                                 </FormGroup>
                             </div >
-                            <div className="col col-6">
+                            <div className="col col-6" >{/*  Delivery Date field */}
                                 <FormGroup className=" row mt-3 " >
-                                    <Label className=" col col-3  p-2"
+                                    <Label className=" p-2"
                                         style={{ width: "130px" }}>Delivery Date</Label>
-                                    <div className="col col-6">
+                                    <div className="col col-6 sm-1">
                                         <Flatpickr
                                             id="deliverydate"
-                                            ref={(e)=>{debugger}}
                                             name="deliverydate"
                                             value={deliverydate}
+                                            disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
-                                                altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: pageMode === "edit" ? podate : "today",
+                                                // minDate: pageMode === "edit" ? orderdate : "today",
 
                                             }}
                                             onChange={(e, date) => { setdeliverydate(date) }}
@@ -611,58 +817,128 @@ const Order = (props) => {
                                 </FormGroup>
                             </div >
                         </div>
-                        <div className="row  ">
-                            <div className="col col-6">
-                                <FormGroup className="mb-2 row  " >
-                                    <Label className=" p-2"
-                                        style={{ width: "130px" }}>Billing Address</Label>
-                                    <Select
-                                        value={billAddr}
-                                        classNamePrefix="select2-Customer"
-                                        // isDisabled={pageMode === "edit" ? true : false}
-                                        options={supplierAddress}
-                                        styles={{
-                                            control: base => ({
-                                                ...base,
-                                                border: 'non',
-                                                backgroundColor: ""
 
-                                            })
-                                        }}
-                                        onChange={(e) => { setbillAddr(e) }}
-                                    />
+                        <div className="row  ">                                       {/*  Billing Address   and Shipping Address*/}
+
+                            <div className="col col-6">{/* Billing Address */}
+                                <FormGroup className="row  " >
+                                    <Label className=" p-2"
+                                        style={{ width: "115px" }}>Billing Address</Label>
+                                    <div className="col col-6">
+                                        <Select
+                                            value={billAddr}
+                                            classNamePrefix="select2-Customer"
+
+                                            options={supplierAddress}
+                                            styles={{
+                                                control: base => ({
+                                                    ...base,
+                                                    border: 'non',
+                                                    // backgroundColor: ""
+                                                })
+                                            }}
+                                            onChange={(e) => { setbillAddr(e) }}
+                                        />
+                                    </div>
                                 </FormGroup>
                             </div >
-                            <div className="col col-6">
-                                <FormGroup className="mb-2 row " >
+
+                            <div className="col col-6">{/*  Billing Shipping Address */}
+                                <FormGroup className=" row " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
-                                    <Select
-                                        value={shippAddr}
-                                        classNamePrefix="select2-Customer"
-                                        // isDisabled={pageMode === "edit" ? true : false}
-                                        styles={{
-                                            control: base => ({
-                                                ...base,
-                                                border: 'non',
-                                                backgroundColor: ""
-
-                                            })
-                                        }}
-                                        options={supplierAddress}
-                                        onChange={(e) => { setshippAddr(e) }}
-                                    />
+                                    <div className="col col-6">
+                                        <Select
+                                            value={shippAddr}
+                                            classNamePrefix="select2-Customer"
+                                            // isDisabled={pageMode === "edit" ? true : false}
+                                            styles={{
+                                                control: base => ({
+                                                    ...base,
+                                                    border: 'non',
+                                                    // backgroundColor: ""
+                                                })
+                                            }}
+                                            options={supplierAddress}
+                                            onChange={(e) => { setshippAddr(e) }}
+                                        />
+                                    </div>
                                 </FormGroup>
                             </div >
                         </div>
 
+                        <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
+                            <div className="col col-6" >                              {/**PO Type */}
+                                <FormGroup className=" row  " >
+                                    <Label className=" p-2"
+                                        style={{ width: "115px" }}>PO Type</Label>
+                                    <div className="col col-6 ">
+                                        <Select
+                                            value={orderTypeSelect}
+                                            classNamePrefix="select2-Customer"
+                                            options={orderTypeOptions}
+                                            onChange={(e) => { setorderTypeSelect(e) }}
+                                        />
+                                    </div>
+                                </FormGroup>
+                            </div >
+                        </div>
+
+                        {orderTypeSelect.label === 'Open PO' ?
+                            <div className="row" >                                    {/*PO From Date */}
+                                <div className="col col-6" >
+                                    <FormGroup className=" row  " >
+                                        <Label className=" p-2"
+                                            style={{ width: "115px" }}>PO From Date</Label>
+                                        <div className="col col-6 ">
+                                            <Flatpickr
+                                                id="pofromdate"
+                                                name="pofromdate"
+                                                value={poFromDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                                onChange={(e, date) => { setpoFromDate(date) }}
+                                            />
+                                        </div>
+                                    </FormGroup>
+                                </div >
+
+                                <div className="col col-6" >                        {/*PO To Date */}
+                                    <FormGroup className=" row  " >                   
+                                        <Label className=" p-2"
+                                            style={{ width: "130px" }}>PO To Date</Label>
+                                        <div className="col col-6 ">
+                                            <Flatpickr
+                                                id="potodate"
+                                                name="potodate"
+                                                value={poToDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                                onChange={(e, date) => { setpoToDate(date) }}
+                                            />
+                                        </div>
+                                    </FormGroup>
+                                </div >
+                            </div> : <></>}
+
                     </div>
+
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
                                 defaultSorted={defaultSorted}
-                                data={items}
+                                data={orderItemTable}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -670,7 +946,7 @@ const Order = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table table-Rresponsive">
+                                                <div className="table table-Rresponsive ">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive
@@ -702,13 +978,13 @@ const Order = (props) => {
                     </PaginationProvider>
 
                     {
-                        items.length > 0 ?
-                            <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                        orderItemTable.length > 0 ?
+                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} />
                             : null
                     }
 
                     {
-                        (items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        ((orderItemTable.length > 0) && (!isOpen_TermsModal)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"Order"} onClick={saveHandeller}
                             />
@@ -716,7 +992,25 @@ const Order = (props) => {
                             : <div className="row save1"></div>
                     }
                 </div >
-                {/* </div> */}
+
+                <Modal
+                    isOpen={isOpen_TermsModal}
+                    toggle={() => {
+                        setisOpen_TermsModal(false)
+                    }}
+                    size="xl"
+                >
+
+                    <PartyItems
+                        dropMode={mode.dropdownAdd}
+                        editValue={{ SupplierName: supplierSelect }}
+                        masterPath={url.PARTYITEM}
+                        redirectPath={url.ORDER}
+                        isOpenModal={Open_TermsModal_func}
+                        pageMode={pageMode}
+                    />
+
+                </Modal>
 
             </React.Fragment >
         )
@@ -725,5 +1019,7 @@ const Order = (props) => {
     }
 
 }
+
+
 export default Order
 

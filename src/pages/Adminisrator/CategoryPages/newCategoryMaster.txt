@@ -23,7 +23,6 @@ import {
     updateCategoryID
 } from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -32,10 +31,10 @@ import {
     onChangeSelect,
     onChangeText,
 
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";/validationFunction";
 
 
-import { SaveButton } from "../../../components/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 
 

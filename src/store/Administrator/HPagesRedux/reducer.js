@@ -10,6 +10,7 @@ import {
   GET_PAGELIST_SUCCESS,
   SAVE_HPAGES_SUCCESS,
   UPDATE_H_PAGES_SUCCESS,
+  GET_PAGETYPE_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -23,10 +24,10 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMessage: { Status: false },
   PageList: [],
-  PageAccess:[],
-  ControlTypes:[],
-  FieldValidations:[]
-
+  PageType: [],
+  PageAccess: [],
+  ControlTypes: [],
+  FieldValidations: []
 }
 
 const H_Pages = (state = INIT_STATE, action) => {
@@ -75,24 +76,31 @@ const H_Pages = (state = INIT_STATE, action) => {
         PageList: action.payload,
       };
 
-      // PageAccess Dropdown api
+    // PageType Dropdown api
+    case GET_PAGETYPE_SUCCESS:
+      return {
+        ...state,
+        PageType: action.payload,
+      };
+
+    // PageAccess Dropdown api
     case GET_PAGEACCESS_DROPDOWN_API_SUCCESS:
       return {
         ...state,
         PageAccess: action.payload,
       };
 
-      case GET_CONTROL_TYPES_SUCCESS:
-        return {
-          ...state,
-          ControlTypes: action.payload,
-        }
+    case GET_CONTROL_TYPES_SUCCESS:
+      return {
+        ...state,
+        ControlTypes: action.payload,
+      }
 
-        case GET_FIELD_VALIDATIONS_SUCCESS:
-          return {
-            ...state,
-            FieldValidations: action.payload,
-          }
+    case GET_FIELD_VALIDATIONS_SUCCESS:
+      return {
+        ...state,
+        FieldValidations: action.payload,
+      }
     default:
       return state
   }

@@ -1,4 +1,4 @@
-export const columns = ["Item Name", "Quantity", "	UOM", "Comments "];
+export const columns = ["Item Name", "Quantity", "	Unit", "Comments "];
 export const Rows = (data) => {
     var a = [];
     data.forEach(ticket => {

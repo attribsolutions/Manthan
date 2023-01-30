@@ -21,7 +21,7 @@ import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 
 const AddEmployee = (props) => {

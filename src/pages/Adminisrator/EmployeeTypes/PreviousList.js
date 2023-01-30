@@ -13,10 +13,11 @@ import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomTable2/datatables.scss"
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { deleteEmployeeTypeIDSuccess, delete_EmployeeType_ID, editEmployeeTypeId, getEmployeeTypelist, PostEmployeeTypeSubmitSuccess, updateEmployeeTypeIDSuccess } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const EmployeeTypeList = (props) => {
 

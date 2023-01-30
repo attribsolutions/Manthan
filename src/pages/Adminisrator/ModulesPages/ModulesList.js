@@ -10,8 +10,12 @@ import {
 } from "../../../store/actions";
 import Modules from "./Modules";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { MODULE } from "../../../routes/route_url";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
+
 const ModulesList = () => {
 
     const dispatch = useDispatch();
@@ -38,28 +42,30 @@ const ModulesList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = pageId.MODULE_lIST
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(6))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(fetchModelsList());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField ,userAccess=[]} = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MODULE_lIST} /> */}
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={Modules}
-                        masterPath={MODULE}
+                        masterPath={url.MODULE}
                         ButtonMsgLable={"Module"}
                         deleteName={"Name"}
                     />
                     : null
             }
-
         </React.Fragment>
     )
 }

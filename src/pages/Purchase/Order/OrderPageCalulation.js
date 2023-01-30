@@ -1,28 +1,34 @@
 
 
 export const basicAmount = i => {
+    let rate = 0
+    let qty = 0
+    if (!(i.Rate == '')) { rate = i.Rate; };
+    if (!(i.Quantity == '')) { qty = i.Quantity; };
 
-    let val = parseFloat(i.inpRate) * parseFloat(i.inpQty)
+    let val = parseFloat(rate) * parseFloat(qty)
     if (!val) {
         val = 0
     }
+
     return val
 }
 
 export const GstAmount = (i) => {
-
+    let rowGst = 0
+    let qty = 0
+    if (!(i.GSTPercentage == '')) { rowGst = i.GSTPercentage; };
     const base = basicAmount(i);
-    const gst = parseFloat(i.GST);
+    const gst = parseFloat(rowGst);
 
     return ((base * gst) / 100)
 }
 
-export const totalAmount = (i) => {
+export const Amount = (i) => {
 
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
     const total = gstAmt + parseFloat(baseAmt)
-
     return total.toFixed(2)
 }
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import React, { useEffect, useState, } from "react";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
     Card,
@@ -16,83 +16,83 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    editPartySubPartySuccess,
     postPartySubParty,
-    postPartySubPartySuccess
+    postPartySubPartySuccess,
+    updatePartySubParty,
+    updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
-import { AlertState } from "../../../store/actions";
+import {
+    AlertState,
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     get_Division_ForDropDown,
     get_Party_ForDropDown
 } from "../../../store/Administrator/ItemsRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import {
+    comAddPageFieldFunc,
+    formValid,
+    initialFiledFunc,
+    onChangeSelect,
+    resetFunction
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const PartySubParty = (props) => {
 
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("save");
+    const dispatch = useDispatch();
+    const history = useHistory()
+
+    const fileds = {
+        id: "",
+        Party: "",
+        Division: "",
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [pageMode, setPageMode] = useState("");
+    const [modalCss, setModalCss] = useState(false);
     const [PartyData, setPartyData] = useState([]);
     const [Division_dropdown_Select, setDivision_dropdown_Select] = useState("");
-    const dispatch = useDispatch();
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [Party_dropdown_Select, setParty_dropdown_Select] = useState("");
-    const history = useHistory()
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         Divisions,
         Party,
+        updateMsg,
+        pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.PartySubPartyReducer.postMsg,
             Divisions: state.ItemMastersReducer.Division,
             Party: state.ItemMastersReducer.Party,
-            // pageField: state.CommonPageFieldReducer.pageField,
+            updateMsg: state.PartySubPartyReducer.updateMsg,
+            pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
         }));
 
-    // useEffect(() => {
-    //     dispatch(commonPageField(121))
-    // }, []);
+    useEffect(() => {
+        const page_Id = pageId.PARTY_SUB_PARTY
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(get_Division_ForDropDown());
+        dispatch(get_Party_ForDropDown());
+    }, []);
 
-
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            Division: "",
-            Party: ""
-        },
-        fieldLabel: {
-            Division: "",
-            Party: ""
-        },
-
-        isError: {
-            Division: "",
-            Party: ""
-        },
-        hasValid: {
-            Division: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            Party: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-        },
-        required: {
-
-        }
-    })
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -115,12 +115,49 @@ const PartySubParty = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                const { id, Party, Division } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Party.valid = true;
+                hasValid.Division.valid = true;
+
+                values.id = id
+                values.Party = { label: Party, value: Party };
+                values.Division = { label: Division, value: Division };
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.Party))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+            dispatch(editPartySubPartySuccess({ Status: false }))
+        }
+    }, [])
+
+    useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            // setDivision_dropdown_Select('')
-            // setParty_dropdown_Select('')
             dispatch(postPartySubPartySuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -133,11 +170,12 @@ const PartySubParty = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: false,
+                    RedirectPath: url.PARTY_SUB_PARTY_lIST,
                 }))
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            saveDissable(false);//save Button Is enable function
             dispatch(postPartySubPartySuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -149,72 +187,57 @@ const PartySubParty = (props) => {
         }
     }, [postMsg])
 
-
-
-    //get method for dropdown
     useEffect(() => {
-        dispatch(get_Division_ForDropDown());
-        dispatch(get_Party_ForDropDown());
-    }, [dispatch]);
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            history.push({
+                pathname: url.PARTY_SUB_PARTY_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//Update Button Is enable function
+            dispatch(updatePartySubPartySuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
+    useEffect(() => {
 
-    function handllerDivision(e) {
-        setDivision_dropdown_Select(e)
-    }
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     const DivisionValues = Divisions.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    function handllerParty(e) {
-        setParty_dropdown_Select(e)
-    }
-
     const PartyValues = Party.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    const formSubmitHandler = (event) => {
+    function handllerDivision(e) {
+        setDivision_dropdown_Select(e)
+    }
 
-        event.preventDefault();
-        // if (formValid(state, setState)) {
-        //     const arr = PartyData.map(i => ({
-        //         Party: Division_dropdown_Select.value,
-        //         SubParty: i.value,
-        //         CreatedBy: 1,
-        //         UpdatedBy: 1,
-
-        //     }))
-        //     const jsonBody = JSON.stringify(arr);
-        //     console.log(" jsonBody", jsonBody)
-        //     if (pageMode === "edit") {
-        //         // dispatch(updateCategoryID(jsonBody, EditData.id));
-        //     }
-        //     else {
-        //         dispatch(PostMethodForPartySubParty(jsonBody));
-        //     }
-        // }
-
-        const arr = PartyData.map(i => ({
-            Party: Division_dropdown_Select.value,
-            SubParty: i.value,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-
-        }))
-        const jsonBody = JSON.stringify(arr);
-        console.log(" jsonBody", jsonBody)
-        dispatch(postPartySubParty(jsonBody));
-    };
-
+    function handllerParty(e) {
+        setParty_dropdown_Select(e)
+    }
 
     /// Role Table Validation
     function AddPartyHandler() {
-        debugger
+
         const find = PartyData.find((element) => {
-            return element.value === Party_dropdown_Select.value
+            return element.value === Party_dropdown_Select.values
         });
 
         if (Party_dropdown_Select.length <= 0) {
@@ -234,7 +257,6 @@ const PartySubParty = (props) => {
         }
     }
 
-
     // For Delete Button in table
     function UserRoles_DeleteButton_Handller(tableValue) {
         setPartyData(PartyData.filter(
@@ -242,6 +264,26 @@ const PartySubParty = (props) => {
         )
         )
     }
+
+    const SaveHandler = (event) => {
+        event.preventDefault();
+        if (formValid(state, setState)) {
+            const arr = PartyData.map(i => ({
+                Party: values.Division.value,
+                SubParty: i.value,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy(),
+            }))
+            const jsonBody = JSON.stringify(arr);
+            saveDissable(true);//save Button Is dissable function
+            if (pageMode === "edit") {
+                dispatch(updatePartySubParty(jsonBody, values.id,));
+            }
+            else {
+                dispatch(postPartySubParty(jsonBody));
+            }
+        }
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -252,35 +294,44 @@ const PartySubParty = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>PartySubPartyMaster | FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb breadcrumbItem={"PartySubPartyMaster"} />
+                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_SUB_PARTY} /> */}
+                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
-                                                        <FormGroup className="mb-2  ">
+                                                        <FormGroup className="mb-3">
                                                             <Row>
-                                                                <Col md="4">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01"> Division </Label>
+                                                                <Col sm="4">
+                                                                    <FormGroup className="mb-1">
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.Division} </Label>
                                                                         <Col sm={12}>
                                                                             <Select
-                                                                                value={Division_dropdown_Select}
+                                                                                name="Division"
+                                                                                value={values.Division}
+                                                                                isSearchable={true}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
                                                                                 options={DivisionValues}
-                                                                                onChange={(e) => { handllerDivision(e) }}
+                                                                                onChange={(hasSelect, evn) => {
+                                                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                                    handllerDivision(hasSelect)
+                                                                                }}
                                                                             />
+                                                                            {isError.Division.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.Division}</small></span>
+                                                                            )}
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -288,42 +339,49 @@ const PartySubParty = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Party</Label>
+                                                            <Col sm="4">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
                                                                     <Select
-                                                                        value={Party_dropdown_Select}
+                                                                        name="Party"
+                                                                        value={values.Party}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
                                                                         options={PartyValues}
-                                                                        onChange={(e) => { handllerParty(e) }}
-
+                                                                        onChange={(hasSelect, evn) => {
+                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                            handllerParty(hasSelect)
+                                                                        }}
                                                                     />
-
+                                                                    {isError.Party.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Party}</small></span>
+                                                                    )}
                                                                 </FormGroup>
-
                                                             </Col>
-                                                            <Col sm={2} style={{ marginTop: '28px' }} >
+
+                                                            <Col sm={2} style={{ marginTop: '16px' }} >
                                                                 <Button
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary text-center"
+                                                                    className=" button_add"
+                                                                    color="btn btn-outline-primary border-2 font-size-12"
                                                                     onClick={() =>
                                                                         AddPartyHandler()
                                                                     }
                                                                 >
-                                                                    <i className="dripicons-plus "></i>
+                                                                    <i className="dripicons-plus"></i>
                                                                 </Button>
                                                             </Col>
-
                                                         </Row>
+
                                                         <Row>
                                                             <Col sm={3} style={{ marginTop: '28px' }}>
                                                                 {PartyData.length > 0 ? (
-
                                                                     <div className="table">
-                                                                        <Table className="table table-bordered  text-center">
+                                                                        <Table className="table table-bordered  text-center" >
                                                                             <Thead>
                                                                                 <tr>
                                                                                     <th>Party</th>
-
                                                                                     <th>Action</th>
                                                                                 </tr>
                                                                             </Thead>
@@ -349,13 +407,14 @@ const PartySubParty = (props) => {
                                                                     </>
                                                                 )}
                                                             </Col>
-
                                                         </Row>
 
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"PartySubParty"}
                                                                     />
                                                                 </Col>
@@ -374,7 +433,7 @@ const PartySubParty = (props) => {
 
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else {

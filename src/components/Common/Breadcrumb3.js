@@ -27,11 +27,11 @@ const Breadcrumb = props => {
     } = props;
 
     const {
-        bredcrumbName = '',
+        bredcrumbItemName = '',
         filterSize,
         userAccess
     } = useSelector((state) => ({
-        bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+        bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
         filterSize: state.BreadcrumbReducer.filterSize,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
@@ -47,6 +47,8 @@ const Breadcrumb = props => {
 
     // New Button Handller
     const NewButtonHandeller = () => {
+    
+
 
         let pathName = history.location.pathname
         let userAcc = userAccess.find((inx) => {
@@ -61,8 +63,6 @@ const Breadcrumb = props => {
         history.push({
             pathname: `/${listPagePath.ActualPagePath}`,
         })
-
-
     }
 
     // Onfocus Search Box
@@ -74,6 +74,7 @@ const Breadcrumb = props => {
     }, [history])
 
     useEffect(() => {
+
         if (!(excelData === undefined)) {
             if ((excelData.length > 0)) {
                 // object to array conversion
@@ -105,20 +106,37 @@ const Breadcrumb = props => {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "Excel File.xlsx");
+        setmodal_scroll(false)
     }
 
-    const excelChekOnChange = (e) => {
+    const handleChange = (e) => {
+        debugger
+        var chek = document.getElementById("checkAll")
+        if (chek) {
+            for (var i = 0; i < downListKey.length; i++) {
+                document.getElementById(`chckbox${i}`).checked = true
+            }
+        }
+        else {
+            for (var i = 0; i < downListKey.length; i++) {
+                document.getElementById(`chckbox${i}`).checked = false
+            }
+        }
+    };
+
+    const excelCheckBoxOnChange = (e) => {
+        debugger
         // e.preventDefault();
         const check = e.target
         // var chek = document.getElementById("checkAll").checked
-        debugger
         if (check.id === "checkAll") {
+            debugger
             if (check.checked) {
                 for (var i = 0; i < downListKey.length; i++) {
                     const a = document.getElementById(`chckbox${i}`)
                     if (a) {
                         a.checked = true
-                        // excelData[0][`$defSelect${downListKey[i]}`]=true
+                        // excelData[0][`$defSelect${downListKey[i]}`] = true
                     }
                 }
             }
@@ -127,14 +145,16 @@ const Breadcrumb = props => {
                     const a = document.getElementById(`chckbox${i}`)
                     if (a) {
                         a.checked = false
-                        // excelData[0][`$defSelect${downListKey[i]}`]=false
+                        // excelData[0][`$defSelect${downListKey[i]}`] = false
                     }
                 }
             }
         }
+
     };
 
     function ExcelCheckBox() {
+
         const arrDiv = []
         downListKey.forEach((index, key) => {
 
@@ -165,8 +185,6 @@ const Breadcrumb = props => {
 
     return (
         <React.Fragment>
-
-
             <div className="mb-3 " style={{ Color: "F7F8F4", }}>
                 <div className=" d-flex  justify-content-between">
                     <div className="mb-1 ">
@@ -185,9 +203,9 @@ const Breadcrumb = props => {
                                     :
                                     <div>
                                         <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{pageHeading}</label>
-                                        {(bredcrumbName.length > 0) ?
+                                        {(bredcrumbItemName.length > 0) ?
                                             <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
-                                                style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                                                style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
                                             : null
                                         }
 
@@ -195,9 +213,6 @@ const Breadcrumb = props => {
                             }
                         </div>
                     </div>
-
-
-
 
                     <div >
                         <div className=" d-flex  justify-content-end">
@@ -253,12 +268,12 @@ const Breadcrumb = props => {
                                     id="checkAll"
                                     type="checkbox"
                                     className="form-check-input"
-                                    onChange={excelChekOnChange}
+                                    onChange={excelCheckBoxOnChange}
                                 />
                                 <label className="form-label text-black">All Select</label>
                             </div>
-
                             <ExcelCheckBox />
+
                             <div className="modal-body">
                                 <div className="modal-footer">
                                     <button
@@ -268,7 +283,7 @@ const Breadcrumb = props => {
                                     >
                                         Cancel
                                     </button>
-                                    <button type="submit" className="btn btn-primary">
+                                    <button type="submit" className="btn btn-primary" >
                                         Download in Excel
                                     </button>
                                 </div>

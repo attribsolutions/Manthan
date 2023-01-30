@@ -10,12 +10,13 @@ import {
 } from "../../../store/Administrator/HPagesRedux/actions";
 import HPageMaster from "./PageMaster";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { PAGE } from "../../../routes/route_url";
-
-
+import * as pageId from "../../../routes/allPageID"
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { MetaTags } from "react-meta-tags";
 export default function PageList() {
-debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -45,10 +46,12 @@ debugger
     dispatch(GetHpageListData());
   }, []);
 
-  const { pageField } = reducers;
+  const { pageField ,userAccess=[]} = reducers;
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

@@ -9,9 +9,12 @@ import {
   delete_VehicleType_ID,
   PostMethod_ForVehicleMasterSuccess,
 } from "../../../store/Administrator/VehicleRedux/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import { VEHICLE } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const VehicleList = (props) => {
 
@@ -39,22 +42,25 @@ const VehicleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(30))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getMethodForVehicleList());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField ,userAccess=[]} = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.VEHICLE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={VehicleMaster}
-            masterPath={VEHICLE}
+            masterPath={url.VEHICLE}
             ButtonMsgLable={"Vehicle"}
             deleteName={"VehicleNumber"}
 
