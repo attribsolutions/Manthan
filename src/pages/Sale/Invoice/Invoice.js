@@ -79,7 +79,7 @@ const Invoice = (props) => {
         GoButton: state.InvoiceReducer.GoButton
     }));
 
-    const { OrderItemDetails = [], OrderIDs = [] } = Data;
+    const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
