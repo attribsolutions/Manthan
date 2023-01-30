@@ -9,8 +9,7 @@ import { DELETE_INVOICE_LIST_PAGE, GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INV
 // GO Botton Post API
 function* GoButtonInvoice_genfun({ data, goBtnId }) {
   yield put(SpinnerState(true))
-  try {
-    
+  try {  
     const response = yield call(Invoice_GoButton_Post_API, data);
 
     let convResp = response.Data.OrderItemDetails.map(i1 => {

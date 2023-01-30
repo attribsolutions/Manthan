@@ -440,11 +440,11 @@ import * as table from './TableData'
 
 export const pageBorder = (doc) => {
     // doc.line(570 ,40,50, 40);//horizontal line (Top)
+    // doc.setDrawColor(255, 0, 0);
     doc.line(30, 815, 30, 40);//vertical line (left)
     doc.line(570, 815, 570, 40);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
-
 export const pageHeder = (doc, data) => {
     doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
@@ -452,8 +452,6 @@ export const pageHeder = (doc, data) => {
     doc.setFontSize(15)
     doc.text('Tax Invoice', 200, 40,)
 }
-
-
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
@@ -473,9 +471,9 @@ export const reportHeder1 = (doc, data) => {
     // doc.line(570, 815, 30, 815);//horizontal line buttom 1
     // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
     var options3 = {
-        
+
         margin: {
-            top: 40, left: 30, right: 22,// bottom:100 /
+            top: 45, left: 35, right: 35,// bottom:100 
         },
         showHead: 'always',
         theme: 'plain',
@@ -545,10 +543,19 @@ export const reportHeder3 = (doc, data) => {
     doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
 }
 
+
+
+
+
+
+
+
+// original
+
 export const reportFooter = (doc, data) => {
     var optionsTable2 = {
         margin: {
-            top: 45, left: 35, right: 35,// bottom:100 
+            top: 45, left: 35, right: 35,
         },
         theme: 'grid',
         headerStyles: {
@@ -669,11 +676,11 @@ export const reportFooter = (doc, data) => {
 
 
     };
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),optionsTable3);
+    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
 
     const optionsTable4 = {
         margin: {
-            top: 410, left: 410, right: 30, bottom: 10
+            top: 410, left: 410, right: 30,
         },
         showHead: 'never',
         theme: 'plain',
@@ -720,13 +727,45 @@ export const reportFooter = (doc, data) => {
         },
         startY: 745,
     };
-    let finalY = doc.previousAutoTable.finalY;
+    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data), optionsTable3);
+    // doc.autoTable(table.ReportFotterColumns4, table.ReportFooterRow4(data), optionsTable4);
+    // let finalY = doc.previousAutoTable.finalY;
+
+    // if (finalY < 745) {
+    //     doc.line(35, finalY, 35, 815);//horizontal line 3
+    //     doc.line(561, finalY, 561, 815);//horizontal line 3
+    // }
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
+    const tableRow = table.Rows(data);
+    console.log(tableRow)
     var options = {
+
+        didParseCell: (data1) => {
+    debugger
+
+            if (data1.row.cells[5].raw === "isaddition") {
+                data1.row.cells[0].colSpan = 3
+                data1.row.cells[4].colSpan = 2
+                data1.row.cells[6].colSpan = 2
+
+                data1.row.cells[0].styles.fontSize = 10
+                data1.row.cells[4].styles.fontSize = 10
+                data1.row.cells[6].styles.fontSize = 10
+
+                data1.row.cells[0.].styles.fontStyle = "bold"
+                data1.row.cells[4.].styles.fontStyle = "bold"
+                data1.row.cells[6.].styles.fontStyle = "bold"
+
+                
+                // data1.row.cells[3].colSpan=4
+                // .colSpan = 3;
+                //description above refer to the column of the table on the lastrow
+            }
+        },
         margin: {
-            left: 30, right: 25,// bottom:100 
+            left: 30, right: 25,//200 bottom
         },
         theme: 'grid',
         headerStyles: {
@@ -745,8 +784,9 @@ export const tableBody = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 3,
             fontSize: 7,
+            columnWidth: 'wrap',
             // fontStyle: 'bold',
-            lineColor: [0, 0, 0]
+            lineColor: [0, 0, 0],
         },
         columnStyles: {
             0: {
@@ -787,55 +827,104 @@ export const tableBody = (doc, data) => {
         },
 
 
-        drawHeaderCell: function (cell, data) {
 
-            if (cell.raw === 'Total GST') {//paint.Name header red
-                cell.styles.fontSize = 20;
-                cell.styles.textColor = [255, 0, 0];
-            } else {
-                cell.styles.textColor = 255;
-                cell.styles.fontSize = 10;
+        // drawHeaderCell: function (cell, data) {
+        //     if (cell.raw === 'Total GST') {//paint.Name header red
+        //         cell.styles.fontSize = 20;
+        //         cell.styles.textColor = [255, 0, 0];
+        //     } else {
+        //         cell.styles.textColor = 255;
+        //         cell.styles.fontSize = 10;
+        //     }
+        // },
+
+
+        tableLineColor: "black",
+        startY: doc.autoTableEndPosY(45),// 45,
+
+
+
+    };
+
+    doc.autoTable(table.columns, table.Rows(data), options, {
+
+
+    });
+
+    const optionsTable4 = {
+
+        margin: {
+            left: 30, right: 30, bottom: 140
+        },
+        showHead: 'never',
+        // theme: 'plain',
+        headerStyles: {
+            // columnWidth: 'wrap',
+            // cellPadding: 1,
+            // lineWidth: 0,
+            // valign: 'top',
+            // fontStyle: 'bold',
+            // halign: 'left',    //'center' or 'right'
+            // fillColor: "white",
+            // textColor: [0, 0, 0], //Black     
+            // // textColor: [255, 255, 255], //White     
+            // // fillColor: "white"
+            // fontSize: 8,
+            // rowHeight: 10,
+            // lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            // columnWidth: 'wrap',
+            // textColor: [30, 30, 30],
+            // cellPadding: 2,
+            // fontSize: 7,
+            // fontStyle: 'bold',
+            // lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                // columnWidth:10,
+                // fontStyle: 'bold',
+            },
+            1: {
+                halign: 'right',    //'center' or 'left'
+                valign: "top",
+                // columnWidth: 140,
+                // fontStyle: 'bold',
+            },
+        },
+        didParseCell: function (cell, data) {
+            console.log("didParseCell", cell)
+            console.log(" didParse data", data)
+
+            if (cell.row.index === 4) {
+                // cell.cell.styles.fontSize = 12;
+                // cell.cell.styles.lineColor = 'gray'
+                // cell.cell.styles.lineWidth = 0.5
+
             }
         },
 
-        // createdCell: function (cell, data) {
-        //     // // console.log("aaaaaaaaaaaaaaaaaaaaaa",cell)
-        //     // if (cell.raw === 'Total GST') {//paint.Name header red
-        //     //     cell.styles.fontSize = 15;
-        //     //     // cell.styles.textColor = [255, 0, 0];
-        //     // } else {
-        //     //     // cell.styles.textColor = 255;
-        //     //     cell.styles.fontSize = 10;
-        //     // }
-        // },
-        tableLineColor: "black",
-        startY: doc.autoTableEndPosY(),// 45,
-
-        // html: '#table',
-        // didParseCell(data) {
-        //     debugger
-        //   if (data.cell.row.index === 1) {
-        //     data.cell.styles.textColor = [255, 255, 255];
-        //     data.cell.styles.fillColor = '#FF5783';
-        //   }
-        // }
     };
 
-    doc.autoTable(table.columns, table.Rows(data), options);
-    // doc.autoTable({
-    //     html: '#table',
-    //     didParseCell(data) {
-    //       if (data.cell.row.index === 0) {
-    //         data.cell.styles.textColor = [255, 255, 255];
-    //         data.cell.styles.fillColor = '#FF5783';
-    //       }
-    //     }
-    //   })
+    doc.autoTable(optionsTable4);
+
+    doc.autoTable({
+        html: '#table',
+        didParseCell(data) {
+            if (data.cell.row.index === 0) {
+                data.cell.styles.textColor = [255, 255, 255];
+                data.cell.styles.fillColor = '#FF5783';
+            }
+        }
+    })
 
 
 }
 
 export const pageFooter = (doc, data) => {
+
     var th = ['', 'thousand', 'million', 'billion', 'trillion'];
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -884,40 +973,37 @@ export const pageFooter = (doc, data) => {
         return str.replace(/\s+/g, ' ');
     }
     let stringNumber = toWords(data.GrandTotal)
-    doc.addImage(upi_qr_code, 'PNG', 470, 710, 80, 60)
-    // doc.line(570, 690, 35, 690);//horizontal line Footer 1
-    doc.line(460, 745, 30, 745);//horizontal line Footer 2
+    doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 745, 30, 745);//horizontal line Footer 2
     doc.line(570, 680, 30, 680);//horizontal line Footer 3
-    doc.line(570, 700, 30, 700);//horizontal line Footer 3 Ruppe section
-    doc.line(570, 660, 30, 660);//horizontal line Footer 3 Sub Total Section
-    doc.line(460, 700, 460, 775);//vertical right1 Qr Left 1
-    doc.line(170, 660, 170, 680);//vertical right1 Sub Total
-    doc.line(310, 660, 310, 680);//vertical right1 Sub Total
-    doc.line(390, 660, 390, 700);//vertical right1 Sub Total
-    doc.line(460, 660, 460, 680);//vertical right1 Sub Total
-    doc.line(100, 660, 100, 680);//vertical right1 Sub Total
+    doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
+    doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
+
+    doc.line(430, 680, 430, 745);//vertical right1 Sub Total
 
     doc.setFont('Tahoma')
-    doc.setFontSize(15)
-    doc.line(570, 775, 30, 775);//horizontal line (Bottom)
-    doc.text(` Amount :${data.GrandTotal}`, 390, 695,)
+    doc.line(460, 775, 30, 775);//horizontal line (Bottom)
+    doc.setFontSize(8)
+    doc.text(` CGST :`, 430, 690,)
+    doc.text(` SGST :`, 430, 700,)
+    doc.text(` TotalGST :`, 430, 710,)
+    doc.text(` BasicAmount :`, 430, 720,)
+    doc.setFontSize(12)
+    doc.text(` Amount :`, 430, 740,)
+    doc.text(` Amount :${data.GrandTotal}`, 430, 740,)
     doc.setFont('Tahoma')
     doc.setFontSize(9)
-    // doc.text(` Total Basic :${data.Total.BasicAmount}`, 175, 675,)
-    // doc.text(` Total SGST :${data.Total.TotalSGst}`, 315, 675,)
-    // doc.text(` Total CGST :${data.Total.TotalGGst}`, 392, 675,)
-    // const TotalGST = data.Total.TotalSGst + data.Total.TotalGGst;
-    // doc.text(`Total GST :${TotalGST}`, 465, 675,)
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.text(`Prepared by `, 35, 785,)
-    doc.text(`Received By `, 260, 785,)
+    doc.text(`Received By `, 180, 785,)
     doc.setFontSize(10)
-    doc.text(`${data.PartyName} `, 450, 785,)
+    doc.text(`${data.PartyName} `, 390, 785,)
     doc.setFontSize(10)
-    doc.text(`${data.CustomerName} `, 250, 811,)
+    doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
-    doc.text(`Signature `, 475, 811,)
+    doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
    quantity whitch it/these purports to be `, 34, 760,)
@@ -927,6 +1013,7 @@ export const pageFooter = (doc, data) => {
     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
 
     let finalY = doc.previousAutoTable.finalY;
+
     if (finalY > 675) {
         pageBorder(doc)
         reportFooter(doc, data)
@@ -945,3 +1032,5 @@ export const pageFooter = (doc, data) => {
         console.log("aaa", doc.internal.pageSize.height)
     }
 }
+
+// original

@@ -2,9 +2,10 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { InvoiceFakeData } from "../../pages/Order/InvioceFakedata";
+import { Data } from "./DemoData";
 
 var pageHeder = function (doc,data) {
-    // style.pageBorder(doc,data);
+    style.pageBorder(doc,data);
     style.pageHeder(doc,data);     //Title
     style.reportHeder1(doc,data);
     style.reportHeder2(doc,data);
@@ -13,10 +14,12 @@ var pageHeder = function (doc,data) {
 };
 function reportBody(doc, data) {
     style.tableBody(doc, data);
+
 }
 function pageFooter(doc,data) {
-    style.reportFooter(doc,data);
     style.pageFooter(doc,data);
+    style.reportFooter(doc,data);
+
     // style.pageFooter1(doc,data)
 }
 
