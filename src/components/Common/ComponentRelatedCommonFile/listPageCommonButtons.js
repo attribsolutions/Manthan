@@ -33,17 +33,16 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData) {
-      
         if (editBodyfunc) { editBodyfunc(rowData) }
         else {
             dispatch(editActionFun(rowData.id, "edit",));
         }
+
     }
 
     function copyHandler(rowData) {
         dispatch(editActionFun(rowData.id, "copy",));
     }
-
     function downHandler(rowData) {
         downBtnFunc(rowData);
     }
@@ -318,23 +317,19 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
     //     //alert("Save button dissable error") 
     // }
 }
-export function mainSppinerOnOff({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+export function mainSppinerOnOff( state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
         document.getElementById("overlay").style.display = state ? "block" : "none";
     } catch (e) { alert("button sppiner error") }
-    try {
-        document.getElementById(`${id}`).disabled = state;
-    } catch (e) {
-        // alert("Go btn dissable  error") 
-    }
+    // try {
+    //     document.getElementById(`${id}`).disabled = state;
+    // } catch (e) {
+    //     // alert("Go btn dissable  error") 
+    // }
 }
 
 export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    // try {
-    //     document.getElementById("overlay").style.display = state ? "block" : "none";
-    // } catch (e) {
-    //     alert("Go btn dissable overlay error")
-    // }
+ 
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
@@ -349,6 +344,27 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
         // alert("Go btn dissable  error") 
     }
 }
+
+// export function GoBtnDissable1({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+//     try {
+//         document.getElementById("overlay").style.display = state ? "block" : "none";
+//     } catch (e) {
+//         // alert("Go btn dissable overlay error")
+//     }
+//     try {
+//         const btn = document.getElementById(id);
+//         btn.disabled = state;
+//         debugger
+//         if (state) {
+//             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
+//         } else {
+//             btn.innerHTML = `<span> Go</span>`
+//             btn.text = "Go"
+//         }
+//     } catch (e) {
+//         // alert("Go btn dissable  error") 
+//     }
+// }
 
 export function convertNumber(e) {//++++++++++++++++++++++ Convert Quantity +++++++++++++++++++++++++++++
     return parseFloat(e).toFixed(3)
