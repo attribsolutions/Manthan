@@ -21,7 +21,7 @@ import {
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
@@ -59,7 +59,6 @@ const Invoice = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [EditData, setEditData] = useState({})
     const [showAllStockState, setShowAllStockState] = useState(true);
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -133,7 +132,6 @@ const Invoice = (props) => {
 
             if (hasEditVal) {
 
-                setEditData(hasEditVal)
                 const { Customer, CustomerName, } = hasEditVal
                 const { values, hasValid, } = { ...state }
                 hasValid.Customer.valid = true;
@@ -182,7 +180,7 @@ const Invoice = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.INVOICE,
+                    RedirectPath: url.INVOICE_LIST,
                 }))
             }
         }
@@ -278,6 +276,7 @@ const Invoice = (props) => {
             formatter: (cellContent, user) => (
                 <div >
                     <Input type="text"
+                        disabled={pageMode === 'edit' ? true : false}
                         id={`OrderQty${user.id}`}
                         style={{ textAlign: "right" }}
                         className=" width-100"
@@ -297,7 +296,7 @@ const Invoice = (props) => {
 
             headerFormatter: (cell, index1 = [], k) => {
                 return (
-                    <div className="width-100">Unit</div>)
+                    <div className="width-100" >Unit</div>)
             },
             formatter: (value, row, key) => {
 
@@ -305,6 +304,7 @@ const Invoice = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
+                        isDisabled={pageMode === 'edit' ? true : false}
                         defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
                         className=" width-100"
@@ -416,7 +416,7 @@ const Invoice = (props) => {
                                     <th className="">Batch Code </th>
                                     <th className="" >Supplier BatchCode</th>
                                     <th className="" >Batch Date</th>
-                                    <th className="" >Batch Date</th>
+                                    {/* <th className="" >Batch Date</th> */}
 
 
                                     <th className="">
@@ -459,6 +459,7 @@ const Invoice = (props) => {
                                             <td>
                                                 <div style={{ width: "150px" }}>
                                                     <Input type="text"
+                                                        disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
                                                         key={`batchQty${index1.id}-${index2.id}`}
                                                         id={`batchQty${index1.id}-${index2.id}`}
@@ -860,26 +861,15 @@ const Invoice = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-
                                 </Col>
-                                <Col sm={1} className="mt-2">
-                                    {OrderItemDetails.length === 0 ?
-                                        <Button
-                                            color="btn btn-outline-success border-1 font-size-12 " style={{ marginTop: '3px' }}
-                                            onClick={(e) => goButtonHandler(e)}
-                                        >Go</Button>
-                                        :
-                                        <Button
-                                            color="btn btn-outline-info border-1 font-size-12 " style={{ marginTop: '3px' }}
-                                            onClick={(e) => {
-                                                // document.getElementById("myInput11").flatpickr({
-                                                //     maxDate: currentDate,
-                                                //     defaultDate: values.InvoiceDate,
-                                                //     dateFormat: "Y-m-d",
-                                                // });
-                                                dispatch(GoButton_post_For_Invoice_Success([]))
-                                            }}
-                                        >Change</Button>
+
+                                <Col sm={1} className="mt-3">
+                                    {pageMode === "save" ?
+                                        (OrderItemDetails.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(GoButton_post_For_Invoice_Success([]))} />
+                                        : null
                                     }
                                 </Col>
                                 <Col>
