@@ -1,9 +1,20 @@
-import { DELETE_INVOICE_LIST_PAGE, DELETE_INVOICE_LIST_PAGE_SUCCESS, GET_INVOICE_LIST_PAGE, GET_INVOICE_LIST_PAGE_SUCCESS, GO_BUTTON_POST_FOR_INVOICE, GO_BUTTON_POST_FOR_INVOICE_SUCCESS, POST_INVOICE_MASTER, POST_INVOICE_MASTER_SUCCESS } from "./actionType";
+import {
+    DELETE_INVOICE_LIST_PAGE,
+    DELETE_INVOICE_LIST_PAGE_SUCCESS,
+    EDIT_INVOICE_LIST,
+    EDIT_INVOICE_LIST_SUCCESS,
+    GET_INVOICE_LIST_PAGE,
+    GET_INVOICE_LIST_PAGE_SUCCESS,
+    GO_BUTTON_POST_FOR_INVOICE,
+    GO_BUTTON_POST_FOR_INVOICE_SUCCESS,
+    POST_INVOICE_MASTER,
+    POST_INVOICE_MASTER_SUCCESS
+} from "./actionType";
 
 // Go Button Post API for Invoice Master
-export const GoButton_post_For_Invoice = (data,goBtnId) => ({
+export const GoButton_post_For_Invoice = (data, goBtnId) => ({
     type: GO_BUTTON_POST_FOR_INVOICE,
-    data,goBtnId
+    data, goBtnId
 });
 
 export const GoButton_post_For_Invoice_Success = (data) => ({
@@ -12,9 +23,9 @@ export const GoButton_post_For_Invoice_Success = (data) => ({
 });
 
 // post api
-export const postInvoiceMaster = (data,saveBtnid) => ({
+export const postInvoiceMaster = (data, saveBtnid) => ({
     type: POST_INVOICE_MASTER,
-    data,saveBtnid
+    data, saveBtnid
 });
 
 export const postInvoiceMasterSuccess = (data) => ({
@@ -32,6 +43,17 @@ export const getIssueListPageSuccess = (data) => ({
     type: GET_INVOICE_LIST_PAGE_SUCCESS,
     payload: data,
 });
+
+// edit api
+export const editInvoiceList = (id, pageMode) => ({
+    type: EDIT_INVOICE_LIST,
+    id, pageMode
+})
+
+export const editInvoiceListSuccess = (editData) => ({
+    type: EDIT_INVOICE_LIST_SUCCESS,
+    payload: editData,
+})
 
 // listpage api
 export const deleteInvoiceId = (id) => ({
