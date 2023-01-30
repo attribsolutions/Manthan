@@ -169,10 +169,11 @@ const OrderList = () => {
     }
 
     function goButtonHandler() {
+
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: venderSelect === "" ? '' : venderSelect.value,
+            Supplier: venderSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder
         });
