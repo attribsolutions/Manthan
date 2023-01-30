@@ -173,7 +173,7 @@ const ItemsMaster = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: userCompany(),
-            TypeID: 32
+            TypeID: 47
         });
         dispatch(GeneralMasterSubType(jsonBody));
     }, []);
