@@ -51,7 +51,7 @@ import { createdBy, userCompany } from "../../../../components/Common/ComponentR
 import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
-import { PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
+import { GeneralMasterSubType, PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -145,7 +145,7 @@ const ItemsMaster = (props) => {
         CategoryList: state.ItemMastersReducer.Category,
         ItemTagList: state.ItemMastersReducer.ItemTagList,
         BrandTagList: state.ItemMastersReducer.BrandTagList,
-        BrandName: state.ItemMastersReducer.BrandName,
+        BrandName: state.GeneralReducer.GeneralMasterSubType,
     }));
 
     const location = { ...history.location }
@@ -171,12 +171,11 @@ const ItemsMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-
         const jsonBody = JSON.stringify({
             Company: userCompany(),
-            TypeID: 32
+            TypeID: 47
         });
-        dispatch(post_BrandName_dropdown(jsonBody));
+        dispatch(GeneralMasterSubType(jsonBody));
     }, []);
 
     useEffect(() => {
