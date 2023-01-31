@@ -39,9 +39,6 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
-    dispatch(roleAceessActionSuccess([]))
-  }, [])
-  useEffect(() => {
     if (RoleAccessUpdateData.length <= 0) {
       let role = userDetails()
       if (role) {
