@@ -21,12 +21,12 @@ import {
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, GoBtnDissable, mainSppinerOnOff, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { postGoButtonForMaterialIssue_Master, } from "../../../store/Purchase/Matrial_Issue/action";
+import { goButtonForMaterialIssue_Master_Action, } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -34,7 +34,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
@@ -59,9 +59,7 @@ const Invoice = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.save);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [Itemselect, setItemselect] = useState([])
     const [showAllStockState, setShowAllStockState] = useState(true);
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -133,31 +131,23 @@ const Invoice = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
-                setItemselect(hasEditVal)
-                const { id, Item, Customer, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
-                setState((i) => {
-                    i.values.InvoiceDate = currentDate
-                    i.values.Customer = { value: id, label: Customer, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
-                    i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.Customer.valid = true;
-                    i.hasValid.InvoiceDate.valid = true;
-                    i.hasValid.NumberOfLot.valid = true;
-                    i.hasValid.LotQuantity.valid = true;
-                    return i
-                })
 
-                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+                const { Customer, CustomerName, } = hasEditVal
+                const { values, hasValid, } = { ...state }
+                hasValid.Customer.valid = true;
+
+                values.Customer = { label: CustomerName, value: Customer };
+
+                //++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
                 const jsonBody = JSON.stringify({
-                    WorkOrder: id,
-                    Item: Item,
-                    Company: userCompany(),
+                    FromDate: hasEditVal.InvoiceDate,
+                    Customer: hasEditVal.Customer,
                     Party: userParty(),
-                    Quantity: parseInt(EstimatedOutputQty)
+                    OrderIDs: ""
                 });
+                dispatch(GoButton_post_For_Invoice(jsonBody));
+                dispatch(editInvoiceListSuccess({ Status: false }))
 
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
             }
         }
     }, []);
@@ -167,7 +157,7 @@ const Invoice = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInvoiceMasterSuccess({ Status: false }))
             dispatch(GoButton_post_For_Invoice_Success([]))
-            // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
@@ -190,7 +180,7 @@ const Invoice = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.INVOICE,
+                    RedirectPath: url.INVOICE_LIST,
                 }))
             }
         }
@@ -286,6 +276,7 @@ const Invoice = (props) => {
             formatter: (cellContent, user) => (
                 <div >
                     <Input type="text"
+                        disabled={pageMode === 'edit' ? true : false}
                         id={`OrderQty${user.id}`}
                         style={{ textAlign: "right" }}
                         className=" width-100"
@@ -305,7 +296,7 @@ const Invoice = (props) => {
 
             headerFormatter: (cell, index1 = [], k) => {
                 return (
-                    <div className="width-100">Unit</div>)
+                    <div className="width-100" >Unit</div>)
             },
             formatter: (value, row, key) => {
 
@@ -313,6 +304,7 @@ const Invoice = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
+                        isDisabled={pageMode === 'edit' ? true : false}
                         defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
                         className=" width-100"
@@ -424,7 +416,7 @@ const Invoice = (props) => {
                                     <th className="">Batch Code </th>
                                     <th className="" >Supplier BatchCode</th>
                                     <th className="" >Batch Date</th>
-                                    <th className="" >Batch Date</th>
+                                    {/* <th className="" >Batch Date</th> */}
 
 
                                     <th className="">
@@ -467,6 +459,7 @@ const Invoice = (props) => {
                                             <td>
                                                 <div style={{ width: "150px" }}>
                                                     <Input type="text"
+                                                        disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
                                                         key={`batchQty${index1.id}-${index2.id}`}
                                                         id={`batchQty${index1.id}-${index2.id}`}
@@ -496,6 +489,7 @@ const Invoice = (props) => {
         // totalSize: OrderItemDetails.length,
         custom: true,
     };
+
     function showAllStockOnclick(isplus = false) {
         try {
             if (isplus) {
@@ -867,26 +861,15 @@ const Invoice = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-
                                 </Col>
-                                <Col sm={1} className="mt-2">
-                                    {OrderItemDetails.length === 0 ?
-                                        <Button
-                                            color="btn btn-outline-success border-1 font-size-12 " style={{ marginTop: '3px' }}
-                                            onClick={(e) => goButtonHandler(e)}
-                                        >Go</Button>
-                                        :
-                                        <Button
-                                            color="btn btn-outline-info border-1 font-size-12 " style={{ marginTop: '3px' }}
-                                            onClick={(e) => {
-                                                // document.getElementById("myInput11").flatpickr({
-                                                //     maxDate: currentDate,
-                                                //     defaultDate: values.InvoiceDate,
-                                                //     dateFormat: "Y-m-d",
-                                                // });
-                                                dispatch(GoButton_post_For_Invoice_Success([]))
-                                            }}
-                                        >Change</Button>
+
+                                <Col sm={1} className="mt-3">
+                                    {pageMode === "save" ?
+                                        (OrderItemDetails.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(GoButton_post_For_Invoice_Success([]))} />
+                                        : null
                                     }
                                 </Col>
                                 <Col>

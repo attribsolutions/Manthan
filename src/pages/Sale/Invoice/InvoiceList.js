@@ -23,7 +23,7 @@ import { Invoice_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
 import Invoice from "./Invoice";
-import { deleteInvoiceId, deleteInvoiceIdSuccess, getIssueListPage } from "../../../store/Sales/Invoice/action";
+import { deleteInvoiceId, deleteInvoiceIdSuccess, editInvoiceList, getIssueListPage } from "../../../store/Sales/Invoice/action";
 
 const InvoiceList = () => {
 
@@ -46,13 +46,13 @@ const InvoiceList = () => {
             deleteMsg: state.InvoiceReducer.deleteMsg,
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            editData: state.OrderReducer.editData,
+            editData: state.InvoiceReducer.editData,
             orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, GRNitem, customer, tableList, } = reducers;
+    const { userAccess, pageField, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 
     const page_Id = pageId.INVOICE_LIST
@@ -61,6 +61,7 @@ const InvoiceList = () => {
         getList: getIssueListPage,
         deleteId: deleteInvoiceId,
         postSucc: postMessage,
+        editId: editInvoiceList,
         updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteInvoiceIdSuccess
     }
@@ -103,62 +104,6 @@ const InvoiceList = () => {
 
         }
     }, [userAccess])
-
-    useEffect(() => {
-        if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            history.push({
-                pathname: GRNitem.path,
-                pageMode: GRNitem.pageMode,
-            })
-        }
-    }, [GRNitem])
-
-    const makeBtnFunc = (list = []) => {
-
-        var isGRNSelect = ''
-        var challanNo = ''
-        const grnRef = []
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.hasSelect) {
-                    grnRef.push({
-                        Invoice: null,
-                        Order: ele.id,
-                        ChallanNo: ele.FullOrderNumber,
-                        Inward: false
-                    });
-                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-                }
-            });
-
-            if (isGRNSelect) {
-
-                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
-                const jsonBody = JSON.stringify({
-                    OrderIDs: isGRNSelect
-                })
-
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
-
-            } else {
-                alert("Please Select Order1")
-            }
-        }
-    }
-
-    function editBodyfunc(rowData) {
-        const jsonBody = JSON.stringify({
-            Party: rowData.SupplierID,
-            Customer: rowData.CustomerID,
-            EffectiveDate: rowData.preOrderDate,
-            OrderID: rowData.id
-        })
-        var Mode = "edit"
-        dispatch(editOrderId(jsonBody, Mode));
-    }
 
     function downBtnFunc(row) {
         var ReportType = report.invoice;
@@ -282,11 +227,11 @@ const InvoiceList = () => {
                             deleteName={"FullInvoiceNumber"}
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.INVOICE_LIST ? false : true}
-                            makeBtnFunc={makeBtnFunc}
+                            // makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            editBodyfunc={editBodyfunc}
+                            // editBodyfunc={editBodyfunc}
                             filters={orderlistFilter}
                         />
                         : null

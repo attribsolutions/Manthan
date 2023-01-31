@@ -18,7 +18,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -39,6 +39,7 @@ const OrderList = () => {
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(url.ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
+    const [orderlistFilter, setorderlistFilter] = useState('');
 
 
     const reducers = useSelector(
@@ -50,13 +51,13 @@ const OrderList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
-            orderlistFilter: state.OrderReducer.orderlistFilter,
+            // orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, GRNitem, vender, tableList, orderlistFilter } = reducers;
-    const { fromdate, todate, venderSelect } = orderlistFilter;
+    const { fromdate = currentDate, todate = currentDate, venderSelect = { value: "", label: "All" } } = orderlistFilter;
+    const { userAccess, pageField, GRNitem, vender, tableList } = reducers;
     const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
 
     const action = {
@@ -73,7 +74,7 @@ const OrderList = () => {
         // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(GetVender())
         goButtonHandler(true)
 
@@ -184,19 +185,22 @@ const OrderList = () => {
     function fromdateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.fromdate = date
-        dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
+        // dispatch(orderlistfilters(newObj))
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.todate = date
-        dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
+        // dispatch(orderlistfilters(newObj))
     }
 
     function venderOnchange(e) {
         let newObj = { ...orderlistFilter }
         newObj.venderSelect = e
-        dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
+        // dispatch(orderlistfilters(newObj))
     }
 
     return (

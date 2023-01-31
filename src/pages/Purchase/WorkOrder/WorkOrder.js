@@ -391,13 +391,14 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
+        debugger
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
             Quantity: parseFloat(values.Quantity),
             Party: userParty()
         });
-        GoBtnDissable({ id: goBtnID1, state: true })
+        // GoBtnDissable({ id: goBtnID1, state: true })
         dispatch(postGoButtonForWorkOrder_Master(jsonBody,goBtnID1));
     }
 

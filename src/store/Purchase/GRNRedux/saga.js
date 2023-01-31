@@ -43,7 +43,7 @@ function* postGRNGenFunc({ data }) {
       Status: true, Message: "500 Error postGRN API",
     }));
   }
-}
+};
 
 function* DeleteGRNGenFunc({ id }) {
   yield put(SpinnerState(true))
@@ -58,7 +58,7 @@ function* DeleteGRNGenFunc({ id }) {
       Status: true, Message: "500 Error DeleteGRN API",
     }));
   }
-}
+};
 
 function* UpdateGRNGenFunc({ data, id }) {
   try {
@@ -127,7 +127,6 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
 }
 
 function* Edit_GRN_GenratorFunction({ id, pageMode }) {
-debugger
   try {
     const response = yield call(GRN_Edit_API, id);
     response.pageMode = pageMode

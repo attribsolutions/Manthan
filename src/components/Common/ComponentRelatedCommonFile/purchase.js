@@ -187,7 +187,6 @@ const PurchaseListPage = (props) => {
     }, [deleteMsg]);
 
     useEffect(() => {
-        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postSucc({ Status: false }))
@@ -217,7 +216,6 @@ const PurchaseListPage = (props) => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-
         if (editData.Status === true) {
             if (pageField.IsEditPopuporComponent) {
                 history.push({
