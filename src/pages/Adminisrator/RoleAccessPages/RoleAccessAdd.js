@@ -390,7 +390,7 @@ const RoleAccessAdd = (props) => {
             let divisionID = division_dropdown_Select.value
 
             pageAccessElement["Role"] = role_dropdown_Select.value
-            pageAccessElement["Company"] = userCompany()
+            pageAccessElement["Company"] = company_dropdown_Select.value
             pageAccessElement["Division"] = (divisionID === 0 ? "" : divisionID)
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
@@ -404,7 +404,7 @@ const RoleAccessAdd = (props) => {
                 if (relatedPageID > 0) {
 
                     pageAccessElement2["Role"] = role_dropdown_Select.value
-                    pageAccessElement2["Company"] = userCompany()
+                    pageAccessElement2["Company"] = company_dropdown_Select.value
                     pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
