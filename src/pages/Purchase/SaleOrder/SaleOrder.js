@@ -512,7 +512,7 @@ const SaleOrder = (props) => {
             Party: !(supplierSelect.value > 0) ? 0 : supplierSelect.value,
             Customer: userParty(),
             EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.save) ? 0 : editVal.id
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id
         })
 
         dispatch(goButtonForOrderAdd(jsonBody))

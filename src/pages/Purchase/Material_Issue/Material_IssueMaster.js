@@ -54,7 +54,7 @@ const MaterialIssueMaster = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.save);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
@@ -84,8 +84,9 @@ const MaterialIssueMaster = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
@@ -109,27 +110,22 @@ const MaterialIssueMaster = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         FromDate: "2022-12-01",
-    //         ToDate: currentDate
-    //     });
-    //     dispatch(getWorkOrderListPage(jsonBody));
-    // }, [])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+
     useEffect(() => {
 
-        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
+            let blockpageMode = null
             if (hasShowloction) {
+                blockpageMode = location.pageMode;
                 setPageMode(location.pageMode)
-                hasEditVal = location.editValue
+                hasEditVal = location[mode.editValue]
             }
             else if (hasShowModal) {
-                hasEditVal = props.editValue
+                hasEditVal = props[mode.editValue]
+                blockpageMode = props.pageMode;
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
@@ -150,18 +146,22 @@ const MaterialIssueMaster = (props) => {
                     i.hasValid.LotQuantity.valid = true;
                     return i
                 })
-
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
-                const jsonBody = JSON.stringify({
-                    WorkOrder: id,
-                    Item: Item,
-                    Company: userCompany(),
-                    Party: userParty(),
-                    Quantity: parseInt(EstimatedOutputQty)
-                });
-                // dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
-                dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
-                dispatch(editMaterialIssueIdSuccess({Status:false}))
+
+                if (blockpageMode === mode.mode2save) {
+                    const jsonBody = JSON.stringify({
+                        WorkOrder: id,
+                        Item: Item,
+                        Company: userCompany(),
+                        Party: userParty(),
+                        Quantity: parseInt(EstimatedOutputQty)
+                    });
+                    dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
+                } else if (blockpageMode === mode.view) {
+                    dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
+                    dispatch(editMaterialIssueIdSuccess({ Status: false }))
+                }
+
             }
         }
     }, [])
@@ -181,7 +181,7 @@ const MaterialIssueMaster = (props) => {
             //     Message: "Item is out of stock",
             //     RedirectPath: url.MATERIAL_ISSUE_LIST,
             // }))
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
