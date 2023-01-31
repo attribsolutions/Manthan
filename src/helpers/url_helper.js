@@ -197,6 +197,7 @@ export const WORK_ORDER_LIST_API='/WorkOrder' //Single gate and delete
 // Material Issue
 export const GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE = '/WorkOrderDetails'
 export const POST_API_FOR_MATERIAL_ISSUE = '/MaterialIssue'
+export const MATERIAL_ISSUE_SHOW = '/MaterialIssueShow'
 export const POST_API_FOR_MATERIAL_ISSUE_LIST = '/MaterialIssueFilter'
 
 // Production master

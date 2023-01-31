@@ -29,7 +29,7 @@ import {
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
-import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
+import { goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -78,7 +78,7 @@ const MaterialIssueMaster = (props) => {
 
     useEffect(() => {
         const page_Id = pageId.MATERIAL_ISSUE
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -109,13 +109,13 @@ const MaterialIssueMaster = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            FromDate: "2022-12-01",
-            ToDate: currentDate
-        });
-        dispatch(getWorkOrderListPage(jsonBody));
-    }, [])
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         FromDate: "2022-12-01",
+    //         ToDate: currentDate
+    //     });
+    //     dispatch(getWorkOrderListPage(jsonBody));
+    // }, [])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -159,7 +159,7 @@ const MaterialIssueMaster = (props) => {
                     Quantity: parseInt(EstimatedOutputQty)
                 });
 
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+                dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
             }
         }
     }, [])
@@ -168,7 +168,7 @@ const MaterialIssueMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
-            dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
@@ -372,7 +372,7 @@ const MaterialIssueMaster = (props) => {
     function ItemOnchange(hasSelect, evn) {
         onChangeSelect({ hasSelect, evn, state, setState });
         dispatch(Breadcrumb_inputName(hasSelect.label))
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         setState((i) => {
             i.values.ItemName = hasSelect
             i.values.NumberOfLot = hasSelect.NumberOfLot;
@@ -399,12 +399,12 @@ const MaterialIssueMaster = (props) => {
                     Quantity: parseInt(values.LotQuantity)
                 });
 
-                dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
+                dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
             }
     }
 
     function ItemOnchange(e) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         setItemselectonchange(e)
         setState((i) => {
             i.values.ItemName = {
@@ -425,7 +425,7 @@ const MaterialIssueMaster = (props) => {
 
     function Quantitychange(event) {
 
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
             Itemselectonchange.Quantity :
             Itemselect.Quantity, Number(event.target.value)));
@@ -443,7 +443,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         let value1 = Math.max('', Math.min(Itemselect.NumberOfLot, Number(event.target.value)));
         event.target.value = value1
         if ((event.target.value === "NaN")) {
@@ -710,7 +710,7 @@ const MaterialIssueMaster = (props) => {
                                         (GoButton.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :
-                                            <Change_Button onClick={(e) => dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))} />
+                                            <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
                                         : null
                                     }
                                 </Col>
@@ -719,7 +719,7 @@ const MaterialIssueMaster = (props) => {
                                         (GoButton.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :
-                                            <Change_Button onClick={(e) => dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))} />
+                                            <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
                                         : null
                                     }
                                 </Col> */}
