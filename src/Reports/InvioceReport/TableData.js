@@ -55,7 +55,6 @@ export const Rows = (data) => {
 
             // return ({ TotalCGst: Number(cgst) + Number(totalCGst),})
             return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
-
         };
 
         function totalrow() {
