@@ -18,11 +18,10 @@ import {
     WorkOrderlistfilters
 } from "../../../store/Purchase/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
-import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const WorkOrderList = () => {
 
@@ -120,15 +119,14 @@ const WorkOrderList = () => {
 
         history.push({
             pathname: url.MATERIAL_ISSUE,
-            pageMode: "save",
-            editValue: list[0]
+            pageMode: mode.mode2save,
+            [mode.editValue]: list[0]
         })
 
     }
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
             <div className="page-content">
                 {/* <Breadcrumb
@@ -204,7 +202,7 @@ const WorkOrderList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === url.WORK_ORDER_LIST ? false : true}
+                            makeBtnShow={pageMode === mode.mode2save ? false : true}
                             makeBtnName={"Make Material Issue"}
                         />
                         : null

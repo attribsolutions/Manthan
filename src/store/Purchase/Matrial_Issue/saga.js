@@ -61,7 +61,7 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
     const response = yield call(Material_Issue_Edit_API, id);
 
     let obj = response.Data[0]
-    obj["pageMode"] = pageMode;
+    response["pageMode"] = pageMode;
     let newArr = [];
 
     yield obj.MaterialIssueItems.forEach((i1) => {
@@ -89,12 +89,11 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
       };
 
     });
-  yield  obj.MaterialIssueItems = newArr
-  yield response.Data = obj;
-    
+    yield obj.MaterialIssueItems = newArr
+    yield response.Data = obj;
+
     yield put(editMaterialIssueIdSuccess(response));
-    console.log("editmaterial", JSON.stringify(response.Data))
-    // yield put(goButtonForMaterialIssue_Master_ActionSuccess(response.Data));
+    // console.log("editmaterial", JSON.stringify(response.Data))
 
 
   } catch (error) {

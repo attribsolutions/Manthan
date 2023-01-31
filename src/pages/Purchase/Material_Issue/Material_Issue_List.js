@@ -18,7 +18,7 @@ import {
 } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
-import { Mode2 } from "../../../routes/PageMode";
+import * as  mode  from "../../../routes/PageMode";
 import { MetaTags } from "react-meta-tags";
 import { updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 
@@ -97,7 +97,7 @@ const MaterialIssueList = () => {
         history.push({
             pathname: url.PRODUCTION_MASTER,
             MaterialProductionaData: list,
-            pageMode: Mode2
+            pageMode:mode.mode2save
         })
     };
 

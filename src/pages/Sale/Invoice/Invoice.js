@@ -57,7 +57,7 @@ const Invoice = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.save);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
     //Access redux store Data /  'save_ModuleSuccess' action data
