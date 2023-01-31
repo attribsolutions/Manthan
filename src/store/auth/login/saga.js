@@ -56,7 +56,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-
+debugger
   try {
 
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
@@ -143,7 +143,7 @@ function* RoleAccessGenratorFunction({party, employee,company }) {
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error : RoleAccess Api",
+      Status: true, Message: "500 Error : RoleAccess get Api",
     }));
   }
 }
