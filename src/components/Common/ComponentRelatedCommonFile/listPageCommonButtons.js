@@ -256,28 +256,44 @@ export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++
     return currentDate
 }
 
-export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
-    let createdBy = 0
+export const userDetails = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+    let user_Details = null
     try {
-        createdBy = JSON.parse(localStorage.getItem('userId'))
+        user_Details = JSON.parse(localStorage.getItem('roleId'))
+    } catch (e) { alert("Common user_Details  Error") }
+    return user_Details
+}
+
+export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
+    let created_By = 0
+    try {
+        created_By = JSON.parse(localStorage.getItem('userId'))
     } catch (e) { alert("Common Created By Error") }
-    return createdBy
+    return created_By
 }
 
 export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-    let userCompany = 0
+    let user_Company = 0
     try {
-        userCompany = JSON.parse(localStorage.getItem('Company'))
+        user_Company = JSON.parse(localStorage.getItem('Company'))
     } catch (e) { alert("Common userCompany  Error") }
-    return userCompany
+    return user_Company
 }
 
 export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
-    let userParty = 0
+    let user_Party = 0
     try {
-        userParty = JSON.parse(localStorage.getItem("roleId")).Party_id
+        user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
     } catch (e) { alert("Common userParty Func  Error") }
-    return userParty
+    return user_Party
+}
+
+export const userEmployeeID = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+    let user_EmployeeID = 0
+    try {
+        user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
+    } catch (e) { alert("Common userEmployeeID Func  Error") }
+    return user_EmployeeID
 }
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++

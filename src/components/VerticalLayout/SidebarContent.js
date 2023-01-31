@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roleAceessAction } from "../../store/actions";
 import { WindowScrollController } from "@fullcalendar/react";
+import { userCompany, userDetails, userEmployeeID, userParty } from "../Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const SidebarContent = (props) => {
   const ref = useRef();
@@ -39,14 +40,13 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
-    debugger
+  
     if (RoleAccessUpdateData.length <= 0) {
-      var role = JSON.parse(localStorage.getItem("roleId"))
-      var CompanyID = JSON.parse(localStorage.getItem("Company"))
-      if (!(role === undefined) && !(role === null)) {
-        var party = role.Party_id
-        var employee = role.Employee_id;
-        var company = CompanyID;
+      let role = userDetails()
+      if (role) {
+        let party = userParty()
+        let employee = userEmployeeID();
+        let company = userCompany();
         dispatch(roleAceessAction(party, employee, company))
       };
     }
