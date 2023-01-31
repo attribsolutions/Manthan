@@ -408,8 +408,9 @@ export const Rows1 = (data) => {
     return a1;
 }
 export const ReportHederRows = (data) => {
+    data.OrderTermsAndCondition.values()
     var reportArray = [
-        [`${data.CustomerName}`, `${data.SupplierName}`,`Driver Name : Sameer`],
+        [`${data.CustomerName}`, `${data.SupplierName}`,``],
         [`${data.BillingAddress}`, `${data.ShippingAddress}` , ``,],
         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, ``],
         // [, , ""],

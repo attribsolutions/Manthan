@@ -361,7 +361,7 @@ export const tableBody = (doc, data) => {
 
             },
             2: {
-                columnWidth: 40,
+                columnWidth: 50,
                 halign: 'right',
             },
             3: {
