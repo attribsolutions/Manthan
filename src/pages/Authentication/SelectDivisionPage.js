@@ -86,7 +86,7 @@ const SelectDivisionPage = props => {
     var party = value.Party_id
 
     localStorage.setItem("roleId", JSON.stringify(value))
-    dispatch(roleAceessAction(party, employee))
+    dispatch(roleAceessAction(party, employee,userCompany()))
     history.push("/Dashboard")
 
   }
