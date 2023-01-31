@@ -18,118 +18,88 @@ export const PageHedercolumns = [
 
 export const Rows = (data) => {
 
+
     const { InvoiceItems = [] } = data
-    var a = [];
-    var TotalBasicAmount = 0
-    var TotalCGst = 0
-    var TotalSGst = 0
-    var TotalAmount = 0
-    var Item = ""
-    var TotalQuantity = 0
-    InvoiceItems.forEach(element => {
+    const returnArr = [];
+    let item = ""
 
+    let totalBasicAmount = 0
+    let totalCGst = 0
+    let totalSGst = 0
+    let totalAmount = 0
+    let totalQuantity = 0
 
-        if (Item === "") { Item = element.ItemName };
-        if ((Item === element.ItemName)) {
-            TotalBasicAmount = parseInt(TotalBasicAmount) + parseInt(element.BasicAmount);
-            TotalCGst = parseInt(TotalCGst) + parseInt(element.CGST)
-            TotalSGst = parseInt(TotalSGst) + parseInt(element.SGST)
-            TotalAmount = parseInt(TotalAmount) + parseInt(element.Amount)
-            TotalQuantity = parseInt(TotalQuantity) + parseInt(element.Quantity)
-            const TableListData = [
-                element.ItemName,
-                element.Quantity,
-                element.Rate,
-                element.BasicAmount,
-                element.CGSTPercentage,
-                element.CGST,
-                element.SGSTPercentage,
-                element.SGST,
-                element.Amount,
-                element.GSTPercentage,
-                element.GSTAmount,
+    InvoiceItems.forEach((element, key) => {
+      
+        const tableitemRow = [
+            element.ItemName,
+            element.Quantity,
+            element.Rate,
+            element.BasicAmount,
+            element.CGSTPercentage,
+            element.CGST,
+            element.SGSTPercentage,
+            element.SGST,
+            element.Amount,
+            element.GSTPercentage,
+            element.GSTAmount,
+        ];
+
+        function totalLots() {
+            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalCGst = Number(totalCGst) + Number(element.CGST)
+            totalSGst = Number(totalSGst) + Number(element.SGST)
+            totalAmount = Number(totalAmount) + Number( element.Amount)
+            // totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            let cgst = data["tableTot"].TotalCGst
+
+            // return ({ TotalCGst: Number(cgst) + Number(totalCGst),})
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+
+        };
+
+        function totalrow() {
+            return [
+                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+                " ",
+                `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                "",
+                `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+                "isaddition",
+                `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+                "",
+                `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+                // parseFloat(TotalCGst).toFixed(2),
+                // parseFloat(TotalSGst).toFixed(2),
             ];
-            a.push(TableListData);
-            Item = element.ItemName
+        };
+
+
+        if (item === "") { item = element.ItemName };
+        let aa = { TotalCGst: 0, totalSGst: 0 }
+        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+        if ((item === element.ItemName)) {
+            data["tableTot"] = totalLots()
+            returnArr.push(tableitemRow);
         }
         else {
-            const tableTotalRow = [ 
-                
-                `Total Quantity:${parseFloat(TotalQuantity).toFixed(2)}`,
-                " ",
-                `BasicAmount:${parseFloat(TotalBasicAmount).toFixed(2)}` ,
-                "",
-                `TotalCGST:${parseFloat(TotalCGst).toFixed(2)}`,
-                "isaddition",
-                `TotalSGST:${parseFloat(TotalSGst).toFixed(2)}`,
-                `Amount:${parseFloat(TotalAmount).toFixed(2)}`,
-                parseFloat(TotalCGst).toFixed(2),
-                parseFloat(TotalSGst).toFixed(2),
-                
-                
+            returnArr.push(totalrow());
+            returnArr.push(tableitemRow);
+            totalBasicAmount = 0
+            totalCGst = 0
+            totalSGst = 0
+            totalAmount = 0
+            totalQuantity = 0
 
-            ];
-
-            // const tableTot = {"TotalQuantity":TotalQuantity}
-
-
-            
-
-            // a.push(tableTot)
-
-            a.push(tableTotalRow);
-
-            TotalBasicAmount = 0;
-            TotalCGst = 0
-            TotalSGst = 0
-            TotalAmount = 0
-            TotalQuantity = 0
-
-            TotalBasicAmount = TotalBasicAmount + element.BasicAmount;
-            TotalCGst = TotalCGst + element.CGST
-            TotalSGst = TotalSGst + element.SGST
-            TotalAmount = TotalAmount + element.Amount
-            TotalQuantity = TotalQuantity + element.Quantity
-
-            const tableTotalRowNew = [
-                element.ItemName,
-                element.Quantity,
-                element.Rate,
-                element.BasicAmount,
-                element.CGSTPercentage,
-                element.CGST,
-                element.SGSTPercentage,
-                element.SGST,
-                element.Amount,
-                element.GSTPercentage,
-                element.GSTAmount,
-                element.Value,
-            ];
-
-            a.push(tableTotalRowNew);
-            Item = element.ItemName;
+            data["tableTot"] = totalLots()
+            item = element.ItemName;
         }
-
-
+        if (key === InvoiceItems.length - 1) {
+            returnArr.push(totalrow());
+        }
     })
-    const tableTotalRowLast = [
-        `Total Quantity:${parseFloat(TotalQuantity).toFixed(2)}`,
-        " ",
-        `BasicAmount:${parseFloat(TotalBasicAmount).toFixed(2)}` ,
-        "",
-        `TotalCGST:${parseFloat(TotalCGst).toFixed(2)}`,
-        "isaddition",
-        `TotalSGST:${parseFloat(TotalSGst).toFixed(2)}`,
-        `Amount:${parseFloat(TotalAmount).toFixed(2)}`,
-        parseFloat(TotalCGst).toFixed(2),
-        parseFloat(TotalSGst).toFixed(2),
-        
-    ];
-    a.push(tableTotalRowLast);
-    return a;
+    return returnArr;
 }
-
-
 export const ReportFotterColumns = [
     "SGST",
     "CGST", "Quantity",
@@ -195,7 +165,6 @@ export const ReportFooterRow2 = (element) => {
                 sk = 0;
             }
         }
-
         if (x != s.length) {
             var y = s.length;
             str += 'point ';
@@ -259,11 +228,11 @@ export const Rows1 = (data) => {
 }
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [, , `Invoice NO :${data.InvoiceID}`],
-        [`${data.CustomerName}`, `${data.PartyName}`, `${data.InvoiceDate}`,],
-        [`${data.BilByState}`, `${data.BilToState}`, `E-way Bill :${data.EWaYBill}`],
-        [`GSTIN :${data.BilByGSTIN}`, `GSTIN :${data.BilToGSTIN}`, "e-way-Bill : 36454454"],
-        [`FSSAI :${data.BilByFSSAI}`, `FSSAI :${data.BilToFSSAI}`, "IRN : 36454454", ""],
+        [, ,`Driver Name : Sameer`],
+        [`${data.CustomerName}`, `${data.PartyName}`, `vehical No :MH34566`,],
+        [`maharashtra`, `karnatak`, `E-way Bill :24654364633`],
+        // [, , ""],
+        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`INR NO :${data.FullInvoiceNumber}` , ],
     ]
     return reportArray;
 }
