@@ -33,7 +33,6 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData) {
-    
         if (editBodyfunc) { editBodyfunc(rowData) }
         else {
             dispatch(editActionFun(rowData.id, "edit",));

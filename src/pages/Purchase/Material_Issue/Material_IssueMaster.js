@@ -29,7 +29,7 @@ import {
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
-import { goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
+import { editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -120,7 +120,7 @@ const MaterialIssueMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -137,7 +137,8 @@ const MaterialIssueMaster = (props) => {
             if (hasEditVal) {
 
                 setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
+                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
+                // const { BatchesData = [] } = MaterialIssueItems
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate
                     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
@@ -158,8 +159,9 @@ const MaterialIssueMaster = (props) => {
                     Party: userParty(),
                     Quantity: parseInt(EstimatedOutputQty)
                 });
-
-                dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
+                // dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
+                dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
+                dispatch(editMaterialIssueIdSuccess({Status:false}))
             }
         }
     }, [])

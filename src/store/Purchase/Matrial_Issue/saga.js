@@ -12,14 +12,14 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Material_Issue_GoButton_Post_API, data);
-   yield response.Data.forEach(i1 => {
+    response.Data.forEach(i1 => {
       i1.BatchesData.forEach(i2 => {
         i2.Qty = '';
       });
-    })
+    });
 
     let convResp = []
-    convResp = response.Data.map(i1 => {
+    yield convResp = response.Data.map(i1 => {
       let count = Number(i1.Quantity)
 
       i1.BatchesData = i1.BatchesData.map(i2 => {
@@ -43,6 +43,7 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
     })
 
     yield put(SpinnerState(false))
+    console.log("gobtn", JSON.stringify(convResp))
     yield put(goButtonForMaterialIssue_Master_ActionSuccess(convResp));
 
   } catch (error) {
@@ -50,6 +51,57 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Go Button in Work Order ",
+    }));
+  }
+}
+
+
+function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
+  try {
+    const response = yield call(Material_Issue_Edit_API, id);
+
+    let obj = response.Data[0]
+    obj["pageMode"] = pageMode;
+    let newArr = [];
+
+    yield obj.MaterialIssueItems.forEach((i1) => {
+      const b1 = {
+        BatchDate: i1.BatchDate,
+        BatchCode: i1.BatchCode,
+        SystemBatchDate: i1.SystemBatchDate,
+        SystemBatchCode: i1.SystemBatchCode,
+        BaseUnitQuantity: 0,
+        Qty: i1.IssueQuantity,
+      };
+
+
+      let found = newArr.find((i2) => {
+        if (i1.Item === i2.Item) {
+          i2.BatchesData.push(b1);
+        }
+        return (i1.Item === i2.Item)
+      })
+
+      if (found === undefined) {
+        i1["BatchesData"] = [];
+        i1.BatchesData.push(b1)
+        newArr.push(i1)
+      };
+
+    });
+  yield  obj.MaterialIssueItems = newArr
+  yield response.Data = obj;
+    
+    yield put(editMaterialIssueIdSuccess(response));
+    console.log("editmaterial", JSON.stringify(response.Data))
+    // yield put(goButtonForMaterialIssue_Master_ActionSuccess(response.Data));
+
+
+  } catch (error) {
+    // yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Merssage in Material Issue edit Api "
     }));
   }
 }
@@ -96,47 +148,6 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
   }
 }
 
-function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
-
-  try {
-    const response = yield call(Material_Issue_Edit_API, id);
-
-    let obj = response.Data[0]
-    obj["pageMode"] = pageMode;
-    let newArr = [];
-
-    obj.MaterialIssueItems.forEach((i1) => {
-      const b1 = {
-        IssueQuantity: i1.IssueQuantity,
-        BatchDate: i1.BatchDate,
-        BatchCode: i1.BatchCode,
-        SystemBatchDate: i1.SystemBatchDate,
-      }
-      var found = newArr.find((i2) => {
-        if (i1.Item === i2.Item) {
-          i2.StockDetail.push(b1);
-        }
-      })
-
-      var found = newArr.find((i2) => (i1.Item === i2.Item))
-      if (found === undefined) {
-        i1["StockDetail"] = [];
-        i1.StockDetail.push(b1)
-        newArr.push(i1)
-      }
-    });
-    obj.MaterialIssueItems = newArr
-    response.Data = obj
-    yield put(editMaterialIssueIdSuccess(response));
-
-  } catch (error) {
-    // yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Merssage in Material Issue edit Api "
-    }));
-  }
-}
 
 function* Delete_Metrialissue_listpage_GenFunc({ id }) {
 
