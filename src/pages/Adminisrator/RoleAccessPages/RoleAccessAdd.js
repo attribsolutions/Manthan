@@ -213,7 +213,7 @@ const RoleAccessAdd = (props) => {
         label: i.Name
     }));
 
-    const CompanyValues = partyList.map((i) => ({
+    const CompanyValues = company.map((i) => ({
         value: i.id,
         label: i.Name
     }));
@@ -547,7 +547,7 @@ const RoleAccessAdd = (props) => {
                                             <>
                                                 <CardHeader className="card-header   text-black  c_card_body"  >
                                                     <Row className="mt-3">
-                                                        <Col md="4">
+                                                        <Col md="3">
                                                             <FormGroup className="mb-3 row ">
                                                                 <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
                                                                 <Col md="9">
@@ -563,7 +563,7 @@ const RoleAccessAdd = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
-                                                        <Col md="4" className="">
+                                                        <Col md="3" className="">
                                                             <FormGroup className="mb-3 row" >
                                                                 <Label className="col-sm-3 p-2">Division</Label>
                                                                 <Col md="9">
@@ -578,7 +578,7 @@ const RoleAccessAdd = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
-                                                        <Col md="4" className="">
+                                                        <Col md="3" className="">
                                                             <FormGroup className="mb-3 row" >
                                                                 <Label className="col-sm-3 p-2">Company</Label>
                                                                 <Col md="9">
