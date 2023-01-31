@@ -30,7 +30,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(570, 10, 30, 10);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(409, 100, 30, 100) //horizontal line 4
+    // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
     doc.line(408, 200, 408, 10);//vertical right 1
@@ -76,7 +76,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY() + 85,// 45,
-        
+
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
@@ -100,8 +100,8 @@ export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 95)
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 95)
+    // doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 95)
+    // doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 95)
 }
 
 export const reportHeder3 = (doc, data) => {
@@ -356,7 +356,7 @@ export const tableBody = (doc, data) => {
                 columnWidth: 140,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 50,
                 halign: 'right',
 
             },
@@ -536,17 +536,17 @@ export const pageFooter = (doc, data) => {
         return str.replace(/\s+/g, ' ');
     }
     let stringNumber = toWords(45757)
-    doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
+    // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 745, 30, 745);//horizontal line Footer 2
     doc.line(570, 680, 30, 680);//horizontal line Footer 3
     doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
-    doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
+    // doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
 
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
 
     doc.setFont('Tahoma')
-    doc.line(460, 775, 30, 775);//horizontal line (Bottom)
+    doc.line(570, 775, 30, 775);//horizontal line (Bottom)
 
     doc.setFontSize(8)
 
@@ -576,14 +576,14 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(9)
     doc.setFont('Tahoma')
     doc.setFontSize(8)
-    doc.text(`Prepared by `, 35, 785,)
-    doc.text(`Received By `, 180, 785,)
+    doc.text(`Prepared by `, 35, 785,"justify")
+    doc.text(`Received By `, 180, 785,"justify")
     doc.setFontSize(10)
-    doc.text(`${data.PartyName} `, 390, 785,)
+    doc.text(`${data.SupplierName} `, 390, 785, "justify")
     doc.setFontSize(10)
-    doc.text(`${data.CustomerName} `, 140, 811,)
+    doc.text(`${data.CustomerName} `, 175, 811,"justify")
     doc.setFontSize(9)
-    doc.text(`Signature `, 400, 811,)
+    doc.text(`Signature `, 400, 811, "justify")
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
    quantity whitch it/these purports to be `, 34, 760,)

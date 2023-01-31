@@ -216,7 +216,7 @@ export const Rows = (data) => {
       
         const tableitemRow = [
             element.ItemName,
-            element.Quantity,
+            `${element.Quantity}.${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
             element.CGSTPercentage,
@@ -409,11 +409,11 @@ export const Rows1 = (data) => {
 }
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [, ,`Driver Name : Sameer`],
-        [`${data.CustomerName}`, `${data.SupplierName}`, ``,],
-        [`maharashtra`, `karnatak`, ``],
+        [`${data.CustomerName}`, `${data.SupplierName}`,`Driver Name : Sameer`],
+        [`${data.BillingAddress}`, `${data.ShippingAddress}` , ``,],
+        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, ``],
         // [, , ""],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`` , ],
+        [,`` , ],
     ]
     return reportArray;
 }
