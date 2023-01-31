@@ -33,7 +33,7 @@ export const Rows = (data) => {
       
         const tableitemRow = [
             element.ItemName,
-            element.Quantity,
+            `${element.Quantity}.${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
             element.CGSTPercentage,
