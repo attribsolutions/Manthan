@@ -222,5 +222,5 @@ export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//List Api
 
 // Challan
-export const CHALLAN_LIST_API = '/InterBranchChallanFilter'//List Api
+export const CHALLAN_LIST_API = '/BranchInvoiceFilter'//List Api
 export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward Button Api Api

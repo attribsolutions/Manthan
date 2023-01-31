@@ -39,18 +39,21 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
+    debugger
     if (RoleAccessUpdateData.length <= 0) {
       var role = JSON.parse(localStorage.getItem("roleId"))
+      var CompanyID = JSON.parse(localStorage.getItem("Company"))
       if (!(role === undefined) && !(role === null)) {
         var party = role.Party_id
         var employee = role.Employee_id;
-        dispatch(roleAceessAction(party, employee))
+        var company = CompanyID;
+        dispatch(roleAceessAction(party, employee, company))
       };
     }
   }, [])
 
   useEffect(() => {
-    
+
   }, [])
 
   const activateParentDropdown = useCallback(item => {
@@ -88,7 +91,7 @@ const SidebarContent = (props) => {
     scrollElement(item);
     return false;
   }, []);
-  
+
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
@@ -102,7 +105,7 @@ const SidebarContent = (props) => {
     if (userAcc === undefined) { }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
       pathName = urlRel[`${userAcc.ActualPagePath}`]
-     
+
     }
 
     const initMenu = () => {
@@ -133,7 +136,7 @@ const SidebarContent = (props) => {
       }
     }
   }
-  
+
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
