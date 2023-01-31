@@ -42,8 +42,6 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { Button } from "bootstrap";
 
 let editVal = {}
 
@@ -58,7 +56,7 @@ const Order = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
     const  [description, setDescription] = useState('')
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -520,7 +518,7 @@ const Order = (props) => {
             Party: supplierSelect.value,
             Customer: userParty(),
             EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.save) ? 0 : editVal.id
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id
         })
 
         dispatch(goButtonForOrderAdd(jsonBody))
