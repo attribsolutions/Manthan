@@ -98,7 +98,7 @@ export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postForget(url.FO
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
-export const RoleAccessApi_url = (id1, id2,) => get(`${url.ROLE_ACCESS}/${id1}/${id2}`)
+export const RoleAccessApi_url = (party, employee,company) => get(`${url.ROLE_ACCESS}/${party}/${employee}/${company}`)
 export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save And Update
 
 //  common pages get data for page filed and validation
