@@ -1,6 +1,8 @@
 import {
   DELETE_MATERIAL_ISSUE_LIST_PAGE,
     DELETE_MATERIAL_ISSUE_PAGE_SUCCESS,
+    EDIT_MATERIAL_ISSUE_LIST_PAGE,
+    EDIT_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
     GET_MATERIAL_ISSUE_LIST_PAGE,
     GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
     MATERIAL_ISSUE_LIST_FILTERS,
@@ -16,12 +18,12 @@ export const MaterialIssuelistfilters = filter => ({
 })
 
 // Go Button Post API
-export const postGoButtonForMaterialIssue_Master = (data) => ({
+export const goButtonForMaterialIssue_Master_Action = (data) => ({
     type: POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER,
     data,
 });
 
-export const postGoButtonForMaterialIssue_MasterSuccess = (data) => ({
+export const goButtonForMaterialIssue_Master_ActionSuccess = (data) => ({
     type: POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS,
     payload: data,
 });
@@ -49,7 +51,15 @@ export const getMaterialIssueListPage = (filters) => ({
   });
 
   // listpage api
+  export const editMaterialIssueId = (id,pageMode) => ({
+    type: EDIT_MATERIAL_ISSUE_LIST_PAGE,
+    id,pageMode
 
+  });
+  export const editMaterialIssueIdSuccess = (data) => ({
+    type: EDIT_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
+    payload: data,
+  });
 
   export const deleteMaterialIssueId = (id) => ({
     type: DELETE_MATERIAL_ISSUE_LIST_PAGE,

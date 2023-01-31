@@ -26,7 +26,7 @@ import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { convertDatefunc, createdBy, currentDate, GoBtnDissable, mainSppinerOnOff, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { postGoButtonForMaterialIssue_Master, } from "../../../store/Purchase/Matrial_Issue/action";
+import { goButtonForMaterialIssue_Master_Action, } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -145,9 +145,9 @@ const Invoice = (props) => {
                     Party: userParty(),
                     OrderIDs: ""
                 });
-
                 dispatch(GoButton_post_For_Invoice(jsonBody));
                 dispatch(editInvoiceListSuccess({ Status: false }))
+
             }
         }
     }, []);
@@ -157,7 +157,7 @@ const Invoice = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInvoiceMasterSuccess({ Status: false }))
             dispatch(GoButton_post_For_Invoice_Success([]))
-            // dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
