@@ -88,12 +88,12 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction({ id1, id2,id3 }) {
-debugger
+function* RoleAccessGenratorFunction({party, employee,company }) {
+
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, id1, id2,id3);
+    const RoleResponse = yield call(RoleAccessApi_url,party, employee,company);
 
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
