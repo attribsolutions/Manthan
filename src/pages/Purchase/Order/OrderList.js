@@ -73,7 +73,7 @@ const OrderList = () => {
         // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(GetVender())
         goButtonHandler(true)
 

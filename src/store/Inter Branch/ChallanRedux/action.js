@@ -17,9 +17,9 @@ export const getChallanListPage = (filters) => ({
   });
   
     //Inward Button api
-    export const InwardButtonId =(id,pageMode)=>({
+    export const InwardButtonId =(id)=>({
       type:INWARD_BUTTON_ID,
-      id,pageMode
+      id
     })
     export const InwardButtonIdSuccess =(editData)=>({
       type:INWARD_BUTTON_ID_SUCCESS,
