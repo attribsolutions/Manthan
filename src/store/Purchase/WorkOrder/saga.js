@@ -122,7 +122,7 @@ function* editWorkOrderGenFunc({ id1, pageMode }) {
     response.Data = response.Data[0];
     yield put(SpinnerState(false))
    
-    if (response.StatusCode === 204) yield put(AlertState({
+    if (response.StatusCode === 226) yield put(AlertState({
       Type: 3,
       Status: true, Message:response.Message,
     }));
