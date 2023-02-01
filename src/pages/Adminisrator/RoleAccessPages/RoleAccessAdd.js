@@ -54,7 +54,7 @@ const RoleAccessAdd = (props) => {
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState({ value: 0, label: "All Pages" });
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
-
+ 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const {
@@ -84,6 +84,7 @@ const RoleAccessAdd = (props) => {
     }));
 
     useEffect(() => {
+        debugger
         const editDataGatingFromList = history.location.state
 
         const locationPath = history.location.pathname
@@ -94,14 +95,17 @@ const RoleAccessAdd = (props) => {
         if (!(editDataGatingFromList === undefined)) {
 
             var divisionid = editDataGatingFromList.Division_id
+            var divisionName = editDataGatingFromList.DivisionName
             var roleid = editDataGatingFromList.Role_id
             var roleName = editDataGatingFromList.RoleName
-            var divisionName = editDataGatingFromList.DivisionName
-
+            var company_id = editDataGatingFromList.Company_id
+            var companyName = editDataGatingFromList.CompanyName
+           
             if (roleid > 0) {
                 dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
                 setShowTableOnUI(true)
                 setRoleDropDown({ label: roleName, value: roleid })
+                setCompany_dropdown_Select({ label: companyName, value: company_id })
                 setDivision_dropdown_Select({ label: divisionName, value: divisionid })
             }
         }
@@ -109,7 +113,6 @@ const RoleAccessAdd = (props) => {
             setUserPageAccessState(userAcc)
         }
     }, [userAccess])
-
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
@@ -329,6 +332,7 @@ const RoleAccessAdd = (props) => {
         setPage_DropdownSelect('')
         setTableListData([])
     }
+
     const saveHandeller = () => {
 
         let selectedItemArray = [];
@@ -627,12 +631,13 @@ const RoleAccessAdd = (props) => {
                                                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
 
                                                     <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
-                                                        <Col md="4" className="p-2 ">
+                                                        <Col md="3" className="p-2 ">
                                                             <Label className="p-2 col-sm-3">Role</Label>
-                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                <h className="text-black">{role_dropdown_Select.label}</h></Button>
                                                         </Col>
 
-                                                        <Col md="4" className="p-2 ">
+                                                        <Col md="3" className="p-2 ">
                                                             {(division_dropdown_Select.value > 0)
                                                                 ? <> <Label className=" p-2 col-sm-3 ">Division</Label>
                                                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
@@ -640,8 +645,19 @@ const RoleAccessAdd = (props) => {
                                                                 </>
                                                                 : null}
                                                         </Col>
-                                                        <Col md="4" className="p-2 text-end">
-                                                            <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
+
+                                                        <Col md="3" className="p-2 ">
+                                                            <Label className="p-2 col-sm-4">Company</Label>
+                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                        </Col>
+
+                                                        <Col md="3" className="p-2 text-end">
+                                                            <Button type="button"
+                                                                color="btn btn-outline-secondary"
+                                                                className="btn-sm"
+                                                                onClick={() => { ChangeButtonHandeler() }}>
+                                                                <h className="text-black">Change Role</h></Button>
                                                         </Col>
                                                     </Row>
 
