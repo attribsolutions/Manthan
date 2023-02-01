@@ -313,13 +313,11 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
-                data1.row.cells[10].styles.fontSize = 8
 
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[10].styles.fontStyle = "bold"
 
 
                 // data1.row.cells[3].colSpan=4
@@ -366,7 +364,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             3: {
-                columnWidth: 30,
+                columnWidth: 45,
                 halign: 'right',
             },
             4: {
@@ -374,6 +372,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             5: {
+                // columnWidth: 40,
                 halign: 'right',
             },
             6: {
@@ -384,12 +383,12 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 30,
+                columnWidth: 60,
                 fontStyle: 'bold',
                 halign: 'right',
             },
             9: {
-                columnWidth: 50,
+                columnWidth: 60,
                 fontStyle: 'bold',
                 halign: 'right',
             },
