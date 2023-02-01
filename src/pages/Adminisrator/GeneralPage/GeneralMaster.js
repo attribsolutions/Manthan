@@ -216,7 +216,6 @@ const GeneralMaster = (props) => {
     }, [updateMsg, modalCss]);
 
 
-
     useEffect(() => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200 && !modalCss) {
             history.push({
@@ -255,7 +254,6 @@ const GeneralMaster = (props) => {
                 IsActive: values.IsActive,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy()
-
             });
 
             saveDissable(true);//save Button Is dissable function
@@ -309,7 +307,6 @@ const GeneralMaster = (props) => {
                                                                             classNamePrefix="dropdown"
                                                                             options={TypeDropdownOptions}
                                                                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
                                                                         />
                                                                         {isError.TypeName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.TypeName}</small></span>
