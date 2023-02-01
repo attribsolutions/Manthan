@@ -13,7 +13,7 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
     post_Type_API,
     Post_General_API,
-    detelet_General_List_Api,
+    delete_General_List_Api,
     edit_General_List_Api,
     Post_General_List_Api,
     update_General_List_Api,
@@ -68,7 +68,7 @@ function* Post_General_List_GenratorFunction({ data }) {
 function* Delete_General_ID_GenratorFunction({ id }) {
     try {
         yield put(SpinnerState(true))
-        const response = yield call(detelet_General_List_Api, id);
+        const response = yield call(delete_General_List_Api, id);
         yield put(SpinnerState(false))
         yield put(deleteGeneralIDSuccess(response))
     } catch (error) {
@@ -114,7 +114,6 @@ function* Update_General_ID_GenratorFunction({ updateData, ID }) {
 }
 
 /// Type Dropdown
-
 function* Post_Type_GenFun({ data }) {
 
     yield put(SpinnerState(true))

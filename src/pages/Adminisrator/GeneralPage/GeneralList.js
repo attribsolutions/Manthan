@@ -51,8 +51,6 @@ const GeneralList = (props) => {
 
     const { pageField, userAccess = [] } = reducers
 
-
-
     useEffect(() => {
      
         const jsonBody = JSON.stringify({
