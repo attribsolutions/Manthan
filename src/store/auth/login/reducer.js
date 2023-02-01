@@ -7,7 +7,7 @@ import {
   ROLE_ACCESS_API_CALL_SUCCESS,
   ROLE_ACCESS_API_UPDATE_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
-  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
+  DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN,
   GET_SUPER_ADMIN_API_SUCCESS,
   LOGOUT_REST
 } from "./actionTypes"
@@ -54,7 +54,7 @@ const Login = (state = initialState, action) => {
           afterLoginUserDetails: action.payload,
         }
         
-      case DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN:
+      case DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN:
         return {
           ...state,
           divisionDropdown: action.payload,

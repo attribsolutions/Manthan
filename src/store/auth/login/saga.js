@@ -56,7 +56,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-
+debugger
   try {
 
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
@@ -88,12 +88,12 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction({ id1, id2, }) {
+function* RoleAccessGenratorFunction({party, employee,company }) {
 
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, id1, id2,);
+    const RoleResponse = yield call(RoleAccessApi_url,party, employee,company);
 
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
@@ -143,7 +143,7 @@ function* RoleAccessGenratorFunction({ id1, id2, }) {
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error : RoleAccess Api",
+      Status: true, Message: "500 Error : RoleAccess get Api",
     }));
   }
 }

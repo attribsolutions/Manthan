@@ -3,113 +3,101 @@ export const columns = [
     "HSNCode Item Name",
     "Quantity",
     "Rate",
-    "Basic Amt",
-    "SGST %",
-    "SGSTAmt",
+    "BasicAmount ",
     "CGST %",
-    "CGSTAmt",
+    "CGSTAmount",
+    "SGST %",
+    "SGSTAmount",
     "Total Amt"];
 
 export const PageHedercolumns = [
-    "Bill by",
+    "Billed by",
     "Billed to",
-    "Invoice Detail"
-    
-
+    ''
 ]
 
 export const Rows = (data) => {
+
+
     const { InvoiceItems = [] } = data
-    var a = [];
-    var BasicAmount = 0
-    var TotalCGst = 0
-    var TotalSGst = 0
-    var TotalValue = 0
-    var Quantity = 0
-    var Gst = 0
-    InvoiceItems.forEach(element => { 
-        debugger
-        if (Gst === 0) { Gst = element.GSTPercentage };
-        if ((Gst === element.GSTPercentage)) {
-            BasicAmount = BasicAmount + element.BasicAmount;
-            Quantity = Quantity + element.Quantity
-            TotalCGst = TotalCGst + element.CGST
-            TotalSGst = TotalSGst + element.SGST
-            TotalValue = TotalValue + element.Value
-            const TableListData = [
-                element.ItemName,
-                element.Quantity,
-                element.Rate,
-                element.BasicAmount,
-                element.SGSTPercentage,
-                element.SGST,
-                element.CGSTPercentage,
-                element.CGST,
-                element.Amount,
+    const returnArr = [];
+    let item = ""
+
+    let totalBasicAmount = 0
+    let totalCGst = 0
+    let totalSGst = 0
+    let totalAmount = 0
+    let totalQuantity = 0
+
+    InvoiceItems.forEach((element, key) => {
+      
+        const tableitemRow = [
+            element.ItemName,
+            `${element.Quantity}.${element.UnitName}`,
+            element.Rate,
+            element.BasicAmount,
+            element.CGSTPercentage,
+            element.CGST,
+            element.SGSTPercentage,
+            element.SGST,
+            element.Amount,
+            element.GSTPercentage,
+            element.GSTAmount,
+        ];
+
+        function totalLots() {
+            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalCGst = Number(totalCGst) + Number(element.CGST)
+            totalSGst = Number(totalSGst) + Number(element.SGST)
+            totalAmount = Number(totalAmount) + Number( element.Amount)
+            // totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            let cgst = data["tableTot"].TotalCGst
+
+            // return ({ TotalCGst: Number(cgst) + Number(totalCGst),})
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+        };
+
+        function totalrow() {
+            return [
+                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+                " ",
+                `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                "",
+                `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+                "isaddition",
+                `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+                "",
+                `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+                // parseFloat(TotalCGst).toFixed(2),
+                // parseFloat(TotalSGst).toFixed(2),
             ];
-            a.push(TableListData);
-            // Gst = element.GSTPercentage
-        } else {
-            const tableTotalRow = [
-                "",
-                `Qty: ${parseFloat(Quantity).toFixed(2)}`,
-                "",
-                `Amt:${parseFloat(BasicAmount).toFixed(2)}`,
-                "",
-                `CGST:${parseFloat(TotalCGst).toFixed(2)}`,
-                "",
-                `SGST:${parseFloat(TotalSGst).toFixed(2)}`,
+        };
 
-                `Totalvalue:${parseFloat(TotalValue).toFixed(2)}`
-            ];
-            a.push(tableTotalRow);
-            BasicAmount = 0;
-            TotalCGst = 0
-            TotalSGst = 0
-            TotalValue = 0
-            Quantity=0
-            Quantity = Quantity + element.Quantity
-            BasicAmount = BasicAmount + element.BasicAmount;
-            TotalCGst = TotalCGst + element.CGST
-            TotalSGst = TotalSGst + element.SGST
-            TotalValue = TotalValue + element.Value
 
-            const tableTotalRowNew = [
-                element.ItemName,
-                element.Quantity,
-                element.Rate,
-                element.BasicAmount,
-                element.SGSTPercentage,
-                element.SGST,
-                element.CGSTPercentage,
-                element.CGST,
-                element.Amount,
-            ];
+        if (item === "") { item = element.ItemName };
+        let aa = { TotalCGst: 0, totalSGst: 0 }
+        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+        if ((item === element.ItemName)) {
+            data["tableTot"] = totalLots()
+            returnArr.push(tableitemRow);
+        }
+        else {
+            returnArr.push(totalrow());
+            returnArr.push(tableitemRow);
+            totalBasicAmount = 0
+            totalCGst = 0
+            totalSGst = 0
+            totalAmount = 0
+            totalQuantity = 0
 
-            a.push(tableTotalRowNew);
-
-            Gst = element.GSTPercentage;
+            data["tableTot"] = totalLots()
+            item = element.ItemName;
+        }
+        if (key === InvoiceItems.length - 1) {
+            returnArr.push(totalrow());
         }
     })
-    const tableTotalRowLast = [
-        "",
-        ` ${parseFloat(Quantity).toFixed(2)}`,
-        "",
-        `${parseFloat(BasicAmount).toFixed(2)}`,
-        "",
-        `${parseFloat(TotalCGst).toFixed(2)}`,
-        "",
-        `${parseFloat(TotalSGst).toFixed(2)}`,
-
-        `${parseFloat(TotalValue).toFixed(2)}`
-        ,
-    ];
-    // const subtotal = BasicAmount+TotalCGst+TotalSGst
-    // const Total = { "BasicAmount": BasicAmount, "TotalGGst": TotalCGst, "TotalSGst": TotalSGst ,"TotalAmount":subtotal }
-    // data["Total"] = Total
-    a.push(tableTotalRowLast);
-
-    return a;
+    return returnArr;
 }
 export const ReportFotterColumns = [
     "SGST",
@@ -137,7 +125,7 @@ export const ReportFotterColumns2 = [
     "SGST",
 ];
 
-export const ReportFooterRow2 = ( data) => {
+export const ReportFooterRow2 = (element) => {
     var th = ['', 'thousand', 'million', 'billion', 'trillion'];
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -176,7 +164,6 @@ export const ReportFooterRow2 = ( data) => {
                 sk = 0;
             }
         }
-
         if (x != s.length) {
             var y = s.length;
             str += 'point ';
@@ -185,15 +172,14 @@ export const ReportFooterRow2 = ( data) => {
         }
         return str.replace(/\s+/g, ' ');
     }
-    console.log(data)
-    let stringNumber = toWords(data.Total.TotalAmount)
-    var TableArray = [['I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and quantity whitch it/these purports to be '
+    let stringNumber = toWords(67674168.45)
+    var TableArray = [[`${stringNumber}`
     ],
-    [,
+    ['I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and quantity whitch it/these purports to be '
     ],
-    ['Bank details ·sdSVvDsdgbvzdfbBzdf',
+    ['Bank details ·sdSVvDsdgbvzdfbBzdf'
     ],
-    [`Rupees: ${stringNumber}`,
+    ['A/C No: 2715500356 IFSC Code:BKID00015422',
     ],
     ]
     return TableArray
@@ -201,27 +187,27 @@ export const ReportFooterRow2 = ( data) => {
 export const ReportFotterColumns4 = [
     "SGST", "a "
 ];
-export const ReportFooterRow4 = (data) => {
-    var TableArray = [[
-     "Total Amount", data.Total.BasicAmount
+export const ReportFooterRow4 = (element) => {
+
+    var TableArray = [[`Total.Amt:`, "67674168.45"
     ],
-    ["Total SGST", data.Total.TotalGGst
+    ['Total GST: ', '124855.25'
     ],
-    ['Total CGTS:', data.Total.TotalSGst
+    ['Total CTCS:', '45742.635'
     ],
-    // [`Amount:`, data.Total.TotalAmount]
+    ['Round Off:', '46464.253',
+    ],
+    [`Amount:`, `7654214463.53`]
     ]
-    // console.log(data.Total.TotalAmount)
     return TableArray
 }
-
 
 export const columns1 = ["Total", "abc", "ayk", "Amount "];
 
 export const Rows1 = (data) => {
     var a1 = [];
     var c = 0;
-    data.InvoiceServiceItems.forEach(element => {
+    data.InvoiceItems.forEach(element => {
         if (c < 2) {
             c = c + 1;
             const ticketData = [
@@ -241,11 +227,11 @@ export const Rows1 = (data) => {
 }
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [, ,  `E-way Bill :${data.EWaYBill}`   ],
-        [`${data.CustomerName}`, `${data.PartyName}`,              `Full Invoice NO :${data.FullInvoiceNumber}`],
-        [`${data.BilByAdr}`,  `${data.BilToAdr}`,               `${data.InvoiceDate}`,],
-        [`${data.BilByState}`, `${data.BilToState}`,             "Vehical No : MH 273587  " ],
-        [`FSSAI :${data.BilByFSSAI}`,`FSSAI :${data.BilToFSSAI}` , `Driver Name: Abcd`],
+        [, ,`Driver Name : Sameer`],
+        [`${data.CustomerName}`, `${data.PartyName}`, `vehical No :MH34566`,],
+        [`maharashtra`, `karnatak`, `E-way Bill :24654364633`],
+        // [, , ""],
+        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`INR NO :${data.FullInvoiceNumber}` , ],
     ]
     return reportArray;
 }

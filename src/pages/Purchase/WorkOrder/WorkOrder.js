@@ -63,7 +63,7 @@ const WorkOrder = (props) => {
 
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
 
@@ -100,8 +100,8 @@ const WorkOrder = (props) => {
     const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
@@ -187,7 +187,7 @@ const WorkOrder = (props) => {
             dispatch(postWorkOrderMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
             // saveDissable(false);//save Button Is enable function
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -391,13 +391,14 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
+        debugger
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
             Quantity: parseFloat(values.Quantity),
             Party: userParty()
         });
-        GoBtnDissable({ id: goBtnID1, state: true })
+        // GoBtnDissable({ id: goBtnID1, state: true })
         dispatch(postGoButtonForWorkOrder_Master(jsonBody,goBtnID1));
     }
 
@@ -625,7 +626,7 @@ const WorkOrder = (props) => {
 
                                 <Col sm={1}>
                                     <div className="col col-1 mt-2">
-                                        {pageMode === "save" ?
+                                        {pageMode ===mode.defaultsave ?
                                             (BOMItems.length === 0) ?
                                                 < Go_Button id={goBtnID1} onClick={(e) => goButtonHandler()} />
                                                 :

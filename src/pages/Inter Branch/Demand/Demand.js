@@ -1,6 +1,5 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Button,
     Col,
     FormGroup,
     Input,
@@ -16,7 +15,6 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
-    onChangeSelect,
     onChangeText,
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
@@ -37,7 +35,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { DEMAND_LIST } from "../../../routes/route_url";
 import {
-    editDemandId,
     editDemandIdSuccess,
     postDemand,
     postDemandSuccess,
@@ -49,7 +46,7 @@ import {
 } from "../../../store/Inter Branch/DemandRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
-let editVal = {}
+
 const Demand = (props) => {
 
     const dispatch = useDispatch();
@@ -65,17 +62,11 @@ const Demand = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [demandDetail, setDemandDetail] = useState({});
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [DemandNo, setDemandNo] = useState();
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
-    const [FullDemandNumber, setFullDemandNumber] = useState();
-    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [userAccState, setUserPageAccessState] = useState("");
-    const [deliverydate, setdeliverydate] = useState(currentDate)
     const [demanddate, setdemanddate] = useState(currentDate)
-    // const [SupplierSelect, setSupplierSelect] = useState('');
     const [demandItemTable, setdemandItemTable] = useState([])
     const [demandAmount, setDemandAmount] = useState(0);
 
@@ -108,7 +99,7 @@ const Demand = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
     const values = { ...state.values }
     const { isError } = state;
-    const { fieldLabe } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -138,8 +129,6 @@ const Demand = (props) => {
         dispatch(postDivision(jsonBody));
     }, []);
 
-
-
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
 
@@ -155,8 +144,7 @@ const Demand = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                // console.log("hasEditVal", hasEditVal)
-                 setEditData(hasEditVal);
+                setEditData(hasEditVal);
                 const { id, SupplierName, Supplier, Comment, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.DemandDate = DemandDate;
@@ -248,8 +236,6 @@ const Demand = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
-
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
@@ -273,14 +259,12 @@ const Demand = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
     };
 
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
 
     useEffect(() => {
         if (GoButton) {
@@ -289,7 +273,6 @@ const Demand = (props) => {
             dispatch(postGoButtonForDemandSuccess(''))
         }
     }, [GoButton]);
-
 
     const SupplierDropdown_Options = Supplier.map((i) => ({ label: i.Name, value: i.id }))
 
@@ -423,7 +406,7 @@ const Demand = (props) => {
             },
 
             headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center'};
+                return { width: '140px', textAlign: 'center' };
             }
         },
     ];
@@ -440,7 +423,7 @@ const Demand = (props) => {
         totalSize: 0,
         custom: true,
     };
-    
+
 
     const goButtonHandler = () => {
         // if (!SupplierSelect > 0) {
@@ -459,7 +442,7 @@ const Demand = (props) => {
             Supplier: values.SupplierName.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
-            DemandID: (pageMode === mode.save) ? 0 : EditData.id
+            DemandID: (pageMode === mode.defaultsave) ? 0 : EditData.id
         })
 
         dispatch(postGoButtonForDemand(jsonBody))
@@ -475,7 +458,6 @@ const Demand = (props) => {
             setdemandItemTable([])
         }
     }
-
 
     function SupplierOnchange(e) {
         var isfind = demandItemTable.find(i => (i.Quantity > 0))
@@ -695,32 +677,22 @@ const Demand = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col>
+                                   
                                     {
-                                        pageMode === 'edit' ?
-                                            <Col sm="6">
-                                                <FormGroup className="mb-2 mt-2 row" style={{ marginTop: "" }}>
-                                                    <Label className="mt-1" style={{ width: "150px" }}>Demand No</Label>
-                                                    <Col sm={7}>
-                                                        <Input
-                                                            name="DemandNo"
-                                                            value={values.DemandNo}
-                                                            type="text"
-                                                            disabled={pageMode === "edit" ? true : false}
-                                                            className={isError.DemandNo.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Challan No"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                            }}
-                                                        />
-                                                        {isError.DemandNo.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.DemandNo}</span>
-                                                        )}
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            :
-                                            <></>
+                                        pageMode === "edit" ? <Col sm="6">
+                                            <FormGroup className="row mt-2 ">
+                                                <Label className="mt-2" style={{ width: "100px" }}> Demand No. </Label>
+                                                <Col sm={7}>
+                                                    <Input
+                                                        name="DemandNo"
+                                                        value={values.DemandNo}
+                                                        type="text"
+                                                        disabled={true}
+                                                    />
+
+                                                </Col>
+                                            </FormGroup>
+                                        </Col > : <></>
                                     }
 
                                 </Col>

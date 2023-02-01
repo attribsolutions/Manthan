@@ -67,20 +67,24 @@ const Layout = props => {
   /*
   layout  settings
   */
-
   useEffect(() => {
+    // document.body.addEventListener("click", hideRightbar, true);
+    
+    try{
     if (isPreloader === true) {
       document.getElementById("preloader").style.display = "block";
-      document.getElementById("status").style.display = "block";
+      // document.getElementById("status").style.display = "block";
 
       setTimeout(function () {
         document.getElementById("preloader").style.display = "none";
-        document.getElementById("status").style.display = "none";
-      }, 2500);
+        // document.getElementById("status").style.display = "none";
+      }, 1000);
     } else {
       document.getElementById("preloader").style.display = "none";
-      document.getElementById("status").style.display = "none";
+      
+      // document.getElementById("status").style.display = "none";
     }
+    }catch(e){}
   }, [isPreloader]);
 
   useEffect(() => {
@@ -150,7 +154,7 @@ const Layout = props => {
   // pageId={pageId.GROUP_lIST}
   return (
     <React.Fragment>
-      <div id="preloader">
+      {/* <div id="preloaderq">
         <div id="status">
           <div className="spinner-chase">
             <div className="chase-dot" />
@@ -161,7 +165,12 @@ const Layout = props => {
             <div className="chase-dot" />
           </div>
         </div>
-      </div>
+      </div> */}
+      <div className="pace pace-active" id="preloader">
+        <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+          <div className="pace-progress-inner"></div>
+        </div>
+        <div className="pace-activity"></div></div>
 
       <div id="layout-wrapper">
         <CustomAlert/>

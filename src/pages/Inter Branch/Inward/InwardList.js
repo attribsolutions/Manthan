@@ -52,7 +52,7 @@ const InwardList = () => {
     const { userAccess, pageField, InwardlistFilter, supplier } = reducers;
     const { fromdate, todate, SupplierSelect } = InwardlistFilter;
     const page_Id = pageId.INWARD_LIST
-    
+
     const action = {
         getList: getInwardListPage,
         editId: editBOMList,
@@ -67,7 +67,7 @@ const InwardList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"BOM Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Inward Count"} :0`))
         dispatch(getSupplier())
         goButtonHandler(true)
 
@@ -99,7 +99,7 @@ const InwardList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Customer: userParty(),
-            Supplier: SupplierSelect.value === "" ? '' : SupplierSelect.value,
+            Supplier: SupplierSelect.value,
         });
         dispatch(getInwardListPage(jsonBody));
     }

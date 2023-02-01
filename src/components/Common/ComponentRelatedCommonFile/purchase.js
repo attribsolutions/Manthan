@@ -18,7 +18,7 @@ import { listPageCommonButtonFunction, makeBtnCss }
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 let sortType = "asc"
 let searchCount = 0
@@ -53,7 +53,7 @@ const PurchaseListPage = (props) => {
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
     const [tableList, settableList] = useState([]);
-
+    // debugger
     const {
         editData,
         updateMsg,
@@ -135,7 +135,6 @@ const PurchaseListPage = (props) => {
         }
     }, [userAccess])
 
-
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
 
@@ -187,7 +186,6 @@ const PurchaseListPage = (props) => {
     }, [deleteMsg]);
 
     useEffect(() => {
-        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postSucc({ Status: false }))
@@ -217,12 +215,12 @@ const PurchaseListPage = (props) => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-
         if (editData.Status === true) {
+            debugger
             if (pageField.IsEditPopuporComponent) {
                 history.push({
                     pathname: masterPath,
-                    editValue: editData.Data,
+                    [mode.editValue]: editData.Data,
                     pageMode: editData.pageMode,
                 })
             }
@@ -240,7 +238,6 @@ const PurchaseListPage = (props) => {
     }
 
     function onSaveBtnClick() {
-
         makeBtnFunc(tableList);
     }
 
@@ -319,7 +316,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === url.GRN_ADD_Mode_2) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        if ((pageMode === mode.mode2save) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
@@ -494,7 +491,7 @@ const PurchaseListPage = (props) => {
 
                     {
 
-                        (pageMode === url.GRN_ADD_Mode_2) ?
+                        (`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button

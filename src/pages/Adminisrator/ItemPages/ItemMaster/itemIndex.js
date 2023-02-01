@@ -35,6 +35,7 @@ import {
     get_PriceList_ForDropDown,
     postItemData,
     PostItemDataSuccess,
+    post_BrandName_dropdown,
     updateItemID,
     updateItemSuccess
 } from "../../../../store/Administrator/ItemsRedux/action";
@@ -50,7 +51,7 @@ import { createdBy, userCompany } from "../../../../components/Common/ComponentR
 import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
-import { PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
+import { GeneralMasterSubType, PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -61,6 +62,7 @@ export const unitConversionInitial = {
     IsBase: false
 };
 const ItemsMaster = (props) => {
+
     const dispatch = useDispatch();
     const history = useHistory()
     const [EditData, setEditData] = useState({});
@@ -97,8 +99,10 @@ const ItemsMaster = (props) => {
         Company: false,
         CategoryType: false,
         Category: false,
-        Division: false
+        Division: false,
+        BrandName:false,
     })
+
     let [isValidate, setIsValidate] = useState(initialInValid);
 
     const [formValue, setFormValue] = useState(initial);
@@ -141,12 +145,8 @@ const ItemsMaster = (props) => {
         CategoryList: state.ItemMastersReducer.Category,
         ItemTagList: state.ItemMastersReducer.ItemTagList,
         BrandTagList: state.ItemMastersReducer.BrandTagList,
-        BrandName: state.GeneralReducer.GeneralList,
+        BrandName: state.GeneralReducer.GeneralMasterSubType,
     }));
-
-    console.log(BrandName)
-
-    
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -173,8 +173,9 @@ const ItemsMaster = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: userCompany(),
+            TypeID: 47
         });
-        dispatch(PostGenerallist(jsonBody));
+        dispatch(GeneralMasterSubType(jsonBody));
     }, []);
 
     useEffect(() => {
@@ -291,7 +292,7 @@ const ItemsMaster = (props) => {
         }
 
     }, [])
-    
+
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
@@ -306,8 +307,8 @@ const ItemsMaster = (props) => {
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
 
-
     }, []);
+
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -340,8 +341,6 @@ const ItemsMaster = (props) => {
             }));
         }
     }, [postMsg])
-
-
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
@@ -394,7 +393,7 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    const BrandName_DropdownOptions = CategoryList.map((data) => ({
+    const BrandName_DropdownOptions = BrandName.map((data) => ({
         value: data.id,
         label: data.Name,
     }));
@@ -458,7 +457,10 @@ const ItemsMaster = (props) => {
 
     const Division_Handler = (event) => {
         dropDownValidation(event, "Division")
+    };
 
+    const BrandName_Handler = (event) => {
+        dropDownValidation(event, "BrandName")
     };
 
     const handleValidSubmit = (event, values) => {
@@ -504,6 +506,11 @@ const ItemsMaster = (props) => {
             isvalid = false
             inValidMsg.push("Division:Is Requried")
         }
+        if (formValue.BrandName.length < 1) {
+            inValidDrop.BrandName = true
+            isvalid = false
+            inValidMsg.push("Brand Name:Is Requried")
+        }
         if (!Group_Tab_TableData.length > 0) {
             isvalid = false
             inValidMsg.push(" GroupType Primary:Is Requried")
@@ -518,7 +525,10 @@ const ItemsMaster = (props) => {
             }
         }
         if (isvalid) {/// ************* is valid if start 
-
+            //**************** Brand Name **************** */
+            const ItemBrandName = formValue.BrandName.map((index) => ({
+                BrandName: index.value,
+            }))
             // ====================== Unit conversion *****start ======================
 
             const itemUnitDetails = []
@@ -626,6 +636,7 @@ const ItemsMaster = (props) => {
                 );
                 return;
             }
+            debugger
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -634,7 +645,7 @@ const ItemsMaster = (props) => {
                 isActive: formValue.isActive,
                 Company: formValue.Company.value,
                 BaseUnitID: formValue.BaseUnit.value,
-                BrandName: formValue.BrandName,
+                BrandName:ItemBrandName,
                 Tag: formValue.Tag,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
@@ -1097,10 +1108,10 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Brand Name</Label>
                                                                         <Select
-                                                                            defaultValue={formValue.Category}
+                                                                            defaultValue={formValue.BrandName}
                                                                             isMulti={true}
                                                                             className="basic-multi-select"
-                                                                            options={CategoryList_DropdownOptions}
+                                                                            options={BrandName_DropdownOptions}
                                                                             styles={{
                                                                                 control: base => ({
                                                                                     ...base,
@@ -1108,7 +1119,7 @@ const ItemsMaster = (props) => {
 
                                                                                 })
                                                                             }}
-                                                                            onChange={(e) => { Category_Handler(e) }}
+                                                                            onChange={(e) => { BrandName_Handler(e) }}
                                                                             classNamePrefix="select2-selection"
                                                                         />
                                                                     </FormGroup>

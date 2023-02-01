@@ -1,7 +1,7 @@
 import { Button } from "reactstrap";
 import { AlertState } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-
+import * as mode from "../../../routes/PageMode"
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
@@ -32,21 +32,19 @@ export const listPageCommonButtonFunction = (props) => {
     //     dispatch(editActionFun(rowData.id, "edit",));
     // }
 
-    function editHandler(rowData) {
-      
+    function editHandler(rowData,btnmode) {
         if (editBodyfunc) { editBodyfunc(rowData) }
         else {
-            dispatch(editActionFun(rowData.id, "edit",));
+            dispatch(editActionFun(rowData.id, btnmode,));
         }
-    }
+    };
 
-    function copyHandler(rowData) {
-        dispatch(editActionFun(rowData.id, "copy",));
+    function copyHandler(rowData,btnmode) {
+        dispatch(editActionFun(rowData.id,btnmode));
     }
-
     function downHandler(rowData) {
         downBtnFunc(rowData);
-    }
+    };
 
     function deleteHandler(rowData) {
         dispatch(AlertState({
@@ -79,7 +77,7 @@ export const listPageCommonButtonFunction = (props) => {
                         type="button"
                         className={editBtnCss}
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                        onClick={() => { editHandler(rowData) }}
+                        onClick={() => { editHandler(rowData,mode.edit) }}
                     >
                         <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </Button>)
@@ -92,7 +90,7 @@ export const listPageCommonButtonFunction = (props) => {
                             type="button"
                             className={editSelfBtnCss}
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                            onClick={() => { editHandler(rowData) }}
+                            onClick={() => { editHandler(rowData,mode.edit) }}
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button>
@@ -105,7 +103,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={editSelfBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { editHandler(rowData) }}
+                                onClick={() => { editHandler(rowData,mode.view) }}
                             >
                                 <i className="bx bxs-show font-size-18 "></i>
                             </Button>
@@ -146,7 +144,7 @@ export const listPageCommonButtonFunction = (props) => {
                     type="button"
                     className={editSelfBtnCss}
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                    onClick={() => { copyHandler(rowData) }}
+                    onClick={() => { copyHandler(rowData,mode.copy) }}
                 >
                     <i className="bx bxs-copy font-size-18 "></i>
                 </Button>
@@ -257,28 +255,44 @@ export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++
     return currentDate
 }
 
-export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
-    let createdBy = 0
+export const userDetails = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+    let user_Details = null
     try {
-        createdBy = JSON.parse(localStorage.getItem('userId'))
+        user_Details = JSON.parse(localStorage.getItem('roleId'))
+    } catch (e) { alert("Common user_Details  Error") }
+    return user_Details
+}
+
+export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
+    let created_By = 0
+    try {
+        created_By = JSON.parse(localStorage.getItem('userId'))
     } catch (e) { alert("Common Created By Error") }
-    return createdBy
+    return created_By
 }
 
 export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-    let userCompany = 0
+    let user_Company = 0
     try {
-        userCompany = JSON.parse(localStorage.getItem('Company'))
+        user_Company = JSON.parse(localStorage.getItem('Company'))
     } catch (e) { alert("Common userCompany  Error") }
-    return userCompany
+    return user_Company
 }
 
 export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
-    let userParty = 0
+    let user_Party = 0
     try {
-        userParty = JSON.parse(localStorage.getItem("roleId")).Party_id
+        user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
     } catch (e) { alert("Common userParty Func  Error") }
-    return userParty
+    return user_Party
+}
+
+export const userEmployeeID = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+    let user_EmployeeID = 0
+    try {
+        user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
+    } catch (e) { alert("Common userEmployeeID Func  Error") }
+    return user_EmployeeID
 }
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
@@ -309,32 +323,33 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
 }
 
 export function saveDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    // try {
-    //     document.getElementById("overlay").style.display = state ? "block" : "none";
-    // } catch (e) { alert("button sppiner error") }
-    // try {
-    //     document.getElementById(`form_submmit${id}`).disabled = state;
-    // } catch (e) {
-    //     //alert("Save button dissable error") 
-    // }
-}
-export function mainSppinerOnOff({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
-        document.getElementById("overlay").style.display = state ? "block" : "none";
-    } catch (e) { alert("button sppiner error") }
-    try {
-        document.getElementById(`${id}`).disabled = state;
+        const btn = document.getElementById(id);
+        btn.disabled = state;
+        debugger
+        if (state) {
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
+        } else {
+            btn.innerHTML = `<span> Save</span>`
+            // btn.text = "save"
+        }
     } catch (e) {
         // alert("Go btn dissable  error") 
     }
 }
+export function mainSppinerOnOff( state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+    try {
+        document.getElementById("overlay").style.display = state ? "block" : "none";
+    } catch (e) { alert("button sppiner error") }
+    // try {
+    //     document.getElementById(`${id}`).disabled = state;
+    // } catch (e) {
+    //     // alert("Go btn dissable  error") 
+    // }
+}
 
 export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    // try {
-    //     document.getElementById("overlay").style.display = state ? "block" : "none";
-    // } catch (e) {
-    //     alert("Go btn dissable overlay error")
-    // }
+ 
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
@@ -349,6 +364,27 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
         // alert("Go btn dissable  error") 
     }
 }
+
+// export function GoBtnDissable1({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+//     try {
+//         document.getElementById("overlay").style.display = state ? "block" : "none";
+//     } catch (e) {
+//         // alert("Go btn dissable overlay error")
+//     }
+//     try {
+//         const btn = document.getElementById(id);
+//         btn.disabled = state;
+//         debugger
+//         if (state) {
+//             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
+//         } else {
+//             btn.innerHTML = `<span> Go</span>`
+//             btn.text = "Go"
+//         }
+//     } catch (e) {
+//         // alert("Go btn dissable  error") 
+//     }
+// }
 
 export function convertNumber(e) {//++++++++++++++++++++++ Convert Quantity +++++++++++++++++++++++++++++
     return parseFloat(e).toFixed(3)

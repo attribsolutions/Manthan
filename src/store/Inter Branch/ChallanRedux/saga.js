@@ -29,18 +29,17 @@ function* get_ChallanList_GenFunc({ filters }) {
   }
 }
 
-// Inward Button Api
-function* Inward_Button_GenratorFunction({ id, pageMode }) {
+// Inward Go Button Api
+function* Inward_Button_GenratorFunction({ id }) {
   debugger
   try {
-    const response = Data
-    yield put(InwardButtonIdSuccess(response));
-    
-    console.log("response in saga", response)
+    const response =  yield call(Inward_Button_API, id);
+    yield put(InwardButtonIdSuccess(response.Data));
+
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Inward Button",
     }));
   }
 }

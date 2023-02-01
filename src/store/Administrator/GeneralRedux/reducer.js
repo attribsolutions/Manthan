@@ -4,16 +4,18 @@ import {
     DELETE_GENERAL_ID_SUCCESS,
     EDIT_GENERAL_ID_SUCCESS,
     UPDATE_GENERAL_ID_SUCCESS,
-    POST_TYPE_SUCCESS
+    POST_TYPE_SUCCESS,
+    GENERAL_MASTER_SUB_TYPE_SUCCESS
 } from "./actionType";
 
 const INIT_STATE = {
     PostDataMessage: { Status: false },
-    GeneralList:[],
-    Type:[],
+    GeneralList: [],
+    Type: [],
     deleteMessage: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
+    GeneralMasterSubType:[]
 }
 
 const GeneralReducer = (state = INIT_STATE, action) => {
@@ -55,9 +57,14 @@ const GeneralReducer = (state = INIT_STATE, action) => {
         case POST_TYPE_SUCCESS:
             return {
                 ...state,
-                Type :action.payload,
+                Type: action.payload,
             };
 
+        case GENERAL_MASTER_SUB_TYPE_SUCCESS:
+            return {
+                ...state,
+                GeneralMasterSubType: action.payload,
+            };
         default:
             return state
     }

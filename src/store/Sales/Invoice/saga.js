@@ -1,18 +1,15 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { convertDatefunc, convertTimefunc, mainSppinerOnOff } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { Invoice_Delete_API, Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
+import { convertDatefunc, convertTimefunc, GoBtnDissable, mainSppinerOnOff, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { Invoice_Delete_API, Invoice_Edit_API_Singel_Get, Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { deleteInvoiceIdSuccess, getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
-import { DELETE_INVOICE_LIST_PAGE, GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
+import { deleteInvoiceIdSuccess, editInvoiceListSuccess, getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
+import { DELETE_INVOICE_LIST_PAGE, EDIT_INVOICE_LIST, GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
 
 // GO Botton Post API
 function* GoButtonInvoice_genfun({ data, goBtnId }) {
-  yield put(SpinnerState(true))
   try {
-    
     const response = yield call(Invoice_GoButton_Post_API, data);
-
     let convResp = response.Data.OrderItemDetails.map(i1 => {
 
       i1["OrderQty"] = i1.Quantity
@@ -59,14 +56,11 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
     })
 
     response.Data.OrderItemDetails = convResp
-console.log("aksj",JSON.stringify(response.Data))
-    yield mainSppinerOnOff({ id: goBtnId, state: false })
-    // yield put(SpinnerState(false))
+    yield GoBtnDissable({ id: goBtnId, state: false })
     yield put(GoButton_post_For_Invoice_Success(response.Data));
 
   } catch (error) {
-    mainSppinerOnOff({ id: goBtnId, state: false })
-    // yield put(SpinnerState(false))
+    GoBtnDissable({ id: goBtnId, state: false })
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Go Button in Invoice ",
@@ -81,10 +75,10 @@ function* save_Invoice_Genfun({ data, saveBtnid }) {
     const response = yield call(Invoice_Post_API, data);
     yield put(SpinnerState(false))
 
-    mainSppinerOnOff({ id: saveBtnid, state: false })
+    saveDissable({ id: saveBtnid, state: false })
     yield put(postInvoiceMasterSuccess(response));
   } catch (error) {
-    mainSppinerOnOff({ id: saveBtnid, state: false })
+    saveDissable({ id: saveBtnid, state: false })
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
@@ -117,6 +111,23 @@ function* InvoiceListGenFunc({ filters }) {
   }
 }
 
+// edit List page
+function* editInvoiceListGenFunc({ id, pageMode }) {
+  yield put(SpinnerState(true))
+  try {
+    let response = yield call(Invoice_Edit_API_Singel_Get, id);
+    response.pageMode = pageMode
+    yield put(SpinnerState(false))
+    yield put(editInvoiceListSuccess(response))
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Invoice Edit Method ",
+    }));
+  }
+}
+
 // Invoice List delete List page
 function* DeleteInvoiceGenFunc({ id }) {
 
@@ -138,6 +149,7 @@ function* InvoiceSaga() {
   yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonInvoice_genfun)
   yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
   yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
+  yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
   yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
 }
 

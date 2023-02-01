@@ -32,10 +32,10 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import { createdBy, userCompany} from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
-import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../../routes/PageMode";
 
 const BOMMaster = (props) => {
 
@@ -44,7 +44,7 @@ const BOMMaster = (props) => {
 
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -87,8 +87,8 @@ const BOMMaster = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
@@ -164,7 +164,7 @@ const BOMMaster = (props) => {
             // saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -242,7 +242,6 @@ const BOMMaster = (props) => {
     }
 
     function Items_Dropdown_Handler(e) {
-        debugger
         setItemTabDetails([])
         let Item = Items.filter((index) => {
             return index.id === e.value
@@ -261,10 +260,8 @@ const BOMMaster = (props) => {
         })
     }
 
-    const SaveHandler = ({ event, mode = false }) => {
-        debugger
+    const SaveHandler = ( event) => {
         event.preventDefault();
-
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
             Quantity: index.Quantity,
@@ -273,10 +270,10 @@ const BOMMaster = (props) => {
         if (formValid(state, setState)) {
 
             let BOMrefID = 0
-            if ((pageMode === 'edit') && mode) {
+            if ((pageMode === mode.edit) ) {
                 BOMrefID = EditData.id
             };
-            
+
             const jsonBody = JSON.stringify({
                 BomDate: values.BomDate,
                 EstimatedOutputQty: values.EstimatedOutputQty,
@@ -304,7 +301,7 @@ const BOMMaster = (props) => {
 
             // saveDissable(true);//save Button Is dissable function
 
-            if ((pageMode === 'edit') && !mode) {
+            if (pageMode === mode.edit) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
             }
             else {
@@ -317,13 +314,10 @@ const BOMMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS} /> */}
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    // showCount={true}
-                    /> */}
-                    <form onSubmit={(event) => SaveHandler({ event })} noValidate>
+               
+                    <form onSubmit={(event) => SaveHandler(event)} noValidate>
                         <div className="px-2 c_card_filter header text-black" >
                             <div className=" row  ">
                                 <Col sm="6">
@@ -336,12 +330,12 @@ const BOMMaster = (props) => {
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
                                                 autoComplete="0,''"
-                                                disabled={pageMode === "edit" ? true : false}
+                                                disabled={pageMode === mode.edit ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: pageMode === "edit" ? values.BomDate : "today"
+                                                    defaultDate: (pageMode === mode.edit) ? values.BomDate : "today"
                                                 }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
@@ -383,7 +377,7 @@ const BOMMaster = (props) => {
                                         <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
                                         <Col sm="7">
                                             <Input
-                                              style={{ textAlign: "right" }}
+                                                style={{ textAlign: "right" }}
                                                 name="EstimatedOutputQty"
                                                 value={values.EstimatedOutputQty}
                                                 type="text"
@@ -411,7 +405,7 @@ const BOMMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={pageMode === 'edit' ? ItemUnitOnEditData : ItemUnitOptions}
+                                                options={pageMode === mode.edit ? ItemUnitOnEditData : ItemUnitOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                             {isError.UnitName.length > 0 && (
@@ -479,7 +473,8 @@ const BOMMaster = (props) => {
 
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "9px" }}>
-                                        <SaveButton pageMode={pageMode}
+                                        <SaveButton
+                                            pageMode={pageMode}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"BOMMaster"}

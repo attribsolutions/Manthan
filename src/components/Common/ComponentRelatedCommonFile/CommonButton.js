@@ -1,5 +1,6 @@
 import { Button } from "reactstrap"
 import { createdBy } from "./listPageCommonButtons";
+import * as mode from "../../../routes/PageMode"
 
 export function SaveButton(props) {
 
@@ -10,7 +11,7 @@ export function SaveButton(props) {
   return (
     <div>
       {
-        pageMode === "edit" ?
+        pageMode === mode.edit ?
           (userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) && (isCreated)) ?
             <button
               type="submit"
@@ -23,7 +24,7 @@ export function SaveButton(props) {
             </button>
             :
             <></>
-          : (
+          : (pageMode === mode.defaultsave || pageMode === mode.mode2save || pageMode === mode.dropdownAdd) ? (
             userAcc.RoleAccess_IsSave ?
               <button
                 type="submit"
@@ -36,6 +37,7 @@ export function SaveButton(props) {
               :
               <></>
           )
+            : <></>
       }
     </div>
   )
@@ -46,14 +48,14 @@ export function Go_Button(props) {
   const { onClick, id } = props
   return (
     // <div className="spinner-grow t"   role="status" >
-      <Button
-        id={id} type="button"
-      
-        color="btn btn-outline-success border-1 font-size-12 mb-2 "
-        onClick={onClick}
-      >
-        
-        Go</Button>
+    <Button
+      id={id} type="button"
+
+      color="btn btn-outline-success border-1 font-size-12 mb-2 "
+      onClick={onClick}
+    >
+
+      Go</Button>
     // </div>
   )
 }

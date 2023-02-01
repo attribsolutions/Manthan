@@ -5,18 +5,22 @@ import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import MaterialIssueMaster from "./Material_IssueMaster";
-import { deleteMaterialIssueId, deleteMaterialIssueIdSuccess, getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
+import {
+    deleteMaterialIssueId,
+    deleteMaterialIssueIdSuccess,
+    editMaterialIssueId,
+    getMaterialIssueListPage,
+    MaterialIssuelistfilters
+} from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
-import { Mode2 } from "../../../routes/PageMode";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as  mode  from "../../../routes/PageMode";
 import { MetaTags } from "react-meta-tags";
+import { updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 
 const MaterialIssueList = () => {
 
@@ -33,7 +37,7 @@ const MaterialIssueList = () => {
             deleteMsg: state.MaterialIssueReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            editData: state.WorkOrderReducer.editData,
+            editData: state.MaterialIssueReducer.editData,
             materialIssuelistFilters: state.MaterialIssueReducer.materialIssuelistFilters,
             produtionMake: state.ProductionReducer.produtionMake,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -47,7 +51,7 @@ const MaterialIssueList = () => {
 
     const action = {
         getList: getMaterialIssueListPage,
-        editId: editWorkOrderList,
+        editId: editMaterialIssueId,
         deleteId: deleteMaterialIssueId,
         postSucc: postMessage,
         updateSucc: updateWorkOrderListSuccess,
@@ -78,7 +82,7 @@ const MaterialIssueList = () => {
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
-    }, [userAccess])
+    }, [userAccess]);
 
     useEffect(() => {
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
@@ -87,61 +91,42 @@ const MaterialIssueList = () => {
                 pageMode: produtionMake.pageMode,
             })
         }
-    }, [produtionMake])
+    }, [produtionMake]);
 
     const makeBtnFunc = (list = {}) => {
-        debugger
-        // var isSelect = ''
-        // if (list.length > 0) {
-        //     list.forEach(ele => {
-        //         if (ele.hasSelect) {
-        //             isSelect = isSelect.concat(`${ele.id},`)
-        //         }
-        //     });
-        //     if (isSelect) {
-        //         const withoutLastComma = isSelect.replace(/,*$/, '');
-        //         const jsonBody = JSON.stringify({
-        //             MaterialIssueID: withoutLastComma
-        //         })
-
-        //         dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
-
-        //     } else {
-        //         alert("Please Select Material Issue")
-        //     }
-        // }
         history.push({
             pathname: url.PRODUCTION_MASTER,
             MaterialProductionaData: list,
-            pageMode: Mode2
+            pageMode:mode.mode2save
         })
-    }
+    };
+
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
         });
         dispatch(getMaterialIssueListPage(jsonBody));
-    }
+    };
 
     function fromdateOnchange(e, date) {
         let newObj = { ...materialIssuelistFilters }
         newObj.fromdate = date
         dispatch(MaterialIssuelistfilters(newObj))
-    }
+    };
 
     function todateOnchange(e, date) {
         let newObj = { ...materialIssuelistFilters }
         newObj.todate = date
         dispatch(MaterialIssuelistfilters(newObj))
-    }
+    };
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-           
+
             <div className="page-content">
-            
+
                 <div className="px-2  c_card_header text-black" >
                     <div className=" row" >
                         <Col sm="5" >

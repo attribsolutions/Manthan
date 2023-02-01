@@ -42,11 +42,7 @@ const Inward = (props) => {
     }));
 
     const { IBChallanItems = [], Party = '',IBChallanNumber='' } = InwardData
-
-    useEffect(() => {
-        dispatch(InwardButtonId())
-    }, []);
-
+    
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -123,18 +119,18 @@ const Inward = (props) => {
         }))
 
         const jsonBody = JSON.stringify({
-            // IBInwardDate: InwardDate,
-            // IBInwardNumber: data.IBChallanNumber,
-            // FullIBInwardNumber: data.FullIBInwardNumber,
-            // GrandTotal: data.GrandTotal,
-            // CreatedBy: createdBy(),
-            // UpdatedBy: createdBy(),
-            // Customer: data.Customer.id,
-            // Supplier: data.Party.id,
-            // InterBranchInwardItems: arr,
-            // InterBranchInwardReferences: [{
-            //     IBChallan: 1
-            // }]
+            IBInwardDate: InwardDate,
+            IBInwardNumber: InwardData.IBChallanNumber,
+            FullIBInwardNumber: InwardData.FullIBInwardNumber,
+            GrandTotal: InwardData.GrandTotal,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            Customer: InwardData.Customer.id,
+            Supplier: InwardData.Party.id,
+            InterBranchInwardItems: arr,
+            InterBranchInwardReferences: [{
+                IBChallan: 1
+            }]
         });
 
         // saveDissable(true);//save Button Is dissable function

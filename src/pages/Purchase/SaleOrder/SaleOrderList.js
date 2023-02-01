@@ -9,7 +9,6 @@ import {
     editOrderId,
     getOrderListPage,
     updateOrderIdSuccess,
-    orderlistfilters,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
@@ -59,6 +58,7 @@ const SaleOrderList = () => {
     );
     const { userAccess, pageField, GRNitem, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
+    // const supplierSelect = venderSelect
     const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.SALE_ORDER_lIST;
     debugger
     const action = {
@@ -190,7 +190,7 @@ const SaleOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Customer: !(supplierSelect.value > 0) ? "": supplierSelect.value,
+            Customer: supplierSelect.value,
             Supplier: userParty(),
             OrderType: order_Type.SaleOrder
         });

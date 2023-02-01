@@ -33,7 +33,7 @@ import {
 import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 const ProductionMaster = (props) => {
 
@@ -41,7 +41,7 @@ const ProductionMaster = (props) => {
     const history = useHistory();
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [UnitNamefromPageMod_2, setUnitNamefromPageMod_2] = useState('');
     const fileds = {
@@ -100,7 +100,7 @@ const ProductionMaster = (props) => {
         let mode2Data = props.location
         const MaterialProductionaData = Object.assign({}, mode2Data.MaterialProductionaData)
      
-        if (mode2Data.pageMode === "Mode2") {
+        if (mode2Data.pageMode === mode.mode2save) {
             setUnitNamefromPageMod_2(props.location.MaterialProductionaData[0].UnitName)
             setState(i => {
                 i.values.ItemName = {
