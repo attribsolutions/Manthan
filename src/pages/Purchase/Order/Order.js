@@ -885,7 +885,7 @@ const Order = (props) => {
                         {orderTypeSelect.label === 'Open PO' ?
                             <div className="row" >                                    {/*PO From Date */}
                                 <div className="col col-6" >
-                                    <FormGroup className=" row  " >
+                                    <FormGroup className=" row " >
                                         <Label className=" p-2"
                                             style={{ width: "115px" }}>PO From Date</Label>
                                         <div className="col col-6 ">

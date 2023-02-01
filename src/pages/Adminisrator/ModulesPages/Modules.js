@@ -39,6 +39,8 @@ import { createdBy, saveDissable } from "../../../components/Common/ComponentRel
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode"
+
 
 const Modules = (props) => {
 
@@ -56,7 +58,7 @@ const Modules = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -82,8 +84,8 @@ const Modules = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -224,7 +226,7 @@ const Modules = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === 'edit') {
+            if (pageMode === mode.edit) {
                 dispatch(updateModuleID(jsonBody, values.id));
                 console.log("update jsonBody", jsonBody)
             }
@@ -237,7 +239,7 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

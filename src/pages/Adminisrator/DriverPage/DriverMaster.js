@@ -37,7 +37,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 const DriverMaster = (props) => {
 
@@ -53,7 +53,7 @@ const DriverMaster = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -78,8 +78,8 @@ const DriverMaster = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
@@ -149,7 +149,7 @@ const DriverMaster = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -221,7 +221,7 @@ const DriverMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === 'edit') {
+            if (pageMode === mode.edit) {
                 dispatch(updateDriverTypeID(jsonBody, values.id));
             }
 
@@ -234,7 +234,7 @@ const DriverMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };// new change
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };// new change
 
     if (!(userPageAccessState === '')) {
         return (
