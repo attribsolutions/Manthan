@@ -108,7 +108,6 @@ function* get_PRODUCTION_GerFunc({ filters }) {
     // })
 
     const newList = response.Data.map((index) => {
-      debugger
       index.Item = index.Item.Name;
       var date = convertDatefunc(index.ProductionDate)
       var batchdate = convertDatefunc(index.BatchDate)
@@ -159,7 +158,6 @@ function* getProduction_Mode2_GenFunc({ data }) {
 
 // Edit Production  Page API
 function* editProduction_GenFunc({ id, pageMode }) {
-
   try {
     const response = yield call(production_Edit_API, id);
     response["pageMode"] = pageMode;
