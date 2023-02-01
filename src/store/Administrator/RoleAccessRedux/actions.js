@@ -42,7 +42,7 @@ export const PageDropdownForRoleAccessList_Success = (data) => ({
 
 export const GO_Button_HandlerForRoleAccessListPage = (id1,id2,id3) => ({
   type: GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
-  id1,id2,id3
+  id1,id2,id3,
 });
 
 export const GO_Button_HandlerForRoleAccessListPage_Success = (data) => ({
