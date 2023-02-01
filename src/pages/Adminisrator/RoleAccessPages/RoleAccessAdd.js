@@ -38,6 +38,7 @@ import "./table-fixed.scss"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../routes/allPageID"
 import { userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const RoleAccessAdd = (props) => {
 
@@ -52,8 +53,8 @@ const RoleAccessAdd = (props) => {
     const [role_dropdown_Select, setRoleDropDown] = useState("");
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState({ value: 0, label: "All Pages" });
-
-
+    const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
+ 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const {
@@ -65,7 +66,8 @@ const RoleAccessAdd = (props) => {
         PostMessage_ForRoleAccessList,
         Roles,
         partyList,
-        userAccess
+        userAccess,
+        company
     } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
@@ -78,9 +80,11 @@ const RoleAccessAdd = (props) => {
         GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
         PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
         userAccess: state.Login.RoleAccessUpdateData,
+        company: state.Company.companyList,
     }));
 
     useEffect(() => {
+        debugger
         const editDataGatingFromList = history.location.state
 
         const locationPath = history.location.pathname
@@ -91,14 +95,17 @@ const RoleAccessAdd = (props) => {
         if (!(editDataGatingFromList === undefined)) {
 
             var divisionid = editDataGatingFromList.Division_id
+            var divisionName = editDataGatingFromList.DivisionName
             var roleid = editDataGatingFromList.Role_id
             var roleName = editDataGatingFromList.RoleName
-            var divisionName = editDataGatingFromList.DivisionName
-
+            var company_id = editDataGatingFromList.Company_id
+            var companyName = editDataGatingFromList.CompanyName
+           
             if (roleid > 0) {
                 dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
                 setShowTableOnUI(true)
                 setRoleDropDown({ label: roleName, value: roleid })
+                setCompany_dropdown_Select({ label: companyName, value: company_id })
                 setDivision_dropdown_Select({ label: divisionName, value: divisionid })
             }
         }
@@ -107,7 +114,6 @@ const RoleAccessAdd = (props) => {
         }
     }, [userAccess])
 
-
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         dispatch(getPartyListAPI());//for division dropdown API
@@ -115,7 +121,7 @@ const RoleAccessAdd = (props) => {
         dispatch(fetchModelsList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
-
+        dispatch(fetchCompanyList());
     }, []);
 
     useEffect(() => {
@@ -210,6 +216,11 @@ const RoleAccessAdd = (props) => {
         label: i.Name
     }));
 
+    const CompanyValues = company.map((i) => ({
+        value: i.id,
+        label: i.Name
+    }));
+
     const Role_DropdownOption = Roles.map((i) => ({
         value: i.id,
         label: i.Name
@@ -254,11 +265,12 @@ const RoleAccessAdd = (props) => {
         debugger
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
+        var company = company_dropdown_Select.value
         if (division === undefined) {
             division = 0
         }
         if (role > 0) {
-            dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
+            dispatch(GO_Button_HandlerForRoleAccessListPage(role, division, company));
             setShowTableOnUI(true)
         }
         else if (role === undefined) {
@@ -320,6 +332,7 @@ const RoleAccessAdd = (props) => {
         setPage_DropdownSelect('')
         setTableListData([])
     }
+
     const saveHandeller = () => {
 
         let selectedItemArray = [];
@@ -381,7 +394,7 @@ const RoleAccessAdd = (props) => {
             let divisionID = division_dropdown_Select.value
 
             pageAccessElement["Role"] = role_dropdown_Select.value
-            pageAccessElement["Company"] = userCompany()
+            pageAccessElement["Company"] = company_dropdown_Select.value
             pageAccessElement["Division"] = (divisionID === 0 ? "" : divisionID)
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
@@ -395,7 +408,7 @@ const RoleAccessAdd = (props) => {
                 if (relatedPageID > 0) {
 
                     pageAccessElement2["Role"] = role_dropdown_Select.value
-                    pageAccessElement2["Company"] =userCompany()
+                    pageAccessElement2["Company"] = company_dropdown_Select.value
                     pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
@@ -538,7 +551,7 @@ const RoleAccessAdd = (props) => {
                                             <>
                                                 <CardHeader className="card-header   text-black  c_card_body"  >
                                                     <Row className="mt-3">
-                                                        <Col md="4">
+                                                        <Col md="3">
                                                             <FormGroup className="mb-3 row ">
                                                                 <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
                                                                 <Col md="9">
@@ -554,7 +567,7 @@ const RoleAccessAdd = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
-                                                        <Col md="4" className="">
+                                                        <Col md="3" className="">
                                                             <FormGroup className="mb-3 row" >
                                                                 <Label className="col-sm-3 p-2">Division</Label>
                                                                 <Col md="9">
@@ -569,6 +582,20 @@ const RoleAccessAdd = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
+                                                        <Col md="3" className="">
+                                                            <FormGroup className="mb-3 row" >
+                                                                <Label className="col-sm-3 p-2">Company</Label>
+                                                                <Col md="9">
+                                                                    <Select
+                                                                        value={company_dropdown_Select}
+                                                                        className="rounded-bottom"
+                                                                        placeholder="Select..."
+                                                                        options={CompanyValues}
+                                                                        onChange={(e) => { setCompany_dropdown_Select(e) }}
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
                                                         <Col md="3" className="mt- ">
                                                             <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
                                                         </Col>
@@ -604,12 +631,13 @@ const RoleAccessAdd = (props) => {
                                                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
 
                                                     <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
-                                                        <Col md="4" className="p-2 ">
+                                                        <Col md="3" className="p-2 ">
                                                             <Label className="p-2 col-sm-3">Role</Label>
-                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                <h className="text-black">{role_dropdown_Select.label}</h></Button>
                                                         </Col>
 
-                                                        <Col md="4" className="p-2 ">
+                                                        <Col md="3" className="p-2 ">
                                                             {(division_dropdown_Select.value > 0)
                                                                 ? <> <Label className=" p-2 col-sm-3 ">Division</Label>
                                                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
@@ -617,8 +645,19 @@ const RoleAccessAdd = (props) => {
                                                                 </>
                                                                 : null}
                                                         </Col>
-                                                        <Col md="4" className="p-2 text-end">
-                                                            <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
+
+                                                        <Col md="3" className="p-2 ">
+                                                            <Label className="p-2 col-sm-4">Company</Label>
+                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                        </Col>
+
+                                                        <Col md="3" className="p-2 text-end">
+                                                            <Button type="button"
+                                                                color="btn btn-outline-secondary"
+                                                                className="btn-sm"
+                                                                onClick={() => { ChangeButtonHandeler() }}>
+                                                                <h className="text-black">Change Role</h></Button>
                                                         </Col>
                                                     </Row>
 

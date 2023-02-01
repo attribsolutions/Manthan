@@ -42,11 +42,10 @@ const ChallanList = () => {
             customer: state.SupplierReducer.customer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            InwardData: state.ChallanReducer.InwardData,
+
         })
     );
-
-    const { userAccess, pageField, ChallanlistFilter, customer, InwardData } = reducers;
+    const { userAccess, pageField, ChallanlistFilter, customer, } = reducers;
     const { fromdate, todate, CustomerSelect } = ChallanlistFilter;
 
     const page_Id = pageId.CHALLAN_LIST
@@ -125,7 +124,7 @@ const ChallanList = () => {
 
     const InwardMakeBtnFunc = (list = []) => {
         debugger
-        // dispatch(InwardButtonId(id))
+        dispatch(InwardButtonId(list[0].id))
         history.push({
             pathname: url.INWARD,
             pageMode: "save",

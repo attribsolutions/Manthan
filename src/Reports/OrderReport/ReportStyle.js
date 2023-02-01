@@ -58,22 +58,22 @@ export const reportHeder1 = (doc, data) => {
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 200,
-                halign: 'lfet',
-            },
-            1: {
-                columnWidth: 200,
-                halign: 'left',
-            },
-            1: {
-                columnWidth: 200,
-                halign: 'left',
-            },
+        // columnStyles: {
+        //     0: {
+        //         valign: "top",
+        //         columnWidth: 200,
+        //         halign: 'lfet',
+        //     },
+        //     1: {
+        //         columnWidth: 200,
+        //         halign: 'left',
+        //     },
+        //     1: {
+        //         columnWidth: 200,
+        //         halign: 'left',
+        //     },
 
-        },
+        // },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY() + 85,// 45,
 
@@ -113,8 +113,6 @@ export const reportHeder3 = (doc, data) => {
     doc.text(`Order Date: ${data.OrderDate}`, 415, 50) //Invoice date
 }
 
-// original
-
 export const reportFooter = (doc, data) => {
     var optionsTable2 = {
         margin: {
@@ -146,7 +144,7 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 140,
+                columnWidth: 80,
                 // fontStyle: 'bold',
             },
             1: {
@@ -306,7 +304,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-
+    debugger
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
@@ -315,16 +313,19 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[10].styles.fontSize = 8
 
-                data1.row.cells[0.].styles.fontStyle = "bold"
-                data1.row.cells[4.].styles.fontStyle = "bold"
-                data1.row.cells[6.].styles.fontStyle = "bold"
 
-                
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[10].styles.fontStyle = "bold"
+
+
                 // data1.row.cells[3].colSpan=4
                 // .colSpan = 3;
                 //description above refer to the column of the table on the lastrow
-            }
+            } 
         },
         margin: {
             left: 30, right: 25,//200 bottom
@@ -353,19 +354,19 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 140,
+                columnWidth: 120,
             },
             1: {
-                columnWidth: 50,
+                columnWidth: 40,
                 halign: 'right',
 
             },
             2: {
-                columnWidth: 40,
+                columnWidth: 30,
                 halign: 'right',
             },
             3: {
-                columnWidth: 60,
+                columnWidth: 30,
                 halign: 'right',
             },
             4: {
@@ -383,6 +384,16 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             8: {
+                columnWidth: 30,
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 50,
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+            10: {
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -409,7 +420,6 @@ export const tableBody = (doc, data) => {
     };
 
     doc.autoTable(table.columns, table.Rows(data), options, {
-
 
     });
 
@@ -551,7 +561,7 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(8)
 
     doc.text(`CGST:`,434, 690,)
-    doc.text(``,560, 690,'right')
+    doc.text(`${data.SubTotalGst}`,560, 690,'right')
 
     doc.text(`SGST:`, 434, 700,)
     doc.text(``, 560, 700,'right')
@@ -564,11 +574,11 @@ export const pageFooter = (doc, data) => {
     
 
     doc.setFont(undefined, 'Normal')
-
+    
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 434, 740,)
-    doc.text(``, 560, 740,'right')
+    doc.text(`Order Amt:`, 434, 740,)
+    doc.text(`${data.OrderAmount}`, 560, 740,'right')
 
 
     doc.setFont(undefined, 'Normal')
