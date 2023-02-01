@@ -636,45 +636,42 @@ const RoleAccessAdd = (props) => {
                                             :
                                             <>
                                                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                                    <Row style={{ backgroundColor: "#f2f2f2",borderRadius:"5px" }} className='mb-3 mt-n1'>
+                                                        <Row sm={12}>
+                                                            <Col sm={3} className="p-2 ">
+                                                                <Label className="p-2 col-sm-3">Role</Label>
+                                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                    <h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                                            </Col>
 
-                                                    <div style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
-
-                                                        <div className="row">
-                                                            <div className="col col-10">
-                                                                <div className="row">
-                                                                    <Col md="3" className="p-2 ">
-                                                                        <Label className="p-2 col-sm-3">Role</Label>
+                                                            <Col sm={3} className="p-2 ">
+                                                                {(division_dropdown_Select.value > 0)
+                                                                    ?
+                                                                    <> <Label className=" p-2 col-sm-3 ">Division</Label>
                                                                         <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                            <h className="text-black">{role_dropdown_Select.label}</h></Button>
-                                                                    </Col>
+                                                                            <h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                                                    </>
+                                                                    : null}
+                                                            </Col>
 
-                                                                    <Col md="3" className="p-2 ">
-                                                                        {(division_dropdown_Select.value > 0)
-                                                                            ? <> <Label className=" p-2 col-sm-3 ">Division</Label>
-                                                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                                    <h className="text-black">{division_dropdown_Select.label}</h></Button>
-                                                                            </>
-                                                                            : null}
-                                                                    </Col>
-
-                                                                    <Col md="3" className="p-2 ">
-                                                                        <Label className="p-2 col-sm-4">Company</Label>
-                                                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                            <h className="text-black">{company_dropdown_Select.label}</h></Button>
-                                                                    </Col>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col col-2">
+                                                            <Col sm={4} className="p-2 ">
+                                                                <Label className="p-2 col-sm-4">Company</Label>
+                                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                    <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                            </Col>
+                                                            <Col sm={2} className="p-2 mt-2">
                                                                 <Button type="button"
                                                                     color="btn btn-outline-secondary"
                                                                     className="btn-sm"
                                                                     onClick={() => { ChangeButtonHandeler() }}>
                                                                     <h className="text-black">Change Role</h></Button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
+                                                            </Col>
 
+                                                        </Row>
+                                                    </Row>
+
+                                                
                                                     <Row>
                                                         <Col className="">
                                                             <FormGroup className="mb-3  row">
