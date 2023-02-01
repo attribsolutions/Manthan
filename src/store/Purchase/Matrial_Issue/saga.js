@@ -85,7 +85,7 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
       if (found === undefined) {
         i1["BatchesData"] = [];
         i1.BatchesData.push(b1)
-        i1.Quantity = i1.WorkOrderQuantity
+        // i1.Quantity = i1.WorkOrderQuantity
 
         newArr.push(i1)
       };
