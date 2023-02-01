@@ -34,7 +34,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode"
 
 const AddEmployee = (props) => {
 
@@ -61,7 +61,7 @@ const AddEmployee = (props) => {
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-  const [pageMode, setPageMode] = useState("save");
+  const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
@@ -92,23 +92,20 @@ const AddEmployee = (props) => {
     }));
 
   useEffect(() => {
-
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.EMPLOYEE))
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
-    // dispatch(getPartyListAPI());
-    // dispatch(Get_CompanyName_By_EmployeeTypeID());
-  }, [dispatch]);
+    }, [dispatch]);
 
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
 
   const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editValue")
-  const hasShowModal = props.hasOwnProperty("editValue")
+  const hasShowloction = location.hasOwnProperty(mode.editValue)
+  const hasShowModal = props.hasOwnProperty(mode.editValue)
 
   // userAccess useEffect
   useEffect(() => {
@@ -199,7 +196,7 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
       saveDissable(false);//save Button Is enable function
@@ -358,7 +355,7 @@ const AddEmployee = (props) => {
 
       saveDissable(true);//save Button Is dissable function
 
-      if (pageMode === "edit") {
+      if (pageMode === mode.edit) {
         dispatch(updateEmployeeID(jsonBody, values.id,));
         console.log("update jsonBody", jsonBody)
       }
@@ -373,7 +370,7 @@ const AddEmployee = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
