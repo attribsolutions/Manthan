@@ -316,7 +316,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === mode.mode2save) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        if ((`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",

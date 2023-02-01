@@ -123,8 +123,8 @@ const Order = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
         dispatch(goButtonForOrderAddSuccess(null))
@@ -718,8 +718,8 @@ const Order = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content">
 
-                    <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name*/}
-                        <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name*/}
+                    <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
+                        <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
                             <Col sm="6">{/* Order Date*/}
                                 <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
@@ -758,8 +758,8 @@ const Order = (props) => {
                                             onChange={supplierOnchange}
                                         />
                                     </Col>
-                                    <Col sm="1" className="mx-4 ">
-                                        {pageMode === "save" ?
+                                    <Col sm="1" className="mx-4 ">{/*Go_Button  */}
+                                        {pageMode === mode.defaultsave ?
                                             (orderItemTable.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
                                                 :
