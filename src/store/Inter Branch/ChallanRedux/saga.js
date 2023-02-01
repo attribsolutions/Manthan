@@ -34,8 +34,8 @@ function* Inward_Button_GenratorFunction({ id }) {
   debugger
   try {
     const response =  yield call(Inward_Button_API, id);
-    yield put(InwardButtonIdSuccess(response));
-    console.log("response in saga", response)
+    yield put(InwardButtonIdSuccess(response.Data));
+
   } catch (error) {
     yield put(AlertState({
       Type: 4,

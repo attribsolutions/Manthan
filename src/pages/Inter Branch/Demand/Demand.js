@@ -35,7 +35,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { DEMAND_LIST } from "../../../routes/route_url";
 import {
-    editDemandId,
     editDemandIdSuccess,
     postDemand,
     postDemandSuccess,
@@ -64,7 +63,7 @@ const Demand = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
     const [userAccState, setUserPageAccessState] = useState("");
     const [demanddate, setdemanddate] = useState(currentDate)
@@ -443,7 +442,7 @@ const Demand = (props) => {
             Supplier: values.SupplierName.value,
             Customer: userParty(),
             EffectiveDate: demanddate,
-            DemandID: (pageMode === mode.save) ? 0 : EditData.id
+            DemandID: (pageMode === mode.defaultsave) ? 0 : EditData.id
         })
 
         dispatch(postGoButtonForDemand(jsonBody))

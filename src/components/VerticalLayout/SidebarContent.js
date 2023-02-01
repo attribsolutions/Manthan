@@ -19,8 +19,7 @@ import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { roleAceessAction } from "../../store/actions";
-import { WindowScrollController } from "@fullcalendar/react";
+import { roleAceessAction, roleAceessActionSuccess, } from "../../store/actions";
 import { userCompany, userDetails, userEmployeeID, userParty } from "../Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const SidebarContent = (props) => {
@@ -40,7 +39,6 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
-  
     if (RoleAccessUpdateData.length <= 0) {
       let role = userDetails()
       if (role) {
@@ -50,10 +48,6 @@ const SidebarContent = (props) => {
         dispatch(roleAceessAction(party, employee, company))
       };
     }
-  }, [])
-
-  useEffect(() => {
-
   }, [])
 
   const activateParentDropdown = useCallback(item => {
@@ -92,7 +86,6 @@ const SidebarContent = (props) => {
     return false;
   }, []);
 
-
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
     // debugger
@@ -125,9 +118,11 @@ const SidebarContent = (props) => {
     };
     initMenu();
   }, [props.location.pathname, activateParentDropdown]);
+
   useEffect(() => {
     ref.current.recalculate();
   });
+
   function scrollElement(item) {
     if (item) {
       const currentPosition = item.offsetTop;
