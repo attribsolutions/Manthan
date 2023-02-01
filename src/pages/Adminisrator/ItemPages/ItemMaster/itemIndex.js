@@ -173,7 +173,7 @@ const ItemsMaster = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: userCompany(),
-            TypeID: 47
+            TypeID: 1
         });
         dispatch(GeneralMasterSubType(jsonBody));
     }, []);
@@ -193,7 +193,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+               
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
