@@ -9,13 +9,13 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
             setState({ isError, hasValid, required, fieldLabel, values })
         }
     });
-    
+
     return isValid
 };
 
 export const formValChange = ({ event, state, setState }) => {
 
-    
+
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -120,17 +120,18 @@ export const formValChange = ({ event, state, setState }) => {
 export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
-
     fieldArr.forEach(ele => {
-        Object.keys(values).forEach(lab => {
+        Object.keys(values).some(lab => {
             if (lab === ele.ControlID) {
                 isState.fieldLabel[lab] = ele.FieldLabel;
                 isState.hasValid[lab].regExp = ele.RegularExpression;
                 isState.hasValid[lab].inValidMsg = ele.InValidMsg;
                 if (ele.IsCompulsory) {
                     isState.required[lab] = true
-                };
+                }
+                return true
             };
+
         });
     });
 
@@ -178,7 +179,7 @@ export const initialFiledFunc = (field) => {
 
 
 export const resetFunction = (field, state) => {
-   
+
     var preState = { ...state }
     preState.values = field
     Object.keys(field).forEach(label => {

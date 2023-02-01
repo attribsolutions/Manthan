@@ -117,15 +117,15 @@ const MaterialIssueMaster = (props) => {
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
-            let blockpageMode = null
+            let insidePageMode = null
             if (hasShowloction) {
-                blockpageMode = location.pageMode;
+                insidePageMode = location.pageMode;
                 setPageMode(location.pageMode)
                 hasEditVal = location[mode.editValue]
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
-                blockpageMode = props.pageMode;
+                insidePageMode = props.pageMode;
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
@@ -148,7 +148,7 @@ const MaterialIssueMaster = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                if (blockpageMode === mode.mode2save) {
+                if (insidePageMode === mode.mode2save) {
                     const jsonBody = JSON.stringify({
                         WorkOrder: id,
                         Item: Item,
@@ -157,7 +157,7 @@ const MaterialIssueMaster = (props) => {
                         Quantity: parseInt(EstimatedOutputQty)
                     });
                     dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
-                } else if (blockpageMode === mode.view) {
+                } else if (insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
                     dispatch(editMaterialIssueIdSuccess({ Status: false }))
                 }
@@ -345,7 +345,8 @@ const MaterialIssueMaster = (props) => {
                                             <div style={{ width: "150px" }}>
                                                 <Input
                                                     type="text"
-                                                    key={index.id}
+                                                    key={`stock${user.id}-${index.id}`}
+                                                    disabled={pageMode === mode.view ? true : false}
                                                     id={`stock${user.id}-${index.id}`}
                                                     style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
