@@ -712,10 +712,10 @@ const GRNAdd = (props) => {
                                         <Input
                                             type="text"
                                             style={{ backgroundColor: "white" }}
-                                            // value={EditData.InvoiceNumber}
+                                            value={EditData.InvoiceNumber}
                                             placeholder="Enter Invoice No"
                                             disabled={pageMode === mode.view ? true : false}
-                                        // onChange={(e) => setInvoiceNo(e.target.value)}
+                                            onChange={(e) => setInvoiceNo(e.target.value)}
                                         />
                                     </Col>
                                 </FormGroup>
