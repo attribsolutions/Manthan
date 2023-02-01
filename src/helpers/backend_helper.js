@@ -412,11 +412,12 @@ export const Material_Issue_Edit_API = (id) => get(`${url.POST_API_FOR_MATERIAL_
 export const Material_Issue_Delete_API = (id) => del(`${url.POST_API_FOR_MATERIAL_ISSUE}/${id}`)// delete api
 
 // Production 
-export const Production_Post_API = (data) => post(url.POST_API_FOR_PRODUCTION, data)// go button postapi
-export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_LIST, filters)// go button postapi
+export const Production_Post_API = (data) => post(url.PRODUCTION_POST_API, data)// go button postapi
+export const production_get_API = (filters) => post(url.PRODUCTION_LIST_FILTER, filters)// go button postapi
+export const production_Edit_API = (id) => get(`${url.PRODUCTION_POST_API}/${id}`)// make production to material Issue postapi
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
-export const Production_Delete_API = (id) => del(`${url.POST_API_FOR_PRODUCTION}/${id}`)// delete api
+export const Production_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
 
 // Invoice
 export const Invoice_GoButton_Post_API = (data) => post(url.INVOICE_GO_BUTTON_POST_API, data)// go button postapi

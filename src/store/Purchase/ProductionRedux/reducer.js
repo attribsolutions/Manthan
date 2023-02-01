@@ -16,7 +16,7 @@ import {
 
 const INIT_STATE = {
   postMsg: { Status: false },
-  editData: { Status: false, Items: [] },
+  editData: { Status: false, },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   ProductionList: [],

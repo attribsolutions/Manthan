@@ -30,7 +30,7 @@ const WorkOrderList = () => {
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(url.WORK_ORDER_LIST)
+    const [pageMode, setpageMode] = useState(mode.defaultList)
     const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -49,6 +49,7 @@ const WorkOrderList = () => {
     const { userAccess, pageField, tableList, workOrderlistFilters, GRNitem } = reducers;
     const { fromdate, todate } = workOrderlistFilters
     const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
+    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? mode.mode2save : mode.defaultList;
 
     const action = {
         getList: getWorkOrderListPage,
@@ -61,7 +62,7 @@ const WorkOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        setpageMode(page_mode)
         dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -202,7 +203,7 @@ const WorkOrderList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === mode.mode2save ? false : true}
+                            makeBtnShow={pageMode === mode.defaultList ? false : true}
                             makeBtnName={"Make Material Issue"}
                         />
                         : null
