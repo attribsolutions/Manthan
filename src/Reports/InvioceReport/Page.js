@@ -10,10 +10,10 @@ var pageHeder = function (doc,data) {
     style.reportHeder1(doc,data);
     style.reportHeder2(doc,data);
     style.reportHeder3(doc,data);    //Invoice ID , Date
-
-};
-function reportBody(doc, data) {
     style.tableBody(doc, data);
+};
+
+function reportBody(doc, data) {    
 
 }
 function pageFooter(doc,data) {
