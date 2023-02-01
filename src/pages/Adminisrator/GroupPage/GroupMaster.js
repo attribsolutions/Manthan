@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -15,7 +14,6 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
     Breadcrumb_inputName,
-    CommonBreadcrumbDetails,
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
@@ -41,7 +39,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 const GroupMaster = (props) => {
 
@@ -56,8 +54,7 @@ const GroupMaster = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [EditData, setEditData] = useState({});
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -70,7 +67,7 @@ const GroupMaster = (props) => {
         pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.GroupReducer.postMsg,
-            updateMsg: state.CategoryReducer.updateMessage,
+            updateMsg: state.GroupReducer.updateMsg,
             GroupTypeAPI: state.GroupTypeReducer.GroupType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -89,8 +86,8 @@ const GroupMaster = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -126,8 +123,6 @@ const GroupMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
-                setEditData(hasEditVal)
 
                 const { id, Name, GroupType, GroupTypeName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -186,7 +181,7 @@ const GroupMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-
+        debugger
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values
@@ -232,7 +227,7 @@ const GroupMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(updateGroupID(jsonBody, values.id));
 
             }
@@ -245,14 +240,15 @@ const GroupMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* < BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUP}/>  */}
+
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

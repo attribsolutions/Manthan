@@ -25,8 +25,7 @@ import {
     updateGeneralID,
     updateGeneralIDSuccess,
     PostType,
-    PostTypeSuccess,
-    deleteGeneralIDSuccess
+    PostTypeSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -42,7 +41,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode"
 
 const GeneralMaster = (props) => {
 
@@ -54,12 +53,11 @@ const GeneralMaster = (props) => {
         TypeName: "",
         Name: "",
         IsActive: true
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -70,11 +68,9 @@ const GeneralMaster = (props) => {
         Type=[] ,
         pageField,
         updateMsg,
-        deleteMsg,
         userAccess } = useSelector((state) => ({
             postMsg: state.GeneralReducer.PostDataMessage,
             updateMsg: state.GeneralReducer.updateMessage,
-            deleteMsg: state.GeneralReducer.deleteMessage,
             Type: state.GeneralReducer.Type,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -92,8 +88,8 @@ const GeneralMaster = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -215,25 +211,6 @@ const GeneralMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
-    useEffect(() => {
-        if (deleteMsg.Status === true && deleteMsg.StatusCode === 200 && !modalCss) {
-            history.push({
-                pathname: url.GENERAL_LIST,
-            })
-        } else if (deleteMsg.Status === true && !modalCss) {
-            dispatch(deleteGeneralIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                })
-            );
-        }
-    }, [deleteMsg, modalCss]);
-
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -258,26 +235,24 @@ const GeneralMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(updateGeneralID(jsonBody, values.id,));
             }
             else {
                 dispatch(PostMethodForGeneral(jsonBody));
             }
         }
-
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GENERAL} /> */}
-
+               
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>
                         <Card className="text-black">

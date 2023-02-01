@@ -95,7 +95,7 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
 
         let tableArr = props.reducers.tableList;
-        if (pageMode === url.GRN_ADD_Mode_2) {
+        if (`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })

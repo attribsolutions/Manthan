@@ -106,7 +106,6 @@ const ItemsMaster = (props) => {
     let [isValidate, setIsValidate] = useState(initialInValid);
 
     const [formValue, setFormValue] = useState(initial);
-    const [pageRefresh, setpageRefresh] = useState(false);
     const [marginMaster, setMarginMaster] = useState([]);
 
     const [imageTabTable, setImageTabTable] = useState([{
@@ -193,7 +192,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-               
+
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -231,7 +230,7 @@ const ItemsMaster = (props) => {
                     Division: editDivision,
                     BaseUnit: { label: hasEditVal.BaseUnitName, value: hasEditVal.BaseUnitID },
                     isActive: hasEditVal.isActive,
-                    BrandName:editBrandName
+                    BrandName: editBrandName
                 }
                 // ====================== Images tab ======================
 
@@ -406,13 +405,15 @@ const ItemsMaster = (props) => {
     }));
 
     function dropDownValidation(event, type,) {
-
-        let returnVal = event.value === ''
-        if (returnVal) {
+        let isval = (event.value === '')
+        if (isval) {
             inValidDrop[type] = true
             return
         } else {
-            formValue[type] = event
+            setFormValue((i) => {
+                return { ...i, [type]: event }
+            })
+            // formValue[type] = event
             inValidDrop[type] = false
 
         }
