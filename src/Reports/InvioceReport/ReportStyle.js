@@ -546,21 +546,37 @@ export const pageFooter = (doc, data) => {
 
     doc.setFont('Tahoma')
     doc.line(460, 775, 30, 775);//horizontal line (Bottom)
+    
+    // const a = data.InvoiceItems.map((data) => ({
+    //     CGST: Number(data.CGST),
+    //     SGST: Number(data.SGST),
+    //     BasicAmount: Number(data.BasicAmount),
+    // }));
+    // var totalCGST = 0;
+    // var totalSGST = 0;
+    // var TotalBasicAmount = 0;
+    // a.forEach(arg => {
+    //     totalCGST += arg.CGST;
+    //     totalSGST += arg.SGST;
+    //     TotalBasicAmount += arg.BasicAmount
+
+    // });
+
+    //  const TotalGST = totalCGST +totalSGST;
 
     doc.setFontSize(8)
 
     doc.text(`CGST:`,434, 690,)
-    doc.text(`${data.tableTot.TotalCGst}`,560, 690,'right')
+    // doc.text(`${totalCGST}`,560, 690,'right')
 
     doc.text(`SGST:`, 434, 700,)
-    doc.text(`${data.tableTot.TotalSGst}`, 560, 700,'right')
+    // doc.text(`${totalSGST}`, 560, 700,'right')
 
-    const TotalGST=data.tableTot.TotalCGst+data.tableTot.TotalSGst
     doc.text(`TotalGST:`, 434, 710,)
-    doc.text(` ${TotalGST}`, 550, 710,'right')
+    // doc.text(` ${TotalGST}`, 550, 710,'right')
 
     doc.text(`BasicAmount:`, 434, 720, )
-    doc.text(`${data.tableTot.TotalBasicAmount1}`, 560, 720, 'right')
+    // doc.text(`${TotalBasicAmount}`, 560, 720, 'right')
     
 
     doc.setFont(undefined, 'Normal')
