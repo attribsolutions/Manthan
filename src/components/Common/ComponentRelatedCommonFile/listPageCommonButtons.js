@@ -32,15 +32,15 @@ export const listPageCommonButtonFunction = (props) => {
     //     dispatch(editActionFun(rowData.id, "edit",));
     // }
 
-    function editHandler(rowData,btnmode) {
+    function editHandler(rowData, btnmode) {
         if (editBodyfunc) { editBodyfunc(rowData) }
         else {
             dispatch(editActionFun(rowData.id, btnmode,));
         }
     };
 
-    function copyHandler(rowData,btnmode) {
-        dispatch(editActionFun(rowData.id,btnmode));
+    function copyHandler(rowData, btnmode) {
+        dispatch(editActionFun(rowData.id, btnmode));
     }
     function downHandler(rowData) {
         downBtnFunc(rowData);
@@ -77,7 +77,7 @@ export const listPageCommonButtonFunction = (props) => {
                         type="button"
                         className={editBtnCss}
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                        onClick={() => { editHandler(rowData,mode.edit) }}
+                        onClick={() => { editHandler(rowData, mode.edit) }}
                     >
                         <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </Button>)
@@ -90,7 +90,7 @@ export const listPageCommonButtonFunction = (props) => {
                             type="button"
                             className={editSelfBtnCss}
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                            onClick={() => { editHandler(rowData,mode.edit) }}
+                            onClick={() => { editHandler(rowData, mode.edit) }}
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button>
@@ -103,7 +103,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={editSelfBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { editHandler(rowData,mode.view) }}
+                                onClick={() => { editHandler(rowData, mode.view) }}
                             >
                                 <i className="bx bxs-show font-size-18 "></i>
                             </Button>
@@ -144,7 +144,7 @@ export const listPageCommonButtonFunction = (props) => {
                     type="button"
                     className={editSelfBtnCss}
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                    onClick={() => { copyHandler(rowData,mode.copy) }}
+                    onClick={() => { copyHandler(rowData, mode.copy) }}
                 >
                     <i className="bx bxs-copy font-size-18 "></i>
                 </Button>
@@ -337,7 +337,7 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
         // alert("Go btn dissable  error") 
     }
 }
-export function mainSppinerOnOff( state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+export function mainSppinerOnOff(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
         document.getElementById("overlay").style.display = state ? "block" : "none";
     } catch (e) { alert("button sppiner error") }
@@ -349,7 +349,7 @@ export function mainSppinerOnOff( state = false) {//+++++++++++++++++++++ Save B
 }
 
 export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
- 
+
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
@@ -386,6 +386,3 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //     }
 // }
 
-export function convertNumber(e) {//++++++++++++++++++++++ Convert Quantity +++++++++++++++++++++++++++++
-    return parseFloat(e).toFixed(3)
-}

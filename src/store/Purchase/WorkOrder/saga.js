@@ -37,7 +37,7 @@ function* Get_BOMList_GenratorFunction({ filters }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(BOMList_Get_API, filters);
-    
+
     yield put(getBOMListSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -50,18 +50,18 @@ function* Get_BOMList_GenratorFunction({ filters }) {
 }
 
 // GO Botton Post API
-function* GoButton_WorkOrder_post_genfun({ jsonbody,btnId }) {
-debugger
+function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {
+  debugger
   // yield put(SpinnerState(true))
   try {
 
     const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
     // GoBtnDissable({ id: btnId, state: false })
-    
+
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
-    
+
   } catch (error) {
-      GoBtnDissable({ id: btnId, state: false })
+    GoBtnDissable({ id: btnId, state: false })
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Go Button in Work Order ",
@@ -70,7 +70,7 @@ debugger
 }
 
 // WOrk Order Post API
-function* Post_WorkOrder_GenratorFunction({ jsonbody,btnId }) {
+function* Post_WorkOrder_GenratorFunction({ jsonbody, btnId }) {
 
   // yield put(SpinnerState(true))
   try {
@@ -113,7 +113,6 @@ function* GetWorkOrderGenFunc({ filters }) {
 
 // Work Order edit List page
 function* editWorkOrderGenFunc({ id1, pageMode }) {
-
   yield put(SpinnerState(true))
   try {
 
@@ -121,14 +120,15 @@ function* editWorkOrderGenFunc({ id1, pageMode }) {
     response.pageMode = pageMode
     response.Data = response.Data[0];
     yield put(SpinnerState(false))
-   
+
     if (response.StatusCode === 226) yield put(AlertState({
       Type: 3,
-      Status: true, Message:response.Message,
+      Status: true, Message: response.Message,
     }));
-    else{
+    else {
       yield put(editWorkOrderListSuccess(response));
     }
+  
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
