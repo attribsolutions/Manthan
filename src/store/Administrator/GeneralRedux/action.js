@@ -50,7 +50,6 @@ export const deleteGeneralIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-
 export const editGeneralID = (id, pageMode) => ({
   type: EDIT_GENERAL_ID,
   id, pageMode
