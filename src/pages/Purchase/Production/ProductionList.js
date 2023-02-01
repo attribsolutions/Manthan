@@ -10,14 +10,14 @@ import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import {
-    editWorkOrderList,
     getWorkOrderListPage,
     updateWorkOrderListSuccess
 } from "../../../store/Purchase/WorkOrder/action";
 import ProductionMaster from "./ProductionMaster";
-import { delete_ProductionId, delete_ProductionIdSuccess, getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
+import { delete_ProductionId, delete_ProductionIdSuccess, edit_ProductionId, getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 
 const ProductionList = () => {
 
@@ -32,7 +32,7 @@ const ProductionList = () => {
             deleteMsg: state.ProductionReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            editData: state.WorkOrderReducer.editData,
+            editData: state.ProductionReducer.editData,
             productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
@@ -40,8 +40,8 @@ const ProductionList = () => {
     );
 
     const action = {
-        getList: getWorkOrderListPage,
-        editId: editWorkOrderList,
+        // getList: ,
+        editId: edit_ProductionId,
         deleteId: delete_ProductionId,
         postSucc: postMessage,
         updateSucc: updateWorkOrderListSuccess,
@@ -53,7 +53,7 @@ const ProductionList = () => {
         setpageMode(hasPagePath)
         dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(78))
+        dispatch(commonPageFieldList(pageId.PRODUCTION_LIST))
         goButtonHandler(true)
     }, []);
     const { userAccess, pageField, tableList, productionFilter } = reducers;
@@ -66,9 +66,9 @@ const ProductionList = () => {
     }, [tableList]);
 
     useEffect(() => {
-        const pageId =78
+        
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === pageId.PRODUCTION_LIST)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
@@ -105,9 +105,9 @@ const ProductionList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            
+
             <div className="page-content">
-               
+
                 <div className="px-2  c_card_header"  >
                     <div className="row" >
                         <Col sm="5" >

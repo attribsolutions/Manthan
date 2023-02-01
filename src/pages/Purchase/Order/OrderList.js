@@ -23,6 +23,7 @@ import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
+import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
@@ -35,10 +36,8 @@ const OrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.ORDER_lIST)
-    const [userAccState, setUserAccState] = useState('');
+   
+    // const [userAccState, setUserAccState] = useState('');
     const [orderlistFilter, setorderlistFilter] = useState('');
 
 
@@ -56,10 +55,13 @@ const OrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+
+    const hasPagePath = history.location.pathname
     const { fromdate = currentDate, todate = currentDate, venderSelect = { value: "", label: "All" } } = orderlistFilter;
     const { userAccess, pageField, GRNitem, vender, tableList } = reducers;
     const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
-
+    const pageMode= (hasPagePath === url.GRN_ADD_Mode_2) ?mode.mode2save : mode.defaultList;
+    
     const action = {
         getList: getOrderListPage,
         deleteId: deleteOrderId,
@@ -70,7 +72,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        // setpageMode(page_mode)
         // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -96,16 +98,16 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
+    //     let userAcc = userAccess.find((inx) => {
+    //         return (inx.id === page_Id)
+    //     })
+    //     if (!(userAcc === undefined)) {
+    //         setUserAccState(userAcc)
 
-        }
-    }, [userAccess])
+    //     }
+    // }, [userAccess])
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -153,7 +155,6 @@ const OrderList = () => {
     }
 
     function editBodyfunc(rowData) {
-        debugger
         const jsonBody = JSON.stringify({
             Party: rowData.SupplierID,
             Customer: rowData.CustomerID,
@@ -206,15 +207,8 @@ const OrderList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === url.ORDER_lIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
@@ -291,7 +285,7 @@ const OrderList = () => {
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.ORDER_lIST ? false : true}
+                            makeBtnShow={pageMode === mode.defaultList? false : true}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
