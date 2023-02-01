@@ -100,7 +100,7 @@ const ItemsMaster = (props) => {
         CategoryType: false,
         Category: false,
         Division: false,
-        BrandName:false,
+        BrandName: false,
     })
 
     let [isValidate, setIsValidate] = useState(initialInValid);
@@ -193,7 +193,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -212,6 +212,12 @@ const ItemsMaster = (props) => {
                     label: index.CategoryName
                 }))
 
+                const editBrandName = hasEditVal.BrandName.map(index => ({
+                    value: index.id,
+                    label: index.Name
+                }))
+
+
                 let initialFormValue = {
                     // ====================== Base detail tab ======================
 
@@ -225,6 +231,7 @@ const ItemsMaster = (props) => {
                     Division: editDivision,
                     BaseUnit: { label: hasEditVal.BaseUnitName, value: hasEditVal.BaseUnitID },
                     isActive: hasEditVal.isActive,
+                    BrandName:editBrandName
                 }
                 // ====================== Images tab ======================
 
@@ -526,9 +533,11 @@ const ItemsMaster = (props) => {
         }
         if (isvalid) {/// ************* is valid if start 
             //**************** Brand Name **************** */
-            const ItemBrandName = formValue.BrandName.map((index) => ({
-                BrandName: index.value,
-            }))
+            const ItemBrandName = formValue.BrandName.map((index) => {
+                return index.value
+            })
+            // let text = fruits.toString();
+            // console.log(ItemBrandName.toString())
             // ====================== Unit conversion *****start ======================
 
             const itemUnitDetails = []
@@ -645,7 +654,7 @@ const ItemsMaster = (props) => {
                 isActive: formValue.isActive,
                 Company: formValue.Company.value,
                 BaseUnitID: formValue.BaseUnit.value,
-                BrandName:ItemBrandName,
+                BrandName: ItemBrandName.toString(),
                 Tag: formValue.Tag,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
