@@ -731,7 +731,7 @@ const SaleOrder = (props) => {
                                             id="orderdate"
                                             name="orderdate"
                                             value={orderdate}
-                                            disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                            disabled={(orderItemTable.length > 0 || pageMode === mode.edit) ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
@@ -753,7 +753,7 @@ const SaleOrder = (props) => {
                                         <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
-                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === mode.edit) ? true : false}
                                             options={supplierOptions}
                                             onChange={supplierOnchange}
                                         />
@@ -764,7 +764,7 @@ const SaleOrder = (props) => {
                                             : null}
                                     </Col> */}
                                     <Col sm="1" className="mx-4 ">
-                                        {pageMode === "save" ?
+                                        {pageMode === mode.defaultsave ?
                                             (orderItemTable.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
                                                 :
@@ -805,7 +805,7 @@ const SaleOrder = (props) => {
                                             id="deliverydate"
                                             name="deliverydate"
                                             value={deliverydate}
-                                            disabled={pageMode === "edit" ? true : false}
+                                            disabled={pageMode === mode.edit ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
