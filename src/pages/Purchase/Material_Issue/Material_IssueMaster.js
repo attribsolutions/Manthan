@@ -708,7 +708,7 @@ const MaterialIssueMaster = (props) => {
 
                                 </Col>
                                 <Col sm={1} className="mt-2">
-                                    {pageMode === "save" ?
+                                    {pageMode === mode.defaultsave ?
                                         (GoButton.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :

@@ -57,7 +57,7 @@ export const getProductionistPageSuccess = (data) => ({
 
 export const edit_ProductionId = (id, pageMode) => ({
   type: EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
-  id, pageMode
+  id, pageMode,
 });
 export const edit_ProductionIdSuccess = (data) => ({
   type: EDIT_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS,

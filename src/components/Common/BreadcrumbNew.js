@@ -473,7 +473,6 @@ const BreadcrumbNew = (props) => {
   //   })
   // }
   const NewButtonHandeller = () => {
-debugger
     if (pageMode === "add") {
       let pathName = history.location.pathname
       let userAcc = breadcrum.userAccess.find((inx) => {

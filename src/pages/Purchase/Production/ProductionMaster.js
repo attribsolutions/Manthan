@@ -24,6 +24,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
+    edit_ProductionIdSuccess,
     getUnitIDForProdunction,
     getUnitIDForProdunctionSuccess,
     post_Production,
@@ -88,48 +89,73 @@ const ProductionMaster = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
     useEffect(() => {
-        debugger
-        let mode2Data = props.location
-        const MaterialProductionaData = Object.assign({}, mode2Data.MaterialProductionaData)
-     
-        if (mode2Data.pageMode === mode.mode2save) {
-            setUnitNamefromPageMod_2(props.location.MaterialProductionaData[0].UnitName)
-            setState(i => {
-                i.values.ItemName = {
-                    label: MaterialProductionaData[0].ItemName,
-                    value: MaterialProductionaData[0].Item
-                }
-                i.values.UnitName = {
-                    label: MaterialProductionaData[0].UnitName,
-                    value: MaterialProductionaData[0].Unit
-                }
-                i.values.id = MaterialProductionaData[0].id;
-                i.values.EstimatedQuantity = MaterialProductionaData[0].LotQuantity;//EstimatedQuantity===LoQuantity
-                i.values.NumberOfLot = MaterialProductionaData[0].NumberOfLot;      //NumberOfLot===NumberOfLot
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-                i.hasValid.id.valid = true
-                i.hasValid.ActualQuantity.valid = true
-                i.hasValid.ProductionDate.valid = true
-                i.hasValid.ItemName.valid = true
-                i.hasValid.EstimatedQuantity.valid = true
-                i.hasValid.NumberOfLot.valid = true
-                return i
-            })
-            // debugger
-            const jsonBody = JSON.stringify({
-                Item: MaterialProductionaData[0].Item
-            });
-            dispatch(getUnitIDForProdunction(jsonBody));
+            if (hasEditVal) {
+
+                // }
+                // debugger
+                // // let mode2Data = props.location
+                // // const MaterialProductionaData = Object.assign({}, mode2Data.MaterialProductionaData)
+
+
+
+                // if (mode2Data.pageMode === mode.mode2save) {
+                const { Item, ItemName, UnitName, Unit, id, EstimatedQuantity = 0, NumberOfLot = 0 } = hasEditVal
+                setUnitNamefromPageMod_2(UnitName)
+                setState(i => {
+                    i.values.ItemName = {
+                        label: ItemName,
+                        value: Item
+                    }
+                    i.values.UnitName = {
+                        label: UnitName,
+                        value: Unit
+                    }
+                    i.values.id = id;
+                    i.values.EstimatedQuantity = EstimatedQuantity;//EstimatedQuantity===LoQuantity
+                    i.values.NumberOfLot = NumberOfLot;      //NumberOfLot===NumberOfLot
+
+                    i.hasValid.id.valid = true
+                    i.hasValid.ActualQuantity.valid = true
+                    i.hasValid.ProductionDate.valid = true
+                    i.hasValid.ItemName.valid = true
+                    i.hasValid.EstimatedQuantity.valid = true
+                    i.hasValid.NumberOfLot.valid = true
+                    return i
+                })
+
+                if (pageMode === mode.mode2save) {
+                    const jsonBody = JSON.stringify({
+                        Item: Item
+                    });
+                    dispatch(getUnitIDForProdunction(jsonBody));
+                }
+                else if (pageMode === mode.edit || pageMode === mode.view) {
+                    dispatch(edit_ProductionIdSuccess({ Status: false }))
+                }
+            }
+
         }
-    }, [props.location]);
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {

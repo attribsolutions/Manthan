@@ -18,7 +18,7 @@ import {
 } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
-import * as  mode  from "../../../routes/PageMode";
+import * as  mode from "../../../routes/PageMode";
 import { MetaTags } from "react-meta-tags";
 import { updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 
@@ -27,9 +27,8 @@ const MaterialIssueList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.MATERIAL_ISSUE_LIST)
-    const [userAccState, setUserAccState] = useState('');
+    // const [pageMode, setpageMode] = useState(page_mode)
+    // const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
         (state) => ({
@@ -46,7 +45,10 @@ const MaterialIssueList = () => {
     );
 
     const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
-    const { fromdate, todate } = materialIssuelistFilters
+    const { fromdate, todate } = materialIssuelistFilters;
+
+    const hasPagePath = history.location.pathname;
+    const pageMode = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? mode.mode2save : mode.defaultList;
     const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
 
     const action = {
@@ -60,7 +62,7 @@ const MaterialIssueList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        // setpageMode(page_mode)
         dispatch(BreadcrumbShowCountlabel(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -75,14 +77,14 @@ const MaterialIssueList = () => {
     }, [tableList])
 
 
-    useEffect(() => {
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess]);
+    // useEffect(() => {
+    //     let userAcc = userAccess.find((inx) => {
+    //         return (inx.id === page_Id)
+    //     })
+    //     if (!(userAcc === undefined)) {
+    //         // setUserAccState(userAcc)
+    //     }
+    // }, [userAccess]);
 
     useEffect(() => {
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
@@ -94,10 +96,11 @@ const MaterialIssueList = () => {
     }, [produtionMake]);
 
     const makeBtnFunc = (list = {}) => {
+        const obj = { ...list[0], EstimatedQuantity: list[0].LotQuantity }
         history.push({
             pathname: url.PRODUCTION_MASTER,
-            MaterialProductionaData: list,
-            pageMode:mode.mode2save
+            editValue: obj,
+            pageMode: mode.mode2save
         })
     };
 
@@ -193,7 +196,7 @@ const MaterialIssueList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === url.MATERIAL_ISSUE_LIST ? false : true}
+                            makeBtnShow={pageMode === mode.defaultList ? false : true}
                             makeBtnName={"Make Production"}
                         />
                         : null

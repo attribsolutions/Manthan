@@ -31,8 +31,8 @@ import { createdBy, currentDate, saveDissable } from "../../../components/Common
 import FeatherIcon from "feather-icons-react";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as url from "../../../routes/route_url";
+import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID";
-import { modeView } from "../../../routes/PageMode"
 
 let initialTableData = []
 
@@ -41,7 +41,7 @@ const GRNAdd = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -90,8 +90,8 @@ const GRNAdd = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
@@ -224,12 +224,12 @@ const GRNAdd = (props) => {
         {//------------- Quntity first column ----------------------------------
             text: "PO-Qty",
             dataField: "poQuantity",
-            hidden: pageMode === 'edit' ? true : false,
+            hidden: pageMode === mode.view ? true : false,
             formatter: (value, row, k) => {
                 return (
                     <div className="text-end" >
 
-                        <samp key={row.id} className="font-asian">{pageMode === 'edit'  ? 0 : value}</samp>
+                        <samp key={row.id} className="font-asian"> {value}</samp>
                     </div>
                 )
             },
@@ -254,7 +254,7 @@ const GRNAdd = (props) => {
                             className="text-end"
                             autoComplete="off"
                             key={row.id}
-                            disabled={pageMode === 'edit'  ? true : false}
+                            disabled={pageMode === mode.view ? true : false}
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
@@ -292,7 +292,7 @@ const GRNAdd = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         key={row.id}
-                        isDisabled={pageMode === 'edit'  ? true : false}
+                        isDisabled={pageMode === mode.view ? true : false}
                         defaultValue={{ value: row.Unit, label: row.UnitName }}
                         options={
                             row.UnitDetails.map(i => ({
@@ -330,7 +330,7 @@ const GRNAdd = (props) => {
                             className=" text-end"
                             defaultValue={row.Rate}
                             autoComplete="off"
-                            disabled={(row.GST === '') || (pageMode === 'edit' ) ? true : false}
+                            disabled={(row.GST === '') || (pageMode === mode.view) ? true : false}
                             onChange={e => {
                                 row["Rate"] = e.target.value;
                                 const qty = document.getElementById(`Quantity${k}`)
@@ -385,7 +385,7 @@ const GRNAdd = (props) => {
                         id={`Batch${row.id}`}
                         placeholder="Batch Code..."
                         className="text-end "
-                        disabled={pageMode === 'edit'  ? true : false}
+                        disabled={(pageMode === mode.view) ? true : false}
                         defaultValue={row.BatchCode}
                         onChange={e => { row["BatchCode"] = e.target.value }}
                         autoComplete="off"
@@ -413,7 +413,7 @@ const GRNAdd = (props) => {
                         key={row.id}
                         value={row.BatchDate}
                         data-enable-time
-                        disabled={pageMode === 'edit'  ? true : false}
+                        disabled={(pageMode === mode.view) ? true : false}
                         options={{
                             altInput: true,
                             altFormat: "d-m-Y",
@@ -431,7 +431,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: pageMode === 'edit'  ? true : false,
+            hidden: (pageMode === mode.view) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -650,7 +650,7 @@ const GRNAdd = (props) => {
                                             name="grndate"
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
-                                            disabled={(pageMode === 'edit' ) ? true : false}
+                                            disabled={(pageMode === mode.view) ? true : false}
                                             options={{
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
@@ -670,8 +670,8 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             type="text"
                                             // value={grnDetail.SupplierName}
-                                            value={pageMode === 'edit'  ? EditData.CustomerName : grnDetail.SupplierName}
-                                            disabled={pageMode === 'edit'  ? true : false} />
+                                            value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
+                                            disabled={pageMode === mode.view ? true : false} />
                                     </Col>
                                 </FormGroup>
 
@@ -681,7 +681,8 @@ const GRNAdd = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
-                                            value={pageMode === 'edit'  ? grnDetail : grnDetail.challanNo}
+                                            disabled={pageMode === mode.view ? true : false}
+                                            value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>
                                 </FormGroup>
@@ -694,7 +695,7 @@ const GRNAdd = (props) => {
                                         <Flatpickr
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
-                                            disabled={pageMode === 'edit'  ? true : false}
+                                            disabled={pageMode === mode.view ? true : false}
                                             options={{
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
@@ -710,9 +711,12 @@ const GRNAdd = (props) => {
                                     <Col md="7">
                                         <Input
                                             type="text"
-                                            value={EditData.InvoiceNumber}
+                                            style={{ backgroundColor: "white" }}
+                                            // value={EditData.InvoiceNumber}
                                             placeholder="Enter Invoice No"
-                                            onChange={(e) => setInvoiceNo(e.target.value)} />
+                                            disabled={pageMode === mode.view ? true : false}
+                                        // onChange={(e) => setInvoiceNo(e.target.value)}
+                                        />
                                     </Col>
                                 </FormGroup>
 
@@ -726,6 +730,7 @@ const GRNAdd = (props) => {
                                                     type="checkbox"
                                                     style={{ paddingTop: "7px" }}
                                                     placeholder="Enter Invoice No"
+                                                    disabled={pageMode === mode.view ? true : false}
                                                     onChange={(e) => openPOdata[0].Inward = e.target.checked}
                                                 />
                                                 :
