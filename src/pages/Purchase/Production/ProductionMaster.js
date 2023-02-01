@@ -45,6 +45,7 @@ const ProductionMaster = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [UnitNamefromPageMod_2, setUnitNamefromPageMod_2] = useState('');
+
     const fileds = {
         id: "",
         ProductionDate: currentDate,
@@ -81,11 +82,7 @@ const ProductionMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PRODUCTION_LIST))
 
-        const jsonBody = JSON.stringify({
-            FromDate: "2022-11-01", //from datehardrd code value is compulsory
-            ToDate: currentDate,
-        });
-        dispatch(getMaterialIssueListPage(jsonBody));
+
     }, []);
 
     const location = { ...history.location }
@@ -99,12 +96,15 @@ const ProductionMaster = (props) => {
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
+            let insidePageMode = null;
             if (hasShowloction) {
                 setPageMode(location.pageMode)
+                insidePageMode = location.pageMode;
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
                 hasEditVal = props.editValue
+                insidePageMode = props.pageMode;
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
@@ -119,9 +119,17 @@ const ProductionMaster = (props) => {
 
 
                 // if (mode2Data.pageMode === mode.mode2save) {
-                const { Item, ItemName, UnitName, Unit, id, EstimatedQuantity = 0, NumberOfLot = 0 } = hasEditVal
+                const { Item, ItemName, UnitName, Unit, id,
+                    EstimatedQuantity = 0,
+                    BestBefore = '',
+                    Remark = "", PrintedBatchCode = '',
+                    NumberOfLot = 0, ActualQuantity = '',
+                    ProductionDate = currentDate } = hasEditVal;
+
                 setUnitNamefromPageMod_2(UnitName)
-                setState(i => {
+                setState(ele => {
+                    const i = { ...ele };
+
                     i.values.ItemName = {
                         label: ItemName,
                         value: Item
@@ -131,8 +139,14 @@ const ProductionMaster = (props) => {
                         value: Unit
                     }
                     i.values.id = id;
+
+                    i.values.ProductionDate = ProductionDate;
                     i.values.EstimatedQuantity = EstimatedQuantity;//EstimatedQuantity===LoQuantity
                     i.values.NumberOfLot = NumberOfLot;      //NumberOfLot===NumberOfLot
+                    i.values.ActualQuantity = ActualQuantity;
+                    i.values.BestBefore = BestBefore;
+                    i.values.PrintedBatchCode = PrintedBatchCode;
+                    i.values.Remark = Remark;
 
                     i.hasValid.id.valid = true
                     i.hasValid.ActualQuantity.valid = true
@@ -143,17 +157,23 @@ const ProductionMaster = (props) => {
                     return i
                 })
 
-                if (pageMode === mode.mode2save) {
+                if (insidePageMode === mode.mode2save) {
                     const jsonBody = JSON.stringify({
                         Item: Item
                     });
                     dispatch(getUnitIDForProdunction(jsonBody));
                 }
-                else if (pageMode === mode.edit || pageMode === mode.view) {
+                else if (insidePageMode === mode.edit || insidePageMode === mode.view) {
                     dispatch(edit_ProductionIdSuccess({ Status: false }))
                 }
             }
 
+        } else {
+            const jsonBody = JSON.stringify({
+                FromDate: "2022-11-01", //from datehardrd code value is compulsory
+                ToDate: currentDate,
+            });
+            dispatch(getMaterialIssueListPage(jsonBody));
         }
     }, []);
 
@@ -283,7 +303,7 @@ const ProductionMaster = (props) => {
                                                 value={values.ProductionDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-                                                disabled={pageMode === "edit" ? true : false}
+                                                disabled={pageMode === mode.mode2save || pageMode === mode.view ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
@@ -331,6 +351,8 @@ const ProductionMaster = (props) => {
                                                 type="text"
                                                 name="ActualQuantity"
                                                 value={values.ActualQuantity}
+                                                disabled={pageMode === mode.view ? true : false}
+
                                                 className="text-end"
                                                 placeholder="Enter ActualQuantity"
                                                 autoComplete="off"
@@ -353,7 +375,7 @@ const ProductionMaster = (props) => {
                                                 value={values.BestBefore}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-                                                disabled={pageMode === "edit" ? true : false}
+                                                disabled={pageMode === mode.mode2save || pageMode === mode.view ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
@@ -394,7 +416,7 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.UnitName}</Label>
                                         <Col md="7">
                                             <Select
-                                                // isDisabled={true}
+                                                isDisabled={pageMode === mode.view ? true : false}
                                                 name="UnitName"
                                                 value={values.UnitName}
                                                 options={UnitDropdown}
@@ -417,6 +439,8 @@ const ProductionMaster = (props) => {
                                                 type="text"
                                                 name="PrintedBatchCode"
                                                 value={values.PrintedBatchCode}
+                                                disabled={pageMode === mode.view ? true : false}
+
                                                 placeholder="Enter PrintedBatchCode"
                                                 autoComplete="off"
                                                 onChange={(event) => {
@@ -438,6 +462,8 @@ const ProductionMaster = (props) => {
                                             type="text"
                                             name="Remark"
                                             value={values.Remark}
+                                            disabled={pageMode === mode.view ? true : false}
+
                                             placeholder="Enter Remark"
                                             autoComplete="off"
                                             onChange={(event) => {

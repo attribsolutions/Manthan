@@ -216,7 +216,6 @@ const PurchaseListPage = (props) => {
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
-            debugger
             if (pageField.IsEditPopuporComponent) {
                 history.push({
                     pathname: masterPath,
