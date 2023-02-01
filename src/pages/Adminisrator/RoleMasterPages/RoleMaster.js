@@ -42,6 +42,7 @@ import { createdBy, saveDissable } from "../../../components/Common/ComponentRel
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode"
 
 const RoleMaster = (props) => {
 
@@ -61,7 +62,7 @@ const RoleMaster = (props) => {
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-  const [pageMode, setPageMode] = useState("");
+  const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [modalCss, setModalCss] = useState(false);
   const [userPageAccessState, setUserPageAccessState] = useState(123);
   const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -88,8 +89,8 @@ const RoleMaster = (props) => {
   }, []);
 
   const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editValue")
-  const hasShowModal = props.hasOwnProperty("editValue")
+  const hasShowloction = location.hasOwnProperty(mode.editValue)
+  const hasShowModal = props.hasOwnProperty(mode.editValue)
 
   const values = { ...state.values }
   const { isError } = state;
@@ -178,7 +179,7 @@ const RoleMaster = (props) => {
       saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
 
-      if (pageMode === "dropdownAdd") {
+      if (pageMode === mode.dropdownAdd) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -260,7 +261,7 @@ const RoleMaster = (props) => {
 
       saveDissable(true);//save Button Is dissable function
 
-      if (pageMode === 'edit') {
+      if (pageMode === mode.edit) {
         dispatch(updateID(jsonBody, values.id));
       }
       else {
@@ -271,7 +272,7 @@ const RoleMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (modalCss || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if (modalCss || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (

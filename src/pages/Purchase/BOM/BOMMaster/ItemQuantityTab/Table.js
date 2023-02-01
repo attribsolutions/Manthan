@@ -15,7 +15,7 @@ function BOMTable(props) {
   };
 
   const handleChange = (event, info) => {
-    debugger
+ 
     // let val = event.target.value
     // const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
     // if (result) {

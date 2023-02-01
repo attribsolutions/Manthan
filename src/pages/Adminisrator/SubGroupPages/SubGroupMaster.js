@@ -42,7 +42,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 const SubGroupMaster = (props) => {
 
@@ -59,7 +59,7 @@ const SubGroupMaster = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [EditData, setEditData] = useState({});
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -91,8 +91,8 @@ const SubGroupMaster = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -236,7 +236,7 @@ const SubGroupMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(updateSubGroupID(jsonBody, values.id));
             }
             else {

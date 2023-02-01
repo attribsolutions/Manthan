@@ -37,7 +37,6 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
@@ -45,7 +44,7 @@ const PartyItems = (props) => {
     debugger
     const history = useHistory()
     const dispatch = useDispatch();
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userAccState, setUserPageAccessState] = useState("");
     const [itemArr, setitemArr] = useState([]);
@@ -63,8 +62,8 @@ const PartyItems = (props) => {
 
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
     const hasDropMode = props.hasOwnProperty("dropMode")
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -291,7 +290,7 @@ const PartyItems = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userAccState === '')) {
         return (

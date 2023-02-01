@@ -21,8 +21,8 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Vendor", 80, 75)
-    doc.text('Shift to', 280, 75)
+    doc.text("Billing Address", 80, 75)
+    doc.text('shipping address', 280, 75)
     doc.text('Terms And Condition', 440, 75)
 
 
@@ -58,22 +58,22 @@ export const reportHeder1 = (doc, data) => {
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
-        // columnStyles: {
-        //     0: {
-        //         valign: "top",
-        //         columnWidth: 200,
-        //         halign: 'lfet',
-        //     },
-        //     1: {
-        //         columnWidth: 200,
-        //         halign: 'left',
-        //     },
-        //     1: {
-        //         columnWidth: 200,
-        //         halign: 'left',
-        //     },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 200,
+                halign: 'lfet',
+            },
+            1: {
+                columnWidth: 200,
+                halign: 'left',
+            },
+            1: {
+                columnWidth: 200,
+                halign: 'left',
+            },
 
-        // },
+        },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY() + 85,// 45,
 
@@ -313,13 +313,11 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
-                data1.row.cells[10].styles.fontSize = 8
 
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[10].styles.fontStyle = "bold"
 
 
                 // data1.row.cells[3].colSpan=4
@@ -366,7 +364,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             3: {
-                columnWidth: 30,
+                columnWidth: 45,
                 halign: 'right',
             },
             4: {
@@ -374,6 +372,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             5: {
+                // columnWidth: 40,
                 halign: 'right',
             },
             6: {
@@ -384,12 +383,12 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 30,
+                columnWidth: 60,
                 fontStyle: 'bold',
                 halign: 'right',
             },
             9: {
-                columnWidth: 50,
+                columnWidth: 60,
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -596,7 +595,7 @@ export const pageFooter = (doc, data) => {
     doc.text(`Signature `, 400, 811, "justify")
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
-   quantity whitch it/these purports to be `, 34, 760,)
+    quantity whitch it/these purports to be `, 34, 760,)
     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
     // doc.text(`INR NO : 12547yfewyrt5675w6wer78sdf687s6d7f8676yse87fugh43 `, 34, 740)

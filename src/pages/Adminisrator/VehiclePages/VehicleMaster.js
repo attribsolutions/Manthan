@@ -48,7 +48,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 const VehicleMaster = (props) => {
 
@@ -59,15 +59,15 @@ const VehicleMaster = (props) => {
         id: "",
         VehicleNumber: "",
         Description: "",
-        Driver: "",
-        VehicleType: "",
+        DriverName: "",
+        Vehicletype: "",
         VehicleDivisions: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [divisionData, setDivisionData] = useState([]);
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
@@ -103,8 +103,8 @@ const VehicleMaster = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
@@ -156,17 +156,17 @@ const VehicleMaster = (props) => {
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
-                hasValid.Driver.valid = true;
+                hasValid.DriverName.valid = true;
                 hasValid.Description.valid = true;
-                hasValid.VehicleType.valid = true;
+                hasValid.Vehicletype.valid = true;
                 hasValid.VehicleDivisions.valid = true;
 
 
                 values.id = id
                 values.VehicleNumber = VehicleNumber
                 values.Description = Description
-                values.Driver = { label: DriverName, value: Driver };
-                values.VehicleType = { label: VehicleTypeName, value: VehicleType };
+                values.DriverName = { label: DriverName, value: Driver };
+                values.Vehicletype = { label: VehicleTypeName, value: VehicleType };
                 values.VehicleDivisions = divisionTable
 
                 setDivisionData(divisionTable)
@@ -185,7 +185,7 @@ const VehicleMaster = (props) => {
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -313,8 +313,8 @@ const VehicleMaster = (props) => {
             const jsonBody = JSON.stringify({
                 VehicleNumber: values.VehicleNumber,
                 Description: values.Description,
-                Driver: values.Driver.value,
-                VehicleType: values.VehicleType.value,
+                Driver: values.DriverName.value,
+                VehicleType: values.Vehicletype.value,
                 VehicleDivisions: division,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy()
@@ -322,7 +322,7 @@ const VehicleMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === 'edit') {
+            if (pageMode === mode.edit) {
                 dispatch(updateVehicleTypeID(jsonBody, values.id));
             }
             else {
@@ -334,7 +334,7 @@ const VehicleMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -359,20 +359,20 @@ const VehicleMaster = (props) => {
                                                     <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.Driver} </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.DriverName} </Label>
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="DriverDropDown "
-                                                                        name="Driver"
-                                                                        value={values.Driver}
+                                                                        name="DriverName"
+                                                                        value={values.DriverName}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                     />
-                                                                    {isError.Driver.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.Driver}</small></span>
+                                                                    {isError.DriverName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
                                                                     )}
                                                                 </Col>
                                                             </FormGroup>
@@ -381,20 +381,20 @@ const VehicleMaster = (props) => {
                                                         <Col md="1" className="mx-n1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.VehicleType}</Label>
+                                                                <Label htmlFor="validationCustom01"> {fieldLabel.Vehicletype}</Label>
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="VehicleDropDown "
-                                                                        name="VehicleType"
-                                                                        value={values.VehicleType}
+                                                                        name="Vehicletype"
+                                                                        value={values.Vehicletype}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={VehicleType_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                     />
-                                                                    {isError.VehicleType.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.VehicleType}</small></span>
+                                                                    {isError.Vehicletype.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Vehicletype}</small></span>
                                                                     )}
                                                                 </Col>
                                                             </FormGroup>

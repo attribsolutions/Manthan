@@ -38,7 +38,7 @@ import {
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode";
 
 const TermsAndConditionsMaster = (props) => {
 
@@ -53,7 +53,7 @@ const TermsAndConditionsMaster = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -76,8 +76,8 @@ const TermsAndConditionsMaster = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -206,7 +206,7 @@ const TermsAndConditionsMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
             }
             else {
@@ -216,7 +216,8 @@ const TermsAndConditionsMaster = (props) => {
     };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -250,7 +251,7 @@ const TermsAndConditionsMaster = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(Breadcrumb_inputName(event.target.value))
+                                                                    // dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (

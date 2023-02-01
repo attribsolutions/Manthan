@@ -2,6 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
   delete_ProductionIdSuccess,
+  edit_ProductionIdSuccess,
   getProductionistPageSuccess,
   getProduction_Mode2_Success,
   getUnitIDForProdunctionSuccess,
@@ -10,6 +11,7 @@ import {
 } from "./actions";
 import {
   Production_Delete_API,
+  production_Edit_API,
   production_get_API,
   production_Make_API,
   Production_Post_API,
@@ -23,6 +25,7 @@ import {
   POST_PRODUCTION_FROM_PRODUCTION_PAGE,
   GET_UNIT_ID_FOR_PRODUNCTION,
   UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE,
+  EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
 } from "./actionType";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -50,17 +53,17 @@ function* postProductionGenFunc({ data }) {
 function* DeleteProductionGenFunc({ id }) {
   yield put(SpinnerState(true));
   try {
-    const response = yield call(Production_Delete_API,id);
+    const response = yield call(Production_Delete_API, id);
     yield put(SpinnerState(false));
-    
+
     if (response.StatusCode === 204) yield put(AlertState({
       Type: 4,
-      Status: true, Message:response.Message,
+      Status: true, Message: response.Message,
     }));
-    else{
+    else {
       yield put(delete_ProductionIdSuccess(response));
     }
-   
+
   } catch (error) {
     yield put(SpinnerState(false));
     yield put(
@@ -105,7 +108,6 @@ function* get_PRODUCTION_GerFunc({ filters }) {
     // })
 
     const newList = response.Data.map((index) => {
-      debugger
       index.Item = index.Item.Name;
       var date = convertDatefunc(index.ProductionDate)
       var batchdate = convertDatefunc(index.BatchDate)
@@ -124,7 +126,7 @@ function* get_PRODUCTION_GerFunc({ filters }) {
       AlertState({
         Type: 4,
         Status: true,
-        Message: "500 Error get_PRODUCTION LIst API",
+        Message: "500 Error Get Production API",
       })
     );
   }
@@ -154,16 +156,33 @@ function* getProduction_Mode2_GenFunc({ data }) {
   }
 }
 
+// Edit Production  Page API
+function* editProduction_GenFunc({ id, pageMode }) {
+  try {
+    const response = yield call(production_Edit_API, id);
+    response["pageMode"] = pageMode;
+    yield put(edit_ProductionIdSuccess(response));
+
+  } catch (error) {
+    yield put(
+      AlertState({
+        Type: 4,
+        Status: true,
+        Message: "500 Error Edit Production API",
+      })
+    );
+  };
+};
+
 //  DesignationID dropdown list
 function* UnitIDForProduction_saga({ data }) {
-  debugger
   yield put(SpinnerState(true));
   try {
     const response = yield call(production_UnitDropdown_API, data);
     const UnitDropdown = response.Data.map((index) => ({
       value: index.id,
       label: index.UnitName,
-  }));
+    }));
     yield put(getUnitIDForProdunctionSuccess(UnitDropdown));
     yield put(SpinnerState(false));
   } catch (error) {
@@ -172,7 +191,7 @@ function* UnitIDForProduction_saga({ data }) {
       AlertState({
         Type: 4,
         Status: true,
-        Message: "500 Error get Production Unit API ",
+        Message: "500 Error Get Production Unit API ",
       })
     );
   }
@@ -180,6 +199,7 @@ function* UnitIDForProduction_saga({ data }) {
 
 function* ProductionSaga() {
   yield takeEvery(GET_PRODUCTION_ITEM_MODE_2, getProduction_Mode2_GenFunc);
+  yield takeEvery(EDIT_PRODUCTION_FOR_PRODUCTION_PAGE, editProduction_GenFunc);
   yield takeEvery(POST_PRODUCTION_FROM_PRODUCTION_PAGE, postProductionGenFunc);
   yield takeEvery(UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE, UpdateProductionGenFunc);
   yield takeEvery(DELETE_PRODUCTION_ID, DeleteProductionGenFunc);

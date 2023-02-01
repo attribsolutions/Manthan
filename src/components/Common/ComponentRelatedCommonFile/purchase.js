@@ -216,7 +216,6 @@ const PurchaseListPage = (props) => {
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
-            debugger
             if (pageField.IsEditPopuporComponent) {
                 history.push({
                     pathname: masterPath,
@@ -316,7 +315,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === mode.mode2save) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        if ((`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
