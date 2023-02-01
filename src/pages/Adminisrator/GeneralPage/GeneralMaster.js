@@ -25,8 +25,7 @@ import {
     updateGeneralID,
     updateGeneralIDSuccess,
     PostType,
-    PostTypeSuccess,
-    deleteGeneralIDSuccess
+    PostTypeSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -69,11 +68,9 @@ const GeneralMaster = (props) => {
         Type=[] ,
         pageField,
         updateMsg,
-        deleteMsg,
         userAccess } = useSelector((state) => ({
             postMsg: state.GeneralReducer.PostDataMessage,
             updateMsg: state.GeneralReducer.updateMessage,
-            deleteMsg: state.GeneralReducer.deleteMessage,
             Type: state.GeneralReducer.Type,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -214,25 +211,6 @@ const GeneralMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
-    useEffect(() => {
-        if (deleteMsg.Status === true && deleteMsg.StatusCode === 200 && !modalCss) {
-            history.push({
-                pathname: url.GENERAL_LIST,
-            })
-        } else if (deleteMsg.Status === true && !modalCss) {
-            dispatch(deleteGeneralIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                })
-            );
-        }
-    }, [deleteMsg, modalCss]);
-
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -264,7 +242,6 @@ const GeneralMaster = (props) => {
                 dispatch(PostMethodForGeneral(jsonBody));
             }
         }
-
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

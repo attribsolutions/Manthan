@@ -118,8 +118,6 @@ const Order = (props) => {
                 setFindPartyItemAccess(true)
             }
         };
-
-
     }, [userAccess])
 
     const location = { ...history.location }
@@ -149,7 +147,6 @@ const Order = (props) => {
             }
             if (hasEditVal) {
                 dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-
                 setorderdate(hasEditVal.OrderDate)
                 setsupplierSelect({
                     label: hasEditVal.SupplierName,
@@ -370,15 +367,12 @@ const Order = (props) => {
                             onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
-
                 )
             },
 
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
-
-
         },
 
         {  //------------- Unit column ----------------------------------
@@ -419,7 +413,6 @@ const Order = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '150px', textAlign: 'center' };
             }
-
         },
 
         {//------------- Rate column ----------------------------------
@@ -470,14 +463,12 @@ const Order = (props) => {
                             onChange={(e) => { row["Comment"] = e.target.value }}
                         />
                     </span>
-
                 )
             },
 
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
-
         },
     ];
 
@@ -643,7 +634,6 @@ const Order = (props) => {
             IsDeleted: i.IsDeleted
         }))
 
-
         if (validMsg.length > 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -695,9 +685,7 @@ const Order = (props) => {
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
             OrderItem: itemArr,
-            OrderTermsAndConditions: termsAndCondition,
-
-
+            OrderTermsAndConditions: termsAndCondition
         });
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
