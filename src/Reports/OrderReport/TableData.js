@@ -37,9 +37,9 @@ export const Rows = (data) => {
             `${element.Quantity} ${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
-            element.CGSTPercentage,
+            `${element.CGSTPercentage}%`,
             element.CGST,
-            element.SGSTPercentage,
+            `${element.SGSTPercentage}%`,
             element.SGST,
             element.Unit,
             element.Comment,
@@ -104,11 +104,8 @@ export const Rows = (data) => {
         }
 
          SubTotalGst =  Number(SubTotalGst)+Number(element.CGST)
-         
- 
     })
     return returnArr;
-    
 }
 export const ReportFotterColumns = [
     "SGST",
@@ -235,8 +232,10 @@ export const Rows1 = (data) => {
     return a1;
 }
 export const ReportHederRows = (data) => {
+    debugger
+    const terms =data.OrderTermsAndCondition
     var reportArray = [
-        [`${data.CustomerName}`, `${data.SupplierName}`,`  `],
+        [`${data.CustomerName}`,  `${data.SupplierName}`,``],
         [`${data.BillingAddress}`, `${data.ShippingAddress}` , ` `,],
         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, ` `],
         // [, , ""],
