@@ -375,12 +375,12 @@ const ProductionMaster = (props) => {
                                                 value={values.BestBefore}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-                                                disabled={pageMode === mode.mode2save || pageMode === mode.view ? true : false}
+                                                disabled={ pageMode === mode.view ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: pageMode === "edit" ? values.BestBefore : "today"
+                                                    defaultDate: pageMode === mode.view ? values.BestBefore : "today"
                                                 }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
