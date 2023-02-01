@@ -55,7 +55,7 @@ const CategoryMaster = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [pageMode, setPageMode] = useState( mode.defaultsave );
+    const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -75,7 +75,7 @@ const CategoryMaster = (props) => {
         }));
 
     useEffect(() => {
-        const page_Id = pageId.CATEGORY
+        const page_Id = pageId.CATEGORY//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getCategoryTypelist());
@@ -86,8 +86,8 @@ const CategoryMaster = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
+    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
 
     // userAccess useEffect
     useEffect(() => {
@@ -224,7 +224,7 @@ const CategoryMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === mode.edit) {
+            if (pageMode === mode.edit) {   //changes
                 dispatch(updateCategoryID(jsonBody, values.id,));
             }
             else {
@@ -236,106 +236,106 @@ const CategoryMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd))//changes { IsEditMode_Css = "-5.5%" };
 
-    if (!(userPageAccessState === '')) {
-        return (
-            <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORY} /> */}
+        if (!(userPageAccessState === '')) {
+            return (
+                <React.Fragment>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORY} /> */}
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
-                    <Container fluid>
-                        <Card className="text-black">
-                            <CardHeader className="card-header   text-black c_card_header" >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader>
+                    <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
+                        <Container fluid>
+                            <Card className="text-black">
+                                <CardHeader className="card-header   text-black c_card_header" >
+                                    <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                    <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                                </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={saveHandeller} noValidate>
-                                    <Row className="">
-                                        <Col md={12}>
-                                            <Card>
-                                                <CardBody className="c_card_body">
-                                                    <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                            <Input
-                                                                name="Name"
-                                                                id="txtName"
-                                                                value={values.Name}
-                                                                type="text"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                placeholder="Please Enter Name"
-                                                                autoComplete='off'
-                                                                autoFocus={true}
-                                                                onChange={(event) => {
-                                                                    onChangeText({ event, state, setState })
-                                                                    dispatch(Breadcrumb_inputName(event.target.value))
-                                                                }}
-                                                            />
-                                                            {isError.Name.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.Name}</span>
-                                                            )}
-                                                        </FormGroup>
-
+                                <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                                    <form onSubmit={saveHandeller} noValidate>
+                                        <Row className="">
+                                            <Col md={12}>
+                                                <Card>
+                                                    <CardBody className="c_card_body">
                                                         <Row>
+                                                            <FormGroup className="mb-2 col col-sm-4 ">
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                                <Input
+                                                                    name="Name"
+                                                                    id="txtName"
+                                                                    value={values.Name}
+                                                                    type="text"
+                                                                    className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    placeholder="Please Enter Name"
+                                                                    autoComplete='off'
+                                                                    autoFocus={true}
+                                                                    onChange={(event) => {
+                                                                        onChangeText({ event, state, setState })
+                                                                        dispatch(Breadcrumb_inputName(event.target.value))
+                                                                    }}
+                                                                />
+                                                                {isError.Name.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.Name}</span>
+                                                                )}
+                                                            </FormGroup>
 
-                                                            <Col md="4" >
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
-                                                                    <Col sm={12} >
-                                                                        <Select
-                                                                            name="CategoryTypeName"
-                                                                            value={values.CategoryTypeName}
-                                                                            isSearchable={true}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            options={CategoryTypesValues}
-                                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
-                                                                        />
-                                                                        {isError.CategoryTypeName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>
-                                                                        )}
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-
-                                                        <FormGroup className="mt-1">
                                                             <Row>
-                                                                <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode}
-                                                                        userAcc={userPageAccessState}
-                                                                        editCreatedBy={editCreatedBy}
-                                                                        module={"CategoryMaster"}
-                                                                    />
+
+                                                                <Col md="4" >
+                                                                    <FormGroup className="mb-3">
+                                                                        <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
+                                                                        <Col sm={12} >
+                                                                            <Select
+                                                                                name="CategoryTypeName"
+                                                                                value={values.CategoryTypeName}
+                                                                                isSearchable={true}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
+                                                                                options={CategoryTypesValues}
+                                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
+                                                                            />
+                                                                            {isError.CategoryTypeName.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>
+                                                                            )}
+                                                                        </Col>
+                                                                    </FormGroup>
                                                                 </Col>
                                                             </Row>
-                                                        </FormGroup>
-                                                    </Row>
 
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                    </Row>
-                                </form>
-                            </CardBody>
+                                                            <FormGroup className="mt-1">
+                                                                <Row>
+                                                                    <Col sm={2}>
+                                                                        <SaveButton pageMode={pageMode}
+                                                                            userAcc={userPageAccessState}
+                                                                            editCreatedBy={editCreatedBy}
+                                                                            module={"CategoryMaster"}
+                                                                        />
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
 
-                        </Card>
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                    </form>
+                                </CardBody>
 
-                    </Container>
-                </div>
-            </React.Fragment >
-        );
-    }
-    else {
-        return (
-            <React.Fragment></React.Fragment>
-        )
-    }
+                            </Card>
+
+                        </Container>
+                    </div>
+                </React.Fragment >
+            );
+        }
+        else {
+            return (
+                <React.Fragment></React.Fragment>
+            )
+        }
 };
 
 export default CategoryMaster
