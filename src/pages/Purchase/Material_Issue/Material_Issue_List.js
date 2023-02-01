@@ -23,11 +23,9 @@ import { MetaTags } from "react-meta-tags";
 import { updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 
 const MaterialIssueList = () => {
-    
+
     const dispatch = useDispatch();
     const history = useHistory();
-    
-
 
     // const [pageMode, setpageMode] = useState(page_mode)
     // const [userAccState, setUserAccState] = useState('');
@@ -49,7 +47,7 @@ const MaterialIssueList = () => {
     const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters;
 
-    const hasPagePath = history.location.pathname
+    const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? mode.mode2save : mode.defaultList;
     const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
 
@@ -98,9 +96,10 @@ const MaterialIssueList = () => {
     }, [produtionMake]);
 
     const makeBtnFunc = (list = {}) => {
+        const obj = { ...list[0], EstimatedQuantity: list[0].LotQuantity }
         history.push({
             pathname: url.PRODUCTION_MASTER,
-            MaterialProductionaData: list,
+            editValue: obj,
             pageMode: mode.mode2save
         })
     };

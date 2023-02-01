@@ -200,8 +200,8 @@ export const POST_API_FOR_MATERIAL_ISSUE = '/MaterialIssue'
 export const POST_API_FOR_MATERIAL_ISSUE_LIST = '/MaterialIssueFilter'
 
 // Production master
-export const POST_API_FOR_PRODUCTION ='/Production'
-export const POST_API_FOR_PRODUCTION_LIST ='/ProductionFilter'
+export const PRODUCTION_POST_API ='/Production'
+export const PRODUCTION_LIST_FILTER ='/ProductionFilter'
 export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
 export const PRODUCTION_UNIT_DROPDOWN_API ='/MCUnitDetails'
 
