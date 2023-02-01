@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -35,8 +34,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-
+import * as mode from "../../../routes/PageMode"
 
 const GroupTypeMaster = (props) => {
 
@@ -52,7 +50,7 @@ const GroupTypeMaster = (props) => {
 
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -76,8 +74,8 @@ const GroupTypeMaster = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
@@ -143,7 +141,7 @@ const GroupTypeMaster = (props) => {
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -214,7 +212,7 @@ const GroupTypeMaster = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === 'edit') {
+            if (pageMode === mode.edit) {
                 dispatch(updateGroupTypeID(jsonBody, EditData.id));
             }
             else {
@@ -225,7 +223,7 @@ const GroupTypeMaster = (props) => {
 
 
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -233,9 +231,7 @@ const GroupTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GROUPTYPE} /> */}
-                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
-
+                     
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
