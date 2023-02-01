@@ -22,7 +22,6 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
-    convertNumber,
     createdBy,
     currentDate,
     GoBtnDissable,
@@ -399,7 +398,7 @@ const WorkOrder = (props) => {
             Party: userParty()
         });
         // GoBtnDissable({ id: goBtnID1, state: true })
-        dispatch(postGoButtonForWorkOrder_Master(jsonBody,goBtnID1));
+        dispatch(postGoButtonForWorkOrder_Master(jsonBody, goBtnID1));
     }
 
     const SaveHandler = (event) => {
@@ -418,7 +417,7 @@ const WorkOrder = (props) => {
             Bom: (pageMode === mode.edit ? id : values.ItemName.value),
             Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
             NumberOfLot: values.NumberOfLot,
-            Quantity: convertNumber(values.Quantity),
+            Quantity: parseFloat(values.Quantity).toFixed(3),
             Company: userCompany(),
             Party: userParty(),
             CreatedBy: createdBy(),
@@ -626,7 +625,7 @@ const WorkOrder = (props) => {
 
                                 <Col sm={1}>
                                     <div className="col col-1 mt-2">
-                                        {pageMode ===mode.defaultsave ?
+                                        {pageMode === mode.defaultsave ?
                                             (BOMItems.length === 0) ?
                                                 < Go_Button id={goBtnID1} onClick={(e) => goButtonHandler()} />
                                                 :
