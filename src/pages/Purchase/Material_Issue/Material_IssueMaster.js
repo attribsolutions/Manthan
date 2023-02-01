@@ -345,7 +345,8 @@ const MaterialIssueMaster = (props) => {
                                             <div style={{ width: "150px" }}>
                                                 <Input
                                                     type="text"
-                                                    key={index.id}
+                                                    key={`stock${user.id}-${index.id}`}
+                                                    disabled={pageMode === mode.view ? true : false}
                                                     id={`stock${user.id}-${index.id}`}
                                                     style={{ textAlign: "right" }}
                                                     defaultValue={index.Qty}
