@@ -21,7 +21,7 @@ export const Rows = (data) => {
 
     const { InvoiceItems = [] } = data
     const returnArr = [];
-    let item = ""
+    let Gst = 0
 
     let totalBasicAmount = 0
     let totalCGst = 0
@@ -33,7 +33,7 @@ export const Rows = (data) => {
       
         const tableitemRow = [
             element.ItemName,
-            `${element.Quantity}.${element.UnitName}`,
+            `${element.Quantity} ${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
             element.CGSTPercentage,
@@ -43,6 +43,7 @@ export const Rows = (data) => {
             element.Amount,
             element.GSTPercentage,
             element.GSTAmount,
+            "row"
         ];
 
         function totalLots() {
@@ -74,10 +75,10 @@ export const Rows = (data) => {
         };
 
 
-        if (item === "") { item = element.ItemName };
+        if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
-        if ((item === element.ItemName)) {
+        if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
         }
@@ -91,7 +92,7 @@ export const Rows = (data) => {
             totalQuantity = 0
 
             data["tableTot"] = totalLots()
-            item = element.ItemName;
+            Gst = element.GSTPercentage;
         }
         if (key === InvoiceItems.length - 1) {
             returnArr.push(totalrow());
