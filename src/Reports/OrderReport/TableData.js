@@ -9,7 +9,6 @@ export const columns = [
     "CGSTAmt ",
     "SGST%",
     "SGSTAmt",
-    "Unit",
     "comment",
     "Total Amt"];
 
@@ -41,7 +40,6 @@ export const Rows = (data) => {
             element.CGST,
             `${element.SGSTPercentage}%`,
             element.SGST,
-            element.Unit,
             element.Comment,
             element.Amount,
             
@@ -70,7 +68,6 @@ export const Rows = (data) => {
                 `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
                 `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
-                "",
                 "",
                 "",
                 `Amount:${parseFloat(totalAmount).toFixed(2)}`,
