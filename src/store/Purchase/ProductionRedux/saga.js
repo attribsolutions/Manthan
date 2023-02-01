@@ -56,13 +56,7 @@ function* DeleteProductionGenFunc({ id }) {
     const response = yield call(Production_Delete_API, id);
     yield put(SpinnerState(false));
 
-    if (response.StatusCode === 204) yield put(AlertState({
-      Type: 4,
-      Status: true, Message: response.Message,
-    }));
-    else {
-      yield put(delete_ProductionIdSuccess(response));
-    }
+    yield put(delete_ProductionIdSuccess(response));
 
   } catch (error) {
     yield put(SpinnerState(false));
