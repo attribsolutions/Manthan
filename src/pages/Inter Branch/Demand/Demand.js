@@ -16,7 +16,7 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
     onChangeText,
-    resetFunction,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -119,7 +119,6 @@ const Demand = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {
 
         const jsonBody = JSON.stringify({
@@ -144,6 +143,9 @@ const Demand = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
+
+                // console.log("hasEditVal", hasEditVal)
+
                 setEditData(hasEditVal);
                 const { id, SupplierName, Supplier, Comment, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -236,28 +238,6 @@ const Demand = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-    function val_onChange(val, row, type) {
-
-        if (type === "qty") {
-            row["Quantity"] = val;
-        }
-        else {
-            row["Rate"] = val
-        }
-
-        row["Amount"] = Amount(row)
-
-        let sum = 0
-        demandItemTable.forEach(ind => {
-            if (ind.Amount === null) {
-                ind.Amount = 0
-            }
-            var amt = parseFloat(ind.Amount)
-            sum = sum + amt
-        });
-        setDemandAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
-    };
 
     useEffect(() => {
         if (pageField) {
@@ -328,12 +308,9 @@ const Demand = (props) => {
                     </span>
                 )
             },
-
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
-
-
         },
 
         {  //------------- Unit column ----------------------------------
@@ -374,7 +351,6 @@ const Demand = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '150px', textAlign: 'center' };
             }
-
         },
 
         {//------------- Rate column ----------------------------------
@@ -423,7 +399,6 @@ const Demand = (props) => {
         totalSize: 0,
         custom: true,
     };
-
 
     const goButtonHandler = () => {
         // if (!SupplierSelect > 0) {
@@ -483,11 +458,33 @@ const Demand = (props) => {
         }
     };
 
+    function val_onChange(val, row, type) {
+
+        if (type === "qty") {
+            row["Quantity"] = val;
+        }
+        else {
+            row["Rate"] = val
+        }
+
+        row["Amount"] = Amount(row)
+
+        let sum = 0
+        demandItemTable.forEach(ind => {
+            if (ind.Amount === null) {
+                ind.Amount = 0
+            }
+            var amt = parseFloat(ind.Amount)
+            sum = sum + amt
+        });
+        setDemandAmount(sum.toFixed(2))
+        dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
+    };
+
     const SaveHandler = (event) => {
         event.preventDefault();
         const validMsg = []
         const itemArr = []
-
 
         function isChanged({ i, isedit, isdel }) {
             const basicAmt = parseFloat(basicAmount(i))
@@ -511,7 +508,6 @@ const Demand = (props) => {
                 IGSTPercentage: 0,
                 Amount: i.Amount,
                 IsDeleted: isedit,
-                //  Comment: i.Comment
             }
             itemArr.push(arr)
         };
@@ -608,8 +604,6 @@ const Demand = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
-
                 <div className="page-content" >
                     <form>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
