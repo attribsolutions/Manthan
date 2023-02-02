@@ -66,102 +66,106 @@ export const listPageCommonButtonFunction = (props) => {
                 && !(userAccState.RoleAccess_IsDelete)
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
-        formatter: (cellContent, rowData) => (<div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+        formatter: (cellContent, rowData) => {
+           const   forceEdit=rowData.forceEdit;
+        //    debugger
+            return (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
-            {
-                //** if condition start
+                    {
+                        //** if condition start
 
-                (userAccState.RoleAccess_IsEdit) //condtion:1
-                    ?
-                    (<Button
-                        type="button"
-                        className={editBtnCss}
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                        onClick={() => { editHandler(rowData, mode.edit) }}
-                    >
-                        <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                    </Button>)
+                        (userAccState.RoleAccess_IsEdit && !forceEdit) //condtion:1
+                            ?
+                            (<Button
+                                type="button"
+                                className={editBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
+                                onClick={() => { editHandler(rowData, mode.edit) }}
+                            >
+                                <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                            </Button>)
 
-                    : // **Else-If Condition start 
+                            : // **Else-If Condition start 
 
-                    ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated)) //**condition :2
+                            ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated) && !forceEdit) //**condition :2
+                                ?
+                                <Button
+                                    type="button"
+                                    className={editSelfBtnCss}
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
+                                    onClick={() => { editHandler(rowData, mode.edit) }}
+                                >
+                                    <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                                </Button>
+
+                                : // **second else-if condition
+
+                                (userAccState.RoleAccess_IsView)  // ** condition :3
+                                    ?
+                                    <Button
+                                        type="button"
+                                        className={editSelfBtnCss}
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
+                                        onClick={() => { editHandler(rowData, mode.view) }}
+                                    >
+                                        <i className="bx bxs-show font-size-18 "></i>
+                                    </Button>
+
+                                    : null  // **else null
+
+                    }
+
+
+                    {(userAccState.RoleAccess_IsDelete)
                         ?
                         <Button
                             type="button"
-                            className={editSelfBtnCss}
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                            onClick={() => { editHandler(rowData, mode.edit) }}
+                            className={deltBtnCss}
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
+                            onClick={() => { deleteHandler(rowData) }}
                         >
-                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                            <i className="mdi mdi-delete font-size-18"></i>
                         </Button>
-
-                        : // **second else-if condition
-
-                        (userAccState.RoleAccess_IsView)  // ** condition :3
+                        /*chnage delete-self functionality  autho by- Rohit date: 22-08-022 
+                        line no 88 to 108
+                        */
+                        :
+                        ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
                             ?
                             <Button
                                 type="button"
-                                className={editSelfBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { editHandler(rowData, mode.view) }}
+                                className={deltBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
+                                onClick={() => { deleteHandler(rowData) }}
                             >
-                                <i className="bx bxs-show font-size-18 "></i>
+                                <i className="mdi mdi-delete font-size-18"></i>
                             </Button>
-
-                            : null  // **else null
-
-            }
-
-
-            {(userAccState.RoleAccess_IsDelete)
-                ?
-                <Button
-                    type="button"
-                    className={deltBtnCss}
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                    onClick={() => { deleteHandler(rowData) }}
-                >
-                    <i className="mdi mdi-delete font-size-18"></i>
-                </Button>
-                /*chnage delete-self functionality  autho by- Rohit date: 22-08-022 
-                line no 88 to 108
-                */
-                :
-                ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
-                    ?
-                    <Button
-                        type="button"
-                        className={deltBtnCss}
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                        onClick={() => { deleteHandler(rowData) }}
-                    >
-                        <i className="mdi mdi-delete font-size-18"></i>
-                    </Button>
-                    : null
-            }
-            {((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
-                <Button
-                    type="button"
-                    className={editSelfBtnCss}
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                    onClick={() => { copyHandler(rowData, mode.copy) }}
-                >
-                    <i className="bx bxs-copy font-size-18 "></i>
-                </Button>
-                : null
-            }
-            {((userAccState.RoleAccess_IsPrint)) ?
-                <Button
-                    type="button"
-                    className={downBtnCss}
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
-                    onClick={() => { downHandler(rowData) }}
-                >
-                    <i className="bx bx-printer font-size-18"></i>
-                </Button>
-                : null
-            }
-            {/* {makeBtnShow ? <Button
+                            : null
+                    }
+                    {((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
+                        <Button
+                            type="button"
+                            className={editSelfBtnCss}
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                            onClick={() => { copyHandler(rowData, mode.copy) }}
+                        >
+                            <i className="bx bxs-copy font-size-18 "></i>
+                        </Button>
+                        : null
+                    }
+                    {((userAccState.RoleAccess_IsPrint)) ?
+                        <Button
+                            type="button"
+                            className={downBtnCss}
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
+                            onClick={() => { downHandler(rowData) }}
+                        >
+                            <i className="bx bx-printer font-size-18"></i>
+                        </Button>
+                        : null
+                    }
+                    {/* {makeBtnShow ? <Button
                 type="button"
                 className={makeBtnCss}
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
@@ -170,10 +174,10 @@ export const listPageCommonButtonFunction = (props) => {
                 <span style={{ marginLeft: "6px" ,marginRight:"6px"}} className=" fas fa-file-invoice" ></span> </Button>
                  : <></>} */}
 
-        </div>
-        )
-    }
-    )
+                </div>
+            )
+        }
+    });
 
 }
 
@@ -382,7 +386,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //             btn.text = "Go"
 //         }
 //     } catch (e) {
-//         // alert("Go btn dissable  error") 
+//         // alert("Go btn dissable  error")
 //     }
 // }
 
