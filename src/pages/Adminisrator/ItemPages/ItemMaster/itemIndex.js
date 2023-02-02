@@ -197,8 +197,8 @@ const ItemsMaster = (props) => {
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
                 const editDivision = hasEditVal.ItemDivisionDetails.map(index => ({
-                    value: index.Division,
-                    label: index.DivisionName
+                    value: index.Party,
+                    label: index.PartyName
                 }))
 
                 const editCategoryType = {
@@ -663,7 +663,7 @@ const ItemsMaster = (props) => {
                 ItemUnitDetails: itemUnitDetails,
 
                 ItemDivisionDetails: formValue.Division.map((i) => {
-                    return ({ Division: i.value })
+                    return ({ Party: i.value })
                 }),
 
                 // ItemImagesDetails: imageTabTable.map((i) => ({

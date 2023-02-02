@@ -301,14 +301,13 @@ const Order = (props) => {
         value: i.id,
         label: i.Name,
     }));
-
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
 
             dataField: "ItemName",
             headerFormatter: (value, row, k) => {
                 return (
-                    <div className="d-flex justify-content-between" key={row.id}>
+                    <div className="d-flex justify-content-between"key={row.id}>
                         <div>
                             Item Name
                         </div>
@@ -346,6 +345,7 @@ const Order = (props) => {
             dataField: "",
             // sort: true,
             formatter: (value, row, k) => {
+                debugger
                 return (
                     <span >
                         <Input type="text"
@@ -421,6 +421,8 @@ const Order = (props) => {
             dataField: "",
             // sort: true,
             formatter: (value, row, k) => {
+                debugger
+
 
                 return (
                     <span className="text-right" >
