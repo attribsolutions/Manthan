@@ -555,9 +555,7 @@ const MaterialIssueMaster = (props) => {
             return (index.IssueQuantity > 0)
         })
 
-
         if (formValid(state, setState)) {
-
             if (validMsg.length > 0) {
                 dispatch(AlertState({
                     Type: 4,

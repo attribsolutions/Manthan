@@ -229,14 +229,12 @@ export const Rows1 = (data) => {
     return a1;
 }
 export const ReportHederRows = (data) => {
-    debugger
-    const terms =data.OrderTermsAndCondition
     var reportArray = [
-        [`${data.CustomerName}`,  `${data.SupplierName}`,``],
-        [`${data.BillingAddress}`, `${data.ShippingAddress}` , ` `,],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, ` `],
+        [`${data.CustomerName}`, ,`${data.SupplierName}`],
+        [`${data.BillingAddress}`, ,`${data.ShippingAddress}`],
+        [`FSSAI :f23dfxxxxxwe55`, ,`FSSAI :ui3dfxxxxxwe55` ],
         // [, , ""],
-        [,`` , ],
+        // [,`` , ],
     ]
     return reportArray;
 }

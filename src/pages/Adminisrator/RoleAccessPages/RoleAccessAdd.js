@@ -54,7 +54,7 @@ const RoleAccessAdd = (props) => {
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState({ value: 0, label: "All Pages" });
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
- 
+
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const {
@@ -84,7 +84,7 @@ const RoleAccessAdd = (props) => {
     }));
 
     useEffect(() => {
-        debugger
+
         const editDataGatingFromList = history.location.state
 
         const locationPath = history.location.pathname
@@ -94,19 +94,19 @@ const RoleAccessAdd = (props) => {
 
         if (!(editDataGatingFromList === undefined)) {
 
-            var divisionid = editDataGatingFromList.Division_id
+            var division_id = editDataGatingFromList.Division_id
             var divisionName = editDataGatingFromList.DivisionName
-            var roleid = editDataGatingFromList.Role_id
+            var role_id = editDataGatingFromList.Role_id
             var roleName = editDataGatingFromList.RoleName
             var company_id = editDataGatingFromList.Company_id
             var companyName = editDataGatingFromList.CompanyName
-           
-            if (roleid > 0) {
-                dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
+
+            if (role_id > 0) {
+                dispatch(GO_Button_HandlerForRoleAccessListPage(role_id, division_id, company_id));
                 setShowTableOnUI(true)
-                setRoleDropDown({ label: roleName, value: roleid })
+                setRoleDropDown({ label: roleName, value: role_id })
                 setCompany_dropdown_Select({ label: companyName, value: company_id })
-                setDivision_dropdown_Select({ label: divisionName, value: divisionid })
+                setDivision_dropdown_Select({ label: divisionName, value: division_id })
             }
         }
         if (!(userAcc === undefined)) {
@@ -550,56 +550,63 @@ const RoleAccessAdd = (props) => {
                                         !showTableOnUI ?
                                             <>
                                                 <CardHeader className="card-header   text-black  c_card_body"  >
-                                                    <Row className="mt-3">
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3 row ">
-                                                                <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                                                <Col md="9">
-                                                                    <Select
-                                                                        value={role_dropdown_Select}
-                                                                        options={Role_DropdownOption}
-                                                                        className="rounded-bottom"
-                                                                        placeholder="Select..."
-                                                                        onChange={(e) => { RoleDropDown_select_handler(e) }}
-                                                                        classNamePrefix="select2-selection"
-                                                                    />
+                                                    <div className="row">
+                                                        <div className="col col-10">
+                                                            <Row className="mt-3">
+                                                                <Col md="4">
+                                                                    <FormGroup className="mb-3 row ">
+                                                                        <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
+                                                                        <Col md="9">
+                                                                            <Select
+                                                                                value={role_dropdown_Select}
+                                                                                options={Role_DropdownOption}
+                                                                                className="rounded-bottom"
+                                                                                placeholder="Select..."
+                                                                                onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                                                                classNamePrefix="select2-selection"
+                                                                            />
+                                                                        </Col>
+                                                                    </FormGroup>
                                                                 </Col>
-                                                            </FormGroup>
-                                                        </Col>
 
-                                                        <Col md="3" className="">
-                                                            <FormGroup className="mb-3 row" >
-                                                                <Label className="col-sm-3 p-2">Division</Label>
-                                                                <Col md="9">
-                                                                    <Select
-                                                                        value={division_dropdown_Select}
-                                                                        className="rounded-bottom"
-                                                                        placeholder="Select..."
-                                                                        options={DivisionTypesValues}
-                                                                        onChange={(e) => { handllerDivisionTypes(e) }}
-                                                                    />
+                                                                <Col md="4" className="">
+                                                                    <FormGroup className="mb-3 row" >
+                                                                        <Label className="col-sm-3 p-2">Division</Label>
+                                                                        <Col md="9">
+                                                                            <Select
+                                                                                value={division_dropdown_Select}
+                                                                                className="rounded-bottom"
+                                                                                placeholder="Select..."
+                                                                                options={DivisionTypesValues}
+                                                                                onChange={(e) => { handllerDivisionTypes(e) }}
+                                                                            />
+                                                                        </Col>
+                                                                    </FormGroup>
                                                                 </Col>
-                                                            </FormGroup>
-                                                        </Col>
 
-                                                        <Col md="3" className="">
-                                                            <FormGroup className="mb-3 row" >
-                                                                <Label className="col-sm-3 p-2">Company</Label>
-                                                                <Col md="9">
-                                                                    <Select
-                                                                        value={company_dropdown_Select}
-                                                                        className="rounded-bottom"
-                                                                        placeholder="Select..."
-                                                                        options={CompanyValues}
-                                                                        onChange={(e) => { setCompany_dropdown_Select(e) }}
-                                                                    />
+                                                                <Col md="4" className="">
+                                                                    <FormGroup className="mb-3 row" >
+                                                                        <Label className="col-sm-3 p-2">Company</Label>
+                                                                        <Col md="9">
+                                                                            <Select
+                                                                                value={company_dropdown_Select}
+                                                                                className="rounded-bottom"
+                                                                                placeholder="Select..."
+                                                                                options={CompanyValues}
+                                                                                onChange={(e) => { setCompany_dropdown_Select(e) }}
+                                                                            />
+                                                                        </Col>
+                                                                    </FormGroup>
                                                                 </Col>
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="3" className="mt- ">
-                                                            <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
-                                                        </Col>
-                                                    </Row>
+
+                                                            </Row>
+                                                        </div>
+                                                        <div>
+                                                            <div className="col col-2">
+                                                                <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </CardHeader>
 
                                                 <br></br>
@@ -629,39 +636,42 @@ const RoleAccessAdd = (props) => {
                                             :
                                             <>
                                                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                                    <Row style={{ backgroundColor: "#f2f2f2",borderRadius:"5px" }} className='mb-3 mt-n1'>
+                                                        <Row sm={12}>
+                                                            <Col sm={3} className="p-2 ">
+                                                                <Label className="p-2 col-sm-3">Role</Label>
+                                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                    <h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                                            </Col>
 
-                                                    <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
-                                                        <Col md="3" className="p-2 ">
-                                                            <Label className="p-2 col-sm-3">Role</Label>
-                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                <h className="text-black">{role_dropdown_Select.label}</h></Button>
-                                                        </Col>
+                                                            <Col sm={3} className="p-2 ">
+                                                                {(division_dropdown_Select.value > 0)
+                                                                    ?
+                                                                    <> <Label className=" p-2 col-sm-3 ">Division</Label>
+                                                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                            <h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                                                    </>
+                                                                    : null}
+                                                            </Col>
 
-                                                        <Col md="3" className="p-2 ">
-                                                            {(division_dropdown_Select.value > 0)
-                                                                ? <> <Label className=" p-2 col-sm-3 ">Division</Label>
-                                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                        <h className="text-black">{division_dropdown_Select.label}</h></Button>
-                                                                </>
-                                                                : null}
-                                                        </Col>
+                                                            <Col sm={4} className="p-2 ">
+                                                                <Label className="p-2 col-sm-4">Company</Label>
+                                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                    <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                            </Col>
+                                                            <Col sm={2} className="p-2 mt-2">
+                                                                <Button type="button"
+                                                                    color="btn btn-outline-secondary"
+                                                                    className="btn-sm"
+                                                                    onClick={() => { ChangeButtonHandeler() }}>
+                                                                    <h className="text-black">Change Role</h></Button>
 
-                                                        <Col md="3" className="p-2 ">
-                                                            <Label className="p-2 col-sm-4">Company</Label>
-                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                <h className="text-black">{company_dropdown_Select.label}</h></Button>
-                                                        </Col>
+                                                            </Col>
 
-                                                        <Col md="3" className="p-2 text-end">
-                                                            <Button type="button"
-                                                                color="btn btn-outline-secondary"
-                                                                className="btn-sm"
-                                                                onClick={() => { ChangeButtonHandeler() }}>
-                                                                <h className="text-black">Change Role</h></Button>
-                                                        </Col>
+                                                        </Row>
                                                     </Row>
 
-
+                                                
                                                     <Row>
                                                         <Col className="">
                                                             <FormGroup className="mb-3  row">
