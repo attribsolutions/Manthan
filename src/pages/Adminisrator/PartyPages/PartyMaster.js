@@ -41,15 +41,15 @@ import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
     const [EditData, setEditData] = useState('');
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
     const [modalCss, setModalCss] = useState(false);
@@ -91,8 +91,8 @@ const PartyMaster = (props) => {
     }));
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
 
@@ -125,7 +125,7 @@ const PartyMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -178,7 +178,7 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             setCompanyList_dropdown_Select('')
             setPartyType_dropdown_Select('')
@@ -186,7 +186,7 @@ const PartyMaster = (props) => {
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -203,7 +203,7 @@ const PartyMaster = (props) => {
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
             saveDissable(false);
             dispatch(postPartyDataSuccess({ Status: false }))
             dispatch(AlertState({
@@ -371,7 +371,7 @@ const PartyMaster = (props) => {
 
         });
 
-        if (pageMode === 'edit') {
+        if (pageMode === mode.edit) {
             dispatch(updatePartyID(jsonBody, EditData.id));
             console.log("update jsonBody", jsonBody)
         }
@@ -382,7 +382,7 @@ const PartyMaster = (props) => {
     };
 
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -466,28 +466,29 @@ const PartyMaster = (props) => {
                                                             <Col sm={2}>
                                                                 <div>
                                                                     {
-                                                                        pageMode === "edit" ?
-                                                                            userPageAccessState.RoleAccess_IsEdit ?
+                                                                        (pageMode === mode.edit) ?
+                                                                            (userPageAccessState.RoleAccess_IsEdit )?
                                                                                 <button
                                                                                     type="submit"
-                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
                                                                                     className="btn btn-success w-md"
                                                                                 >
                                                                                     <i class="fas fa-edit me-2"></i>Update
                                                                                 </button>
                                                                                 :
-                                                                                <></>
-                                                                            : (
-                                                                                userPageAccessState.RoleAccess_IsSave ?
+                                                                                null
+                                                                            : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
+                                                                                (userPageAccessState.RoleAccess_IsSave) ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
                                                                                         className="btn btn-primary w-md"
                                                                                     > <i className="fas fa-save me-2"></i> Save
                                                                                     </button>
                                                                                     :
-                                                                                    <></>
+                                                                                    null
                                                                             )
+                                                                                : null
                                                                     }
                                                                 </div>
                                                             </Col>

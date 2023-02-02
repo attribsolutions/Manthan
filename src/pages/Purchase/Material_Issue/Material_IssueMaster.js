@@ -595,7 +595,7 @@ const MaterialIssueMaster = (props) => {
             else {
                 dispatch(postMaterialIssue(jsonBody));
             }
-            debugger
+            // debugger
         };
     }
 
