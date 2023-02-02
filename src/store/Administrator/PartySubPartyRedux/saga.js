@@ -4,12 +4,14 @@ import {
     deletePartySubPartySuccess,
     editPartySubPartySuccess,
     getPartySubPartylistSuccess,
+    getPartySubParty_For_party_dropdownSuccess,
     postPartySubPartySuccess,
     updatePartySubPartySuccess,
 } from "./action";
 
 import {
     PartySubParty_Delete_API,
+    PartySubParty_Dropdown_Get_API,
     PartySubParty_Edit_API,
     PartySubParty_Get_API,
     PartySubParty_Post_API,
@@ -22,7 +24,8 @@ import {
     UPDATE_PARTY_SUB_PARTY,
     GET_PARTY_SUB_PARTY_LIST,
     POST_PARTY_SUB_PARTY,
-  
+    GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
+
 } from "./actionType"
 
 import { AlertState } from "../../actions";
@@ -60,7 +63,7 @@ function* getListGenFunc() {
 
         // yield put(getPartySubPartylistSuccess(data));
         // console.log("response in saga", response)
-      yield put(getPartySubPartylistSuccess(response.Data));
+        yield put(getPartySubPartylistSuccess(response.Data));
         yield put(SpinnerState(false))
     } catch (error) {
         yield put(SpinnerState(false))
@@ -70,7 +73,6 @@ function* getListGenFunc() {
         }));
     }
 }
-
 
 function* postGenFunc({ data }) {
     yield put(SpinnerState(true))
@@ -87,7 +89,6 @@ function* postGenFunc({ data }) {
     }
 }
 
-
 function* deleteGenFunc({ id }) {
     try {
         yield put(SpinnerState(true))
@@ -103,7 +104,6 @@ function* deleteGenFunc({ id }) {
     }
 }
 
-
 function* editGenFunc({ id, pageMode }) {
     try {
         const response = yield call(PartySubParty_Edit_API, id);
@@ -116,7 +116,6 @@ function* editGenFunc({ id, pageMode }) {
         }));
     }
 }
-
 
 function* updateGenFunc({ updateData, ID }) {
     try {
@@ -134,13 +133,27 @@ function* updateGenFunc({ updateData, ID }) {
     }
 }
 
-
+function* getPartySubPartyGenFunc({id}) {
+    yield put(SpinnerState(true))
+    try {
+        const response = yield call(PartySubParty_Dropdown_Get_API,id);
+        yield put(getPartySubParty_For_party_dropdownSuccess(response.Data));
+        yield put(SpinnerState(false))
+    } catch (error) {
+        yield put(SpinnerState(false))
+        yield put(AlertState({
+            Type: 4,
+            Status: true, Message: "500 Error Message PartySubParty list dropdown",
+        }));
+    }
+}
 function* PartySubPartysaga() {
     yield takeEvery(GET_PARTY_SUB_PARTY_LIST, getListGenFunc)
     yield takeEvery(POST_PARTY_SUB_PARTY, postGenFunc)
     yield takeEvery(EDIT_PARTY_SUB_PARTY, editGenFunc)
     yield takeEvery(UPDATE_PARTY_SUB_PARTY, updateGenFunc)
     yield takeEvery(DELETE_PARTY_SUB_PARTY, deleteGenFunc)
+    yield takeEvery(GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, getPartySubPartyGenFunc)
 }
 
 export default PartySubPartysaga;

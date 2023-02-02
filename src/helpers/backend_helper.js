@@ -338,6 +338,7 @@ export const PartySubParty_Post_API = (data) => post(url.PARTY_SUB_PARTY, data)/
 export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id}`)// delete api
 export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api
 export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY}/${id}`, data)// update api
+export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY_DROPDOWN_API}/${id}`)// PartySubParty dropdown Api
 
 //PartyItems API
 
