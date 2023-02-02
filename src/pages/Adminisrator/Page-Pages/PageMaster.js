@@ -46,6 +46,9 @@ import { createdBy, saveDissable } from "../../../components/Common/ComponentRel
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import PageFieldMaster_Tab from "./PageFieldMaster";
+import * as mode from "../../../routes/PageMode"
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+
 
 const PageMaster = (props) => {
   const dispatch = useDispatch();
@@ -53,7 +56,7 @@ const PageMaster = (props) => {
 
   const [EditData, setEditData] = useState([]);
   const [modalCss, setModalCss] = useState(false);
-  const [pageMode, setPageMode] = useState("save");
+  const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
   const [customActiveTab, setcustomActiveTab] = useState("1");
@@ -66,6 +69,7 @@ const PageMaster = (props) => {
   const [modal_center, setmodal_center] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
   const [pageAccessData, setPageAccessData] = useState([]);
+  const [editCreatedBy, seteditCreatedBy] = useState("");
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -103,8 +107,8 @@ const PageMaster = (props) => {
   }));
 
   const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editValue")
-  const hasShowModal = props.hasOwnProperty("editValue")
+  const hasShowloction = location.hasOwnProperty(mode.editValue)
+  const hasShowModal = props.hasOwnProperty(mode.editValue)
 
   // userAccess useEffect
   useEffect(() => {
@@ -156,6 +160,8 @@ const PageMaster = (props) => {
 
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         setPageAccessData(hasEditVal.PagePageAccess);
+        seteditCreatedBy(hasEditVal.CreatedBy);
+
 
         setModule_DropdownSelect({
           label: hasEditVal.ModuleName,
@@ -364,7 +370,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-    
+
     let Access = []
     PageAccess.forEach((element, key) => {
       if (element.hascheck) {
@@ -452,7 +458,7 @@ const PageMaster = (props) => {
       }
     }
 
-    if (pageMode === "edit") {
+    if (pageMode === mode.edit) {
       dispatch(updateHPages(jsonBody, EditData.id));
     } else {
       dispatch(saveHPages(jsonBody));
@@ -503,7 +509,7 @@ const PageMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -981,7 +987,16 @@ const PageMaster = (props) => {
                     <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
                       <Col sm={2}>
                         <div style={{ paddingLeft: "14px" }}>
-                          {
+
+                          <SaveButton pageMode={pageMode}
+                            userAcc={userPageAccessState}
+                            editCreatedBy={editCreatedBy}
+                            module={"PageMaster"}
+                          />
+
+
+
+                          {/* {
                             pageMode === "edit" ?
                               userPageAccessState.RoleAccess_IsEdit ?
                                 <button
@@ -1004,7 +1019,7 @@ const PageMaster = (props) => {
                                   :
                                   <></>
                               )
-                          }
+                          } */}
                         </div>
                       </Col>
                     </Row>
