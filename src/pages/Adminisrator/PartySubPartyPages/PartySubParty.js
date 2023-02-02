@@ -20,7 +20,8 @@ import {
     postPartySubParty,
     postPartySubPartySuccess,
     updatePartySubParty,
-    updatePartySubPartySuccess
+    updatePartySubPartySuccess,
+    getPartySubParty_For_party_dropdown
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
     AlertState,
@@ -31,7 +32,7 @@ import {
 import { useHistory } from "react-router-dom";
 import {
     get_Division_ForDropDown,
-    get_Party_ForDropDown
+    get_Party_ForDropDown,
 } from "../../../store/Administrator/ItemsRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -62,6 +63,7 @@ const PartySubParty = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [PartyData, setPartyData] = useState([]);
+    console.log("PartyData", PartyData)
     const [Division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [Party_dropdown_Select, setParty_dropdown_Select] = useState("");
@@ -73,6 +75,7 @@ const PartySubParty = (props) => {
         Party,
         updateMsg,
         pageField,
+        PartySubParty,
         userAccess } = useSelector((state) => ({
             postMsg: state.PartySubPartyReducer.postMsg,
             Divisions: state.ItemMastersReducer.Division,
@@ -80,7 +83,9 @@ const PartySubParty = (props) => {
             updateMsg: state.PartySubPartyReducer.updateMsg,
             pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
+            PartySubParty: state.PartySubPartyReducer.PartySubParty,
         }));
+
 
     useEffect(() => {
         const page_Id = pageId.PARTY_SUB_PARTY
@@ -115,7 +120,6 @@ const PartySubParty = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
-
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -215,6 +219,7 @@ const PartySubParty = (props) => {
         }
     }, [pageField])
 
+
     const DivisionValues = Divisions.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -225,8 +230,17 @@ const PartySubParty = (props) => {
         label: Data.Name
     }));
 
+    const PartySubPartyValues = PartySubParty.map((Data) => ({
+        value: Data.SubParty,
+        label: Data.SubPartyName
+    }));
+    console.log("Values", PartySubPartyValues)
+
     function handllerDivision(e) {
+        debugger
         setDivision_dropdown_Select(e)
+        dispatch(getPartySubParty_For_party_dropdown(e.value));
+        setPartyData(PartySubPartyValues)
     }
 
     function handllerParty(e) {
@@ -235,7 +249,7 @@ const PartySubParty = (props) => {
 
     /// Role Table Validation
     function AddPartyHandler() {
-
+        debugger
         const find = PartyData.find((element) => {
             return element.value === Party_dropdown_Select.values
         });
@@ -295,8 +309,6 @@ const PartySubParty = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_SUB_PARTY} /> */}
-                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
