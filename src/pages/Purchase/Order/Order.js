@@ -308,7 +308,7 @@ const Order = (props) => {
             dataField: "ItemName",
             headerFormatter: (value, row, k) => {
                 return (
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between" key={row.id}>
                         <div>
                             Item Name
                         </div>
@@ -331,7 +331,7 @@ const Order = (props) => {
             formatter: (value, row, k) => {
 
                 return (
-                    <div className="text-end">
+                    <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
                     </div>
                 )
@@ -351,7 +351,7 @@ const Order = (props) => {
                         <Input type="text"
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
-                            key={row.Quantity}
+                            key={`Quantity${row.id}`}
                             className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
@@ -392,6 +392,7 @@ const Order = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
+                        key={`ddlUnit${row.id}`}
                         defaultValue={{ value: row.Unit_id, label: row.UnitName }}
                         // value={{value:row.Unit,label:row.UnitName}}
                         options={
@@ -426,6 +427,7 @@ const Order = (props) => {
                         <Input
                             type="text"
                             id={`Ratey${k}`}
+                            key={`Ratey${row.id}`}
                             defaultValue={row.Rate}
                             autoComplete="off"
                             className="text-end"
@@ -458,6 +460,8 @@ const Order = (props) => {
                     <span >
                         <Input type="text"
                             id={`Comment${k}`}
+                            key={`Comment${row.id}`}
+
                             defaultValue={row.Comment}
                             autoComplete="off"
                             onChange={(e) => { row["Comment"] = e.target.value }}
