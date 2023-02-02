@@ -36,7 +36,7 @@ const OrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-   
+
     // const [userAccState, setUserAccState] = useState('');
     const [orderlistFilter, setorderlistFilter] = useState('');
 
@@ -59,9 +59,20 @@ const OrderList = () => {
     const hasPagePath = history.location.pathname
     const { fromdate = currentDate, todate = currentDate, venderSelect = { value: "", label: "All" } } = orderlistFilter;
     const { userAccess, pageField, GRNitem, vender, tableList } = reducers;
-    const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
-    const pageMode= (hasPagePath === url.GRN_ADD_Mode_2) ?mode.mode2save : mode.defaultList;
-    
+
+    let page_Id = pageId.ORDER_lIST;
+    let page_Mode = mode.defaultList;
+    let page_Url = url.ORDER_lIST;
+    let make_BtnShow = false;
+
+    if (hasPagePath === url.GRN_ADD_Mode_2) {
+        page_Id = pageId.GRN_ADD_Mode_2;
+        page_Mode = mode.mode2save;
+        page_Url = url.GRN_ADD_Mode_2;
+        make_BtnShow = true
+    }
+
+
     const action = {
         getList: getOrderListPage,
         deleteId: deleteOrderId,
@@ -146,7 +157,7 @@ const OrderList = () => {
                     OrderIDs: isGRNSelect
                 })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+                dispatch(getGRN_itemMode2({ jsonBody, page_Mode, path: url.GRN_ADD, grnRef, challanNo }))
 
             } else {
                 alert("Please Select Order1")
@@ -161,8 +172,7 @@ const OrderList = () => {
             EffectiveDate: rowData.preOrderDate,
             OrderID: rowData.id
         })
-        var Mode = "edit"
-        dispatch(editOrderId(jsonBody, Mode));
+        dispatch(editOrderId(jsonBody, mode.edit));
     }
 
     function downBtnFunc(row) {
@@ -284,8 +294,9 @@ const OrderList = () => {
                             masterPath={url.ORDER}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
-                            pageMode={pageMode}
-                            makeBtnShow={pageMode === mode.defaultList? false : true}
+                            pageMode={page_Mode}
+                            pageUrl={page_Url}
+                            makeBtnShow={make_BtnShow}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

@@ -79,7 +79,7 @@ const PurchaseListPage = (props) => {
         masterPath,
         ButtonMsgLable,
         deleteName,
-        pageMode,
+        pageUrl,
         goButnFunc = () => { },
         makeBtnFunc = () => { },
         makeBtnShow,
@@ -95,7 +95,7 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
 
         let tableArr = props.reducers.tableList;
-        if (`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) {
+        if ((pageUrl === url.GRN_ADD_Mode_2)) {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })
