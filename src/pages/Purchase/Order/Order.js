@@ -58,7 +58,7 @@ const Order = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
-    const  [description, setDescription] = useState('')
+    const [description, setDescription] = useState('')
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     // const [podate, setpoDate] = useState(currentDate);
@@ -155,7 +155,7 @@ const Order = (props) => {
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
-                setDescription( hasEditVal.Description)
+                setDescription(hasEditVal.Description)
                 editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
@@ -198,7 +198,7 @@ const Order = (props) => {
         }
     }, [goBtnOrderdata]);
 
-   
+
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
             setbillAddr(supplierAddress[0]);
@@ -654,6 +654,16 @@ const Order = (props) => {
             }));
             return
         }
+        if (orderTypeSelect.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Select PO Type",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
         if (termsAndCondition.length === 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -895,7 +905,7 @@ const Order = (props) => {
                                 </div >
 
                                 <div className="col col-6" >                        {/*PO To Date */}
-                                    <FormGroup className=" row  " >                   
+                                    <FormGroup className=" row  " >
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>PO To Date</Label>
                                         <div className="col col-6 ">
