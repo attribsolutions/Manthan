@@ -31,6 +31,8 @@ import { useHistory } from "react-router-dom";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode"
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 const AddUser = (props) => {
 
@@ -41,11 +43,13 @@ const AddUser = (props) => {
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [modalCss, setModalCss] = useState(false);
-  const [pageMode, setPageMode] = useState("save");
+  const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
+  const [editCreatedBy, seteditCreatedBy] = useState("");
+
 
   // M_Roles DropDown
 
@@ -77,8 +81,8 @@ const AddUser = (props) => {
   }));
 
   const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editValue")
-  const hasShowModal = props.hasOwnProperty("editValue")
+  const hasShowloction = location.hasOwnProperty(mode.editValue)
+  const hasShowModal = props.hasOwnProperty(mode.editValue)
 
   useEffect(() => {
     if (isCPassword) {
@@ -148,6 +152,8 @@ const AddUser = (props) => {
         dispatch(Breadcrumb_inputName(hasEditVal.LoginName))
         dispatch(GetUserPartiesForUserMastePage(hasEditVal.Employee))
         setEditData(hasEditVal)
+        seteditCreatedBy(hasEditVal.CreatedBy)
+
 
         setEmployeeSelect({
           value: hasEditVal.Employee,
@@ -172,7 +178,7 @@ const AddUser = (props) => {
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(addUserSuccess({ Status: false }))
       setEmployeeSelect('')
       setPartyRoleData('')
@@ -195,7 +201,7 @@ const AddUser = (props) => {
       }
     }
 
-    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
       dispatch(addUserSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -251,8 +257,8 @@ const AddUser = (props) => {
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
-      password: pageMode === 'edit' ? EditData.AdminPassword : values.password,
-      AdminPassword: pageMode === 'edit' ? EditData.AdminPassword : values.password,
+      password: pageMode === mode.edit ? EditData.AdminPassword : values.password,
+      AdminPassword: pageMode === mode.edit ? EditData.AdminPassword : values.password,
       Employee: EmployeeSelect.value,
       isActive: values.isActive,
       isSendOTP: values.isSendOTP,
@@ -273,7 +279,7 @@ const AddUser = (props) => {
 
     }
 
-    else if (pageMode === 'edit') {
+    else if (pageMode === mode.edit) {
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
       console.log("Update jsonBody", jsonBody)
@@ -304,7 +310,7 @@ const AddUser = (props) => {
               <td>
                 <FormGroup className="" >
                   <Select
-                    defaultValue={pageMode === "edit" ? index.PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                    defaultValue={pageMode === mode.edit ? index.PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
                     options={RolesValues}
                     isMulti={true}
                     className="basic-multi-select"
@@ -322,7 +328,7 @@ const AddUser = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (modalCss || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if (modalCss || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -356,7 +362,7 @@ const AddUser = (props) => {
                                 <Col sm={12}>
                                   <Select
                                     id="EmployeeDropDown "
-                                    isDisabled={pageMode === "edit" ? true : false}
+                                    isDisabled={pageMode === mode.edit ? true : false}
                                     value={EmployeeSelect}
                                     options={EmployeeValues}
                                     onChange={(e) => { handllerEmployeeID(e) }}
@@ -375,7 +381,7 @@ const AddUser = (props) => {
                                   placeholder="Please Enter Login Name"
                                   defaultvalue=''
                                   value={EditData.LoginName}
-                                  disabled={pageMode === "edit" ? true : false}
+                                  disabled={pageMode === mode.edit ? true : false}
                                   autoComplete='off'
                                   validate={{
                                     required: { value: true, errorMessage: 'Please Enter Name' },
@@ -478,29 +484,29 @@ const AddUser = (props) => {
                                 <Col sm={2}>
                                   <div>
                                     {
-                                      pageMode === "edit" ?
-                                        userPageAccessState.RoleAccess_IsEdit ?
+                                      (pageMode === mode.edit) ?
+                                        (userPageAccessState.RoleAccess_IsEdit) ?
                                           <button
                                             type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
                                             className="btn btn-success w-md"
                                           >
                                             <i class="fas fa-edit me-2"></i>Update
                                           </button>
                                           :
-                                          <></>
-                                        : (
-                                          userPageAccessState.RoleAccess_IsSave ?
+                                          null
+                                        : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
+                                          (userPageAccessState.RoleAccess_IsSave) ?
                                             <button
                                               type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
                                               className="btn btn-primary w-md"
-                                            >
-                                              <i className="fas fa-save me-2"></i> Save
+                                            > <i className="fas fa-save me-2"></i> Save
                                             </button>
                                             :
-                                            <></>
+                                            null
                                         )
+                                          : null
                                     }
                                   </div>
                                 </Col>
@@ -525,7 +531,7 @@ const AddUser = (props) => {
                                     <div className="mb-3">
                                       <Label className="form-label font-size-13 ">Role name</Label>
                                       <Select
-                                        defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                                        defaultValue={pageMode === mode.edit ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
                                         options={RolesValues}
                                         isMulti={true}
                                         className="basic-multi-select"
@@ -539,8 +545,14 @@ const AddUser = (props) => {
                                 <Row>
                                   <Col sm={2}>
                                     <div>
-                                      {
-                                        pageMode === "edit" ?
+                                    <SaveButton
+                                  pageMode={pageMode}
+                                  userAcc={userPageAccessState}
+                                  editCreatedBy={editCreatedBy}
+                                  module={"User"}
+                                />
+                                      {/* {
+                                        pageMode === mode.edit ?
                                           userPageAccessState.RoleAccess_IsEdit ?
                                             <button
                                               type="submit"
@@ -562,7 +574,7 @@ const AddUser = (props) => {
                                               :
                                               <></>
                                           )
-                                      }
+                                      } */}
                                     </div>
                                   </Col>
                                 </Row>
