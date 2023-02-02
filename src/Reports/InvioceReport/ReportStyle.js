@@ -108,7 +108,7 @@ export const reportHeder3 = (doc, data) => {
     doc.setFontSize(10)
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.id}`, 415, 30) //Invoice Id
+    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
     doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
 }
 
