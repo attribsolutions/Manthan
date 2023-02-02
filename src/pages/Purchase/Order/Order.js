@@ -263,7 +263,7 @@ const Order = (props) => {
     }, [updateMsg, modalCss]);
 
 
-    const val_onChange = async (val, row, type) => {
+    function val_onChange(val, row, type) {
 
         if (type === "qty") {
             row["Quantity"] = val;
@@ -275,7 +275,7 @@ const Order = (props) => {
         row["Amount"] = Amount(row)
 
         let sum = 0
-        await orderItemTable.forEach(ind => {
+        orderItemTable.forEach(ind => {
             if (ind.Amount === null) {
                 ind.Amount = 0
             }
@@ -347,23 +347,24 @@ const Order = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    <span key={`qtysamp`}  >
-                        <Input
-                            type="text"
-                            id={`Rate1y${k}`}
-                            key={`Rate1y${row.id}`}
-                           defaultValue={row.Rate}
-                            autoComplete="off"
+                    <span >
+                        <Input type="text"
+                            id={`Quantity${k}`}
+                            defaultValue={row.Quantity}
+                            key={`Quantity${row.id}`}
                             className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
+                                    val_onChange(val, row, "qty")
                                 } else {
-                                    document.getElementById(`Rate1y${k}`).value = row.Rate
+                                    document.getElementById(`Quantity${k}`).value = row.Quantity
                                 }
+                                handleKeyDown(e, orderItemTable)
                             }}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
                 )
@@ -392,7 +393,7 @@ const Order = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         key={`ddlUnit${row.id}`}
-                        value={{ value: row.Unit_id, label: row.UnitName }}
+                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
                         // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
@@ -438,7 +439,6 @@ const Order = (props) => {
                                 } else {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
-                                e.preventDefault()
                             }}
                             onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
