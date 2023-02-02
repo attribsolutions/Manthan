@@ -619,7 +619,7 @@ const MaterialIssueMaster = (props) => {
                                                 <Flatpickr
                                                     name="MaterialIssueDate"
                                                     value={values.MaterialIssueDate}
-                                                    disabled={(GoButton.length > 0) ? true : false}
+                                                    // disabled={(GoButton.length > 0) ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
