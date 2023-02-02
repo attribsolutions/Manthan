@@ -3,8 +3,8 @@ import { CHALLAN_LIST_FILTERS, GET_CHALLAN_LIST_PAGE_SUCCESS, INWARD_BUTTON_ID_S
 
 const INIT_STATE = {
     ChallanList: [],
-    ChallanlistFilter: { fromdate: currentDate, todate: currentDate, },
-    InwardData:[]
+    ChallanlistFilter: { fromdate: currentDate, todate: currentDate, CustomerSelect: { value: "", label: " All" } },
+    InwardData: []
 }
 
 const ChallanReducer = (state = INIT_STATE, action) => {

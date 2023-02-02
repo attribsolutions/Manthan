@@ -168,7 +168,7 @@ const Invoice = (props) => {
             //     Message: "Item is out of stock",
             //     RedirectPath: url.MATERIAL_ISSUE_LIST,
             // }))
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -696,7 +696,6 @@ const Invoice = (props) => {
         const validMsg = []
 
         const InvoiceItems = []
-        debugger
         const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
         let grandtotal = 0
 
@@ -800,8 +799,7 @@ const Invoice = (props) => {
             saveDissable({ id: saveBtnid, state: true })
             dispatch(postInvoiceMaster(jsonBody, saveBtnid));
         }
-        // };
-        debugger
+
     }
 
     if (!(userPageAccessState === '')) {
@@ -843,7 +841,7 @@ const Invoice = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    // isDisabled={values.Customer ? true : null}
+
                                                     name="Customer"
                                                     value={values.Customer}
                                                     isSearchable={true}
@@ -864,7 +862,7 @@ const Invoice = (props) => {
                                 </Col>
 
                                 <Col sm={1} className="mt-3">
-                                    {pageMode === "save" ?
+                                    {pageMode === mode.defaultsave ?
                                         (OrderItemDetails.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :
