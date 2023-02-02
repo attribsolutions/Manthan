@@ -22,7 +22,7 @@ import { postInward, postInwardSuccess } from "../../../store/Inter Branch/Inwar
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { InwardButtonId } from "../../../store/Inter Branch/ChallanRedux/action";
+import * as mode from "../../../routes/PageMode";
 
 const Inward = (props) => {
 
@@ -30,7 +30,7 @@ const Inward = (props) => {
     const history = useHistory();
     const [userAccState, setUserAccState] = useState('');
     const [InwardDate, setInwardDate] = useState(currentDate);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const {
         postMsg,
         userAccess,
@@ -60,7 +60,7 @@ const Inward = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -135,7 +135,7 @@ const Inward = (props) => {
 
         // saveDissable(true);//save Button Is dissable function
 
-        if (pageMode === "edit") {
+        if (pageMode === mode.edit) {
         } else {
 
             dispatch(postInward(jsonBody))
@@ -213,6 +213,7 @@ const Inward = (props) => {
         totalSize: IBChallanItems.length,
         custom: true,
     };
+    
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>

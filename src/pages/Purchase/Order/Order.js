@@ -58,7 +58,7 @@ const Order = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
-    const  [description, setDescription] = useState('')
+    const [description, setDescription] = useState('')
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     // const [podate, setpoDate] = useState(currentDate);
@@ -155,7 +155,7 @@ const Order = (props) => {
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
-                setDescription( hasEditVal.Description)
+                setDescription(hasEditVal.Description)
                 editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
@@ -198,7 +198,7 @@ const Order = (props) => {
         }
     }, [goBtnOrderdata]);
 
-   
+
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
             setbillAddr(supplierAddress[0]);
@@ -263,7 +263,7 @@ const Order = (props) => {
     }, [updateMsg, modalCss]);
 
 
-    function val_onChange(val, row, type) {
+    const val_onChange = async (val, row, type) => {
 
         if (type === "qty") {
             row["Quantity"] = val;
@@ -275,7 +275,7 @@ const Order = (props) => {
         row["Amount"] = Amount(row)
 
         let sum = 0
-        orderItemTable.forEach(ind => {
+        await orderItemTable.forEach(ind => {
             if (ind.Amount === null) {
                 ind.Amount = 0
             }
@@ -308,7 +308,7 @@ const Order = (props) => {
             dataField: "ItemName",
             headerFormatter: (value, row, k) => {
                 return (
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between" key={row.id}>
                         <div>
                             Item Name
                         </div>
@@ -331,7 +331,7 @@ const Order = (props) => {
             formatter: (value, row, k) => {
 
                 return (
-                    <div className="text-end">
+                    <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
                     </div>
                 )
@@ -347,24 +347,23 @@ const Order = (props) => {
             // sort: true,
             formatter: (value, row, k) => {
                 return (
-                    <span >
-                        <Input type="text"
-                            id={`Quantity${k}`}
-                            defaultValue={row.Quantity}
-                            key={row.Quantity}
+                    <span key={`qtysamp`}  >
+                        <Input
+                            type="text"
+                            id={`Rate1y${k}`}
+                            key={`Rate1y${row.id}`}
+                           defaultValue={row.Rate}
+                            autoComplete="off"
                             className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "qty")
+                                    val_onChange(val, row, "rate")
                                 } else {
-                                    document.getElementById(`Quantity${k}`).value = row.Quantity
+                                    document.getElementById(`Rate1y${k}`).value = row.Rate
                                 }
-                                handleKeyDown(e, orderItemTable)
                             }}
-                            autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
                     </span>
                 )
@@ -392,7 +391,8 @@ const Order = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
-                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        key={`ddlUnit${row.id}`}
+                        value={{ value: row.Unit_id, label: row.UnitName }}
                         // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
@@ -426,6 +426,7 @@ const Order = (props) => {
                         <Input
                             type="text"
                             id={`Ratey${k}`}
+                            key={`Ratey${row.id}`}
                             defaultValue={row.Rate}
                             autoComplete="off"
                             className="text-end"
@@ -437,6 +438,7 @@ const Order = (props) => {
                                 } else {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
+                                e.preventDefault()
                             }}
                             onKeyDown={(e) => handleKeyDown(e, orderItemTable)}
                         />
@@ -458,6 +460,8 @@ const Order = (props) => {
                     <span >
                         <Input type="text"
                             id={`Comment${k}`}
+                            key={`Comment${row.id}`}
+
                             defaultValue={row.Comment}
                             autoComplete="off"
                             onChange={(e) => { row["Comment"] = e.target.value }}
@@ -649,6 +653,16 @@ const Order = (props) => {
                 Type: 4,
                 Status: true,
                 Message: "Please Enter One Item Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
+        if (orderTypeSelect.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Select PO Type",
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -895,7 +909,7 @@ const Order = (props) => {
                                 </div >
 
                                 <div className="col col-6" >                        {/*PO To Date */}
-                                    <FormGroup className=" row  " >                   
+                                    <FormGroup className=" row  " >
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>PO To Date</Label>
                                         <div className="col col-6 ">

@@ -38,11 +38,9 @@ import { createdBy, currentDate, saveDissable, userParty } from "../../../compon
 import OrderPageTermsTable from "../Order/OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
-
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 let description = ''
 let editVal = {}
@@ -61,12 +59,8 @@ const SaleOrder = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-
-    // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
@@ -119,15 +113,10 @@ const SaleOrder = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
@@ -302,13 +291,10 @@ const SaleOrder = (props) => {
             sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))
-        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
-        // dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
     function assignItem_onClick() {
-        debugger
         setisOpen_TermsModal(true)
     };
 
@@ -549,10 +535,6 @@ const SaleOrder = (props) => {
             setorderItemTable([])
             setTermsAndConTable([])
         }
-
-        // let newObj = { ...orderAddFilter }
-        // newObj.supplierSelect = e
-        // dispatch(orderAddfilters(newObj))
     };
 
     const saveHandeller = () => {
@@ -613,7 +595,7 @@ const SaleOrder = (props) => {
             //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
             // }
 
-            else if (pageMode === "edit") {
+            else if (pageMode === mode.edit) {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
                 if (ischange && (i.poQty === 0)) {
@@ -697,7 +679,7 @@ const SaleOrder = (props) => {
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
-        if (pageMode === "edit") {
+        if (pageMode === mode.edit) {
             dispatch(updateOrderId(jsonBody, editVal.id))
 
         } else {
@@ -712,13 +694,9 @@ const SaleOrder = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.SALE_ORDER} /> */}
+
                 <div className="page-content">
 
-                    {/* <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        showCount={true}
-                    /> */}
                     <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
                         <div className=" mt-1 row ">
                             <Col sm="6">
@@ -735,7 +713,6 @@ const SaleOrder = (props) => {
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
-                                                // altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                             }}
@@ -758,11 +735,7 @@ const SaleOrder = (props) => {
                                             onChange={supplierOnchange}
                                         />
                                     </Col>
-                                    {/* <Col sm="1" className="mx-4 ">
-                                        {pageMode === "save" ?
-                                            <Go_Button onClick={(e) => goButtonHandler()} />
-                                            : null}
-                                    </Col> */}
+
                                     <Col sm="1" className="mx-4 ">
                                         {pageMode === mode.defaultsave ?
                                             (orderItemTable.length === 0) ?
@@ -812,8 +785,6 @@ const SaleOrder = (props) => {
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
-                                                // minDate: pageMode === "edit" ? orderdate : "today",
-
                                             }}
                                             onChange={(e, date) => { setdeliverydate(date) }}
                                         />
@@ -833,7 +804,6 @@ const SaleOrder = (props) => {
                                             id="pofromdate"
                                             name="pofromdate"
                                             value={poFromDate}
-                                            // disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
@@ -856,7 +826,6 @@ const SaleOrder = (props) => {
                                             id="potodate"
                                             name="potodate"
                                             value={poToDate}
-                                            // disabled={pageMode === "edit" ? true : false}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{

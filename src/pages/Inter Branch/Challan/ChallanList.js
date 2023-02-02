@@ -29,7 +29,9 @@ const ChallanList = () => {
 
     const [pageMode, setpageMode] = useState(url.CHALLAN_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [challanlistFilter, setChallanlistFilter] = useState({ todate: currentDate, fromdate: currentDate, });
+    const [challanlistFilter, setChallanlistFilter] = useState({
+        todate: currentDate, fromdate: currentDate, CustomerSelect: { value: "", label: "All" }
+    });
 
     const reducers = useSelector(
         (state) => ({
@@ -45,8 +47,8 @@ const ChallanList = () => {
 
         })
     );
-    const { userAccess, pageField, ChallanlistFilter, customer, } = reducers;
-    const { fromdate, todate, CustomerSelect } = ChallanlistFilter;
+    const { userAccess, pageField, customer, } = reducers;
+    const { fromdate, todate, CustomerSelect } = challanlistFilter;
 
     const page_Id = pageId.CHALLAN_LIST
 
@@ -75,10 +77,10 @@ const ChallanList = () => {
         label: i.Name,
     }));
 
-    // CustomerOptions.unshift({
-    //     value: "",
-    //     label: " All"
-    // });
+    CustomerOptions.unshift({
+        value: "",
+        label: " All"
+    });
 
     useEffect(() => {
 
@@ -94,10 +96,10 @@ const ChallanList = () => {
     const goButtonHandler = () => {
 
         const jsonBody = JSON.stringify({
-            FromDate: "2023-01-06",
-            ToDate: "2023-01-24",
-            Party: 5,
-            Customer: 4,
+            FromDate:fromdate,
+            ToDate:todate,
+            Party: userParty(),
+            Customer: CustomerSelect.value,
         });
         dispatch(getChallanListPage(jsonBody));
     }
@@ -117,18 +119,17 @@ const ChallanList = () => {
     }
 
     function CustomerOnchange(e) {
+        debugger
         let newObj = { ...challanlistFilter }
         newObj.CustomerSelect = e
         setChallanlistFilter(newObj)
     }
 
     const InwardMakeBtnFunc = (list = []) => {
-        debugger
         dispatch(InwardButtonId(list[0].id))
         history.push({
             pathname: url.INWARD,
             pageMode: "save",
-            // editValue: InwardData
         })
     }
 
