@@ -3,6 +3,8 @@ import {
   DELETE_PARTY_SUB_PARTY_SUCCESS,
   EDIT_PARTY_SUB_PARTY,
   EDIT_PARTY_SUB_PARTY_SUCCESS,
+  GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
+  GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS,
   GET_PARTY_SUB_PARTY_LIST,
   GET_PARTY_SUB_PARTY_LIST_SUCCESS,
   POST_PARTY_SUB_PARTY,
@@ -21,8 +23,7 @@ export const postPartySubPartySuccess = (data) => ({
   payload: data,
 });
 
-
-/// get Product Category Type list 
+// get Product Category Type list 
 export const getPartySubPartylist = () => ({
   type: GET_PARTY_SUB_PARTY_LIST,
 });
@@ -63,3 +64,14 @@ export const updatePartySubPartySuccess = (msg) => ({
   type: UPDATE_PARTY_SUB_PARTY_SUCCESS,
   payload: msg,
 })
+
+// get PartySubParty List in party dropdown
+export const getPartySubParty_For_party_dropdown = (id) => ({
+  type: GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
+  id,
+});
+
+export const getPartySubParty_For_party_dropdownSuccess = (list) => ({
+  type: GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS,
+  payload: list,
+});

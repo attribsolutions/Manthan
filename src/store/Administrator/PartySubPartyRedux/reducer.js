@@ -1,6 +1,7 @@
 import {
   DELETE_PARTY_SUB_PARTY_SUCCESS,
   EDIT_PARTY_SUB_PARTY_SUCCESS,
+  GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS,
   GET_PARTY_SUB_PARTY_LIST_SUCCESS,
   POST_PARTY_SUB_PARTY_SUCCESS,
   UPDATE_PARTY_SUB_PARTY_SUCCESS,
@@ -12,7 +13,8 @@ const INIT_STATE = {
   postMsg: { Status: false },
   editData: [],
   updateMsg: { Status: false },
-  deleteMsg: { Status: false }
+  deleteMsg: { Status: false },
+  PartySubParty: []
 }
 
 const PartySubPartyReducer = (state = INIT_STATE, action) => {
@@ -24,20 +26,16 @@ const PartySubPartyReducer = (state = INIT_STATE, action) => {
         ...state,
         listData: action.payload,
       }
-
     case POST_PARTY_SUB_PARTY_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       }
-
-
     case EDIT_PARTY_SUB_PARTY_SUCCESS:
       return {
         ...state,
         editData: action.payload,
       }
-
     case UPDATE_PARTY_SUB_PARTY_SUCCESS:
       return {
         ...state,
@@ -48,7 +46,11 @@ const PartySubPartyReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       }
-
+    case GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS:
+      return {
+        ...state,
+        PartySubParty: action.payload,
+      }
     default:
       return state
   }

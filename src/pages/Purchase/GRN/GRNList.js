@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
-import { GRN_ADD_Mode_2, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
@@ -17,9 +15,10 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
-import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import {GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
+import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 
@@ -199,7 +198,7 @@ const GRNList = () => {
                             masterPath={url.GRN_ADD}
                             ButtonMsgLable={"GRN"}
                             deleteName={"FullGRNNumber"}
-                            pageMode={"List"}
+                            pageMode={mode.defaultList}
                             goButnFunc={goButtonHandler}
                         />
                         : null
