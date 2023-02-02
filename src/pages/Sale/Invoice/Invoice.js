@@ -677,11 +677,11 @@ const Invoice = (props) => {
 
         // }catch(e){}
         // if (formValid(state, setState)) {
-        debugger
+        // debugger
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: values.Customer.value,
-            Party: userParty(),
+            Customer: userParty(),
+            Party: values.Customer.value,
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
