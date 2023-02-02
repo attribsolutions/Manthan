@@ -79,7 +79,7 @@ const SaleOrder = (props) => {
     const {
         goBtnOrderdata,
         postMsg,
-        customer,
+        supplier,
         userAccess,
         orderType,
         updateMsg,
@@ -87,7 +87,7 @@ const SaleOrder = (props) => {
         pageField
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
-        customer: state.SupplierReducer.customer,
+        supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
         orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
@@ -197,7 +197,7 @@ const SaleOrder = (props) => {
         const page_Id = pageId.BIllOf_MATERIALS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetCustomer())
+        dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
         dispatch(getOrderType())
@@ -298,7 +298,7 @@ const SaleOrder = (props) => {
         setisOpen_TermsModal(true)
     };
 
-    const supplierOptions = customer.map((i) => ({
+    const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
