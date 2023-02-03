@@ -64,7 +64,7 @@ const PartySubParty = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [PartyData, setPartyData] = useState([]);
-    const [Division_dropdown_Select, setDivision_dropdown_Select] = useState("");
+    const [Division_dropdown_Select, setDivision_dropdown_Select] = useState([]);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [Party_dropdown_Select, setParty_dropdown_Select] = useState([]);
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -251,11 +251,17 @@ const PartySubParty = (props) => {
     /// Role Table Validation
     function AddPartyHandler() {
         debugger
+
         const find = PartyData.find((element) => {
             return element.value === Party_dropdown_Select.value
         });
-
-        if (Party_dropdown_Select.value === undefined) {
+        if (Division_dropdown_Select.value === undefined) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Division",
+            }));
+        }
+        else if (Party_dropdown_Select.value === undefined) {
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: "Select Party",
