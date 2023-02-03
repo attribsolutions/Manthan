@@ -17,7 +17,7 @@ import { deleteInwardId, deleteInwardIdSuccess } from "../../../store/Inter Bran
 import { currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import Select from "react-select";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { IB_Invoicelistfilters, get_IB_InvoiceListPage, InwardButtonId } from "../../../store/Inter Branch/ChallanRedux/action";
+import { IB_Invoicelistfilters, get_IB_InvoiceListPage, InwardButtonId } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const IB_Invoice_List = () => {
@@ -66,7 +66,7 @@ const IB_Invoice_List = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Challan Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"IB Invoice Count"} :0`))
         dispatch(GetCustomer())
         goButtonHandler(true)
 
