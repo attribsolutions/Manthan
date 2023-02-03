@@ -360,7 +360,7 @@ export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/$
 // General API
 export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST, data)// get api
 export const Post_General_API = (data) => post(url.GENERAL_API, data)// post api
-export const del_General_List_Api = (id) => del(`${url.GENERAL_API}/${id}`)// delete api
+export const delete_General_List_Api = (id) => del(`${url.GENERAL_API}/${id}`)// delete api
 export const edit_General_List_Api = (id) => get(`${url.GENERAL_API}/${id}`)// edit api
 export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${id}`, data)// update api
 export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
