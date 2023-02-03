@@ -40,7 +40,7 @@ export const postDemandSuccess = (data) => ({
 });
 
 //List Filters Demand
-export const demandlistfilters = filter => ({
+export const IBOrderListfilters = filter => ({
     type: DEMAND_LIST_FILTERS,
     payload: filter,
 })
@@ -59,12 +59,12 @@ export const postDivisionSuccess = (data) => ({
 });
 
 ///List page
-export const postDemandListPage = (filters) => ({
+export const postIBOrderListPage = (filters) => ({
     type: POST_DEMAND_LIST_PAGE,
     filters,
 });
 
-export const postDemandListPageSuccess = (data) => ({
+export const postIBOrderListPageSuccess = (data) => ({
     type: POST_DEMAND_LIST_PAGE_SUCCESS,
     payload: data,
 });

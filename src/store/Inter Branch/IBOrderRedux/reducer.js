@@ -19,10 +19,10 @@ const INIT_STATE = {
     postMsg: { Status: false },
     updateMsg: { Status: false },
     deleteMsg: { Status: false },
-    demandList: [],
-    demandlistFilter: { fromdate: currentDate, todate: currentDate,SupplierSelect: {value:'', label:"All"} },
+    IBOrderList: [],
+    IBOrderListFilter: { fromdate: currentDate, todate: currentDate,SupplierSelect: {value:'', label:"All"} },
 }
-const DemandReducer = (state = INIT_STATE, action) => {
+const IBOrderReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
         // GO Button 
@@ -50,14 +50,14 @@ const DemandReducer = (state = INIT_STATE, action) => {
         case DEMAND_LIST_FILTERS:
             return {
                 ...state,
-                demandlistFilter: action.payload,
+                IBOrderListFilter: action.payload,
             }
 
         // Listpage
         case POST_DEMAND_LIST_PAGE_SUCCESS:
             return {
                 ...state,
-                demandList: action.payload,
+                IBOrderList: action.payload,
             }
 
         case UPDATE_DEMAND_ID_FROM_DEMAND_PAGE_SUCCESS:
@@ -84,4 +84,4 @@ const DemandReducer = (state = INIT_STATE, action) => {
 
 }
 
-export default DemandReducer
+export default IBOrderReducer

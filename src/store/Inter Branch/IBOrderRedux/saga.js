@@ -1,7 +1,7 @@
 import { call, delay, put, takeEvery } from "redux-saga/effects";
 import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
-    DemandList_get_Filter_API,
+    IBOrderList_get_Filter_API,
     DemandPage_Delete_API,
     DemandPage_Edit_API,
     DemandPage_GoButton_API,
@@ -18,7 +18,7 @@ import {
     editDemandIdSuccess,
     deleteDemandIdSuccess,
     updateDemandIdSuccess,
-    postDemandListPageSuccess,
+    postIBOrderListPageSuccess,
 
 } from "./action";
 import {
@@ -130,37 +130,37 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
   }
   
   // List Page API
-  function* Post_DemandList_GenFunc({ filters }) {
+  function* Post_IBOrderList_GenFunc({ filters }) {
     yield put(SpinnerState(true))
   try {
 
-    const response = yield call(DemandList_get_Filter_API, filters);
+    const response = yield call(IBOrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
       i.DemandDate = i.DemandDate;
       var date = convertDatefunc(i.DemandDate)
       i.DemandDate = (date)
       return i
     })
-    yield put(postDemandListPageSuccess(newList));
+    yield put(postIBOrderListPageSuccess(newList));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message in DemandList ",
+      Status: true, Message: "500 Error Message in IBOrderList ",
     }));
   }
 }
   
 
-function* DemandSaga() {
+function* IBOrderSaga() {
     yield takeEvery(POST_GO_BUTTON_FOR_DEMAND, GoButton_Demand_genfun)
     yield takeEvery(POST_DEMAND, Post_Demand_Genfun)
     yield takeEvery(POST_DIVISION, post_Division_Genfun)
     yield takeEvery(EDIT_DEMAND_FOR_DEMAND_PAGE, editDemandGenFunc)
     yield takeEvery(DELETE_DEMAND_FOR_DEMAND_PAGE, DeleteDemand_GenFunc)
-    yield takeEvery(POST_DEMAND_LIST_PAGE, Post_DemandList_GenFunc)
+    yield takeEvery(POST_DEMAND_LIST_PAGE, Post_IBOrderList_GenFunc)
     yield takeEvery(UPDATE_DEMAND_ID_FROM_DEMAND_PAGE, UpdateDemand_ID_GenFunc)
 }
 
-export default DemandSaga;
+export default IBOrderSaga;

@@ -51,7 +51,7 @@ import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
 import ProductionSaga from "./Purchase/ProductionRedux/saga"
 import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 import InvoiceSaga from "./Sales/Invoice/saga"
-import DemandSaga from "./Inter Branch/DemandRedux/saga"
+import IBOrderSaga from "./Inter Branch/IBOrderRedux/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
 import ChallanSaga from "./Inter Branch/IB_Invoice_Redux/saga"
 
@@ -102,7 +102,7 @@ export default function* rootSaga() {
     fork(WorkOrderSaga),
     fork(MaterialIssueSaga),
     fork(ProductionSaga),
-    fork(DemandSaga),
+    fork(IBOrderSaga),
     fork(InvoiceSaga),
     fork(InwardSaga),
     fork(ChallanSaga)

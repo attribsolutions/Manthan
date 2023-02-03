@@ -33,7 +33,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { DEMAND_LIST } from "../../../routes/route_url";
+import { IB_ORDER_LIST } from "../../../routes/route_url";
 import {
     editDemandIdSuccess,
     postDemand,
@@ -43,11 +43,11 @@ import {
     postGoButtonForDemandSuccess,
     updateDemandId,
     updateDemandIdSuccess
-} from "../../../store/Inter Branch/DemandRedux/action";
+} from "../../../store/Inter Branch/IBOrderRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 
-const Demand = (props) => {
+const IBOrder = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -79,16 +79,16 @@ const Demand = (props) => {
         Supplier,
         GoButton,
     } = useSelector((state) => ({
-        postMsg: state.DemandReducer.postMsg,
-        updateMsg: state.DemandReducer.updateMsg,
+        postMsg: state.IBOrderReducer.postMsg,
+        updateMsg: state.IBOrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Supplier: state.DemandReducer.Supplier,
-        GoButton: state.DemandReducer.GoButton,
+        Supplier: state.IBOrderReducer.Supplier,
+        GoButton: state.IBOrderReducer.GoButton,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.DEMAND
+        const page_Id = pageId.IB_ORDER
         dispatch(postGoButtonForDemandSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -198,7 +198,7 @@ const Demand = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.DEMAND_LIST,
+                    RedirectPath: url.IB_ORDER_LIST,
                 }))
             }
         }
@@ -223,7 +223,7 @@ const Demand = (props) => {
             saveDissable(false);//save Button Is enable function
             // Comment = ''
             history.push({
-                pathname: DEMAND_LIST,
+                pathname: IB_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
@@ -353,38 +353,38 @@ const Demand = (props) => {
             }
         },
 
-        {//------------- Rate column ----------------------------------
-            text: "Rate/Unit",
-            dataField: "",
-            formatter: (value, row, k) => {
+        // {//------------- Rate column ----------------------------------
+        //     text: "Rate/Unit",
+        //     dataField: "",
+        //     formatter: (value, row, k) => {
 
-                return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-                            id={`Ratey${k}`}
-                            defaultValue={row.Rate}
-                            autoComplete="off"
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
-                                } else {
-                                    document.getElementById(`Ratey${k}`).value = row.Rate
-                                }
-                            }}
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
-                        />
-                    </span>
-                )
-            },
+        //         return (
+        //             <span className="text-right" >
+        //                 <Input
+        //                     type="text"
+        //                     id={`Ratey${k}`}
+        //                     defaultValue={row.Rate}
+        //                     autoComplete="off"
+        //                     className="text-end"
+        //                     onChange={(e) => {
+        //                         const val = e.target.value
+        //                         let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+        //                         if ((isnum) || (val === '')) {
+        //                             val_onChange(val, row, "rate")
+        //                         } else {
+        //                             document.getElementById(`Ratey${k}`).value = row.Rate
+        //                         }
+        //                     }}
+        //                     onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+        //                 />
+        //             </span>
+        //         )
+        //     },
 
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
+        //     headerStyle: (colum, colIndex) => {
+        //         return { width: '140px', textAlign: 'center' };
+        //     }
+        // },
     ];
 
     const defaultSorted = [
@@ -478,7 +478,7 @@ const Demand = (props) => {
             sum = sum + amt
         });
         setDemandAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbShowCountlabel(`${"InterBranchOrder Amount"} :${sum.toFixed(2)}`))
     };
 
     const SaveHandler = (event) => {
@@ -745,7 +745,7 @@ const Demand = (props) => {
                         {
                             ((demandItemTable.length > 0)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                 <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                    module={"Demand"}
+                                    module={"IBOrder"}
                                     onClick={SaveHandler}
                                 />
                             </div>
@@ -763,4 +763,4 @@ const Demand = (props) => {
     }
 };
 
-export default Demand
+export default IBOrder

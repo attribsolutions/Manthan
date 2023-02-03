@@ -7,14 +7,14 @@ import {
     deleteDemandId,
     deleteDemandIdSuccess,
     editDemandId,
-    postDemandListPage,
+    postIBOrderListPage,
     updateDemandIdSuccess,
-    demandlistfilters,
+    IBOrderListfilters,
     postDivision,
     postGoButtonForDemand
-} from "../../../store/Inter Branch/DemandRedux/action";
+} from "../../../store/Inter Branch/IBOrderRedux/action";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import Demand from "./Demand";
+import IBOrder from "./IBOrder";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -27,35 +27,35 @@ import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCom
 
 
 
-const DemandList = () => {
+const IBOrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.DEMAND_LIST)
+    const [pageMode, setpageMode] = useState(url.IB_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [demanddate, setdemanddate] = useState(currentDate)
 
     const reducers = useSelector(
 
         (state) => ({
-            Supplier: state.DemandReducer.Supplier,
-            tableList: state.DemandReducer.demandList,
-            deleteMsg: state.DemandReducer.deleteMsg,
-            updateMsg: state.DemandReducer.updateMsg,
-            postMsg: state.DemandReducer.postMsg,
-            editData: state.DemandReducer.editData,
-            demandlistFilter: state.DemandReducer.demandlistFilter,
+            Supplier: state.IBOrderReducer.Supplier,
+             tableList: state.IBOrderReducer.IBOrderList,
+            deleteMsg: state.IBOrderReducer.deleteMsg,
+            updateMsg: state.IBOrderReducer.updateMsg,
+            postMsg: state.IBOrderReducer.postMsg,
+            editData: state.IBOrderReducer.editData,
+            IBOrderListFilter: state.IBOrderReducer.IBOrderListFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            GoButton: state.DemandReducer.GoButton,
+            GoButton: state.IBOrderReducer.GoButton,
         })
     );
 
-    const { userAccess, pageField, Supplier, tableList, demandlistFilter } = reducers;
-    const { fromdate, todate, SupplierSelect } = demandlistFilter;
-    const page_Id = (pageId.DEMAND_LIST);
+    const { userAccess, pageField, Supplier, tableList, IBOrderListFilter } = reducers;
+    const { fromdate, todate, SupplierSelect } = IBOrderListFilter;
+    const page_Id = (pageId.IB_ORDER_LIST);
 
     const fileds = {
 
@@ -68,7 +68,7 @@ const DemandList = () => {
     const values = { ...state.values }
 
     const action = {
-        getList: postDemandListPage,
+        getList: postIBOrderListPage,
         deleteId: deleteDemandId,
         postSucc: postMessage,
         updateSucc: updateDemandIdSuccess,
@@ -80,7 +80,7 @@ const DemandList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Demand Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"IB Order Count"} :0`))
         goButtonHandler(true)
     }, []);
 
@@ -154,25 +154,25 @@ const DemandList = () => {
             Customer: userParty(),
         })
 
-        dispatch(postDemandListPage(jsonBody))
+        dispatch(postIBOrderListPage(jsonBody))
     };
 
     function FromdateOnchange(e, date) {
-        let newObj = { ...demandlistFilter }
+        let newObj = { ...IBOrderListFilter }
         newObj.fromdate = date
-        dispatch(demandlistfilters(newObj))
+        dispatch(IBOrderListfilters(newObj))
     }
 
     function TodateOnchange(e, date) {
-        let newObj = { ...demandlistFilter }
+        let newObj = { ...IBOrderListFilter }
         newObj.todate = date
-        dispatch(demandlistfilters(newObj))
+        dispatch(IBOrderListfilters(newObj))
     }
 
     function SupplierOnchange(e) {
-        let newObj = { ...demandlistFilter }
+        let newObj = { ...IBOrderListFilter }
         newObj.divisionSelect = e
-        dispatch(demandlistfilters(newObj))
+        dispatch(IBOrderListfilters(newObj))
     }
 
     return (
@@ -253,15 +253,15 @@ const DemandList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Demand}
-                            masterPath={url.DEMAND}
-                            ButtonMsgLable={"Demand"}
+                            MasterModal={IBOrder}
+                            masterPath={url.IB_ORDER}
+                            ButtonMsgLable={"IBOrder"}
                             deleteName={"id"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.DEMAND_LIST ? false : true}
+                            makeBtnShow={pageMode === url.IB_ORDER_LIST ? false : true}
                             goButnFunc={goButtonHandler}
                             editBodyfunc={editBodyfunc}
-                            filters={demandlistFilter}
+                            filters={IBOrderListFilter}
                         />
                         : null
                 }
@@ -272,4 +272,4 @@ const DemandList = () => {
     )
 }
 
-export default DemandList;
+export default IBOrderList;
