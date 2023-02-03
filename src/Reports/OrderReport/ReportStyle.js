@@ -601,8 +601,8 @@ export const pageFooter = (doc, data) => {
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(9)
     doc.text(`${terms[0].TermsAndCondition}`, 35, 793, "justify")
-    doc.text(`${terms[1].TermsAndCondition}`, 35, 803, "justify")
-    doc.text(`${terms[2].TermsAndCondition}`, 35, 813, "justify")
+    // doc.text(`${terms[1].TermsAndCondition}`, 35, 803, "justify")
+    // doc.text(`${terms[2].TermsAndCondition}`, 35, 813, "justify")
 
 
 
