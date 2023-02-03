@@ -592,7 +592,7 @@ const BreadcrumbNew = (props) => {
                     type="checkbox"
                     id={`chckbox${key}-${index.id}`}
                     name={index}
-                    defaultValue={(downBtnData[0][`$defSelect${index}`]) ? true : false}
+                    // defaultValue={(downBtnData[0][`$defSelect${index}`]) ? true : false}
                   />&nbsp;&nbsp;&nbsp;
                   <label className="form-label text-black"> {index} </label>
                 </div>
