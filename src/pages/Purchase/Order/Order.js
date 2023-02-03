@@ -42,13 +42,15 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
-
+import useConfirm from "../../../Demo/useConfirm"
 let editVal = {}
 
 const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const {confirm} = useConfirm();
+   
 
     const fileds = {
         id: "",
@@ -288,10 +290,13 @@ const Order = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
-    function assignItem_onClick() {
-        
-        dispatch(goButtonForOrderAddSuccess([]))
-        setisOpen_TermsModal(true)
+   async function assignItem_onClick() {
+        const isConfirmed = await confirm('Do you confirm your choice?');
+        if(isConfirmed){
+            dispatch(goButtonForOrderAddSuccess([]))
+            setisOpen_TermsModal(true)
+        }
+      
     };
 
     const supplierOptions = vender.map((i) => ({

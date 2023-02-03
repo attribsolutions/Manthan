@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 // import ConfirmContext from '../store/ConfirmContext';
-import {HIDE_CONFIRM, SHOW_CONFIRM} from "./reducer";
+import {HIDE_CONFIRM, SHOW_CONFIRM} from "./Reducer";
+import ConfirmContext from "./ConfirmContext";
 
-const ConfirmContext = React.createContext();
 let resolveCallback;
 function useConfirm() {
     const [confirmState, dispatch] = useContext(ConfirmContext);
