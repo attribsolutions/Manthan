@@ -135,5 +135,5 @@ export const Demand = url.DEMAND_LIST
 export const InwardList = url.INWARD
 export const Inward = url.INWARD_LIST
 
-export const ChallanList = url.CHALLAN
-export const Challan = url.CHALLAN_LIST
+export const IB_Invoice_List = url.IB_INVOICE
+export const IB_Invoice = url.IB_INVOICE_LIST
