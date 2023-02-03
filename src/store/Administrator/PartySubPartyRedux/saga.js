@@ -34,7 +34,6 @@ function* getListGenFunc() {
     yield put(SpinnerState(true))
     try {
         const response = yield call(PartySubParty_Get_API);
-
         // const data = response.Data.map((index) => ({
         //     StateId: index.State.id,
         //     State: index.State.Name,
@@ -58,9 +57,7 @@ function* getListGenFunc() {
         //     MkUpMkDn: index.MkUpMkDn,
         //     isActive: index.isActive,
         //     id: index.id
-
         // }));
-
         // yield put(getPartySubPartylistSuccess(data));
         // console.log("response in saga", response)
         yield put(getPartySubPartylistSuccess(response.Data));
