@@ -17,30 +17,30 @@ import { deleteInwardId, deleteInwardIdSuccess } from "../../../store/Inter Bran
 import { currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import Select from "react-select";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { Challanlistfilters, getChallanListPage, InwardButtonId } from "../../../store/Inter Branch/ChallanRedux/action";
+import { IB_Invoicelistfilters, get_IB_InvoiceListPage, InwardButtonId } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 
-const ChallanList = () => {
+const IB_Invoice_List = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(url.CHALLAN_LIST)
+    const [pageMode, setpageMode] = useState(url.IB_INVOICE_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [challanlistFilter, setChallanlistFilter] = useState({
+    const [IB_InvoiceFilter, setIB_InvoiceFilter] = useState({
         todate: currentDate, fromdate: currentDate, CustomerSelect: { value: "", label: "All" }
     });
 
     const reducers = useSelector(
         (state) => ({
-            tableList: state.ChallanReducer.ChallanList,
+            tableList: state.ChallanReducer.IB_Invoice,
             deleteMsg: state.InwardReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
-            ChallanlistFilter: state.ChallanReducer.ChallanlistFilter,
+            IB_InvoiceFilter: state.ChallanReducer.IB_InvoiceFilter,
             customer: state.SupplierReducer.customer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
@@ -48,12 +48,12 @@ const ChallanList = () => {
         })
     );
     const { userAccess, pageField, customer, } = reducers;
-    const { fromdate, todate, CustomerSelect } = challanlistFilter;
+    const { fromdate, todate, CustomerSelect } = IB_InvoiceFilter;
 
-    const page_Id = pageId.CHALLAN_LIST
+    const page_Id = pageId.IB_INVOICE_LIST
 
     const action = {
-        getList: getChallanListPage,
+        getList: get_IB_InvoiceListPage,
         editId: editBOMList,
         deleteId: deleteInwardId,
         postSucc: postMessage,
@@ -66,7 +66,7 @@ const ChallanList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Challan Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"IB Invoice Count"} :0`))
         dispatch(GetCustomer())
         goButtonHandler(true)
 
@@ -96,33 +96,33 @@ const ChallanList = () => {
     const goButtonHandler = () => {
 
         const jsonBody = JSON.stringify({
-            FromDate:fromdate,
-            ToDate:todate,
+            FromDate: fromdate,
+            ToDate: todate,
             Party: userParty(),
             Customer: CustomerSelect.value,
         });
-        dispatch(getChallanListPage(jsonBody));
+        dispatch(get_IB_InvoiceListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...challanlistFilter }
+        let newObj = { ...IB_InvoiceFilter }
         newObj.fromdate = date
-        // dispatch(Challanlistfilters(newObj))
-        setChallanlistFilter(newObj)
+        // dispatch(IB_Invoicelistfilters(newObj))
+        setIB_InvoiceFilter(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...challanlistFilter }
+        let newObj = { ...IB_InvoiceFilter }
         newObj.todate = date
-        // dispatch(Challanlistfilters(newObj))
-        setChallanlistFilter(newObj)
+        // dispatch(IB_Invoicelistfilters(newObj))
+        setIB_InvoiceFilter(newObj)
     }
 
     function CustomerOnchange(e) {
         debugger
-        let newObj = { ...challanlistFilter }
+        let newObj = { ...IB_InvoiceFilter }
         newObj.CustomerSelect = e
-        setChallanlistFilter(newObj)
+        setIB_InvoiceFilter(newObj)
     }
 
     const InwardMakeBtnFunc = (list = []) => {
@@ -217,9 +217,9 @@ const ChallanList = () => {
                             deleteName={"FullIBChallanNumber"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            filters={challanlistFilter}
+                            filters={IB_InvoiceFilter}
                             InwardMakeBtnFunc={InwardMakeBtnFunc}
-                            InwardMakeBtnShow={pageMode === url.CHALLAN_LIST ? true : false}
+                            InwardMakeBtnShow={pageMode === url.IB_INVOICE_LIST ? true : false}
                             InwardMakeBtnName={"Make Inward"}
                         />
                         : null
@@ -229,4 +229,4 @@ const ChallanList = () => {
     )
 }
 
-export default ChallanList;
+export default IB_Invoice_List;
