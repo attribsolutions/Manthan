@@ -53,7 +53,7 @@ import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 import InvoiceSaga from "./Sales/Invoice/saga"
 import DemandSaga from "./Inter Branch/DemandRedux/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
-import ChallanSaga from "./Inter Branch/ChallanRedux/saga"
+import ChallanSaga from "./Inter Branch/IB_Invoice_Redux/saga"
 
 export default function* rootSaga() {
   yield all([

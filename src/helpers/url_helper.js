@@ -177,7 +177,7 @@ export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
 export const ORDER_PAGE_API = "Orders"
 export const ORDER_Edit_API = "OrderEdit"
-export const ORDER_TYPE_API ='/POType'
+export const ORDER_TYPE_API = '/POType'
 
 // GRN
 export const GRN_MAKE_API = "/MakeOrdersGrn"
@@ -193,8 +193,8 @@ export const BOM_LiST = "/BomFilter"
 // Work Order
 export const GO_BUTTON_POST_API_FOR_WORKORDER = '/BomDetails'
 export const POST_WORK_ORDER_API = '/WorkOrder'
-export const WORK_ORDER_LIST='/WorkOrderFilter'// ALL GET
-export const WORK_ORDER_LIST_API='/WorkOrder' //Single gate and delete
+export const WORK_ORDER_LIST = '/WorkOrderFilter'// ALL GET
+export const WORK_ORDER_LIST_API = '/WorkOrder' //Single gate and delete
 
 // Material Issue
 export const GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE = '/WorkOrderDetails'
@@ -202,10 +202,10 @@ export const POST_API_FOR_MATERIAL_ISSUE = '/MaterialIssue'
 export const POST_API_FOR_MATERIAL_ISSUE_LIST = '/MaterialIssueFilter'
 
 // Production master
-export const PRODUCTION_POST_API ='/Production'
-export const PRODUCTION_LIST_FILTER ='/ProductionFilter'
-export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
-export const PRODUCTION_UNIT_DROPDOWN_API ='/MCUnitDetails'
+export const PRODUCTION_POST_API = '/Production'
+export const PRODUCTION_LIST_FILTER = '/ProductionFilter'
+export const PRODUCTION_MAKE_API = '/MaterialIssueforProduction'
+export const PRODUCTION_UNIT_DROPDOWN_API = '/MCUnitDetails'
 
 // Invoice
 export const INVOICE_GO_BUTTON_POST_API = '/GetOrderDetails'
@@ -213,16 +213,16 @@ export const INVOICE_POST_API = '/Invoice'
 export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
 //********************************** Inter Branch  **************************************/
-// Demand
+// Inter Branch Order
 export const GO_BUTTON_POST_API_FOR_DEMAND = '/InterBranchesItems'
 export const DIVISION_DROPDOWN = '/InterBranches'
-export const POST_API_FOR_DEMAND = '/Demands'
-export const DEMAND_LiST_BY_FILTERS ='/DemandsFilter'
+export const POST_API_FOR_DEMAND = '/InterBranchesOrder'
+export const DEMAND_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 
 // Inward
 export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//List Api
 
-// Challan
+//  Inter Branch Invoice
 export const IB_InvoiceList_API = '/BranchInvoiceFilter'//List Api
-export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward Button Api Api
+export const INWARD_BUTTON_API = '/InterBrancheOrderDetails'//Inward Button Api Api

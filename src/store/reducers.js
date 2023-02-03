@@ -55,7 +55,7 @@ import ProductionReducer from "./Purchase/ProductionRedux/reducer"
 import InvoiceReducer from "./Sales/Invoice/reducer"
 import DemandReducer from "./Inter Branch/DemandRedux/reducer"
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
-import ChallanReducer from "./Inter Branch/ChallanRedux/reducer"
+import ChallanReducer from "./Inter Branch/IB_Invoice_Redux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
