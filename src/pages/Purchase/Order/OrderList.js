@@ -165,14 +165,14 @@ const OrderList = () => {
         }
     }
 
-    function editBodyfunc(rowData) {
+    function editBodyfunc(rowData, btnMode) {
         const jsonBody = JSON.stringify({
             Party: rowData.SupplierID,
             Customer: rowData.CustomerID,
             EffectiveDate: rowData.preOrderDate,
             OrderID: rowData.id
         })
-        dispatch(editOrderId(jsonBody, mode.edit));
+        dispatch(editOrderId(jsonBody, btnMode));
     }
 
     function downBtnFunc(row) {
