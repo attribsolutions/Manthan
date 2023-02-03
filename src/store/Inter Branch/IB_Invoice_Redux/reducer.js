@@ -1,25 +1,25 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { CHALLAN_LIST_FILTERS, GET_CHALLAN_LIST_PAGE_SUCCESS, INWARD_BUTTON_ID_SUCCESS } from "./actionType"
+import { IB_INVOICE_LIST_FILTERS, GET_IB_INVOICE_LIST_PAGE_SUCCESS, INWARD_BUTTON_ID_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
-    ChallanList: [],
-    ChallanlistFilter: { fromdate: currentDate, todate: currentDate, CustomerSelect: { value: "", label: " All" } },
+    IB_Invoice: [],
+    IB_InvoiceFilter: { fromdate: currentDate, todate: currentDate, CustomerSelect: { value: "", label: " All" } },
     InwardData: []
 }
 
 const ChallanReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
-        case CHALLAN_LIST_FILTERS:
+        case IB_INVOICE_LIST_FILTERS:
             return {
                 ...state,
-                ChallanlistFilter: action.payload,
+                IB_InvoiceFilter: action.payload,
             }
 
-        case GET_CHALLAN_LIST_PAGE_SUCCESS:
+        case GET_IB_INVOICE_LIST_PAGE_SUCCESS:
             return {
                 ...state,
-                ChallanList: action.payload,
+                IB_Invoice: action.payload,
             }
         // edit api
         case INWARD_BUTTON_ID_SUCCESS:

@@ -4,8 +4,7 @@ import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
-    doc.line(570 ,10,30, 10);//horizontal line (Top)
-    // doc.setDrawColor(255, 0, 0);
+    doc.line(570, 10, 30, 10);//horizontal line (Top)
     doc.line(30, 815, 30, 10);//vertical line (left)
     doc.line(570, 815, 570, 10);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
@@ -15,18 +14,17 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    doc.text('Tax Invoice', 200, 40,)
+    doc.text('Tax Invoice', 200, 40,) //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 75)
-    doc.text('Billed to', 280, 75)
+    doc.text("Billed by", 80, 75)  //bill by 
+    doc.text('Billed to', 280, 75) //billed to
     doc.text('Details of Transport', 440, 75)
 
 
-    // doc.text(`GSTIN:${data.Total.TotalAmount}`, 570,95)
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(570, 10, 30, 10);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
@@ -35,17 +33,14 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 789, 570, 10);//vertical left 2
     doc.line(408, 200, 408, 10);//vertical right 1
     doc.line(220, 200, 220, 60);//vertical right 2
-    // doc.line(570, 815, 30, 815);//horizontal line buttom 1
-    // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
-    var options3 = {
 
+    var options3 = {
         margin: {
             top: 45, left: 35, right: 35,// bottom:100 
         },
         showHead: 'always',
         theme: 'plain',
         styles: {
-            // overflowColumns: false ,
             overflow: 'linebreak',
             fontSize: 8,
             height: 0,
@@ -79,22 +74,7 @@ export const reportHeder1 = (doc, data) => {
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
-export const ReportHederRows = (doc, data) => {
-    // doc.line(285, 15, 30, 15);//horizontal line 1
-    // doc.line(285, 45, 30, 45);//horizontal bottom
-    // doc.line(30, 45, 30, 15);//vertical left
-    // doc.line(285, 45, 285, 15);//vertical right 
-    // doc.line(285, 15, 573, 15);//horizontal line 1
-    // doc.line(285, 45, 575, 45);//horizontal bottom
-    // doc.line(285, 45, 285, 15);//vertical left
-    // doc.line(575, 45, 575, 15);//vertical right 
-    // doc.setFont('Tahoma', 'Normal')
-    // doc.setFontSize(9)
-    // doc.text(`GSTIN: ${data.GSTIN}`, 33, 25)
-    // doc.text('PAN:AAAFC5288N', 33, 35)
-    // doc.text(`Invoice Number:${data.InvoiceID}`, 288, 25)
-    // doc.text(`Invoice Date: ${data.InvoiceDate}`, 288, 35)
-}
+
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
@@ -111,8 +91,6 @@ export const reportHeder3 = (doc, data) => {
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
     doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
 }
-
-
 // original
 
 export const reportFooter = (doc, data) => {
@@ -122,7 +100,6 @@ export const reportFooter = (doc, data) => {
         },
         theme: 'grid',
         headerStyles: {
-            //columnWidth: 'wrap',
             cellPadding: 4,
             lineWidth: 1,
             valign: 'top',
@@ -130,8 +107,6 @@ export const reportFooter = (doc, data) => {
             halign: 'left',    //'center' or 'right'
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
-            // textColor: [255, 255, 255], //White     
-            // fillColor: "white"
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -147,48 +122,31 @@ export const reportFooter = (doc, data) => {
             0: {
                 valign: "top",
                 columnWidth: 140,
-                // fontStyle: 'bold',
             },
             1: {
                 columnWidth: 50,
-                // fontStyle: 'bold',
                 halign: 'right',
-                // fontStyle: 'bold',
-                //  height:50,
             },
             2: {
                 columnWidth: 40,
-                // fontStyle: 'bold',
-                // fontStyle: 'bold',
                 halign: 'center',
             },
             3: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
                 halign: 'center',
             },
             4: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
                 halign: 'center',
             },
             5: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
                 halign: 'center',
             },
             6: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
                 halign: 'center',
             },
             7: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
                 halign: 'center',
             },
             8: {
-                // columnWidth: 40,
                 fontStyle: 'bold',
                 halign: 'center',
             },
@@ -290,14 +248,6 @@ export const reportFooter = (doc, data) => {
         },
         startY: 745,
     };
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data), optionsTable3);
-    // doc.autoTable(table.ReportFotterColumns4, table.ReportFooterRow4(data), optionsTable4);
-    // let finalY = doc.previousAutoTable.finalY;
-
-    // if (finalY < 745) {
-    //     doc.line(35, finalY, 35, 815);//horizontal line 3
-    //     doc.line(561, finalY, 561, 815);//horizontal line 3
-    // }
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
@@ -319,11 +269,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0.].styles.fontStyle = "bold"
                 data1.row.cells[4.].styles.fontStyle = "bold"
                 data1.row.cells[6.].styles.fontStyle = "bold"
-
-                
-                // data1.row.cells[3].colSpan=4
-                // .colSpan = 3;
-                //description above refer to the column of the table on the lastrow
             }
         },
         margin: {
@@ -347,7 +292,6 @@ export const tableBody = (doc, data) => {
             cellPadding: 3,
             fontSize: 7,
             columnWidth: 'wrap',
-            // fontStyle: 'bold',
             lineColor: [0, 0, 0],
         },
         columnStyles: {
@@ -387,19 +331,6 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
         },
-
-
-
-        // drawHeaderCell: function (cell, data) {
-        //     if (cell.raw === 'Total GST') {//paint.Name header red
-        //         cell.styles.fontSize = 20;
-        //         cell.styles.textColor = [255, 0, 0];
-        //     } else {
-        //         cell.styles.textColor = 255;
-        //         cell.styles.fontSize = 10;
-        //     }
-        // },
-
 
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
@@ -540,12 +471,9 @@ export const pageFooter = (doc, data) => {
     doc.line(570, 680, 30, 680);//horizontal line Footer 3
     doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
     doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
-
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
-
     doc.setFont('Tahoma')
     doc.line(460, 775, 30, 775);//horizontal line (Bottom)
-    debugger
     const a = data.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
@@ -561,31 +489,27 @@ export const pageFooter = (doc, data) => {
 
     });
 
-     const TotalGST = totalCGST +totalSGST;
+    const TotalGST = totalCGST + totalSGST;
 
     doc.setFontSize(8)
 
-    doc.text(`CGST:`,434, 690,)
-    doc.text(`${totalCGST.toFixed(2)}`,560, 690,'right')
+    doc.text(`CGST:`, 434, 690,)
+    doc.text(`${totalCGST.toFixed(2)}`, 560, 690, 'right')
 
     doc.text(`SGST:`, 434, 700,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 700,'right')
+    doc.text(`${totalSGST.toFixed(2)}`, 560, 700, 'right')
 
     doc.text(`TotalGST:`, 434, 710,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 710,'right')
+    doc.text(` ${TotalGST.toFixed(2)}`, 560, 710, 'right')
 
-    doc.text(`BasicAmount:`, 434, 720, )
+    doc.text(`BasicAmount:`, 434, 720,)
     doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 720, 'right')
-    
 
     doc.setFont(undefined, 'Normal')
-
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 434, 740,)
-    doc.text(`${data.GrandTotal}`, 560, 740,'right')
-
-
+    doc.text(`${data.GrandTotal}`, 560, 740, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -604,11 +528,9 @@ export const pageFooter = (doc, data) => {
    quantity whitch it/these purports to be `, 34, 760,)
     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
-    // doc.text(`INR NO : 12547yfewyrt5675w6wer78sdf687s6d7f8676yse87fugh43 `, 34, 740)
     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
-
+debugger
     let finalY = doc.previousAutoTable.finalY;
-
     if (finalY > 675) {
         pageBorder(doc)
         reportFooter(doc, data)
