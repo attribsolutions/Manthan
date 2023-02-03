@@ -41,7 +41,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 const PartyItems = (props) => {
-    debugger
+    
     const history = useHistory()
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState(mode.defaultsave);

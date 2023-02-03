@@ -507,16 +507,20 @@ const BreadcrumbNew = (props) => {
       }
     }
   }, [downBtnData])
+
   const DownloadInExcelButtonHanler = (event, values) => {
-    const exldata = breadcrum.excelData
-    var list = []
-    var object1 = {}
+    // const exldata = downBtnData
+    let list = []
+    let object1 = {}
     var selectedValues = Object.keys(values);
     var filteredValues = selectedValues.filter(function (selectedValues) {
       return values[selectedValues]
     });
-    exldata.map((index1) => {
+    // debugger
+    downBtnData.map((index1) => {
+      // debugger
       filteredValues.map((index2) => {
+        // debugger
         if (index1.hasOwnProperty(index2)) {
           object1[index2] = index1[index2]
         }
@@ -524,7 +528,8 @@ const BreadcrumbNew = (props) => {
       list.push(object1)
       object1 = {}
     })
-    const worksheet = XLSX.utils.json_to_sheet(exldata);
+    // debugger
+    const worksheet = XLSX.utils.json_to_sheet(list);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, "Excel File.xlsx");
@@ -585,7 +590,7 @@ const BreadcrumbNew = (props) => {
                   <AvInput
                     className=" text-black checkbox-border-red"
                     type="checkbox"
-                    id={`chckbox${key}`}
+                    id={`chckbox${key}-${index.id}`}
                     name={index}
                     defaultValue={(downBtnData[0][`$defSelect${index}`]) ? true : false}
                   />&nbsp;&nbsp;&nbsp;
@@ -681,7 +686,7 @@ const BreadcrumbNew = (props) => {
         </div>
         <div className="modal-body">
           <AvForm onValidSubmit={(event, values) => { DownloadInExcelButtonHanler(event, values); }}>
-            <div className="form-check">
+            {/* <div className="form-check">
               <input
                 id="checkAll"
                 type="checkbox"
@@ -689,7 +694,7 @@ const BreadcrumbNew = (props) => {
                 onChange={excelCheckBoxOnChange}
               />
               <label className="form-label text-black">All Select</label>
-            </div>
+            </div> */}
             <ExcelCheckBox />
 
             <div className="modal-body">

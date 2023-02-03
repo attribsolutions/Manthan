@@ -92,6 +92,18 @@ const PurchaseListPage = (props) => {
 
     const fileds = pageField.PageFieldMaster;
 
+    
+    useEffect(() => {
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+        if (!(userAcc === undefined)) {
+            setUserAccState(userAcc)
+        }
+    }, [userAccess])
+
     useEffect(() => {
 
         let tableArr = props.reducers.tableList;
@@ -120,20 +132,10 @@ const PurchaseListPage = (props) => {
             listObj = {}
         })
 
-        // dispatch(BreadcrumbDownBtndata(downList))
+        dispatch(BreadcrumbDownBtndata(downList))
 
     }, [props.reducers.tableList])
 
-    useEffect(() => {
-
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
