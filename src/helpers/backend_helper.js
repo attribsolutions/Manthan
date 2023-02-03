@@ -333,7 +333,7 @@ export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
 
 // PartySubParty API
-export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY}`)// get list api
+export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY_LIST}`)// get list api
 export const PartySubParty_Post_API = (data) => post(url.PARTY_SUB_PARTY, data)// post api
 export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id}`)// delete api
 export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api

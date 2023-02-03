@@ -21,7 +21,8 @@ import {
     postPartySubPartySuccess,
     updatePartySubParty,
     updatePartySubPartySuccess,
-    getPartySubParty_For_party_dropdown
+    getPartySubParty_For_party_dropdown,
+    getPartySubParty_For_party_dropdownSuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
     AlertState,
@@ -55,7 +56,7 @@ const PartySubParty = (props) => {
 
     const fileds = {
         id: "",
-        Party: "",
+        PartyName: "",
         Division: "",
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -63,10 +64,9 @@ const PartySubParty = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [PartyData, setPartyData] = useState([]);
-    console.log("PartyData", PartyData)
     const [Division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
-    const [Party_dropdown_Select, setParty_dropdown_Select] = useState("");
+    const [Party_dropdown_Select, setParty_dropdown_Select] = useState([]);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -85,7 +85,6 @@ const PartySubParty = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             PartySubParty: state.PartySubPartyReducer.PartySubParty,
         }));
-
 
     useEffect(() => {
         const page_Id = pageId.PARTY_SUB_PARTY
@@ -219,7 +218,6 @@ const PartySubParty = (props) => {
         }
     }, [pageField])
 
-
     const DivisionValues = Divisions.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -234,13 +232,16 @@ const PartySubParty = (props) => {
         value: Data.SubParty,
         label: Data.SubPartyName
     }));
-    console.log("Values", PartySubPartyValues)
+
+    useEffect(() => {
+        if (Division_dropdown_Select.value > 0) {
+            setPartyData(PartySubPartyValues)
+        }
+    }, [PartySubParty]);
 
     function handllerDivision(e) {
-        debugger
-        setDivision_dropdown_Select(e)
         dispatch(getPartySubParty_For_party_dropdown(e.value));
-        setPartyData(PartySubPartyValues)
+        setDivision_dropdown_Select(e)
     }
 
     function handllerParty(e) {
@@ -251,18 +252,20 @@ const PartySubParty = (props) => {
     function AddPartyHandler() {
         debugger
         const find = PartyData.find((element) => {
-            return element.value === Party_dropdown_Select.values
+            return element.value === Party_dropdown_Select.value
         });
 
-        if (Party_dropdown_Select.length <= 0) {
+        if (Party_dropdown_Select.value === undefined) {
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: "Select One Role",
+                Message: "Select Party",
             }));
         }
+
         else if (find === undefined) {
             setPartyData([...PartyData, Party_dropdown_Select]);
         }
+
         else {
             dispatch(AlertState({
                 Type: 4, Status: true,
@@ -283,7 +286,7 @@ const PartySubParty = (props) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const arr = PartyData.map(i => ({
-                Party: values.Division.value,
+                Party: Division_dropdown_Select.value,
                 SubParty: i.value,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
@@ -331,7 +334,7 @@ const PartySubParty = (props) => {
                                                                         <Col sm={12}>
                                                                             <Select
                                                                                 name="Division"
-                                                                                value={values.Division}
+                                                                                value={Division_dropdown_Select}
                                                                                 isSearchable={true}
                                                                                 className="react-dropdown"
                                                                                 classNamePrefix="dropdown"
@@ -353,10 +356,10 @@ const PartySubParty = (props) => {
                                                         <Row>
                                                             <Col sm="4">
                                                                 <FormGroup>
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.PartyName}</Label>
                                                                     <Select
-                                                                        name="Party"
-                                                                        value={values.Party}
+                                                                        name="PartyName"
+                                                                        value={values.PartyName}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
@@ -366,9 +369,9 @@ const PartySubParty = (props) => {
                                                                             handllerParty(hasSelect)
                                                                         }}
                                                                     />
-                                                                    {isError.Party.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.Party}</small></span>
-                                                                    )}
+                                                                    {/* {isError.PartyName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                                    )} */}
                                                                 </FormGroup>
                                                             </Col>
 

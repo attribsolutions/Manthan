@@ -24,7 +24,6 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
 import SaleOrder from "./SaleOrder";
 import { order_Type } from "../../../components/Common/C-Varialbes";
