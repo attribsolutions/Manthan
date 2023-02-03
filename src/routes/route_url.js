@@ -127,3 +127,7 @@ export const INWARD_LIST = "/InwardList"
 
 export const CHALLAN ="/Challan"
 export const CHALLAN_LIST = "/ChallanList"
+
+// demo
+export const Demo= "/Demo"
+
