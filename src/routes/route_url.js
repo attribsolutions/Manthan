@@ -125,5 +125,9 @@ export const DEMAND_LIST= "/DemandList"
 export const INWARD ="/Inward"
 export const INWARD_LIST = "/InwardList"
 
-export const IB_INVOICE ="/IB_Invoice"
-export const IB_INVOICE_LIST = "/IB_Invoice_List"
+export const CHALLAN ="/Challan"
+export const CHALLAN_LIST = "/ChallanList"
+
+// demo
+export const Demo= "/Demo"
+
