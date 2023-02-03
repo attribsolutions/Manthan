@@ -618,7 +618,7 @@ const Demand = (props) => {
                                                     id="demanddate"
                                                     name="Date"
                                                     value={demanddate}
-                                                    disabled={pageMode === "edit" ? true : false}
+                                                    disabled={pageMode === mode.edit ? true : false}
                                                     className="form-control d-block p-2 bg-white text-dark"
                                                     placeholder="Select..."
                                                     options={{
@@ -637,7 +637,7 @@ const Demand = (props) => {
                                             <Label className="mt-2" style={{ width: "100px" }}> Division </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    isDisabled={pageMode === "edit" ? true : false}
+                                                    isDisabled={pageMode === mode.edit ? true : false}
                                                     name="SupplierName"
                                                     value={values.SupplierName}
                                                     isSearchable={true}
@@ -671,9 +671,9 @@ const Demand = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col>
-                                   
+
                                     {
-                                        pageMode === "edit" ? <Col sm="6">
+                                        pageMode === mode.edit ? <Col sm="6">
                                             <FormGroup className="row mt-2 ">
                                                 <Label className="mt-2" style={{ width: "100px" }}> Demand No. </Label>
                                                 <Col sm={7}>
@@ -692,7 +692,7 @@ const Demand = (props) => {
                                 </Col>
 
                                 <Col sm="1" className="mx-2 mt-3">
-                                    {pageMode === "save" ?
+                                    {pageMode === mode.defaultsave ?
                                         <Go_Button onClick={(e) => goButtonHandler()} />
                                         : null}
                                 </Col>

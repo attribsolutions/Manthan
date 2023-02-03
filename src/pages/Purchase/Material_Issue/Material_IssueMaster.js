@@ -512,16 +512,15 @@ const MaterialIssueMaster = (props) => {
         }
     };
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
         const validMsg = []
-
-        const MaterialIssueItems = []
-        GoButton.map((index) => {
-
+      
+        const materialIssueItems = []
+        let ox = await GoButton.map((index) => {
 
             var TotalStock = 0;
-            index.BatchesData.forEach(i => {
+            index.BatchesData.map(i => {
                 TotalStock += Number(i.BaseUnitQuantity);
             });
 
@@ -531,12 +530,13 @@ const MaterialIssueMaster = (props) => {
                     validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
                 };
             }
-            if (index["invalid"]) {
+            let a = index["invalid"]
+            if (a) {
                 validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
             };
-
-            index.BatchesData.map((ele) => {
-                MaterialIssueItems.push({
+            
+            function batch(ele) {
+                materialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
                     WorkOrderQuantity: index.Quantity,
@@ -548,12 +548,16 @@ const MaterialIssueMaster = (props) => {
                     BatchID: ele.id,
                     LiveBatchID: ele.LiveBatchID
                 })
+            }
+             index.BatchesData.map((ele) => {
+                // debugger
+                if (Number(ele.Qty) > 0) {
+                    batch(ele)
+                }
             })
         })
 
-        const FilterData = MaterialIssueItems.filter((index) => {
-            return (index.IssueQuantity > 0)
-        })
+
 
         if (formValid(state, setState)) {
             if (validMsg.length > 0) {
@@ -566,6 +570,7 @@ const MaterialIssueMaster = (props) => {
                 }));
                 return
             }
+
             const jsonBody = JSON.stringify({
                 MaterialIssueDate: values.MaterialIssueDate,
                 NumberOfLot: values.NumberOfLot,
@@ -576,12 +581,11 @@ const MaterialIssueMaster = (props) => {
                 Party: userParty(),
                 Item: Itemselect.Item,
                 Unit: Itemselect.Unit,
-                MaterialIssueItems: FilterData,
+                MaterialIssueItems: materialIssueItems,
                 MaterialIssueWorkOrder: [
                     {
                         WorkOrder: Itemselect.id,
                         Bom: Itemselect.Bom
-
                     }
                 ]
             }
@@ -591,6 +595,7 @@ const MaterialIssueMaster = (props) => {
             else {
                 dispatch(postMaterialIssue(jsonBody));
             }
+            // debugger
         };
     }
 
@@ -614,7 +619,7 @@ const MaterialIssueMaster = (props) => {
                                                 <Flatpickr
                                                     name="MaterialIssueDate"
                                                     value={values.MaterialIssueDate}
-                                                    disabled={(GoButton.length > 0) ? true : false}
+                                                    // disabled={(GoButton.length > 0) ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{

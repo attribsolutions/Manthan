@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import AddressDetailsTable from './Table';
 import { AvField, AvInput } from 'availity-reactstrap-validation';
-import { Modal } from 'bootstrap';
+import { AlertState } from '../../../../store/actions';
+import { useDispatch } from 'react-redux';
 
 function AddressDetails_Tab(props) {
+
+    const dispatch = useDispatch();
 
     const [address, setAddress] = useState('');
     const [FSSAINo, setFSSAINo] = useState('');
@@ -36,6 +39,33 @@ function AddressDetails_Tab(props) {
 
     const addRowsHandler = (data) => {
 
+        const invalidMsg1 = []
+
+        if ((address === "")) {
+            invalidMsg1.push(`Address Is Required`)
+        }
+        if (FSSAINo === "") {
+            invalidMsg1.push(`FSSAINo Is Required`)
+        };
+        if ((FSSAIExipry === "")) {
+            invalidMsg1.push(`FSSAIExipry Is Required`)
+        };
+        if ((PIN === "")) {
+            invalidMsg1.push(`PIN Is Required`)
+        };
+        if ((address === "") || (FSSAINo === "") || (FSSAIExipry === "") || (PIN === "")) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: JSON.stringify(invalidMsg1),
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
+
         const val = {
             Address: address,
             FSSAINo: FSSAINo,
@@ -44,26 +74,17 @@ function AddressDetails_Tab(props) {
             IsDefault: IsDefault,
             fssaidocument: imageTable
         };
-
-        if (!(address === "")
-            && !(FSSAINo === "")
-            && !(FSSAIExipry === "")
-            && !(PIN === "")
-            && !(IsDefault === "")
-        ) {
-            if (IsDefault) {
-                props.tableData.forEach(ele => {
-                    ele.IsDefault = false
-                });
-            }
-            const tableleth = props.tableData.length;
-            val.id = tableleth + 1;
-            const updatedTableData = [...props.tableData];
-            updatedTableData.push(val);
-            props.func(updatedTableData)
-            clearState();
+        if (IsDefault) {
+            props.tableData.forEach(ele => {
+                ele.IsDefault = false
+            });
         }
-        else (alert("Please Enter value"))
+        const tableleth = props.tableData.length;
+        val.id = tableleth + 1;
+        const updatedTableData = [...props.tableData];
+        updatedTableData.push(val);
+        props.func(updatedTableData)
+        clearState();
     }
 
     const clearState = () => {
@@ -76,7 +97,6 @@ function AddressDetails_Tab(props) {
     };
 
     const onchangeHandler = async (event) => {
-        debugger
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
         let ImageUpload = base64
@@ -246,10 +266,10 @@ function AddressDetails_Tab(props) {
                         </Row>
 
 
-                            {/* <div className='abc1'> */}
-                            {/* </div> */}
+                        {/* <div className='abc1'> */}
+                        {/* </div> */}
 
-                       
+
                     </CardBody>
                 </Card>
                 <Row>

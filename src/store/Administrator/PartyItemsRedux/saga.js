@@ -23,6 +23,7 @@ function* Post_PartyItems_GneratorFunction({ data }) {
 }
 
 function* getPartyItemGenFunc({ supplierId }) {
+
   try {
     const itemList = yield call(Items_Master_Get_API);
     const partyItem = yield call(get_Party_Item_List, supplierId);
@@ -39,7 +40,7 @@ function* getPartyItemGenFunc({ supplierId }) {
     // yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Message Party Item List",
     }));
   }
 }

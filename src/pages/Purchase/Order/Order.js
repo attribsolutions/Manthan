@@ -58,7 +58,7 @@ const Order = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
-    const  [description, setDescription] = useState('')
+    const [description, setDescription] = useState('')
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     // const [podate, setpoDate] = useState(currentDate);
@@ -155,7 +155,7 @@ const Order = (props) => {
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
-                setDescription( hasEditVal.Description)
+                setDescription(hasEditVal.Description)
                 editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
@@ -198,7 +198,7 @@ const Order = (props) => {
         }
     }, [goBtnOrderdata]);
 
-   
+
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
             setbillAddr(supplierAddress[0]);
@@ -289,6 +289,8 @@ const Order = (props) => {
     };
 
     function assignItem_onClick() {
+        
+        dispatch(goButtonForOrderAddSuccess([]))
         setisOpen_TermsModal(true)
     };
 
@@ -308,7 +310,7 @@ const Order = (props) => {
             dataField: "ItemName",
             headerFormatter: (value, row, k) => {
                 return (
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between" key={row.id}>
                         <div>
                             Item Name
                         </div>
@@ -331,7 +333,7 @@ const Order = (props) => {
             formatter: (value, row, k) => {
 
                 return (
-                    <div className="text-end">
+                    <div key={row.id} className="text-end">
                         <span>{row.StockQuantity}</span>
                     </div>
                 )
@@ -351,7 +353,7 @@ const Order = (props) => {
                         <Input type="text"
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
-                            key={row.Quantity}
+                            key={`Quantity${row.id}`}
                             className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
@@ -392,6 +394,7 @@ const Order = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
+                        key={`ddlUnit${row.id}`}
                         defaultValue={{ value: row.Unit_id, label: row.UnitName }}
                         // value={{value:row.Unit,label:row.UnitName}}
                         options={
@@ -426,6 +429,7 @@ const Order = (props) => {
                         <Input
                             type="text"
                             id={`Ratey${k}`}
+                            key={`Ratey${row.id}`}
                             defaultValue={row.Rate}
                             autoComplete="off"
                             className="text-end"
@@ -458,6 +462,8 @@ const Order = (props) => {
                     <span >
                         <Input type="text"
                             id={`Comment${k}`}
+                            key={`Comment${row.id}`}
+
                             defaultValue={row.Comment}
                             autoComplete="off"
                             onChange={(e) => { row["Comment"] = e.target.value }}
@@ -649,6 +655,16 @@ const Order = (props) => {
                 Type: 4,
                 Status: true,
                 Message: "Please Enter One Item Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
+        if (orderTypeSelect.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Select PO Type",
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -895,7 +911,7 @@ const Order = (props) => {
                                 </div >
 
                                 <div className="col col-6" >                        {/*PO To Date */}
-                                    <FormGroup className=" row  " >                   
+                                    <FormGroup className=" row  " >
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>PO To Date</Label>
                                         <div className="col col-6 ">

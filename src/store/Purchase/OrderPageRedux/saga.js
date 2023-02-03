@@ -197,9 +197,18 @@ function* get_OrderList_GenFunc({ filters }) {
       i["preOrderDate"] = i.OrderDate
       i.OrderDate = (`${date} ${time}`)
       i.DeliveryDate = (`${DeliveryDate}`)
-      i.Inward === 0 ? i.Inward = "Open" : i.Inward = "Close";
+
+      if((i.Inward === 0)){
+        i.Inward = "Open"
+        i.forceEdit= false
+      }else{
+        i.Inward = "Close"
+        i.forceEdit = true
+      }
+    
       return i
     })
+    // debugger
     yield put(getOrderListPageSuccess(newList))
     yield mainSppinerOnOff(false)
 
