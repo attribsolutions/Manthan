@@ -113,9 +113,8 @@ import Demand from "../pages/Inter Branch/Demand/Demand";
 import DemandList from "../pages/Inter Branch/Demand/DemandList"
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
-import InwardList from "../pages/Inter Branch/Inward/InwardList";
-import ChallanList from "../pages/Inter Branch/Challan/ChallanList";
-import Challan from "../pages/Inter Branch/Challan/Challan";
+import InwardList from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
+import IB_Invoice_List from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
 
 const userRoutes = [
 
@@ -244,8 +243,8 @@ const userRoutes = [
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
 
-  { path: path.CHALLAN_LIST, component: ChallanList },
-  { path: path.CHALLAN, component: Challan },
+  { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
+  // { path: path.CHALLAN, component: Challan },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

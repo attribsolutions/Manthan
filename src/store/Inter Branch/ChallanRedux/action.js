@@ -1,24 +1,24 @@
 import {
-  CHALLAN_LIST_FILTERS,
-  GET_CHALLAN_LIST_PAGE,
-  GET_CHALLAN_LIST_PAGE_SUCCESS,
+  IB_INVOICE_LIST_FILTERS,
+  GET_IB_INVOICE_LIST_PAGE,
+  GET_IB_INVOICE_LIST_PAGE_SUCCESS,
   INWARD_BUTTON_ID,
   INWARD_BUTTON_ID_SUCCESS
 } from "./actionType";
 
-export const Challanlistfilters = filter => ({
-  type: CHALLAN_LIST_FILTERS,
+export const IB_Invoicelistfilters = filter => ({
+  type: IB_INVOICE_LIST_FILTERS,
   payload: filter,
 })
 
 //Challan listpage api
-export const getChallanListPage = (filters) => ({
-  type: GET_CHALLAN_LIST_PAGE,
+export const get_IB_InvoiceListPage = (filters) => ({
+  type: GET_IB_INVOICE_LIST_PAGE,
   filters,
 });
 
-export const getChallanListPageSuccess = (data) => ({
-  type: GET_CHALLAN_LIST_PAGE_SUCCESS,
+export const get_IB_InvoiceListPageSuccess = (data) => ({
+  type: GET_IB_INVOICE_LIST_PAGE_SUCCESS,
   payload: data,
 });
 
