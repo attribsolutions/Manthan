@@ -15,7 +15,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 
 /// tsdfddf Punam demotest
 // actions
-import { getUserDetailsAction, loginUser, roleAceessAction } from "../../store/actions"
+import { AlertState, getUserDetailsAction, loginUser, roleAceessAction } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -81,13 +81,17 @@ const SelectDivisionPage = props => {
 
   function goButtonHandller() {
     debugger
-    let value = divisionDropdown_redux[divisionDropdowSelect.value]
-    var employee = value.Employee_id;
-    var party = value.Party_id
+    if (!(divisionDropdowSelect.value === undefined)) {
 
-    localStorage.setItem("roleId", JSON.stringify(value))
-    dispatch(roleAceessAction(party, employee,userCompany()))
-    history.push("/Dashboard")
+      let value = divisionDropdown_redux[divisionDropdowSelect.value]
+      var employee = value.Employee_id;
+      var party = value.Party_id
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      dispatch(roleAceessAction(party, employee, userCompany()))
+      history.push("/Dashboard")
+    }
+
 
   }
   return (
@@ -107,12 +111,16 @@ const SelectDivisionPage = props => {
                         <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
                       </Link>
                     </div>
+
                     <div className="auth-content my-auto">
+                      {/* <div className="mb-3">
+                        <h5 className="text-danger" >Please Select Division...!</h5>
+                      </div> */}
+
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Select Role to Continue FoodERP.</p>
                       </div>
-
 
                       <div className="mb-3">
                         {/* <Label className="form-label font-size-13 "></Label> */}
