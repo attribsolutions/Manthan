@@ -160,6 +160,7 @@ export const GO_BUTTON_POST_API_FOR_GST_MASTER = '/GetGstHsncode' // for go butt
 export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for delete 
 
 //PartySubParty
+export const PARTY_SUB_PARTY_LIST = '/PartySubPartyList'
 export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 export const PARTY_SUB_PARTY_DROPDOWN_API = '/PartySubParty' // PartySubParty dropdown Api
 
