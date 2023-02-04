@@ -214,10 +214,10 @@ export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
 //********************************** Inter Branch  **************************************/
 // Inter Branch Order
-export const GO_BUTTON_POST_API_FOR_DEMAND = '/InterBranchesItems'
+export const GO_BUTTON_POST_API_FOR_IBORDER = '/InterBranchesItems'
 export const DIVISION_DROPDOWN = '/InterBranches'
-export const POST_API_FOR_DEMAND = '/InterBranchesOrder'
-export const DEMAND_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
+export const POST_API_FOR_IBORDER = '/InterBranchesOrder'
+export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 
 // Inward
 export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api
