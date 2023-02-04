@@ -529,7 +529,6 @@ export const pageFooter = (doc, data) => {
     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
-debugger
     let finalY = doc.previousAutoTable.finalY;
     if (finalY > 675) {
         pageBorder(doc)

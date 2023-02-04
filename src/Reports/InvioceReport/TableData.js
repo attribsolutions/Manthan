@@ -18,6 +18,7 @@ export const PageHedercolumns = [
 
 export const Rows = (data) => {
     const { InvoiceItems = [] } = data
+    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
     let totalBasicAmount = 0
@@ -27,6 +28,7 @@ export const Rows = (data) => {
     let totalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
+        debugger
       
         const tableitemRow = [
             element.ItemName,
@@ -101,11 +103,12 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [, ,`Driver Name : Sameer`],
-        [`${data.CustomerName}`, `${data.PartyName}`, `vehical No :MH34566`,],
-        [`maharashtra`, `karnatak`, `E-way Bill :24654364633`],
+        [, ,"Purches Order No: 1"],
+        [`${data.CustomerName}`, `${data.PartyName}`,`Driver Name : Sameer` ,],
+        [`maharashtra`, `karnatak`, `vehical No :MH34566`],
         // [, , ""],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`INR NO :${data.FullInvoiceNumber}` , ],
+        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, `E-way Bill :24654364633`, ],
+        [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
     return reportArray;
 }
