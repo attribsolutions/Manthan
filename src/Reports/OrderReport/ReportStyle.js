@@ -21,8 +21,8 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billing Address", 80, 75)
-    doc.text('shipping address', 400, 75)
+    doc.text("Vendor", 80, 75)
+    doc.text('Shift to', 400, 75)
     // doc.text('Terms And Condition', 440, 75)
 
     // doc.text(`GSTIN:${data.Total.TotalAmount}`, 570,95)
