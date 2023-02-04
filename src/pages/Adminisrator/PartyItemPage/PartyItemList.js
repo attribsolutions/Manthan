@@ -11,7 +11,7 @@ import {
   updategroupIDSuccess,
 } from "../../../store/actions";
 import PartyItems from "./PartyItems";
-import { GetPartyList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { editPartyItemID, GetPartyList, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
@@ -23,7 +23,7 @@ const PartyItemsList = (props) => {
     (state) => ({
       tableList: state.PartyItemsReducer.partyList,
       editData: state.PartyItemsReducer.editData,
-      updateMsg: state.PartyItemsReducer.updateMsg,
+      updateMsg: state.PartyItemsReducer.postMsg,
       deleteMsg: state.PartyItemsReducer.deleteMsg,
       postMsg: state.PartyItemsReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
@@ -33,10 +33,10 @@ const PartyItemsList = (props) => {
 
   const action = {
     getList: GetPartyList,
-    editId: editGroupID,
+    editId: editPartyItemID,
     deleteId: delete_GroupList_ID,
     postSucc: postGroupSuccess,
-    updateSucc: updategroupIDSuccess,
+    updateSucc: PostPartyItemsSuccess,
     deleteSucc: deleteGrouplistSuccess
 
   }

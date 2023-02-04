@@ -24,6 +24,7 @@ import {
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
+    editPartyItemIDSuccess,
     getpartyItemList,
     getPartyItemListSuccess,
     PostPartyItems,
@@ -52,7 +53,7 @@ const PartyItems = (props) => {
 
     const fileds = {
         id: "",
-        SupplierName: "",
+        Name: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -131,20 +132,18 @@ const PartyItems = (props) => {
                 hasEditVal = location.editValue
             }
             if (hasEditVal) {
-
-                const { id, SupplierName } = hasEditVal
+                debugger
+                const { Party, PartyName } = hasEditVal.Party
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.SupplierName.valid = true;
+                hasValid.Name.valid = true;
+                values.Name = { value: Party, label: PartyName };
 
-                values.id = id
-                values.SupplierName = SupplierName;
+                dispatch(getpartyItemList(Party))
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.SupplierName))
-                dispatch(getpartyItemList(SupplierName.value))
-
+                dispatch(Breadcrumb_inputName(PartyName))
             }
-            dispatch(editGroupIDSuccess({ Status: false }))
+            dispatch(editPartyItemIDSuccess({ Status: false }))
         }
     }, [])
 
@@ -163,7 +162,7 @@ const PartyItems = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: false,
+                RedirectPath: url.PARTYITEM_LIST,
             }))
 
         } else if
@@ -173,7 +172,7 @@ const PartyItems = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: false,
+                RedirectPath:url.PARTYITEM_LIST,
                 AfterResponseAction: false
             }));
         }
@@ -185,7 +184,7 @@ const PartyItems = (props) => {
                 pathname: url.PARTYITEM_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updategroupIDSuccess({ Status: false }));
+            dispatch(PostPartyItemsSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -276,15 +275,15 @@ const PartyItems = (props) => {
     };
 
     const SubmitHandler = (e) => {
-        debugger
+
         e.preventDefault();
         const Find = itemArr.filter((index) => {
             return (index.itemCheck === true)
         })
-        console.log("Find", Find)
+
         var PartyData = Find.map((index) => ({
             Item: index.Item,
-            Party: values.SupplierName.value
+            Party: values.Name.value
 
         }))
         const jsonBody = JSON.stringify(PartyData)
@@ -318,11 +317,11 @@ const PartyItems = (props) => {
                                                     <Row>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> SupplierName </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
                                                                 <Col md="12">
                                                                     <Select
-                                                                        name="SupplierName"
-                                                                        value={values.SupplierName}
+                                                                        name="Name"
+                                                                        value={values.Name}
                                                                         isDisabled={props.dropMode === "dropdownAdd" ? true : false}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
@@ -331,10 +330,12 @@ const PartyItems = (props) => {
                                                                         onChange={(hasSelect, evn) => {
                                                                             onChangeSelect({ hasSelect, evn, state, setState, })
                                                                             GoButton_Handler(hasSelect)
+                                                                            dispatch(Breadcrumb_inputName(hasSelect.label
+                                                                            ))
                                                                         }}
                                                                     />
-                                                                    {isError.SupplierName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.SupplierName}</small></span>
+                                                                    {isError.Name.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Name}</small></span>
                                                                     )}
 
                                                                 </Col>
@@ -401,7 +402,7 @@ const PartyItems = (props) => {
                                     <SaveButton
                                         pageMode={pageMode}
                                         userAcc={userAccState}
-                                        module={"supplier"} onClick={SubmitHandler}
+                                        module={"PartyItems"} onClick={SubmitHandler}
                                     />
                                 </div>
                                     : <div className="row save1"></div>}
