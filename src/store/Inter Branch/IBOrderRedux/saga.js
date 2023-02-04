@@ -2,6 +2,7 @@ import { call, delay, put, takeEvery } from "redux-saga/effects";
 import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     IBOrderList_get_Filter_API,
+
     IBOrderPage_Delete_API,
     IBOrderPage_Edit_API,
     IBOrderPage_GoButton_API,
@@ -12,6 +13,7 @@ import {
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
+
     postGoButtonForIBOrderSuccess,
     postIBOrderSuccess,
     postDivisionSuccess,
@@ -22,6 +24,7 @@ import {
 
 } from "./action";
 import {
+
     POST_GO_BUTTON_FOR_IBORDER,
     POST_IBORDER,
     POST_IBORDER_LIST_PAGE,
@@ -33,6 +36,7 @@ import {
 
 
 // GO Botton Post API
+
 function* GoButton_IBOrder_genfun({ data }) {
   try {
     const response = yield call(IBOrderPage_GoButton_API, data);
@@ -46,6 +50,7 @@ function* GoButton_IBOrder_genfun({ data }) {
 };
 
 //post api
+
 function* Post_IBOrder_Genfun({ data }) {
   
     yield put(SpinnerState(true))
@@ -79,6 +84,7 @@ function* post_Division_Genfun({ data }) {
 }
 
 
+
 function* editIBOrderGenFunc({ jsonBody, pageMode }) {
 
     yield put(SpinnerState(true))
@@ -92,11 +98,14 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
       yield put(SpinnerState(false))
       yield put(AlertState({
         Type: 4,
+
         Status: true, Message: "500 Error Edit IBOrder",
+
       }));
     }
   }
   
+
   function* DeleteIBOrder_GenFunc({ id }) {
     yield put(SpinnerState(true))
     try {
@@ -112,6 +121,7 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
     }
   }
   
+
   function* UpdateIBOrder_ID_GenFunc({ data, id }) {
   
     try {
@@ -136,6 +146,7 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
 
     const response = yield call(IBOrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
+
       i.IBOrderDate = i.IBOrderDate;
       var date = convertDatefunc(i.IBOrderDate)
       i.IBOrderDate = (date)
@@ -154,6 +165,7 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
   
 
 function* IBOrderSaga() {
+
     yield takeEvery(POST_GO_BUTTON_FOR_IBORDER, GoButton_IBOrder_genfun)
     yield takeEvery(POST_IBORDER, Post_IBOrder_Genfun)
     yield takeEvery(POST_DIVISION, post_Division_Genfun)
@@ -161,6 +173,7 @@ function* IBOrderSaga() {
     yield takeEvery(DELETE_IBORDER_FOR_IBORDER_PAGE, DeleteIBOrder_GenFunc)
     yield takeEvery(POST_IBORDER_LIST_PAGE, Post_IBOrderList_GenFunc)
     yield takeEvery(UPDATE_IBORDER_ID_FROM_IBORDER_PAGE, UpdateIBOrder_ID_GenFunc)
+
 }
 
 export default IBOrderSaga;

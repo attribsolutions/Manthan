@@ -1,5 +1,6 @@
 
 import {
+
     POST_GO_BUTTON_FOR_IBORDER,
     POST_GO_BUTTON_FOR_IBORDER_SUCCESS,
     POST_IBORDER,
@@ -25,10 +26,10 @@ export const postGoButtonForIBOrder = (data) => ({
 
 export const postGoButtonForIBOrderSuccess = (data) => ({
     type: POST_GO_BUTTON_FOR_IBORDER_SUCCESS,
-    payload: data,
-});
+
 
 // post api
+
 export const postIBOrder = (data) => ({
     type: POST_IBORDER,
     data,
@@ -42,8 +43,7 @@ export const postIBOrderSuccess = (data) => ({
 //List Filters IBOrder
 export const iborderlistfilter = filter => ({
     type: IBORDER_LIST_FILTERS,
-    payload: filter,
-})
+
 
 
 /// Division  dropdown
@@ -61,15 +61,16 @@ export const postDivisionSuccess = (data) => ({
 ///List page
 export const postIBOrderListPage = (filters) => ({
     type: POST_IBORDER_LIST_PAGE,
-    filters,
 });
 
 export const postIBOrderListPageSuccess = (data) => ({
+
     type: POST_IBORDER_LIST_PAGE_SUCCESS,
     payload: data,
 });
 
 //EDIT
+
 export const editIBOrderId = (jsonBody, pageMode) => ({
     type: EDIT_IBORDER_FOR_IBORDER_PAGE,
     jsonBody, pageMode
@@ -80,6 +81,7 @@ export const editIBOrderIdSuccess = (data) => ({
 });
 
 //DELETE
+
 
 export const deleteIBOrderId = (id) => ({
     type: DELETE_IBORDER_FOR_IBORDER_PAGE,
@@ -92,6 +94,7 @@ export const deleteIBOrderId = (id) => ({
   
 
 //UPDATE
+
 export const updateIBOrderId = (data, id) => ({
     type: UPDATE_IBORDER_ID_FROM_IBORDER_PAGE,
     data, id,

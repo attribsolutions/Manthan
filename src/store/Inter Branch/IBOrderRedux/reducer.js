@@ -1,6 +1,7 @@
 
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import {
+
     POST_GO_BUTTON_FOR_IBORDER_SUCCESS,
     POST_IBORDER_SUCCESS,
     POST_DIVISION_SUCCESS,
@@ -9,6 +10,7 @@ import {
     UPDATE_IBORDER_ID_FROM_IBORDER_PAGE_SUCCESS,
     EDIT_IBORDER_FOR_IBORDER_PAGE_SUCCESS,
     DELETE_IBORDER_FOR_IBORDER_PAGE_SUCCESS
+   
 } from "./actionType"
 
 const INIT_STATE = {
@@ -19,6 +21,7 @@ const INIT_STATE = {
     postMsg: { Status: false },
     updateMsg: { Status: false },
     deleteMsg: { Status: false },
+
     iborderList: [],
     iborderlistFilter: { fromdate: currentDate, todate: currentDate,SupplierSelect: {value:'', label:"All"} },
 }
@@ -26,6 +29,7 @@ const IBOrderReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
         // GO Button 
+
         case POST_GO_BUTTON_FOR_IBORDER_SUCCESS:
             return {
                 ...state,
@@ -33,6 +37,7 @@ const IBOrderReducer = (state = INIT_STATE, action) => {
             }
 
         // Post Method 
+
         case POST_IBORDER_SUCCESS:
             return {
                 ...state,
@@ -47,6 +52,7 @@ const IBOrderReducer = (state = INIT_STATE, action) => {
             }
 
         // filter list
+
         case IBORDER_LIST_FILTERS:
             return {
                 ...state,
@@ -66,11 +72,13 @@ const IBOrderReducer = (state = INIT_STATE, action) => {
                 updateMsg: action.payload,
             }
 
+
         case EDIT_IBORDER_FOR_IBORDER_PAGE_SUCCESS:
             return {
                 ...state,
                 editData: action.payload,
             }
+
 
         case DELETE_IBORDER_FOR_IBORDER_PAGE_SUCCESS:
             return {

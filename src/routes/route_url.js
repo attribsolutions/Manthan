@@ -119,6 +119,7 @@ export const INVOICE = "/Invoice"
 export const INVOICE_LIST = "/InvoiceList"
 
 //******************************* Inter Branch  ************************************//
+
 export const IB_ORDER= "/IBOrder"
 export const IB_ORDER_LIST= "/IBOrderList"
 

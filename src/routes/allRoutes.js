@@ -109,11 +109,14 @@ import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
 import Invoice from "../pages/Sale/Invoice/Invoice";
 import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
+
 import IBOrder from "../pages/Inter Branch/IBOrder/IBOrder";
 import IBOrderList from "../pages/Inter Branch/IBOrder/IBOrderList"
 
+
 import Inward from "../pages/Inter Branch/Inward/Inward";
-import InwardList from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
+import InwardList from "../pages/Inter Branch/Inward/InwardList";
+
 import IB_Invoice_List from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
 
 
