@@ -165,8 +165,8 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 export const PARTY_SUB_PARTY_DROPDOWN_API = '/PartySubParty' // PartySubParty dropdown Api
 
 //PartyItems
-export const PARTYITEMS = '/PartyItemList' // FOR Get
-
+export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
+export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
 //******** purchase modal *********************************************************************************************************************** */
 
@@ -214,10 +214,10 @@ export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
 //********************************** Inter Branch  **************************************/
 // Inter Branch Order
-export const GO_BUTTON_POST_API_FOR_DEMAND = '/InterBranchesItems'
+export const GO_BUTTON_POST_API_FOR_IBORDER = '/InterBranchesItems'
 export const DIVISION_DROPDOWN = '/InterBranches'
-export const POST_API_FOR_DEMAND = '/InterBranchesOrder'
-export const DEMAND_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
+export const POST_API_FOR_IBORDER = '/InterBranchesOrder'
+export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 
 // Inward
 export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api

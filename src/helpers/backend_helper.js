@@ -342,11 +342,11 @@ export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY
 
 //PartyItems API
 
-export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
-export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
-export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
-export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
-
+export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
+export const Party_Items = (data) => post(url.PARTYITEM_FOR_MASTER, data)// post api
+export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEM_FOR_MASTER}/${party_id}`)//get api
+export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
+export const edit_PartyItem_List_Api = (id) => get(`${url.PARTYITEM_FOR_MASTER}/${id}`)// edit api
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
 
@@ -431,14 +431,15 @@ export const Invoice_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_POST_API}/
 //************************************Inter Branch ************************************/
 
 
-// Demand
-export const DemandPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND, data)//go button api
-export const DemandPage_Post_API = (data) => post(url.POST_API_FOR_DEMAND, data)//post api
-export const DemandList_get_Filter_API = (filters) => post(url.DEMAND_LiST_BY_FILTERS, filters)//list page
+// IBOrder
+export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//go button api
+export const IBOrderPage_Post_API = (data) => post(url.POST_API_FOR_IBORDER, data)//post api
+export const IBOrderList_get_Filter_API = (filters) => post(url.IBORDER_LiST_BY_FILTERS, filters)//list page
+
 export const Division = (data) => post(url.DIVISION_DROPDOWN, data)//dropdown api
-export const DemandPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_DEMAND, data)//edit
-export const DemandPage_Delete_API = (id) => del(`${url.POST_API_FOR_DEMAND}/${id}`)//delete
-export const DemandPage_Update_API = (data, id) => put(`${url.POST_API_FOR_DEMAND}/${id}`, data)//update
+export const IBOrderPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//edit
+export const IBOrderPage_Delete_API = (id) => del(`${url.POST_API_FOR_IBORDER}/${id}`)//delete
+export const IBOrderPage_Update_API = (data, id) => put(`${url.POST_API_FOR_IBORDER}/${id}`, data)//update
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api

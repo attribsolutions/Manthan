@@ -18,8 +18,112 @@ export const PageHedercolumns = [
     ''
 ]
 
+
+// export const Rows = (data) => {
+//     const { OrderItem = [] } = data
+//     var a = [];
+//     let Gst = 0
+//     let totalBasicAmount = 0
+//     let totalCGst = 0
+//     let totalSGst = 0
+//     let totalAmount = 0
+//     let totalQuantity = 0
+//     let SubTotalGst = 0
+
+
+//     OrderItem.forEach(element => {
+//         debugger
+//         if (Gst === 0) { Gst = element.GSTPercentage };
+//         if ((Gst === element.GSTPercentage)) {
+//             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+//             totalCGst = Number(totalCGst) + Number(element.CGST)
+//             totalSGst = Number(totalSGst) + Number(element.SGST)
+//             totalAmount = Number(totalAmount) + Number(element.Amount)
+
+//             const tableitemRow = [
+//                 `${element.ItemName} (${element.HSNCode})`,
+//                 `${element.Quantity} ${element.UnitName}`,
+//                 element.Rate,
+//                 element.BasicAmount,
+//                 `${element.CGSTPercentage}%`,
+//                 element.CGST,
+//                 `${element.SGSTPercentage}%`,
+//                 element.SGST,
+//                 element.Comment,
+//                 element.Amount,
+//             ];
+//             a.push(tableitemRow);
+//             Gst = element.GSTPercentage
+//         } else {
+
+//             const tableTotalRow = [
+//                 `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+//                 " ",
+//                 `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+//                 "",
+//                 `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+//                 "isaddition",
+//                 `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+//                 "",
+//                 "",
+//                 `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+
+//             ];
+//             a.push(tableTotalRow);
+
+//             Gst = 0
+//             totalBasicAmount = 0
+//             totalCGst = 0
+//             totalSGst = 0
+//             totalAmount = 0
+//             totalQuantity = 0
+
+//             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+//             totalCGst = Number(totalCGst) + Number(element.CGST)
+//             totalSGst = Number(totalSGst) + Number(element.SGST)
+//             totalAmount = Number(totalAmount) + Number(element.Amount)
+
+//             const tableTotalRowNew = [
+//                 `${element.ItemName} (${element.HSNCode})`,
+//                 `${element.Quantity} ${element.UnitName}`,
+//                 element.Rate,
+//                 element.BasicAmount,
+//                 `${element.CGSTPercentage}%`,
+//                 element.CGST,
+//                 `${element.SGSTPercentage}%`,
+//                 element.SGST,
+//                 element.Comment,
+//                 element.Amount,
+//             ];
+
+//             a.push(tableTotalRowNew);
+
+//             const tableTotalRowLast = [
+//                 `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+//                 " ",
+//                 `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+//                 "",
+//                 `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+//                 "isaddition",
+//                 `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+//                 "",
+//                 "",
+//                 `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+
+//             ];
+
+//             a.push(tableTotalRowLast);
+
+//             return a;
+//         }
+//     })
+// }
+
+
+
 export const Rows = (data) => {
     const { OrderItem = [] } = data
+    OrderItem.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
     let totalBasicAmount = 0
@@ -27,8 +131,8 @@ export const Rows = (data) => {
     let totalSGst = 0
     let totalAmount = 0
     let totalQuantity = 0
-    let SubTotalGst =0
-    
+    let SubTotalGst = 0
+
 
     OrderItem.forEach((element, key) => {
         const tableitemRow = [
@@ -42,19 +146,17 @@ export const Rows = (data) => {
             element.SGST,
             element.Comment,
             element.Amount,
-            
-
         ];
 
         function totalLots() {
             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
-            totalAmount = Number(totalAmount) + Number( element.Amount)
+            totalAmount = Number(totalAmount) + Number(element.Amount)
             // totalQuantity = Number(totalQuantity) + Number(element.Quantity)
             let cgst = data["tableTot"].TotalCGst
             // return ({ TotalCGst: Number(cgst) + Number(totalCGst),})
-            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst),}) 
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst), })
         };
 
 
@@ -69,23 +171,22 @@ export const Rows = (data) => {
                 "isaddition",
                 `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
-                "",
+                // "",
                 `Amount:${parseFloat(totalAmount).toFixed(2)}`,
                 // parseFloat(TotalCGst).toFixed(2),
                 // parseFloat(TotalSGst).toFixed(2),
             ];
         };
-
-
-        if (Gst === "") { Gst = element.GSTPercentage };
-        let aa = {TotalCGst: 0, totalSGst: 0 }
+        if (Gst === 0) { Gst = element.GSTPercentage };
+        let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
         }
+
         else {
-            // returnArr.push(totalrow());
+            returnArr.push(totalrow())
             returnArr.push(tableitemRow);
             totalBasicAmount = 0
             totalCGst = 0
@@ -94,13 +195,12 @@ export const Rows = (data) => {
             totalQuantity = 0
 
             data["tableTot"] = totalLots()
-            Gst = element.GSTPercentage;
         }
         if (key === OrderItem.length - 1) {
             returnArr.push(totalrow());
         }
 
-         SubTotalGst =  Number(SubTotalGst)+Number(element.CGST)
+        SubTotalGst = Number(SubTotalGst) + Number(element.CGST)
     })
     return returnArr;
 }
@@ -230,14 +330,16 @@ export const Rows1 = (data) => {
 }
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.CustomerName}`, ,`${data.SupplierName}`],
-        [`${data.BillingAddress}`, ,`${data.ShippingAddress}`],
-        [`FSSAI :f23dfxxxxxwe55`, ,`FSSAI :ui3dfxxxxxwe55` ],
-        // [, , ""],
-        // [,`` , ],
+        [`${data.SupplierName}`, , `${data.CustomerName}`],
+        [`${data.ShippingAddress}`, , `${data.BillingAddress}`],
+        [`FSSAI :f23dfxxxxxwe55`, , `FSSAI :ui3dfxxxxxwe55`],
+      
     ]
     return reportArray;
 }
+
+
+
 
 
 

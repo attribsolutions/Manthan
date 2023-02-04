@@ -43,10 +43,10 @@ function* Inward_Button_GenratorFunction({ id }) {
   }
 }
 
-function* ChallanSaga() {
+function* IB_InvoiceSaga() {
   yield takeEvery(GET_IB_INVOICE_LIST_PAGE, get_IB_InvoiceList_GenFunc)
   yield takeEvery(INWARD_BUTTON_ID, Inward_Button_GenratorFunction)
 
 }
 
-export default ChallanSaga;
+export default IB_InvoiceSaga;

@@ -129,12 +129,12 @@ export const Invoice = url.INVOICE_LIST
 
 //******************************* Inter Branch ************************************//
 
-export const DemandList = url.DEMAND
-export const Demand = url.DEMAND_LIST
+export const IBOrderList = url.IB_ORDER
+export const IBOrder = url.IB_ORDER_LIST
 
 export const InwardList = url.INWARD
 export const Inward = url.INWARD_LIST
 
-
 export const IB_Invoice_List = url.IB_INVOICE
 export const IB_Invoice = url.IB_INVOICE_LIST
+export const IB_Invoice_Mode_2 = url.PRODUCTION_LIST

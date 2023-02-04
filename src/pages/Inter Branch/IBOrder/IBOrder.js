@@ -33,32 +33,31 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { DEMAND_LIST } from "../../../routes/route_url";
 import {
-    editDemandIdSuccess,
-    postDemand,
-    postDemandSuccess,
+    editIBOrderIdSuccess,
+    postIBOrder,
+    postIBOrderSuccess,
     postDivision,
-    postGoButtonForDemand,
-    postGoButtonForDemandSuccess,
-    updateDemandId,
-    updateDemandIdSuccess
-} from "../../../store/Inter Branch/DemandRedux/action";
+    postGoButtonForIBOrder,
+    postGoButtonForIBOrderSuccess,
+    updateIBOrderId,
+    updateIBOrderIdSuccess
+} from "../../../store/Inter Branch/IBOrderRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Amount, basicAmount, GstAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 
-const Demand = (props) => {
+const IBOrder = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
     const fileds = {
         id: "",
-        DemandDate: currentDate,
+        IBOrderDate: currentDate,
         SupplierName: "",
         Comment: "",
-        DemandNo: "",
-        FullDemandNumber: ""
+        IBOrderNo: "",
+        FullIBOrderNumber: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -66,9 +65,9 @@ const Demand = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
     const [userAccState, setUserPageAccessState] = useState("");
-    const [demanddate, setdemanddate] = useState(currentDate)
-    const [demandItemTable, setdemandItemTable] = useState([])
-    const [demandAmount, setDemandAmount] = useState(0);
+    const [iborderdate, setiborderdate] = useState(currentDate)
+    const [iborderItemTable, setiborderItemTable] = useState([])
+    const [iborderAmount, setIBOrderAmount] = useState(0);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -79,17 +78,17 @@ const Demand = (props) => {
         Supplier,
         GoButton,
     } = useSelector((state) => ({
-        postMsg: state.DemandReducer.postMsg,
-        updateMsg: state.DemandReducer.updateMsg,
+        postMsg: state.IBOrderReducer.postMsg,
+        updateMsg: state.IBOrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Supplier: state.DemandReducer.Supplier,
-        GoButton: state.DemandReducer.GoButton,
+        Supplier: state.IBOrderReducer.Supplier,
+        GoButton: state.IBOrderReducer.GoButton,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.DEMAND
-        dispatch(postGoButtonForDemandSuccess([]))
+        const page_Id = pageId.IB_ORDER
+        dispatch(postGoButtonForIBOrderSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -147,20 +146,20 @@ const Demand = (props) => {
                 // console.log("hasEditVal", hasEditVal)
 
                 setEditData(hasEditVal);
-                const { id, SupplierName, Supplier, Comment, DemandDate, DemandNo, FullDemandNumber } = hasEditVal
+                const { id, SupplierName, Supplier, Comment, IBOrderDate, IBOrderNo, FullIBOrderNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.DemandDate = DemandDate;
+                values.IBOrderDate = IBOrderDate;
                 values.SupplierName = { value: hasEditVal.Supplier, label: hasEditVal.SupplierName };
                 values.Comment = Comment;
-                values.DemandNo = DemandNo;
-                values.FullDemandNumber = FullDemandNumber;
+                values.IBOrderNo = IBOrderNo;
+                values.FullIBOrderNumber = FullIBOrderNumber;
                 values.id = id;
 
                 hasValid.SupplierName.valid = true;
-                hasValid.DemandDate.valid = true;
+                hasValid.IBOrderDate.valid = true;
                 hasValid.Comment.valid = true;
-                hasValid.DemandNo.valid = true;
-                hasValid.FullDemandNumber.valid = true;
+                hasValid.IBOrderNo.valid = true;
+                hasValid.FullIBOrderNumber.valid = true;
                 hasValid.id.valid = true
 
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
@@ -168,12 +167,12 @@ const Demand = (props) => {
                 const jsonBody = JSON.stringify({
                     Supplier: hasEditVal.Supplier,
                     Customer: userParty(),
-                    EffectiveDate: hasEditVal.DemandDate,
-                    DemandID: hasEditVal.id
+                    EffectiveDate: hasEditVal.IBOrderDate,
+                    IBOrderID: hasEditVal.id
                 })
-                dispatch(postGoButtonForDemand(jsonBody));
+                dispatch(postGoButtonForIBOrder(jsonBody));
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editDemandIdSuccess({ Status: false }))
+                dispatch(editIBOrderIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
             }
         }
@@ -181,8 +180,8 @@ const Demand = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postDemandSuccess({ Status: false }))
-            dispatch(postGoButtonForDemandSuccess([]))
+            dispatch(postIBOrderSuccess({ Status: false }))
+            dispatch(postGoButtonForIBOrderSuccess([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//save Button Is enable function
 
@@ -198,13 +197,13 @@ const Demand = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.DEMAND_LIST,
+                    RedirectPath: url.IB_ORDER_LIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
-            dispatch(postDemandSuccess({ Status: false }))
+            dispatch(postIBOrderSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -223,11 +222,11 @@ const Demand = (props) => {
             saveDissable(false);//save Button Is enable function
             // Comment = ''
             history.push({
-                pathname: DEMAND_LIST,
+                pathname: url.IB_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
-            dispatch(updateDemandIdSuccess({ Status: false }));
+            dispatch(updateIBOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -248,9 +247,9 @@ const Demand = (props) => {
 
     useEffect(() => {
         if (GoButton) {
-            let { DemandItems = [] } = GoButton
-            setdemandItemTable(DemandItems)
-            dispatch(postGoButtonForDemandSuccess(''))
+            let { IBOrderItems = [] } = GoButton
+            setiborderItemTable(IBOrderItems)
+            dispatch(postGoButtonForIBOrderSuccess(''))
         }
     }, [GoButton]);
 
@@ -300,10 +299,10 @@ const Demand = (props) => {
                                 } else {
                                     document.getElementById(`Quantity${k}`).value = row.Quantity
                                 }
-                                handleKeyDown(e, demandItemTable)
+                                handleKeyDown(e, iborderItemTable)
                             }}
                             autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                            onKeyDown={(e) => handleKeyDown(e, iborderItemTable)}
                         />
                     </span>
                 )
@@ -375,7 +374,7 @@ const Demand = (props) => {
                                     document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
                             }}
-                            onKeyDown={(e) => handleKeyDown(e, demandItemTable)}
+                            onKeyDown={(e) => handleKeyDown(e, iborderItemTable)}
                         />
                     </span>
                 )
@@ -395,12 +394,13 @@ const Demand = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: (demandItemTable.length + 2),
+        sizePerPage: (iborderItemTable.length + 2),
         totalSize: 0,
         custom: true,
     };
 
     const goButtonHandler = () => {
+        debugger
         // if (!SupplierSelect > 0) {
         //     dispatch(
         //         AlertState({
@@ -416,26 +416,26 @@ const Demand = (props) => {
         const jsonBody = JSON.stringify({
             Supplier: values.SupplierName.value,
             Customer: userParty(),
-            EffectiveDate: demanddate,
-            DemandID: (pageMode === mode.defaultsave) ? 0 : EditData.id
+            EffectiveDate: iborderdate,
+            IBOrderID: (pageMode === mode.defaultsave) ? 0 : EditData.id
         })
 
-        dispatch(postGoButtonForDemand(jsonBody))
+        dispatch(postGoButtonForIBOrder(jsonBody))
     };
 
-    function demanddateOnchange(e, date) {
-        setdemanddate(date)
+    function iborderdateOnchange(e, date) {
+        setiborderdate(date)
     };
 
     function permissionfunc(istrue) {
         if (istrue) {
             // setSupplierSelect(istrue)// **istrue is == event value
-            setdemandItemTable([])
+            setiborderItemTable([])
         }
     }
 
     function SupplierOnchange(e) {
-        var isfind = demandItemTable.find(i => (i.Quantity > 0))
+        var isfind = iborderItemTable.find(i => (i.Quantity > 0))
         if (isfind) {
             dispatch(
                 AlertState({
@@ -454,7 +454,7 @@ const Demand = (props) => {
                 i.values.SupplierName = e;
                 return i
             })
-            setdemandItemTable([])
+            setiborderItemTable([])
         }
     };
 
@@ -470,15 +470,15 @@ const Demand = (props) => {
         row["Amount"] = Amount(row)
 
         let sum = 0
-        demandItemTable.forEach(ind => {
+        iborderItemTable.forEach(ind => {
             if (ind.Amount === null) {
                 ind.Amount = 0
             }
             var amt = parseFloat(ind.Amount)
             sum = sum + amt
         });
-        setDemandAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"Demand Amount"} :${sum.toFixed(2)}`))
+        setIBOrderAmount(sum.toFixed(2))
+        dispatch(BreadcrumbShowCountlabel(`${"IBOrder Amount"} :${sum.toFixed(2)}`))
     };
 
     const SaveHandler = (event) => {
@@ -512,7 +512,7 @@ const Demand = (props) => {
             itemArr.push(arr)
         };
 
-        function demandItem({ i, isedit }) {
+        function iborderItem({ i, isedit }) {
             if ((i.Quantity > 0) && (i.Rate > 0)) {
                 var isdel = false;
                 isChanged({ i, isedit, isdel })
@@ -523,7 +523,7 @@ const Demand = (props) => {
             };
         };
 
-        demandItemTable.forEach(i => {
+        iborderItemTable.forEach(i => {
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
@@ -535,19 +535,19 @@ const Demand = (props) => {
 
                 if (ischange && (i.poQty === 0)) {
                     var isedit = 0;
-                    demandItem({ i, isedit })
+                    iborderItem({ i, isedit })
                 }
                 else if (ischange) {
                     var isedit = 1;
-                    demandItem({ i, isedit })
+                    iborderItem({ i, isedit })
                 } else {
                     var isedit = 0;
-                    demandItem({ i, isedit })
+                    iborderItem({ i, isedit })
                 }
             }
             else {
                 var isedit = 0;
-                demandItem({ i, isedit })
+                iborderItem({ i, isedit })
             };
         });
 
@@ -574,8 +574,8 @@ const Demand = (props) => {
         };
 
         const jsonBody = JSON.stringify({
-            DemandDate: demanddate,
-            DemandAmount: demandAmount,
+            DemandDate: iborderdate,
+            DemandAmount: iborderAmount,
             Comment: values.Comment,
             Customer: userParty(),
             Supplier: values.SupplierName.value,
@@ -583,8 +583,8 @@ const Demand = (props) => {
             BillingAddressID: 4,
             ShippingAddressID: 4,
             Inward: 0,
-            DemandNo: (pageMode === "edit" ? EditData.DemandNo : values.DemandNo),
-            FullDemandNumber: (pageMode === "edit" ? EditData.FullDemandNumber : values.FullDemandNumber),
+            DemandNo: (pageMode === "edit" ? EditData.IBOrderNo : values.IBOrderNo),
+            FullDemandNumber: (pageMode === "edit" ? EditData.FullIBOrderNumber : values.FullIBOrderNumber),
             MaterialIssue: null,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
@@ -593,10 +593,10 @@ const Demand = (props) => {
         );
         //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
         if (pageMode === mode.edit) {
-            dispatch(updateDemandId(jsonBody, EditData.id))
+            dispatch(updateIBOrderId(jsonBody, EditData.id))
         }
         else {
-            dispatch(postDemand(jsonBody));
+            dispatch(postIBOrder(jsonBody));
         }
     }
 
@@ -611,13 +611,13 @@ const Demand = (props) => {
                                 <Col className=" mt-1 row  " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}> Demand Date</Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}> IBOrder Date</Label>
                                             <Col sm="7">
                                                 <Flatpickr
                                                     style={{ userselect: "all" }}
-                                                    id="demanddate"
+                                                    id="iborderdate"
                                                     name="Date"
-                                                    value={demanddate}
+                                                    value={iborderdate}
                                                     disabled={pageMode === mode.edit ? true : false}
                                                     className="form-control d-block p-2 bg-white text-dark"
                                                     placeholder="Select..."
@@ -626,7 +626,7 @@ const Demand = (props) => {
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
                                                     }}
-                                                    onChange={demanddateOnchange}
+                                                    onChange={iborderdateOnchange}
                                                 />
                                             </Col>
                                         </FormGroup>
@@ -675,11 +675,11 @@ const Demand = (props) => {
                                     {
                                         pageMode === mode.edit ? <Col sm="6">
                                             <FormGroup className="row mt-2 ">
-                                                <Label className="mt-2" style={{ width: "100px" }}> Demand No. </Label>
+                                                <Label className="mt-2" style={{ width: "100px" }}> IBOrder No. </Label>
                                                 <Col sm={7}>
                                                     <Input
-                                                        name="DemandNo"
-                                                        value={values.DemandNo}
+                                                        name="IBOrderNo"
+                                                        value={values.IBOrderNo}
                                                         type="text"
                                                         disabled={true}
                                                     />
@@ -704,7 +704,7 @@ const Demand = (props) => {
                                 <ToolkitProvider
                                     keyField="id"
                                     defaultSorted={defaultSorted}
-                                    data={demandItemTable}
+                                    data={iborderItemTable}
                                     columns={pagesListColumns}
                                     search
                                 >
@@ -743,9 +743,9 @@ const Demand = (props) => {
 
                         </PaginationProvider>
                         {
-                            ((demandItemTable.length > 0)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                            ((iborderItemTable.length > 0)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                 <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                    module={"Demand"}
+                                    module={"IBOrder"}
                                     onClick={SaveHandler}
                                 />
                             </div>
@@ -763,4 +763,4 @@ const Demand = (props) => {
     }
 };
 
-export default Demand
+export default IBOrder

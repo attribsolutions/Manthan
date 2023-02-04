@@ -109,11 +109,14 @@ import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
 import Invoice from "../pages/Sale/Invoice/Invoice";
 import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
-import Demand from "../pages/Inter Branch/Demand/Demand";
-import DemandList from "../pages/Inter Branch/Demand/DemandList"
+
+import IBOrder from "../pages/Inter Branch/IBOrder/IBOrder";
+import IBOrderList from "../pages/Inter Branch/IBOrder/IBOrderList"
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
-import InwardList from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
+import InwardList from "../pages/Inter Branch/Inward/InwardList";
+
+import IB_Invoice from "../pages/Inter Branch/IB_Invoice/IB_Invoice";
 import IB_Invoice_List from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
 
 const userRoutes = [
@@ -237,14 +240,14 @@ const userRoutes = [
   { path: path.INVOICE_LIST, component: InvoiceList },
 
   //************************************** Inter Branch ********************************//
-  { path: path.DEMAND, component: Demand },
-  { path: path.DEMAND_LIST, component: DemandList },
+  { path: path.IB_ORDER, component: IBOrder },
+  { path: path.IB_ORDER_LIST, component: IBOrderList },
 
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
 
   { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
-  // { path: path.CHALLAN, component: Challan },
+  { path: path.IB_INVOICE, component: IB_Invoice },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
