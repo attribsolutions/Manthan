@@ -2,57 +2,62 @@ import { call, delay, put, takeEvery } from "redux-saga/effects";
 import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     IBOrderList_get_Filter_API,
-    DemandPage_Delete_API,
-    DemandPage_Edit_API,
-    DemandPage_GoButton_API,
-    DemandPage_Post_API,
-    DemandPage_Update_API,
+
+    IBOrderPage_Delete_API,
+    IBOrderPage_Edit_API,
+    IBOrderPage_GoButton_API,
+    IBOrderPage_Post_API,
+    IBOrderPage_Update_API,
     Division,
 } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
-    postGoButtonForDemandSuccess,
-    postDemandSuccess,
+
+    postGoButtonForIBOrderSuccess,
+    postIBOrderSuccess,
     postDivisionSuccess,
-    editDemandIdSuccess,
-    deleteDemandIdSuccess,
-    updateDemandIdSuccess,
+    editIBOrderIdSuccess,
+    deleteIBOrderIdSuccess,
+    updateIBOrderIdSuccess,
     postIBOrderListPageSuccess,
 
 } from "./action";
 import {
-    POST_GO_BUTTON_FOR_DEMAND,
-    POST_DEMAND,
-    POST_DEMAND_LIST_PAGE,
-    UPDATE_DEMAND_ID_FROM_DEMAND_PAGE,
-    EDIT_DEMAND_FOR_DEMAND_PAGE,
-    DELETE_DEMAND_FOR_DEMAND_PAGE,
+
+    POST_GO_BUTTON_FOR_IBORDER,
+    POST_IBORDER,
+    POST_IBORDER_LIST_PAGE,
+    UPDATE_IBORDER_ID_FROM_IBORDER_PAGE,
+    EDIT_IBORDER_FOR_IBORDER_PAGE,
+    DELETE_IBORDER_FOR_IBORDER_PAGE,
     POST_DIVISION,
 } from "./actionType";
 
 
 // GO Botton Post API
-function* GoButton_Demand_genfun({ data }) {
+
+function* GoButton_IBOrder_genfun({ data }) {
   try {
-    const response = yield call(DemandPage_GoButton_API, data);
-    yield put(postGoButtonForDemandSuccess(response.Data));
+    const response = yield call(IBOrderPage_GoButton_API, data);
+    yield put(postGoButtonForIBOrderSuccess(response.Data));
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Go Button-Demand Page",
+      Status: true, Message: "500 Error Go Button-IBOrder Page",
     }));
   }
 };
 
 //post api
-function* Post_Demand_Genfun({ data }) {
+
+function* Post_IBOrder_Genfun({ data }) {
   
     yield put(SpinnerState(true))
     try {
-        const response = yield call(DemandPage_Post_API,data);
+        const response = yield call(IBOrderPage_Post_API,data);
         yield put(SpinnerState(false))
-        yield put(postDemandSuccess(response));
+        yield put(postIBOrderSuccess(response));
     } catch (error) {
         yield put(SpinnerState(false))
         yield put(AlertState({
@@ -79,52 +84,57 @@ function* post_Division_Genfun({ data }) {
 }
 
 
-function* editDemandGenFunc({ jsonBody, pageMode }) {
+
+function* editIBOrderGenFunc({ jsonBody, pageMode }) {
 
     yield put(SpinnerState(true))
     try {
-      const response = yield call(DemandPage_Edit_API, jsonBody);
+      const response = yield call(IBOrderPage_Edit_API, jsonBody);
 
       response.pageMode = pageMode
       yield put(SpinnerState(false))
-      yield put(editDemandIdSuccess(response));
+      yield put(editIBOrderIdSuccess(response));
     } catch (error) {
       yield put(SpinnerState(false))
       yield put(AlertState({
         Type: 4,
-        Status: true, Message: "500 Error Edit Demand",
+
+        Status: true, Message: "500 Error Edit IBOrder",
+
       }));
     }
   }
   
-  function* DeleteDemand_GenFunc({ id }) {
+
+  function* DeleteIBOrder_GenFunc({ id }) {
     yield put(SpinnerState(true))
     try {
-      const response = yield call(DemandPage_Delete_API, id);
+      const response = yield call(IBOrderPage_Delete_API, id);
       yield put(SpinnerState(false))
-      yield put(deleteDemandIdSuccess(response));
+      yield put(deleteIBOrderIdSuccess(response));
     } catch (error) {
       yield put(SpinnerState(false))
       yield put(AlertState({
         Type: 4,
-        Status: true, Message: "500 Error Delete Demand",
+        Status: true, Message: "500 Error Delete IBOrder",
       }));
     }
   }
   
-  function* UpdateDemand_ID_GenFunc({ data, id }) {
+
+  function* UpdateIBOrder_ID_GenFunc({ data, id }) {
   
     try {
       yield saveDissable(true)
-      const response = yield call(DemandPage_Update_API, data, id);
-      yield put(updateDemandIdSuccess(response))
+      const response = yield call(IBOrderPage_Update_API, data, id);
+      yield put(updateIBOrderIdSuccess(response))
       yield saveDissable(false)
     }
     catch (error) {
       yield saveDissable(false)
       yield put(AlertState({
         Type: 4,
-        Status: true, Message: "500 Error UpdateDemand",
+        Status: true, Message: "500 Error UpdateIBOrder",
       }));
     }
   }
@@ -136,9 +146,10 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
 
     const response = yield call(IBOrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
-      i.DemandDate = i.DemandDate;
-      var date = convertDatefunc(i.DemandDate)
-      i.DemandDate = (date)
+
+      i.IBOrderDate = i.IBOrderDate;
+      var date = convertDatefunc(i.IBOrderDate)
+      i.IBOrderDate = (date)
       return i
     })
     yield put(postIBOrderListPageSuccess(newList));
@@ -154,13 +165,15 @@ function* editDemandGenFunc({ jsonBody, pageMode }) {
   
 
 function* IBOrderSaga() {
-    yield takeEvery(POST_GO_BUTTON_FOR_DEMAND, GoButton_Demand_genfun)
-    yield takeEvery(POST_DEMAND, Post_Demand_Genfun)
+
+    yield takeEvery(POST_GO_BUTTON_FOR_IBORDER, GoButton_IBOrder_genfun)
+    yield takeEvery(POST_IBORDER, Post_IBOrder_Genfun)
     yield takeEvery(POST_DIVISION, post_Division_Genfun)
-    yield takeEvery(EDIT_DEMAND_FOR_DEMAND_PAGE, editDemandGenFunc)
-    yield takeEvery(DELETE_DEMAND_FOR_DEMAND_PAGE, DeleteDemand_GenFunc)
-    yield takeEvery(POST_DEMAND_LIST_PAGE, Post_IBOrderList_GenFunc)
-    yield takeEvery(UPDATE_DEMAND_ID_FROM_DEMAND_PAGE, UpdateDemand_ID_GenFunc)
+    yield takeEvery(EDIT_IBORDER_FOR_IBORDER_PAGE, editIBOrderGenFunc)
+    yield takeEvery(DELETE_IBORDER_FOR_IBORDER_PAGE, DeleteIBOrder_GenFunc)
+    yield takeEvery(POST_IBORDER_LIST_PAGE, Post_IBOrderList_GenFunc)
+    yield takeEvery(UPDATE_IBORDER_ID_FROM_IBORDER_PAGE, UpdateIBOrder_ID_GenFunc)
+
 }
 
 export default IBOrderSaga;
