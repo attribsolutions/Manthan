@@ -55,6 +55,7 @@ const IBOrderList = () => {
 
     const { userAccess, pageField, Supplier, tableList, iborderlistFilter } = reducers;
     const { fromdate, todate, SupplierSelect } = iborderlistFilter;
+
     const page_Id = (pageId.IB_ORDER_LIST);
 
     const fileds = {
@@ -62,6 +63,9 @@ const IBOrderList = () => {
         FormDate: currentDate,
         ToDate: currentDate,
     }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const values = { ...state.values }
+
     const action = {
         getList: postIBOrderListPage,
         deleteId: deleteIBOrderId,
@@ -92,7 +96,7 @@ const IBOrderList = () => {
 
 
     // useEffect(() => {
-     
+
     //     const jsonBody = JSON.stringify({
     //         Supplier: SupplierSelect === "" ? '' : SupplierSelect.value,
     //         Customer: userParty(),
@@ -136,7 +140,7 @@ const IBOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: "",
+            Supplier:"",
             Customer: userParty(),
         })
 
@@ -164,14 +168,14 @@ const IBOrderList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-        
+
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>From Date </Label>
+                                    style={{ width: "90px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
@@ -189,9 +193,9 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col>
                         <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                            <FormGroup className="mb- row mt-3 ">
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>To Date </Label>
+                                    style={{ width: "70px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
@@ -217,10 +221,11 @@ const IBOrderList = () => {
                                 <Col sm="6">
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        value={SupplierSelect}
+                                        value={values.SupplierName}
                                         options={SupplierDropdown_Options}
                                         onChange={SupplierOnchange}
                                     />
+
                                 </Col>
                             </FormGroup>
                         </Col >
@@ -241,7 +246,7 @@ const IBOrderList = () => {
                             MasterModal={IBOrder}
                             masterPath={url.IB_ORDER}
                             ButtonMsgLable={"IBOrder"}
-                            deleteName={"id"}
+                            deleteName={"FullIBOrderNumber"}
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.IB_ORDER_LIST ? false : true}
                             goButnFunc={goButtonHandler}
