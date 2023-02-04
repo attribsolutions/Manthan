@@ -178,7 +178,6 @@ export const Rows = (data) => {
                 // parseFloat(TotalSGst).toFixed(2),
             ];
         };
-        debugger
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
@@ -335,11 +334,13 @@ export const ReportHederRows = (data) => {
         [`${data.CustomerName}`, , `${data.SupplierName}`],
         [`${data.BillingAddress}`, , `${data.ShippingAddress}`],
         [`FSSAI :f23dfxxxxxwe55`, , `FSSAI :ui3dfxxxxxwe55`],
-        // [, , ""],
-        // [,`` , ],
+      
     ]
     return reportArray;
 }
+
+
+
 
 
 
