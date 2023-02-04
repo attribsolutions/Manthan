@@ -22,8 +22,8 @@ export const reportHeder1 = (doc, data) => {
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text("Vendor", 80, 75)
-    doc.text('Customer', 400, 75)
-    // doc.text('Terms And Condition', 440, 75)
+    doc.text('Customer', 280, 75)
+    doc.text('Shipping Address', 440, 75)
 
     // doc.text(`GSTIN:${data.Total.TotalAmount}`, 570,95)
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
@@ -32,8 +32,8 @@ export const reportHeder1 = (doc, data) => {
     // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 60, 408, 10);//vertical right 1
-    doc.line(295, 180, 295, 60);//vertical right 2
+    doc.line(408, 200, 408, 10);//vertical right 1
+    doc.line(220, 180, 220, 60);//vertical right 2
     // doc.line(570, 815, 30, 815);//horizontal line buttom 1
     // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
     var options3 = {
@@ -63,7 +63,7 @@ export const reportHeder1 = (doc, data) => {
                 halign: 'left',
             },
             1: {
-                columnWidth: 70,
+                columnWidth: 200,
                 halign: 'left',
             },
             2: {
@@ -526,7 +526,6 @@ export const pageFooter = (doc, data) => {
     doc.line(570, 680, 30, 680);//horizontal line Footer 3
     doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
     // doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
-
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(570, 775, 30, 775);//horizontal line (Bottom)
