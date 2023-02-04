@@ -22,7 +22,7 @@ export const reportHeder1 = (doc, data) => {
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text("Vendor", 80, 75)
-    doc.text('Shift to', 400, 75)
+    doc.text('Customer', 400, 75)
     // doc.text('Terms And Condition', 440, 75)
 
     // doc.text(`GSTIN:${data.Total.TotalAmount}`, 570,95)
@@ -176,6 +176,8 @@ export const reportFooter = (doc, data) => {
                 halign: 'center',
             },
         },
+
+        
         startY: doc.autoTableEndPosY(),// 45,
     };
 
@@ -279,15 +281,21 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
                 data1.row.cells[6].colSpan = 2
+                data1.row.cells[8].colSpan = 2
+
 
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[8].styles.fontSize = 8
+
 
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+
 
 
                 // data1.row.cells[3].colSpan=4
@@ -574,9 +582,9 @@ export const pageFooter = (doc, data) => {
     doc.autoTable(terms);
     const slicedArray = terms.slice(0, 3);
     // doc.text(`${slicedArray[0]}`, 35, 793, "justify")
-     doc.text(`${slicedArray[0].TermsAndCondition===undefined?"":slicedArray[0].TermsAndCondition}`, 35, 793, "justify")
-     doc.text(`${slicedArray[1].TermsAndCondition===undefined?"":slicedArray[1].TermsAndCondition}`, 35, 803, "justify")
-     doc.text(`${slicedArray[2].TermsAndCondition===undefined?"":slicedArray[2].TermsAndCondition}`, 35, 813, "justify")
+     doc.text(`${slicedArray[0]===undefined?"":slicedArray[0].TermsAndCondition}`, 35, 793, "justify")
+     doc.text(`${slicedArray[1]===undefined?"":slicedArray[1].TermsAndCondition}`, 35, 803, "justify")
+     doc.text(`${slicedArray[2]===undefined?"":slicedArray[2].TermsAndCondition}`, 35, 813, "justify")
     // doc.text(`${slicedArray[2]}`, 35, 813, "justify")
     // doc.text(`Received By `, 180, 785,"justify")
     doc.setFontSize(10)
