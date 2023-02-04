@@ -33,7 +33,8 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData, btnmode) {
-        if (editBodyfunc) { editBodyfunc(rowData,btnmode) }
+   
+        if (editBodyfunc) { editBodyfunc(rowData, btnmode) }
         else {
             dispatch(editActionFun(rowData.id, btnmode,));
         }
@@ -67,8 +68,8 @@ export const listPageCommonButtonFunction = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-           const   forceEdit=rowData.forceEdit;
-        //    debugger
+            const forceEdit = rowData.forceEdit;
+            //    debugger
             return (
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 

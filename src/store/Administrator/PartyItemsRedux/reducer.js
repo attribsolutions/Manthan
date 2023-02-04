@@ -1,4 +1,5 @@
 import {
+  EDIT_PARTY_ITEM_ID_SUCCESS,
   GET_PARTY_ITEM_LIST_SUCCESS,
   GET_PARTY_LIST_SUCCESS,
   POST_PARTYITEMS_SUCCESS,
@@ -33,6 +34,12 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         partyItem: action.payload,
+      }
+
+      case EDIT_PARTY_ITEM_ID_SUCCESS:
+      return {
+        ...state,
+        editData: action.payload,
       }
     default:
       return state
