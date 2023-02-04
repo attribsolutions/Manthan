@@ -41,13 +41,14 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 const PartyItems = (props) => {
-    
+
     const history = useHistory()
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userAccState, setUserPageAccessState] = useState("");
     const [itemArr, setitemArr] = useState([]);
+    console.log("itemArr", itemArr)
 
     const fileds = {
         id: "",
@@ -77,7 +78,7 @@ const PartyItems = (props) => {
             postMsg: state.PartyItemsReducer.postMsg,
             updateMsg: state.PartyItemsReducer.updateMsg,
             tableList: state.PartyItemsReducer.partyItem,
-            supplier:state.PartyMasterReducer.partyList,
+            supplier: state.PartyMasterReducer.partyList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -211,12 +212,12 @@ const PartyItems = (props) => {
     const tableColumns = [
         {
             text: "ItemID",
-            dataField: "id",
+            dataField: "Item",
             sort: true,
         },
         {
             text: "ItemName",
-            dataField: "Name",
+            dataField: "ItemName",
             sort: true,
         },
         {
@@ -224,16 +225,17 @@ const PartyItems = (props) => {
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
+                debugger
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}
-                        key={cellContent}
+                        key={row.Item}
                         disabled={hasDropMode ? row.hasInitialVal ? pageMode === mode.edit ? true : false : false : false}
                         onChange={e => {
                             setitemArr(ele => {
                                 var newrr = ele.map(i => {
-                                    if (row.id === i.id) {
+                                    if (row.Item === i.Item) {
                                         i.itemCheck = !i.itemCheck;
                                     }
                                     return i
@@ -274,13 +276,14 @@ const PartyItems = (props) => {
     };
 
     const SubmitHandler = (e) => {
+        debugger
         e.preventDefault();
         const Find = itemArr.filter((index) => {
             return (index.itemCheck === true)
         })
-
+        console.log("Find", Find)
         var PartyData = Find.map((index) => ({
-            Item: index.id,
+            Item: index.Item,
             Party: values.SupplierName.value
 
         }))

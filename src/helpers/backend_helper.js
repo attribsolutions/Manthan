@@ -342,10 +342,10 @@ export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY
 
 //PartyItems API
 
-export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
-export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
-export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
-export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
+export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
+export const Party_Items = (data) => post(url.PARTYITEM_FOR_MASTER, data)// post api
+export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEM_FOR_MASTER}/${party_id}`)//get api
+export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
 
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
