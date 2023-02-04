@@ -11,14 +11,7 @@ import {
   GET_CUSTOMER_SUCCESS,
 } from './actionType'
 
-export const getSupplier = () => ({
-  type: GET_SUPPLIER,
-});
 
-export const getSupplierSuccess = orders => ({
-  type: GET_SUPPLIER_SUCCESS,
-  payload: orders,
-})
 
 export const getSupplierAddress = () => ({
   type: GET_SUPPLIER_ADDRESS,
@@ -28,15 +21,18 @@ export const getSupplierAddressSuccess = address => ({
   type: GET_SUPPLIER_ADDRESS_SUCCESS,
   payload: address,
 })
+// ************************************************************
 
-export const getOrderType = () => ({
-  type: GET_ORDER_TYPE,
+
+export const getSupplier = () => ({
+  type: GET_SUPPLIER,
 });
 
-export const getOrderTypeSuccess = orderType => ({
-  type: GET_ORDER_TYPE_SUCCESS,
-  payload: orderType,
+export const getSupplierSuccess = orders => ({
+  type: GET_SUPPLIER_SUCCESS,
+  payload: orders,
 })
+// ************************************************************
 
 export const GetVender = () => ({
   type: GET_VENDER,
@@ -46,6 +42,7 @@ export const GetVenderSuccess = orders => ({
   type: GET_VENDER_SUCCESS,
   payload: orders,
 })
+// ************************************************************
 
 export const GetCustomer = () => ({
   type: GET_CUSTOMER,
@@ -54,4 +51,15 @@ export const GetCustomer = () => ({
 export const GetCustomerSuccess = orders => ({
   type: GET_CUSTOMER_SUCCESS,
   payload: orders,
+})
+
+
+// ************************************************************
+export const getOrderType = () => ({
+  type: GET_ORDER_TYPE,
+});
+
+export const getOrderTypeSuccess = orderType => ({
+  type: GET_ORDER_TYPE_SUCCESS,
+  payload: orderType,
 })
