@@ -18,6 +18,7 @@ export const PageHedercolumns = [
 
 export const Rows = (data) => {
     const { InvoiceItems = [] } = data
+    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
     let totalBasicAmount = 0
@@ -27,6 +28,7 @@ export const Rows = (data) => {
     let totalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
+        debugger
       
         const tableitemRow = [
             element.ItemName,

@@ -165,8 +165,8 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 export const PARTY_SUB_PARTY_DROPDOWN_API = '/PartySubParty' // PartySubParty dropdown Api
 
 //PartyItems
-export const PARTYITEMS = '/PartyItemList' // FOR Get
-
+export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
+export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
 //******** purchase modal *********************************************************************************************************************** */
 
