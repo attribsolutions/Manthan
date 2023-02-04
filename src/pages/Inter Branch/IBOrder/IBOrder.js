@@ -574,8 +574,8 @@ const IBOrder = (props) => {
         };
 
         const jsonBody = JSON.stringify({
-            IBOrderDate: iborderdate,
-            IBOrderAmount: iborderAmount,
+            DemandDate: iborderdate,
+            DemandAmount: iborderAmount,
             Comment: values.Comment,
             Customer: userParty(),
             Supplier: values.SupplierName.value,
@@ -583,12 +583,12 @@ const IBOrder = (props) => {
             BillingAddressID: 4,
             ShippingAddressID: 4,
             Inward: 0,
-            IBOrderNo: (pageMode === "edit" ? EditData.IBOrderNo : values.IBOrderNo),
-            FullIBOrderNumber: (pageMode === "edit" ? EditData.FullIBOrderNumber : values.FullIBOrderNumber),
+            DemandNo: (pageMode === "edit" ? EditData.IBOrderNo : values.IBOrderNo),
+            FullDemandNumber: (pageMode === "edit" ? EditData.FullIBOrderNumber : values.FullIBOrderNumber),
             MaterialIssue: null,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            IBOrderItem: itemArr
+            DemandItem: itemArr
         }
         );
         //  saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
