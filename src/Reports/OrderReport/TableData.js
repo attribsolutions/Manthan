@@ -124,7 +124,6 @@ export const PageHedercolumns = [
 export const Rows = (data) => {
     const { OrderItem = [] } = data
     OrderItem.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
-   
     const returnArr = [];
     let Gst = 0
     let totalBasicAmount = 0
@@ -172,13 +171,12 @@ export const Rows = (data) => {
                 "isaddition",
                 `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
-                "",
+                // "",
                 `Amount:${parseFloat(totalAmount).toFixed(2)}`,
                 // parseFloat(TotalCGst).toFixed(2),
                 // parseFloat(TotalSGst).toFixed(2),
             ];
         };
-        debugger
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
@@ -332,14 +330,16 @@ export const Rows1 = (data) => {
 }
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`${data.CustomerName}`, , `${data.SupplierName}`],
-        [`${data.BillingAddress}`, , `${data.ShippingAddress}`],
+        [`${data.SupplierName}`, , `${data.CustomerName}`],
+        [`${data.ShippingAddress}`, , `${data.BillingAddress}`],
         [`FSSAI :f23dfxxxxxwe55`, , `FSSAI :ui3dfxxxxxwe55`],
-        // [, , ""],
-        // [,`` , ],
+      
     ]
     return reportArray;
 }
+
+
+
 
 
 

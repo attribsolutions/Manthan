@@ -21,8 +21,8 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billing Address", 80, 75)
-    doc.text('shipping address', 400, 75)
+    doc.text("Vendor", 80, 75)
+    doc.text('Customer', 400, 75)
     // doc.text('Terms And Condition', 440, 75)
 
     // doc.text(`GSTIN:${data.Total.TotalAmount}`, 570,95)
@@ -37,7 +37,6 @@ export const reportHeder1 = (doc, data) => {
     // doc.line(570, 815, 30, 815);//horizontal line buttom 1
     // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
     var options3 = {
-
         margin: {
             top: 45, left: 35, right: 35,// bottom:100 
         },
@@ -79,22 +78,9 @@ export const reportHeder1 = (doc, data) => {
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
-export const ReportHederRows = (doc, data) => {
-    // doc.line(285, 15, 30, 15);//horizontal line 1
-    // doc.line(285, 45, 30, 45);//horizontal bottom
-    // doc.line(30, 45, 30, 15);//vertical left
-    // doc.line(285, 45, 285, 15);//vertical right 
-    // doc.line(285, 15, 573, 15);//horizontal line 1
-    // doc.line(285, 45, 575, 45);//horizontal bottom
-    // doc.line(285, 45, 285, 15);//vertical left
-    // doc.line(575, 45, 575, 15);//vertical right 
-    // doc.setFont('Tahoma', 'Normal')
-    // doc.setFontSize(9)
-    // doc.text(`GSTIN: ${data.GSTIN}`, 33, 25)
-    // doc.text('PAN:AAAFC5288N', 33, 35)
-    // doc.text(`Invoice Number:${data.InvoiceID}`, 288, 25)
-    // doc.text(`Invoice Date: ${data.InvoiceDate}`, 288, 35)
-}
+
+
+
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
@@ -190,53 +176,42 @@ export const reportFooter = (doc, data) => {
                 halign: 'center',
             },
         },
+
+        
         startY: doc.autoTableEndPosY(),// 45,
     };
-    const optionsTable3 = {
 
-        margin: {
-            top: 45, left: 35, right: 200
-        },
-        showHead: 'never',
-        theme: 'plain',
-        headerStyles: {
-            cellPadding: 1,
-            lineWidth: 0,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 1,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                // valign: "top",
-                // columnWidth: 280,
-                // fontStyle: 'bold',
-            },
-        },
-        didParseCell: function (cell, data) {
-            if (cell.row.index === 0) {
-                cell.cell.styles.fontSize = 7;
-                cell.cell.styles.lineColor = 'gray'
-                cell.cell.styles.lineWidth = 0.5
-            }
-        },
-        startY: 745,
+    // const optionsTable3 = {
+    //     margin: {
+    //         // top: 70, left: 35, right: 200
+    //     },
+    //     showHead: 'never',
+    //     theme: 'plain',
+    //     headerStyles: {
+    //         cellPadding: 1,
+    //     },
+    //     bodyStyles: {
+    //         cellPadding: 1,
+    //     },
+    //     columnStyles: {
+    //         0: {
+                
+    //         },
+    //         1: {
+                
+    //         },
+    //     },
+    //     didParseCell: function (cell, data) {
+    //         if (cell.row.index === 0) {
+    //             cell.cell.styles.fontSize = 7;
+    //             // cell.cell.styles.lineColor = ''
+    //             cell.cell.styles.lineWidth = 0.5
+    //         }
+    //     },
+    //     startY: 790,
+    // };
 
-
-    };
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
+    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRows(data),optionsTable3);
 
     const optionsTable4 = {
         margin: {
@@ -306,15 +281,21 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
                 data1.row.cells[6].colSpan = 2
+                data1.row.cells[8].colSpan = 2
+
 
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[8].styles.fontSize = 8
+
 
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+
 
 
                 // data1.row.cells[3].colSpan=4
@@ -415,9 +396,7 @@ export const tableBody = (doc, data) => {
 
     };
 
-    doc.autoTable(table.columns, table.Rows(data), options, {
-
-    });
+    doc.autoTable(table.columns, table.Rows(data), options);
 
     const optionsTable4 = {
 
@@ -549,7 +528,6 @@ export const pageFooter = (doc, data) => {
     // doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
 
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
-    debugger
     doc.setFont('Tahoma')
     doc.line(570, 775, 30, 775);//horizontal line (Bottom)
 
@@ -568,7 +546,7 @@ export const pageFooter = (doc, data) => {
 
     });
 
-     const TotalGST = totalCGST +totalSGST;
+    const TotalGST = totalCGST + totalSGST;
     // console.log(arr)
     doc.setFontSize(8)
 
@@ -600,12 +578,14 @@ export const pageFooter = (doc, data) => {
     doc.text(`Terms And Condition  `, 35, 784, "justify")
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(9)
-    doc.text(`${terms[0].TermsAndCondition}`, 35, 793, "justify")
-    // doc.text(`${terms[1].TermsAndCondition}`, 35, 803, "justify")
-    // doc.text(`${terms[2].TermsAndCondition}`, 35, 813, "justify")
-
-
-
+    debugger
+    doc.autoTable(terms);
+    const slicedArray = terms.slice(0, 3);
+    // doc.text(`${slicedArray[0]}`, 35, 793, "justify")
+     doc.text(`${slicedArray[0]===undefined?"":slicedArray[0].TermsAndCondition}`, 35, 793, "justify")
+     doc.text(`${slicedArray[1]===undefined?"":slicedArray[1].TermsAndCondition}`, 35, 803, "justify")
+     doc.text(`${slicedArray[2]===undefined?"":slicedArray[2].TermsAndCondition}`, 35, 813, "justify")
+    // doc.text(`${slicedArray[2]}`, 35, 813, "justify")
     // doc.text(`Received By `, 180, 785,"justify")
     doc.setFontSize(10)
     // doc.text(`${data.SupplierName} `, 390, 785, "justify")

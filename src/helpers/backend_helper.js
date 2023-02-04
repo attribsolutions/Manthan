@@ -346,7 +346,7 @@ export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get ap
 export const Party_Items = (data) => post(url.PARTYITEM_FOR_MASTER, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEM_FOR_MASTER}/${party_id}`)//get api
 export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
-
+export const edit_PartyItem_List_Api = (id) => get(`${url.PARTYITEM_FOR_MASTER}/${id}`)// edit api
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
 
