@@ -352,38 +352,38 @@ const IBOrder = (props) => {
             }
         },
 
-        {//------------- Rate column ----------------------------------
-            text: "Rate/Unit",
-            dataField: "",
-            formatter: (value, row, k) => {
+        // {//------------- Rate column ----------------------------------
+        //     text: "Rate/Unit",
+        //     dataField: "",
+        //     formatter: (value, row, k) => {
 
-                return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-                            id={`Ratey${k}`}
-                            defaultValue={row.Rate}
-                            autoComplete="off"
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
-                                } else {
-                                    document.getElementById(`Ratey${k}`).value = row.Rate
-                                }
-                            }}
-                            onKeyDown={(e) => handleKeyDown(e, iborderItemTable)}
-                        />
-                    </span>
-                )
-            },
+        //         return (
+        //             <span className="text-right" >
+        //                 <Input
+        //                     type="text"
+        //                     id={`Ratey${k}`}
+        //                     defaultValue={row.Rate}
+        //                     autoComplete="off"
+        //                     className="text-end"
+        //                     onChange={(e) => {
+        //                         const val = e.target.value
+        //                         let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+        //                         if ((isnum) || (val === '')) {
+        //                             val_onChange(val, row, "rate")
+        //                         } else {
+        //                             document.getElementById(`Ratey${k}`).value = row.Rate
+        //                         }
+        //                     }}
+        //                     onKeyDown={(e) => handleKeyDown(e, iborderItemTable)}
+        //                 />
+        //             </span>
+        //         )
+        //     },
 
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
+        //     headerStyle: (colum, colIndex) => {
+        //         return { width: '140px', textAlign: 'center' };
+        //     }
+        // },
     ];
 
     const defaultSorted = [
@@ -400,7 +400,7 @@ const IBOrder = (props) => {
     };
 
     const goButtonHandler = () => {
-        debugger
+      
         // if (!SupplierSelect > 0) {
         //     dispatch(
         //         AlertState({
@@ -608,7 +608,7 @@ const IBOrder = (props) => {
                     <form>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
+                                <Col className=" mt-1 row " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}> IBOrder Date</Label>
