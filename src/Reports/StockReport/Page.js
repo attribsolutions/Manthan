@@ -20,7 +20,7 @@ function pageFooter(doc,data) {
     style.reportFooter(doc,data);
 }
 
- const ProductionReport=()=> {
+ const StockReport=()=> {
    const data = Data
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc,data);
@@ -32,4 +32,4 @@ function pageFooter(doc,data) {
     window.open(doc.output('dataurlnewwindow'));
     return(<></>);
 }
-export default ProductionReport;
+export default StockReport;
