@@ -154,7 +154,7 @@ const IBOrderList = () => {
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>From Date </Label>
+                                    style={{ width: "90px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
@@ -174,7 +174,7 @@ const IBOrderList = () => {
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>To Date </Label>
+                                    style={{ width: "70px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"

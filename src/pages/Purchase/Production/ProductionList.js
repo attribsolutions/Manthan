@@ -20,7 +20,7 @@ import * as report from '../../../Reports/ReportIndex'
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Material_Issue_Edit_API } from "../../../helpers/backend_helper";
+import { Material_Issue_Edit_API, production_Edit_API } from "../../../helpers/backend_helper";
 
 const ProductionList = () => {
 
@@ -77,10 +77,9 @@ const ProductionList = () => {
             setUserAccState(userAcc)
         }
     }, [userAccess])
-
     function downBtnFunc(row) {
         var ReportType = report.Production1;
-        dispatch(getpdfReportdata(Material_Issue_Edit_API,ReportType, row.id))
+        dispatch(getpdfReportdata(production_Edit_API,ReportType, row.id))
     }
 
     const goButtonHandler = (onload = false) => {
