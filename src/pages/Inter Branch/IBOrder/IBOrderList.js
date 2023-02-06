@@ -11,21 +11,17 @@ import {
     updateIBOrderIdSuccess,
     iborderlistfilter,
     postDivision,
-    postGoButtonForIBOrder
+
 } from "../../../store/Inter Branch/IBOrderRedux/action";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { useMemo } from "react";
+import { currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { MetaTags } from "react-meta-tags";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import IBOrder from "./IBOrder";
-
-
 
 const IBOrderList = () => {
 
@@ -35,7 +31,7 @@ const IBOrderList = () => {
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(url.IB_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [iborderdate, setiborderdate] = useState(currentDate)
+    const [iborderdate, setiborderdate] = useState({ fromdate: currentDate, todate: currentDate, SupplierSelect: { value: '', label: "All" } })
 
     const reducers = useSelector(
 
@@ -46,25 +42,16 @@ const IBOrderList = () => {
             updateMsg: state.IBOrderReducer.updateMsg,
             postMsg: state.IBOrderReducer.postMsg,
             editData: state.IBOrderReducer.editData,
-            iborderlistFilter: state.IBOrderReducer.iborderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             GoButton: state.IBOrderReducer.GoButton,
         })
     );
 
-    const { userAccess, pageField, Supplier, tableList, iborderlistFilter } = reducers;
-    const { fromdate, todate, SupplierSelect } = iborderlistFilter;
+    const { userAccess, pageField, Supplier, iborderlistFilter } = reducers;
+    const { fromdate, todate, SupplierSelect } = iborderdate;
 
     const page_Id = (pageId.IB_ORDER_LIST);
-
-    const fileds = {
-
-        FormDate: currentDate,
-        ToDate: currentDate,
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const values = { ...state.values }
 
     const action = {
         getList: postIBOrderListPage,
@@ -93,18 +80,6 @@ const IBOrderList = () => {
         });
         dispatch(postDivision(jsonBody));
     }, []);
-
-
-    // useEffect(() => {
-
-    //     const jsonBody = JSON.stringify({
-    //         Supplier: SupplierSelect === "" ? '' : SupplierSelect.value,
-    //         Customer: userParty(),
-    //         EffectiveDate: iborderdate,
-    //         IBOrderID: 0,
-    //     });
-    //     dispatch(postGoButtonForIBOrder(jsonBody));
-    // }, []);
 
     SupplierDropdown_Options.unshift({
         value: "",
@@ -140,7 +115,7 @@ const IBOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier:"",
+            Supplier: SupplierSelect.value,
             Customer: userParty(),
         })
 
@@ -148,21 +123,25 @@ const IBOrderList = () => {
     };
 
     function FromdateOnchange(e, date) {
-        let newObj = { ...iborderlistFilter }
+        let newObj = { ...iborderdate }
         newObj.fromdate = date
-        dispatch(iborderlistfilter(newObj))
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
     }
 
     function TodateOnchange(e, date) {
-        let newObj = { ...iborderlistFilter }
+        let newObj = { ...iborderdate }
         newObj.todate = date
-        dispatch(iborderlistfilter(newObj))
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
     }
 
     function SupplierOnchange(e) {
-        let newObj = { ...iborderlistFilter }
-        newObj.divisionSelect = e
-        dispatch(iborderlistfilter(newObj))
+        debugger
+        let newObj = { ...iborderdate }
+        newObj.SupplierSelect = e
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
     }
 
     return (
@@ -175,7 +154,7 @@ const IBOrderList = () => {
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "90px" }}>From Date </Label>
+                                    style={{ width: "110px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
@@ -193,9 +172,9 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col>
                         <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 ">
+                            <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "70px" }}>To Date </Label>
+                                    style={{ width: "110px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
@@ -221,11 +200,10 @@ const IBOrderList = () => {
                                 <Col sm="6">
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        value={values.SupplierName}
+                                        value={SupplierSelect}
                                         options={SupplierDropdown_Options}
                                         onChange={SupplierOnchange}
                                     />
-
                                 </Col>
                             </FormGroup>
                         </Col >
@@ -246,7 +224,7 @@ const IBOrderList = () => {
                             MasterModal={IBOrder}
                             masterPath={url.IB_ORDER}
                             ButtonMsgLable={"IBOrder"}
-                            deleteName={"FullIBOrderNumber"}
+                            deleteName={"id"}
                             pageMode={pageMode}
                             makeBtnShow={pageMode === url.IB_ORDER_LIST ? false : true}
                             goButnFunc={goButtonHandler}
