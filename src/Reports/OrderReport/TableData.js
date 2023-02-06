@@ -332,7 +332,7 @@ export const ReportHederRows = (data) => {
     var reportArray = [
         [`${data.SupplierName}`, `${data.CustomerName}`, `${data.CustomerName}`],
         [`${data.ShippingAddress}`, `${data.BillingAddress}`,`${data.BillingAddress}` ],
-        [`FSSAI :f23dfxxxxxwe55`,`FSSAI :ui3dfxxxxxwe55` , ],
+        [`${data.ShippingFssai}`,`FSSAI :ui3dfxxxxxwe55`,],
       
     ]
     return reportArray;

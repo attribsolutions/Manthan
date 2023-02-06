@@ -16,8 +16,11 @@ import {
 import ProductionMaster from "./ProductionMaster";
 import { delete_ProductionId, delete_ProductionIdSuccess, edit_ProductionId, getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
 import { MetaTags } from "react-meta-tags";
+import * as report from '../../../Reports/ReportIndex'
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import { Material_Issue_Edit_API } from "../../../helpers/backend_helper";
 
 const ProductionList = () => {
 
@@ -74,6 +77,11 @@ const ProductionList = () => {
             setUserAccState(userAcc)
         }
     }, [userAccess])
+
+    function downBtnFunc(row) {
+        var ReportType = report.Production1;
+        dispatch(getpdfReportdata(Material_Issue_Edit_API,ReportType, row.id))
+    }
 
     const goButtonHandler = (onload = false) => {
         let FromDate
@@ -168,6 +176,7 @@ const ProductionList = () => {
                             ButtonMsgLable={"Production"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
+                            downBtnFunc={downBtnFunc}
                             goButnFunc={goButtonHandler}
 
                         />
