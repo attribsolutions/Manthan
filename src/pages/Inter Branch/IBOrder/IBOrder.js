@@ -525,9 +525,9 @@ const IBOrder = (props) => {
 
         iborderItemTable.forEach(i => {
 
-            if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
-            }
+            // if ((i.Quantity > 0) && !(i.Rate > 0)) {
+            //     validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+            // }
 
             if (pageMode === "edit") {
                 const ischange = (!(i.poQty === i.Quantity) ||
