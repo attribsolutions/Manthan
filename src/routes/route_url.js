@@ -128,6 +128,7 @@ export const INWARD_LIST = "/InwardList"
 
 export const IB_INVOICE ="/IB_Invoice"
 export const IB_INVOICE_LIST = "/IB_Invoice_List"
+export const IB_INVOICE_MODE_2 = "/IBInvoiceMode2"
 
 // demo
 export const Demo= "/Demo"

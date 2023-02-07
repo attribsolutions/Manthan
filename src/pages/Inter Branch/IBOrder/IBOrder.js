@@ -65,7 +65,8 @@ const IBOrder = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
     const [userAccState, setUserPageAccessState] = useState("");
-    const [iborderdate, setiborderdate] = useState(currentDate)
+    const [InOutSelect, setInOutSelect] = useState();
+    const [iborderdate, setiborderdate] = useState(currentDate);
     const [iborderItemTable, setiborderItemTable] = useState([])
     const [iborderAmount, setIBOrderAmount] = useState(0);
 
@@ -142,8 +143,6 @@ const IBOrder = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-
-                // console.log("hasEditVal", hasEditVal)
 
                 setEditData(hasEditVal);
                 const { id, SupplierName, Supplier, Comment, IBOrderDate, IBOrderNo, FullIBOrderNumber } = hasEditVal
@@ -400,7 +399,7 @@ const IBOrder = (props) => {
     };
 
     const goButtonHandler = () => {
-      
+
         // if (!SupplierSelect > 0) {
         //     dispatch(
         //         AlertState({
@@ -480,6 +479,24 @@ const IBOrder = (props) => {
         setIBOrderAmount(sum.toFixed(2))
         dispatch(BreadcrumbShowCountlabel(`${"IBOrder Amount"} :${sum.toFixed(2)}`))
     };
+
+
+    const InOutDropdown_Options = [
+        {
+            label: "In",
+            value: 0,
+        },
+
+        {
+            label: "Out",
+            value: 1,
+        }
+    ]
+
+    function InOutOnchange(e) {
+        setInOutSelect(e)
+    }
+
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -675,7 +692,7 @@ const IBOrder = (props) => {
                                     {
                                         pageMode === mode.edit ? <Col sm="6">
                                             <FormGroup className="row mt-2 ">
-                                                <Label className="mt-2" style={{ width: "100px" }}> IBOrder No. </Label>
+                                                <Label className="mt-2" style={{ width: "150px" }}> IBOrder No. </Label>
                                                 <Col sm={7}>
                                                     <Input
                                                         name="IBOrderNo"
