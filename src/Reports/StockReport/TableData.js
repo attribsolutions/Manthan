@@ -107,9 +107,9 @@ export const ReportFotterColumns = [
 export const ReportHederRows = (data) => {
     var reportArray = [
         // [, ,],
-        [`${data.CustomerName}`, ,`${data.Time}`],
-        [`maharashtra`, , `${data.InvoiceDate}`],
-        [`FSSAI :f23dfxxxxxwe55`, , `${data.Todate}`],
+        [`${data.CustomerName}`, ,`Current Time: ${data.Time}`],
+        [`maharashtra`, , `From Date:  ${data.InvoiceDate}`],
+        [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
     return reportArray;
