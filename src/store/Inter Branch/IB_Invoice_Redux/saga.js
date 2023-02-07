@@ -32,7 +32,7 @@ function* get_IB_InvoiceList_GenFunc({ filters }) {
 function* Inward_Button_GenratorFunction({ id }) {
   debugger
   try {
-    const response =  yield call(Inward_Button_API, id);
+    const response = yield call(Inward_Button_API, id);
     yield put(InwardButtonIdSuccess(response.Data));
 
   } catch (error) {
@@ -44,10 +44,11 @@ function* Inward_Button_GenratorFunction({ id }) {
 }
 
 // Make IB_Invoice API
-function* MakeIBInvoice_GenFun({ data }) {
+function* MakeIBInvoice_GenFun({ data, division }) {
   debugger
   try {
-    const response =  yield call(Make_IB_Invoice_API, data);
+    const response = yield call(Make_IB_Invoice_API, data);
+    response.Data.division = division
     yield put(MakeIBInvoiceSuccess(response.Data));
 
   } catch (error) {
