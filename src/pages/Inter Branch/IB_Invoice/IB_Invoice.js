@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -24,27 +24,31 @@ import { AlertState } from "../../../store/actions";
 import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as  mode from "../../../routes/PageMode";
 import Select from "react-select";
+import { postDivision } from "../../../store/Inter Branch/IBOrderRedux/action";
 
 const IB_Invoice = (props) => {
-
 
     const dispatch = useDispatch();
     const history = useHistory();
     const [userAccState, setUserAccState] = useState('');
     const [InwardDate, setInwardDate] = useState(currentDate);
-    const [pageMode, setPageMode] = useState("save");
+    const [divisionSelect, setDivisionSelect] = useState([]);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+
     const {
         postMsg,
+        Division,
         userAccess,
         MakeIBInvoice
     } = useSelector((state) => ({
         postMsg: state.InwardReducer.postMsg,
+        Division: state.IBOrderReducer.Supplier,
         MakeIBInvoice: state.IBInvoiceReducer.MakeIBInvoice,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
-    const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [] } = MakeIBInvoice
-    debugger
+    const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [], division = {} } = MakeIBInvoice
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -87,6 +91,17 @@ const IB_Invoice = (props) => {
             }));
         }
     }, [postMsg])
+
+    useEffect(() => {
+
+        const jsonBody = JSON.stringify({
+            Company: userCompany(),
+            Party: userParty()
+        });
+        dispatch(postDivision(jsonBody));
+    }, []);
+
+    const DivisionDropdown_Options = Division.map((i) => ({ label: i.Name, value: i.id }))
 
     function InwardDateOnchange(e, date) {
         setInwardDate(date)
@@ -149,6 +164,11 @@ const IB_Invoice = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
+        },
+
+        {
+            text: "Quantity",
+            dataField: "Quantity",
         },
 
         {
@@ -240,7 +260,10 @@ const IB_Invoice = (props) => {
             // ),
         },
 
-
+        {
+            text: "Rate",
+            dataField: "Rate",
+        },
 
     ];
 
@@ -250,17 +273,6 @@ const IB_Invoice = (props) => {
         custom: true,
     };
 
-    const goButtonHandler = () => {
-
-        // const jsonBody = JSON.stringify({
-        //     Supplier: values.SupplierName.value,
-        //     Customer: userParty(),
-        //     EffectiveDate: iborderdate,
-        //     IBOrderID: (pageMode === mode.defaultsave) ? 0 : EditData.id
-        // })
-
-        // dispatch(postGoButtonForIBOrder(jsonBody))
-    };
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
@@ -297,10 +309,15 @@ const IB_Invoice = (props) => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>Division</Label>
                                 <Col sm="7">
-                                    <Input type="text"
-                                        // defaultValue={data.Party.Name}
-                                        placeholder='Enter Division'
-                                    // onChange={e => description = e.target.value}
+                                    <Select
+                                        isDisabled={location.pageMode === "mode2save" ? true : false}
+                                        name="division"
+                                        value={location.pageMode === "mode2save" ? division : divisionSelect}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        options={DivisionDropdown_Options}
+                                        onChange={(e) => { setDivisionSelect(e) }}
                                     />
                                 </Col>
                             </FormGroup>
