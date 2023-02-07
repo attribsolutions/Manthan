@@ -91,11 +91,15 @@ export const reportHeder2 = (doc, data) => {
 
 export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
-    doc.setFontSize(10)
-    doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
+    doc.setFontSize(9)
+    doc.line(570, 25, 408, 25) //horizontal line 1 billby upper
+    doc.line(570, 40, 408, 40) //horizontal line 2 billby upper
+
     doc.setFont(undefined, 'bold')
-    doc.text(`Order No: ${data.OrderNo} `, 415, 30) //Invoice Id
-    doc.text(`Order Date: ${data.OrderDate}`, 415, 50) //Invoice date
+    doc.text(`Order No: ${data.OrderNo} `, 415, 20) //Invoice Id
+    doc.text(`Order Date: ${data.OrderDate}`, 415, 35) //Invoice date
+    doc.text(`DeliveryDate: ${data.DeliveryDate}`, 415, 50) //Invoice date
+
 }
 
 export const reportFooter = (doc, data) => {

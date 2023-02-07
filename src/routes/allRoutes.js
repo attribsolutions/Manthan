@@ -242,12 +242,13 @@ const userRoutes = [
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: IBOrder },
   { path: path.IB_ORDER_LIST, component: IBOrderList },
-
+  
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
-
+  
   { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
   { path: path.IB_INVOICE, component: IB_Invoice },
+  { path: path.IB_INVOICE_MODE_2, component: IBOrderList },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

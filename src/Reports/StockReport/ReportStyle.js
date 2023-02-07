@@ -14,29 +14,27 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    doc.text('Tax Invoice', 200, 40,) //Tax invoice Header
+    doc.text('Stock Report', 200, 40,) //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 75)  //bill by 
-    doc.text('Billed to', 280, 75) //billed to
-    doc.text('Details of Transport', 440, 75)
-
-
+    doc.text(`*** ${data.CompanyName} ***`, 300, 75,'center')  //bill by 
+    // doc.text('Billed to', 280, 75) //billed to
+    // doc.text('Details of Transport', 440, 75)
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(570, 10, 30, 10);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(409, 100, 30, 100) //horizontal line 4
+    // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 200, 408, 10);//vertical right 1
-    doc.line(220, 200, 220, 60);//vertical right 2
+    doc.line(408, 60, 408, 10);//vertical right 1
+    doc.line(300, 200, 300, 80);//vertical right 2
 
     var options3 = {
         margin: {
-            top: 45, left: 35, right: 35,// bottom:100 
+            // top: 45, left: 35, right: 35,// bottom:100 
         },
         showHead: 'always',
         theme: 'plain',
@@ -49,7 +47,7 @@ export const reportHeder1 = (doc, data) => {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
             cellPadding: 3,
-            fontSize: 8,
+            fontSize: 9,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
         },
@@ -79,8 +77,8 @@ export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 95)
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 95)
+    // doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 95)
+    // doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 95)
 }
 
 export const reportHeder3 = (doc, data) => {
@@ -88,8 +86,8 @@ export const reportHeder3 = (doc, data) => {
     doc.setFontSize(10)
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    doc.text(`Report No:${data.InvoiceNumber}`, 415, 30) //Invoice Id
+    doc.text(`Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
 }
 // original
 
@@ -121,7 +119,7 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 140,
+                columnWidth: 80,
             },
             1: {
                 columnWidth: 50,
@@ -251,7 +249,6 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    debugger
     const tableRow = table.Rows(data);
     const { OrderItem = [] } = data
 
@@ -262,7 +259,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-
+debugger
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
@@ -277,9 +274,12 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[6.].styles.fontStyle = "bold"
             }
 
-            // if (data1.row.cells[5].raw === a) {
+            if (data1.row.raw[6] ==="Dispatch" ) {
+                data1.row.cells[6].contentHeight = 2
                 
-            // }
+
+                
+            }
         },
         margin: {
             left: 30, right: 25,//200 bottom
@@ -307,7 +307,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 140,
+                columnWidth: 100,
             },
             1: {
                 columnWidth: 40,
@@ -315,11 +315,11 @@ export const tableBody = (doc, data) => {
 
             },
             2: {
-                columnWidth: 50,
+                columnWidth: 30,
                 halign: 'right',
             },
             3: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             4: {
@@ -327,16 +327,19 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             5: {
-                halign: 'right',
-            },
-            6: {
                 columnWidth: 40,
                 halign: 'right',
             },
+            6: {
+                columnWidth: 42,
+                halign: 'right',
+            },
             7: {
+                columnWidth:35,
                 halign: 'right',
             },
             8: {
+                columnWidth: 40,
                 fontStyle: 'bold',
                 halign: 'right',
             },
@@ -344,9 +347,6 @@ export const tableBody = (doc, data) => {
 
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
-        
-
-
 
     };
 
