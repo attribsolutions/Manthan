@@ -245,7 +245,8 @@ const userRoutes = [
   
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
-  
+  { path: path.IB_INWARD_MODE_2, component: IB_Invoice_List },
+
   { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
   { path: path.IB_INVOICE, component: IB_Invoice },
   { path: path.IB_INVOICE_MODE_2, component: IBOrderList },
