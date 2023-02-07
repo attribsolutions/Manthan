@@ -169,17 +169,11 @@ const IBOrderList = () => {
 
     const makeBtnFunc = (list = {}) => {
         debugger
-        // const obj = { ...list[0], }
-        const jsonBody = JSON.stringify({
-            Customer: 4,
-            OrderIDs: "",
-            FromDate: "2023-02-06",
-            Party: 25
-        })
-        dispatch(MakeIBInvoice(jsonBody))
+        const obj = { ...list[0] }
+
         history.push({
             pathname: url.IB_INVOICE,
-            editValue: list[0],
+            editValue: obj,
             pageMode: mode.mode2save
         })
     };

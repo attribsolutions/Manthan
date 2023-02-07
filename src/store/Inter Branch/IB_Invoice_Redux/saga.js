@@ -1,10 +1,10 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { convertDatefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { IB_InvoiceList_API, Inward_Button_API, Make_IB_Invoice_API } from "../../../helpers/backend_helper";
+import { IB_InvoiceList_API, Inward_Button_API, Make_IB_Invoice_API, Post_IB_Invoice_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { get_IB_InvoiceListPageSuccess, InwardButtonIdSuccess, MakeIBInvoiceSuccess } from "./action";
-import { GET_IB_INVOICE_LIST_PAGE, INWARD_BUTTON_ID, MAKE_IB_INVOICE } from "./actionType";
+import { get_IB_InvoiceListPageSuccess, InwardButtonIdSuccess, MakeIBInvoiceSuccess, PostIBInvoiceSuccess } from "./action";
+import { GET_IB_INVOICE_LIST_PAGE, INWARD_BUTTON_ID, MAKE_IB_INVOICE, POST_IB_INVOICE } from "./actionType";
 
 // Inward List API
 function* get_IB_InvoiceList_GenFunc({ filters }) {
@@ -32,7 +32,7 @@ function* get_IB_InvoiceList_GenFunc({ filters }) {
 function* Inward_Button_GenratorFunction({ id }) {
   debugger
   try {
-    const response =  yield call(Inward_Button_API, id);
+    const response = yield call(Inward_Button_API, id);
     yield put(InwardButtonIdSuccess(response.Data));
 
   } catch (error) {
@@ -47,7 +47,8 @@ function* Inward_Button_GenratorFunction({ id }) {
 function* MakeIBInvoice_GenFun({ data }) {
   debugger
   try {
-    const response =  yield call(Make_IB_Invoice_API, data);
+    const response = yield call(Make_IB_Invoice_API, data);
+    // response.Data.division = division
     yield put(MakeIBInvoiceSuccess(response.Data));
 
   } catch (error) {
@@ -58,10 +59,25 @@ function* MakeIBInvoice_GenFun({ data }) {
   }
 }
 
+// Make IB_Invoice API
+function* PostIBInvoice_GenFun({ data }) {
+  debugger
+  try {
+    const response = yield call(Post_IB_Invoice_API, data);
+    yield put(PostIBInvoiceSuccess(response.Data));
+
+  } catch (error) {
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Post IB Invoice ",
+    }));
+  }
+}
 function* IB_InvoiceSaga() {
   yield takeEvery(GET_IB_INVOICE_LIST_PAGE, get_IB_InvoiceList_GenFunc)
   yield takeEvery(INWARD_BUTTON_ID, Inward_Button_GenratorFunction)
   yield takeEvery(MAKE_IB_INVOICE, MakeIBInvoice_GenFun)
+  yield takeEvery(POST_IB_INVOICE, PostIBInvoice_GenFun)
 
 }
 

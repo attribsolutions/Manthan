@@ -451,6 +451,7 @@ export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)
 export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
 export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
 export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
+export const Post_IB_Invoice_API = (data) => post(url.POST_IB_INVOICE, data)// Make IBInvoice api
 
 export {
   getLoggedInUser,
