@@ -14,14 +14,14 @@ import { useHistory } from "react-router-dom";
 import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
 import * as url from "../../../routes/route_url";
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as  mode from "../../../routes/PageMode";
 import Select from "react-select";
 import { postDivision } from "../../../store/Inter Branch/IBOrderRedux/action";
@@ -81,7 +81,7 @@ const IB_Invoice = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postInwardSuccess({ Status: false }))
+            dispatch(PostIBInvoiceSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
@@ -92,7 +92,7 @@ const IB_Invoice = (props) => {
 
         } else if (postMsg.Status === true) {
             // saveDissable(false);//save Button Is enable function
-            dispatch(postInwardSuccess({ Status: false }))
+            dispatch(PostIBInvoiceSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -156,6 +156,18 @@ const IB_Invoice = (props) => {
     }
     const goButtonHandler = () => {
         debugger
+        if (!divisionSelect.value > 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please select Division",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
         const jsonBody = JSON.stringify({
             Customer: userParty(),
             OrderIDs: pageMode === mode.mode2save ? EditData.id.toString() : "",
@@ -167,46 +179,97 @@ const IB_Invoice = (props) => {
     };
 
     const saveHandeller = (e, values) => {
+        // {
+        //     IBChallanDate: "2023-02-07",
+        //         CustomerGSTTin: "41",
+        //             GrandTotal: 6,
+        //                 RoundOffAmount: "0.60",
+        //                     Customer: 24,
+        //                         Party: 4,
+        //                             CreatedBy: 15,
+        //                                 UpdatedBy: 15,
+        //                                     IBChallanItems: [
+        //                                         {
+        //                                             Item: 55,
+        //                                             Unit: 481,
+        //                                             BatchCode: "65",
+        //                                             Quantity: "0.500",
+        //                                             BatchDate: "2023-01-18",
+        //                                             BatchID: 456,
+        //                                             BaseUnitQuantity: "13.000",
+        //                                             LiveBatch: 44,
+        //                                             MRP: null,
+        //                                             Rate: "10.00",
+        //                                             BasicAmount: "5.00",
+        //                                             GSTAmount: "0.60",
+        //                                             GST: 53,
+        //                                             CGST: "0.30",
+        //                                             SGST: "0.30",
+        //                                             IGST: 0,
+        //                                             GSTPercentage: "12.00",
+        //                                             CGSTPercentage: 6,
+        //                                             SGSTPercentage: 6,
+        //                                             IGSTPercentage: 0,
+        //                                             Amount: "5.60",
+        //                                             TaxType: "GST",
+        //                                             DiscountType: "",
+        //                                             Discount: "0",
+        //                                             DiscountAmount: "0"
+        //                                         }
+        //                                     ],
+        //                                         IBChallansReferences: [
+        //                                             {
+        //                                                 Demand: 11
+        //                                             }
+        //                                         ]
+        // }
+
 
         const arr = IBOrderItemDetails.map(i => ({
-            Item: i.Item.id,
-            Quantity: i.Quantity,
-            MRP: i.MRP,
-            ReferenceRate: i.Rate,
-            Rate: i.Rate,
-            Unit: i.Unit.id,
-            BaseUnitQuantity: i.BaseUnitQuantity,
-            GST: i.LiveBatch.GST,
-            BasicAmount: i.BasicAmount,
-            GSTAmount: parseFloat(i.GSTAmount).toFixed(2),
-            Amount: i.Amount,
-            CGST: i.CGST,
-            SGST: i.SGST,
-            IGST: i.IGST,
-            CGSTPercentage: i.CGSTPercentage,
-            SGSTPercentage: i.SGSTPercentage,
-            IGSTPercentage: i.IGSTPercentage,
-            BatchDate: i.BatchDate,
-            BatchCode: i.BatchCode,
-            DiscountType: i.DiscountType,
-            Discount: i.Discount,
-            DiscountAmount: i.DiscountAmount,
-            TaxType: i.TaxType
+            Item: 55,
+            Unit: 481,
+            BatchCode: "65",
+            Quantity: "0.500",
+            BatchDate: "2023-01-18",
+            BatchID: 456,
+            BaseUnitQuantity: "13.000",
+            LiveBatch: 44,
+            MRP: null,
+            Rate: "10.00",
+            BasicAmount: "5.00",
+            GSTAmount: "0.60",
+            GST: 53,
+            CGST: "0.30",
+            SGST: "0.30",
+            IGST: 0,
+            GSTPercentage: "12.00",
+            CGSTPercentage: 6,
+            SGSTPercentage: 6,
+            IGSTPercentage: 0,
+            Amount: "5.60",
+            TaxType: "GST",
+            DiscountType: "",
+            Discount: "0",
+            DiscountAmount: "0"
+
         }))
 
         const jsonBody = JSON.stringify({
-            // IBInvoiceDate: InvoiceDate,
-            // IBInwardNumber: data.IBChallanNumber,
-            // FullIBInwardNumber: data.FullIBInwardNumber,
-            // GrandTotal: data.GrandTotal,
-            // CreatedBy: createdBy(),
-            // UpdatedBy: createdBy(),
-            // Customer: data.Customer.id,
-            // Supplier: data.Party.id,
-            InterBranchInwardItems: arr,
-            InterBranchInwardReferences: [{
-                IBChallan: 1
-            }]
+            IBChallanDate: "2023-02-07",
+            CustomerGSTTin: "41",
+            GrandTotal: 6,
+            RoundOffAmount: "0.60",
+            Customer: 24,
+            Party: 4,
+            CreatedBy: 15,
+            UpdatedBy: 15,
+            IBChallanItems: arr,
+
+            IBChallansReferences: [
+                {
+                    Demand: 11
+                }
+            ]
         });
 
         // saveDissable(true);//save Button Is dissable function
@@ -235,10 +298,6 @@ const IB_Invoice = (props) => {
             dataField: "",
             formatter: (value, row, key) => {
                 debugger
-                // if (!row.UnitName) {
-                //     row["Unit_id"] = row.UnitDetails[0].Unit
-                //     row["UnitName"] = row.UnitDetails[0].UnitName
-                // }
 
                 return (
                     <Select
@@ -268,55 +327,71 @@ const IB_Invoice = (props) => {
         {
             text: "StockDetails",
             dataField: "StockDetails",
-            // formatter: (cellContent, user) => (
+            formatter: (cellContent, user) => (
 
-            //     <>
-            //         <Table className="table table-bordered table-responsive mb-1">
-            //             <Thead>
-            //                 <tr>
+                <>
+                    <Table className="table table-bordered table-responsive mb-1">
+                        <Thead>
+                            <tr>
 
-            //                     <th>  Item Name </th>
-            //                     <th> Quantity</th>
-            //                     <th>  Unit</th>
-            //                     <th>   Stock Details</th>
-            //                     <th>  Rate</th>
-            //                 </tr>
-            //             </Thead>
-            //             <Tbody>
-            //                 {/* {IBOrderItemDetails.map((index) => {
+                                <th>Batch Code </th>
+                                <th>Supplier BatchCode</th>
+                                <th>Batch Date</th>
+                                <th>Stock Quantity</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </Thead>
+                        <Tbody>
+                            {StockDetails.map((index) => {
 
-            //                     return (
-            //                         < tr >
-            //                             <td>
-            //                                 <div style={{ width: "150px" }}>
-            //                                     <Label>
-            //                                         {index.LiveBatch.BatchCode}
-            //                                     </Label>
-            //                                 </div>
-            //                             </td>
-            //                             <td>
-            //                                 <div style={{ width: "150px" }}>
-            //                                     <Label>
-            //                                         {index.LiveBatch.SystemBatchCode}
-            //                                     </Label>
-            //                                 </div>
-            //                             </td>
+                                return (
+                                    < tr >
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.SystemBatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.BatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
 
-            //                             <td>
-            //                                 <div style={{ width: "120px", textAlign: "right" }}>
-            //                                     <Label >
-            //                                         {index.Quantity}
-            //                                     </Label>
-            //                                 </div>
-            //                             </td>
+                                        <td>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
+                                                <Label >
+                                                    {index.BatchDate}
+                                                </Label>
+                                            </div>
+                                        </td>
 
-            //                         </tr>
-            //                     )
-            //                 })} */}
-            //             </Tbody>
-            //         </Table>
-            //     </>
-            // ),
+                                        <td>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
+                                                <Label >
+                                                    {index.BaseUnitQuantity}
+                                                </Label>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
+                                                <Label >
+                                                    {index.Qty}
+                                                </Label>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                )
+                            })}
+                        </Tbody>
+                    </Table>
+                </>
+            ),
         },
 
         {
@@ -386,7 +461,14 @@ const IB_Invoice = (props) => {
                             </FormGroup>
                         </Col>
                         <Col sm="1" className="mx-2 mt-3">
-                            <Go_Button onClick={(e) => goButtonHandler()} />
+                            {/* <Go_Button onClick={(e) => goButtonHandler()} /> */}
+                            {(pageMode === mode.defaultsave) || (pageMode === mode.mode2save) ?
+                                (IBOrderItemDetails.length === 0) ?
+                                    < Go_Button onClick={(e) => goButtonHandler()} />
+                                    :
+                                    <Change_Button onClick={(e) => dispatch(MakeIBInvoiceSuccess([]))} />
+                                : null
+                            }
                         </Col>
 
                     </div>
