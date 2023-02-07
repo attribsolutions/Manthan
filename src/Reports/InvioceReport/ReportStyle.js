@@ -1,6 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
+import { invoice } from "../ReportIndex";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -251,18 +252,15 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    debugger
     const tableRow = table.Rows(data);
-    const { OrderItem = [] } = data
+    const {OrderItem = [] } = data
 
     console.log(tableRow)
 //    const a= OrderItem.forEach((element) => {
 //         element.Comment
 //     })
     var options = {
-
         didParseCell: (data1) => {
-
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
@@ -276,10 +274,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4.].styles.fontStyle = "bold"
                 data1.row.cells[6.].styles.fontStyle = "bold"
             }
-
-            // if (data1.row.cells[5].raw === a) {
-                
-            // }
         },
         margin: {
             left: 30, right: 25,//200 bottom
@@ -312,7 +306,6 @@ export const tableBody = (doc, data) => {
             1: {
                 columnWidth: 40,
                 halign: 'right',
-
             },
             2: {
                 columnWidth: 50,
@@ -341,22 +334,104 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
         },
-
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
-        
-
-
-
     };
+    var options2 = {
+        didParseCell: (data1) => {
+            if (data1.row.cells[5].raw === "isaddition") {
+                data1.row.cells[0].colSpan = 3
+                data1.row.cells[4].colSpan = 2
+                data1.row.cells[6].colSpan = 2
+                
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
 
-    doc.autoTable(table.columns, table.Rows(data), options, {
-
-
-    });
+                data1.row.cells[0.].styles.fontStyle = "bold"
+                data1.row.cells[4.].styles.fontStyle = "bold"
+                data1.row.cells[6.].styles.fontStyle = "bold"
+            }
+        },
+        margin: {
+            left: 30, right: 25,//200 bottom
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'left',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 140,
+            },
+            1: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            2: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 60,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            5: {
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            7: {
+                halign: 'right',
+            },
+            8: {
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+            9: {
+                halign: 'right',
+            },
+            10: {
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+        },
+        tableLineColor: "black",
+        startY: doc.autoTableEndPosY(45),// 45,
+    };
+debugger
+if (data.ReportType===invoice) {
+    doc.autoTable(table.columns,table.Rows(data), options,);
+    
+}else{
+    doc.autoTable(table.columns1,table.Rows(data), options2,);
+    
+}
 
     const optionsTable4 = {
-
         margin: {
             left: 30, right: 30, bottom: 140
         },
@@ -432,7 +507,6 @@ export const pageFooter = (doc, data) => {
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
     var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-
     function toWords(s) {
         s = s.toString();
         s = s.replace(/[\, ]/g, '');

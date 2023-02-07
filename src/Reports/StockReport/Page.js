@@ -22,7 +22,7 @@ function pageFooter(doc,data) {
 
  const StockReport=()=> {
    const data = Data
-    var doc = new jsPDF('p', 'pt', 'a4');
+    var doc = new jsPDF('l', 'pt', 'a4');
     pageHeder(doc,data);
     reportBody(doc, data);
     pageFooter(doc,data);
