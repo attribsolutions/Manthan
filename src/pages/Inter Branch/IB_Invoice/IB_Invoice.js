@@ -20,12 +20,12 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
 import * as url from "../../../routes/route_url";
-import { AlertState, Breadcrumb_inputName } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as  mode from "../../../routes/PageMode";
 import Select from "react-select";
 import { postDivision } from "../../../store/Inter Branch/IBOrderRedux/action";
-import { MakeIBInvoice, MakeIBInvoiceSuccess } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
+import { MakeIBInvoice, MakeIBInvoiceSuccess, PostIBInvoice, PostIBInvoiceSuccess } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 
 const IB_Invoice = (props) => {
 
@@ -36,14 +36,14 @@ const IB_Invoice = (props) => {
     const [divisionSelect, setDivisionSelect] = useState([]);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
-    const [modalCss, setModalCss] = useState(false);
+
     const {
         postMsg,
         Division,
         userAccess,
         MakeIBInvoiceData
     } = useSelector((state) => ({
-        postMsg: state.InwardReducer.postMsg,
+        postMsg: state.IBInvoiceReducer.postMsg,
         Division: state.IBOrderReducer.Supplier,
         MakeIBInvoiceData: state.IBInvoiceReducer.MakeIBInvoice,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -51,7 +51,14 @@ const IB_Invoice = (props) => {
 
     const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [], } = MakeIBInvoiceData
 
-   
+    useEffect(() => {
+        const page_Id = pageId.IB_INVOICE
+        dispatch(PostIBInvoiceSuccess([]))
+        dispatch(MakeIBInvoiceSuccess([]))
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+
+    }, []);
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -80,7 +87,7 @@ const IB_Invoice = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: url.INWARD_LIST,
+                RedirectPath: url.INVOICE_LIST,
             }))
 
         } else if (postMsg.Status === true) {
@@ -116,7 +123,6 @@ const IB_Invoice = (props) => {
             else if (hasShowModal) {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
-                setModalCss(true)
             }
 
             if (hasEditVal) {
@@ -205,10 +211,10 @@ const IB_Invoice = (props) => {
 
         // saveDissable(true);//save Button Is dissable function
 
-        if (pageMode === "edit") {
+        if (pageMode === mode.edit) {
         } else {
 
-            dispatch(postInward(jsonBody))
+            dispatch(PostIBInvoice(jsonBody))
         }
     }
 

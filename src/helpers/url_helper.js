@@ -228,3 +228,5 @@ export const IB_InvoiceList_API = '/BranchInvoiceFilter'//List Api
 export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward Button Api 
 export const POST_API_FOR_IB_INVOICE = '/BranchInvoice'//Post Api
 export const MAKE_IB_INVOICE = '/InterBrancheOrderDetails'//Post Api
+export const POST_IB_INVOICE = '/BranchInvoice'//Post Api
+

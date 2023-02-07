@@ -5,7 +5,9 @@ import {
   INWARD_BUTTON_ID,
   INWARD_BUTTON_ID_SUCCESS,
   MAKE_IB_INVOICE,
-  MAKE_IB_INVOICE_SUCCESS
+  MAKE_IB_INVOICE_SUCCESS,
+  POST_IB_INVOICE,
+  POST_IB_INVOICE_SUCCESS
 } from "./actionType";
 
 export const IB_Invoicelistfilters = filter => ({
@@ -34,7 +36,7 @@ export const InwardButtonIdSuccess = (editData) => ({
   payload: editData,
 })
 
-//For Make Invoice 
+//For Make IBInvoice 
 export const MakeIBInvoice = (data) => ({
   type: MAKE_IB_INVOICE,
   data
@@ -43,3 +45,14 @@ export const MakeIBInvoiceSuccess = (data) => ({
   type: MAKE_IB_INVOICE_SUCCESS,
   payload: data,
 })
+
+//For IB Invoice Post 
+export const PostIBInvoice = (data) => ({
+  type: POST_IB_INVOICE,
+  data
+})
+export const PostIBInvoiceSuccess = (data) => ({
+  type: POST_IB_INVOICE_SUCCESS,
+  payload: data,
+})
+
