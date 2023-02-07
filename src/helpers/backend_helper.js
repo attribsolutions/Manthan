@@ -98,7 +98,7 @@ export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postForget(url.FO
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
-export const RoleAccessApi_url = (party, employee,company) => get(`${url.ROLE_ACCESS}/${party}/${employee}/${company}`)
+export const RoleAccessApi_url = (party, employee, company) => get(`${url.ROLE_ACCESS}/${party}/${employee}/${company}`)
 export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save And Update
 
 //  common pages get data for page filed and validation
@@ -212,7 +212,7 @@ export const GetCompanyByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_CO
 
 export const PageDropdownForRoleAccessList_Api = (id1, id2) => get(`${url.PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE}/${id1}/${id2}`)//get api Pages
 export const GetRoleListForRoleAccessList_Page_Api = (id1, id2) => get(`${url.GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}`) //get api role List 
-export const GO_Button_HandlerForRoleAccessList_Api = (id1, id2,id3) => get(`${url.GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}/${id3}`) //get api role List 
+export const GO_Button_HandlerForRoleAccessList_Api = (id1, id2, id3) => get(`${url.GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}/${id3}`) //get api role List 
 export const AddPageHandlerForRoleAccessList_Api = (id1) => get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
 export const PostMethod_HandlerForRoleAccessList_Api = (data) => post(url.ROLE_ACCESS, data) //post api role Access List 
 export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
@@ -420,6 +420,7 @@ export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
 export const Production_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
 
+
 // Invoice
 export const Invoice_GoButton_Post_API = (data) => post(url.INVOICE_GO_BUTTON_POST_API, data)// go button postapi
 export const Invoice_Post_API = (data) => post(url.INVOICE_POST_API, data)//  postapi
@@ -446,9 +447,10 @@ export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// I
 export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// List Api
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
 
-// Challan
+// IB Invoice
 export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
 export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
+export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
 
 export {
   getLoggedInUser,

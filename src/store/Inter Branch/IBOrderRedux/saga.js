@@ -146,10 +146,10 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
 
     const response = yield call(IBOrderList_get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
-
       i.IBOrderDate = i.IBOrderDate;
+      var time = convertTimefunc(i.CreatedOn)
       var date = convertDatefunc(i.IBOrderDate)
-      i.IBOrderDate = (date)
+      i.IBOrderDate = (`${date} ${time}`)
       return i
     })
     yield put(postIBOrderListPageSuccess(newList));

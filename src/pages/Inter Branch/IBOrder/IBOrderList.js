@@ -9,33 +9,39 @@ import {
     editIBOrderId,
     postIBOrderListPage,
     updateIBOrderIdSuccess,
-    iborderlistfilter,
     postDivision,
-    postGoButtonForIBOrder
+
 } from "../../../store/Inter Branch/IBOrderRedux/action";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { useMemo } from "react";
+import { currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { MetaTags } from "react-meta-tags";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import IBOrder from "./IBOrder";
-
-
+import * as  mode from "../../../routes/PageMode";
+import { MakeIBInvoice } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 
 const IBOrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.IB_ORDER_LIST)
+    // const hasPagePath = history.location.pathname
+    // const [pageMode, setpageMode] = useState(url.IB_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [iborderdate, setiborderdate] = useState(currentDate)
+    const [iborderdate, setiborderdate] = useState(
+        {
+            fromdate: currentDate,
+            todate: currentDate,
+            SupplierSelect: { value: '', label: "All" },
+            InOutSelect: {
+                value: 1,
+                label: 'IN',
+            }
+        })
 
     const reducers = useSelector(
 
@@ -46,22 +52,20 @@ const IBOrderList = () => {
             updateMsg: state.IBOrderReducer.updateMsg,
             postMsg: state.IBOrderReducer.postMsg,
             editData: state.IBOrderReducer.editData,
-            iborderlistFilter: state.IBOrderReducer.iborderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             GoButton: state.IBOrderReducer.GoButton,
         })
     );
 
-    const { userAccess, pageField, Supplier, tableList, iborderlistFilter } = reducers;
-    const { fromdate, todate, SupplierSelect } = iborderlistFilter;
-    const page_Id = (pageId.IB_ORDER_LIST);
+    const { userAccess, pageField, Supplier, iborderlistFilter } = reducers;
+    const { fromdate, todate, SupplierSelect, InOutSelect } = iborderdate;
 
-    const fileds = {
+    // const page_Id = (pageId.IB_ORDER_LIST);
+    const hasPagePath = history.location.pathname;
+    const pageMode = (hasPagePath === url.IB_INVOICE_MODE_2) ? mode.mode2save : mode.defaultList;
+    const page_Id = (hasPagePath === url.IB_INVOICE_MODE_2) ? pageId.IB_INVOICE_MODE_2 : pageId.IB_ORDER_LIST;
 
-        FormDate: currentDate,
-        ToDate: currentDate,
-    }
     const action = {
         getList: postIBOrderListPage,
         deleteId: deleteIBOrderId,
@@ -72,7 +76,7 @@ const IBOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        // setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"IBOrder Count"} :0`))
@@ -89,18 +93,6 @@ const IBOrderList = () => {
         });
         dispatch(postDivision(jsonBody));
     }, []);
-
-
-    // useEffect(() => {
-     
-    //     const jsonBody = JSON.stringify({
-    //         Supplier: SupplierSelect === "" ? '' : SupplierSelect.value,
-    //         Customer: userParty(),
-    //         EffectiveDate: iborderdate,
-    //         IBOrderID: 0,
-    //     });
-    //     dispatch(postGoButtonForIBOrder(jsonBody));
-    // }, []);
 
     SupplierDropdown_Options.unshift({
         value: "",
@@ -136,41 +128,73 @@ const IBOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: "",
+            Supplier: SupplierSelect.value,
             Customer: userParty(),
+            InOut: InOutSelect.value
         })
 
         dispatch(postIBOrderListPage(jsonBody))
     };
 
     function FromdateOnchange(e, date) {
-        let newObj = { ...iborderlistFilter }
+        let newObj = { ...iborderdate }
         newObj.fromdate = date
-        dispatch(iborderlistfilter(newObj))
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
     }
 
     function TodateOnchange(e, date) {
-        let newObj = { ...iborderlistFilter }
+        let newObj = { ...iborderdate }
         newObj.todate = date
-        dispatch(iborderlistfilter(newObj))
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
     }
 
     function SupplierOnchange(e) {
-        let newObj = { ...iborderlistFilter }
-        newObj.divisionSelect = e
-        dispatch(iborderlistfilter(newObj))
+        debugger
+        let newObj = { ...iborderdate }
+        newObj.SupplierSelect = e
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
     }
+
+    function InOutOnchange(e) {
+        debugger
+        let newObj = { ...iborderdate }
+        newObj.InOutSelect = e
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
+    }
+
+
+    const makeBtnFunc = (list = {}) => {
+        debugger
+        // const obj = { ...list[0], }
+        const jsonBody = JSON.stringify({
+            Customer: 4,
+            OrderIDs: "",
+            FromDate: "2023-02-06",
+            Party: 25
+        })
+        dispatch(MakeIBInvoice(jsonBody))
+        history.push({
+            pathname: url.IB_INVOICE,
+            editValue: list[0],
+            pageMode: mode.mode2save
+        })
+    };
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-        
+
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm="3" className="">
+
+                        <Col sm="3">
                             <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
+                                <Label className="col-sm-2 p-2"
                                     style={{ width: "110px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
@@ -188,10 +212,11 @@ const IBOrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="3" className="">
+
+                        <Col sm="3" >
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "110px" }}>To Date </Label>
+                                    style={{ width: "110px", marginLeft: "-50px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
@@ -209,11 +234,10 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="4">
+                        <Col sm="3">
                             <FormGroup className="mb-2 row mt-3">
-                                <Label className="col-md-4 p-2"
-
-                                    style={{ width: "80px" }}>Division</Label>
+                                <Label className=" p-2 pl-2"
+                                    style={{ width: "80px", marginLeft: "-50px" }}>Division</Label>
                                 <Col sm="6">
                                     <Select
                                         classNamePrefix="select2-Customer"
@@ -225,7 +249,30 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col >
 
-                        <Col sm="1" className="mx-4 ">
+                        <Col sm="3">
+                            <FormGroup className="mb-2 row mt-3">
+                                <Label className=" p-2"
+                                    style={{ width: "80px", marginLeft: "-100px" }}>In/Out</Label>
+                                <Col sm="6">
+                                    <Select
+                                        classNamePrefix="select2-Customer"
+                                        value={InOutSelect}
+                                        options={[{
+                                            value: 1,
+                                            label: 'IN',
+                                        },
+                                        {
+                                            value: 2,
+                                            label: 'Out',
+                                        }]}
+                                        onChange={InOutOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
+
+                        <Col sm="1"
+                            style={{ width: "80px", marginLeft: "-100px" }}>
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
@@ -243,10 +290,12 @@ const IBOrderList = () => {
                             ButtonMsgLable={"IBOrder"}
                             deleteName={"id"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.IB_ORDER_LIST ? false : true}
                             goButnFunc={goButtonHandler}
                             editBodyfunc={editBodyfunc}
                             filters={iborderlistFilter}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnShow={pageMode === mode.defaultList ? false : true}
+                            makeBtnName={"Make IB Invoice"}
                         />
                         : null
                 }

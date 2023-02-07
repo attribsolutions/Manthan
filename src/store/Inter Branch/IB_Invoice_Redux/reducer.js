@@ -1,13 +1,14 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { IB_INVOICE_LIST_FILTERS, GET_IB_INVOICE_LIST_PAGE_SUCCESS, INWARD_BUTTON_ID_SUCCESS } from "./actionType"
+import { IB_INVOICE_LIST_FILTERS, GET_IB_INVOICE_LIST_PAGE_SUCCESS, INWARD_BUTTON_ID_SUCCESS, MAKE_IB_INVOICE_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     IB_Invoice: [],
     IB_InvoiceFilter: { fromdate: currentDate, todate: currentDate, CustomerSelect: { value: "", label: " All" } },
-    InwardData: []
+    InwardData: [],
+    MakeIBInvoice:{ Status: false }
 }
 
-const ChallanReducer = (state = INIT_STATE, action) => {
+const IBInvoiceReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
         case IB_INVOICE_LIST_FILTERS:
@@ -27,10 +28,15 @@ const ChallanReducer = (state = INIT_STATE, action) => {
                 ...state,
                 InwardData: action.payload,
             };
-
+        // Make IB Invoice
+        case MAKE_IB_INVOICE_SUCCESS:
+            return {
+                ...state,
+                MakeIBInvoice: action.payload,
+            };
         default:
             return state
     }
 }
 
-export default ChallanReducer
+export default IBInvoiceReducer

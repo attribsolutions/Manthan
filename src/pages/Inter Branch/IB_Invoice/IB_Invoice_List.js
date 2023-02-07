@@ -19,6 +19,9 @@ import Select from "react-select";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { IB_Invoicelistfilters, get_IB_InvoiceListPage, InwardButtonId } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import * as  mode from "../../../routes/PageMode";
+import IB_Invoice from "./IB_Invoice";
+import { formatDate } from "@fullcalendar/react";
 
 const IB_Invoice_List = () => {
 
@@ -35,12 +38,12 @@ const IB_Invoice_List = () => {
 
     const reducers = useSelector(
         (state) => ({
-            tableList: state.ChallanReducer.IB_Invoice,
+            tableList: state.IBInvoiceReducer.IB_Invoice,
             deleteMsg: state.InwardReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
-            IB_InvoiceFilter: state.ChallanReducer.IB_InvoiceFilter,
+            IB_InvoiceFilter: state.IBInvoiceReducer.IB_InvoiceFilter,
             customer: state.SupplierReducer.customer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
@@ -51,6 +54,7 @@ const IB_Invoice_List = () => {
     const { fromdate, todate, CustomerSelect } = IB_InvoiceFilter;
 
     const page_Id = pageId.IB_INVOICE_LIST
+
 
     const action = {
         getList: get_IB_InvoiceListPage,
@@ -97,9 +101,13 @@ const IB_Invoice_List = () => {
 
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
-            ToDate: todate,
+            ToDate:todate,
             Party: userParty(),
             Customer: CustomerSelect.value,
+            // FromDate: "2023-01-06",
+            // ToDate: "2023-01-24",
+            // Party: 5,
+            // Customer:4,
         });
         dispatch(get_IB_InvoiceListPage(jsonBody));
     }
@@ -211,9 +219,9 @@ const IB_Invoice_List = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            // MasterModal={Challan}
-                            // masterPath={url.CHALLAN}
-                            ButtonMsgLable={"Challan"}
+                            MasterModal={IB_Invoice}
+                            masterPath={url.IB_INVOICE}
+                            ButtonMsgLable={"IBInvoice"}
                             deleteName={"FullIBChallanNumber"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}

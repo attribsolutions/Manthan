@@ -251,8 +251,14 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
+    debugger
     const tableRow = table.Rows(data);
+    const { OrderItem = [] } = data
+
     console.log(tableRow)
+//    const a= OrderItem.forEach((element) => {
+//         element.Comment
+//     })
     var options = {
 
         didParseCell: (data1) => {
@@ -261,7 +267,7 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
                 data1.row.cells[6].colSpan = 2
-
+                
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
@@ -270,6 +276,10 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4.].styles.fontStyle = "bold"
                 data1.row.cells[6.].styles.fontStyle = "bold"
             }
+
+            // if (data1.row.cells[5].raw === a) {
+                
+            // }
         },
         margin: {
             left: 30, right: 25,//200 bottom
@@ -334,6 +344,7 @@ export const tableBody = (doc, data) => {
 
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
+        
 
 
 

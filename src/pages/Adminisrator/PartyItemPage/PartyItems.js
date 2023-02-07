@@ -85,6 +85,7 @@ const PartyItems = (props) => {
         }));
 
     useEffect(() => {
+        dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(36))
         dispatch(getPartyListAPI())
@@ -172,7 +173,7 @@ const PartyItems = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath:url.PARTYITEM_LIST,
+                RedirectPath: url.PARTYITEM_LIST,
                 AfterResponseAction: false
             }));
         }

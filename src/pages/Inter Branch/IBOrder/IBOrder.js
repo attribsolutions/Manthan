@@ -65,7 +65,8 @@ const IBOrder = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
     const [userAccState, setUserPageAccessState] = useState("");
-    const [iborderdate, setiborderdate] = useState(currentDate)
+    const [InOutSelect, setInOutSelect]= useState();
+    const [iborderdate, setiborderdate] = useState(currentDate);
     const [iborderItemTable, setiborderItemTable] = useState([])
     const [iborderAmount, setIBOrderAmount] = useState(0);
 
@@ -142,8 +143,6 @@ const IBOrder = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-
-                // console.log("hasEditVal", hasEditVal)
 
                 setEditData(hasEditVal);
                 const { id, SupplierName, Supplier, Comment, IBOrderDate, IBOrderNo, FullIBOrderNumber } = hasEditVal
@@ -352,38 +351,38 @@ const IBOrder = (props) => {
             }
         },
 
-        {//------------- Rate column ----------------------------------
-            text: "Rate/Unit",
-            dataField: "",
-            formatter: (value, row, k) => {
+        // {//------------- Rate column ----------------------------------
+        //     text: "Rate/Unit",
+        //     dataField: "",
+        //     formatter: (value, row, k) => {
 
-                return (
-                    <span className="text-right" >
-                        <Input
-                            type="text"
-                            id={`Ratey${k}`}
-                            defaultValue={row.Rate}
-                            autoComplete="off"
-                            className="text-end"
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    val_onChange(val, row, "rate")
-                                } else {
-                                    document.getElementById(`Ratey${k}`).value = row.Rate
-                                }
-                            }}
-                            onKeyDown={(e) => handleKeyDown(e, iborderItemTable)}
-                        />
-                    </span>
-                )
-            },
+        //         return (
+        //             <span className="text-right" >
+        //                 <Input
+        //                     type="text"
+        //                     id={`Ratey${k}`}
+        //                     defaultValue={row.Rate}
+        //                     autoComplete="off"
+        //                     className="text-end"
+        //                     onChange={(e) => {
+        //                         const val = e.target.value
+        //                         let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+        //                         if ((isnum) || (val === '')) {
+        //                             val_onChange(val, row, "rate")
+        //                         } else {
+        //                             document.getElementById(`Ratey${k}`).value = row.Rate
+        //                         }
+        //                     }}
+        //                     onKeyDown={(e) => handleKeyDown(e, iborderItemTable)}
+        //                 />
+        //             </span>
+        //         )
+        //     },
 
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-        },
+        //     headerStyle: (colum, colIndex) => {
+        //         return { width: '140px', textAlign: 'center' };
+        //     }
+        // },
     ];
 
     const defaultSorted = [
@@ -400,7 +399,7 @@ const IBOrder = (props) => {
     };
 
     const goButtonHandler = () => {
-        debugger
+
         // if (!SupplierSelect > 0) {
         //     dispatch(
         //         AlertState({
@@ -481,6 +480,24 @@ const IBOrder = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"IBOrder Amount"} :${sum.toFixed(2)}`))
     };
 
+
+    const InOutDropdown_Options = [
+        {
+            label: "In",
+            value: 0,
+        },
+
+        {
+            label: "Out",
+            value: 1,
+        }
+    ]
+
+    function InOutOnchange(e) {
+        setInOutSelect(e)
+    }
+
+
     const SaveHandler = (event) => {
         event.preventDefault();
         const validMsg = []
@@ -525,9 +542,9 @@ const IBOrder = (props) => {
 
         iborderItemTable.forEach(i => {
 
-            if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
-            }
+            // if ((i.Quantity > 0) && !(i.Rate > 0)) {
+            //     validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+            // }
 
             if (pageMode === "edit") {
                 const ischange = (!(i.poQty === i.Quantity) ||
@@ -580,6 +597,7 @@ const IBOrder = (props) => {
             Customer: userParty(),
             Supplier: values.SupplierName.value,
             Division: userParty(),
+            InOut: InOutSelect.value,
             BillingAddressID: 4,
             ShippingAddressID: 4,
             Inward: 0,
@@ -608,7 +626,7 @@ const IBOrder = (props) => {
                     <form>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
+                                <Col className=" mt-1 row " sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
                                             <Label className="mt-1" style={{ width: "150px" }}> IBOrder Date</Label>
@@ -672,10 +690,24 @@ const IBOrder = (props) => {
                                         </FormGroup>
                                     </Col>
 
+                                    <Col sm="6">
+                                        <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
+                                            <Label className="mt-1 " style={{ width: "100px" }}> In Out </Label>
+                                            <Col sm={7}>
+                                                <Select
+                                                    classNamePrefix="select2-Customer"
+                                                    value={InOutSelect}
+                                                    options={InOutDropdown_Options}
+                                                    onChange={InOutOnchange}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+
                                     {
                                         pageMode === mode.edit ? <Col sm="6">
                                             <FormGroup className="row mt-2 ">
-                                                <Label className="mt-2" style={{ width: "100px" }}> IBOrder No. </Label>
+                                                <Label className="mt-2" style={{ width: "150px" }}> IBOrder No. </Label>
                                                 <Col sm={7}>
                                                     <Input
                                                         name="IBOrderNo"
