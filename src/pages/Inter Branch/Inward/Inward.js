@@ -36,13 +36,13 @@ const Inward = (props) => {
         userAccess,
         InwardData
     } = useSelector((state) => ({
-        InwardData: state.ChallanReducer.InwardData,
+        InwardData: state.IBInvoiceReducer.InwardData,
         postMsg: state.InwardReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
-    const { IBChallanItems = [], Party = '',IBChallanNumber='' } = InwardData
-    
+    const { IBChallanItems = [], PartyName = '', IBChallanNumber = '' } = InwardData
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -91,16 +91,16 @@ const Inward = (props) => {
     };
 
     const saveHandeller = (e, values) => {
-
+        debugger
         const arr = IBChallanItems.map(i => ({
-            Item: i.Item.id,
+            Item: i.Item,
             Quantity: i.Quantity,
             MRP: i.MRP,
             ReferenceRate: i.Rate,
             Rate: i.Rate,
-            Unit: i.Unit.id,
+            Unit: i.Unit,
             BaseUnitQuantity: i.BaseUnitQuantity,
-            GST: i.LiveBatch.GST,
+            GST: i.GSTPercentage,
             BasicAmount: i.BasicAmount,
             GSTAmount: parseFloat(i.GSTAmount).toFixed(2),
             Amount: i.Amount,
@@ -125,8 +125,8 @@ const Inward = (props) => {
             GrandTotal: InwardData.GrandTotal,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            Customer: InwardData.Customer.id,
-            Supplier: InwardData.Party.id,
+            Customer: InwardData.Customer,
+            Supplier: InwardData.Party,
             InterBranchInwardItems: arr,
             InterBranchInwardReferences: [{
                 IBChallan: 1
@@ -139,13 +139,14 @@ const Inward = (props) => {
         } else {
 
             dispatch(postInward(jsonBody))
+            console.log("jsonBody", jsonBody)
         }
     }
 
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "Item.Name",
+            dataField: "ItemName",
         },
         {
             text: "Batch Code",
@@ -157,7 +158,7 @@ const Inward = (props) => {
                         <Thead>
                             <tr>
                                 <th>Batch Code </th>
-                                <th>System Batch Code</th>
+                                {/* <th>System Batch Code</th> */}
                                 <th>Quantity</th>
                             </tr>
                         </Thead>
@@ -169,22 +170,22 @@ const Inward = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Label>
-                                                    {index.LiveBatch.BatchCode}
+                                                    {index.BatchCode}
                                                 </Label>
                                             </div>
                                         </td>
-                                        <td>
+                                        {/* <td>
                                             <div style={{ width: "150px" }}>
                                                 <Label>
                                                     {index.LiveBatch.SystemBatchCode}
                                                 </Label>
                                             </div>
-                                        </td>
+                                        </td> */}
 
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label >
-                                                    {index.Quantity}
+                                                    {index.BaseUnitQuantity}
                                                 </Label>
                                             </div>
                                         </td>
@@ -200,11 +201,11 @@ const Inward = (props) => {
 
         {
             text: "Quantity",
-            dataField: "Quantity",
+            dataField: "BaseUnitQuantity",
         },
         {
             text: "Unit",
-            dataField: "Unit.UnitID",
+            dataField: "UnitName",
         },
     ];
 
@@ -213,7 +214,7 @@ const Inward = (props) => {
         totalSize: IBChallanItems.length,
         custom: true,
     };
-    
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
@@ -251,7 +252,7 @@ const Inward = (props) => {
                                     style={{ width: "83px" }}>Division</Label>
                                 <Col sm="7">
                                     <Input type="text"
-                                        defaultValue={Party.Name}
+                                        defaultValue={PartyName}
                                         placeholder='Enter Division'
                                     // onChange={e => description = e.target.value}
                                     />
