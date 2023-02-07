@@ -6,8 +6,8 @@ import "./i18n"
 import { Provider } from "react-redux"
 
 import store from "./store"
-import ConfirmDialog from "./Demo/ConfirmDialog"
-import { ConfirmContextProvider } from "./Demo/ConfirmContextProvider"
+import ConfirmDialog from "./CustomAlert/ConfirmDialog"
+import { ConfirmContextProvider } from "./CustomAlert/ConfirmContextProvider"
 
 const app = (
   <Provider store={store}>

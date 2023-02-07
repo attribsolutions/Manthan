@@ -294,9 +294,7 @@ const SaleOrder = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
-    function assignItem_onClick() {
-        setisOpen_TermsModal(true)
-    };
+
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -474,6 +472,10 @@ const SaleOrder = (props) => {
         custom: true,
     };
 
+    function assignItem_onClick() {
+        setisOpen_TermsModal(true)
+    };
+    
     function Open_TermsModal_func() {
         setisOpen_TermsModal(false)
         goButtonHandler()

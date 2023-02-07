@@ -42,13 +42,13 @@ import {
 } from "./actionType";
 
 function* fetchHPagesList_GneratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Fetch_HPagesListApi);
     yield put(GetHpageListDataSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -73,14 +73,14 @@ function* GetH_Modules() {
 }
 
 function* saveHPageSaga_GneratorFunction({ Data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(saveHPagesAPI, Data);
-    yield put(SpinnerState(false))
+   
     yield put(saveHPagesSuccess(response));
     console.log("Post response", response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -103,15 +103,15 @@ function* editHpages_ID({ id,pageMode }) {
 
 function* update_HPagesUsingID_GenratorFunction({ data, id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(updateHPages, data, id);
 
-    yield put(SpinnerState(false))
+   
     yield put(updateHPagesSuccess(response))
     console.log("update response in saga ", response)
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -121,12 +121,12 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
 
 function* deleteHpagesUsingID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(deletHPagesUsingID_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteModuleIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

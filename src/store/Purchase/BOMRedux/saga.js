@@ -8,14 +8,14 @@ import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNI
 
 //post api
 function* Post_BOM_GenratorFunction({ data }) {
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(BOM_Post_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postBOMSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -41,7 +41,7 @@ function* GetItemUnits_saga({ data }) {
 // List Page API
 function* get_BOMList_GenFunc({ filters }) {
 
-  yield put(SpinnerState(true))
+
 
   try {
 
@@ -53,11 +53,11 @@ function* get_BOMList_GenFunc({ filters }) {
       i.BomDate = (`${date} ${time}`)
       return i
     })
-    yield put(SpinnerState(false))
+   
     yield put(getBOMListPageSuccess(data))
    
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error  Get BOMList",
@@ -68,19 +68,19 @@ function* get_BOMList_GenFunc({ filters }) {
 // edit List page
 function* editBOMListGenFunc({ id1, pageMode }) {
 
-  yield put(SpinnerState(true))
+
   try {
     let response = yield call(edit_BOMListID, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
-    yield put(SpinnerState(false))
+   
     if (response.StatusCode === 200) yield put(editBOMListSuccess(response))
     else yield put(AlertState({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error BOM Edit Method ",
@@ -91,13 +91,13 @@ function* editBOMListGenFunc({ id1, pageMode }) {
 function* UpdateBOM_ID_GenFunc({ data, id1 }) {
 
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(BOM_Update_API, data, id1);
-    yield put(SpinnerState(false))
+   
     yield put(updateBOMListSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error UpdateOrder",
@@ -106,17 +106,17 @@ function* UpdateBOM_ID_GenFunc({ data, id1 }) {
 }
 
 function* DeleteBOM_GenFunc({ id }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(BOM_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     if (response.StatusCode === 200) yield put(deleteBOMIdSuccess(response))
     else yield put(AlertState({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error DeleteOrder",

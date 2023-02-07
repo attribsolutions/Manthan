@@ -31,7 +31,7 @@ import {
 } from "./actionTypes";
 
 function* Get_Party_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Party_Master_Get_API);
 
@@ -63,10 +63,10 @@ function* Get_Party_GenratorFunction() {
     });
 
 
-    yield put(SpinnerState(false))
+   
     yield put(getPartyListAPISuccess(data1))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error for Get Party  ",
@@ -75,13 +75,13 @@ function* Get_Party_GenratorFunction() {
 }
 
 function* Submit_Party_GenratorFunction({ Data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Party_Master_Post_API, Data);
-    yield put(SpinnerState(false))
+   
     yield put(postPartyDataSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -91,12 +91,12 @@ function* Submit_Party_GenratorFunction({ Data }) {
 
 function* Delete_Party_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(Party_Master_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deletePartyIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -123,13 +123,13 @@ function* Edit_Party_GenratorFunction({ id, pageMode }) {
 function* Update_Party_GenratorFunction({ updateData, id }) {
 
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(Party_Master_Update_API, updateData, id);
-    yield put(SpinnerState(false))
+   
     yield put(updatePartyIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

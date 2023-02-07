@@ -14,13 +14,13 @@ import {
 } from "./actionType";
 
 function* fetch_CompanyList_data() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(fetch_CompanyList);
     yield put(fetchCompanyListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));
@@ -28,14 +28,14 @@ function* fetch_CompanyList_data() {
 }
 
 function* SubmitCompanyModules({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(postSubmit_Company, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostCompanySubmitSuccess(response));
     console.log("response",response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));
@@ -44,13 +44,13 @@ function* SubmitCompanyModules({ data }) {
 
 function* deleteCompany_ID({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(delete_CompanyID, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteCompanyIDSuccess(response))
     console.log("delete response",response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));
@@ -72,15 +72,15 @@ function* editCompany_ID({ id,pageMode }) {
 function* update_Company({ updateData, ID }) {
   debugger
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(updateCompany_ID, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateCompanyIDSuccess(response))
     console.log("saga response",response)
   }
   
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));

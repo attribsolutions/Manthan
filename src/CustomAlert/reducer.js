@@ -2,16 +2,16 @@ export const SHOW_CONFIRM = 'SHOW_CONFIRM';
 export const HIDE_CONFIRM = 'HIDE_CONFIRM';
 
 export const initialState = {
-    show: false,
-    text: ''
+    Status: false,
+    Type: '',
 };
 
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case SHOW_CONFIRM:
             return {
-                show: true,
-                text: action.payload.text
+                Status: true,
+                ...action.payload,
             };
         case HIDE_CONFIRM:
             return initialState;

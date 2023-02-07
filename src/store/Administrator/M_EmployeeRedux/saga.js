@@ -48,14 +48,14 @@ function* State_saga() {
 ///post api
 
 function* Submit_Employee_GenratorFunction({ Data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(post_EmployeeData, Data);
     console.log("post response in saga file", response)
-    yield put(SpinnerState(false))
+   
     yield put(PostEmployeeSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -66,13 +66,13 @@ function* Submit_Employee_GenratorFunction({ Data }) {
 /// get api
 
 function* Get_EmployeeList_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_EmployeelistApi);
     yield put(getEmployeelistSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -83,12 +83,12 @@ function* Get_EmployeeList_GenratorFunction() {
 
 function* Delete_EmployeeID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_EmployeeID, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteEmployeeIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -113,13 +113,13 @@ function* Edit_EmployeeID_GenratorFunction({ id,pageMode }) {
 
 function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_EmployeeAPI, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateEmployeeIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

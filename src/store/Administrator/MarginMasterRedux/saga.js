@@ -33,14 +33,14 @@ import {
 
 function* Post_MarginMaster_GenratorFunction({ Data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_MarginMaster_API, Data);
-    yield put(SpinnerState(false))
+   
     yield put(postMarginMasterDataSuccess(response));
     console.log("response", response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -52,14 +52,14 @@ function* Post_MarginMaster_GenratorFunction({ Data }) {
 //listpage
 function* get_MarginListPage_GenratorFunction() {
   
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GetMarginList_For_Listpage);
-    yield put(SpinnerState(false))
+   
     yield put(getMarginListPageSuccess(response.Data))
   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -70,14 +70,14 @@ function* get_MarginListPage_GenratorFunction() {
 //delete
 function* delete_MarginListPage_GenratorFunction({ CommonID }) {
   
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(delete_MarginList_API, CommonID);
-    yield put(SpinnerState(false))
+   
     yield put(delete_MarginListSuccess(response));
     console.log("response",response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -106,13 +106,13 @@ function* Edit_MarginListPage_GenratorFunction({ id, pageMode }) {
 // update api
 function* Update_MarginListPage_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_MarginList, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateMarginListSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -123,13 +123,13 @@ function* Update_MarginListPage_GenratorFunction({ updateData, ID }) {
 function* MarginGoButton_post_GenratorFunction({ data }) {
 
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GoButton_Post_API_For_MarginMaster, data);
-    yield put(SpinnerState(false))
+   
     yield put(postGoButtonForMargin_Master_Success(response.Data));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -140,15 +140,15 @@ function* MarginGoButton_post_GenratorFunction({ data }) {
 
 // delete api Margin Master Page
 function* deleteId_for_MarginMaster_GenratorFunction({ id }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Margin_MasterPage_delete_API, id);
     response["deletedId"] = id
-    yield put(SpinnerState(false))
+   
     yield put(deleteID_In_Margin_MasterPageSuccess(response));
 
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

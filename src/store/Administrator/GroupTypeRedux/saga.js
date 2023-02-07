@@ -7,13 +7,13 @@ import { DELETE_GROUP_TYPE_ID, EDIT_GROUP_TYPE_ID, GET_GROUP_TYPES_LIST, POST_GR
 
 // get api
 function* Get_GropuTypeList_GenratorFunction() {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(GroupTypes_API);
         yield put(getGroupTypeslistSuccess(response.Data));
-        yield put(SpinnerState(false))
+       
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -24,13 +24,13 @@ function* Get_GropuTypeList_GenratorFunction() {
 //post api
 function* Submit_GroupType_GenratorFunction({ data }) {
    
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(GroupTypes_Post_API, data);
-        yield put(SpinnerState(false))
+       
         yield put(PostGroupTypeSubmitSuccess(response));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -41,12 +41,12 @@ function* Submit_GroupType_GenratorFunction({ data }) {
 // delete api 
 function* Delete_GroupTypeID_GenratorFunction({ id }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(GroupTypes_Delete_API, id);
-        yield put(SpinnerState(false))
+       
         yield put(deleteGroupType_IDSuccess(response))
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -71,13 +71,13 @@ function* Edit_GroupTypeID_GenratorFunction({ id, pageMode }) {
 
 function* Update_GroupTypeID_GenratorFunction({ updateData, ID }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(GroupTypes_Update_API, updateData, ID);
-        yield put(SpinnerState(false))
+       
         yield put(updateGroupTypeIDSuccess(response))
     }
     catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",

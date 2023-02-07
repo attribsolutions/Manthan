@@ -1,6 +1,6 @@
 import {useReducer} from "react";
 import ConfirmContext from "./ConfirmContext";
-import {initialState, reducer} from "./Reducer";
+import {initialState, reducer} from "./reducer";
 // import ConfirmContext from "./store/ConfirmContext";
 
 export const ConfirmContextProvider = ({ children }) => {
