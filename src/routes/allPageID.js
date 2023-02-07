@@ -126,6 +126,7 @@ export const IB_ORDER_LIST = 127
 
 export const INWARD = 128
 export const INWARD_LIST = 129
+export const IB_INWARD_MODE_2 = 133
 
 export const IB_INVOICE = 130
 export const IB_INVOICE_LIST = 131
