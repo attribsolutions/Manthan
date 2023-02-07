@@ -65,7 +65,7 @@ const IBOrder = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [EditData, setEditData] = useState({});
     const [userAccState, setUserPageAccessState] = useState("");
-    const [InOutSelect, setInOutSelect]= useState();
+    const [InOutSelect, setInOutSelect] = useState();
     const [iborderdate, setiborderdate] = useState(currentDate);
     const [iborderItemTable, setiborderItemTable] = useState([])
     const [iborderAmount, setIBOrderAmount] = useState(0);
@@ -597,7 +597,6 @@ const IBOrder = (props) => {
             Customer: userParty(),
             Supplier: values.SupplierName.value,
             Division: userParty(),
-            InOut: InOutSelect.value,
             BillingAddressID: 4,
             ShippingAddressID: 4,
             Inward: 0,
@@ -686,20 +685,6 @@ const IBOrder = (props) => {
                                                 {isError.Comment.length > 0 && (
                                                     <span className="invalid-feedback">{isError.Comment}</span>
                                                 )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col sm="6">
-                                        <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
-                                            <Label className="mt-1 " style={{ width: "100px" }}> In Out </Label>
-                                            <Col sm={7}>
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                    value={InOutSelect}
-                                                    options={InOutDropdown_Options}
-                                                    onChange={InOutOnchange}
-                                                />
                                             </Col>
                                         </FormGroup>
                                     </Col>
