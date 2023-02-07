@@ -14,23 +14,28 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    doc.text('Stock Report', 200, 40,) //Tax invoice Header
+    doc.text('Material Register', 200, 40,) //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`*** ${data.CompanyName} ***`, 300, 75,'center')  //bill by 
+    doc.text(`*** ${data.CompanyName} ***`, 200, 75,'center')  //bill by 
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(570, 10, 30, 10);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
     // doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 60, 408, 10);//vertical right 1
-    doc.line(300, 200, 300, 80);//vertical right 2
+    doc.line(408, 200, 408, 10);//vertical right 1
+    doc.line(250, 200, 250, 80);//vertical right 2
 
-    doc.line(300, 100, 570, 100) //horizontal line Current date upper
+    doc.line(250, 100, 408, 100) //horizontal line Current date upper
+    doc.line(250, 117, 408, 117) //horizontal line Current date upper
+
+    doc.line(408, 107, 570, 107) //horizontal line Current date upper
+
+
 
 
     var options3 = {
@@ -59,7 +64,7 @@ export const reportHeder1 = (doc, data) => {
                 halign: 'lfet',
             },
             1: {
-                columnWidth: 100,
+                columnWidth: 20,
                 halign: 'left',
             },
             2: {
@@ -87,6 +92,12 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Report No:${data.InvoiceNumber}`, 415, 30) //Invoice Id
     doc.text(`Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    doc.setFontSize(11)
+    doc.text(`Material: ${data.ItemName}`, 415, 75) //Invoice date
+    doc.text(`Open Balance : ${data.Open}`, 415, 95) //Invoice date
+    doc.text(`Close Balance: ${data.Close}`, 415, 120) //Invoice date
+
+
 }
 // original
 
@@ -205,18 +216,27 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            if (data1.row.cells[5].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 3
-                data1.row.cells[4].colSpan = 2
-                data1.row.cells[6].colSpan = 2
-                
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
+            debugger
+            if (data1.row.cells[2].raw === "Total") {
+                // data1.row.cells[0].colSpan = 3
+                // data1.row.cells[4].colSpan = 2
+                // data1.row.cells[6].colSpan = 2
+                data1.row.cells[2].styles.fontSize = 9
+                data1.row.cells[3].styles.fontSize = 9
+                data1.row.cells[4].styles.fontSize = 9
+                data1.row.cells[5].styles.fontSize = 9
+                data1.row.cells[6].styles.fontSize = 9
 
-                data1.row.cells[0.].styles.fontStyle = "bold"
-                data1.row.cells[4.].styles.fontStyle = "bold"
-                data1.row.cells[6.].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+               
+
+
+
+
             }
 
             if (data1.row.raw[6] ==="Dispatch" ) {
@@ -252,44 +272,34 @@ export const tableBody = (doc, data) => {
                 columnWidth: 100,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 70,
                 halign: 'right',
 
             },
             2: {
-                columnWidth: 30,
+                columnWidth: 70,
                 halign: 'right',
             },
             3: {
-                columnWidth: 55,
+                columnWidth: 70,
                 halign: 'right',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 70,
                 halign: 'right',
             },
             5: {
-                columnWidth: 40,
+                columnWidth: 60,
                 halign: 'right',
             },
             6: {
-                columnWidth: 42,
+                columnWidth: 100,
                 halign: 'right',
             },
-            7: {
-                columnWidth:35,
-                halign: 'right',
-            },
-            8: {
-                columnWidth: 40,
-                fontStyle: 'bold',
-                halign: 'right',
-            },
+           
         },
-
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
-
     };
 
     doc.autoTable(table.columns, table.Rows(data), options, {
@@ -299,7 +309,7 @@ export const tableBody = (doc, data) => {
     // Auto table for footer
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom: 140
+            left: 30, right: 30, bottom: 10
         },
         showHead: 'never',
     };
