@@ -20,35 +20,38 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
 import * as url from "../../../routes/route_url";
-import { AlertState } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName } from "../../../store/actions";
 import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as  mode from "../../../routes/PageMode";
 import Select from "react-select";
 import { postDivision } from "../../../store/Inter Branch/IBOrderRedux/action";
+import { MakeIBInvoice, MakeIBInvoiceSuccess } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 
 const IB_Invoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const [userAccState, setUserAccState] = useState('');
-    const [InwardDate, setInwardDate] = useState(currentDate);
+    const [InvoiceDate, setInvoiceDate] = useState(currentDate);
     const [divisionSelect, setDivisionSelect] = useState([]);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-
+    const [EditData, setEditData] = useState({});
+    const [modalCss, setModalCss] = useState(false);
     const {
         postMsg,
         Division,
         userAccess,
-        MakeIBInvoice
+        MakeIBInvoiceData
     } = useSelector((state) => ({
         postMsg: state.InwardReducer.postMsg,
         Division: state.IBOrderReducer.Supplier,
-        MakeIBInvoice: state.IBInvoiceReducer.MakeIBInvoice,
+        MakeIBInvoiceData: state.IBInvoiceReducer.MakeIBInvoice,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
-    const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [], division = {} } = MakeIBInvoice
+    const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [], } = MakeIBInvoiceData
 
+   
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -66,7 +69,8 @@ const IB_Invoice = (props) => {
     }, [userAccess])
 
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -101,10 +105,59 @@ const IB_Invoice = (props) => {
         dispatch(postDivision(jsonBody));
     }, []);
 
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                setEditData(hasEditVal)
+                const { CustomerID, SupplierID, Supplier, id, IBOrderDate } = hasEditVal;
+                setDivisionSelect({ value: SupplierID, label: Supplier })
+                const jsonBody = JSON.stringify({
+                    Customer: CustomerID,
+                    OrderIDs: (id).toString(),
+                    FromDate: IBOrderDate,
+                    Party: SupplierID
+                });
+                dispatch(MakeIBInvoice(jsonBody));
+                dispatch(MakeIBInvoiceSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.Supplier))
+            }
+        }
+    }, [])
+
     const DivisionDropdown_Options = Division.map((i) => ({ label: i.Name, value: i.id }))
 
-    function InwardDateOnchange(e, date) {
-        setInwardDate(date)
+    function InvoiceDateOnchange(e, date) {
+        setInvoiceDate(date)
+        dispatch(MakeIBInvoiceSuccess([]))
+    };
+
+    function DivisionOnchange(e) {
+        setDivisionSelect(e)
+        dispatch(MakeIBInvoiceSuccess([]))
+        dispatch(Breadcrumb_inputName(e.label))
+    }
+    const goButtonHandler = () => {
+        debugger
+        const jsonBody = JSON.stringify({
+            Customer: userParty(),
+            OrderIDs: pageMode === mode.mode2save ? EditData.id.toString() : "",
+            FromDate: InvoiceDate,
+            Party: divisionSelect.value
+
+        })
+        dispatch(MakeIBInvoice(jsonBody))
     };
 
     const saveHandeller = (e, values) => {
@@ -136,7 +189,7 @@ const IB_Invoice = (props) => {
         }))
 
         const jsonBody = JSON.stringify({
-            // IBInwardDate: InwardDate,
+            // IBInvoiceDate: InvoiceDate,
             // IBInwardNumber: data.IBChallanNumber,
             // FullIBInwardNumber: data.FullIBInwardNumber,
             // GrandTotal: data.GrandTotal,
@@ -175,29 +228,29 @@ const IB_Invoice = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (value, row, key) => {
-
-                if (!row.UnitName) {
-                    row["Unit_id"] = row.UnitDetails[0].Unit
-                    row["UnitName"] = row.UnitDetails[0].UnitName
-                }
+                debugger
+                // if (!row.UnitName) {
+                //     row["Unit_id"] = row.UnitDetails[0].Unit
+                //     row["UnitName"] = row.UnitDetails[0].UnitName
+                // }
 
                 return (
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         key={`ddlUnit${row.id}`}
-                        defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                        defaultValue={{ value: row.Unit, label: row.UnitName }}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
-                                value: i.UnitID,
+                                value: i.Unit,
 
                             }))
                         }
-                        onChange={e => {
-                            row["Unit_id"] = e.value;
-                            row["UnitName"] = e.label
-                        }}
+                    // onChange={e => {
+                    //     row["Unit_id"] = e.value;
+                    //     row["UnitName"] = e.label
+                    // }}
                     >
                     </Select >
                 )
@@ -290,7 +343,7 @@ const IB_Invoice = (props) => {
                                         style={{ userselect: "all" }}
                                         id="orderdate"
                                         name="orderdate"
-                                        value={InwardDate}
+                                        value={InvoiceDate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -298,7 +351,7 @@ const IB_Invoice = (props) => {
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                         }}
-                                        onChange={InwardDateOnchange}
+                                        onChange={InvoiceDateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -310,37 +363,26 @@ const IB_Invoice = (props) => {
                                     style={{ width: "83px" }}>Division</Label>
                                 <Col sm="7">
                                     <Select
-                                        isDisabled={location.pageMode === "mode2save" ? true : false}
+                                        isDisabled={pageMode === mode.mode2save ? true : false}
                                         name="division"
-                                        value={location.pageMode === "mode2save" ? division : divisionSelect}
+                                        value={divisionSelect}
                                         isSearchable={true}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         options={DivisionDropdown_Options}
-                                        onChange={(e) => { setDivisionSelect(e) }}
+                                        // onChange={(e) => {
+                                        //     // setDivisionSelect(e)
+                                        //     // dispatch(Breadcrumb_inputName(e.label))
+                                        // }}
+                                        onChange={DivisionOnchange}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
-                        {/* <Col sm="1" className="mx-2 mt-3">
-                            {pageMode === mode.defaultsave ?
-                                <Go_Button onClick={(e) => goButtonHandler()} />
-                                : null}
-                        </Col> */}
+                        <Col sm="1" className="mx-2 mt-3">
+                            <Go_Button onClick={(e) => goButtonHandler()} />
+                        </Col>
 
-                        {/* <Col sm="4" className="">
-                            <FormGroup className=" row mt-3 " >
-                                <Label className="col-sm- p-2"
-                                    style={{ width: "83px" }}>Challan No.</Label>
-                                <Col sm="7">
-                                    <Input type="text"
-                                        defaultValue={data.IBChallanNumber}
-                                        placeholder='Enter Challan No.'
-                                    // onChange={e => description = e.target.value}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col> */}
                     </div>
                 </div>
 
@@ -366,6 +408,10 @@ const IB_Invoice = (props) => {
                                                         classes={"table  table-bordered"}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>}
                                                     />
 
                                                 </div>
