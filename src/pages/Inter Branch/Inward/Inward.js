@@ -298,6 +298,10 @@ const Inward = (props) => {
                                                         classes={"table  table-bordered"}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>}
                                                     />
                                                     {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")} */}
                                                     {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}

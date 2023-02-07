@@ -44,11 +44,11 @@ function* Inward_Button_GenratorFunction({ id }) {
 }
 
 // Make IB_Invoice API
-function* MakeIBInvoice_GenFun({ data, division }) {
+function* MakeIBInvoice_GenFun({ data }) {
   debugger
   try {
     const response = yield call(Make_IB_Invoice_API, data);
-    response.Data.division = division
+    // response.Data.division = division
     yield put(MakeIBInvoiceSuccess(response.Data));
 
   } catch (error) {
