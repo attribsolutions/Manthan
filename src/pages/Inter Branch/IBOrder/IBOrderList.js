@@ -37,7 +37,10 @@ const IBOrderList = () => {
             fromdate: currentDate,
             todate: currentDate,
             SupplierSelect: { value: '', label: "All" },
-            InOutSelect: ''
+            InOutSelect: {
+                value: 1,
+                label: 'IN',
+            }
         })
 
     const reducers = useSelector(
