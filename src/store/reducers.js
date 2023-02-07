@@ -56,7 +56,7 @@ import InvoiceReducer from "./Sales/Invoice/reducer"
 
 import IBOrderReducer from "./Inter Branch/IBOrderRedux/reducer"
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
-import ChallanReducer from "./Inter Branch/IB_Invoice_Redux/reducer"
+import IBInvoiceReducer from "./Inter Branch/IB_Invoice_Redux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -124,6 +124,6 @@ const rootReducer = combineReducers({
   IBOrderReducer,
   InvoiceReducer,
   InwardReducer,
-  ChallanReducer
+  IBInvoiceReducer
 })
 export default rootReducer
