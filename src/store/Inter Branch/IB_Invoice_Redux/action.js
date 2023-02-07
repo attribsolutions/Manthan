@@ -35,9 +35,9 @@ export const InwardButtonIdSuccess = (editData) => ({
 })
 
 //For Make Invoice 
-export const MakeIBInvoice = (data,division) => ({
+export const MakeIBInvoice = (data) => ({
   type: MAKE_IB_INVOICE,
-  data,division
+  data
 })
 export const MakeIBInvoiceSuccess = (data) => ({
   type: MAKE_IB_INVOICE_SUCCESS,
