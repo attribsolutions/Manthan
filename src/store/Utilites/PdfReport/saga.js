@@ -12,6 +12,7 @@ function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
   try {
     const response = yield call(urlpath, Id);
     response["ReportType"] = ReportType
+    response.Data["ReportType"] = ReportType
     yield put(getpdfReportdataSuccess(response));
     yield put(SpinnerState(false))
   } catch (error) {

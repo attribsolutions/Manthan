@@ -22,6 +22,10 @@ import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as  mode from "../../../routes/PageMode";
 import IB_Invoice from "./IB_Invoice";
 import { formatDate } from "@fullcalendar/react";
+import { Inward_Button_API } from "../../../helpers/backend_helper";
+import * as report from '../../../Reports/ReportIndex'
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+
 
 const IB_Invoice_List = () => {
 
@@ -56,7 +60,7 @@ const IB_Invoice_List = () => {
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.IB_INWARD_MODE_2) ? mode.mode2save : mode.defaultList;
     const page_Id = (hasPagePath === url.IB_INWARD_MODE_2) ? pageId.IB_INWARD_MODE_2 : pageId.IB_INVOICE_LIST;
-    debugger
+    
 
     const action = {
         getList: get_IB_InvoiceListPage,
@@ -139,7 +143,12 @@ const IB_Invoice_List = () => {
     //         pageMode: "save",
     //     })
     // }
+  
 
+    function downBtnFunc(row) {
+        var ReportType = report.IBinvoice;
+        dispatch(getpdfReportdata(Inward_Button_API, ReportType, row.id))
+    }
 
     const makeBtnFunc = (list = {}) => {
         dispatch(InwardButtonId(list[0].id))
@@ -235,6 +244,7 @@ const IB_Invoice_List = () => {
                             goButnFunc={goButtonHandler}
                             filters={IB_InvoiceFilter}
                             makeBtnFunc={makeBtnFunc}
+                            downBtnFunc={downBtnFunc}
                             makeBtnShow={pageMode === mode.defaultList ? false : true}
                             makeBtnName={"Make IB Invoice"}
                         />

@@ -4,9 +4,9 @@ import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
-    doc.line(570, 10, 30, 10);//horizontal line (Top)
+    doc.line(815, 10, 30, 10);//horizontal line (Top)
     doc.line(30, 815, 30, 10);//vertical line (left)
-    doc.line(570, 815, 570, 10);//vertical line (Right)
+    doc.line(815, 815, 815, 10);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
@@ -79,7 +79,6 @@ export const reportHeder2 = (doc, data) => {
     doc.setFont(undefined, 'bold')
 
 }
-
 export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
@@ -206,21 +205,24 @@ export const tableBody = (doc, data) => {
 
         didParseCell: (data1) => {
             if (data1.row.cells[5].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 3
-                data1.row.cells[4].colSpan = 2
-                data1.row.cells[6].colSpan = 2
+                data1.row.cells[0].colSpan = 12
+                data1.row.cells[4].colSpan = 1
+                data1.row.cells[6].colSpan = 1
                 
-                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[0].styles.fontSize = 10
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
 
+                data1.row.cells[0.].styles.halign = "center"
                 data1.row.cells[0.].styles.fontStyle = "bold"
-                data1.row.cells[4.].styles.fontStyle = "bold"
                 data1.row.cells[6.].styles.fontStyle = "bold"
             }
 
-            if (data1.row.raw[6] ==="Dispatch" ) {
-                data1.row.cells[6].contentHeight = 2    
+            if (data1.row.cells[5].raw === "packing" ) {
+                data1.row.cells[0].colSpan = 12
+
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[0.].styles.fontStyle = "bold"                 
             }
         },
         margin: {
@@ -252,36 +254,49 @@ export const tableBody = (doc, data) => {
                 columnWidth: 100,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 60,
                 halign: 'right',
 
             },
             2: {
-                columnWidth: 30,
+                columnWidth: 60,
                 halign: 'right',
             },
             3: {
-                columnWidth: 55,
+                columnWidth: 60,
                 halign: 'right',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 60,
                 halign: 'right',
             },
             5: {
-                columnWidth: 40,
+                columnWidth: 60,
                 halign: 'right',
             },
             6: {
-                columnWidth: 42,
+                columnWidth: 60,
                 halign: 'right',
             },
             7: {
-                columnWidth:35,
+                columnWidth:70,
                 halign: 'right',
             },
             8: {
-                columnWidth: 40,
+                columnWidth: 75,
+                fontStyle: 'bold',
+                halign: 'right',
+            },
+            9: {
+                columnWidth: 60,
+                halign: 'right',
+            },
+            10: {
+                columnWidth:60,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 60,
                 fontStyle: 'bold',
                 halign: 'right',
             },
