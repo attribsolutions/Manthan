@@ -30,13 +30,13 @@ import {
 
 // post api
 function*  Post_Method_ForCategory_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_Category_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostMethod_ForCategoryAPISuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -47,14 +47,14 @@ function*  Post_Method_ForCategory_GenFun({ data }) {
 
 // get api
 function* Get_Category_List_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     
     const response = yield call(get_Category_List_Api);
     yield put(getCategorylistSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -65,12 +65,12 @@ function* Get_Category_List_GenratorFunction() {
 // delete api 
 function* Delete_Category_ID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_Category_List_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteCategoryIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -97,13 +97,13 @@ function* Edit_Category_ID_GenratorFunction({ id,pageMode }) {
 // update api
 function* Update_Category_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_Category_List_Api, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateCategoryIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

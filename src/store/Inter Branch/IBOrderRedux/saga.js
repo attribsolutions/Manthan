@@ -53,13 +53,13 @@ function* GoButton_IBOrder_genfun({ data }) {
 
 function* Post_IBOrder_Genfun({ data }) {
   
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(IBOrderPage_Post_API,data);
-        yield put(SpinnerState(false))
+       
         yield put(postIBOrderSuccess(response));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -69,13 +69,13 @@ function* Post_IBOrder_Genfun({ data }) {
 
 //division  api
 function* post_Division_Genfun({ data }) {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(Division, data);
-        yield put(SpinnerState(false))
+       
       yield put(postDivisionSuccess(response.Data));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -87,15 +87,15 @@ function* post_Division_Genfun({ data }) {
 
 function* editIBOrderGenFunc({ jsonBody, pageMode }) {
 
-    yield put(SpinnerState(true))
+  
     try {
       const response = yield call(IBOrderPage_Edit_API, jsonBody);
 
       response.pageMode = pageMode
-      yield put(SpinnerState(false))
+     
       yield put(editIBOrderIdSuccess(response));
     } catch (error) {
-      yield put(SpinnerState(false))
+     
       yield put(AlertState({
         Type: 4,
 
@@ -107,13 +107,13 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
   
 
   function* DeleteIBOrder_GenFunc({ id }) {
-    yield put(SpinnerState(true))
+  
     try {
       const response = yield call(IBOrderPage_Delete_API, id);
-      yield put(SpinnerState(false))
+     
       yield put(deleteIBOrderIdSuccess(response));
     } catch (error) {
-      yield put(SpinnerState(false))
+     
       yield put(AlertState({
         Type: 4,
         Status: true, Message: "500 Error Delete IBOrder",
@@ -141,10 +141,20 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
   
   // List Page API
   function* Post_IBOrderList_GenFunc({ filters }) {
-    yield put(SpinnerState(true))
+  
   try {
 
     const response = yield call(IBOrderList_get_Filter_API, filters);
+
+    const newList = yield response.Data.map((i) => {
+      i.IBOrderDate = i.IBOrderDate;
+      var time = convertTimefunc(i.CreatedOn)
+      var date = convertDatefunc(i.IBOrderDate)
+      i.IBOrderDate = (`${date} ${time}`)
+      return i
+    })
+    yield put(postIBOrderListPageSuccess(newList));
+
     // const newList = yield response.Data.map((i) => {
     //   i.IBOrderDate = i.IBOrderDate;
     //   var time = convertTimefunc(i.CreatedOn)
@@ -153,9 +163,9 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
     //   return i
     // })
     yield put(postIBOrderListPageSuccess(response.Data));
-    yield put(SpinnerState(false))
+
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message in IBOrderList ",

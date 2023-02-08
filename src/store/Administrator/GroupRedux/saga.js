@@ -18,13 +18,13 @@ import { DELETE_GROUP_LIST_ID, EDIT_GROUPMASTER_ID, GET_GROUP_LIST, POST_GROUPLI
 
 // post api
 function* Post_Method_ForGroupMaster_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_GroupList_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postGroupSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -35,14 +35,14 @@ function* Post_Method_ForGroupMaster_GenFun({ data }) {
 
 // get api
 function* Get_Group_List_genFunc() {
-  yield put(SpinnerState(true))
+
   try {
     
     const response = yield call(get_Group_List_Api);
     yield put(getGroupListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -53,12 +53,12 @@ function* Get_Group_List_genFunc() {
 // delete api 
 function* Delete_GroupList_ID_GenratorFunction({id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(del_Group_List_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteGrouplistSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -85,13 +85,13 @@ function* Edit_Grouplist_ID_GenratorFunction({ id,pageMode }) {
 // update api
 function* Update_Grouplist_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_Group_List_Api,updateData,ID);
-    yield put(SpinnerState(false))
+   
     yield put(updategroupIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

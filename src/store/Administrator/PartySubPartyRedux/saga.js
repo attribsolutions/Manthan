@@ -31,7 +31,7 @@ import {
 import { AlertState } from "../../actions";
 
 function* getListGenFunc() {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(PartySubParty_Get_API);
         // const data = response.Data.map((index) => ({
@@ -61,9 +61,9 @@ function* getListGenFunc() {
         // yield put(getPartySubPartylistSuccess(data));
         // console.log("response in saga", response)
         yield put(getPartySubPartylistSuccess(response.Data));
-        yield put(SpinnerState(false))
+       
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -72,13 +72,13 @@ function* getListGenFunc() {
 }
 
 function* postGenFunc({ data }) {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(PartySubParty_Post_API, data);
-        yield put(SpinnerState(false))
+       
         yield put(postPartySubPartySuccess(response));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -88,12 +88,12 @@ function* postGenFunc({ data }) {
 
 function* deleteGenFunc({ id }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(PartySubParty_Delete_API, id);
-        yield put(SpinnerState(false))
+       
         yield put(deletePartySubPartySuccess(response))
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -116,13 +116,13 @@ function* editGenFunc({ id, pageMode }) {
 
 function* updateGenFunc({ updateData, ID }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(PartySubParty_Update_API, updateData, ID);
-        yield put(SpinnerState(false))
+       
         yield put(updatePartySubPartySuccess(response))
     }
     catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -131,13 +131,13 @@ function* updateGenFunc({ updateData, ID }) {
 }
 
 function* getPartySubPartyGenFunc({id}) {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(PartySubParty_Dropdown_Get_API,id);
         yield put(getPartySubParty_For_party_dropdownSuccess(response.Data));
-        yield put(SpinnerState(false))
+       
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message PartySubParty list dropdown",

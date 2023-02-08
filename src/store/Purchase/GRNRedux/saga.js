@@ -31,13 +31,13 @@ import { convertDatefunc, convertTimefunc } from "../../../components/Common/Com
 import { EDIT_ORDER_FOR_ORDER_PAGE } from "../OrderPageRedux/actionType";
 
 function* postGRNGenFunc({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GRN_Post_API, data);
     yield put(postGRNSuccess(response));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error postGRN API",
@@ -46,13 +46,13 @@ function* postGRNGenFunc({ data }) {
 };
 
 function* DeleteGRNGenFunc({ id }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GRN_delete_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteGRNIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error DeleteGRN API",
@@ -62,13 +62,13 @@ function* DeleteGRNGenFunc({ id }) {
 
 function* UpdateGRNGenFunc({ data, id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(GRN_update_API, data, id);
-    yield put(SpinnerState(false))
+   
     yield put(updateGRNIdSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 ErrorUpdateGRN API",
@@ -79,7 +79,7 @@ function* UpdateGRNGenFunc({ data, id }) {
 // List Page API
 function* get_GRN_GerFunc({ filters }) {
   
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GRN_get_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -88,11 +88,11 @@ function* get_GRN_GerFunc({ filters }) {
       i.GRNDate = (`${date} ${time}`)
       return i
     })
-    yield put(SpinnerState(false))
+   
     yield put(getGRNListPageSuccess(newList))
 
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error get_GRN LIst API ",
@@ -104,7 +104,7 @@ function* get_GRN_GerFunc({ filters }) {
 function* getGRNitem_Mode2_GenFunc({ data }) {
   
   const { jsonBody, pageMode, path, grnRef, challanNo } = data
-  yield put(SpinnerState(true))
+
   try {
     // debugger
     const response = yield call(GRN_Make_API, jsonBody);
@@ -115,10 +115,10 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
     response.Data["challanNo"] = challanNo;
     response["path"] = path; //Pagepath
 
-    yield put(SpinnerState(false))
+   
     yield put(getGRN_itemMode2_Success(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error get_GRN Item API ",

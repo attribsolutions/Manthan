@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-// import ConfirmContext from '../store/ConfirmContext';
-import {HIDE_CONFIRM, SHOW_CONFIRM} from "./reducer";
+import { HIDE_CONFIRM, SHOW_CONFIRM } from "./reducer";
+import ConfirmContext from "./ConfirmContext";
 
-const ConfirmContext = React.createContext();
 let resolveCallback;
 function useConfirm() {
+
     const [confirmState, dispatch] = useContext(ConfirmContext);
+
     const onConfirm = () => {
         closeConfirm();
         resolveCallback(true);
@@ -15,21 +16,21 @@ function useConfirm() {
         closeConfirm();
         resolveCallback(false);
     };
-    const confirm = text => {
+
+    const confirm = (payload) => {
         dispatch({
             type: SHOW_CONFIRM,
-            payload: {
-                text
-            }
+            payload: payload
         });
         return new Promise((res, rej) => {
             resolveCallback = res;
         });
     };
 
-    const closeConfirm = () => {
+    const closeConfirm = (payload) => {
         dispatch({
-            type: HIDE_CONFIRM
+            type: HIDE_CONFIRM,
+            payload: payload
         });
     };
 

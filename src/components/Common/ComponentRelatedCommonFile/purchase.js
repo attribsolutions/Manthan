@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../Breadcrumb3";
 import { Button, Col, Input, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -12,13 +11,14 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 let sortType = "asc"
 let searchCount = 0
@@ -44,6 +44,15 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
     searchProps = toolkitProps.searchProps
 }
+
+
+export async function isAlertFunc(type, Msg) {
+    await CustomAlert({
+        Type: type,
+        Message: Msg.Message,
+        isFunc: true,
+    })
+};
 
 const PurchaseListPage = (props) => {
 
@@ -92,7 +101,7 @@ const PurchaseListPage = (props) => {
 
     const fileds = pageField.PageFieldMaster;
 
-    
+
     useEffect(() => {
 
         const locationPath = history.location.pathname
@@ -140,27 +149,21 @@ const PurchaseListPage = (props) => {
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
 
+        // async function isAlertFunc(type) {
+        //     await CustomAlert({
+        //         Type: type,
+        //         Message: updateMsg.Message,
+        //         isFunc: true,
+        //     })
+        // }
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
-            goButnFunc()
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: updateMsg.Message,
-                    isFunc: true,
-                })
-            );
+            goButnFunc();
+            isAlertFunc(1);
             tog_center();
         } else if (updateMsg.Status === true) {
             dispatch(updateSucc({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            isAlertFunc(3);
         }
     }, [updateMsg]);
 
@@ -168,22 +171,24 @@ const PurchaseListPage = (props) => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMsg.Message,
-                })
-            );
+            // dispatch(
+            isAlertFunc(1, deleteMsg)
+            // CustomAlert({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: deleteMsg.Message,
+            // })
+            // );
         } else if (deleteMsg.Status === true) {
             dispatch(deleteSucc({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                })
-            );
+            // dispatch(
+            isAlertFunc(3, deleteMsg)
+            // CustomAlert({
+            //     Type: 3,
+            //     Status: true,
+            //     Message: JSON.stringify(deleteMsg.Message),
+            // })
+            // );
         }
     }, [deleteMsg]);
 
@@ -193,22 +198,28 @@ const PurchaseListPage = (props) => {
             dispatch(postSucc({ Status: false }))
             tog_center();
             dispatch(getList());
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: postMsg.Message,
-            }))
+            isAlertFunc(1, postMsg)
+            // dispatch(
+            // CustomAlert({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: postMsg.Message,
+            // })
+            // )
         }
 
         else if ((postMsg.Status === true)) {
             dispatch(postSucc({ Status: false }))
-            dispatch(AlertState({
+            // dispatch(
+
+            CustomAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
-            }));
+            })
+            // );
         }
 
 

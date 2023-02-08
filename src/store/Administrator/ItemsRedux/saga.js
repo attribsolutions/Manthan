@@ -45,13 +45,13 @@ import {
 
 
 function* Get_Items_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(apiCall.Items_Master_Get_API);
-    yield put(SpinnerState(false))
+   
     if (response.StatusCode === 200) yield put(getItemListSuccess(response.Data))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error for Item Master",
@@ -64,9 +64,9 @@ function* Items_Group_GenratorFunction() {
   try {
     const response = yield call(apiCall.Items_Group_Get_API);
     yield put(getItemGroup_ForDropDownSuccess(response.Data));
-    // yield put(SpinnerState(false))
+    //
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -76,13 +76,13 @@ function* Items_Group_GenratorFunction() {
 
 
 function* Submit_Items_GenratorFunction({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(apiCall.Items_Master_Post_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostItemDataSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -92,12 +92,12 @@ function* Submit_Items_GenratorFunction({ data }) {
 
 function* Delete_Items_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(apiCall.Items_Master_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteItemIdSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -123,13 +123,13 @@ function* Edit_Items_GenratorFunction({ id, pageMode }) {
 function* Update_Items_GenratorFunction({ updateData, ID }) {
 
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(apiCall.Items_Master_Update_API, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateItemSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

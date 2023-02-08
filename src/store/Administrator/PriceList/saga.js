@@ -8,13 +8,13 @@ import { DELETE_PRICE_LIST, GET_PRICE_LIST_DATA, POST_PRICE_LIST_DATA,EDIT_PRICE
 
 
 function* Post_PriceList_GenratorFunction({ Data }) {
-    yield put(SpinnerState(true))
+  
     try {
       const response = yield call(Post_PriceList_API, Data);
-      yield put(SpinnerState(false))
+     
       yield put(postPriceListDataSuccess(response));
     } catch (error) {
-      yield put(SpinnerState(false))
+     
       yield put(AlertState({ Type: 4, 
         Status: true, Message: "500 Error Message",
       }));
@@ -22,13 +22,13 @@ function* Post_PriceList_GenratorFunction({ Data }) {
   }
   
 function* get_PriceList_GenratorFunction({ partyType }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_PriceListByPartyType_API, partyType);
-    yield put(SpinnerState(false))
+   
     yield put(getPriceListDataSuccess(response.Data));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));
@@ -38,14 +38,14 @@ function* get_PriceList_GenratorFunction({ partyType }) {
 
 //listpage
 function* get_PriceListPage_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(GetPriceList_For_Listpage);
-    yield put(SpinnerState(false))
+   
     yield put(getPriceListPageSuccess(response.Data));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));
@@ -54,16 +54,16 @@ function* get_PriceListPage_GenratorFunction() {
 
 //delete
 function* delete_PriceList_GenFun({ id }) {
-  yield put(SpinnerState(true))
+
   try {
     
   
 
     const response = yield call(delete_PriceList_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(delete_PriceListSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",
     }));
@@ -91,13 +91,13 @@ function* Edit_PriceList__GenratorFunction({ id ,pageMode}) {
 // update api
 function* Update_PriceList_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_PriceList, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updatePriceListSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

@@ -8,15 +8,15 @@ import { getpdfReportdataSuccess } from "./actions";
 
 
 function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(urlpath, Id);
     response["ReportType"] = ReportType
     response.Data["ReportType"] = ReportType
     yield put(getpdfReportdataSuccess(response));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
 
   }
 }

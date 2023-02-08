@@ -9,7 +9,7 @@ import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MAT
 
 // GO Botton Post API
 function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Material_Issue_GoButton_Post_API, data);
     response.Data.forEach(i1 => {
@@ -42,12 +42,12 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
       return i1
     })
 
-    yield put(SpinnerState(false))
+   
     console.log("gobtn", JSON.stringify(convResp))
     yield put(goButtonForMaterialIssue_Master_ActionSuccess(convResp));
 
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Go Button in Work Order ",
@@ -99,7 +99,7 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
 
 
   } catch (error) {
-    // yield put(SpinnerState(false))
+    //
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Merssage in Material Issue edit Api "
@@ -110,14 +110,14 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
 //post api
 function* save_Material_Issue_Genfun({ data }) {
 
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(Material_Issue_Post_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postMaterialIssueSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -128,7 +128,7 @@ function* save_Material_Issue_Genfun({ data }) {
 // get Work Order List API Using post method
 function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
 
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(Material_Issue_Get_API, filters);
@@ -139,9 +139,9 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
       return i
     })
     yield put(getMaterialIssueListPageSuccess(newList));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message in Work Order List ",
@@ -152,13 +152,13 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
 
 function* Delete_Metrialissue_listpage_GenFunc({ id }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Material_Issue_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteMaterialIssueIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Merssage in Material issue delete Api "

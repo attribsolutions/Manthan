@@ -434,7 +434,7 @@ const PageMaster = (props) => {
       PageHeading: values.pageheading,
       PageDescription: values.pagedescription,
       PageDescriptionDetails: values.pageheadingdescription,
-      RelatedPageID: relatedPage_DropdownSelect.value,
+      RelatedPageID: (pageType_DropdownSelect.value === 2) ? relatedPage_DropdownSelect.value : 0,
       IsDivisionRequired: values.IsDivisionRequired,
       IsEditPopuporComponent: values.IsEditPopuporComponent,
       CreatedBy: createdBy(),

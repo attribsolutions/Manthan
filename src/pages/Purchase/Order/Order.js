@@ -25,14 +25,13 @@ import {
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { getOrderType, getSupplier, getSupplierAddress, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { getOrderType, getSupplierAddress, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions"
+import { BreadcrumbShowCountlabel } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 import { ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -40,8 +39,8 @@ import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCom
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 
 let editVal = {}
 
@@ -125,6 +124,7 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
+
         dispatch(goButtonForOrderAddSuccess(null))
         dispatch(GetVender())
         dispatch(getSupplierAddress())
@@ -222,23 +222,32 @@ const Order = (props) => {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
-            dispatch(AlertState({
+            // dispatch(AlertState({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: postMsg.Message,
+            //     RedirectPath: ORDER_lIST,
+            // }))
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: postMsg.Message,
                 RedirectPath: ORDER_lIST,
-            }))
+            })
 
         } else if (postMsg.Status === true) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: JSON.stringify(postMsg.Message),
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
         }
     }, [postMsg])
 
@@ -252,13 +261,17 @@ const Order = (props) => {
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            // dispatch(
+            //     AlertState({
+            //         Type: 3,
+            //         Status: true,
+            //         Message: JSON.stringify(updateMsg.Message),
+            //     })
+            // );
+            CustomAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
@@ -288,11 +301,7 @@ const Order = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
-    function assignItem_onClick() {
-        
-        dispatch(goButtonForOrderAddSuccess([]))
-        setisOpen_TermsModal(true)
-    };
+
 
     const supplierOptions = vender.map((i) => ({
         value: i.id,
@@ -496,17 +505,12 @@ const Order = (props) => {
         goButtonHandler()
     }
 
-    const goButtonHandler = () => {
+    const goButtonHandler = async () => {
         if (!supplierSelect > 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please select supplier",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
+            await CustomAlert({
+                Type: 4,
+                Message: "Please select supplier",
+            })
             return;
         }
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
@@ -525,40 +529,52 @@ const Order = (props) => {
         setorderdate(date)
     };
 
-    function permissionfunc(istrue) {
-        if (istrue) {
-            setsupplierSelect(istrue)// **istrue is == event value
-            setorderItemTable([])
-        }
-    }
+    // function permissionfunc(istrue) {
+    //     if (istrue) {
+    //         setsupplierSelect(istrue)// **istrue is == event value
+    //         setorderItemTable([])
+    //     }
+    // }
 
     function supplierOnchange(e) {
-        var isfind = orderItemTable.find(i => (i.Quantity > 0))
-        if (isfind) {
-            dispatch(
-                AlertState({
-                    Type: 7,
-                    Status: true,
-                    Message: "If you are change Supplier Name then All Item Data is Clear",
-                    RedirectPath: false,
-                    PermissionFunction: permissionfunc,
-                    permissionValueReturn: e
+        // var isfind = orderItemTable.find(i => (i.Quantity > 0))
+        // if (isfind) {
+        //     // dispatch(
+        //         AlertState({
+        //             Type: 7,
+        //             Status: true,
+        //             Message: "If you are change Supplier Name then All Item Data is Clear",
+        //             RedirectPath: false,
+        //             PermissionFunction: permissionfunc,
+        //             permissionValueReturn: e
 
-                })
-            );
-            return;
-        } else {
-            setsupplierSelect(e)
-            setorderItemTable([])
-            setTermsAndConTable([])
-        }
+        //         })
+        //     // );
+        //     return;
+        // } else {
+        setsupplierSelect(e)
+        //     setorderItemTable([])
+        //     setTermsAndConTable([])
+        // }
 
-        // let newObj = { ...orderAddFilter }
-        // newObj.supplierSelect = e
-        // dispatch(orderAddfilters(newObj))
+
     };
 
-    const saveHandeller = () => {
+    async function assignItem_onClick() {
+
+        var msg = "Do you confirm your choice?"
+        const isConfirmed = await CustomAlert({
+            Type: 7,
+            Message: msg,
+        });
+        if (isConfirmed) {
+            dispatch(goButtonForOrderAddSuccess([]))
+            setisOpen_TermsModal(true)
+        }
+
+    };
+
+    const saveHandeller = async () => {
         const division = userParty();
         const supplier = supplierSelect.value;
 
@@ -606,10 +622,12 @@ const Order = (props) => {
             };
         }
 
-        orderItemTable.forEach(i => {
+        await orderItemTable.forEach(i => {
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+                // validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+                validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
+
             }
             //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
             //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
@@ -635,49 +653,66 @@ const Order = (props) => {
                 orderItem({ i, isedit })
             };
         })
-        const termsAndCondition = termsAndConTable.map(i => ({
+        const termsAndCondition = await termsAndConTable.map(i => ({
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
 
         if (validMsg.length > 0) {
-            dispatch(AlertState({
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: validMsg,
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
+            await CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: validMsg,
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
             return
         }
         if (itemArr.length === 0) {
-            dispatch(AlertState({
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: "Please Enter One Item Quantity",
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
+            await CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: "Please Enter One Item Quantity",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+
             return
         }
         if (orderTypeSelect.length === 0) {
-            dispatch(AlertState({
+            await CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: "Please Select PO Type",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: "Please Select PO Type",
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
             return
         }
         if (termsAndCondition.length === 0) {
-            dispatch(AlertState({
+            await CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: "Please Enter One Terms And Condition",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: "Please Enter One Terms And Condition",
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
 
             return
         }
@@ -706,7 +741,7 @@ const Order = (props) => {
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
-        if (pageMode === "edit") {
+        if (pageMode === mode.edit) {
             dispatch(updateOrderId(jsonBody, editVal.id))
 
         } else {

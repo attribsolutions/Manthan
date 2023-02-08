@@ -32,13 +32,13 @@ import {
 
 // post api
 function* Post_Method_ForGeneral_GenFun({ data }) {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(Post_General_API, data);
-        yield put(SpinnerState(false))
+       
         yield put(PostMethodForGeneralSuccess(response));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -50,13 +50,13 @@ function* Post_Method_ForGeneral_GenFun({ data }) {
 // get api
 function* Post_General_List_GenratorFunction({ data }) {
 
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(Post_General_List_Api, data);
         yield put(PostGenerallistSuccess(response.Data));
-        yield put(SpinnerState(false))
+       
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -67,12 +67,12 @@ function* Post_General_List_GenratorFunction({ data }) {
 // delete api 
 function* Delete_General_ID_GenratorFunction({ id }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(delete_General_List_Api, id);
-        yield put(SpinnerState(false))
+       
         yield put(deleteGeneralIDSuccess(response))
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -99,13 +99,13 @@ function* Edit_General_ID_GenratorFunction({ id, pageMode }) {
 // update api
 function* Update_General_ID_GenratorFunction({ updateData, ID }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(update_General_List_Api, updateData, ID);
-        yield put(SpinnerState(false))
+       
         yield put(updateGeneralIDSuccess(response))
     }
     catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -116,13 +116,13 @@ function* Update_General_ID_GenratorFunction({ updateData, ID }) {
 /// Type Dropdown
 function* Post_Type_GenFun({ data }) {
 
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(post_Type_API, data);
-        yield put(SpinnerState(false))
+       
         yield put(PostTypeSuccess(response.Data));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -131,13 +131,13 @@ function* Post_Type_GenFun({ data }) {
 }
 
 function* GeneralMasterSubType_Genfun({ data }) {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(GeneralMasterSubType_API, data);
-        yield put(SpinnerState(false))
+       
         yield put(GeneralMasterSubType_Success(response.Data));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",

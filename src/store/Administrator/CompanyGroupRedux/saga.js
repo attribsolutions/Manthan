@@ -27,13 +27,13 @@ import { AlertState } from "../../actions";
 
 // Get List Page API
 function* Get_CompanyGroup_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_CompanyGroupList_API);
     yield put(getMethod_ForCompanyGroupListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -43,13 +43,13 @@ function* Get_CompanyGroup_GenratorFunction() {
 
 // post api
 function* Post_Method_For_CompanyGroup_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_CompanyGroup_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostMethod_ForCompanyGroupMasterSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -62,12 +62,12 @@ function* Post_Method_For_CompanyGroup_GenFun({ data }) {
 // delete api 
 function* Delete_CompanyGroupType_ID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_CompanyGroupType_List_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteCompanyGroupTypeIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -94,13 +94,13 @@ function* Edit_CompanyGroupType_ID_GenratorFunction({ id, pageMode }) {
 // update api
 function* Update_CompanyGroupType_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_CompanyGroupType_List_Api, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateCompanyGroupTypeIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
