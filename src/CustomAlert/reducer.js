@@ -7,7 +7,7 @@ export const initialState = {
 };
 
 function fun(state, action) {
-    debugger
+
     let s = { ...state };
     let p = { ...action.payload };
     if (s.Type === p.Type) {

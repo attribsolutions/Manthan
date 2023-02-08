@@ -12,7 +12,7 @@ const ConfirmDialog = () => {
     const { confirmState, confirm } = useConfirm();
     CustomAlert = confirm;
     let component = null;
-    debugger
+
     if (confirmState.Status) {
         switch (confirmState.Type) {
             case 1: component = <AlertSucc />
