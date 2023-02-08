@@ -680,8 +680,8 @@ const Invoice = (props) => {
         // debugger
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: userParty(),
-            Party: values.Customer.value,
+            Customer: values.Customer.value,
+            Party: userParty(),
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
