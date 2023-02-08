@@ -116,7 +116,7 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
 
         let tableArr = props.reducers.tableList;
-        if ((pageUrl === url.GRN_ADD_Mode_2)) {
+        if ((pageUrl === url.GRN_STP)) {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })
@@ -328,7 +328,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
@@ -503,7 +503,7 @@ const PurchaseListPage = (props) => {
 
                     {
 
-                        (`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) ?
+                        (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button

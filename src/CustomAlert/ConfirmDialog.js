@@ -19,7 +19,7 @@ const ConfirmDialog = () => {
                 break;
             case 2: component = <AlertDanger />
                 break;
-            case 2: component = <AlertInfo />
+            case 3: component = <AlertInfo />
                 break;
             case 4: component = <AlertWarning />
                 break;
@@ -154,7 +154,7 @@ const AlertInfo = () => {
     return (
         <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody " onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="modal-content ">
                         <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
@@ -396,7 +396,7 @@ export async function CkeckAlert(method, url, response, body) {
         return Promise.reject(response)
     }
     else if (con3) {
-        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Serializer Error` })
+        await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
         return Promise.reject(response)
     }
     else {

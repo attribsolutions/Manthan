@@ -65,10 +65,10 @@ const OrderList = () => {
     let page_Url = url.ORDER_lIST;
     let make_BtnShow = false;
 
-    if (hasPagePath === url.GRN_ADD_Mode_2) {
-        page_Id = pageId.GRN_ADD_Mode_2;
+    if (hasPagePath === url.GRN_STP) {
+        page_Id = pageId.GRN_STP;
         page_Mode = mode.mode2save;
-        page_Url = url.GRN_ADD_Mode_2;
+        page_Url = url.GRN_STP;
         make_BtnShow = true
     }
 
@@ -84,7 +84,7 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         // setpageMode(page_mode)
-        // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+        // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
