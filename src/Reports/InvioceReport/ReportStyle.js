@@ -1,6 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
+import { invoice } from "../ReportIndex";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -13,8 +14,17 @@ export const pageHeder = (doc, data) => {
     doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
-    doc.setFontSize(15)
-    doc.text('Tax Invoice', 200, 40,) //Tax invoice Header
+    debugger
+    if (data.ReportType===invoice) {
+        doc.setFontSize(15)
+        doc.text('Tax Invoice', 200, 40,)  
+    }else{
+        doc.setFontSize(15)
+        doc.text('Inter Branch Invoice', 200, 40,) 
+
+    }
+
+     //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
@@ -31,8 +41,8 @@ export const reportHeder1 = (doc, data) => {
     doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 200, 408, 10);//vertical right 1
-    doc.line(220, 200, 220, 60);//vertical right 2
+    doc.line(408, 170, 408, 10);//vertical right 1
+    doc.line(220, 170, 220, 60);//vertical right 2
 
     var options3 = {
         margin: {
@@ -84,12 +94,22 @@ export const reportHeder2 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(10)
-    doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
-    doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    if (data.ReportType===invoice) {
+        doc.setFont('Tahoma')
+        doc.setFontSize(10)
+        doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
+        doc.setFont(undefined, 'bold')
+        doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
+        doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    }else{
+        doc.setFont('Tahoma')
+        doc.setFontSize(10)
+        doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
+        doc.setFont(undefined, 'bold')
+        doc.text(`IB Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
+        doc.text(` IB Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    }
+   
 }
 // original
 
@@ -251,18 +271,15 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    debugger
     const tableRow = table.Rows(data);
-    const { OrderItem = [] } = data
+    const {OrderItem = [] } = data
 
     console.log(tableRow)
 //    const a= OrderItem.forEach((element) => {
 //         element.Comment
 //     })
     var options = {
-
         didParseCell: (data1) => {
-
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
@@ -276,10 +293,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4.].styles.fontStyle = "bold"
                 data1.row.cells[6.].styles.fontStyle = "bold"
             }
-
-            // if (data1.row.cells[5].raw === a) {
-                
-            // }
         },
         margin: {
             left: 30, right: 25,//200 bottom
@@ -312,7 +325,6 @@ export const tableBody = (doc, data) => {
             1: {
                 columnWidth: 40,
                 halign: 'right',
-
             },
             2: {
                 columnWidth: 50,
@@ -341,22 +353,16 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
         },
-
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
-        
-
-
-
     };
+    
 
-    doc.autoTable(table.columns, table.Rows(data), options, {
 
-
-    });
+    doc.autoTable(table.columns,table.Rows(data), options,);
+    
 
     const optionsTable4 = {
-
         margin: {
             left: 30, right: 30, bottom: 140
         },
@@ -432,7 +438,6 @@ export const pageFooter = (doc, data) => {
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
     var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-
     function toWords(s) {
         s = s.toString();
         s = s.replace(/[\, ]/g, '');
@@ -485,6 +490,8 @@ export const pageFooter = (doc, data) => {
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(460, 775, 30, 775);//horizontal line (Bottom)
+
+
     const a = data.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
