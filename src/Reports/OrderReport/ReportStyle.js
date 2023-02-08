@@ -288,13 +288,10 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[6].colSpan = 2
                 data1.row.cells[7].colSpan = 2
 
-
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
                 data1.row.cells[8].styles.fontSize = 8
-
-
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"

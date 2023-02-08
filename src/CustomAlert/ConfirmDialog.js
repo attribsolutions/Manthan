@@ -19,7 +19,7 @@ const ConfirmDialog = () => {
                 break;
             case 2: component = <AlertDanger />
                 break;
-            case 2: component = <AlertInfo />
+            case 3: component = <AlertInfo />
                 break;
             case 4: component = <AlertWarning />
                 break;
@@ -80,7 +80,7 @@ const AlertSucc = () => {
     return (
         <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="px-6 mb-0 text-center alert alert-success alert-dismissible fade show" role="alert"><button type="button"
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                             className="mdi mdi-check-all d-block display-6 mt-2 mb-3  text-success"></i>
@@ -116,7 +116,7 @@ const AlertWarning = () => {
     return (
         <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="modal-content ">
                         <div className="px-4 mb-0 text-center alert alert-warning alert-dismissible fade show" role="alert"><button type="button"
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
@@ -154,7 +154,7 @@ const AlertInfo = () => {
     return (
         <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody "  onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="modal-content ">
                         <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
@@ -192,7 +192,7 @@ const AlertDanger = () => {
     return (
         <div id="c-alert1" className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="px-4 mb-0 text-center alert alert-danger alert-dismissible fade show" role="alert"><button
                         type="button" className="close" aria-label="Close" onClick={outerNo}><span
                             aria-hidden="true">×</span></button><i
@@ -237,7 +237,7 @@ const AlertPermission_1 = () => {
     return (
         <div id="c-alert1" className="modal fade show  transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true" >×</span></button><i
                             className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
@@ -284,7 +284,7 @@ const AlertPermission_2 = () => {
     return (
         <div id="c-alert1" className="modal fade show  transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
                     <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true" >×</span></button><i
                             className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
@@ -369,33 +369,38 @@ const MessageFun = ({ msg }) => {
                 }
             })
         })
-        return  msgarr.map((i) => (<div style={{ textAlign: 'left' }}><p> <h5>{i}</h5></p></div>))
+        return msgarr.map((i) => (<div style={{ textAlign: 'left' }}><p> <h5>{i}</h5></p></div>))
     }
     else {
         return (<div style={{ textAlign: 'center' }}><p> <h5>{msg}</h5></p></div>)
     }
 }
 
-export async function CkeckAlert(method, url, resp) {
-    const { data = '' } = resp
-    const con1 = ((data.StatusCode === 200) || (data.StatusCode === 204) || (data.StatusCode === 226))
-    const con2 = ((data.StatusCode === 400))
-    const con3 = ((data.StatusCode === 406))
-    // de
-    console.log(`${url} *** ${method} apiCall response:=>`, resp)
+export async function CkeckAlert(method, url, response, body) {
+    const { data = '' } = response
+    const con1 = ((data.StatusCode === 200) || (data.StatusCode === 204) || (data.StatusCode === 226));
+    const con2 = ((data.StatusCode === 400));
+    const con3 = ((data.StatusCode === 406));
+    const con4 = ((method === "post" || method === "put"))
+
+    if (con4) {
+        console.log(`${url}***=> ${method} Body =>`, body)
+    }
+    console.log(`${url}***${method} apiCall response:=>`, response)
+
 
     if (con1) {
-        return resp.data
+        return response.data
     } else if (con2) {
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
-        return Promise.reject(resp)
+        return Promise.reject(response)
     }
     else if (con3) {
-        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Serializer Error` })
-        return Promise.reject(resp)
+        await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
+        return Promise.reject(response)
     }
     else {
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
-        return Promise.reject(resp)
+        return Promise.reject(response)
     }
 }

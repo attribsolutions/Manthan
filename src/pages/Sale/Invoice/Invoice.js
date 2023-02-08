@@ -680,8 +680,8 @@ const Invoice = (props) => {
         // debugger
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: userParty(),
-            Party: values.Customer.value,
+            Customer: values.Customer.value,
+            Party: userParty(),
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
@@ -697,7 +697,7 @@ const Invoice = (props) => {
 
         const InvoiceItems = []
         const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
-        let grandtotal = 0
+        let grand_total = 0
 
         OrderItemDetails.forEach((index) => {
 
@@ -733,7 +733,7 @@ const Invoice = (props) => {
                     const basicAmt = parseFloat(basicAmount(demo))
                     const cgstAmt = (GstAmount(demo))
                     const amount = Amount(demo)
-                    grandtotal = grandtotal + Number(amount)
+                    grand_total = grand_total + Number(amount)
                     InvoiceItems.push({
                         Item: index.Item,
                         Unit: index.UnitDrop.value,
@@ -780,8 +780,8 @@ const Invoice = (props) => {
         const jsonBody = JSON.stringify({
             InvoiceDate: values.InvoiceDate,
             CustomerGSTTin: '41',
-            GrandTotal: Math.round(grandtotal),
-            RoundOffAmount: (grandtotal - Math.trunc(grandtotal)).toFixed(2),
+            GrandTotal: Math.round(grand_total),
+            RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
             Customer: values.Customer.value,
             Party: userParty(),
             CreatedBy: createdBy(),

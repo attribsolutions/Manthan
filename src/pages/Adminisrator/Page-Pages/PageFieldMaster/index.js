@@ -27,7 +27,6 @@ function PageFieldMaster_Tab(props) {
 
     useEffect(() => {
         dispatch(getControlTypes());
-        dispatch(getFieldValidations());
     }, [dispatch]);
 
     const ControlTypes_DropdownOptions = ControlTypes.map((data) => ({

@@ -33,8 +33,8 @@ function GroupTab(props) {
 
     useEffect(() => {
         dispatch(getGroupTypeslist());
-        dispatch(get_Group_By_GroupType_ForDropDown());
-        dispatch(get_Sub_Group_By_Group_ForDropDown());
+        // dispatch(get_Group_By_GroupType_ForDropDown());
+        // dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
 
 

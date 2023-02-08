@@ -62,8 +62,8 @@ const IBOrderList = () => {
     const { fromdate, todate, SupplierSelect, InOutSelect } = iborderdate;
 
     const hasPagePath = history.location.pathname;
-    const pageMode = (hasPagePath === url.IB_INVOICE_MODE_2) ? mode.mode2save : mode.defaultList;
-    const page_Id = (hasPagePath === url.IB_INVOICE_MODE_2) ? pageId.IB_INVOICE_MODE_2 : pageId.IB_ORDER_LIST;
+    const pageMode = (hasPagePath === url.IB_INVOICE_STP) ? mode.mode2save : mode.defaultList;
+    const page_Id = (hasPagePath === url.IB_INVOICE_STP) ? pageId.IB_INVOICE_STP : pageId.IB_ORDER_LIST;
 
     const action = {
         getList: postIBOrderListPage,
@@ -237,7 +237,7 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col >
 
-                        {!(page_Id === pageId.IB_INVOICE_MODE_2) ?
+                        {!(page_Id === pageId.IB_INVOICE_STP) ?
                             <Col sm="3">
                                 <FormGroup className="mb-2 row mt-3">
                                     <Label className=" p-2"

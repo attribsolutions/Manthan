@@ -309,7 +309,7 @@ const ItemsMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
         dispatch(getCategoryTypelist());
-        dispatch(get_Category_By_CategoryType_ForDropDownAPI());
+        // dispatch(get_Category_By_CategoryType_ForDropDownAPI());
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
 
