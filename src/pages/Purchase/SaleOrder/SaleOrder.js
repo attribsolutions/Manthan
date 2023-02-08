@@ -475,7 +475,7 @@ const SaleOrder = (props) => {
     function assignItem_onClick() {
         setisOpen_TermsModal(true)
     };
-    
+
     function Open_TermsModal_func() {
         setisOpen_TermsModal(false)
         goButtonHandler()
@@ -540,8 +540,8 @@ const SaleOrder = (props) => {
     };
 
     const saveHandeller = () => {
-        const division = supplierSelect.value;
-        const supplier = userParty();
+        const division = userParty();
+        const supplier = supplierSelect.value;
         debugger
         const validMsg = []
         const itemArr = []
