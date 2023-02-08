@@ -22,71 +22,70 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-export async function get(url, config = {}) {
+export function get(url, config = {}) {
 
   AuthonticationFunction();
-  const res = await axiosApi.get(url, { ...config }).then(response => response.data).catch(error => ({ StatusCode: 500, Data: [], Status: false }));
-  //  console.log(`${url}/* getapiCall Url=>`, url);
-  await CkeckAlert("get", url, res)
-  console.log(`${url}/* getapiCall response:=>`, res);
-  return res
+  return axiosApi.get(url, { ...config })
+    .then(response => {
+      return CkeckAlert("get", url, response);
+    })
+    .catch(error => {
+      return CkeckAlert("get", url, error);
+    });
+
+
 }
 
-export async function post(url, data, config = {}) {
+export function post(url, data, config = {}) {
   AuthonticationFunction();
-
-  const res = await axiosApi
+  return axiosApi
     .post(url, data, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     })
-    .then(response => response.data)
-    .catch(error => (''));
+    .then(response => {
+      return CkeckAlert("post", url, response);
+    })
+    .catch(error => {
+      return CkeckAlert("post", url, error);
+    });
+};
 
-  // console.log(`${url}/*postapiCall Url:`, url);
-  console.log(`${url}/*postapiCall Body:`, data)
-  console.log(`${url}/* postapiCall Response:`, res);
-  await  CkeckAlert("post", url, res)
 
-  return res
-}
-
-export async function put(url, data, config = {}) {
+export function put(url, data, config = {}) {
 
   AuthonticationFunction();
-  const res = await axiosApi
+  return axiosApi
     .put(url, data, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     })
-    .then(response => response.data)
-    .catch(error => (error));
-  // console.log(`${url}/*put-apiCall Url:`, url);
-  console.log(`${url}/*put-apiCall Body:`, data);
-  console.log(`${url}/*putapiCall Response:`, res);
-  CkeckAlert("put", url, res)
-
-  return res
+    .then(response => {
+      return CkeckAlert("put", url, response);
+    })
+    .catch(error => {
+      return CkeckAlert("put", url, error);
+    });
 }
 
-export async function del(url, config = {}) {
+export function del(url, config = {}) {
   AuthonticationFunction();
-  const res = await axiosApi
+  return axiosApi
     .delete(url, { ...config })
-    .then(response => response.data)
-    .catch(error => (error));
-  // console.log(`${url}/*deleteapiCall Url:`, url);
-  console.log(`${url}/*delete-apiCall response:`, res);
-  CkeckAlert("delete", url, res)
-  return res
+    .then(response => {
+      return CkeckAlert("delete", url, response);
+    })
+    .catch(error => {
+      return CkeckAlert("delete", url, error);
+    });
 }
 
 // for forget password
-export async function postForget(url, data, config = {}) {
+export function postForget(url, data, config = {}) {
   // debugger
   // AuthonticationFunction();
   return axiosApi
@@ -96,14 +95,21 @@ export async function postForget(url, data, config = {}) {
         "Content-Type": "application/json",
       }
     })
-    .then(response => response.data)
+    .then(response => {
+      return CkeckAlert("postForget", url, response);
+    })
+    .catch(error => {
+      return CkeckAlert("postForget", url, error);
+    });
 
 }
 
 export async function getModify(url) {
   AuthonticationFunction();
-  const res = await axiosApi.get(url).then(response => response.data)
-  console.log("getModify Url:", url);
-  console.log(`${url}/* getModify response:=>`, res);
-  return res
+  return axiosApi.get(url).then(response => {
+    return CkeckAlert("get", url, response);
+  })
+    .catch(error => {
+      return CkeckAlert("get", url, error);
+    });
 }

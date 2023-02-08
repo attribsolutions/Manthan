@@ -220,7 +220,7 @@ textarea:focus {
 .alertbody {
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
-  // z-index: 99999 !important;
+  z-index: 99999 !important;
   background-size: cover;
   backdrop-filter: blur(8px);
   box-shadow:5px 5px 5px #adb5bd !important

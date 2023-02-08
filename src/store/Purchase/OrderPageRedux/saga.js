@@ -26,14 +26,14 @@ import {
   GET_ORDER_LIST_PAGE
 } from "./actionType";
 
-import { SpinnerState } from "../../Utilites/Spinner/actions";
+// import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { convertDatefunc, convertTimefunc, GoBtnDissable, mainSppinerOnOff, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function* goButtonGenFunc({ data }) {
 
 
-  yield mainSppinerOnOff(true)
+  // yield mainSppinerOnOff(true)
   yield delay(400)
   try {
 
@@ -55,16 +55,14 @@ function* goButtonGenFunc({ data }) {
     yield response.Data.TermsAndConditions = termArr;
 
     yield put(goButtonForOrderAddSuccess(response.Data));
-    yield mainSppinerOnOff(false)
+    // yield mainSppinerOnOff(false)
   } catch (error) {
-    yield mainSppinerOnOff(false)
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Go Button-Order Page",
-    }));
+    // yield mainSppinerOnOff(false)
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error Go Button-Order Page",
+    // }));
   }
-
-
 
 
 

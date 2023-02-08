@@ -741,7 +741,7 @@ const Order = (props) => {
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
-        if (pageMode === "edit") {
+        if (pageMode === mode.edit) {
             dispatch(updateOrderId(jsonBody, editVal.id))
 
         } else {

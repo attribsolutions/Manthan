@@ -80,7 +80,7 @@ const AlertSucc = () => {
     return (
         <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody" style={{ boxShadow: "5px 5px 5px #adb5bd !important" }} onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
                     <div className="px-6 mb-0 text-center alert alert-success alert-dismissible fade show" role="alert"><button type="button"
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                             className="mdi mdi-check-all d-block display-6 mt-2 mb-3  text-success"></i>
@@ -116,7 +116,7 @@ const AlertWarning = () => {
     return (
         <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody" style={{ boxShadow: "5px 5px 5px #adb5bd !important" }} onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
                     <div className="modal-content ">
                         <div className="px-4 mb-0 text-center alert alert-warning alert-dismissible fade show" role="alert"><button type="button"
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
@@ -154,7 +154,7 @@ const AlertInfo = () => {
     return (
         <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody " style={{ boxShadow: "5px 5px 5px #adb5bd !important" }} onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody "  onClick={(e) => outerNo(e, 2)}>
                     <div className="modal-content ">
                         <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
@@ -192,14 +192,13 @@ const AlertDanger = () => {
     return (
         <div id="c-alert1" className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content " style={{ boxShadow: "5px 5px 5px #adb5bd !important" }} onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
                     <div className="px-4 mb-0 text-center alert alert-danger alert-dismissible fade show" role="alert"><button
-                        type="button" className="close" aria-label="Close" onclick={outerNo}><span
+                        type="button" className="close" aria-label="Close" onClick={outerNo}><span
                             aria-hidden="true">×</span></button><i
                                 className="mdi mdi-block-helper d-block display-4 mt-2 mb-3  text-danger"></i>
-                        <p>
-                            <h5 className="text-danger">{Message}</h5>
-                        </p><button type="button" className="btn btn-primary" onclick={innerOk}>OK</button>
+                        <MessageFun msg={Message} />
+                        <button type="button" className="btn btn-primary" onClick={innerOk}>OK</button>
                     </div>
                 </div>
             </div>
@@ -238,7 +237,7 @@ const AlertPermission_1 = () => {
     return (
         <div id="c-alert1" className="modal fade show  transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content alertbody" style={{ boxShadow: "5px 5px 5px #adb5bd !important" }} onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
                     <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true" >×</span></button><i
                             className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
@@ -285,7 +284,7 @@ const AlertPermission_2 = () => {
     return (
         <div id="c-alert1" className="modal fade show  transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content " style={{ boxShadow: "5px 5px 5px #adb5bd !important" }} onClick={(e) => outerNo(e, 2)}>
+                <div className="modal-content alertbody"  onClick={(e) => outerNo(e, 2)}>
                     <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
                         className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true" >×</span></button><i
                             className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
@@ -370,8 +369,7 @@ const MessageFun = ({ msg }) => {
                 }
             })
         })
-        let a = msgarr.map((i) => (<div style={{ textAlign: 'left' }}><p> <h5>{i}</h5></p></div>))
-        return a
+        return  msgarr.map((i) => (<div style={{ textAlign: 'left' }}><p> <h5>{i}</h5></p></div>))
     }
     else {
         return (<div style={{ textAlign: 'center' }}><p> <h5>{msg}</h5></p></div>)
@@ -379,21 +377,25 @@ const MessageFun = ({ msg }) => {
 }
 
 export async function CkeckAlert(method, url, resp) {
-    const con1 = ((resp.StatusCode === 200) || (resp.StatusCode === 204) || (resp.StatusCode === 226))
-    const con2 = ((resp.StatusCode === 400))
-    const con3 = ((resp.StatusCode === 406))
-    const con4 = ((resp.StatusCode === 500))
-
+    const { data = '' } = resp
+    const con1 = ((data.StatusCode === 200) || (data.StatusCode === 204) || (data.StatusCode === 226))
+    const con2 = ((data.StatusCode === 400))
+    const con3 = ((data.StatusCode === 406))
+    // de
+    console.log(`${url} *** ${method} apiCall response:=>`, resp)
 
     if (con1) {
-
+        return resp.data
     } else if (con2) {
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
+        return Promise.reject(resp)
     }
     else if (con3) {
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Serializer Error` })
+        return Promise.reject(resp)
     }
     else {
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
+        return Promise.reject(resp)
     }
 }
