@@ -61,11 +61,10 @@ const IBOrderList = () => {
     const { userAccess, pageField, Supplier, iborderlistFilter } = reducers;
     const { fromdate, todate, SupplierSelect, InOutSelect } = iborderdate;
 
-    // const page_Id = (pageId.IB_ORDER_LIST);
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.IB_INVOICE_MODE_2) ? mode.mode2save : mode.defaultList;
     const page_Id = (hasPagePath === url.IB_INVOICE_MODE_2) ? pageId.IB_INVOICE_MODE_2 : pageId.IB_ORDER_LIST;
-    
+
     const action = {
         getList: postIBOrderListPage,
         deleteId: deleteIBOrderId,
@@ -76,7 +75,6 @@ const IBOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        // setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"IBOrder Count"} :0`))
@@ -132,7 +130,6 @@ const IBOrderList = () => {
             Customer: userParty(),
             InOut: InOutSelect.value
         })
-
         dispatch(postIBOrderListPage(jsonBody))
     };
 
@@ -159,7 +156,6 @@ const IBOrderList = () => {
     }
 
     function InOutOnchange(e) {
-        debugger
         let newObj = { ...iborderdate }
         newObj.InOutSelect = e
         // dispatch(iborderlistfilter(newObj))
@@ -168,9 +164,7 @@ const IBOrderList = () => {
 
 
     const makeBtnFunc = (list = {}) => {
-        debugger
         const obj = { ...list[0] }
-
         history.push({
             pathname: url.IB_INVOICE,
             editValue: obj,
