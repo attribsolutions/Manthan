@@ -590,8 +590,8 @@ const BreadcrumbNew = (props) => {
 
   return (
     <React.Fragment>
-      <header id="page-topbar1"  >
-        <div className="navbar-header blur1" style={{ paddingRight: "-10px" }}>
+      <header id="page-topbar1"style={{ zIndex:"1"}}  >
+        <div className="navbar-header blur1" style={{ paddingRight: "-10px",zIndex:"-1"}}>
           <div className="d-flex" >
             <div className="navbar-brand-box" ></div>
             <div style={{ paddingLeft: "7px" }} >
