@@ -65,7 +65,7 @@ const IBOrderList = () => {
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.IB_INVOICE_MODE_2) ? mode.mode2save : mode.defaultList;
     const page_Id = (hasPagePath === url.IB_INVOICE_MODE_2) ? pageId.IB_INVOICE_MODE_2 : pageId.IB_ORDER_LIST;
-
+    
     const action = {
         getList: postIBOrderListPage,
         deleteId: deleteIBOrderId,
@@ -243,27 +243,29 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col >
 
-                        <Col sm="3">
-                            <FormGroup className="mb-2 row mt-3">
-                                <Label className=" p-2"
-                                    style={{ width: "80px", marginLeft: "-100px" }}>In/Out</Label>
-                                <Col sm="6">
-                                    <Select
-                                        classNamePrefix="select2-Customer"
-                                        value={InOutSelect}
-                                        options={[{
-                                            value: 1,
-                                            label: 'IN',
-                                        },
-                                        {
-                                            value: 2,
-                                            label: 'Out',
-                                        }]}
-                                        onChange={InOutOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
+                        {!(page_Id === pageId.IB_INVOICE_MODE_2) ?
+                            <Col sm="3">
+                                <FormGroup className="mb-2 row mt-3">
+                                    <Label className=" p-2"
+                                        style={{ width: "80px", marginLeft: "-100px" }}>In/Out</Label>
+                                    <Col sm="6">
+                                        <Select
+                                            classNamePrefix="select2-Customer"
+                                            value={InOutSelect}
+                                            options={[{
+                                                value: 1,
+                                                label: 'IN',
+                                            },
+                                            {
+                                                value: 2,
+                                                label: 'Out',
+                                            }]}
+                                            onChange={InOutOnchange}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+                            : <></>}
 
                         <Col sm="1"
                             style={{ width: "80px", marginLeft: "-100px" }}>
