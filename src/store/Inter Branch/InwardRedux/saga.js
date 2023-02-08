@@ -25,6 +25,7 @@ function* Post_Inward_GenratorFunction({ data }) {
 
 // Inward List API
 function* get_InwardList_GenFunc({ filters }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(Inward_List_API, filters);

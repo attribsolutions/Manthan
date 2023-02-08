@@ -9,7 +9,6 @@ import {
     editIBOrderId,
     postIBOrderListPage,
     updateIBOrderIdSuccess,
-    iborderlistfilter,
     postDivision,
 
 } from "../../../store/Inter Branch/IBOrderRedux/action";
@@ -22,16 +21,27 @@ import * as pageId from "../../../routes/allPageID"
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { MetaTags } from "react-meta-tags";
 import IBOrder from "./IBOrder";
+import * as  mode from "../../../routes/PageMode";
+import { MakeIBInvoice } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 
 const IBOrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.IB_ORDER_LIST)
+    // const hasPagePath = history.location.pathname
+    // const [pageMode, setpageMode] = useState(url.IB_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [iborderdate, setiborderdate] = useState({ fromdate: currentDate, todate: currentDate, SupplierSelect: { value: '', label: "All" } })
+    const [iborderdate, setiborderdate] = useState(
+        {
+            fromdate: currentDate,
+            todate: currentDate,
+            SupplierSelect: { value: '', label: "All" },
+            InOutSelect: {
+                value: 1,
+                label: 'IN',
+            }
+        })
 
     const reducers = useSelector(
 
@@ -49,9 +59,12 @@ const IBOrderList = () => {
     );
 
     const { userAccess, pageField, Supplier, iborderlistFilter } = reducers;
-    const { fromdate, todate, SupplierSelect } = iborderdate;
+    const { fromdate, todate, SupplierSelect, InOutSelect } = iborderdate;
 
-    const page_Id = (pageId.IB_ORDER_LIST);
+    // const page_Id = (pageId.IB_ORDER_LIST);
+    const hasPagePath = history.location.pathname;
+    const pageMode = (hasPagePath === url.IB_INVOICE_MODE_2) ? mode.mode2save : mode.defaultList;
+    const page_Id = (hasPagePath === url.IB_INVOICE_MODE_2) ? pageId.IB_INVOICE_MODE_2 : pageId.IB_ORDER_LIST;
 
     const action = {
         getList: postIBOrderListPage,
@@ -63,7 +76,7 @@ const IBOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        // setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"IBOrder Count"} :0`))
@@ -117,6 +130,7 @@ const IBOrderList = () => {
             ToDate: todate,
             Supplier: SupplierSelect.value,
             Customer: userParty(),
+            InOut: InOutSelect.value
         })
 
         dispatch(postIBOrderListPage(jsonBody))
@@ -144,6 +158,26 @@ const IBOrderList = () => {
         setiborderdate(newObj)
     }
 
+    function InOutOnchange(e) {
+        debugger
+        let newObj = { ...iborderdate }
+        newObj.InOutSelect = e
+        // dispatch(iborderlistfilter(newObj))
+        setiborderdate(newObj)
+    }
+
+
+    const makeBtnFunc = (list = {}) => {
+        debugger
+        const obj = { ...list[0] }
+
+        history.push({
+            pathname: url.IB_INVOICE,
+            editValue: obj,
+            pageMode: mode.mode2save
+        })
+    };
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
@@ -151,10 +185,11 @@ const IBOrderList = () => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm="3" className="">
+
+                        <Col sm="3">
                             <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "90px" }}>From Date </Label>
+                                <Label className="col-sm-2 p-2"
+                                    style={{ width: "110px" }}>From Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
@@ -171,10 +206,11 @@ const IBOrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="3" className="">
+
+                        <Col sm="3" >
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "70px" }}>To Date </Label>
+                                    style={{ width: "110px", marginLeft: "-50px" }}>To Date </Label>
                                 <Col sm="6">
                                     <Flatpickr
                                         name="todate"
@@ -192,11 +228,10 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="4">
+                        <Col sm="3">
                             <FormGroup className="mb-2 row mt-3">
-                                <Label className="col-md-4 p-2"
-
-                                    style={{ width: "80px" }}>Division</Label>
+                                <Label className=" p-2 pl-2"
+                                    style={{ width: "80px", marginLeft: "-50px" }}>Division</Label>
                                 <Col sm="6">
                                     <Select
                                         classNamePrefix="select2-Customer"
@@ -208,7 +243,30 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col >
 
-                        <Col sm="1" className="mx-4 ">
+                        <Col sm="3">
+                            <FormGroup className="mb-2 row mt-3">
+                                <Label className=" p-2"
+                                    style={{ width: "80px", marginLeft: "-100px" }}>In/Out</Label>
+                                <Col sm="6">
+                                    <Select
+                                        classNamePrefix="select2-Customer"
+                                        value={InOutSelect}
+                                        options={[{
+                                            value: 1,
+                                            label: 'IN',
+                                        },
+                                        {
+                                            value: 2,
+                                            label: 'Out',
+                                        }]}
+                                        onChange={InOutOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
+
+                        <Col sm="1"
+                            style={{ width: "80px", marginLeft: "-100px" }}>
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
@@ -226,10 +284,12 @@ const IBOrderList = () => {
                             ButtonMsgLable={"IBOrder"}
                             deleteName={"id"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.IB_ORDER_LIST ? false : true}
                             goButnFunc={goButtonHandler}
                             editBodyfunc={editBodyfunc}
                             filters={iborderlistFilter}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnShow={pageMode === mode.defaultList ? false : true}
+                            makeBtnName={"Make IB Invoice"}
                         />
                         : null
                 }

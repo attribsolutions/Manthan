@@ -1,14 +1,19 @@
 
 export const columns = [
-    "HSNCode Item Name",
-    "Quantity",
-    "Rate",
-    "BasicAmount ",
-    "CGST %",
-    "CGSTAmount",
-    "SGST %",
-    "SGSTAmount",
-    "Total Amt"];
+    "Item Name",
+    "Opening balance",
+    "GRN",
+    "InterBranch/return ",
+    "Prod'n Quantity",
+    "Total Quantity",
+    "Dispatch",
+    "Sales/Purchase",
+    "Prod'n Issue/Reproduction",
+    "Closing balance",
+    "Actual Stock",
+    "Difference",
+
+];
 
 export const PageHedercolumns = [
     "Billed by",
@@ -28,8 +33,6 @@ export const Rows = (data) => {
     let totalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
-        debugger
-      
         const tableitemRow = [
             element.ItemName,
             `${element.Quantity} ${element.UnitName}`,
@@ -103,12 +106,11 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [, ,"Purches Order No: 1"],
-        [`${data.CustomerName}`, `${data.PartyName}`,`Driver Name : Sameer` ,],
-        [`maharashtra`, `karnatak`, `vehical No :MH34566`],
-        // [, , ""],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, `E-way Bill :24654364633`, ],
-        [,,`INR NO :${data.FullInvoiceNumber}`]
+        // [, ,],
+        [`${data.CustomerName}`, ,`Current Time: ${data.Time}`],
+        [`maharashtra`, , `From Date:  ${data.InvoiceDate}`],
+        [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`],
+        // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
     return reportArray;
 }

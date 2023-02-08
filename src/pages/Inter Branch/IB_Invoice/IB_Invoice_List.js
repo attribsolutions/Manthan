@@ -19,15 +19,18 @@ import Select from "react-select";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { IB_Invoicelistfilters, get_IB_InvoiceListPage, InwardButtonId } from "../../../store/Inter Branch/IB_Invoice_Redux/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import * as  mode from "../../../routes/PageMode";
+import IB_Invoice from "./IB_Invoice";
+import { formatDate } from "@fullcalendar/react";
 
 const IB_Invoice_List = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const hasPagePath = history.location.pathname
+    // const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(url.IB_INVOICE_LIST)
+    // const [pageMode, setpageMode] = useState(url.IB_INVOICE_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [IB_InvoiceFilter, setIB_InvoiceFilter] = useState({
         todate: currentDate, fromdate: currentDate, CustomerSelect: { value: "", label: "All" }
@@ -35,12 +38,12 @@ const IB_Invoice_List = () => {
 
     const reducers = useSelector(
         (state) => ({
-            tableList: state.ChallanReducer.IB_Invoice,
+            tableList: state.IBInvoiceReducer.IB_Invoice,
             deleteMsg: state.InwardReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
-            IB_InvoiceFilter: state.ChallanReducer.IB_InvoiceFilter,
+            IB_InvoiceFilter: state.IBInvoiceReducer.IB_InvoiceFilter,
             customer: state.SupplierReducer.customer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
@@ -50,7 +53,10 @@ const IB_Invoice_List = () => {
     const { userAccess, pageField, customer, } = reducers;
     const { fromdate, todate, CustomerSelect } = IB_InvoiceFilter;
 
-    const page_Id = pageId.IB_INVOICE_LIST
+    const hasPagePath = history.location.pathname;
+    const pageMode = (hasPagePath === url.IB_INWARD_MODE_2) ? mode.mode2save : mode.defaultList;
+    const page_Id = (hasPagePath === url.IB_INWARD_MODE_2) ? pageId.IB_INWARD_MODE_2 : pageId.IB_INVOICE_LIST;
+    debugger
 
     const action = {
         getList: get_IB_InvoiceListPage,
@@ -63,7 +69,7 @@ const IB_Invoice_List = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        // setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"IB Invoice Count"} :0`))
@@ -100,6 +106,7 @@ const IB_Invoice_List = () => {
             ToDate: todate,
             Party: userParty(),
             Customer: CustomerSelect.value,
+
         });
         dispatch(get_IB_InvoiceListPage(jsonBody));
     }
@@ -119,20 +126,29 @@ const IB_Invoice_List = () => {
     }
 
     function CustomerOnchange(e) {
-        debugger
+
         let newObj = { ...IB_InvoiceFilter }
         newObj.CustomerSelect = e
         setIB_InvoiceFilter(newObj)
     }
 
-    const InwardMakeBtnFunc = (list = []) => {
+    // const InwardMakeBtnFunc = (list = []) => {
+    //     dispatch(InwardButtonId(list[0].id))
+    //     history.push({
+    //         pathname: url.INWARD,
+    //         pageMode: "save",
+    //     })
+    // }
+
+
+    const makeBtnFunc = (list = {}) => {
         dispatch(InwardButtonId(list[0].id))
         history.push({
             pathname: url.INWARD,
-            pageMode: "save",
+            // editValue: obj,
+            pageMode: mode.mode2save
         })
-    }
-
+    };
     return (
 
         <React.Fragment>
@@ -211,16 +227,16 @@ const IB_Invoice_List = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            // MasterModal={Challan}
-                            // masterPath={url.CHALLAN}
-                            ButtonMsgLable={"Challan"}
+                            MasterModal={IB_Invoice}
+                            masterPath={url.IB_INVOICE}
+                            ButtonMsgLable={"IBInvoice"}
                             deleteName={"FullIBChallanNumber"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             filters={IB_InvoiceFilter}
-                            InwardMakeBtnFunc={InwardMakeBtnFunc}
-                            InwardMakeBtnShow={pageMode === url.IB_INVOICE_LIST ? true : false}
-                            InwardMakeBtnName={"Make Inward"}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnShow={pageMode === mode.defaultList ? false : true}
+                            makeBtnName={"Make IB Invoice"}
                         />
                         : null
                 }

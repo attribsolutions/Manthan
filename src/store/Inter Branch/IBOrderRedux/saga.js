@@ -145,14 +145,14 @@ function* editIBOrderGenFunc({ jsonBody, pageMode }) {
   try {
 
     const response = yield call(IBOrderList_get_Filter_API, filters);
-    const newList = yield response.Data.map((i) => {
-      i.IBOrderDate = i.IBOrderDate;
-      var time = convertTimefunc(i.CreatedOn)
-      var date = convertDatefunc(i.IBOrderDate)
-      i.IBOrderDate = (`${date} ${time}`)
-      return i
-    })
-    yield put(postIBOrderListPageSuccess(newList));
+    // const newList = yield response.Data.map((i) => {
+    //   i.IBOrderDate = i.IBOrderDate;
+    //   var time = convertTimefunc(i.CreatedOn)
+    //   var date = convertDatefunc(i.IBOrderDate)
+    //   i.IBOrderDate = (`${date} ${time}`)
+    //   return i
+    // })
+    yield put(postIBOrderListPageSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))

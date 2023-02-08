@@ -1,13 +1,14 @@
 import InvioceReport from "./InvioceReport/Page";
 import ordeRreport from "./OrderReport/Page";
-import ProductionReport from "./ProductionReport/Page";
-import Production from "./ProductionReport/Page";
+import StockReport from "./StockReport/Page";
+import MaterialReport from "./MaterialReport/Page";
 
 
 export const order1 = "order1"
 export const invoice = "invoice"
 export const Production1 = "Production1"
-debugger
+export const Materialreport1 = "Materialreport1"
+
 const generateReport = (resp) => {
     switch (resp.ReportType) {
         case order1:
@@ -20,8 +21,13 @@ const generateReport = (resp) => {
             break;
 
         case Production1:
-            ProductionReport(resp.Data)
+            StockReport(resp.Data)
             break;
+
+        case Materialreport1:
+            MaterialReport(resp.Data)
+            break;
+
 
         default:
             break;
