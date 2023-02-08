@@ -1,14 +1,31 @@
 
-export const columns = [
+export const columns =[
     "HSNCode Item Name",
     "Quantity",
     "Rate",
-    "BasicAmount ",
+    "BasicAmount",
     "CGST %",
     "CGSTAmount",
     "SGST %",
     "SGSTAmount",
-    "Total Amt"];
+    "Total Amt" 
+];
+
+export const columns1 =[
+    "HSNCode Item Name",
+    "Quantity",
+    "Rate",
+    "BasicAmount",
+    "CGST %",
+    "CGSTAmount",
+    "SGST %",
+    "SGSTAmount",
+    "Debit note",
+    "Credit note",
+    "Total Amt" 
+];
+
+
 
 export const PageHedercolumns = [
     "Billed by",
@@ -28,7 +45,6 @@ export const Rows = (data) => {
     let totalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
-        debugger
       
         const tableitemRow = [
             element.ItemName,
@@ -40,9 +56,8 @@ export const Rows = (data) => {
             element.SGSTPercentage,
             element.SGST,
             element.Amount,
-            element.GSTPercentage,
-            element.GSTAmount,
-            "row"
+            
+           
         ];
 
         function totalLots() {

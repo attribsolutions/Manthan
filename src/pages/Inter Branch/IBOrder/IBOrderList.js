@@ -61,7 +61,6 @@ const IBOrderList = () => {
     const { userAccess, pageField, Supplier, iborderlistFilter } = reducers;
     const { fromdate, todate, SupplierSelect, InOutSelect } = iborderdate;
 
-    // const page_Id = (pageId.IB_ORDER_LIST);
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.IB_INVOICE_MODE_2) ? mode.mode2save : mode.defaultList;
     const page_Id = (hasPagePath === url.IB_INVOICE_MODE_2) ? pageId.IB_INVOICE_MODE_2 : pageId.IB_ORDER_LIST;
@@ -76,7 +75,6 @@ const IBOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        // setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"IBOrder Count"} :0`))
@@ -132,7 +130,6 @@ const IBOrderList = () => {
             Customer: userParty(),
             InOut: InOutSelect.value
         })
-
         dispatch(postIBOrderListPage(jsonBody))
     };
 
@@ -159,7 +156,6 @@ const IBOrderList = () => {
     }
 
     function InOutOnchange(e) {
-        debugger
         let newObj = { ...iborderdate }
         newObj.InOutSelect = e
         // dispatch(iborderlistfilter(newObj))
@@ -168,9 +164,7 @@ const IBOrderList = () => {
 
 
     const makeBtnFunc = (list = {}) => {
-        debugger
         const obj = { ...list[0] }
-
         history.push({
             pathname: url.IB_INVOICE,
             editValue: obj,
@@ -243,27 +237,29 @@ const IBOrderList = () => {
                             </FormGroup>
                         </Col >
 
-                        <Col sm="3">
-                            <FormGroup className="mb-2 row mt-3">
-                                <Label className=" p-2"
-                                    style={{ width: "80px", marginLeft: "-100px" }}>In/Out</Label>
-                                <Col sm="6">
-                                    <Select
-                                        classNamePrefix="select2-Customer"
-                                        value={InOutSelect}
-                                        options={[{
-                                            value: 1,
-                                            label: 'IN',
-                                        },
-                                        {
-                                            value: 2,
-                                            label: 'Out',
-                                        }]}
-                                        onChange={InOutOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
+                        {!(page_Id === pageId.IB_INVOICE_MODE_2) ?
+                            <Col sm="3">
+                                <FormGroup className="mb-2 row mt-3">
+                                    <Label className=" p-2"
+                                        style={{ width: "80px", marginLeft: "-100px" }}>In/Out</Label>
+                                    <Col sm="6">
+                                        <Select
+                                            classNamePrefix="select2-Customer"
+                                            value={InOutSelect}
+                                            options={[{
+                                                value: 1,
+                                                label: 'IN',
+                                            },
+                                            {
+                                                value: 2,
+                                                label: 'Out',
+                                            }]}
+                                            onChange={InOutOnchange}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+                            : <></>}
 
                         <Col sm="1"
                             style={{ width: "80px", marginLeft: "-100px" }}>
