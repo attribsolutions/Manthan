@@ -46,10 +46,10 @@ export function post(url, data, config = {}) {
       }
     })
     .then(response => {
-      return CkeckAlert("post", url, response);
+      return CkeckAlert("post", url, response,data);
     })
     .catch(error => {
-      return CkeckAlert("post", url, error);
+      return CkeckAlert("post", url, error,data);
     });
 };
 
@@ -65,10 +65,10 @@ export function put(url, data, config = {}) {
       }
     })
     .then(response => {
-      return CkeckAlert("put", url, response);
+      return CkeckAlert("put", url, response,data);
     })
     .catch(error => {
-      return CkeckAlert("put", url, error);
+      return CkeckAlert("put", url, error,data);
     });
 }
 
