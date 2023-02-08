@@ -281,11 +281,12 @@ export const tableBody = (doc, data) => {
     console.log(tableRow)
     var options = {
         didParseCell: (data1) => {
+            debugger
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 3
                 data1.row.cells[4].colSpan = 2
                 data1.row.cells[6].colSpan = 2
-                data1.row.cells[8].colSpan = 2
+                data1.row.cells[7].colSpan = 2
 
 
                 data1.row.cells[0].styles.fontSize = 8
@@ -300,7 +301,7 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
 
-
+               
 
                 // data1.row.cells[3].colSpan=4
                 // .colSpan = 3;
@@ -334,10 +335,10 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 120,
+                columnWidth: 124,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 70,
                 halign: 'right',
 
             },
@@ -354,7 +355,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             5: {
-                // columnWidth: 40,
+                columnWidth: 50,
                 halign: 'right',
             },
             6: {
@@ -362,10 +363,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
+                columnWidth: 50,
                 halign: 'right',
             },
             8: {
-                columnWidth: 60,
+                columnWidth: 90,
                 fontStyle: 'bold',
                 halign: 'right',
             },

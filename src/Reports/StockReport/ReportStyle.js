@@ -5,32 +5,33 @@ import * as table from './TableData'
 
 export const pageBorder = (doc) => {
     doc.line(815, 10, 30, 10);//horizontal line (Top)
-    doc.line(30, 815, 30, 10);//vertical line (left)
-    doc.line(815, 815, 815, 10);//vertical line (Right)
-    doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
+    doc.line(30, 570, 30, 10);//vertical line (left)
+    doc.line(815, 570, 815, 10);//vertical line (Right)
+    doc.line(815,570, 30, 570);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
     doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    doc.text('Stock Report', 200, 40,) //Tax invoice Header
+    doc.text('Stock Report', 380, 30,'center') //stock Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
-    doc.setFontSize(11)
+    doc.setFontSize(14)
     doc.setFont(undefined, 'bold')
-    doc.text(`*** ${data.CompanyName} ***`, 300, 75,'center')  //bill by 
-    doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
-    doc.line(570, 10, 30, 10);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
+    doc.text(`*** ${data.CompanyName} ***`, 380, 50,'center')  //bill by 
+    doc.line(815, 60, 30, 60) //horizontal line 1 billby upper
+    doc.line(815, 10, 30, 10);//horizontal line 2
+    // doc.line(815, 80, 30, 80);//horizontal line 3
     // doc.line(409, 100, 30, 100) //horizontal line 4
-    doc.line(30, 789, 30, 10);//vertical left 1
-    doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 60, 408, 10);//vertical right 1
-    doc.line(300, 200, 300, 80);//vertical right 2
+    doc.line(30, 400, 30, 10);//vertical left 1
+    // doc.line(570, 789, 570, 10);//vertical left 2
+    doc.line(680, 60, 680, 10);//vertical right 1
+    doc.line(407, 200, 407, 60);//vertical right 2
+    doc.line(300, 100, 815, 100) //horizontal line Current date upper
+    // doc.line(815, 35, 700, 35) //horizontal line 1 billby upper
 
-    doc.line(300, 100, 570, 100) //horizontal line Current date upper
 
 
     var options3 = {
@@ -59,7 +60,7 @@ export const reportHeder1 = (doc, data) => {
                 halign: 'lfet',
             },
             1: {
-                columnWidth: 100,
+                columnWidth: 200,
                 halign: 'left',
             },
             2: {
@@ -68,7 +69,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: doc.autoTableEndPosY() + 85,// 45,
+        startY: doc.autoTableEndPosY() + 63,// 45,
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
@@ -82,10 +83,9 @@ export const reportHeder2 = (doc, data) => {
 export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
-    doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Report No:${data.InvoiceNumber}`, 415, 30) //Invoice Id
-    doc.text(`Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    doc.text(`Current Time: ${data.Time}`, 685, 50) //Invoice Id
+    doc.text(`Date: ${data.InvoiceDate}`, 685, 30) //Invoice date
 }
 // original
 
@@ -312,24 +312,24 @@ export const tableBody = (doc, data) => {
 
     });
     // Auto table for footer
-    const optionsTable4 = {
-        margin: {
-            left: 30, right: 30, bottom: 140
-        },
-        showHead: 'never',
-    };
+    // const optionsTable4 = {
+    //     margin: {
+    //         left: 30, right: 30, bottom: 140
+    //     },
+    //     // showHead: 'never',
+    // };
 
-    doc.autoTable(optionsTable4);
+    // doc.autoTable(optionsTable4);
 
-    doc.autoTable({
-        html: '#table',
-        didParseCell(data) {
-            if (data.cell.row.index === 0) {
-                data.cell.styles.textColor = [255, 255, 255];
-                data.cell.styles.fillColor = '#FF5783';
-            }
-        }
-    })
+    // doc.autoTable({
+    //     html: '#table',
+    //     didParseCell(data) {
+    //         if (data.cell.row.index === 0) {
+    //             data.cell.styles.textColor = [255, 255, 255];
+    //             data.cell.styles.fillColor = '#FF5783';
+    //         }
+    //     }
+    // })
 
 
 }

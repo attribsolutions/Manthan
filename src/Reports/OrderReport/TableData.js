@@ -9,7 +9,7 @@ export const columns = [
     "CGSTAmt ",
     "SGST%",
     "SGSTAmt",
-    "comment",
+    // "comment",
     "Total Amt"];
 
 export const PageHedercolumns = [
@@ -136,7 +136,8 @@ export const Rows = (data) => {
 
     OrderItem.forEach((element, key) => {
         const tableitemRow = [
-            `${element.ItemName} (${element.HSNCode})`,
+            `${element.ItemName} (${element.HSNCode})
+             ${element.Comment===null?"":element.Comment}`,
             `${element.Quantity} ${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
@@ -144,8 +145,9 @@ export const Rows = (data) => {
             element.CGST,
             `${element.SGSTPercentage}%`,
             element.SGST,
-            element.Comment,
+            // element.Comment,
             element.Amount,
+            "row"
         ];
 
         function totalLots() {
