@@ -68,19 +68,6 @@ function* OrderType_GenFunc() {
   }
 }
 
-function* getSupplierGenFunc() {
-
-  try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
-    yield put(getSupplierSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for Supplier ",
-    }));
-  }
-}
-
 function* getVendorGenFunc() {
 
   try {
@@ -90,6 +77,19 @@ function* getVendorGenFunc() {
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message for Vendor ",
+    }));
+  }
+}
+
+function* getSupplierGenFunc() {
+
+  try {
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    yield put(getSupplierSuccess(response.Data));
+  } catch (error) {
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message for Supplier ",
     }));
   }
 }
