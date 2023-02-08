@@ -384,9 +384,9 @@ export async function CkeckAlert(method, url, response, body) {
     const con4 = ((method === "post" || method === "put"))
 
     if (con4) {
-        console.log(`${url} => ${method} Body =>`, body)
+        console.log(`${url}***=> ${method} Body =>`, body)
     }
-    console.log(`${url} *** ${method} apiCall response:=>`, response)
+    console.log(`${url}***${method} apiCall response:=>`, response)
 
 
     if (con1) {
