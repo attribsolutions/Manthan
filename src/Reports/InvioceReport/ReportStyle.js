@@ -14,8 +14,17 @@ export const pageHeder = (doc, data) => {
     doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
-    doc.setFontSize(15)
-    doc.text('Tax Invoice', 200, 40,) //Tax invoice Header
+    debugger
+    if (data.ReportType===invoice) {
+        doc.setFontSize(15)
+        doc.text('Tax Invoice', 200, 40,)  
+    }else{
+        doc.setFontSize(15)
+        doc.text('Inter Branch Invoice', 200, 40,) 
+
+    }
+
+     //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
@@ -32,8 +41,8 @@ export const reportHeder1 = (doc, data) => {
     doc.line(409, 100, 30, 100) //horizontal line 4
     doc.line(30, 789, 30, 10);//vertical left 1
     doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 200, 408, 10);//vertical right 1
-    doc.line(220, 200, 220, 60);//vertical right 2
+    doc.line(408, 170, 408, 10);//vertical right 1
+    doc.line(220, 170, 220, 60);//vertical right 2
 
     var options3 = {
         margin: {
@@ -85,12 +94,22 @@ export const reportHeder2 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(10)
-    doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
-    doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    if (data.ReportType===invoice) {
+        doc.setFont('Tahoma')
+        doc.setFontSize(10)
+        doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
+        doc.setFont(undefined, 'bold')
+        doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
+        doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    }else{
+        doc.setFont('Tahoma')
+        doc.setFontSize(10)
+        doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
+        doc.setFont(undefined, 'bold')
+        doc.text(`IB Invoice No:   ${data.InvoiceNumber}`, 415, 30) //Invoice Id
+        doc.text(` IB Invoice Date: ${data.InvoiceDate}`, 415, 50) //Invoice date
+    }
+   
 }
 // original
 
@@ -337,99 +356,11 @@ export const tableBody = (doc, data) => {
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
     };
-    var options2 = {
-        didParseCell: (data1) => {
-            if (data1.row.cells[5].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 3
-                data1.row.cells[4].colSpan = 2
-                data1.row.cells[6].colSpan = 2
-                
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
+    
 
-                data1.row.cells[0.].styles.fontStyle = "bold"
-                data1.row.cells[4.].styles.fontStyle = "bold"
-                data1.row.cells[6.].styles.fontStyle = "bold"
-            }
-        },
-        margin: {
-            left: 30, right: 25,//200 bottom
-        },
-        theme: 'grid',
-        headerStyles: {
-            cellPadding: 4,
-            lineWidth: 1,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 3,
-            fontSize: 7,
-            columnWidth: 'wrap',
-            lineColor: [0, 0, 0],
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 140,
-            },
-            1: {
-                columnWidth: 40,
-                halign: 'right',
-            },
-            2: {
-                columnWidth: 50,
-                halign: 'right',
-            },
-            3: {
-                columnWidth: 60,
-                halign: 'right',
-            },
-            4: {
-                columnWidth: 40,
-                halign: 'right',
-            },
-            5: {
-                halign: 'right',
-            },
-            6: {
-                columnWidth: 40,
-                halign: 'right',
-            },
-            7: {
-                halign: 'right',
-            },
-            8: {
-                fontStyle: 'bold',
-                halign: 'right',
-            },
-            9: {
-                halign: 'right',
-            },
-            10: {
-                fontStyle: 'bold',
-                halign: 'right',
-            },
-        },
-        tableLineColor: "black",
-        startY: doc.autoTableEndPosY(45),// 45,
-    };
-debugger
-if (data.ReportType===invoice) {
+
     doc.autoTable(table.columns,table.Rows(data), options,);
     
-}else{
-    doc.autoTable(table.columns1,table.Rows(data), options2,);
-    
-}
 
     const optionsTable4 = {
         margin: {
@@ -559,6 +490,8 @@ export const pageFooter = (doc, data) => {
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(460, 775, 30, 775);//horizontal line (Bottom)
+
+
     const a = data.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
