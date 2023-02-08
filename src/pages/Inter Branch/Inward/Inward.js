@@ -41,7 +41,12 @@ const Inward = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
-    const { IBChallanItems = [], PartyName = '', IBChallanNumber = '' } = InwardData
+    const { InvoiceItems = [], PartyName = '', InvoiceNumber = '', id = '' } = InwardData
+    debugger
+    // InvoiceNumber
+    // FullInvoiceNumber
+    // InvoiceItems
+    // InvoiceDate
 
     // userAccess useEffect
     useEffect(() => {
@@ -91,8 +96,8 @@ const Inward = (props) => {
     };
 
     const saveHandeller = (e, values) => {
-        debugger
-        const arr = IBChallanItems.map(i => ({
+
+        const arr = InvoiceItems.map(i => ({
             Item: i.Item,
             Quantity: i.Quantity,
             MRP: i.MRP,
@@ -120,8 +125,8 @@ const Inward = (props) => {
 
         const jsonBody = JSON.stringify({
             IBInwardDate: InwardDate,
-            IBInwardNumber: InwardData.IBChallanNumber,
-            FullIBInwardNumber: InwardData.FullIBInwardNumber,
+            IBInwardNumber: InwardData.InvoiceNumber,
+            FullIBInwardNumber: InwardData.FullInvoiceNumber,
             GrandTotal: InwardData.GrandTotal,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
@@ -129,7 +134,7 @@ const Inward = (props) => {
             Supplier: InwardData.Party,
             InterBranchInwardItems: arr,
             InterBranchInwardReferences: [{
-                IBChallan: 1
+                IBChallan: id
             }]
         });
 
@@ -139,7 +144,6 @@ const Inward = (props) => {
         } else {
 
             dispatch(postInward(jsonBody))
-            console.log("jsonBody", jsonBody)
         }
     }
 
@@ -163,7 +167,7 @@ const Inward = (props) => {
                             </tr>
                         </Thead>
                         <Tbody>
-                            {IBChallanItems.map((index) => {
+                            {InvoiceItems.map((index) => {
 
                                 return (
                                     < tr >
@@ -211,7 +215,7 @@ const Inward = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: IBChallanItems.length,
+        totalSize: InvoiceItems.length,
         custom: true,
     };
 
@@ -263,10 +267,10 @@ const Inward = (props) => {
                         <Col sm="4" className="">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm- p-2"
-                                    style={{ width: "83px" }}>Challan No.</Label>
+                                    style={{ width: "83px" }}>Invoice Number</Label>
                                 <Col sm="7">
                                     <Input type="text"
-                                        defaultValue={IBChallanNumber}
+                                        defaultValue={InvoiceNumber}
                                         placeholder='Enter Challan No.'
                                     // onChange={e => description = e.target.value}
                                     />
@@ -281,7 +285,7 @@ const Inward = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField={"id"}
-                                data={IBChallanItems}
+                                data={InvoiceItems}
                                 columns={pagesListColumns}
                                 search
                             >
