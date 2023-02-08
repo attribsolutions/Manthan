@@ -159,11 +159,11 @@ const PurchaseListPage = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
             goButnFunc();
-            isAlertFunc(1);
+            isAlertFunc(1,updateMsg);
             tog_center();
         } else if (updateMsg.Status === true) {
             dispatch(updateSucc({ Status: false }));
-            isAlertFunc(3);
+            isAlertFunc(3,updateMsg);
         }
     }, [updateMsg]);
 
