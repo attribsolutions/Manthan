@@ -19,14 +19,14 @@ import {
 
 function* Post_GSTMaster_GenratorFunction({ Data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_GSTMaster_API, Data);
-    yield put(SpinnerState(false))
+   
     yield put(postGSTMasterDataSuccess(response));
     console.log("response", response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -37,13 +37,13 @@ function* Post_GSTMaster_GenratorFunction({ Data }) {
 
 //listpage
 function* get_GSTListPage_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GetGSTList_For_Listpage);
-    yield put(SpinnerState(false))
+   
     yield put(getGSTListPageSuccess(response.Data));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -54,13 +54,13 @@ function* get_GSTListPage_GenratorFunction() {
 //delete
 function* delete_GSTListPage_GenratorFunction({ CommonID }) {
   debugger
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(delete_GSTList_API, CommonID);
-    yield put(SpinnerState(false))
+   
     yield put(deleteGSTListPageSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -70,14 +70,14 @@ function* delete_GSTListPage_GenratorFunction({ CommonID }) {
 
 function* GSTGoButton_post_GenratorFunction({ data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GoButton_Post_API_For_GSTMaster, data);
-    yield put(SpinnerState(false))
+   
     yield put(postGoButtonForGST_Master_Success(response.Data));
     console.log("response",response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -88,13 +88,13 @@ function* GSTGoButton_post_GenratorFunction({ data }) {
 // delete api for GST Master
 function* deleteId_for_GSTMaster_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(GST_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteGSTForMasterPageSuccess(response))
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

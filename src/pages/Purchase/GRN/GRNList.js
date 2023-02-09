@@ -116,8 +116,8 @@ const GRNList = () => {
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
-                    pageMode={GRN_ADD_Mode_2}
-                    newBtnPagePath={GRN_ADD_Mode_2}
+                    pageMode={GRN_STP}
+                    newBtnPagePath={GRN_STP}
                     excelData={downList} /> */}
 
                 <div className="px-2  c_card_filter text-black " >

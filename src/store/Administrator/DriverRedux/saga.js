@@ -21,13 +21,13 @@ import { PaginationListStandalone } from "react-bootstrap-table2-paginator";
 
 // Get List Page API
 function* Get_Driver_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_DriverList_API);
     yield put(getMethod_ForDriverListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -37,13 +37,13 @@ function* Get_Driver_GenratorFunction() {
 
 // post api
 function* Post_Method_For_Driver_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_Driver_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostMethod_ForDriverMasterSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -57,12 +57,12 @@ function* Post_Method_For_Driver_GenFun({ data }) {
 // delete api 
 function* Delete_DriverType_ID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_DriverType_List_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteDriverTypeIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -89,13 +89,13 @@ function* Edit_DriverType_ID_GenratorFunction({ id ,pageMode}) {
 // update api
 function* Update_DriverType_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_DriverType_List_Api, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateDriverTypeIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

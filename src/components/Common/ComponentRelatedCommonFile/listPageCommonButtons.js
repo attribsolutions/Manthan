@@ -1,7 +1,6 @@
 import { Button } from "reactstrap";
-import { AlertState } from "../../../store/actions";
-import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as mode from "../../../routes/PageMode"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
@@ -33,7 +32,7 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData, btnmode) {
-   
+
         if (editBodyfunc) { editBodyfunc(rowData, btnmode) }
         else {
             dispatch(editActionFun(rowData.id, btnmode,));
@@ -47,14 +46,14 @@ export const listPageCommonButtonFunction = (props) => {
         downBtnFunc(rowData);
     };
 
-    function deleteHandler(rowData) {
-        dispatch(AlertState({
-            Type: 5, Status: true,
+    async function deleteHandler(rowData) {
+        await CustomAlert({
+            Type: 5,
             Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-            RedirectPath: false,
             PermissionAction: deleteActionFun,
             ID: rowData.id,
-        }));
+        })
+       
     }
 
 
@@ -208,18 +207,17 @@ export const commonListPageDelete_UpdateMsgFunction = (props) => {
 
     if ((response.Status === true) && (response.StatusCode === 200)) {
         dispatch(resetAction({ Status: false }))
-        dispatch(AlertState({
-            Type: 1, Status: true,
+        CustomAlert({
+            Type: 1,
             Message: response.Message,
             AfterResponseAction: afterResponseAction,
-        }))
+        });
     } else if (response.Status === true) {
         dispatch(resetAction({ Status: false }))
-        dispatch(AlertState({
+        CustomAlert({
             Type: 3,
-            Status: true,
             Message: response.Message,
-        }));
+        });
     }
 }
 

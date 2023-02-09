@@ -153,9 +153,9 @@ function* Post_SuperAdmin_API_GenratorFunction() {
   try {
     const response = yield call(post_SuperAdmin);
     yield put(postSuperAdminSuccess(response.Data));
-    // yield put(SpinnerState(false))
+    //
   } catch (error) {
-    // / yield put(SpinnerState(false))
+    // /
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

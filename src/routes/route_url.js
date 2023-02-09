@@ -94,7 +94,7 @@ export const GENERAL_LIST ="/GeneralList"
 export const ORDER = "/Order"
 export const ORDER_lIST = "/OrderList"
 
-export const GRN_ADD_Mode_2 = "/GRN_ADD_Mode_2"
+export const GRN_STP = "/GRN_STP"
 export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
 
@@ -106,14 +106,17 @@ export const WORK_ORDER_LIST = "/WorkOrderList"
 
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
-export const MATERIAL_ISSUE_ADD_Mode_2 = "/MaterialIssue_Add_Mode_2"
+export const MATERIAL_ISSUE_STP = "/MaterialIssue_STP"
 
 export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
-export const PRODUCTION_ADD_Mode_2 = "/Production_Add_Mode"
+export const PRODUCTION_STP = "/Production_STP"
 
-export const SALE_ORDER = "/SaleOrder"
-export const SALE_ORDER_lIST = "/SaleOrderList"
+export const SALE_ORDER_1 = "/SaleOrder_1"
+export const SALE_ORDER_lIST_1 = "/SaleOrderList_1"
+
+export const SALE_ORDER_2 = "/SaleOrder_2"
+export const SALE_ORDER_lIST_2 ="/SaleOrderList_2"
 
 export const INVOICE = "/Invoice"
 export const INVOICE_LIST = "/InvoiceList"
@@ -125,11 +128,11 @@ export const IB_ORDER_LIST= "/IBOrderList"
 
 export const INWARD ="/Inward"
 export const INWARD_LIST = "/InwardList"
-export const IB_INWARD_MODE_2 = "/IBInwardMode2"
+export const IB_INWARD_STP= "/IBInward_STP"
 
 export const IB_INVOICE ="/IB_Invoice"
 export const IB_INVOICE_LIST = "/IB_Invoice_List"
-export const IB_INVOICE_MODE_2 = "/IBInvoiceMode2"
+export const IB_INVOICE_STP = "/IBInvoice_STP"
 
 // demo
 export const Demo= "/Demo"

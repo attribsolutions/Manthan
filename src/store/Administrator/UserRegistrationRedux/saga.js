@@ -51,14 +51,14 @@ function* RolesListDropdoun_GenratorFunction() {
 function* user_save_GenratorFunction({ data }) {
 
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(User_Component_PostMethod_API, data);
     console.log("response", response)
-    yield put(SpinnerState(false))
+   
     yield put(addUserSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -68,13 +68,13 @@ function* user_save_GenratorFunction({ data }) {
 
 //  Get list api
 function* Fetch_UserList_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(User_Component_GetMethod_API);
     yield put(getUserSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -85,12 +85,12 @@ function* Fetch_UserList_GenratorFunction() {
 // delete api 
 function* Delete_UserList_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(User_Component_Delete_Method_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -115,14 +115,14 @@ function* Edit_UserList_GenratorFunction({ id, pageMode }) {
 function* Update_User_GenratorFunction({ data, id }) {
   debugger
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(User_Component_Update_API, data, id);
     console.log("update response", response)
-    yield put(SpinnerState(false))
+   
     yield put(updateSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

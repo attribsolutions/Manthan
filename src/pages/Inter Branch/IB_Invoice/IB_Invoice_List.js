@@ -58,8 +58,8 @@ const IB_Invoice_List = () => {
     const { fromdate, todate, CustomerSelect } = IB_InvoiceFilter;
 
     const hasPagePath = history.location.pathname;
-    const pageMode = (hasPagePath === url.IB_INWARD_MODE_2) ? mode.mode2save : mode.defaultList;
-    const page_Id = (hasPagePath === url.IB_INWARD_MODE_2) ? pageId.IB_INWARD_MODE_2 : pageId.IB_INVOICE_LIST;
+    const pageMode = (hasPagePath === url.IB_INWARD_STP) ? mode.mode2save : mode.defaultList;
+    const page_Id = (hasPagePath === url.IB_INWARD_STP) ? pageId.IB_INWARD_STP : pageId.IB_INVOICE_LIST;
     
 
     const action = {

@@ -355,31 +355,14 @@
 
 
 import React, { useEffect, useState } from "react"
-import { Row, Col, Modal, Button, } from "reactstrap"
+import { Row,  Modal, Button, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 import * as urlRalations from "../../routes/urlRalations"
-import { MetaTags } from "react-meta-tags";
-import { GetHpageListData } from "../../store/actions";
 
-
-// export const initialstate = {
-//   breadShow: false,
-//   bredcrumbItemName: '',
-//   showCountlabel: "",
-//   userAccess: {},
-//   newBtnView: false,
-//   excelBtnView: false,
-//   pageHeading: '',
-//   showCount: false,
-//   excelData: [],
-//   userAcc: {},
-//   pageField: {},
-//   masterPage: ''
-// }
 const BreadcrumbNew = (props) => {
 
   const history = useHistory();
@@ -592,7 +575,7 @@ const BreadcrumbNew = (props) => {
                     type="checkbox"
                     id={`chckbox${key}-${index.id}`}
                     name={index}
-                    // defaultValue={(downBtnData[0][`$defSelect${index}`]) ? true : false}
+                  // defaultValue={(downBtnData[0][`$defSelect${index}`]) ? true : false}
                   />&nbsp;&nbsp;&nbsp;
                   <label className="form-label text-black"> {index} </label>
                 </div>
@@ -607,11 +590,11 @@ const BreadcrumbNew = (props) => {
 
   return (
     <React.Fragment>
-      <header id="page-topbar" style={{ marginTop: "56px", backgroundColor: 'white', zIndex: "1" }} >
-        <div className="navbar-header" style={{ paddingRight: "-10px" }}>
+      <header id="page-topbar1"style={{ zIndex:"1"}}  >
+        <div className="navbar-header blur1" style={{ paddingRight: "-10px",zIndex:"-1"}}>
           <div className="d-flex" >
             <div className="navbar-brand-box" ></div>
-            <div style={{ paddingLeft: "7px" }}>
+            <div style={{ paddingLeft: "7px" }} >
               {
                 newBtnView ?
                   <div >

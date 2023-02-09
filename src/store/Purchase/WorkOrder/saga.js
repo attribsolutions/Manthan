@@ -34,14 +34,14 @@ import {
 // get Item dropdown API using post method
 function* Get_BOMList_GenratorFunction({ filters }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(BOMList_Get_API, filters);
 
     yield put(getBOMListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message Work Order Items ",
@@ -75,10 +75,10 @@ function* Post_WorkOrder_GenratorFunction({ jsonbody, btnId }) {
   // yield put(SpinnerState(true))
   try {
     const response = yield call(Post_WorkOrder_Master_API, jsonbody);
-    // yield put(SpinnerState(false))
+    //
     yield put(postWorkOrderMasterSuccess(response));
   } catch (error) {
-    // yield put(SpinnerState(false))
+    //
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message post error in Work Order",
@@ -89,7 +89,7 @@ function* Post_WorkOrder_GenratorFunction({ jsonbody, btnId }) {
 // get Work Order List API Using post method
 function* GetWorkOrderGenFunc({ filters }) {
 
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(WorkOrder_Get_API, filters);
@@ -101,9 +101,9 @@ function* GetWorkOrderGenFunc({ filters }) {
       return i
     })
     yield put(getWorkOrderListPageSuccess(newList));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message in Work Order List ",
@@ -113,13 +113,13 @@ function* GetWorkOrderGenFunc({ filters }) {
 
 // Work Order edit List page
 function* editWorkOrderGenFunc({ id1, pageMode }) {
-  yield put(SpinnerState(true))
+
   try {
 
     let response = yield call(WorkOrder_edit_Api, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
-    yield put(SpinnerState(false))
+   
 
     if (response.StatusCode === 226) yield put(AlertState({
       Type: 3,
@@ -130,7 +130,7 @@ function* editWorkOrderGenFunc({ id1, pageMode }) {
     }
   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Merssage in Work Order List Edit Method ",
@@ -142,13 +142,13 @@ function* editWorkOrderGenFunc({ id1, pageMode }) {
 function* UpdateWorkOrderGenFunc({ data, id1 }) {
 
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(WorkOrder_Update_Api, data, id1);
-    yield put(SpinnerState(false))
+   
     yield put(updateWorkOrderListSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Merssage in Work Order List Upadte Method ",
@@ -159,13 +159,13 @@ function* UpdateWorkOrderGenFunc({ data, id1 }) {
 // Work Order delete List page
 function* DeleteWorkOrderGenFunc({ id }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(WorkOrder_Delete_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteWorkOrderIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Merssage in Work Order List Delete Method "

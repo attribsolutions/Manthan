@@ -103,9 +103,9 @@ export const GeneralMaster = url.GENERAL_LIST
 export const OrderList = url.ORDER
 export const Order = url.ORDER_lIST
 
-export const GRNList = url.GRN_ADD_Mode_2
+export const GRNList = url.GRN_STP
 export const GRN = url.GRN_lIST
-export const GRN_ADD_Mode_2 = url.GRN_lIST
+export const GRN_STP = url.GRN_lIST
 
 export const BOMList = url.BIllOf_MATERIALS
 export const BOM = url.BIllOf_MATERIALS_LIST
@@ -113,16 +113,19 @@ export const BOM = url.BIllOf_MATERIALS_LIST
 export const WorkOrderList = url.WORK_ORDER
 export const WorkOrder = url.WORK_ORDER_LIST
 
-export const MaterialIssueList = url.MATERIAL_ISSUE_ADD_Mode_2
+export const MaterialIssueList = url.MATERIAL_ISSUE_STP
 export const MaterialIssue = url.MATERIAL_ISSUE_LIST
 export const MaterialIssue_Add_Mode_2 = url.MATERIAL_ISSUE_LIST
 
 export const ProductionMaster = url.PRODUCTION_LIST
-export const ProductionList = url.PRODUCTION_ADD_Mode_2
+export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-export const SaleOrderList = url.SALE_ORDER
-export const SaleOrder = url.SALE_ORDER_lIST
+export const SaleOrderList_1 = url.SALE_ORDER_1
+export const SaleOrder_1 = url.SALE_ORDER_lIST_1
+
+export const SaleOrder_2 = url.SALE_ORDER_2
+export const SaleOrderList_2 = url.SALE_ORDER_lIST_2
 
 export const InvoiceList = url.INVOICE
 export const Invoice = url.INVOICE_LIST
@@ -131,11 +134,11 @@ export const Invoice = url.INVOICE_LIST
 
 export const IBOrderList = url.IB_ORDER
 export const IBOrder = url.IB_ORDER_LIST
-export const IB_Invoice_Mode_2 = url.IB_ORDER_LIST
+export const IB_INVOICE_STP = url.IB_ORDER_LIST
 
-export const InwardList = url.IB_INWARD_MODE_2
+export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST
-export const IB_Inward_Mode_2 = url.IB_INVOICE_LIST
+export const IB_INWARD_STP = url.IB_INVOICE_LIST
 
 export const IB_Invoice = url.IB_INVOICE_LIST
-export const IB_Invoice_List = url.IB_INVOICE_MODE_2
+export const IB_Invoice_List = url.IB_INVOICE_STP

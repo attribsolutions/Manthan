@@ -49,6 +49,7 @@ const SaleOrder = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const subPageMode = history.location.pathname;
 
     const fileds = {
         id: "",
@@ -60,6 +61,7 @@ const SaleOrder = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+    // const [subPageMode, setSubPageMode] = useState('');
     const [userAccState, setUserPageAccessState] = useState("");
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
@@ -193,6 +195,7 @@ const SaleOrder = (props) => {
     }, [goBtnOrderdata]);
 
     useEffect(() => {
+        // if(subPageMode===){}
         dispatch(goButtonForOrderAddSuccess(null))
         const page_Id = pageId.BIllOf_MATERIALS
         dispatch(commonPageFieldSuccess(null));
@@ -294,9 +297,7 @@ const SaleOrder = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
 
-    function assignItem_onClick() {
-        setisOpen_TermsModal(true)
-    };
+
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -474,6 +475,10 @@ const SaleOrder = (props) => {
         custom: true,
     };
 
+    function assignItem_onClick() {
+        setisOpen_TermsModal(true)
+    };
+
     function Open_TermsModal_func() {
         setisOpen_TermsModal(false)
         goButtonHandler()
@@ -538,8 +543,8 @@ const SaleOrder = (props) => {
     };
 
     const saveHandeller = () => {
-        const division = supplierSelect.value;
-        const supplier = userParty();
+        const division = userParty();
+        const supplier = supplierSelect.value;
         debugger
         const validMsg = []
         const itemArr = []

@@ -70,16 +70,16 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ data, saveBtnid }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Invoice_Post_API, data);
-    yield put(SpinnerState(false))
+   
 
     saveDissable({ id: saveBtnid, state: false })
     yield put(postInvoiceMasterSuccess(response));
   } catch (error) {
     saveDissable({ id: saveBtnid, state: false })
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message in Invoice",
@@ -90,7 +90,7 @@ function* save_Invoice_Genfun({ data, saveBtnid }) {
 // Invoice List
 function* InvoiceListGenFunc({ filters }) {
 
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(Invoice_Get_API, filters);
@@ -101,9 +101,9 @@ function* InvoiceListGenFunc({ filters }) {
       return i
     })
     yield put(getIssueListPageSuccess(newList));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message in Work Order List ",
@@ -113,14 +113,14 @@ function* InvoiceListGenFunc({ filters }) {
 
 // edit List page
 function* editInvoiceListGenFunc({ id, pageMode }) {
-  yield put(SpinnerState(true))
+
   try {
     let response = yield call(Invoice_Edit_API_Singel_Get, id);
     response.pageMode = pageMode
-    yield put(SpinnerState(false))
+   
     yield put(editInvoiceListSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Invoice Edit Method ",
@@ -131,13 +131,13 @@ function* editInvoiceListGenFunc({ id, pageMode }) {
 // Invoice List delete List page
 function* DeleteInvoiceGenFunc({ id }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Invoice_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteInvoiceIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Merssage in Work Order List Delete Method "

@@ -680,8 +680,8 @@ const Invoice = (props) => {
         // debugger
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: userParty(),
-            Party: values.Customer.value,
+            Customer: values.Customer.value,
+            Party: userParty(),
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
@@ -697,7 +697,7 @@ const Invoice = (props) => {
 
         const InvoiceItems = []
         const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
-        let grandtotal = 0
+        let grand_total = 0
 
         OrderItemDetails.forEach((index) => {
 
@@ -726,14 +726,14 @@ const Invoice = (props) => {
 
                 if (ele.Qty > 0) {
                     var demo = {
-                        Rate: index.Rate,
-                        GSTPercentage: index.GSTPercentage,
+                        Rate: ele.Rate,
+                        GSTPercentage: ele.GST,
                         Quantity: ele.Qty
                     }
                     const basicAmt = parseFloat(basicAmount(demo))
                     const cgstAmt = (GstAmount(demo))
                     const amount = Amount(demo)
-                    grandtotal = grandtotal + Number(amount)
+                    grand_total = grand_total + Number(amount)
                     InvoiceItems.push({
                         Item: index.Item,
                         Unit: index.UnitDrop.value,
@@ -744,16 +744,16 @@ const Invoice = (props) => {
                         BaseUnitQuantity: ele.BaseUnitQuantity,
                         LiveBatch: ele.LiveBatche,
                         MRP: null,
-                        Rate: index.Rate,
+                        Rate: ele.Rate,
                         BasicAmount: basicAmt.toFixed(2),
                         GSTAmount: cgstAmt.toFixed(2),
                         GST: index.GST,
                         CGST: (cgstAmt / 2).toFixed(2),
                         SGST: (cgstAmt / 2).toFixed(2),
                         IGST: 0,
-                        GSTPercentage: index.GSTPercentage,
-                        CGSTPercentage: (index.GSTPercentage / 2),
-                        SGSTPercentage: (index.GSTPercentage / 2),
+                        GSTPercentage: ele.GST,
+                        CGSTPercentage: (ele.GST / 2),
+                        SGSTPercentage: (ele.GST / 2),
                         IGSTPercentage: 0,
                         Amount: amount,
                         TaxType: 'GST',
@@ -780,8 +780,8 @@ const Invoice = (props) => {
         const jsonBody = JSON.stringify({
             InvoiceDate: values.InvoiceDate,
             CustomerGSTTin: '41',
-            GrandTotal: Math.round(grandtotal),
-            RoundOffAmount: (grandtotal - Math.trunc(grandtotal)).toFixed(2),
+            GrandTotal: Math.round(grand_total),
+            RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
             Customer: values.Customer.value,
             Party: userParty(),
             CreatedBy: createdBy(),

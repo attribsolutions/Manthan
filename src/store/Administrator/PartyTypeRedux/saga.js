@@ -7,13 +7,13 @@ import { DELETE_PARTY_TYPE_ID, EDIT_PARTY_TYPE_ID, GET_PARTY_TYPE_LIST, POST_PAR
 
 // post api
 function* Post_Party_Type_GneratorFunction({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_Party_Type_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostPartyTypeAPISuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -23,13 +23,13 @@ function* Post_Party_Type_GneratorFunction({ data }) {
 
 // get api
 function* Get_PartyType_List_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_PartyType_List_Api);
     yield put(getPartyTypelistSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -40,12 +40,12 @@ function* Get_PartyType_List_GenratorFunction() {
 // delete api 
 function* Delete_PartyType_ID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_PartyType_List_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deletePartyTypeIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -72,13 +72,13 @@ function* Edit_PartyType_ID_GenratorFunction({ id,pageMode }) {
 // update api
 function* Update_PartyType_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_PartyType_List_Api, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updatePartyTypeIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

@@ -8,13 +8,13 @@ import { POST_PARTYITEMS, GET_PARTY_ITEM_LIST, GET_PARTY_LIST, EDIT_PARTY_ITEM_I
 // post api
 function* Post_PartyItems_GneratorFunction({ data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Party_Items, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostPartyItemsSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
