@@ -5,6 +5,7 @@ import {
   getSupplierAddressSuccess,
   getSupplierSuccess,
   GetVenderSuccess,
+  GetVenderSupplierCustomerSuccess,
 } from "./actions";
 import {
   get_OrderType_Api,
@@ -18,11 +19,12 @@ import {
   GET_SUPPLIER,
   GET_SUPPLIER_ADDRESS,
   GET_VENDER,
+  GET_VENDER_SUPPLIER_CUSTOMER,
 } from "./actionType";
 
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {
 
@@ -106,11 +108,31 @@ function* getCustomerGenFunc() {
     }));
   }
 }
+function* vendorSupplierCustomer_genFunc({ subPageMode }) {
+
+  if (subPageMode === url.ORDER) {
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    yield put(GetVenderSupplierCustomerSuccess(response.Data));
+  }
+  else if (subPageMode === url.SALE_ORDER_1) {
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
+    yield put(GetVenderSupplierCustomerSuccess(response.Data));
+
+  }
+  else if (subPageMode === url.SALE_ORDER_2) { 
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    yield put(GetVenderSupplierCustomerSuccess(response.Data));
+  }
+ 
+
+}
+
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
   yield takeEvery(GET_SUPPLIER_ADDRESS, supplierAddressGenFunc);
   yield takeEvery(GET_ORDER_TYPE, OrderType_GenFunc);
   yield takeEvery(GET_VENDER, getVendorGenFunc);
+  yield takeEvery(GET_VENDER_SUPPLIER_CUSTOMER, vendorSupplierCustomer_genFunc);
   yield takeEvery(GET_CUSTOMER, getCustomerGenFunc);
 }
 

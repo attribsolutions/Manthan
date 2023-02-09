@@ -58,7 +58,7 @@ const SaleOrderList = () => {
     const { userAccess, pageField, GRNitem, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
     // const supplierSelect = venderSelect
-    const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.SALE_ORDER_lIST;
+    // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.SALE_ORDER_lIST;
     debugger
     const action = {
         getList: getOrderListPage,
@@ -73,7 +73,7 @@ const SaleOrderList = () => {
         setpageMode(hasPagePath)
         // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
+        // dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Orders Count"} :0`))
         dispatch(getSupplier());
         goButtonHandler(true)
@@ -99,7 +99,7 @@ const SaleOrderList = () => {
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
+            // return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
@@ -303,11 +303,11 @@ const SaleOrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={SaleOrder}
-                            masterPath={url.SALE_ORDER}
+                            // masterPath={url.SALE_ORDER}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.SALE_ORDER_lIST ? false : true}
+                            // makeBtnShow={pageMode === url.SALE_ORDER_lIST ? false : true}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
