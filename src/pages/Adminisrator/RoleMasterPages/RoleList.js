@@ -53,7 +53,7 @@ const RoleList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLE_lIST} />
+      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage
