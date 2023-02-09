@@ -5,13 +5,13 @@ import { invoice } from "../ReportIndex";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
-    doc.line(570, 10, 30, 10);//horizontal line (Top)
-    doc.line(30, 815, 30, 10);//vertical line (left)
-    doc.line(570, 815, 570, 10);//vertical line (Right)
+    doc.line(570, 16, 30, 16);//horizontal line (Top)
+    doc.line(30, 815, 30, 16);//vertical line (left)
+    doc.line(570, 815, 570, 16);//vertical line (Right)
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
+    doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     debugger
@@ -35,14 +35,14 @@ export const reportHeder1 = (doc, data) => {
     doc.text('Details of Transport', 440, 75)
 
 
-    doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
-    doc.line(570, 10, 30, 10);//horizontal line 2
+    doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
+    doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(409, 100, 30, 100) //horizontal line 4
-    doc.line(30, 789, 30, 10);//vertical left 1
-    doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(408, 170, 408, 10);//vertical right 1
-    doc.line(220, 170, 220, 60);//vertical right 2
+    doc.line(409, 100, 30, 100)//horizontal line 4
+    doc.line(30, 789, 30, 16);//vertical left 1
+    doc.line(570, 789, 570, 16);//vertical left 2
+    doc.line(408, 160, 408, 16);//vertical right 1
+    doc.line(220, 160, 220, 63);//vertical right 2
 
     var options3 = {
         margin: {
@@ -73,14 +73,15 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 200,
                 halign: 'left',
             },
-            1: {
+            2: {
                 columnWidth: 200,
                 halign: 'left',
             },
 
         },
         tableLineColor: "black",
-        startY: doc.autoTableEndPosY() + 85,// 45,
+        startY:85
+
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
@@ -551,9 +552,18 @@ export const pageFooter = (doc, data) => {
     if (finalY > 675) {
         pageBorder(doc)
         reportFooter(doc, data)
+        pageHeder(doc, data)
+        reportHeder1(doc, data)
+        reportHeder2(doc, data)
+        reportHeder3(doc, data)
+        
     } else {
         pageBorder(doc)
         reportFooter(doc, data)
+        pageHeder(doc, data)
+        reportHeder1(doc, data)
+        reportHeder2(doc, data)
+        reportHeder3(doc, data)
     }
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')

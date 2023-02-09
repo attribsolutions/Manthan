@@ -4,13 +4,13 @@ import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
-    doc.line(815, 10, 30, 10);//horizontal line (Top)
-    doc.line(30, 570, 30, 10);//vertical line (left)
-    doc.line(815, 570, 815, 10);//vertical line (Right)
+    doc.line(815, 16, 30, 16);//horizontal line (Top)
+    doc.line(30, 570, 30, 16);//vertical line (left)
+    doc.line(815, 570, 815, 16);//vertical line (Right)
     doc.line(815,570, 30, 570);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
+    doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
@@ -22,12 +22,12 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`*** ${data.CompanyName} ***`, 380, 50,'center')  //bill by 
     doc.line(815, 60, 30, 60) //horizontal line 1 billby upper
-    doc.line(815, 10, 30, 10);//horizontal line 2
+    doc.line(815, 16, 30, 16);//horizontal line 2
     // doc.line(815, 80, 30, 80);//horizontal line 3
     // doc.line(409, 100, 30, 100) //horizontal line 4
-    doc.line(30, 400, 30, 10);//vertical left 1
+    doc.line(30, 400, 30, 16);//vertical left 1
     // doc.line(570, 789, 570, 10);//vertical left 2
-    doc.line(680, 60, 680, 10);//vertical right 1
+    doc.line(680, 60, 680, 16);//vertical right 1
     doc.line(407, 200, 407, 60);//vertical right 2
     doc.line(300, 100, 815, 100) //horizontal line Current date upper
     // doc.line(815, 35, 700, 35) //horizontal line 1 billby upper
