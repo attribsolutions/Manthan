@@ -87,7 +87,6 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        // [, ,],
         [`${data.CustomerName}`, ,`Current Time: ${data.Time}`],
         [`maharashtra`, , `From Date:  ${data.InvoiceDate}`],
         [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
