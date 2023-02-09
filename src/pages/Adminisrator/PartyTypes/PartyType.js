@@ -12,7 +12,6 @@ import {
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -40,7 +39,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import * as mode from "../../../routes/PageMode"
 
 const PartyType = (props) => {
 
@@ -57,7 +56,7 @@ const PartyType = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.mode2save);
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -82,8 +81,8 @@ const PartyType = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -146,7 +145,7 @@ const PartyType = (props) => {
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -219,7 +218,7 @@ const PartyType = (props) => {
 
             saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(updatePartyTypeID(jsonBody, values.id));
             }
             else {
@@ -230,15 +229,13 @@ const PartyType = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTYTYPE} /> */}
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
