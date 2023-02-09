@@ -298,17 +298,17 @@ const PartySubParty = (props) => {
                 const normal = {
                     Party: Division_dropdown_Select.value,
                     SubParty: i.value,
-
                 }
                 const isvendor = {
                     Party: i.value,
                     SubParty: Division_dropdown_Select.value,
-
                 }
+
                 const ramain = {
                     CreatedBy: createdBy(),
                     UpdatedBy: createdBy(),
                 }
+                
                 if (i.partyType === 3) {
                     return { ...isvendor, ...ramain }
                 } else {
