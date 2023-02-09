@@ -10,7 +10,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-
 import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
@@ -44,7 +43,6 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
     searchProps = toolkitProps.searchProps
 }
-
 
 export async function isAlertFunc(type, Msg) {
     await CustomAlert({
@@ -93,9 +91,6 @@ const PurchaseListPage = (props) => {
         makeBtnFunc = () => { },
         makeBtnShow,
         makeBtnName,
-        InwardMakeBtnFunc = () => { },
-        InwardMakeBtnShow,
-        InwardMakeBtnName,
         downBtnFunc = () => { },
     } = props;
 
@@ -159,11 +154,11 @@ const PurchaseListPage = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
             goButnFunc();
-            isAlertFunc(1,updateMsg);
+            isAlertFunc(1, updateMsg);
             tog_center();
         } else if (updateMsg.Status === true) {
             dispatch(updateSucc({ Status: false }));
-            isAlertFunc(3,updateMsg);
+            isAlertFunc(3, updateMsg);
         }
     }, [updateMsg]);
 
@@ -253,21 +248,9 @@ const PurchaseListPage = (props) => {
         makeBtnFunc(tableList);
     }
 
-    function InwardMakeBtnHandler(rowData) {
-        rowData["hasSelect"] = true;
-        let arr = []
-        arr.push(rowData)
-        InwardMakeBtnFunc(arr)
-    }
-
-    // function onSaveBtnClick() {
-    //     InwardMakeBtnFunc(tableList);
-    // }
-
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     }
-
 
     // ****** columns sort by sequnce
     fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
@@ -346,10 +329,6 @@ const PurchaseListPage = (props) => {
                                 // disabled={rowData["isdisabled"]}
                                 key={rowData.hasSelect}
                                 onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
-
-
-
-
                             />
                             <Button
                                 type="button"
@@ -390,30 +369,6 @@ const PurchaseListPage = (props) => {
             })
         }
 
-        else if ((InwardMakeBtnShow) && (fileds.length - 1 === k)) {
-
-            columns.push({
-                text: "Select",
-                dataField: "hasSelect",
-                sort: true,
-                formatter: (cellContent, rowData, key) => {
-                    rowData["hasSelect"] = false
-                    return (
-                        <div>
-
-                            <Button
-                                type="button"
-                                className={makeBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={InwardMakeBtnName}
-                                onClick={() => { InwardMakeBtnHandler(rowData) }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                ></span> Inward</Button>
-                        </div>)
-                }
-            })
-        }
-
         // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
@@ -434,7 +389,6 @@ const PurchaseListPage = (props) => {
         }
     })
 
-
     const defaultSorted = [
         {
             dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
@@ -454,9 +408,7 @@ const PurchaseListPage = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                {/* <BreadcrumbNew
-                    userAccess={userAccess}
-                /> */}
+
                 <div >
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
@@ -497,12 +449,9 @@ const PurchaseListPage = (props) => {
                                 )}
                             </ToolkitProvider>
                         )}
-
-
                     </PaginationProvider>
 
                     {
-
                         (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
@@ -527,7 +476,6 @@ const PurchaseListPage = (props) => {
                         }}
                         size="xl"
                     >
-
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
 
                     </Modal>
