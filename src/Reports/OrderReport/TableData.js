@@ -136,7 +136,7 @@ export const Rows = (data) => {
 
     OrderItem.forEach((element, key) => {
         const tableitemRow = [
-            `${element.ItemName} (${element.HSNCode})
+            `${element.ItemName} (${element.HSNCode})      
              ${element.Comment===null?"":element.Comment}`,
             `${element.Quantity} ${element.UnitName}`,
             element.Rate,
@@ -155,7 +155,7 @@ export const Rows = (data) => {
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
             totalAmount = Number(totalAmount) + Number(element.Amount)
-            // totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             let cgst = data["tableTot"].TotalCGst
             // return ({ TotalCGst: Number(cgst) + Number(totalCGst),})
             return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst), })
@@ -165,16 +165,16 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
-                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+                `Total Quantity :${parseFloat(totalQuantity).toFixed(2)}`,
                 " ",
-                `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                `TotalBasic:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
-                `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+                `Total:${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
-                `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+                `Total:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
                 // "",
-                `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+                `Total:${parseFloat(totalAmount).toFixed(2)}`,
                 // parseFloat(TotalCGst).toFixed(2),
                 // parseFloat(TotalSGst).toFixed(2),
             ];
@@ -335,7 +335,6 @@ export const ReportHederRows = (data) => {
         [`${data.SupplierName}`, `${data.CustomerName}`, `${data.POTypeName}`],
         [`${data.ShippingAddress}`, `${data.BillingAddress}`,`${data.CustomerName}` ],
         [`${data.ShippingFssai}`,`FSSAI :ui3dfxxxxxwe55`,`${data.BillingAddress}`,],
-      
     ]
     return reportArray;
 }
