@@ -103,9 +103,6 @@ import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_L
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
 import ProductionList from "../pages/Purchase/Production/ProductionList";
 
-import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
-import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
-
 import Invoice from "../pages/Sale/Invoice/Invoice";
 import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
@@ -233,9 +230,12 @@ const userRoutes = [
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
 
-  { path: path.SALE_ORDER, component: SaleOrder },
-  { path: path.SALE_ORDER_lIST, component: SaleOrderList },
+  { path: path.SALE_ORDER_1, component: Order },
+  { path: path.SALE_ORDER_lIST_1, component: OrderList },
 
+  { path: path.SALE_ORDER_2, component: Order },
+  { path: path.SALE_ORDER_lIST_2, component: OrderList },
+  
   { path: path.INVOICE, component: Invoice },
   { path: path.INVOICE_LIST, component: InvoiceList },
 

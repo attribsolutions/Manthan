@@ -112,8 +112,11 @@ export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
 export const PRODUCTION_STP = 123
 
-export const SALE_ORDER = 117
-export const SALE_ORDER_lIST = 118
+export const SALE_ORDER_1 = 117
+export const SALE_ORDER_lIST_1 = 118
+
+export const SALE_ORDER_2 = 134
+export const SALE_ORDER_lIST_2 = 135
 
 export const INVOICE = 121
 export const INVOICE_LIST = 122

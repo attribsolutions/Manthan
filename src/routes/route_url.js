@@ -112,8 +112,11 @@ export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
 export const PRODUCTION_STP = "/Production_STP"
 
-export const SALE_ORDER = "/SaleOrder"
-export const SALE_ORDER_lIST = "/SaleOrderList"
+export const SALE_ORDER_1 = "/SaleOrder_1"
+export const SALE_ORDER_lIST_1 = "/SaleOrderList_1"
+
+export const SALE_ORDER_2 = "/SaleOrder_2"
+export const SALE_ORDER_lIST_2 ="/SaleOrderList_2"
 
 export const INVOICE = "/Invoice"
 export const INVOICE_LIST = "/InvoiceList"
