@@ -432,8 +432,10 @@ export const pageFooter = (doc, data) => {
 //     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
 //     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
 //     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
+debugger
     let finalY = doc.previousAutoTable.finalY;
     if (finalY > 675) {
+        debugger
         pageBorder(doc)
         reportFooter(doc, data)
     } else {
@@ -445,7 +447,7 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
+        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 580, {
             align: 'center'
         })
         console.log("aaa", doc.internal.pageSize.height)
