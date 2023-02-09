@@ -111,7 +111,7 @@ function* getCustomerGenFunc() {
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
 
   if (subPageMode === url.ORDER) {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
   else if (subPageMode === url.SALE_ORDER_1) {
@@ -123,9 +123,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
- 
-
-}
+ }
 
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
