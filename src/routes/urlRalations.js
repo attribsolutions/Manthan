@@ -121,8 +121,11 @@ export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-export const SaleOrderList = url.SALE_ORDER
-export const SaleOrder = url.SALE_ORDER_lIST
+export const SaleOrderList_1 = url.SALE_ORDER_1
+export const SaleOrder_1 = url.SALE_ORDER_lIST_1
+
+export const SaleOrder_2 = url.SALE_ORDER_2
+export const SaleOrderList_2 = url.SALE_ORDER_lIST_2
 
 export const InvoiceList = url.INVOICE
 export const Invoice = url.INVOICE_LIST

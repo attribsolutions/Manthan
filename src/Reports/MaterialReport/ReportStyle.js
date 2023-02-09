@@ -74,7 +74,6 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        // startY: doc.autoTableEndPosY() + 85,// 45,
         startY:85
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);

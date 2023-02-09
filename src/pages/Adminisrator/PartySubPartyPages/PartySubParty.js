@@ -218,26 +218,29 @@ const PartySubParty = (props) => {
         }
     }, [pageField])
 
-    const DivisionValues = Divisions.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
-    const PartyValues = Party.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
-    const PartySubPartyValues = PartySubParty.map((Data) => ({
-        value: Data.SubParty,
-        label: Data.SubPartyName
-    }));
-
     useEffect(() => {
         if (Division_dropdown_Select.value > 0) {
-            setPartyData(PartySubPartyValues)
+            setPartyData(PartySubParty.map(i => ({
+                value: i.SubParty,
+                label: i.SubPartyName,
+                partyType: i.PartyType
+            })));
         }
     }, [PartySubParty]);
+
+    const DivisionValues = Divisions.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
+    const PartyValues = Party.map(i => ({
+        value: i.id,
+        label: i.Name,
+        party: i.PartyType
+    }));
+
+
+
 
     function handllerDivision(e) {
         dispatch(getPartySubParty_For_party_dropdown(e.value));
@@ -250,7 +253,7 @@ const PartySubParty = (props) => {
 
     /// Role Table Validation
     function AddPartyHandler() {
-        debugger
+
 
         const find = PartyData.find((element) => {
             return element.value === Party_dropdown_Select.value
@@ -291,12 +294,28 @@ const PartySubParty = (props) => {
     const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-            const arr = PartyData.map(i => ({
-                Party: Division_dropdown_Select.value,
-                SubParty: i.value,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-            }))
+            const arr = PartyData.map(i => {
+                const normal = {
+                    Party: Division_dropdown_Select.value,
+                    SubParty: i.value,
+                }
+                const isvendor = {
+                    Party: i.value,
+                    SubParty: Division_dropdown_Select.value,
+                }
+
+                const ramain = {
+                    CreatedBy: createdBy(),
+                    UpdatedBy: createdBy(),
+                }
+                
+                if (i.partyType === 3) {
+                    return { ...isvendor, ...ramain }
+                } else {
+                    return { ...normal, ...ramain }
+                }
+            })
+
             const jsonBody = JSON.stringify(arr);
             saveDissable(true);//save Button Is dissable function
             if (pageMode === mode.edit) {
