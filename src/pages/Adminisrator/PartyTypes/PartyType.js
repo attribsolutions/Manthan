@@ -132,14 +132,13 @@ const PartyType = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
-
             }
             dispatch(editPartyTypeSuccess({ Status: false }))
         }
     }, [])
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             saveDissable(false);//save Button Is enable function
@@ -162,7 +161,7 @@ const PartyType = (props) => {
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
             saveDissable(false);//save Button Is enable function
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             dispatch(AlertState({
