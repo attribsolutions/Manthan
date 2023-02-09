@@ -386,20 +386,22 @@ export async function CkeckAlert(method, url, response, body) {
     if (con4) {
         console.log(`${url}***=> ${method} Body =>`, body)
     }
-    console.log(`${url}***${method} apiCall response:=>`, response)
-
 
     if (con1) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     } else if (con2) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
         return Promise.reject(response)
     }
     else if (con3) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
         await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
         return Promise.reject(response)
     }
     else {
+        console.log(`${url}***${method} apiCall response:=>`, response)
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
         return Promise.reject(response)
     }

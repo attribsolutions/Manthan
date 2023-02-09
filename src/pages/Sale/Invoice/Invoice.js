@@ -726,8 +726,8 @@ const Invoice = (props) => {
 
                 if (ele.Qty > 0) {
                     var demo = {
-                        Rate: index.Rate,
-                        GSTPercentage: index.GSTPercentage,
+                        Rate: ele.Rate,
+                        GSTPercentage: ele.GST,
                         Quantity: ele.Qty
                     }
                     const basicAmt = parseFloat(basicAmount(demo))
@@ -744,16 +744,16 @@ const Invoice = (props) => {
                         BaseUnitQuantity: ele.BaseUnitQuantity,
                         LiveBatch: ele.LiveBatche,
                         MRP: null,
-                        Rate: index.Rate,
+                        Rate: ele.Rate,
                         BasicAmount: basicAmt.toFixed(2),
                         GSTAmount: cgstAmt.toFixed(2),
                         GST: index.GST,
                         CGST: (cgstAmt / 2).toFixed(2),
                         SGST: (cgstAmt / 2).toFixed(2),
                         IGST: 0,
-                        GSTPercentage: index.GSTPercentage,
-                        CGSTPercentage: (index.GSTPercentage / 2),
-                        SGSTPercentage: (index.GSTPercentage / 2),
+                        GSTPercentage: ele.GST,
+                        CGSTPercentage: (ele.GST / 2),
+                        SGSTPercentage: (ele.GST / 2),
                         IGSTPercentage: 0,
                         Amount: amount,
                         TaxType: 'GST',

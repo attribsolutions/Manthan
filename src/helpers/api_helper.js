@@ -23,6 +23,7 @@ axiosApi.interceptors.response.use(
 )
 
 export function get(url, config = {}) {
+  console.log("get api call")
 
   AuthonticationFunction();
   return axiosApi.get(url, { ...config })
@@ -37,6 +38,8 @@ export function get(url, config = {}) {
 }
 
 export function post(url, data, config = {}) {
+  console.log("Post api call")
+
   AuthonticationFunction();
   return axiosApi
     .post(url, data, {
@@ -55,7 +58,8 @@ export function post(url, data, config = {}) {
 
 
 export function put(url, data, config = {}) {
-
+ 
+  console.log(" put api call")
   AuthonticationFunction();
   return axiosApi
     .put(url, data, {
@@ -68,11 +72,12 @@ export function put(url, data, config = {}) {
       return CkeckAlert("put", url, response,data);
     })
     .catch(error => {
-      return CkeckAlert("put", url, error,data);
+      return CkeckAlert("put", url, error,);
     });
 }
 
 export function del(url, config = {}) {
+  console.log(" delete api call")
   AuthonticationFunction();
   return axiosApi
     .delete(url, { ...config })
