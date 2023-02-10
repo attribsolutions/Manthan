@@ -66,6 +66,7 @@ export const Rows = (data) => {
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
             totalAmount = Number(totalAmount) + Number( element.Amount)
+            totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             let cgst = data["tableTot"].TotalCGst
             return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
         };
