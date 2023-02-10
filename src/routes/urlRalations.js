@@ -106,6 +106,9 @@ export const Order_1 = url.ORDER_lIST_1
 export const OrderList_2 = url.ORDER_2
 export const Order_2 = url.ORDER_lIST_2
 
+export const OrderList_3 = url.ORDER_3
+export const Order_3 = url.ORDER_LIST_3
+
 export const GRNList = url.GRN_STP
 export const GRN = url.GRN_lIST
 export const GRN_STP = url.GRN_lIST
@@ -129,13 +132,11 @@ export const Invoice = url.INVOICE_LIST_1
 
 //******************************* Inter Branch ************************************//
 
-export const IBOrderList = url.IB_ORDER
-export const IBOrder = url.IB_ORDER_LIST
-export const IB_INVOICE_STP = url.IB_ORDER_LIST
 
 export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST
 export const IB_INWARD_STP = url.INVOICE_LIST_2
 
-export const IB_Invoice = url.INVOICE_LIST_2
 export const IB_Invoice_List = url.IB_INVOICE_STP
+export const IB_Invoice = url.INVOICE_LIST_2
+export const IB_Invoice_STP = url.ORDER_LIST_3

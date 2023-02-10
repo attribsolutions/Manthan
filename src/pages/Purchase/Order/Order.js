@@ -26,7 +26,7 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { BreadcrumbShowCountlabel } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -34,11 +34,12 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondit
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
+import * as pageId from "../../../routes/allPageID"
 
 let editVal = {}
 
@@ -48,7 +49,13 @@ const Order = (props) => {
     const history = useHistory();
     const subPageMode = history.location.pathname;
 
+    const fileds = {
+        id: "",
+        Supplier: "",
 
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
@@ -78,7 +85,7 @@ const Order = (props) => {
         orderType,
         updateMsg,
         supplierAddress = [],
-
+        pageField
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
@@ -89,6 +96,37 @@ const Order = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
+
+    useEffect(() => {
+       
+        const page_Id =
+            ((subPageMode === url.ORDER_1) ? (pageId.ORDER_1) :
+                (subPageMode === url.ORDER_2) ? (pageId.ORDER_2) :
+                    (subPageMode === url.ORDER_3) ? (pageId.ORDER_3) 
+                    : null)
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(getSupplierAddress())
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+    }, []);
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     // userAccess useEffect
     useEffect(() => {
@@ -111,19 +149,6 @@ const Order = (props) => {
             }
         };
     }, [userAccess])
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    useEffect(() => {
-
-        dispatch(goButtonForOrderAddSuccess(null))
-        dispatch(GetVenderSupplierCustomer(subPageMode))
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
-    }, [])
 
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
@@ -759,7 +784,7 @@ const Order = (props) => {
                             <Col sm="6">{/*Supplier Name */}
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
