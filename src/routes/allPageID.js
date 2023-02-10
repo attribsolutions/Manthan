@@ -120,8 +120,8 @@ export const INVOICE_LIST_1 = 122
 
 //******************************* Inter Branch ************************************//
 
-export const IB_ORDER = 126
-export const IB_ORDER_LIST = 127
+export const ORDER_3 = 126
+export const ORDER_LIST_3 = 127
 
 export const INWARD = 128
 export const INWARD_LIST = 129
