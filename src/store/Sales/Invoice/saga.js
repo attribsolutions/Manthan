@@ -1,13 +1,117 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { convertDatefunc, convertTimefunc, GoBtnDissable, mainSppinerOnOff, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { Invoice_Delete_API, Invoice_Edit_API_Singel_Get, Invoice_Get_API, Invoice_GoButton_Post_API, Invoice_Post_API } from "../../../helpers/backend_helper";
+import {
+  convertDatefunc,
+  GoBtnDissable,
+  saveDissable
+} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import {
+  Invoice_Delete_API,
+  Invoice_Edit_API_Singel_Get,
+  Invoice_Get_API,
+  Invoice_GoButton_Post_API,
+  Invoice_Post_API,
+  Make_IB_Invoice_API
+} from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { deleteInvoiceIdSuccess, editInvoiceListSuccess, getIssueListPageSuccess, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "./action";
-import { DELETE_INVOICE_LIST_PAGE, EDIT_INVOICE_LIST, GET_INVOICE_LIST_PAGE, GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER } from "./actionType";
+import {
+  deleteInvoiceIdSuccess,
+  editInvoiceListSuccess,
+  getIssueListPageSuccess,
+  GoButton_For_Invoice_Add_Success,
+  GoButton_post_For_Invoice_Success,
+  postInvoiceMasterSuccess
+} from "./action";
+import {
+  DELETE_INVOICE_LIST_PAGE,
+  EDIT_INVOICE_LIST, GET_INVOICE_LIST_PAGE,
+  GO_BUTTON_FOR_INVOICE_ADD,
+  GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER
+} from "./actionType";
+import *as url from "../../../routes/route_url"
+
+
+
+
+
+//post api for Invoice Master
+function* save_Invoice_Genfun({ data, saveBtnid }) {
+
+  try {
+    const response = yield call(Invoice_Post_API, data);
+
+
+    saveDissable({ id: saveBtnid, state: false })
+    yield put(postInvoiceMasterSuccess(response));
+  } catch (error) {
+    saveDissable({ id: saveBtnid, state: false })
+
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message in Invoice",
+    }));
+  }
+}
+
+// Invoice List
+function* InvoiceListGenFunc({ filters }) {
+
+
+  try {
+
+    const response = yield call(Invoice_Get_API, filters);
+    const newList = yield response.Data.map((i) => {
+      i.InvoiceDate = i.InvoiceDate;
+      var date = convertDatefunc(i.InvoiceDate)
+      i.InvoiceDate = (date)
+      return i
+    })
+    yield put(getIssueListPageSuccess(newList));
+
+  } catch (error) {
+
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message in Work Order List ",
+    }));
+  }
+}
+
+// edit List page
+function* editInvoiceListGenFunc({ id, pageMode }) {
+
+  try {
+    let response = yield call(Invoice_Edit_API_Singel_Get, id);
+    response.pageMode = pageMode
+
+    yield put(editInvoiceListSuccess(response))
+  } catch (error) {
+
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Invoice Edit Method ",
+    }));
+  }
+}
+
+// Invoice List delete List page
+function* DeleteInvoiceGenFunc({ id }) {
+
+
+  try {
+    const response = yield call(Invoice_Delete_API, id);
+
+    yield put(deleteInvoiceIdSuccess(response));
+  } catch (error) {
+
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Merssage in Work Order List Delete Method "
+    }));
+  }
+}
 
 // GO Botton Post API
-function* GoButtonInvoice_genfun({ data, goBtnId }) {
+function* GoButtonSOInvoice_genfun({ data, goBtnId }) {
   try {
     const response = yield call(Invoice_GoButton_Post_API, data);
     let convResp = response.Data.OrderItemDetails.map(i1 => {
@@ -57,7 +161,7 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
 
     response.Data.OrderItemDetails = convResp
     yield GoBtnDissable({ id: goBtnId, state: false })
-    yield put(GoButton_post_For_Invoice_Success(response.Data));
+    yield put(GoButton_For_Invoice_Add_Success(response.Data));
 
   } catch (error) {
     GoBtnDissable({ id: goBtnId, state: false })
@@ -68,89 +172,39 @@ function* GoButtonInvoice_genfun({ data, goBtnId }) {
   }
 }
 
-//post api for Invoice Master
-function* save_Invoice_Genfun({ data, saveBtnid }) {
-
+// Make IB_Invoice API
+function* GoBtnADD_IBInvoice_GenFun({ data }) {
+  debugger
   try {
-    const response = yield call(Invoice_Post_API, data);
-   
+    const response = yield call(Make_IB_Invoice_API, data);
+    yield put(GoButton_For_Invoice_Add_Success(response.Data));
 
-    saveDissable({ id: saveBtnid, state: false })
-    yield put(postInvoiceMasterSuccess(response));
   } catch (error) {
-    saveDissable({ id: saveBtnid, state: false })
-   
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message in Invoice",
+      Status: true, Message: "500 Error Make IB Invoice ",
     }));
   }
 }
 
-// Invoice List
-function* InvoiceListGenFunc({ filters }) {
-
-
-  try {
-
-    const response = yield call(Invoice_Get_API, filters);
-    const newList = yield response.Data.map((i) => {
-      i.InvoiceDate = i.InvoiceDate;
-      var date = convertDatefunc(i.InvoiceDate)
-      i.InvoiceDate = (date)
-      return i
-    })
-    yield put(getIssueListPageSuccess(newList));
-   
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message in Work Order List ",
-    }));
+function* gobutton_invoiceAdd_genFunc(action) {
+  
+  const { subPageMode, data, goBtnId } = action
+  if (subPageMode === url.INVOICE) {
+    yield GoButtonSOInvoice_genfun(action)
+  }
+  else if (subPageMode === url.IB_INVOICE) {
+    yield GoBtnADD_IBInvoice_GenFun(action)
   }
 }
-
-// edit List page
-function* editInvoiceListGenFunc({ id, pageMode }) {
-
-  try {
-    let response = yield call(Invoice_Edit_API_Singel_Get, id);
-    response.pageMode = pageMode
-   
-    yield put(editInvoiceListSuccess(response))
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Invoice Edit Method ",
-    }));
-  }
-}
-
-// Invoice List delete List page
-function* DeleteInvoiceGenFunc({ id }) {
-
-
-  try {
-    const response = yield call(Invoice_Delete_API, id);
-   
-    yield put(deleteInvoiceIdSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Merssage in Work Order List Delete Method "
-    }));
-  }
-}
-
 function* InvoiceSaga() {
-  yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonInvoice_genfun)
+  yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
   yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
   yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
   yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
   yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
+  yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
+
 }
 
 export default InvoiceSaga;

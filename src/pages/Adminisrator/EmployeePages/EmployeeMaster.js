@@ -96,8 +96,9 @@ const AddEmployee = (props) => {
     dispatch(commonPageField(pageId.EMPLOYEE))
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
+    dispatch(getPartyListAPI())
     dispatch(getState());
-    }, [dispatch]);
+  }, [dispatch]);
 
   const values = { ...state.values }
   const { isError } = state;

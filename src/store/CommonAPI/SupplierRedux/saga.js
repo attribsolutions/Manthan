@@ -9,6 +9,7 @@ import {
 } from "./actions";
 import {
   get_OrderType_Api,
+  IB_Division_DROP_API,
   Party_Master_Edit_API,
   VendorSupplierCustomer,
 } from "../../../helpers/backend_helper";
@@ -23,7 +24,7 @@ import {
 } from "./actionType";
 
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {
@@ -109,21 +110,30 @@ function* getCustomerGenFunc() {
   }
 }
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
+  let response;
+  try {
+    if (subPageMode === url.ORDER) {
+      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
+    }
+    else if (subPageMode === url.SALE_ORDER_1) {
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
+    }
+    else if (subPageMode === url.SALE_ORDER_2) {
+      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    }
+    else if (subPageMode === url.IB_INVOICE) {
+      response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
+    }
+    else if (subPageMode === url.INVOICE) {
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
+    };
 
-  if (subPageMode === url.ORDER) {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
-  else if (subPageMode === url.SALE_ORDER_1) {
-    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
-    yield put(GetVenderSupplierCustomerSuccess(response.Data));
+  catch (e) {
 
   }
-  else if (subPageMode === url.SALE_ORDER_2) { 
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
-    yield put(GetVenderSupplierCustomerSuccess(response.Data));
-  }
- }
+}
 
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);

@@ -245,7 +245,7 @@ const RoleAccessAdd = (props) => {
 
     function handllerDivisionTypes(e) {
         setDivision_dropdown_Select(e)
-        dispatch(GetPartyTypeByDivisionTypeID(e.value))
+        // dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
 
     // for module dropdown

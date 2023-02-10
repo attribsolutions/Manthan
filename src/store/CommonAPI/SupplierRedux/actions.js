@@ -69,7 +69,7 @@ export const getOrderTypeSuccess = orderType => ({
 
 export const GetVenderSupplierCustomer = (subPageMode) => ({
   type: GET_VENDER_SUPPLIER_CUSTOMER,
-  subPageMode
+  subPageMode,
 });
 
 export const GetVenderSupplierCustomerSuccess = orders => ({

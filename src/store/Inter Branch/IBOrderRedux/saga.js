@@ -9,9 +9,9 @@ import {
     IBOrderPage_Post_API,
     IBOrderPage_Update_API,
     Division,
+    IB_Division_DROP_API,
 } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
 
     postGoButtonForIBOrderSuccess,
@@ -71,7 +71,7 @@ function* Post_IBOrder_Genfun({ data }) {
 function* post_Division_Genfun({ data }) {
   
     try {
-        const response = yield call(Division, data);
+        const response = yield call(IB_Division_DROP_API, data);
        
       yield put(postDivisionSuccess(response.Data));
     } catch (error) {
