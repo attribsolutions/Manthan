@@ -119,13 +119,10 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if (subPageMode === url.ORDER_2) {
       response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });//supplier mode 2
     }
-    // else if (subPageMode === url.SALE_ORDER_2) {
-    //   response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
-    // }
-    else if (subPageMode === url.IB_INVOICE) {
+    else if (subPageMode === url.INVOICE_1) {
       response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
     }
-    else if (subPageMode === url.INVOICE) {
+    else if (subPageMode === url.INVOICE_2) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     };
 

@@ -92,7 +92,7 @@ const Invoice = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        const page_Id = pageId.INVOICE
+        const page_Id = pageId.INVOICE_1
         // dispatch(GetCustomer())
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(GetCustomer())
@@ -186,7 +186,7 @@ const Invoice = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.INVOICE_LIST,
+                    RedirectPath: url.INVOICE_LIST_1,
                 }))
             }
         }

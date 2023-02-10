@@ -55,7 +55,7 @@ const InvoiceList = () => {
     const { userAccess, pageField, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 
-    const page_Id = pageId.INVOICE_LIST
+    const page_Id = pageId.INVOICE_LIST_1
 
     const action = {
         getList: getIssueListPage,
@@ -222,11 +222,11 @@ const InvoiceList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Invoice}
-                            masterPath={url.INVOICE}
+                            masterPath={url.INVOICE_1}
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.INVOICE_LIST ? false : true}
+                            makeBtnShow={pageMode === url.INVOICE_LIST_1 ? false : true}
                             // makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

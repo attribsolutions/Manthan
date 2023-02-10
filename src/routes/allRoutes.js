@@ -233,12 +233,8 @@ const userRoutes = [
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
 
-
-  { path: path.SALE_ORDER_2, component: Order },
-  { path: path.SALE_ORDER_lIST_2, component: OrderList },
-
-  { path: path.INVOICE, component: Invoice },
-  { path: path.INVOICE_LIST, component: InvoiceList },
+  { path: path.INVOICE_1, component: Invoice },
+  { path: path.INVOICE_LIST_1, component: InvoiceList },
 
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: IBOrder },
@@ -248,8 +244,8 @@ const userRoutes = [
   { path: path.INWARD_LIST, component: InwardList },
   { path: path.IB_INWARD_STP, component: IB_Invoice_List },
 
-  { path: path.IB_INVOICE_LIST, component: InvoiceList },
-  { path: path.IB_INVOICE, component: Invoice },
+  { path: path.INVOICE_LIST_2, component: InvoiceList },
+  { path: path.INVOICE_2, component: Invoice },
   { path: path.IB_INVOICE_STP, component: OrderList },
 
   // ************************************ Utility **************************************//

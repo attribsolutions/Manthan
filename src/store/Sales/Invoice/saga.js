@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { actionChannel, call, put, takeEvery } from "redux-saga/effects";
 import {
   convertDatefunc,
   GoBtnDissable,
@@ -110,10 +110,11 @@ function* DeleteInvoiceGenFunc({ id }) {
   }
 }
 
-// GO Botton Post API
-function* GoButtonSOInvoice_genfun({ data, goBtnId }) {
+// GO-Botton SO-invoice Add Page API
+function* invoice_GoButton_dataConversion_Func(action) {
+  const { response, goBtnId } = { ...action };
+  debugger
   try {
-    const response = yield call(Invoice_GoButton_Post_API, data);
     let convResp = response.Data.OrderItemDetails.map(i1 => {
 
       i1["OrderQty"] = i1.Quantity
@@ -164,41 +165,29 @@ function* GoButtonSOInvoice_genfun({ data, goBtnId }) {
     yield put(GoButton_For_Invoice_Add_Success(response.Data));
 
   } catch (error) {
-    GoBtnDissable({ id: goBtnId, state: false })
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message Go Button in Invoice ",
-    }));
+
   }
 }
 
-// Make IB_Invoice API
-function* GoBtnADD_IBInvoice_GenFun({ data }) {
-  debugger
-  try {
-    const response = yield call(Make_IB_Invoice_API, data);
-    yield put(GoButton_For_Invoice_Add_Success(response.Data));
-
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Make IB Invoice ",
-    }));
-  }
-}
 
 function* gobutton_invoiceAdd_genFunc(action) {
-  
-  const { subPageMode, data, goBtnId } = action
-  if (subPageMode === url.INVOICE) {
-    yield GoButtonSOInvoice_genfun(action)
-  }
-  else if (subPageMode === url.IB_INVOICE) {
-    yield GoBtnADD_IBInvoice_GenFun(action)
+  try {
+    const { subPageMode, data, goBtnId } = action
+    let response;
+debugger
+    if (subPageMode === url.INVOICE_1) {
+      response = yield call(Invoice_GoButton_Post_API, data); // GO-Botton SO-invoice Add Page API
+    }
+    else if (subPageMode === url.INVOICE_1) {
+      response = yield call(Make_IB_Invoice_API, data); // GO-Botton IB-invoice Add Page API
+    }
+    yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
+  } catch (e) {
+
   }
 }
 function* InvoiceSaga() {
-  yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
+  // yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
   yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
   yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
   yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)

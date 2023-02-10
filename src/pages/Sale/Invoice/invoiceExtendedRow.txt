@@ -44,8 +44,8 @@ const Invoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const goBtnId = `ADDGoBtn${pageId.INVOICE}`
-    const saveBtnid = `saveBtn${pageId.INVOICE}`
+    const goBtnId = `ADDGoBtn${pageId.INVOICE_1}`
+    const saveBtnid = `saveBtn${pageId.INVOICE_1}`
 
     const fileds = {
         // id: "",
@@ -89,7 +89,7 @@ const Invoice = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        const page_Id = pageId.INVOICE
+        const page_Id = pageId.INVOICE_1
         dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -189,7 +189,7 @@ const Invoice = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.INVOICE,
+                    RedirectPath: url.INVOICE_1,
                 }))
             }
         }
@@ -954,7 +954,7 @@ const Invoice = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE} /> */}
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE_1} /> */}
 
                 <div className="page-content" >
                     <BootstrapTable

@@ -52,7 +52,7 @@ const IB_Invoice = (props) => {
     const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [], } = MakeIBInvoiceData
 
     useEffect(() => {
-        const page_Id = pageId.IB_INVOICE
+        const page_Id = pageId.INVOICE_2
         dispatch(PostIBInvoiceSuccess([]))
         dispatch(MakeIBInvoiceSuccess([]))
         dispatch(commonPageFieldSuccess(null));
@@ -87,7 +87,7 @@ const IB_Invoice = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: url.INVOICE_LIST,
+                RedirectPath: url.INVOICE_LIST_1,
             }))
 
         } else if (postMsg.Status === true) {

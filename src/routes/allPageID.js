@@ -115,11 +115,8 @@ export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
 export const PRODUCTION_STP = 123
 
-export const SALE_ORDER_2 = 134
-export const SALE_ORDER_lIST_2 = 135
-
-export const INVOICE = 121
-export const INVOICE_LIST = 122
+export const INVOICE_1 = 121
+export const INVOICE_LIST_1 = 122
 
 //******************************* Inter Branch ************************************//
 
@@ -130,6 +127,6 @@ export const INWARD = 128
 export const INWARD_LIST = 129
 export const IB_INWARD_STP = 133
 
-export const IB_INVOICE = 130
-export const IB_INVOICE_LIST = 131
+export const INVOICE_2 = 130
+export const INVOICE_LIST_2 = 131
 export const IB_INVOICE_STP = 132

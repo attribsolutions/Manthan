@@ -34,7 +34,7 @@ const IB_Invoice_List = () => {
 
     // const hasPagePath = history.location.pathname
 
-    // const [pageMode, setpageMode] = useState(url.IB_INVOICE_LIST)
+    // const [pageMode, setpageMode] = useState(url.INVOICE_LIST_2)
     const [userAccState, setUserAccState] = useState('');
     const [IB_InvoiceFilter, setIB_InvoiceFilter] = useState({
         todate: currentDate, fromdate: currentDate, CustomerSelect: { value: "", label: "All" }
@@ -59,7 +59,7 @@ const IB_Invoice_List = () => {
 
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.IB_INWARD_STP) ? mode.mode2save : mode.defaultList;
-    const page_Id = (hasPagePath === url.IB_INWARD_STP) ? pageId.IB_INWARD_STP : pageId.IB_INVOICE_LIST;
+    const page_Id = (hasPagePath === url.IB_INWARD_STP) ? pageId.IB_INWARD_STP : pageId.INVOICE_LIST_2;
     
 
     const action = {
@@ -237,7 +237,7 @@ const IB_Invoice_List = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={IB_Invoice}
-                            masterPath={url.IB_INVOICE}
+                            masterPath={url.INVOICE_2}
                             ButtonMsgLable={"IBInvoice"}
                             deleteName={"FullIBChallanNumber"}
                             pageMode={pageMode}
