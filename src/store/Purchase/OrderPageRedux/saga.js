@@ -125,11 +125,6 @@ function* postOrder_GenFunc({ data }) {
 
   } catch (error) {
 
-    //   yield put(AlertState({
-    //     Type: 4,
-    //     Status: true, Message: "500 Error Post Order",
-    //   }));
-    // }
   }
 }
 
@@ -141,10 +136,6 @@ function* editOrderGenFunc({ jsonBody, pageMode }) {
     yield put(editOrderIdSuccess(response));
   } catch (error) {
 
-    // yield put(AlertState({
-    //   Type: 4,
-    //   Status: true, Message: "500 Error Edit Order",
-    // }));
   }
 }
 

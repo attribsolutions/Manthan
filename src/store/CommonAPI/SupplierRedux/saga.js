@@ -110,17 +110,18 @@ function* getCustomerGenFunc() {
   }
 }
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
+  debugger
   let response;
   try {
-    if (subPageMode === url.ORDER) {
-      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
+    if (subPageMode === url.ORDER_1) {
+      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });//vendor mode 1
     }
-    else if (subPageMode === url.SALE_ORDER_1) {
-      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
+    else if (subPageMode === url.ORDER_2) {
+      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });//supplier mode 2
     }
-    else if (subPageMode === url.SALE_ORDER_2) {
-      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
-    }
+    // else if (subPageMode === url.SALE_ORDER_2) {
+    //   response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
+    // }
     else if (subPageMode === url.IB_INVOICE) {
       response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
     }
