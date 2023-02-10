@@ -5,12 +5,13 @@ import {
   saveDissable
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
-  Invoice_Delete_API,
-  Invoice_Edit_API_Singel_Get,
-  Invoice_Get_API,
-  Invoice_GoButton_Post_API,
-  Invoice_Post_API,
-  Make_IB_Invoice_API
+  Invoice_1_GoButton_API,
+  Invoice_1_Save_API,
+  Make_IB_Invoice_API,
+  Invoice_1_Delete_API,
+  Invoice_1_Edit_API_Singel_Get,
+  Invoice_1_Get_Filter_API,
+  Invoice_2_GoButton_API
 } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import {
@@ -18,14 +19,13 @@ import {
   editInvoiceListSuccess,
   getIssueListPageSuccess,
   GoButton_For_Invoice_Add_Success,
-  GoButton_post_For_Invoice_Success,
   postInvoiceMasterSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
   EDIT_INVOICE_LIST, GET_INVOICE_LIST_PAGE,
   GO_BUTTON_FOR_INVOICE_ADD,
-  GO_BUTTON_POST_FOR_INVOICE, POST_INVOICE_MASTER
+   POST_INVOICE_MASTER
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 
@@ -37,7 +37,7 @@ import *as url from "../../../routes/route_url"
 function* save_Invoice_Genfun({ data, saveBtnid }) {
 
   try {
-    const response = yield call(Invoice_Post_API, data);
+    const response = yield call(Invoice_1_Save_API, data);
 
 
     saveDissable({ id: saveBtnid, state: false })
@@ -58,7 +58,7 @@ function* InvoiceListGenFunc({ filters }) {
 
   try {
 
-    const response = yield call(Invoice_Get_API, filters);
+    const response = yield call(Invoice_1_Get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
       i.InvoiceDate = i.InvoiceDate;
       var date = convertDatefunc(i.InvoiceDate)
@@ -80,7 +80,7 @@ function* InvoiceListGenFunc({ filters }) {
 function* editInvoiceListGenFunc({ id, pageMode }) {
 
   try {
-    let response = yield call(Invoice_Edit_API_Singel_Get, id);
+    let response = yield call(Invoice_1_Edit_API_Singel_Get, id);
     response.pageMode = pageMode
 
     yield put(editInvoiceListSuccess(response))
@@ -98,7 +98,7 @@ function* DeleteInvoiceGenFunc({ id }) {
 
 
   try {
-    const response = yield call(Invoice_Delete_API, id);
+    const response = yield call(Invoice_1_Delete_API, id);
 
     yield put(deleteInvoiceIdSuccess(response));
   } catch (error) {
@@ -174,12 +174,11 @@ function* gobutton_invoiceAdd_genFunc(action) {
   try {
     const { subPageMode, data, goBtnId } = action
     let response;
-debugger
     if (subPageMode === url.INVOICE_1) {
-      response = yield call(Invoice_GoButton_Post_API, data); // GO-Botton SO-invoice Add Page API
+      response = yield call(Invoice_1_GoButton_API, data); // GO-Botton SO-invoice Add Page API
     }
-    else if (subPageMode === url.INVOICE_1) {
-      response = yield call(Make_IB_Invoice_API, data); // GO-Botton IB-invoice Add Page API
+    else if (subPageMode === url.INVOICE_2) {
+      response = yield call(Invoice_2_GoButton_API, data); // GO-Botton IB-invoice Add Page API
     }
     yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
   } catch (e) {

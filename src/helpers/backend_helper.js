@@ -422,13 +422,19 @@ export const Production_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${i
 
 
 // Invoice
-export const Invoice_GoButton_Post_API = (data) => post(url.INVOICE_GO_BUTTON_POST_API, data)// go button postapi
-export const Invoice_Post_API = (data) => post(url.INVOICE_POST_API, data)//  postapi
-export const Invoice_Get_API = (data) => post(url.INVOICE_LIST_API, data)//  postapi
-export const Invoice_Delete_API = (id) => del(`${url.INVOICE_POST_API}/${id}`)// delete api
-export const Invoice_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_POST_API}/${id}`)// delete api
+export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi
+export const Invoice_1_Save_API = (data) => post(url.INVOICE_1_SAVE, data)//  postapi
+export const Invoice_1_Get_Filter_API = (data) => post(url.INVOICE_1_lIST_FILTER, data)//  postapi
+export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)// delete api
+export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
 
+// Invoice
+export const Invoice_2_GoButton_API = (data) => post(url.INVOICE_2_ADD_PAGE_GO_BTN, data)// go button postapi
+export const Invoice_2_Save_API = (data) => post(url.INVOICE_2_SAVE, data)//  postapi
+export const Invoice_2_Get_Filter_API = (data) => post(url.INVOICE_2_lIST_FILTER, data)//  postapi
+export const Invoice_2_Delete_API = (id) => del(`${url.INVOICE_2_SAVE}/${id}`)// delete api
+export const Invoice_2_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_2_SAVE}/${id}`)// delete api
 //************************************Inter Branch ************************************/
 
 
@@ -448,10 +454,10 @@ export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)//
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
 
 // IB Invoice
-export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
-export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
-export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
-export const Post_IB_Invoice_API = (data) => post(url.POST_IB_INVOICE, data)// Make IBInvoice api
+// export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
+// export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
+// export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
+// export const Post_IB_Invoice_API = (data) => post(url.INVOICE_2_SAVE, data)// Make IBInvoice api
 
 export {
   getLoggedInUser,

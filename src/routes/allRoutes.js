@@ -114,7 +114,7 @@ import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
 
 import IB_Invoice from "../pages/Inter Branch/IB_Invoice/IB_Invoice";
-import IB_Invoice_List from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
+// import IB_Invoice_List from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
 
 const userRoutes = [
 
@@ -242,7 +242,7 @@ const userRoutes = [
 
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
-  { path: path.IB_INWARD_STP, component: IB_Invoice_List },
+  { path: path.IB_INWARD_STP, component: InvoiceList },
 
   { path: path.INVOICE_LIST_2, component: InvoiceList },
   { path: path.INVOICE_2, component: Invoice },
