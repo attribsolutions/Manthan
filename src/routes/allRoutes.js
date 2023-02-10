@@ -247,9 +247,9 @@ const userRoutes = [
   { path: path.INWARD_LIST, component: InwardList },
   { path: path.IB_INWARD_STP, component: IB_Invoice_List },
 
-  { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
-  { path: path.IB_INVOICE, component: IB_Invoice },
-  { path: path.IB_INVOICE_STP, component: IBOrderList },
+  { path: path.IB_INVOICE_LIST, component: InvoiceList },
+  { path: path.IB_INVOICE, component: Invoice },
+  { path: path.IB_INVOICE_STP, component: OrderList },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

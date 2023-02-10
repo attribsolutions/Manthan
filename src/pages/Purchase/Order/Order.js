@@ -48,20 +48,14 @@ const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname
-    console.log("subPageMode", subPageMode)
-    const fileds = {
-        id: "",
-        Name: "",
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const subPageMode = history.location.pathname;
+
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
     const [description, setDescription] = useState('')
-    //Access redux store Data /  'save_ModuleSuccess' action data
-
-    // const [podate, setpoDate] = useState(currentDate);
+ 
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
@@ -77,6 +71,8 @@ const Order = (props) => {
     const [isOpen_TermsModal, setisOpen_TermsModal] = useState(false)
     const [orderItemTable, setorderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
+
+
 
     const {
         goBtnOrderdata,
@@ -221,7 +217,6 @@ const Order = (props) => {
       useEffect( async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
@@ -265,7 +260,6 @@ const Order = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: ORDER_lIST,
             })
