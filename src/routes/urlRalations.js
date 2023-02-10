@@ -100,8 +100,11 @@ export const GeneralMaster = url.GENERAL_LIST
 
 //******************************* Purchase Module ************************************//
 
-export const OrderList = url.ORDER
-export const Order = url.ORDER_lIST
+export const OrderList_1 = url.ORDER_1
+export const Order_1 = url.ORDER_lIST_1
+
+export const OrderList_2 = url.ORDER_2
+export const Order_2 = url.ORDER_lIST_2
 
 export const GRNList = url.GRN_STP
 export const GRN = url.GRN_lIST
@@ -120,9 +123,6 @@ export const MaterialIssue_Add_Mode_2 = url.MATERIAL_ISSUE_LIST
 export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
-
-export const SaleOrderList_1 = url.SALE_ORDER_1
-export const SaleOrder_1 = url.SALE_ORDER_lIST_1
 
 export const SaleOrder_2 = url.SALE_ORDER_2
 export const SaleOrderList_2 = url.SALE_ORDER_lIST_2

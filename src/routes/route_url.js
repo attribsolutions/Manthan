@@ -91,8 +91,11 @@ export const GENERAL ="/GeneralMaster"
 export const GENERAL_LIST ="/GeneralList"
 
 //******************************* Purchase Module ************************************//
-export const ORDER = "/Order"
-export const ORDER_lIST = "/OrderList"
+export const ORDER_1 = "/Order_1"
+export const ORDER_lIST_1 = "/OrderList_1"
+
+export const ORDER_2 = "/Order_2"
+export const ORDER_lIST_2 = "/OrderList_2"
 
 export const GRN_STP = "/GRN_STP"
 export const GRN_lIST = "/GRNList"
@@ -112,8 +115,6 @@ export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
 export const PRODUCTION_STP = "/Production_STP"
 
-export const SALE_ORDER_1 = "/SaleOrder_1"
-export const SALE_ORDER_lIST_1 = "/SaleOrderList_1"
 
 export const SALE_ORDER_2 = "/SaleOrder_2"
 export const SALE_ORDER_lIST_2 ="/SaleOrderList_2"
