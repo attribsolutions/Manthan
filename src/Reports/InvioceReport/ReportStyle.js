@@ -17,10 +17,10 @@ export const pageHeder = (doc, data) => {
     debugger
     if (data.ReportType===invoice) {
         doc.setFontSize(15)
-        doc.text('Tax Invoice', 200, 40,)  
+        doc.text('TAX INVOICE', 200, 40,)  
     }else{
         doc.setFontSize(15)
-        doc.text('Inter Branch Invoice', 200, 40,) 
+        doc.text('INTER BRANCH INVOICE', 200, 40,) 
 
     }
 
@@ -281,18 +281,22 @@ export const tableBody = (doc, data) => {
 //     })
     var options = {
         didParseCell: (data1) => {
-            if (data1.row.cells[5].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 3
+            if (data1.row.cells[5].raw === "isaddition")
+             {
+                data1.row.cells[2].colSpan = 2
+                data1.row.cells[0].colSpan = 2
                 data1.row.cells[4].colSpan = 2
                 data1.row.cells[6].colSpan = 2
                 
                 data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[2].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
 
-                data1.row.cells[0.].styles.fontStyle = "bold"
-                data1.row.cells[4.].styles.fontStyle = "bold"
-                data1.row.cells[6.].styles.fontStyle = "bold"
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
             }
         },
         margin: {
@@ -321,14 +325,14 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 140,
+                columnWidth: 120,
             },
             1: {
-                columnWidth: 40,
+                columnWidth: 70,
                 halign: 'right',
             },
             2: {
-                columnWidth: 50,
+                columnWidth: 40,
                 halign: 'right',
             },
             3: {
@@ -340,6 +344,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             5: {
+                columnWidth: 50,
                 halign: 'right',
             },
             6: {
@@ -347,6 +352,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             7: {
+                columnWidth: 50,
                 halign: 'right',
             },
             8: {
@@ -512,17 +518,17 @@ export const pageFooter = (doc, data) => {
 
     doc.setFontSize(8)
 
-    doc.text(`CGST:`, 434, 690,)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 690, 'right')
+    doc.text(`CGST:`, 434, 689,)
+    doc.text(`${totalCGST.toFixed(2)}`, 560, 689, 'right')
 
     doc.text(`SGST:`, 434, 700,)
     doc.text(`${totalSGST.toFixed(2)}`, 560, 700, 'right')
 
-    doc.text(`TotalGST:`, 434, 710,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 710, 'right')
+    doc.text(`TotalGST:`, 434, 712,)
+    doc.text(` ${TotalGST.toFixed(2)}`, 560, 712, 'right')
 
-    doc.text(`BasicAmount:`, 434, 720,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 720, 'right')
+    doc.text(`BasicAmount:`, 434, 724,)
+    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 724, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(12)
