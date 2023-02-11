@@ -63,12 +63,7 @@ function* OrderType_GenFunc() {
   try {
     const response = yield call(get_OrderType_Api);
     yield put(getOrderTypeSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error for Order Type API ",
-    }));
-  }
+  } catch (error) { }
 }
 
 function* getVendorGenFunc() {
@@ -76,12 +71,7 @@ function* getVendorGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });
     yield put(GetVenderSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for Vendor ",
-    }));
-  }
+  } catch (error) { }
 }
 
 function* getSupplierGenFunc() {
@@ -89,26 +79,16 @@ function* getSupplierGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
     yield put(getSupplierSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for Supplier ",
-    }));
-  }
+  } catch (error) { }
 }
 
 function* getCustomerGenFunc() {
-
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     yield put(GetCustomerSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for Customer ",
-    }));
-  }
+  } catch (error) { }
 }
+
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
   debugger
   let response;
@@ -119,21 +99,16 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if (subPageMode === url.ORDER_2) {
       response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });//supplier mode 2
     }
-    // else if (subPageMode === url.SALE_ORDER_2) {
-    //   response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });
-    // }
-    else if (subPageMode === url.IB_INVOICE) {
-      response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
-    }
-    else if (subPageMode === url.INVOICE) {
+    else if (subPageMode === url.INVOICE_1) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
+    }
+    else if (subPageMode === url.INVOICE_2) {
+      response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
     };
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
-  catch (e) {
-
-  }
+  catch (e) { }
 }
 
 function* SupplierSaga() {

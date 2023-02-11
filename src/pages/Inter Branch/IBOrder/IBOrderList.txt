@@ -166,7 +166,7 @@ const IBOrderList = () => {
     const makeBtnFunc = (list = {}) => {
         const obj = { ...list[0] }
         history.push({
-            pathname: url.IB_INVOICE,
+            pathname: url.INVOICE_2,
             editValue: obj,
             pageMode: mode.mode2save
         })
