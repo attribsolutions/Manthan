@@ -209,8 +209,11 @@ const userRoutes = [
 
   //******************************* Purchase Module ************************************//
 
-  { path: path.ORDER, component: Order },
-  { path: path.ORDER_lIST, component: OrderList },
+  { path: path.ORDER_1, component: Order },
+  { path: path.ORDER_lIST_1, component: OrderList },
+
+  { path: path.ORDER_2, component: Order },
+  { path: path.ORDER_lIST_2, component: OrderList },
 
   { path: path.GRN_lIST, component: GRNList },
   { path: path.GRN_ADD, component: GRNAdd },
@@ -230,26 +233,24 @@ const userRoutes = [
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
 
-  { path: path.SALE_ORDER_1, component: Order },
-  { path: path.SALE_ORDER_lIST_1, component: OrderList },
 
   { path: path.SALE_ORDER_2, component: Order },
   { path: path.SALE_ORDER_lIST_2, component: OrderList },
-  
+
   { path: path.INVOICE, component: Invoice },
   { path: path.INVOICE_LIST, component: InvoiceList },
 
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: IBOrder },
   { path: path.IB_ORDER_LIST, component: IBOrderList },
-  
+
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
   { path: path.IB_INWARD_STP, component: IB_Invoice_List },
 
-  { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
-  { path: path.IB_INVOICE, component: IB_Invoice },
-  { path: path.IB_INVOICE_STP, component: IBOrderList },
+  { path: path.IB_INVOICE_LIST, component: InvoiceList },
+  { path: path.IB_INVOICE, component: Invoice },
+  { path: path.IB_INVOICE_STP, component: OrderList },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

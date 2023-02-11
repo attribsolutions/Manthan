@@ -29,7 +29,6 @@ import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../
 import { BreadcrumbShowCountlabel } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
-import { ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -37,7 +36,6 @@ import { createdBy, currentDate, saveDissable, userParty } from "../../../compon
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
-
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
@@ -48,20 +46,14 @@ const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname
-    console.log("subPageMode", subPageMode)
-    const fileds = {
-        id: "",
-        Name: "",
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const subPageMode = history.location.pathname;
+
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
     const [description, setDescription] = useState('')
-    //Access redux store Data /  'save_ModuleSuccess' action data
 
-    // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
@@ -90,8 +82,6 @@ const Order = (props) => {
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
-        // vender: state.SupplierReducer.vender,
-
         supplierAddress: state.SupplierReducer.supplierAddress,
         orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
@@ -218,10 +208,9 @@ const Order = (props) => {
         }
     }, [orderType])
 
-      useEffect( async () => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
@@ -229,18 +218,18 @@ const Order = (props) => {
             //     Type: 1,
             //     Status: true,
             //     Message: postMsg.Message,
-            //     RedirectPath: ORDER_lIST,
+            //     RedirectPath: ORDER_lIST_1,
             // }))
-            
-             const a =await CustomAlert({
+
+            const a = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: ORDER_lIST,
+                RedirectPath: url.ORDER_lIST_1,
                 // AfterResponseAction:
             })
-            if(a){
+            if (a) {
                 history.push({
-                    pathname: ORDER_lIST,
+                    pathname: url.ORDER_lIST_1,
                     // state: history.location.state
                 });
             }
@@ -265,9 +254,8 @@ const Order = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
-                pathname: ORDER_lIST,
+                pathname: url.ORDER_lIST_1,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
@@ -549,7 +537,7 @@ const Order = (props) => {
         const isConfirmed = await CustomAlert({
             Type: 7,
             Message: msg,
-            RedirectPath: ORDER_lIST,
+            RedirectPath: url.ORDER_lIST_1,
         });
         if (isConfirmed) {
             dispatch(goButtonForOrderAddSuccess([]))
@@ -839,7 +827,7 @@ const Order = (props) => {
                             </div >
                         </div>
 
-                        {subPageMode === url.ORDER ? <div>
+                        {subPageMode === url.ORDER_1 ? <div>
                             <div className="row  ">                                       {/*  Billing Address   and Shipping Address*/}
 
                                 <div className="col col-6">{/* Billing Address */}
@@ -1029,7 +1017,7 @@ const Order = (props) => {
                         dropMode={mode.dropdownAdd}
                         editValue={{ SupplierName: supplierSelect }}
                         masterPath={url.PARTYITEM}
-                        redirectPath={url.ORDER}
+                        redirectPath={url.ORDER_1}
                         isOpenModal={Open_TermsModal_func}
                         pageMode={pageMode}
                     />

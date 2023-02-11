@@ -34,8 +34,8 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
-import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { editInvoiceListSuccess, GoButton_For_Invoice_Add, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
@@ -44,9 +44,11 @@ import { Data } from "./demodata";
 const Invoice = (props) => {
 
     const dispatch = useDispatch();
-    const history = useHistory()
-    const goBtnId = `ADDGoBtn${pageId.INVOICE}`
-    const saveBtnid = `saveBtn${pageId.INVOICE}`
+    const history = useHistory();
+    const subPageMode = history.location.pathname
+
+    const goBtnId = `ADDGoBtn${subPageMode}`
+    const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
         // id: "",
@@ -67,14 +69,16 @@ const Invoice = (props) => {
         pageField,
         userAccess,
         customer,
-        GoButton = ''
+        GoButton = '',
+        vendorSupplierCustomer
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.SupplierReducer.customer,
-        GoButton: state.InvoiceReducer.GoButton
+        GoButton: state.InvoiceReducer.gobutton_Add,
+        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
     }));
 
     const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
@@ -89,6 +93,8 @@ const Invoice = (props) => {
 
     useEffect(() => {
         const page_Id = pageId.INVOICE
+        // dispatch(GetCustomer())
+        dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -238,7 +244,7 @@ const Invoice = (props) => {
         showAllStockOnclick(showAllStockState)
     }, [showAllStockState]);
 
-    const CustomerDropdown_Options = customer.map((index) => ({
+    const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
         label: index.Name,
 
@@ -678,6 +684,8 @@ const Invoice = (props) => {
         // }catch(e){}
         // if (formValid(state, setState)) {
         // debugger
+    
+
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
             Customer: values.Customer.value,
@@ -685,7 +693,7 @@ const Invoice = (props) => {
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButton_post_For_Invoice(jsonBody, goBtnId));
+        dispatch(GoButton_For_Invoice_Add(subPageMode, jsonBody, goBtnId));
 
         // }
     };
@@ -743,11 +751,11 @@ const Invoice = (props) => {
                         BatchID: ele.id,
                         BaseUnitQuantity: ele.BaseUnitQuantity,
                         LiveBatch: ele.LiveBatche,
-                        MRP: null,
+                        MRP: ele.LiveBatcheMRPID,
                         Rate: ele.Rate,
                         BasicAmount: basicAmt.toFixed(2),
                         GSTAmount: cgstAmt.toFixed(2),
-                        GST: index.GST,
+                        GST: ele.LiveBatcheGSTID,
                         CGST: (cgstAmt / 2).toFixed(2),
                         SGST: (cgstAmt / 2).toFixed(2),
                         IGST: 0,

@@ -4,15 +4,13 @@ import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import {
-    editOrderId,
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
-import { GetCustomer, getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetCustomer} from "../../../store/CommonAPI/SupplierRedux/actions";
 import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -31,8 +29,9 @@ const InvoiceList = () => {
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.ORDER_lIST)
+    const [pageMode, setpageMode] = useState(url.ORDER_lIST_1)
     const [userAccState, setUserAccState] = useState('');
+
     // const [fromdate, setfromdate] = useState(currentDate);
     // const [todate, settodate] = useState(currentDate);
     // const [customerSelect, setcustomerSelect] = useState({ value: '', label: "All" });
@@ -52,6 +51,7 @@ const InvoiceList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+
     const { userAccess, pageField, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 

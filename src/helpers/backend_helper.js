@@ -437,7 +437,7 @@ export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FO
 export const IBOrderPage_Post_API = (data) => post(url.POST_API_FOR_IBORDER, data)//post api
 export const IBOrderList_get_Filter_API = (filters) => post(url.IBORDER_LiST_BY_FILTERS, filters)//list page
 
-export const Division = (data) => post(url.DIVISION_DROPDOWN, data)//dropdown api
+export const IB_Division_DROP_API = (data) => post(url.IB_DIVISION_DROPDOWN, data)//dropdown api
 export const IBOrderPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//edit
 export const IBOrderPage_Delete_API = (id) => del(`${url.POST_API_FOR_IBORDER}/${id}`)//delete
 export const IBOrderPage_Update_API = (data, id) => put(`${url.POST_API_FOR_IBORDER}/${id}`, data)//update

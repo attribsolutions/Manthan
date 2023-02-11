@@ -9,7 +9,7 @@ export default function OrderPageTermsTable(props,) {
 
     const location = useLocation();
     const { tableData = [] } = props;
-    const showCondition = ((location.pathname === url.ORDER) && (tableData.length > 0))
+    const showCondition = ((location.pathname === url.ORDER_1) && (tableData.length > 0))
 
     const { tableList, setfunc, privious = [] } = props;
 
