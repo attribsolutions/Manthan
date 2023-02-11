@@ -12,7 +12,7 @@ margin-bottom: -14px !important;
 
 }
 .custom_scroll_div{ 
-  margin-bottom: -9%;
+  margin-bottom: -7%;
     overflow-x: scroll;
     max-height: 400px;
     overflow-y: auto;
@@ -22,7 +22,19 @@ margin-bottom: -14px !important;
 
 .pagescroll{
     overflow-x: hidden !important ;
-}    
+}   
+.thsticky {
+ 
+    position: sticky !important;
+    left: 0 !important;
+    background-color: white !important;
+  
+}
+.colorhead{
+  background-color: #e9e9ef !important;
+  
+ 
+}
     
 
 
