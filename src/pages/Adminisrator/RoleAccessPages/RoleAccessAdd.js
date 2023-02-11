@@ -673,7 +673,7 @@ const RoleAccessAdd = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className="row">
                                                         <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                        <Col sm={8}style={{ zIndex: "" }}>
+                                                        <Col sm={8}style={{ zIndex: "2" }}>
                                                             <Select
                                                                 value={module_DropdownSelect}
                                                                 placeholder="select.."
@@ -688,7 +688,7 @@ const RoleAccessAdd = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className=" row ">
                                                         <Label className="col-sm-3 p-2">Page</Label>
-                                                        <Col sm={8} >
+                                                        <Col sm={8} style={{zIndex:"2",}}>
                                                             <Select
                                                                 value={page_DropdownSelect}
                                                                 placeholder="select.."
@@ -721,7 +721,7 @@ const RoleAccessAdd = (props) => {
                                                     >
                                                         <Table className="table table-bordered thead mt-3">
                                                             <thead >
-                                                                <tr >
+                                                                <tr style={{zIndex:"1",}}>
                                                                     {tableHederList.map((indx) => {
                                                                         if (indx.text === "IsShowOnMenu") {
                                                                             return (
@@ -739,12 +739,14 @@ const RoleAccessAdd = (props) => {
                                                                         else if ((indx.text === "PageName")) {
 
                                                                             return (
-                                                                                <th rowSpan={2}
+                                                                                <th className="thsticky colorhead"  rowSpan={2}
                                                                                     style={{
+                                                                                        
                                                                                         textAlign: "center",
                                                                                         verticalAlign: "middle",
 
-                                                                                    }}>
+                                                                                    }} >
+
                                                                                     {indx.text}
                                                                                 </th>
                                                                             )
@@ -782,13 +784,13 @@ const RoleAccessAdd = (props) => {
                                                                                     value={indx.RelatedPageID}
                                                                                 />
                                                                             </td>
-                                                                            <td>
-                                                                                <div className="row" >
-                                                                                    <div className="text-left col"style={{zIndex:"-1"}}>
+                                                                            <td className="thsticky" style={{zIndex:"0",}}>
+                                                                                <div className="row ">
+                                                                                    <div className="text-left col">
                                                                                         {indx.PageName}
                                                                                     </div>
 
-                                                                                    <div className="text-right col col-3" style={{zIndex:"-1"}}>
+                                                                                    <div className="text-right col col-3" style={{zIndex:""}}>
                                                                                         <Input
                                                                                             type="hidden"
                                                                                             id={"PageID" + key}
