@@ -217,6 +217,8 @@ export const AddPageHandlerForRoleAccessList_Api = (id1) => get(`${url.ADD_PAGE_
 export const PostMethod_HandlerForRoleAccessList_Api = (data) => post(url.ROLE_ACCESS, data) //post api role Access List 
 export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
 export const Post_CopyRoleAccess_for_RoleAccess_Api = (data) => post(url.POST_COPY_ROLE_ACCESS_API, data)//POST COPY  RoleAccess API
+export const Delete_RoleAccess_Api = (role,division,company) => del(`${url.DELETE_ROLE_ACCESS_API}/${role}/${division}/${company}`)//POST COPY  RoleAccess API
+
 
 // Employee Type API
 export const Employee_Type_API = (data) => post(url.EMPLOYEE_TYPE_API, data)// post api
