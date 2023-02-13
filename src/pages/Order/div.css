@@ -115,12 +115,7 @@ thead tr {
   /* color: whitesmoke */
 }
 
-.custom_scroll_div{   
-  /* width: 300px; */
-  height: 650px;
-  overflow-y: scroll;
-  scrollbar-color: rebeccapurple green;
-  scrollbar-width: thin; }
+
 
   .ctablehead {
     position: sticky;
