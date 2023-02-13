@@ -33,12 +33,18 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { editInvoiceListSuccess, GoButton_For_Invoice_Add, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import {
+    editInvoiceListSuccess,
+    GoButtonForinvoiceAdd,
+    GoButtonForinvoiceAddSuccess,
+    invoiceSaveAction,
+    invoiceSaveActionSuccess
+} from "../../../store/Sales/Invoice/action";
 import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 import "./css.css"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Invoice = (props) => {
 
@@ -61,13 +67,13 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
+    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
         pageField,
         userAccess,
-        customer,
         GoButton = '',
         vendorSupplierCustomer
     } = useSelector((state) => ({
@@ -93,10 +99,9 @@ const Invoice = (props) => {
     useEffect(() => {
 
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        dispatch(GoButtonForinvoiceAddSuccess([]))
 
     }, []);
 
@@ -149,7 +154,7 @@ const Invoice = (props) => {
                     Party: userParty(),
                     OrderIDs: ""
                 });
-                dispatch(GoButton_post_For_Invoice(jsonBody));
+                dispatch(GoButtonForinvoiceAdd(jsonBody));
                 dispatch(editInvoiceListSuccess({ Status: false }))
 
             }
@@ -159,47 +164,28 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postInvoiceMasterSuccess({ Status: false }))
-            dispatch(GoButton_post_For_Invoice_Success([]))
-            // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-            // dispatch(postBOMSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
+            dispatch(invoiceSaveActionSuccess({ Status: false }))
+            dispatch(GoButtonForinvoiceAddSuccess([]))
 
-            // dispatch(AlertState({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: "Item is out of stock",
-            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
-            // }))
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                CustomAlert({
                     Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
+                    Message: JSON.stringify(postMsg.Message),
+                })
             }
             else {
-                dispatch(AlertState({
+                CustomAlert({
                     Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
+                    Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
-                }))
+                })
             }
         }
         else if (postMsg.Status === true) {
-
-            dispatch(postInvoiceMasterSuccess({ Status: false }))
-            dispatch(GoButton_post_For_Invoice_Success([]))
-
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -231,12 +217,6 @@ const Invoice = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField]);
 
     useEffect(() => {
         showAllStockOnclick(showAllStockState)
@@ -539,7 +519,7 @@ const Invoice = (props) => {
     }
 
     function InvoiceDateOnchange(y, v, e) {
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        dispatch(GoButtonForinvoiceAddSuccess([]))
         onChangeDate({ e, v, state, setState })
     };
 
@@ -551,7 +531,7 @@ const Invoice = (props) => {
             v1.hasValid.Customer.valid = true
             return v1
         })
-        // dispatch(GoButton_post_For_Invoice_Success([]))
+        // dispatch(GoButtonForinvoiceAddSuccess([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -691,7 +671,7 @@ const Invoice = (props) => {
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButton_For_Invoice_Add(subPageMode, jsonBody, goBtnId));
+        dispatch(GoButtonForinvoiceAdd(subPageMode, jsonBody, goBtnId));
 
         // }
     };
@@ -802,9 +782,8 @@ const Invoice = (props) => {
         }
 
         else {
-
             // saveDissable({ id: saveBtnid, state: true })
-            dispatch(postInvoiceMaster(jsonBody, saveBtnid));
+            dispatch(invoiceSaveAction(subPageMode, jsonBody, saveBtnid));
         }
 
     }
@@ -873,7 +852,7 @@ const Invoice = (props) => {
                                         (OrderItemDetails.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :
-                                            <Change_Button onClick={(e) => dispatch(GoButton_post_For_Invoice_Success([]))} />
+                                            <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
                                         : null
                                     }
                                 </Col>

@@ -1,4 +1,4 @@
-import { actionChannel, call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import {
   convertDatefunc,
   GoBtnDissable,
@@ -7,65 +7,61 @@ import {
 import {
   Invoice_1_GoButton_API,
   Invoice_1_Save_API,
-  Make_IB_Invoice_API,
   Invoice_1_Delete_API,
   Invoice_1_Edit_API_Singel_Get,
   Invoice_1_Get_Filter_API,
-  Invoice_2_GoButton_API
+  Invoice_2_GoButton_API,
+  Invoice_2_Save_API,
+  Invoice_2_Get_Filter_API
 } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import {
   deleteInvoiceIdSuccess,
   editInvoiceListSuccess,
-  getIssueListPageSuccess,
-  GoButton_For_Invoice_Add_Success,
-  postInvoiceMasterSuccess
+  invoiceListGoBtnfilterSucccess,
+  GoButtonForinvoiceAddSuccess,
+  invoiceSaveActionSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
-  EDIT_INVOICE_LIST, GET_INVOICE_LIST_PAGE,
+  EDIT_INVOICE_LIST, INVOICE_LIST_GO_BUTTON_FILTER,
   GO_BUTTON_FOR_INVOICE_ADD,
-   POST_INVOICE_MASTER
+  INVOICE_SAVE_ADD_PAGE_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 
 
-
-
-
 //post api for Invoice Master
-function* save_Invoice_Genfun({ data, saveBtnid }) {
+function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
 
   try {
-    const response = yield call(Invoice_1_Save_API, data);
 
-
+    if (subPageMode === url.INVOICE_1) {
+      let response = yield call(Invoice_1_Save_API, data);
+      yield put(invoiceSaveActionSuccess(response))
+    } if (subPageMode === url.INVOICE_2) {
+      let response = yield call(Invoice_2_Save_API, data);
+      yield put(invoiceSaveActionSuccess(response))
+    }
     saveDissable({ id: saveBtnid, state: false })
-    yield put(postInvoiceMasterSuccess(response));
+
   } catch (error) {
     saveDissable({ id: saveBtnid, state: false })
-
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message in Invoice",
-    }));
   }
 }
 
 // Invoice List
-function* InvoiceListGenFunc({ filters }) {
-
-
+function* InvoiceListGenFunc({ subPageMode, filters }) {
+  debugger
   try {
-
-    const response = yield call(Invoice_1_Get_Filter_API, filters);
+    const response = yield call(Invoice_2_Get_Filter_API, filters);
     const newList = yield response.Data.map((i) => {
       i.InvoiceDate = i.InvoiceDate;
       var date = convertDatefunc(i.InvoiceDate)
       i.InvoiceDate = (date)
       return i
     })
-    yield put(getIssueListPageSuccess(newList));
+    yield put(invoiceListGoBtnfilterSucccess(newList));
 
   } catch (error) {
 
@@ -162,7 +158,7 @@ function* invoice_GoButton_dataConversion_Func(action) {
 
     response.Data.OrderItemDetails = convResp
     yield GoBtnDissable({ id: goBtnId, state: false })
-    yield put(GoButton_For_Invoice_Add_Success(response.Data));
+    yield put(GoButtonForinvoiceAddSuccess(response.Data));
 
   } catch (error) {
 
@@ -187,8 +183,8 @@ function* gobutton_invoiceAdd_genFunc(action) {
 }
 function* InvoiceSaga() {
   // yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
-  yield takeEvery(POST_INVOICE_MASTER, save_Invoice_Genfun)
-  yield takeEvery(GET_INVOICE_LIST_PAGE, InvoiceListGenFunc)
+  yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
+  yield takeEvery(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
   yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
   yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
   yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)

@@ -6,12 +6,20 @@ import Flatpickr from "react-flatpickr";
 import {
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import {
+    BreadcrumbShowCountlabel,
+    commonPageFieldList,
+    commonPageFieldListSuccess,
+} from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { GetCustomer} from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import {
+    currentDate,
+    excelDownCommonFunc,
+    userParty
+} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -21,14 +29,19 @@ import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
 import Invoice from "./Invoice";
-import { deleteInvoiceId, deleteInvoiceIdSuccess, editInvoiceList, getIssueListPage } from "../../../store/Sales/Invoice/action";
+import {
+    deleteInvoiceId,
+    deleteInvoiceIdSuccess,
+    editInvoiceList,
+    invoiceListGoBtnfilter
+} from "../../../store/Sales/Invoice/action";
 
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const subPageMode = history.location.pathname;
 
-    const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(url.ORDER_lIST_1)
     const [userAccState, setUserAccState] = useState('');
 
@@ -55,10 +68,10 @@ const InvoiceList = () => {
     const { userAccess, pageField, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 
-    const page_Id = pageId.INVOICE_LIST_1
+    const page_Id = pageId.INVOICE_LIST_2
 
     const action = {
-        getList: getIssueListPage,
+        getList: invoiceListGoBtnfilter,
         deleteId: deleteInvoiceId,
         postSucc: postMessage,
         editId: editInvoiceList,
@@ -68,7 +81,7 @@ const InvoiceList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
+        setpageMode(subPageMode)
         // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -94,6 +107,7 @@ const InvoiceList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
+
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
@@ -118,7 +132,7 @@ const InvoiceList = () => {
             Party: userParty(),
         });
 
-        dispatch(getIssueListPage(jsonBody));
+        dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
     }
 
     function fromdateOnchange(e, date) {
