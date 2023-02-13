@@ -23,13 +23,13 @@ import {
 } from "./actionTypes";
 
 function* Get_Roles_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Role_Master_Get_API);
     yield put(getRoleSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -38,14 +38,14 @@ function* Get_Roles_GenratorFunction() {
 }
 
 function* Submit_Roles_GenratorFunction({ Data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Role_Master_Post_API, Data);
-    yield put(SpinnerState(false))
+   
     yield put(PostSuccess(response));
   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -55,12 +55,12 @@ function* Submit_Roles_GenratorFunction({ Data }) {
 
 function* Delete_Roles_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(Role_Master_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -85,13 +85,13 @@ function* Edit_Roles_GenratorFunction({ id, pageMode }) {
 
 function* Update_Roles_GenratorFunction({ data,ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(Role_Master_Update_API, data,ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

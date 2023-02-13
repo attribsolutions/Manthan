@@ -84,6 +84,9 @@ export const GET_COMPANY_BY_DIVISIONTYPES_ID = "/GetCompanyByDivisionTypeID"
 export const PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE = "/RoleAccessGetPages"
 export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE = '/RoleAccessNewUpdated'
 export const POST_COPY_ROLE_ACCESS_API = '/CopyRoleAccessabc'
+export const DELETE_ROLE_ACCESS_API = '/RoleAccessNewUpdated'
+
+
 
 export const GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE = '/RoleAccessNewUpdated'
 export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE = '/RoleAccessAddPage'
@@ -207,26 +210,27 @@ export const PRODUCTION_LIST_FILTER = '/ProductionFilter'
 export const PRODUCTION_MAKE_API = '/MaterialIssueforProduction'
 export const PRODUCTION_UNIT_DROPDOWN_API = '/MCUnitDetails'
 
-// Invoice
-export const INVOICE_GO_BUTTON_POST_API = '/GetOrderDetails'
-export const INVOICE_POST_API = '/Invoice'
-export const INVOICE_LIST_API = '/InvoicesFilter'//Invoice List
 
 //********************************** Inter Branch  **************************************/
 // Inter Branch Order
 export const GO_BUTTON_POST_API_FOR_IBORDER = '/InterBranchesItems'
-export const DIVISION_DROPDOWN = '/InterBranches'
+export const IB_DIVISION_DROPDOWN = '/InterBranches'
 export const POST_API_FOR_IBORDER = '/InterBranchesOrder'
 export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 
 // Inward
-export const POST_API_FOR_INWARD = '/InterBranchInward'//Post Api
-export const INWARD_LIST_API = '/InterBranchInwardFilter'//List Api
+export const POST_API_FOR_INWARD = '/InterBranchInward'// Inward  addpage save Api
+export const INWARD_LIST_API = '/InterBranchInwardFilter'//InwardList filter Api
+export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
 
-//  Inter Branch Invoice
-export const IB_InvoiceList_API = '/BranchInvoiceFilter'//List Api
-export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward Button Api 
-export const POST_API_FOR_IB_INVOICE = '/BranchInvoice'//Post Api
-export const MAKE_IB_INVOICE = '/InterBrancheOrderDetails'//Post Api
-export const POST_IB_INVOICE = '/BranchInvoice'//Post Api
+
+
+export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
+export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
+export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 
+
+//   Invoice_2==Inter Branch Invoice
+export const INVOICE_2_lIST_FILTER = '/BranchInvoiceFilter'//invoice_2_List filter Api
+export const INVOICE_2_SAVE = '/BranchInvoice'// invoice_2  addpage save Api
+export const INVOICE_2_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// invoice_2 addpage GoButton Api 
 

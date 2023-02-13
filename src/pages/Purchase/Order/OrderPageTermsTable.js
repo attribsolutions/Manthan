@@ -1,14 +1,23 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import Select from "react-select";
 import { Table } from 'reactstrap';
+import * as url from "../../../routes/route_url"
 
-export default function OrderPageTermsTable(props) {
+export default function OrderPageTermsTable(props,) {
+
+    const location = useLocation();
+    const { tableData = [] } = props;
+    const showCondition = ((location.pathname === url.ORDER_1) && (tableData.length > 0))
+
     const { tableList, setfunc, privious = [] } = props;
-    
+
     const { termsAndConditions = [] } = useSelector((state) => ({
         termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditionsList,
     }));
+
+    if (!showCondition) { return <></> }
 
     const onChange = (e) => {
         const find = tableList.find((i) => {
@@ -50,13 +59,13 @@ export default function OrderPageTermsTable(props) {
             })
         }
     }
-
     const table = []
     tableList.map((i, k) => {
         if (i.IsDeleted === 0) {
             table.push(i)
         }
     })
+
 
     return (
         <div style={{ minHeight: "400px", marginTop: "-20px" }}>

@@ -18,13 +18,13 @@ import { DELETE_SUBGROUP_LIST_ID, EDIT_SUBGROUPMASTER_ID, GET_SUBGROUP_LIST, POS
 
 // post api
 function* Post_Method_ForSubGroupMaster_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_SubGroupList_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postSubGroupSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -35,14 +35,14 @@ function* Post_Method_ForSubGroupMaster_GenFun({ data }) {
 
 // get api
 function* Get_SubGroup_List_genFunc() {
-  yield put(SpinnerState(true))
+
   try {
     
     const response = yield call(get_SubGroup_List_Api);
     yield put(getSubGroupListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -53,12 +53,12 @@ function* Get_SubGroup_List_genFunc() {
 // delete api 
 function* Delete_SubGroupList_ID_GenratorFunction({id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(del_SubGroup_List_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteSubGrouplistSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -85,13 +85,13 @@ function* Edit_SubGrouplist_ID_GenratorFunction({ id,pageMode }) {
 // update api
 function* Update_SubGrouplist_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_SubGroup_List_Api,updateData,ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateSubgroupIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

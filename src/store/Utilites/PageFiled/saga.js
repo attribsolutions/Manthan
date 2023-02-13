@@ -11,29 +11,29 @@ import { hasError500 } from "../CommonError/actions";
 
 
 function* commonPageFiled_GenFunc({ pageId }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(commonPageFiled_API, pageId);
 
     yield put(commonPageFieldSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(hasError500(`PageMaster API Error : Page-Id=${pageId}`))
 
   }
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(commonPageFiled_API, pageId);
     yield put(commonPageFieldListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
 
     yield put(hasError500(`PageMaster API Error : Page-Id=${pageId}`))
-    yield put(SpinnerState(false))
+   
   }
 }
 

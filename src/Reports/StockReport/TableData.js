@@ -25,7 +25,7 @@ export const Rows = (data) => {
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
-    let Gst = 0
+    let Item = 0
     let totalBasicAmount = 0
     let totalCGst = 0
     let totalSGst = 0
@@ -59,28 +59,45 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
-                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+                `Raw material`,
                 " ",
-                `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                ``,
                 "",
-                `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+                ``,
                 "isaddition",
-                `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+                ``,
                 "",
-                `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+                ``,
+            ];
+        };
+        function materialRow() {
+            return [
+                `Packing Roll`,
+                " ",
+                ``,
+                "",
+                ``,
+                "packing",
+                ``,
+                "",
+                ``,
             ];
         };
 
 
-        if (Gst === 0) { Gst = element.GSTPercentage };
+        if (Item === 0) { Item = element.Item };
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
-        if ((Gst === element.GSTPercentage)) {
+        if ((Item === element.Item)) {
             data["tableTot"] = totalLots()
+            returnArr.push(totalrow());
+            returnArr.push(materialRow());
+
+
             returnArr.push(tableitemRow);
         }
         else {
-            returnArr.push(totalrow());
+            // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
             totalBasicAmount = 0
             totalCGst = 0
@@ -89,7 +106,7 @@ export const Rows = (data) => {
             totalQuantity = 0
 
             data["tableTot"] = totalLots()
-            Gst = element.GSTPercentage;
+            Item = element.Item;
         }
         if (key === InvoiceItems.length - 1) {
             returnArr.push(totalrow());
@@ -106,10 +123,9 @@ export const ReportFotterColumns = [
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        // [, ,],
-        [`${data.CustomerName}`, ,`Current Time: ${data.Time}`],
-        [`maharashtra`, , `From Date:  ${data.InvoiceDate}`],
-        [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`],
+        [`${data.CustomerName}`, ,`From Date:  ${data.InvoiceDate}`,],
+        [`maharashtra`, , `To Date:      ${data.Todate}`],
+        // [``, ,],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
     return reportArray;

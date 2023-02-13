@@ -6,8 +6,10 @@ import MaterialReport from "./MaterialReport/Page";
 
 export const order1 = "order1"
 export const invoice = "invoice"
-export const Production1 = "Production1"
+export const Stock = "Stock"
 export const Materialreport1 = "Materialreport1"
+export const IBinvoice = "IBinvoice"
+
 
 const generateReport = (resp) => {
     switch (resp.ReportType) {
@@ -20,12 +22,16 @@ const generateReport = (resp) => {
             // ordeRreport(resp.Data)
             break;
 
-        case Production1:
+        case Stock:
             StockReport(resp.Data)
             break;
 
         case Materialreport1:
             MaterialReport(resp.Data)
+            break;
+        case IBinvoice:
+            InvioceReport(resp.Data)
+            // ordeRreport(resp.Data)
             break;
 
 

@@ -9,6 +9,8 @@ import {
   GET_VENDER_SUCCESS,
   GET_CUSTOMER,
   GET_CUSTOMER_SUCCESS,
+  GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS,
+  GET_VENDER_SUPPLIER_CUSTOMER,
 } from './actionType'
 
 
@@ -62,4 +64,15 @@ export const getOrderType = () => ({
 export const getOrderTypeSuccess = orderType => ({
   type: GET_ORDER_TYPE_SUCCESS,
   payload: orderType,
+})
+
+
+export const GetVenderSupplierCustomer = (subPageMode) => ({
+  type: GET_VENDER_SUPPLIER_CUSTOMER,
+  subPageMode,
+});
+
+export const GetVenderSupplierCustomerSuccess = orders => ({
+  type: GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS,
+  payload: orders,
 })

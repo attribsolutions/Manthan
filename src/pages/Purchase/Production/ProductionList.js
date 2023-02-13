@@ -78,7 +78,7 @@ const ProductionList = () => {
         }
     }, [userAccess])
     function downBtnFunc(row) {
-        var ReportType = report.Materialreport1;
+        var ReportType = report.Stock;   //Stock
         dispatch(getpdfReportdata(production_Edit_API,ReportType, row.id))
     }
 

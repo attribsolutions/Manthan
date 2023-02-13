@@ -103,21 +103,11 @@ import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_L
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
 import ProductionList from "../pages/Purchase/Production/ProductionList";
 
-import SaleOrder from "../pages/Purchase/SaleOrder/SaleOrder"
-import SaleOrderList from "../pages/Purchase/SaleOrder/SaleOrderList"
-
 import Invoice from "../pages/Sale/Invoice/Invoice";
 import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
-
-import IBOrder from "../pages/Inter Branch/IBOrder/IBOrder";
-import IBOrderList from "../pages/Inter Branch/IBOrder/IBOrderList"
-
 import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
-
-import IB_Invoice from "../pages/Inter Branch/IB_Invoice/IB_Invoice";
-import IB_Invoice_List from "../pages/Inter Branch/IB_Invoice/IB_Invoice_List";
 
 const userRoutes = [
 
@@ -212,12 +202,15 @@ const userRoutes = [
 
   //******************************* Purchase Module ************************************//
 
-  { path: path.ORDER, component: Order },
-  { path: path.ORDER_lIST, component: OrderList },
+  { path: path.ORDER_1, component: Order },
+  { path: path.ORDER_lIST_1, component: OrderList },
+
+  { path: path.ORDER_2, component: Order },
+  { path: path.ORDER_lIST_2, component: OrderList },
 
   { path: path.GRN_lIST, component: GRNList },
   { path: path.GRN_ADD, component: GRNAdd },
-  { path: path.GRN_ADD_Mode_2, component: OrderList },
+  { path: path.GRN_STP, component: OrderList },
 
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
@@ -227,28 +220,26 @@ const userRoutes = [
 
   { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
   { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
-  { path: path.MATERIAL_ISSUE_ADD_Mode_2, component: WorkOrderList },
+  { path: path.MATERIAL_ISSUE_STP, component: WorkOrderList },
 
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
   { path: path.PRODUCTION_LIST, component: ProductionList },
-  { path: path.PRODUCTION_ADD_Mode_2, component: MaterialIssueList },
+  { path: path.PRODUCTION_STP, component: MaterialIssueList },
 
-  { path: path.SALE_ORDER, component: SaleOrder },
-  { path: path.SALE_ORDER_lIST, component: SaleOrderList },
-
-  { path: path.INVOICE, component: Invoice },
-  { path: path.INVOICE_LIST, component: InvoiceList },
+  { path: path.INVOICE_1, component: Invoice },
+  { path: path.INVOICE_LIST_1, component: InvoiceList },
 
   //************************************** Inter Branch ********************************//
-  { path: path.IB_ORDER, component: IBOrder },
-  { path: path.IB_ORDER_LIST, component: IBOrderList },
-  
+  { path: path.ORDER_3, component: Order },
+  { path: path.ORDER_LIST_3, component: OrderList },
+
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
-  
-  { path: path.IB_INVOICE_LIST, component: IB_Invoice_List },
-  { path: path.IB_INVOICE, component: IB_Invoice },
-  { path: path.IB_INVOICE_MODE_2, component: IBOrderList },
+  { path: path.IB_INWARD_STP, component: InvoiceList },
+
+  { path: path.INVOICE_LIST_2, component: InvoiceList },
+  { path: path.INVOICE_2, component: Invoice },
+  { path: path.IB_INVOICE_STP, component: OrderList },
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

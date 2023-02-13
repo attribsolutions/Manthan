@@ -60,15 +60,15 @@ const OrderList = () => {
     const { fromdate = currentDate, todate = currentDate, venderSelect = { value: "", label: "All" } } = orderlistFilter;
     const { userAccess, pageField, GRNitem, vender, tableList } = reducers;
 
-    let page_Id = pageId.ORDER_lIST;
+    let page_Id = pageId.ORDER_lIST_1;
     let page_Mode = mode.defaultList;
-    let page_Url = url.ORDER_lIST;
+    let page_Url = url.ORDER_lIST_1;
     let make_BtnShow = false;
 
-    if (hasPagePath === url.GRN_ADD_Mode_2) {
-        page_Id = pageId.GRN_ADD_Mode_2;
+    if (hasPagePath === url.GRN_STP) {
+        page_Id = pageId.GRN_STP;
         page_Mode = mode.mode2save;
-        page_Url = url.GRN_ADD_Mode_2;
+        page_Url = url.GRN_STP;
         make_BtnShow = true
     }
 
@@ -84,7 +84,7 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         // setpageMode(page_mode)
-        // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+        // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
@@ -291,7 +291,7 @@ const OrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Order}
-                            masterPath={url.ORDER}
+                            masterPath={url.ORDER_1}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             pageMode={page_Mode}

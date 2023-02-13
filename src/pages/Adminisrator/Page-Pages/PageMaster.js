@@ -21,14 +21,11 @@ import MetaTags from "react-meta-tags"
 import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
-import { Tbody, Thead } from "react-super-responsive-table";
 import {
   AlertState,
   Breadcrumb_inputName,
   editHPagesIDSuccess,
   fetchModelsList,
-  getControlTypes,
-  getFieldValidations,
   getPageAccess_DropDown_API,
   getPageList,
   getPageListSuccess,
@@ -42,11 +39,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
+import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 
@@ -131,8 +127,6 @@ const PageMaster = (props) => {
 
   useEffect(() => {
     dispatch(fetchModelsList());
-    dispatch(getControlTypes());
-    dispatch(getFieldValidations());
     dispatch(getPageAccess_DropDown_API());
     dispatch(getPageType());
   }, [dispatch]);
@@ -434,7 +428,7 @@ const PageMaster = (props) => {
       PageHeading: values.pageheading,
       PageDescription: values.pagedescription,
       PageDescriptionDetails: values.pageheadingdescription,
-      RelatedPageID: relatedPage_DropdownSelect.value,
+      RelatedPageID: (pageType_DropdownSelect.value === 2) ? relatedPage_DropdownSelect.value : 0,
       IsDivisionRequired: values.IsDivisionRequired,
       IsEditPopuporComponent: values.IsEditPopuporComponent,
       CreatedBy: createdBy(),
@@ -460,8 +454,10 @@ const PageMaster = (props) => {
 
     if (pageMode === mode.edit) {
       dispatch(updateHPages(jsonBody, EditData.id));
+     
     } else {
       dispatch(saveHPages(jsonBody));
+   
     }
   };
 

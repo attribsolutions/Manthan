@@ -169,8 +169,6 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
         dispatch(getState());
-        dispatch(getDistrictOnState());
-        dispatch(getAddressTypes());
         dispatch(getPriceList());
         dispatch(getPartyTypes());
         dispatch(getCompany());
@@ -467,7 +465,7 @@ const PartyMaster = (props) => {
                                                                 <div>
                                                                     {
                                                                         (pageMode === mode.edit) ?
-                                                                            (userPageAccessState.RoleAccess_IsEdit )?
+                                                                            (userPageAccessState.RoleAccess_IsEdit) ?
                                                                                 <button
                                                                                     type="submit"
                                                                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"

@@ -31,13 +31,13 @@ import { AlertState } from "../../actions";
 
 // post api
 function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_TermsAndCondtions_Master_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postTermAndConditionSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -48,13 +48,13 @@ function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
 // Get List Page API
 function* Get_TermsAndCondtions_GenratorFunction() {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_TermsAndCondtionsList_API);
     yield put(getTermAndCondition_Success(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -65,12 +65,12 @@ function* Get_TermsAndCondtions_GenratorFunction() {
 // delete api 
 function* Delete_TermsAndCondtions_GenratorFunction({id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(del_TermsAndCondtions_Master_API, id);
-    yield put(SpinnerState(false))
+   
     yield put(DeleteTermsAndCondtions_Success(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -98,13 +98,13 @@ function* Edit_TermsAndCondtions_GenratorFunction({ id,pageMode }) {
 function* update_TermsAndCondtions_GenratorFunction({ updateData, ID }) {
   
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_TermsAndCondtions_Master_API, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(UpdateTermsAndCondtions_Success(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

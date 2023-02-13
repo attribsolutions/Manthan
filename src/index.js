@@ -6,13 +6,18 @@ import "./i18n"
 import { Provider } from "react-redux"
 
 import store from "./store"
+import ConfirmDialog from "./CustomAlert/ConfirmDialog"
+import { ConfirmContextProvider } from "./CustomAlert/ConfirmContextProvider"
 
 const app = (
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <ConfirmContextProvider>
+        <App />
+        <ConfirmDialog />
+      </ConfirmContextProvider>
     </BrowserRouter>
-   </Provider>
+  </Provider>
 )
 
 ReactDOM.render(app, document.getElementById("root"))

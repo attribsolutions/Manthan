@@ -26,13 +26,13 @@ import {
 import { AlertState } from "../../actions";
 // post api
 function* Post_Method_ForCategoryTypeMaster_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_Category_Type_Master_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostMethod_ForCategoryTypeMasterAPISuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -42,13 +42,13 @@ function* Post_Method_ForCategoryTypeMaster_GenFun({ data }) {
 
 // get api
 function* Get_CategoryType_List_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_CategoryType_List_Api);
     yield put(getCategoryTypelistSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -59,12 +59,12 @@ function* Get_CategoryType_List_GenratorFunction() {
 // delete api 
 function* Delete_CategoryType_ID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_CategoryType_List_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteCategoryTypeIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -91,13 +91,13 @@ function* Edit_CategoryType_ID_GenratorFunction({ id,pageMode }) {
 // update api
 function* Update_CategoryType_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_CategoryType_List_Api, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateCategoryTypeIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

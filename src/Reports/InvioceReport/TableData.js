@@ -1,14 +1,32 @@
+import { invoice } from "../ReportIndex";
 
-export const columns = [
+export const columns =[
     "HSNCode Item Name",
     "Quantity",
     "Rate",
-    "BasicAmount ",
+    "BasicAmount",
     "CGST %",
     "CGSTAmount",
     "SGST %",
     "SGSTAmount",
-    "Total Amt"];
+    "Total Amt" 
+];
+
+export const columns1 =[
+    "HSNCode Item Name",
+    "Quantity",
+    "Rate",
+    "BasicAmount",
+    "CGST %",
+    "CGSTAmount",
+    "SGST %",
+    "SGSTAmount",
+    "Debit note",
+    "Credit note",
+    "Total Amt" 
+];
+
+
 
 export const PageHedercolumns = [
     "Billed by",
@@ -28,7 +46,6 @@ export const Rows = (data) => {
     let totalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
-        debugger
       
         const tableitemRow = [
             element.ItemName,
@@ -40,9 +57,8 @@ export const Rows = (data) => {
             element.SGSTPercentage,
             element.SGST,
             element.Amount,
-            element.GSTPercentage,
-            element.GSTAmount,
-            "row"
+            
+           
         ];
 
         function totalLots() {
@@ -50,6 +66,7 @@ export const Rows = (data) => {
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
             totalAmount = Number(totalAmount) + Number( element.Amount)
+            totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             let cgst = data["tableTot"].TotalCGst
             return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
         };
@@ -102,13 +119,14 @@ export const ReportFotterColumns = [
 ];
 
 export const ReportHederRows = (data) => {
+   debugger
     var reportArray = [
-        [, ,"Purches Order No: 1"],
-        [`${data.CustomerName}`, `${data.PartyName}`,`Driver Name : Sameer` ,],
-        [`maharashtra`, `karnatak`, `vehical No :MH34566`],
-        // [, , ""],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, `E-way Bill :24654364633`, ],
-        [,,`INR NO :${data.FullInvoiceNumber}`]
+        [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
+        [`${data.CustomerName}`, `${data.PartyName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],
+        [`maharashtra`, `karnatak`,data.ReportType===invoice?`vehical No :MH34566`:`E-way Bill :24654364633` ],
+        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, data.ReportType===invoice?`E-way Bill :24654364633`:`INR NO :${data.FullInvoiceNumber}`, ],
+        [,,  data.ReportType===invoice?`INR NO :${data.FullInvoiceNumber}`:null]
     ]
+  
     return reportArray;
 }

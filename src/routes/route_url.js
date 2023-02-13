@@ -91,12 +91,19 @@ export const GENERAL ="/GeneralMaster"
 export const GENERAL_LIST ="/GeneralList"
 
 //******************************* Purchase Module ************************************//
-export const ORDER = "/Order"
-export const ORDER_lIST = "/OrderList"
+export const ORDER_1 = "/Order_1"
+export const ORDER_lIST_1 = "/OrderList_1"
 
-export const GRN_ADD_Mode_2 = "/GRN_ADD_Mode_2"
+export const ORDER_2 = "/Order_2"
+export const ORDER_lIST_2 = "/OrderList_2"
+
+//******************************* Inventory Module ************************************//
+
+export const GRN_STP = "/GRN_STP"
 export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
+
+//******************************* Production Module ************************************//
 
 export const BIllOf_MATERIALS = "/BOM"
 export const BIllOf_MATERIALS_LIST = "/BOMList"
@@ -106,30 +113,29 @@ export const WORK_ORDER_LIST = "/WorkOrderList"
 
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
-export const MATERIAL_ISSUE_ADD_Mode_2 = "/MaterialIssue_Add_Mode_2"
+export const MATERIAL_ISSUE_STP = "/MaterialIssue_STP"
 
 export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
-export const PRODUCTION_ADD_Mode_2 = "/Production_Add_Mode"
+export const PRODUCTION_STP = "/Production_STP"
 
-export const SALE_ORDER = "/SaleOrder"
-export const SALE_ORDER_lIST = "/SaleOrderList"
+//******************************* Sale Module  ************************************//
 
-export const INVOICE = "/Invoice"
-export const INVOICE_LIST = "/InvoiceList"
+export const INVOICE_1 = "/Invoice_1"
+export const INVOICE_LIST_1 = "/InvoiceList_1"
 
-//******************************* Inter Branch  ************************************//
 
-export const IB_ORDER= "/IBOrder"
-export const IB_ORDER_LIST= "/IBOrderList"
+//******************************* InterBranch Module ************************************//
+
+export const ORDER_3= "/Order_3" // IB Order
+export const ORDER_LIST_3= "/OrderList_3" //IB Order List
 
 export const INWARD ="/Inward"
 export const INWARD_LIST = "/InwardList"
+export const IB_INWARD_STP= "/IB_Inward_STP"
 
-export const IB_INVOICE ="/IB_Invoice"
-export const IB_INVOICE_LIST = "/IB_Invoice_List"
-export const IB_INVOICE_MODE_2 = "/IBInvoiceMode2"
+export const INVOICE_2 ="/Invoice_2" // IB Invoice
+export const INVOICE_LIST_2 = "/InvoiceList_2" // IB Invoice List
+export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 
-// demo
-export const Demo= "/Demo"
 

@@ -309,7 +309,7 @@ const ItemsMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
         dispatch(getCategoryTypelist());
-        dispatch(get_Category_By_CategoryType_ForDropDownAPI());
+        // dispatch(get_Category_By_CategoryType_ForDropDownAPI());
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
 
@@ -819,8 +819,6 @@ const ItemsMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    <BreadcrumbNew userAccess={userAccess} pageId={pageId.ITEM} />
-
                     <Container fluid>
                         {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
@@ -971,7 +969,7 @@ const ItemsMaster = (props) => {
                                                                         <Input type="text"
                                                                             id='txtName0'
                                                                             placeholder=" Please Enter Name "
-                                                                            value={EditData.Name}
+                                                                            defaultValue={EditData.Name}
                                                                             autoComplete="off"
                                                                             // value={searchTerm}
                                                                             onClick={onclickselect}

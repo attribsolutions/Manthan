@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../Breadcrumb3";
 import { Button, Col, Input, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -11,14 +10,14 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-
-import { AlertState, BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
 import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 let sortType = "asc"
 let searchCount = 0
@@ -44,6 +43,14 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
     searchProps = toolkitProps.searchProps
 }
+
+export async function isAlertFunc(type, Msg) {
+    await CustomAlert({
+        Type: type,
+        Message: Msg.Message,
+        isFunc: true,
+    })
+};
 
 const PurchaseListPage = (props) => {
 
@@ -84,15 +91,12 @@ const PurchaseListPage = (props) => {
         makeBtnFunc = () => { },
         makeBtnShow,
         makeBtnName,
-        InwardMakeBtnFunc = () => { },
-        InwardMakeBtnShow,
-        InwardMakeBtnName,
         downBtnFunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
 
-    
+
     useEffect(() => {
 
         const locationPath = history.location.pathname
@@ -107,7 +111,7 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
 
         let tableArr = props.reducers.tableList;
-        if ((pageUrl === url.GRN_ADD_Mode_2)) {
+        if ((pageUrl === url.GRN_STP)) {
             let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
                 return i.Inward === "Open"
             })
@@ -140,27 +144,21 @@ const PurchaseListPage = (props) => {
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
 
+        // async function isAlertFunc(type) {
+        //     await CustomAlert({
+        //         Type: type,
+        //         Message: updateMsg.Message,
+        //         isFunc: true,
+        //     })
+        // }
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
-            goButnFunc()
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: updateMsg.Message,
-                    isFunc: true,
-                })
-            );
+            goButnFunc();
+            isAlertFunc(1, updateMsg);
             tog_center();
         } else if (updateMsg.Status === true) {
             dispatch(updateSucc({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            isAlertFunc(3, updateMsg);
         }
     }, [updateMsg]);
 
@@ -168,22 +166,24 @@ const PurchaseListPage = (props) => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMsg.Message,
-                })
-            );
+            // dispatch(
+            isAlertFunc(1, deleteMsg)
+            // CustomAlert({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: deleteMsg.Message,
+            // })
+            // );
         } else if (deleteMsg.Status === true) {
             dispatch(deleteSucc({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                })
-            );
+            // dispatch(
+            isAlertFunc(3, deleteMsg)
+            // CustomAlert({
+            //     Type: 3,
+            //     Status: true,
+            //     Message: JSON.stringify(deleteMsg.Message),
+            // })
+            // );
         }
     }, [deleteMsg]);
 
@@ -193,22 +193,28 @@ const PurchaseListPage = (props) => {
             dispatch(postSucc({ Status: false }))
             tog_center();
             dispatch(getList());
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: postMsg.Message,
-            }))
+            isAlertFunc(1, postMsg)
+            // dispatch(
+            // CustomAlert({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: postMsg.Message,
+            // })
+            // )
         }
 
         else if ((postMsg.Status === true)) {
             dispatch(postSucc({ Status: false }))
-            dispatch(AlertState({
+            // dispatch(
+
+            CustomAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
-            }));
+            })
+            // );
         }
 
 
@@ -242,21 +248,9 @@ const PurchaseListPage = (props) => {
         makeBtnFunc(tableList);
     }
 
-    function InwardMakeBtnHandler(rowData) {
-        rowData["hasSelect"] = true;
-        let arr = []
-        arr.push(rowData)
-        InwardMakeBtnFunc(arr)
-    }
-
-    // function onSaveBtnClick() {
-    //     InwardMakeBtnFunc(tableList);
-    // }
-
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     }
-
 
     // ****** columns sort by sequnce
     fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
@@ -317,7 +311,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
@@ -335,10 +329,6 @@ const PurchaseListPage = (props) => {
                                 // disabled={rowData["isdisabled"]}
                                 key={rowData.hasSelect}
                                 onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
-
-
-
-
                             />
                             <Button
                                 type="button"
@@ -379,30 +369,6 @@ const PurchaseListPage = (props) => {
             })
         }
 
-        else if ((InwardMakeBtnShow) && (fileds.length - 1 === k)) {
-
-            columns.push({
-                text: "Select",
-                dataField: "hasSelect",
-                sort: true,
-                formatter: (cellContent, rowData, key) => {
-                    rowData["hasSelect"] = false
-                    return (
-                        <div>
-
-                            <Button
-                                type="button"
-                                className={makeBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={InwardMakeBtnName}
-                                onClick={() => { InwardMakeBtnHandler(rowData) }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                ></span> Inward</Button>
-                        </div>)
-                }
-            })
-        }
-
         // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
@@ -423,7 +389,6 @@ const PurchaseListPage = (props) => {
         }
     })
 
-
     const defaultSorted = [
         {
             dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
@@ -443,9 +408,7 @@ const PurchaseListPage = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                {/* <BreadcrumbNew
-                    userAccess={userAccess}
-                /> */}
+
                 <div >
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
@@ -486,13 +449,10 @@ const PurchaseListPage = (props) => {
                                 )}
                             </ToolkitProvider>
                         )}
-
-
                     </PaginationProvider>
 
                     {
-
-                        (`/${userAccState.ActualPagePath}` === url.GRN_ADD_Mode_2) ?
+                        (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button
@@ -516,7 +476,6 @@ const PurchaseListPage = (props) => {
                         }}
                         size="xl"
                     >
-
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
 
                     </Modal>

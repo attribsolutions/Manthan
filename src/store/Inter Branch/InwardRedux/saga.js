@@ -8,14 +8,14 @@ import { DELETE_INWARD_LIST_PAGE, GET_INWARD_LIST_PAGE, POST_INWARD } from "./ac
 
 //post api
 function* Post_Inward_GenratorFunction({ data }) {
-  yield put(SpinnerState(true))
+
   try {
 
     const response = yield call(Inward_Post_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postInwardSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -26,7 +26,7 @@ function* Post_Inward_GenratorFunction({ data }) {
 // Inward List API
 function* get_InwardList_GenFunc({ filters }) {
   debugger
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Inward_List_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -35,11 +35,11 @@ function* get_InwardList_GenFunc({ filters }) {
       i.IBInwardDate = (`${date} ${time}`)
       return i
     })
-    yield put(SpinnerState(false))
+   
     yield put(getInwardListPageSuccess(newList))
 
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Inward List",
@@ -48,17 +48,17 @@ function* get_InwardList_GenFunc({ filters }) {
 }
 
 function* DeleteInward_GenFunc({ id }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Inward_Delete_API, id);
-    yield put(SpinnerState(false))
+   
     if (response.StatusCode === 200) yield put(deleteInwardIdSuccess(response))
     else yield put(AlertState({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Delete Inward",

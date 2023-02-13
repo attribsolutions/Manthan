@@ -26,15 +26,14 @@ import {
   GET_ORDER_LIST_PAGE
 } from "./actionType";
 
-import { SpinnerState } from "../../Utilites/Spinner/actions";
+// import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { convertDatefunc, convertTimefunc, GoBtnDissable, mainSppinerOnOff, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
 
 function* goButtonGenFunc({ data }) {
 
 
-  yield mainSppinerOnOff(true)
+  // yield mainSppinerOnOff(true)
   yield delay(400)
   try {
 
@@ -56,16 +55,14 @@ function* goButtonGenFunc({ data }) {
     yield response.Data.TermsAndConditions = termArr;
 
     yield put(goButtonForOrderAddSuccess(response.Data));
-    yield mainSppinerOnOff(false)
+    // yield mainSppinerOnOff(false)
   } catch (error) {
-    yield mainSppinerOnOff(false)
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Go Button-Order Page",
-    }));
+    // yield mainSppinerOnOff(false)
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error Go Button-Order Page",
+    // }));
   }
-
-
 
 
 
@@ -121,44 +118,35 @@ function* goButtonGenFunc({ data }) {
 
 function* postOrder_GenFunc({ data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(OrderPage_Post_API, data);
     yield put(postOrderSuccess(response));
-    yield put(SpinnerState(false))
+
   } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Post Order",
-    }));
+
   }
 }
 
 function* editOrderGenFunc({ jsonBody, pageMode }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(OrderPage_Edit_API, jsonBody);
     response.pageMode = pageMode
-    yield put(SpinnerState(false))
     yield put(editOrderIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Edit Order",
-    }));
+
   }
 }
 
 function* DeleteOrder_GenFunc({ id }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(OrderPage_Delete_API, id);
-    yield put(SpinnerState(false))
+
     yield put(deleteOrderIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error DeleteOrder",
@@ -185,10 +173,15 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
-  yield mainSppinerOnOff(true)
-  // yield delay(400)
+  // yield mainSppinerOnOff(true)
   try {
+
     const response = yield call(OrderList_get_Filter_API, filters);
+
+    // yield mainSppinerOnOff(false)
+
+    // const response = yield CkeckAlert("post", url.ORDER_LiST_BY_FILTERS, s)
+
     const newList = yield response.Data.map((i) => {
 
       var date = convertDatefunc(i.OrderDate)
@@ -198,26 +191,27 @@ function* get_OrderList_GenFunc({ filters }) {
       i.OrderDate = (`${date} ${time}`)
       i.DeliveryDate = (`${DeliveryDate}`)
 
-      if((i.Inward === 0)){
+      if ((i.Inward === 0)) {
         i.Inward = "Open"
-        i.forceEdit= false
-      }else{
+        i.forceEdit = false
+      } else {
         i.Inward = "Close"
         i.forceEdit = true
       }
-    
+
       return i
     })
-    // debugger
+
     yield put(getOrderListPageSuccess(newList))
-    yield mainSppinerOnOff(false)
+    // yield mainSppinerOnOff(false)
 
   } catch (error) {
-    yield mainSppinerOnOff(false)
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error  Get OrderList",
-    }));
+    // yield mainSppinerOnOff(false)
+    // yield CkeckAlert("post", url.ORDER_LiST_BY_FILTERS, { StatusCode: 400 })
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error  Get OrderList",
+    // }));
   }
 }
 

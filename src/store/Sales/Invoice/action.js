@@ -5,6 +5,8 @@ import {
     EDIT_INVOICE_LIST_SUCCESS,
     GET_INVOICE_LIST_PAGE,
     GET_INVOICE_LIST_PAGE_SUCCESS,
+    GO_BUTTON_FOR_INVOICE_ADD,
+    GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
     GO_BUTTON_POST_FOR_INVOICE,
     GO_BUTTON_POST_FOR_INVOICE_SUCCESS,
     POST_INVOICE_MASTER,
@@ -63,5 +65,18 @@ export const deleteInvoiceId = (id) => ({
 
 export const deleteInvoiceIdSuccess = (data) => ({
     type: DELETE_INVOICE_LIST_PAGE_SUCCESS,
+    payload: data,
+});
+
+
+
+// Go Button Post API for Invoice Master
+export const GoButton_For_Invoice_Add = (subPageMode,data, goBtnId) => ({
+    type: GO_BUTTON_FOR_INVOICE_ADD,
+    subPageMode, data, goBtnId
+});
+
+export const GoButton_For_Invoice_Add_Success = (data) => ({
+    type: GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
     payload: data,
 });

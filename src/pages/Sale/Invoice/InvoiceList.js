@@ -4,22 +4,20 @@ import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import {
-    editOrderId,
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
-import { GetCustomer, getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetCustomer} from "../../../store/CommonAPI/SupplierRedux/actions";
 import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { Invoice_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
 import Invoice from "./Invoice";
@@ -31,8 +29,9 @@ const InvoiceList = () => {
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.ORDER_lIST)
+    const [pageMode, setpageMode] = useState(url.ORDER_lIST_1)
     const [userAccState, setUserAccState] = useState('');
+
     // const [fromdate, setfromdate] = useState(currentDate);
     // const [todate, settodate] = useState(currentDate);
     // const [customerSelect, setcustomerSelect] = useState({ value: '', label: "All" });
@@ -52,10 +51,11 @@ const InvoiceList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+
     const { userAccess, pageField, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 
-    const page_Id = pageId.INVOICE_LIST
+    const page_Id = pageId.INVOICE_LIST_1
 
     const action = {
         getList: getIssueListPage,
@@ -69,7 +69,7 @@ const InvoiceList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        // const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
+        // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
@@ -107,7 +107,7 @@ const InvoiceList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_Edit_API_Singel_Get, ReportType, row.id))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
     function goButtonHandler() {
@@ -222,11 +222,11 @@ const InvoiceList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Invoice}
-                            masterPath={url.INVOICE}
+                            masterPath={url.INVOICE_1}
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.INVOICE_LIST ? false : true}
+                            makeBtnShow={pageMode === url.INVOICE_LIST_1 ? false : true}
                             // makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

@@ -33,13 +33,13 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function* postProductionGenFunc({ data }) {
-  yield put(SpinnerState(true));
+;
   try {
     const response = yield call(Production_Post_API, data);
     yield put(post_ProductionSuccess(response));
-    yield put(SpinnerState(false));
+   ;
   } catch (error) {
-    yield put(SpinnerState(false));
+   ;
     yield put(
       AlertState({
         Type: 4,
@@ -51,15 +51,15 @@ function* postProductionGenFunc({ data }) {
 }
 
 function* DeleteProductionGenFunc({ id }) {
-  yield put(SpinnerState(true));
+;
   try {
     const response = yield call(Production_Delete_API, id);
-    yield put(SpinnerState(false));
+   ;
 
     yield put(delete_ProductionIdSuccess(response));
 
   } catch (error) {
-    yield put(SpinnerState(false));
+   ;
     yield put(
       AlertState({
         Type: 4,
@@ -72,12 +72,12 @@ function* DeleteProductionGenFunc({ id }) {
 
 function* UpdateProductionGenFunc({ data, id }) {
   try {
-    yield put(SpinnerState(true));
+  ;
     const response = yield call(id);
-    yield put(SpinnerState(false));
+   ;
     yield put(update_ProductionIdSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false));
+   ;
     yield put(
       AlertState({
         Type: 4,
@@ -90,7 +90,7 @@ function* UpdateProductionGenFunc({ data, id }) {
 
 // List Page API
 function* get_PRODUCTION_GerFunc({ filters }) {
-  yield put(SpinnerState(true));
+;
   try {
 
     const response = yield call(production_get_API, filters);
@@ -112,10 +112,10 @@ function* get_PRODUCTION_GerFunc({ filters }) {
 
       return index;
     });
-    yield put(SpinnerState(false));
+   ;
     yield put(getProductionistPageSuccess(newList));
   } catch (error) {
-    yield put(SpinnerState(false));
+   ;
     yield put(
       AlertState({
         Type: 4,
@@ -129,17 +129,17 @@ function* get_PRODUCTION_GerFunc({ filters }) {
 // List Page API
 function* getProduction_Mode2_GenFunc({ data }) {
   const { jsonBody, pageMode, path } = data;
-  yield put(SpinnerState(true));
+;
   try {
     const response = yield call(production_Make_API, jsonBody);
     response.Data = response.Data[0];
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
 
-    yield put(SpinnerState(false));
+   ;
     yield put(getProduction_Mode2_Success(response));
   } catch (error) {
-    yield put(SpinnerState(false));
+   ;
     yield put(
       AlertState({
         Type: 4,
@@ -170,7 +170,7 @@ function* editProduction_GenFunc({ id, pageMode }) {
 
 //  DesignationID dropdown list
 function* UnitIDForProduction_saga({ data }) {
-  yield put(SpinnerState(true));
+;
   try {
     const response = yield call(production_UnitDropdown_API, data);
     const UnitDropdown = response.Data.map((index) => ({
@@ -178,9 +178,9 @@ function* UnitIDForProduction_saga({ data }) {
       label: index.UnitName,
     }));
     yield put(getUnitIDForProdunctionSuccess(UnitDropdown));
-    yield put(SpinnerState(false));
+   ;
   } catch (error) {
-    yield put(SpinnerState(false));
+   ;
     yield put(
       AlertState({
         Type: 4,

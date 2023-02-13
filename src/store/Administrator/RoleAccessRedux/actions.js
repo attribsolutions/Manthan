@@ -16,6 +16,8 @@ import {
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_ACCESS,
   POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS,
+  DELETE_ROLE_ACCESS_lIST_SUCCESS,
+  DELETE_ROLE_ACCESS_lIST,
 } from "./actionType";
 
 
@@ -91,3 +93,16 @@ export const PostMethod_ForCopyRoleAccessFor_Role_Success = (data) => ({
   type: POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS,
   payload:data,
 });
+
+export const DeleteRoleAcess = (role,division,company) => ({
+  type: DELETE_ROLE_ACCESS_lIST,
+  role,division,company,
+});
+
+
+export const DeleteRoleAcessSuccess = (data) => ({
+  type: DELETE_ROLE_ACCESS_lIST_SUCCESS,
+  payload:data,
+});
+
+

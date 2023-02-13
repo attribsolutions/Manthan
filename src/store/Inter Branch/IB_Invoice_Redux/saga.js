@@ -8,7 +8,7 @@ import { GET_IB_INVOICE_LIST_PAGE, INWARD_BUTTON_ID, MAKE_IB_INVOICE, POST_IB_IN
 
 // Inward List API
 function* get_IB_InvoiceList_GenFunc({ filters }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(IB_InvoiceList_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -16,11 +16,11 @@ function* get_IB_InvoiceList_GenFunc({ filters }) {
       i.IBChallanDate = (`${date}`)
       return i
     })
-    yield put(SpinnerState(false))
+   
     yield put(get_IB_InvoiceListPageSuccess(newList))
 
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error InterBranch Invoice List",
@@ -28,7 +28,7 @@ function* get_IB_InvoiceList_GenFunc({ filters }) {
   }
 }
 
-// Inward Go Button Api
+//  Go Button Api
 function* Inward_Button_GenratorFunction({ id }) {
   debugger
   try {
