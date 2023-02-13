@@ -23,6 +23,7 @@ import { mySearchProps } from "../../../components/Common/ComponentRelatedCommon
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { userCompany, userEmployeeID, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {
 
@@ -42,6 +43,7 @@ const RoleAccessListPage = () => {
 
     }));
 
+   
     useEffect(() => {
         const locationPath = history.location.pathname
         let userAcc = userAccess.find((inx) => {
@@ -83,6 +85,9 @@ const RoleAccessListPage = () => {
             })
         }
     }
+    
+
+
 
 
     useEffect(() => {
@@ -110,30 +115,17 @@ const RoleAccessListPage = () => {
         }
     }, [PostMessage_ForCopyRoleAccess])
 
-
     useEffect(() => {
+        debugger
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(DeleteRoleAcessSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMsg.Message,
-                    AfterResponseAction: false,
-                })
-            );
-        } else if (deleteMsg.Status === true) {
-            dispatch(DeleteRoleAcessSuccess({ Status:false}));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                    AfterResponseAction: false,
-
-                })
-            );
-        }
+            dispatch(getRoleAccessListPage());
+            CustomAlert({
+                Type: 1,
+                Message: JSON.stringify(deleteMsg.Message),
+              
+            })
+        } 
     }, [deleteMsg]);
 
     //select id for copy row
@@ -146,22 +138,31 @@ const RoleAccessListPage = () => {
 
 
     //select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(
-            AlertState({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
-                RedirectPath: false,
-                // PermissionAction: deleteItemID,
-                ID: id,
-            })
-        );
-        
-        let role = id.Role_id
-        let division = id.Division_id
-        let company = id.Company_id
-        dispatch(DeleteRoleAcess(role,division,company))
+    const deleteHandeler = async(id, name) => {
+        // dispatch(
+        //     AlertState({
+        //         Type: 5,
+        //         Status: true,
+        //         Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
+        //         RedirectPath: false,
+        //         // PermissionAction: deleteItemID,
+        //         ID: id,
+        //     })
+        // );
+
+        const ispermission= await CustomAlert({
+                    Type: 7,
+                    Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
+                  
+                })
+        if (ispermission) {
+            let role = id.Role_id
+            let division = id.Division_id
+            let company = id.Company_id
+            dispatch(DeleteRoleAcess(role,division,company))
+            
+        }
+       
     
 
     };
