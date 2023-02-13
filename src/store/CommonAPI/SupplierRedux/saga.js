@@ -90,7 +90,7 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
-  debugger
+  
   let response;
   try {
     if (subPageMode === url.ORDER_1) {
@@ -102,7 +102,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if (subPageMode === url.INVOICE_1) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     }
-    else if (subPageMode === url.INVOICE_2) {
+    else if ((subPageMode === url.INVOICE_2)||(subPageMode === url.ORDER_3)) {
       response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
     };
 

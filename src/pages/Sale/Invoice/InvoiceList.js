@@ -42,7 +42,8 @@ const InvoiceList = () => {
     const history = useHistory();
     const subPageMode = history.location.pathname;
 
-    const [pageMode, setpageMode] = useState(url.ORDER_lIST_1)
+    const hasPagePath = history.location.pathname
+    const [pageMode, setpageMode] = useState(url.ORDER_LIST_1)
     const [userAccState, setUserAccState] = useState('');
 
     // const [fromdate, setfromdate] = useState(currentDate);

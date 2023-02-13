@@ -36,7 +36,7 @@ const OrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const subPageMode = history.location.pathname
     // const [userAccState, setUserAccState] = useState('');
     const [orderlistFilter, setorderlistFilter] = useState('');
 
@@ -56,22 +56,41 @@ const OrderList = () => {
         })
     );
 
-    const hasPagePath = history.location.pathname
+
     const { fromdate = currentDate, todate = currentDate, venderSelect = { value: "", label: "All" } } = orderlistFilter;
     const { userAccess, pageField, GRNitem, vender, tableList } = reducers;
 
-    let page_Id = pageId.ORDER_lIST_1;
+    // let page_Id = pageId.ORDER_LIST_1;
+    // let page_Mode = mode.defaultList;
+    // let page_Url = url.ORDER_LIST_1;
+    // let make_BtnShow = false;
+
+    // if (hasPagePath === url.GRN_STP) {
+    //     page_Id = pageId.GRN_STP;
+    //     page_Mode = mode.mode2save;
+    //     page_Url = url.GRN_STP;
+    //     make_BtnShow = true
+    // }
+    let page_Id = '';
     let page_Mode = mode.defaultList;
-    let page_Url = url.ORDER_lIST_1;
-    let make_BtnShow = false;
 
-    if (hasPagePath === url.GRN_STP) {
-        page_Id = pageId.GRN_STP;
-        page_Mode = mode.mode2save;
-        page_Url = url.GRN_STP;
-        make_BtnShow = true
+    if (subPageMode === url.ORDER_LIST_1) {
+        page_Id = pageId.ORDER_LIST_2
     }
-
+    else if (subPageMode === url.ORDER_LIST_2) {
+        page_Id = pageId.ORDER_LIST_2
+    }
+    else if (subPageMode === url.ORDER_LIST_3) {
+        page_Id = pageId.ORDER_LIST_3
+    }
+    else if (subPageMode === url.IB_INWARD_STP) {
+        page_Id = pageId.IB_INWARD_STP
+        page_Mode = mode.mode2save
+    }
+    else if (subPageMode === url.GRN_STP) {
+        page_Id = pageId.GRN_STP
+        page_Mode = mode.mode2save
+    }
 
     const action = {
         getList: getOrderListPage,
@@ -83,8 +102,6 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        // setpageMode(page_mode)
-        // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
@@ -124,7 +141,7 @@ const OrderList = () => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
                 pathname: GRNitem.path,
-                pageMode: GRNitem.pageMode,
+                page_Mode: GRNitem.page_Mode,
             })
         }
     }, [GRNitem])
@@ -181,7 +198,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler() {
-
+        debugger
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -190,7 +207,7 @@ const OrderList = () => {
             OrderType: order_Type.PurchaseOrder
         });
 
-        dispatch(getOrderListPage(jsonBody));
+        dispatch(getOrderListPage(subPageMode, jsonBody));
     }
 
     function fromdateOnchange(e, date) {
@@ -294,9 +311,9 @@ const OrderList = () => {
                             masterPath={url.ORDER_1}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
-                            pageMode={page_Mode}
-                            pageUrl={page_Url}
-                            makeBtnShow={make_BtnShow}
+                            page_Mode={page_Mode}
+                            // pageUrl={page_Url}
+                            // makeBtnShow={make_BtnShow}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

@@ -203,10 +203,10 @@ const userRoutes = [
   //******************************* Purchase Module ************************************//
 
   { path: path.ORDER_1, component: Order },
-  { path: path.ORDER_lIST_1, component: OrderList },
+  { path: path.ORDER_LIST_1, component: OrderList },
 
   { path: path.ORDER_2, component: Order },
-  { path: path.ORDER_lIST_2, component: OrderList },
+  { path: path.ORDER_LIST_2, component: OrderList },
 
   { path: path.GRN_lIST, component: GRNList },
   { path: path.GRN_ADD, component: GRNAdd },
