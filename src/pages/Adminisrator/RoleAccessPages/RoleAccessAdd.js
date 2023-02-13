@@ -662,7 +662,7 @@ const RoleAccessAdd = (props) => {
                                                             color="btn btn-outline-secondary"
                                                             className="btn-sm"
                                                             onClick={() => { ChangeButtonHandeler() }}>
-                                                            <h className="text-black">Change Role</h></Button>
+                                                            <h className="text-black">Change</h></Button>
 
                                                     </Col>
 

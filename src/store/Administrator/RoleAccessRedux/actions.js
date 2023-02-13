@@ -100,9 +100,9 @@ export const DeleteRoleAcess = (role,division,company) => ({
 });
 
 
-export const DeleteRoleAcessSuccess = (deleteMessage) => ({
+export const DeleteRoleAcessSuccess = (data) => ({
   type: DELETE_ROLE_ACCESS_lIST_SUCCESS,
-  payload:deleteMessage,
+  payload:data,
 });
 
 

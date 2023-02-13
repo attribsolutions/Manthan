@@ -11,21 +11,23 @@ border-radius: 5px;
 margin-bottom: -14px !important;
 
 }
-.custom_scroll_div{ 
+
+.custom_scroll_div{
+   
+
   margin-bottom: -7%;
     overflow-x: scroll;
     max-height: 400px;
     overflow-y: auto;
     overflow-x: auto;
-    scrollbar-color: rebeccapurple green;
-    scrollbar-width: thin; }
+    }
 
 .pagescroll{
     overflow-x: hidden !important ;
 }   
 .thsticky {
  
-    position: sticky !important;
+    position: sticky ;
     left: 0 !important;
     background-color: white !important;
   
