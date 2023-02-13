@@ -124,13 +124,13 @@ function PageFieldMaster_Tab(props) {
         <>
             <div className="table-rep-plugin  mx-n4">
                 <div
-                    className="custom_scroll_div"
+                    className="Scroll_div"
                     data-pattern="priority-columns "
                 >
                     <Table className="table table-bordered table-responsive ">
                         <Thead  >
                             <tr style={{ zIndex: "23" }} className="">
-                                <th className="">Control ID</th>
+                                <th className="thsticky colorhead">Control ID</th>
                                 <th className="">Field Label</th>
                                 <th className="">Control Type</th>
                                 <th className="" >Field Validation</th>
@@ -149,9 +149,9 @@ function PageFieldMaster_Tab(props) {
                         <Tbody>
 
                             {pageFieldTabTable.map((TableValue, key) => (
-                                <tr >
-                                    <td>
-                                        <div style={{ width: "150px" }}>
+                                <tr  >
+                                    <td className='thsticky 'style={{ zIndex:"10",}}>
+                                        <div style={{ width: "150px", }}>
                                             <Input
                                                 type="text"
                                                 id={`ControlID${key}`}

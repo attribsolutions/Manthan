@@ -307,6 +307,7 @@ const PartySubParty = (props) => {
                 const ramain = {
                     CreatedBy: createdBy(),
                     UpdatedBy: createdBy(),
+                    PartyID: Division_dropdown_Select.value,
                 }
                 
                 if (i.partyType === 3) {
