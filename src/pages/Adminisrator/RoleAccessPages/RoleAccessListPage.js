@@ -112,7 +112,6 @@ const RoleAccessListPage = () => {
 
 
     useEffect(() => {
-        debugger
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(DeleteRoleAcessSuccess({ Status: false }));
             dispatch(
@@ -130,6 +129,8 @@ const RoleAccessListPage = () => {
                     Type: 3,
                     Status: true,
                     Message: JSON.stringify(deleteMsg.Message),
+                    AfterResponseAction: false,
+
                 })
             );
         }
@@ -150,7 +151,7 @@ const RoleAccessListPage = () => {
             AlertState({
                 Type: 5,
                 Status: true,
-                Message: `Are you sure you want to delete this item : "${id.RoleName}"`,
+                Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
                 RedirectPath: false,
                 // PermissionAction: deleteItemID,
                 ID: id,

@@ -139,7 +139,7 @@ function* Get_RoleAccessList_GenratorFunction() {
 function* Delete_RoleAccessList_GenratorFunction({ role,division,company}) {
   try {
     const response = yield call(Delete_RoleAccess_Api,role,division,company);
-    yield put(DeleteRoleAcessSuccess(response.Data));
+    yield put(DeleteRoleAcessSuccess(response));
   } catch (error) {
     yield put(AlertState({
       Type: 4,
