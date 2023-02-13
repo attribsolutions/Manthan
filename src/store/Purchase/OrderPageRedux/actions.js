@@ -28,20 +28,20 @@ export const orderlistfilters = filter => ({
   payload: filter,
 })
 
-export const goButtonForOrderAdd = (data ) => ({
+export const GoButton_For_Order_Add = (subPageMode,data ) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
-  data,
+  subPageMode,data,
 });
 
-export const goButtonForOrderAddSuccess = list => ({
+export const GoButton_For_Order_AddSuccess = list => ({
   type: GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   payload: list,
 })
 
 //get listpage api
-export const getOrderListPage = (filters) => ({
+export const getOrderListPage = (subPageMode,data) => ({
   type: GET_ORDER_LIST_PAGE,
-  filters,
+  subPageMode,data
 });
 
 export const getOrderListPageSuccess = (data) => ({

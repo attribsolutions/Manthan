@@ -101,13 +101,10 @@ export const GeneralMaster = url.GENERAL_LIST
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1
-export const Order_1 = url.ORDER_lIST_1
+export const Order_1 = url.ORDER_LIST_1
 
 export const OrderList_2 = url.ORDER_2
-export const Order_2 = url.ORDER_lIST_2
-
-export const OrderList_3 = url.ORDER_3
-export const Order_3 = url.ORDER_LIST_3
+export const Order_2 = url.ORDER_LIST_2
 
 export const GRNList = url.GRN_STP
 export const GRN = url.GRN_lIST
@@ -132,6 +129,8 @@ export const Invoice = url.INVOICE_LIST_1
 
 //******************************* Inter Branch ************************************//
 
+export const OrderList_3 = url.ORDER_3
+export const Order_3 = url.ORDER_LIST_3
 
 export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST

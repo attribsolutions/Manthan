@@ -18,8 +18,8 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
-    goButtonForOrderAdd,
-    goButtonForOrderAddSuccess,
+    GoButton_For_Order_Add,
+    GoButton_For_Order_AddSuccess,
     postOrder,
     postOrderSuccess,
     updateOrderId,
@@ -40,6 +40,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import * as pageId from "../../../routes/allPageID"
+import { Post_Division_Type_API } from "../../../helpers/backend_helper";
 
 let editVal = {}
 
@@ -55,7 +56,7 @@ const Order = (props) => {
 
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
@@ -94,19 +95,17 @@ const Order = (props) => {
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageFieldList,
+        pageField: state.CommonPageFieldReducer.pageField,
     }));
 
     useEffect(() => {
-       
-        const page_Id =
-            ((subPageMode === url.ORDER_1) ? (pageId.ORDER_1) :
-                (subPageMode === url.ORDER_2) ? (pageId.ORDER_2) :
-                    (subPageMode === url.ORDER_3) ? (pageId.ORDER_3) 
+        var page_Id = ((subPageMode === url.ORDER_1) ? (pageId.ORDER_1) :
+            (subPageMode === url.ORDER_2) ? (pageId.ORDER_2) :
+                (subPageMode === url.ORDER_3) ? (pageId.ORDER_3)
                     : null)
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(GoButton_For_Order_AddSuccess(null))
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
@@ -212,10 +211,9 @@ const Order = (props) => {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
             setTermsAndConTable(TermsAndConditions)
-            dispatch(goButtonForOrderAddSuccess(''))
+            dispatch(GoButton_For_Order_AddSuccess(''))
         }
     }, [goBtnOrderdata]);
-
 
     useEffect(() => {
         if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
@@ -238,23 +236,23 @@ const Order = (props) => {
             dispatch(postOrderSuccess({ Status: false }))
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
-            dispatch(goButtonForOrderAddSuccess([]))
+            dispatch(GoButton_For_Order_AddSuccess([]))
             // dispatch(AlertState({
             //     Type: 1,
             //     Status: true,
             //     Message: postMsg.Message,
-            //     RedirectPath: ORDER_lIST_1,
+            //     RedirectPath: ORDER_LIST_1,
             // }))
 
             const a = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: url.ORDER_lIST_1,
+                RedirectPath: url.ORDER_LIST_1,
                 // AfterResponseAction:
             })
             if (a) {
                 history.push({
-                    pathname: url.ORDER_lIST_1,
+                    pathname: url.ORDER_LIST_1,
                     // state: history.location.state
                 });
             }
@@ -280,7 +278,7 @@ const Order = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             history.push({
-                pathname: url.ORDER_lIST_1,
+                pathname: url.ORDER_LIST_1,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
@@ -298,7 +296,6 @@ const Order = (props) => {
             })
         }
     }, [updateMsg, modalCss]);
-
 
     function val_onChange(val, row, type) {
 
@@ -528,10 +525,11 @@ const Order = (props) => {
     }
 
     const goButtonHandler = async () => {
+
         if (!supplierSelect > 0) {
             await CustomAlert({
                 Type: 4,
-                Message: "Please select supplier",
+                Message: `Please select ${fieldLabel.Supplier}`
             })
             return;
         }
@@ -543,8 +541,7 @@ const Order = (props) => {
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id
         })
-
-        dispatch(goButtonForOrderAdd(jsonBody))
+        dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
     };
 
     function orderdateOnchange(e, date) {
@@ -562,10 +559,10 @@ const Order = (props) => {
         const isConfirmed = await CustomAlert({
             Type: 7,
             Message: msg,
-            RedirectPath: url.ORDER_lIST_1,
+            RedirectPath: url.ORDER_LIST_1,
         });
         if (isConfirmed) {
-            dispatch(goButtonForOrderAddSuccess([]))
+            dispatch(GoButton_For_Order_AddSuccess([]))
             setisOpen_TermsModal(true)
         }
 
@@ -799,7 +796,7 @@ const Order = (props) => {
                                             (orderItemTable.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
                                                 :
-                                                <Change_Button onClick={(e) => dispatch(goButtonForOrderAddSuccess([]))} />
+                                                <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
                                             : null
                                         }
                                     </Col>
@@ -826,30 +823,33 @@ const Order = (props) => {
 
                                 </FormGroup>
                             </div >
-                            <div className="col col-6" >{/*  Delivery Date field */}
-                                <FormGroup className=" row mt-3 " >
-                                    <Label className=" p-2"
-                                        style={{ width: "130px" }}>Delivery Date</Label>
-                                    <div className="col col-6 sm-1">
-                                        <Flatpickr
-                                            id="deliverydate"
-                                            name="deliverydate"
-                                            value={deliverydate}
-                                            disabled={pageMode === "edit" ? true : false}
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            options={{
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                // minDate: pageMode === "edit" ? orderdate : "today",
 
-                                            }}
-                                            onChange={(e, date) => { setdeliverydate(date) }}
-                                        />
-                                    </div>
+                            {!(subPageMode === url.ORDER_3) ?
+                                <div className="col col-6" >{/*  Delivery Date field */}
+                                    <FormGroup className=" row mt-3 " >
+                                        <Label className=" p-2"
+                                            style={{ width: "130px" }}>Delivery Date</Label>
+                                        <div className="col col-6 sm-1">
+                                            <Flatpickr
+                                                id="deliverydate"
+                                                name="deliverydate"
+                                                value={deliverydate}
+                                                disabled={pageMode === "edit" ? true : false}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    // minDate: pageMode === "edit" ? orderdate : "today",
 
-                                </FormGroup>
-                            </div >
+                                                }}
+                                                onChange={(e, date) => { setdeliverydate(date) }}
+                                            />
+                                        </div>
+
+                                    </FormGroup>
+                                </div > : null}
+
                         </div>
 
                         {subPageMode === url.ORDER_1 ? <div>
