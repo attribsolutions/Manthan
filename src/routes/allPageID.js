@@ -91,8 +91,11 @@ export const GENERAL = 119
 export const GENERAL_LIST = 120
 
 //******************************* Purchase Module ************************************//
-export const ORDER = 53
-export const ORDER_lIST = 54
+export const ORDER_1 = 53
+export const ORDER_lIST_1 = 54
+
+export const ORDER_2 = 117
+export const ORDER_lIST_2 = 118
 
 export const GRN_ADD = 55
 export const GRN_lIST = 56
@@ -112,24 +115,18 @@ export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
 export const PRODUCTION_STP = 123
 
-export const SALE_ORDER_1 = 117
-export const SALE_ORDER_lIST_1 = 118
-
-export const SALE_ORDER_2 = 134
-export const SALE_ORDER_lIST_2 = 135
-
-export const INVOICE = 121
-export const INVOICE_LIST = 122
+export const INVOICE_1 = 121
+export const INVOICE_LIST_1 = 122
 
 //******************************* Inter Branch ************************************//
 
-export const IB_ORDER = 126
-export const IB_ORDER_LIST = 127
+export const ORDER_3 = 126
+export const ORDER_LIST_3 = 127
 
 export const INWARD = 128
 export const INWARD_LIST = 129
 export const IB_INWARD_STP = 133
 
-export const IB_INVOICE = 130
-export const IB_INVOICE_LIST = 131
+export const INVOICE_2 = 130
+export const INVOICE_LIST_2 = 131
 export const IB_INVOICE_STP = 132

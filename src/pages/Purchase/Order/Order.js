@@ -26,21 +26,20 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { BreadcrumbShowCountlabel } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
-import { ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
-
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
+import * as pageId from "../../../routes/allPageID"
 
 let editVal = {}
 
@@ -48,20 +47,20 @@ const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname
-    console.log("subPageMode", subPageMode)
+    const subPageMode = history.location.pathname;
+
     const fileds = {
         id: "",
-        Name: "",
+        Supplier: "",
+
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userAccState, setUserPageAccessState] = useState("");
     const [description, setDescription] = useState('')
-    //Access redux store Data /  'save_ModuleSuccess' action data
 
-    // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
@@ -86,12 +85,10 @@ const Order = (props) => {
         orderType,
         updateMsg,
         supplierAddress = [],
-
+        pageField
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
-        // vender: state.SupplierReducer.vender,
-
         supplierAddress: state.SupplierReducer.supplierAddress,
         orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
@@ -99,6 +96,37 @@ const Order = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
+
+    useEffect(() => {
+       
+        const page_Id =
+            ((subPageMode === url.ORDER_1) ? (pageId.ORDER_1) :
+                (subPageMode === url.ORDER_2) ? (pageId.ORDER_2) :
+                    (subPageMode === url.ORDER_3) ? (pageId.ORDER_3) 
+                    : null)
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(GetVenderSupplierCustomer(subPageMode))
+        dispatch(getSupplierAddress())
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+    }, []);
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     // userAccess useEffect
     useEffect(() => {
@@ -121,19 +149,6 @@ const Order = (props) => {
             }
         };
     }, [userAccess])
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    useEffect(() => {
-
-        dispatch(goButtonForOrderAddSuccess(null))
-        dispatch(GetVenderSupplierCustomer(subPageMode))
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
-    }, [])
 
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
@@ -218,10 +233,9 @@ const Order = (props) => {
         }
     }, [orderType])
 
-      useEffect( async () => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonForOrderAddSuccess([]))
@@ -229,18 +243,18 @@ const Order = (props) => {
             //     Type: 1,
             //     Status: true,
             //     Message: postMsg.Message,
-            //     RedirectPath: ORDER_lIST,
+            //     RedirectPath: ORDER_lIST_1,
             // }))
-            
-             const a =await CustomAlert({
+
+            const a = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: ORDER_lIST,
+                RedirectPath: url.ORDER_lIST_1,
                 // AfterResponseAction:
             })
-            if(a){
+            if (a) {
                 history.push({
-                    pathname: ORDER_lIST,
+                    pathname: url.ORDER_lIST_1,
                     // state: history.location.state
                 });
             }
@@ -265,9 +279,8 @@ const Order = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
-                pathname: ORDER_lIST,
+                pathname: url.ORDER_lIST_1,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
@@ -549,7 +562,7 @@ const Order = (props) => {
         const isConfirmed = await CustomAlert({
             Type: 7,
             Message: msg,
-            RedirectPath: ORDER_lIST,
+            RedirectPath: url.ORDER_lIST_1,
         });
         if (isConfirmed) {
             dispatch(goButtonForOrderAddSuccess([]))
@@ -771,7 +784,7 @@ const Order = (props) => {
                             <Col sm="6">{/*Supplier Name */}
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
                                     <Col sm="6">
                                         <Select
                                             value={supplierSelect}
@@ -839,7 +852,7 @@ const Order = (props) => {
                             </div >
                         </div>
 
-                        {subPageMode === url.ORDER ? <div>
+                        {subPageMode === url.ORDER_1 ? <div>
                             <div className="row  ">                                       {/*  Billing Address   and Shipping Address*/}
 
                                 <div className="col col-6">{/* Billing Address */}
@@ -1029,7 +1042,7 @@ const Order = (props) => {
                         dropMode={mode.dropdownAdd}
                         editValue={{ SupplierName: supplierSelect }}
                         masterPath={url.PARTYITEM}
-                        redirectPath={url.ORDER}
+                        redirectPath={url.ORDER_1}
                         isOpenModal={Open_TermsModal_func}
                         pageMode={pageMode}
                     />
