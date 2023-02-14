@@ -1,51 +1,48 @@
-// /*
-// *
-// * ==========================================
-// * CUSTOM UTIL CLASSES
-// * ==========================================
-// *
-// */
-// .table-fixed tbody {
-//     height: 300px;
-//     overflow-y: auto;
-//     width: 100%;
-// }
 
-// .table-fixed thead,
-// .table-fixed tbody,
-// .table-fixed tr,
-// .table-fixed td,
-// .table-fixed th {
-//     display: block;
-// }
+.head{
+  border-radius: 5px;
+  margin-left:-25px !important;
+  margin-right: -25px !important;
+}
+.headbody{
+margin-left:-25px !important;
+margin-right: -25px !important;
+border-radius: 5px;
+margin-bottom: -14px !important;
 
-// .table-fixed tbody td,
-// .table-fixed tbody th,
-// .table-fixed thead > tr > th {
-//     float: left;
-//     position: relative;
+}
 
-//     &::after {
-//         content: '';
-//         clear: both;
-//         display: block;
-//     }
-// }
+.custom_scroll_div{
+  margin-bottom: -7%;
+    overflow-x: scroll;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    }
 
-// /*
-// *
-// * ==========================================
-// * FOR DEMO PURPOSES
-// * ==========================================
-// *
-// */
+.Scroll_div{
+  margin-bottom: -3%;
+  overflow-x: scroll;
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+.pagescroll{
+    overflow-x: hidden !important ;
+}   
+.thsticky {
+ 
+    position: sticky ;
+    left: 0 !important;
+    background-color: white !important;
+  
+}
+.colorhead{
+  background-color: rgb(245, 245, 245) !important;
+  
+ 
+}
+    
 
-// body {
-//     background: #74ebd5;
-//     background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
-//     background: linear-gradient(to right, #74ebd5, #ACB6E5);
-//     min-height: 100vh;
-
-// }
 
 

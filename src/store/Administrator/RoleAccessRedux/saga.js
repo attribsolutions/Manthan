@@ -5,6 +5,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 // } from "./actions";
 import {
   AddPageHandlerForRoleAccessList_Api,
+  Delete_RoleAccess_Api,
   GetRoleListForRoleAccessList_Page_Api,
   Get_RoleAccess_List_Page_Api,
   GO_Button_HandlerForRoleAccessList_Api,
@@ -13,6 +14,7 @@ import {
 } from "../../../helpers/backend_helper";
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
+  DELETE_ROLE_ACCESS_lIST,
   GET_ROLEACCESS_LIST_PAGE,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
@@ -31,6 +33,7 @@ import {
   PostMethod_ForRoleAccessListPage_Success,
   PostMethod_ForCopyRoleAccessFor_Role_Succes,
   PostMethod_ForCopyRoleAccessFor_Role_Success,
+  DeleteRoleAcessSuccess,
 } from "./actions";
 
 
@@ -127,10 +130,24 @@ function* Get_RoleAccessList_GenratorFunction() {
    
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "RoleAccess GET Method 500 Error",
+      Status:true, Message: "RoleAccess GET Method 500 Error",
     }));
   }
 }
+
+// delete Api
+function* Delete_RoleAccessList_GenratorFunction({ role,division,company}) {
+  try {
+    const response = yield call(Delete_RoleAccess_Api,role,division,company);
+    yield put(DeleteRoleAcessSuccess(response));
+  } catch (error) {
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "RoleAccess delete Method 500 Error",
+    }));
+  }
+}
+
 
 
 
@@ -155,6 +172,7 @@ function* Post_MethodForCopyRoleAccess_GenFun({ data }) {
 
 
 function* RoleAccessSaga() {
+  yield takeEvery(DELETE_ROLE_ACCESS_lIST,Delete_RoleAccessList_GenratorFunction );
   yield takeEvery(PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST, PageDropdownForRoleAccessList_GenratorFunction);
   yield takeEvery(GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE, GetRoleAccessListForRoleAccessList_GenratorFunction);
   yield takeEvery(GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, GoButtonHandlerForRoleAccessList_GenratorFunction);

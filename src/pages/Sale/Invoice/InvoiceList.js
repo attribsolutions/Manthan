@@ -17,7 +17,7 @@ import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { Invoice_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
 import Invoice from "./Invoice";
@@ -55,7 +55,7 @@ const InvoiceList = () => {
     const { userAccess, pageField, customer, tableList, } = reducers;
     const { fromdate, todate, customerSelect } = orderlistFilter;
 
-    const page_Id = pageId.INVOICE_LIST
+    const page_Id = pageId.INVOICE_LIST_1
 
     const action = {
         getList: getIssueListPage,
@@ -107,7 +107,7 @@ const InvoiceList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_Edit_API_Singel_Get, ReportType, row.id))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
     function goButtonHandler() {
@@ -222,11 +222,11 @@ const InvoiceList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Invoice}
-                            masterPath={url.INVOICE}
+                            masterPath={url.INVOICE_1}
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.INVOICE_LIST ? false : true}
+                            makeBtnShow={pageMode === url.INVOICE_LIST_1 ? false : true}
                             // makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

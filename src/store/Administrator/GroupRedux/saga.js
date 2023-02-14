@@ -99,10 +99,7 @@ function* Update_Grouplist_ID_GenratorFunction({ updateData, ID }) {
   }
 }
 
-
-
-
-  function*  GroupSaga() {
+  function* GroupSaga() {
     yield takeEvery( POST_GROUPLIST,Post_Method_ForGroupMaster_GenFun)
     yield takeEvery(GET_GROUP_LIST, Get_Group_List_genFunc)
     yield takeEvery(DELETE_GROUP_LIST_ID, Delete_GroupList_ID_GenratorFunction)

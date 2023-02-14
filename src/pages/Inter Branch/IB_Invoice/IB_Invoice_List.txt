@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import {
     editBOMList,
@@ -21,20 +21,16 @@ import { IB_Invoicelistfilters, get_IB_InvoiceListPage, InwardButtonId } from ".
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as  mode from "../../../routes/PageMode";
 import IB_Invoice from "./IB_Invoice";
-import { formatDate } from "@fullcalendar/react";
 import { Inward_Button_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
-
 const IB_Invoice_List = () => {
-
+    debugger
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // const hasPagePath = history.location.pathname
-
-    // const [pageMode, setpageMode] = useState(url.IB_INVOICE_LIST)
+    // const [pageMode, setpageMode] = useState(url.INVOICE_LIST_2)
     const [userAccState, setUserAccState] = useState('');
     const [IB_InvoiceFilter, setIB_InvoiceFilter] = useState({
         todate: currentDate, fromdate: currentDate, CustomerSelect: { value: "", label: "All" }
@@ -59,8 +55,8 @@ const IB_Invoice_List = () => {
 
     const hasPagePath = history.location.pathname;
     const pageMode = (hasPagePath === url.IB_INWARD_STP) ? mode.mode2save : mode.defaultList;
-    const page_Id = (hasPagePath === url.IB_INWARD_STP) ? pageId.IB_INWARD_STP : pageId.IB_INVOICE_LIST;
-    
+    const page_Id = (hasPagePath === url.IB_INWARD_STP) ? pageId.IB_INWARD_STP : pageId.INVOICE_LIST_2;
+
 
     const action = {
         getList: get_IB_InvoiceListPage,
@@ -135,16 +131,6 @@ const IB_Invoice_List = () => {
         newObj.CustomerSelect = e
         setIB_InvoiceFilter(newObj)
     }
-
-    // const InwardMakeBtnFunc = (list = []) => {
-    //     dispatch(InwardButtonId(list[0].id))
-    //     history.push({
-    //         pathname: url.INWARD,
-    //         pageMode: "save",
-    //     })
-    // }
-  
-
     function downBtnFunc(row) {
         var ReportType = report.IBinvoice;
         dispatch(getpdfReportdata(Inward_Button_API, ReportType, row.id))
@@ -237,7 +223,7 @@ const IB_Invoice_List = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={IB_Invoice}
-                            masterPath={url.IB_INVOICE}
+                            masterPath={url.INVOICE_2}
                             ButtonMsgLable={"IBInvoice"}
                             deleteName={"FullIBChallanNumber"}
                             pageMode={pageMode}

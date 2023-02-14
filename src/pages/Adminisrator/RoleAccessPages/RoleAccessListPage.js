@@ -10,6 +10,8 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    DeleteRoleAcess,
+    DeleteRoleAcessSuccess,
     getRoleAccessListPage,
     PostMethod_ForCopyRoleAccessFor_Role_Success,
 } from "../../../store/actions";
@@ -20,6 +22,8 @@ import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommo
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { userCompany, userEmployeeID, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {
 
@@ -31,13 +35,15 @@ const RoleAccessListPage = () => {
     const [copy_user_RowData, setCopy_user_RowData] = useState({});
 
 
-    const { TableListData, userAccess, PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
+    const { TableListData, userAccess, PostMessage_ForCopyRoleAccess,deleteMsg } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
         userAccess: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
+        deleteMsg:state.RoleAccessReducer.deleteMsg,
 
     }));
 
+   
     useEffect(() => {
         const locationPath = history.location.pathname
         let userAcc = userAccess.find((inx) => {
@@ -55,7 +61,7 @@ const RoleAccessListPage = () => {
     }, []);
 
     const EditPageHandler = (rowData) => {
-        debugger
+    
         if (rowData.Division_id === null) {
             rowData.Division_id = 0
         }
@@ -79,13 +85,14 @@ const RoleAccessListPage = () => {
             })
         }
     }
+    
+
+
 
 
     useEffect(() => {
-
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
             dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
-
             dispatch(getRoleAccessListPage());
             // GoButton_Handler()
             tog_center()
@@ -108,6 +115,19 @@ const RoleAccessListPage = () => {
         }
     }, [PostMessage_ForCopyRoleAccess])
 
+    useEffect(() => {
+        debugger
+        if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
+            dispatch(DeleteRoleAcessSuccess({ Status: false }));
+            dispatch(getRoleAccessListPage());
+            CustomAlert({
+                Type: 1,
+                Message: JSON.stringify(deleteMsg.Message),
+              
+            })
+        } 
+    }, [deleteMsg]);
+
     //select id for copy row
     const CopyHandeler = (event) => {
 
@@ -118,17 +138,33 @@ const RoleAccessListPage = () => {
 
 
     //select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(
-            AlertState({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this item : "${name}"`,
-                RedirectPath: false,
-                // PermissionAction: deleteItemID,
-                ID: id,
-            })
-        );
+    const deleteHandeler = async(id, name) => {
+        // dispatch(
+        //     AlertState({
+        //         Type: 5,
+        //         Status: true,
+        //         Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
+        //         RedirectPath: false,
+        //         // PermissionAction: deleteItemID,
+        //         ID: id,
+        //     })
+        // );
+
+        const ispermission= await CustomAlert({
+                    Type: 7,
+                    Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
+                  
+                })
+        if (ispermission) {
+            let role = id.Role_id
+            let division = id.Division_id
+            let company = id.Company_id
+            dispatch(DeleteRoleAcess(role,division,company))
+            
+        }
+       
+    
+
     };
 
     // Modules list component table columns 
@@ -193,7 +229,7 @@ const RoleAccessListPage = () => {
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete RoleAccess"
-                            onClick={() => { deleteHandeler(RoleAccess.id, RoleAccess.Name); }}
+                            onClick={() => { deleteHandeler(RoleAccess); }}
                         >
                             <i className="mdi mdi-delete font-size-18"></i>
                         </Button>

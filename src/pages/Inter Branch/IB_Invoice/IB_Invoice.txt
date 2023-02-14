@@ -52,7 +52,7 @@ const IB_Invoice = (props) => {
     const { IBOrderIDs = [], IBOrderItemDetails = [], StockDetails = [], } = MakeIBInvoiceData
 
     useEffect(() => {
-        const page_Id = pageId.IB_INVOICE
+        const page_Id = pageId.INVOICE_2
         dispatch(PostIBInvoiceSuccess([]))
         dispatch(MakeIBInvoiceSuccess([]))
         dispatch(commonPageFieldSuccess(null));
@@ -87,7 +87,7 @@ const IB_Invoice = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: url.INVOICE_LIST,
+                RedirectPath: url.INVOICE_LIST_1,
             }))
 
         } else if (postMsg.Status === true) {
@@ -179,51 +179,6 @@ const IB_Invoice = (props) => {
     };
 
     const saveHandeller = (e, values) => {
-        // {
-        //     IBChallanDate: "2023-02-07",
-        //         CustomerGSTTin: "41",
-        //             GrandTotal: 6,
-        //                 RoundOffAmount: "0.60",
-        //                     Customer: 24,
-        //                         Party: 4,
-        //                             CreatedBy: 15,
-        //                                 UpdatedBy: 15,
-        //                                     IBChallanItems: [
-        //                                         {
-        //                                             Item: 55,
-        //                                             Unit: 481,
-        //                                             BatchCode: "65",
-        //                                             Quantity: "0.500",
-        //                                             BatchDate: "2023-01-18",
-        //                                             BatchID: 456,
-        //                                             BaseUnitQuantity: "13.000",
-        //                                             LiveBatch: 44,
-        //                                             MRP: null,
-        //                                             Rate: "10.00",
-        //                                             BasicAmount: "5.00",
-        //                                             GSTAmount: "0.60",
-        //                                             GST: 53,
-        //                                             CGST: "0.30",
-        //                                             SGST: "0.30",
-        //                                             IGST: 0,
-        //                                             GSTPercentage: "12.00",
-        //                                             CGSTPercentage: 6,
-        //                                             SGSTPercentage: 6,
-        //                                             IGSTPercentage: 0,
-        //                                             Amount: "5.60",
-        //                                             TaxType: "GST",
-        //                                             DiscountType: "",
-        //                                             Discount: "0",
-        //                                             DiscountAmount: "0"
-        //                                         }
-        //                                     ],
-        //                                         IBChallansReferences: [
-        //                                             {
-        //                                                 Demand: 11
-        //                                             }
-        //                                         ]
-        // }
-
 
         const arr = IBOrderItemDetails.map(i => ({
             Item: 55,
