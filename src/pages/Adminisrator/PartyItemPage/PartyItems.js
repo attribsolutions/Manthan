@@ -40,6 +40,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PartyItems = (props) => {
 
@@ -49,7 +50,6 @@ const PartyItems = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userAccState, setUserPageAccessState] = useState("");
     const [itemArr, setitemArr] = useState([]);
-    console.log("itemArr", itemArr)
 
     const fileds = {
         id: "",
@@ -66,7 +66,6 @@ const PartyItems = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-    const hasDropMode = props.hasOwnProperty("dropMode")
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -104,9 +103,6 @@ const PartyItems = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         }
-        else if (hasDropMode) {
-            locationPath = props.masterPath;
-        };
 
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
@@ -133,8 +129,7 @@ const PartyItems = (props) => {
                 hasEditVal = location.editValue
             }
             if (hasEditVal) {
-                debugger
-                const { Party, PartyName } = hasEditVal.Party
+                const { Party, PartyName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -152,7 +147,7 @@ const PartyItems = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(PostPartyItemsSuccess({ Status: false }))
-            if (hasDropMode) {
+            if (pageMode === mode.assingLink) {
                 props.isOpenModal(false)
             }
             dispatch(PostPartyItemsSuccess({ Status: false }))
@@ -227,14 +222,16 @@ const PartyItems = (props) => {
             formatter: (cellContent, row, col, k) => {
                 debugger
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
+                debugger
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.Item}
-                        disabled={hasDropMode ? row.hasInitialVal ? pageMode === mode.edit ? true : false : false : false}
+                        disabled={(pageMode === mode.assingLink) ? (row.hasInitialVal) ? true : false : false}
                         onChange={e => {
                             setitemArr(ele => {
-                                var newrr = ele.map(i => {
+                                let a = { ...ele };
+                                const newrr = [...ele].map(i => {
                                     if (row.Item === i.Item) {
                                         i.itemCheck = !i.itemCheck;
                                     }
@@ -258,7 +255,7 @@ const PartyItems = (props) => {
         custom: true,
     };
 
-    const GoButton_Handler = (e) => {
+    const GoButton_Handler = async(e) => {
         let supplier = e.value
         if (!supplier > 0) {
             alert("Please Select Supplier")
@@ -266,7 +263,8 @@ const PartyItems = (props) => {
         }
 
         if (tableList.length > 0) {
-            if (window.confirm("Refresh  Item...!")) {
+           const ispermission=  await CustomAlert({Type:7,Message:"Refresh  Item...!"})
+            if (ispermission) {
                 dispatch(getPartyItemListSuccess([]))
             } else {
                 return

@@ -17,7 +17,7 @@ import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
-import { getSupplier, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -36,14 +36,15 @@ const OrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname
     // const [userAccState, setUserAccState] = useState('');
     const [orderlistFilter, setorderlistFilter] = useState('');
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
 
 
     const reducers = useSelector(
         (state) => ({
-            vender: state.SupplierReducer.vender,
+            supplier: state.SupplierReducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             deleteMsg: state.OrderReducer.deleteMsg,
@@ -57,40 +58,9 @@ const OrderList = () => {
     );
 
 
-    const { fromdate = currentDate, todate = currentDate, venderSelect = { value: "", label: "All" } } = orderlistFilter;
-    const { userAccess, pageField, GRNitem, vender, tableList } = reducers;
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" } } = orderlistFilter;
+    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
 
-    // let page_Id = pageId.ORDER_LIST_1;
-    // let page_Mode = mode.defaultList;
-    // let page_Url = url.ORDER_LIST_1;
-    // let make_BtnShow = false;
-
-    // if (hasPagePath === url.GRN_STP) {
-    //     page_Id = pageId.GRN_STP;
-    //     page_Mode = mode.mode2save;
-    //     page_Url = url.GRN_STP;
-    //     make_BtnShow = true
-    // }
-    let page_Id = '';
-    let page_Mode = mode.defaultList;
-
-    if (subPageMode === url.ORDER_LIST_1) {
-        page_Id = pageId.ORDER_LIST_2
-    }
-    else if (subPageMode === url.ORDER_LIST_2) {
-        page_Id = pageId.ORDER_LIST_2
-    }
-    else if (subPageMode === url.ORDER_LIST_3) {
-        page_Id = pageId.ORDER_LIST_3
-    }
-    else if (subPageMode === url.IB_INWARD_STP) {
-        page_Id = pageId.IB_INWARD_STP
-        page_Mode = mode.mode2save
-    }
-    else if (subPageMode === url.GRN_STP) {
-        page_Id = pageId.GRN_STP
-        page_Mode = mode.mode2save
-    }
 
     const action = {
         getList: getOrderListPage,
@@ -102,20 +72,43 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        debugger
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+
+        if (subPageMode === url.ORDER_LIST_1) {
+            page_Id = pageId.ORDER_LIST_1
+        }
+        else if (subPageMode === url.ORDER_LIST_2) {
+            page_Id = pageId.ORDER_LIST_2
+        }
+        else if (subPageMode === url.ORDER_LIST_3) {
+            page_Id = pageId.ORDER_LIST_3
+        }
+        else if (subPageMode === url.IB_INWARD_STP) {
+            page_Id = pageId.IB_INWARD_STP
+            page_Mode = mode.mode2save
+        }
+        else if (subPageMode === url.GRN_STP) {
+            page_Id = pageId.GRN_STP
+            page_Mode = mode.mode2save
+        };
+        setSubPageMode(page_Mode);
+        setPageMode(page_Id)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(GetVender())
+        dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler(true)
 
     }, []);
 
-    const venderOptions = vender.map((i) => ({
+    const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
 
-    venderOptions.unshift({
+    supplierOptions.unshift({
         value: "",
         label: " All"
     });
@@ -174,7 +167,7 @@ const OrderList = () => {
                     OrderIDs: isGRNSelect
                 })
 
-                dispatch(getGRN_itemMode2({ jsonBody, page_Mode, path: url.GRN_ADD, grnRef, challanNo }))
+                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
             } else {
                 alert("Please Select Order1")
@@ -202,7 +195,7 @@ const OrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: venderSelect.value,
+            Supplier: supplierSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder
         });
@@ -224,9 +217,9 @@ const OrderList = () => {
         // dispatch(orderlistfilters(newObj))
     }
 
-    function venderOnchange(e) {
+    function supplierOnchange(e) {
         let newObj = { ...orderlistFilter }
-        newObj.venderSelect = e
+        newObj.supplierSelect = e
         setorderlistFilter(newObj)
         // dispatch(orderlistfilters(newObj))
     }
@@ -288,9 +281,9 @@ const OrderList = () => {
                                 <Col sm="5">
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        value={venderSelect}
-                                        options={venderOptions}
-                                        onChange={venderOnchange}
+                                        value={supplierSelect}
+                                        options={supplierOptions}
+                                        onChange={supplierOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -311,7 +304,7 @@ const OrderList = () => {
                             masterPath={url.ORDER_1}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
-                            page_Mode={page_Mode}
+                            page_Mode={pageMode}
                             // pageUrl={page_Url}
                             // makeBtnShow={make_BtnShow}
                             makeBtnFunc={makeBtnFunc}

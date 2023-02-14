@@ -117,9 +117,9 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 }
 
 // List Page API
-function* get_OrderList_GenFunc(action) {
+function* orderList_GoBtn_GenFunc(action) {
   try {
-
+debugger
     const { subPageMode, data } = action
     let response;
     let newList;
@@ -188,7 +188,7 @@ function* OrderPageSaga() {
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
   yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
   yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
-  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderList_GenFunc);
+  yield takeEvery(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
 }
 
 export default OrderPageSaga;

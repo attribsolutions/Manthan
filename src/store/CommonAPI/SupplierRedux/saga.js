@@ -90,16 +90,16 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
-  
+  debugger
   let response;
   try {
-    if (subPageMode === url.ORDER_1) {
+    if ((subPageMode === url.ORDER_1)||(subPageMode === url.ORDER_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty() });//vendor mode 1
     }
-    else if (subPageMode === url.ORDER_2) {
+    else if ((subPageMode === url.ORDER_2)||(subPageMode === url.ORDER_LIST_2)) {
       response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty() });//supplier mode 2
     }
-    else if (subPageMode === url.INVOICE_1) {
+    else if ((subPageMode === url.INVOICE_1)||(subPageMode === url.INVOICE_2)) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty() });
     }
     else if ((subPageMode === url.INVOICE_2)||(subPageMode === url.ORDER_3)) {

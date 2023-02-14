@@ -24,39 +24,50 @@ export default function OrderPageTermsTable(props,) {
             return (i.value === e.value)
         });
         if (find === undefined) {
-            setfunc(terms => [...terms, { label: e.label, value: e.value, IsDeleted: 0 }]);
+            setfunc((state) => {
+                 let i={...state}
+                i.termsAndConTable = [...i.termsAndConTable, { label: e.label, value: e.value, IsDeleted: 0 }];
+                return i;
+            })
         } else {
-
-            setfunc(terms => terms.map((i) => {
-                if (i.value === e.value) {
-                    i.IsDeleted = 0
-                }
-                return i
-            }));
+            setfunc((state) => {
+                let i={...state}
+                i.termsAndConTable = i.termsAndConTable.map((ele) => {
+                    if (ele.value === e.value) {
+                        ele.IsDeleted = 0
+                    }
+                    return i
+                });
+                return i;
+            })
         }
     }
-    const ondelete = (i) => {
-
+    const ondelete = (e) => {
+        debugger
         const find = privious.find((ele) => {
-            return (i.value === ele.id)
+            return (e.value === ele.id)
         });
 
         if (!(find === undefined)) {
-            setfunc(terms => {
-                const a = terms.map(ele => {
-                    if (ele.value === i.value) {
+            setfunc((state) => {
+                let i={...state}
+                i.termsAndConTable = i.termsAndConTable.map(ele => {
+                    if (ele.value === e.value) {
                         ele.IsDeleted = 1
                     }
                     return ele
                 })
-                return a
+                return i
             })
+
         }
         else {
-            setfunc(terms => {
-                const a = terms.filter(ele => !(ele.value === i.value))
-                return a
+            setfunc((state) => {
+                let i={...state}
+                i.termsAndConTable = i.termsAndConTable.filter(ele => !(ele.value === e.value))
+                return i
             })
+
         }
     }
     const table = []
