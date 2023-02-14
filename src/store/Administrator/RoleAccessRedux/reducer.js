@@ -23,7 +23,6 @@ const INIT_STATE = {
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
-  debugger
   switch (action.type) {
 
     case GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
