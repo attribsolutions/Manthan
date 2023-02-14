@@ -24,50 +24,39 @@ export default function OrderPageTermsTable(props,) {
             return (i.value === e.value)
         });
         if (find === undefined) {
-            setfunc((state) => {
-                 let i={...state}
-                i.termsAndConTable = [...i.termsAndConTable, { label: e.label, value: e.value, IsDeleted: 0 }];
-                return i;
-            })
+            setfunc(terms => [...terms, { label: e.label, value: e.value, IsDeleted: 0 }]);
         } else {
-            setfunc((state) => {
-                let i={...state}
-                i.termsAndConTable = i.termsAndConTable.map((ele) => {
-                    if (ele.value === e.value) {
-                        ele.IsDeleted = 0
-                    }
-                    return i
-                });
-                return i;
-            })
+
+            setfunc(terms => terms.map((i) => {
+                if (i.value === e.value) {
+                    i.IsDeleted = 0
+                }
+                return i
+            }));
         }
     }
-    const ondelete = (e) => {
-        debugger
+    const ondelete = (i) => {
+
         const find = privious.find((ele) => {
-            return (e.value === ele.id)
+            return (i.value === ele.id)
         });
 
         if (!(find === undefined)) {
-            setfunc((state) => {
-                let i={...state}
-                i.termsAndConTable = i.termsAndConTable.map(ele => {
-                    if (ele.value === e.value) {
+            setfunc(terms => {
+                const a = terms.map(ele => {
+                    if (ele.value === i.value) {
                         ele.IsDeleted = 1
                     }
                     return ele
                 })
-                return i
+                return a
             })
-
         }
         else {
-            setfunc((state) => {
-                let i={...state}
-                i.termsAndConTable = i.termsAndConTable.filter(ele => !(ele.value === e.value))
-                return i
+            setfunc(terms => {
+                const a = terms.filter(ele => !(ele.value === i.value))
+                return a
             })
-
         }
     }
     const table = []
