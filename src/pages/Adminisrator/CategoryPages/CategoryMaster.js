@@ -164,7 +164,7 @@ const CategoryMaster = (props) => {
                     Message: postMsg.Message,
                     RedirectPath: url.CATEGORY_lIST,
                 }))
-            }
+             }
         }
         else if (postMsg.Status === true) {
             saveDissable(false);//save Button Is enable function
@@ -176,6 +176,8 @@ const CategoryMaster = (props) => {
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
+
+            
         }
     }, [postMsg])
 
