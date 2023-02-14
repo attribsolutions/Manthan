@@ -238,10 +238,12 @@ const PurchaseListPage = (props) => {
     }, [editData]);
 
     function makeBtnHandler(rowData) {
+        
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
         makeBtnFunc(arr)
+
     }
 
     function onSaveBtnClick() {

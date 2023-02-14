@@ -292,6 +292,8 @@ const PartySubParty = (props) => {
     }
 
     const SaveHandler = (event) => {
+
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const arr = PartyData.map(i => {
@@ -309,7 +311,7 @@ const PartySubParty = (props) => {
                     UpdatedBy: createdBy(),
                     PartyID: Division_dropdown_Select.value,
                 }
-                
+
                 if (i.partyType === 3) {
                     return { ...isvendor, ...ramain }
                 } else {
@@ -320,9 +322,12 @@ const PartySubParty = (props) => {
             const jsonBody = JSON.stringify(arr);
             saveDissable(true);//save Button Is dissable function
             if (pageMode === mode.edit) {
+                debugger
                 dispatch(updatePartySubParty(jsonBody, values.id,));
             }
             else {
+                debugger
+
                 dispatch(postPartySubParty(jsonBody));
             }
         }
