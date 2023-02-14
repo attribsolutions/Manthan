@@ -390,6 +390,12 @@ export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
 export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
 
 
+//Challan API
+export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
+export const Challan_delete_API = (id) => del(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Delete challan
+export const Challan_Make_API = (id) => get(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Make challan
+
+
 // BOM API
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
