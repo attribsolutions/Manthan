@@ -377,6 +377,7 @@ const MessageFun = ({ msg }) => {
 }
 
 export async function CkeckAlert(method, url, response, body) {
+    debugger
     const { data = '' } = response
     const con1 = ((data.StatusCode === 200)) ;
     const con2 = ((data.StatusCode === 204)) ;
@@ -398,13 +399,7 @@ export async function CkeckAlert(method, url, response, body) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
         return Promise.reject(response)
-    }  else if (con2) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
-        return Promise.reject(response)
-    }
-
-     else if (con4) {
+    }else if (con4) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
         return Promise.reject(response)

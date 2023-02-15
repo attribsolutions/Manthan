@@ -120,6 +120,7 @@ export const formValChange = ({ event, state, setState }) => {
 export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
+
     fieldArr.forEach(ele => {
         Object.keys(values).some(lab => {
             if (lab === ele.ControlID) {
@@ -136,10 +137,14 @@ export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     });
 
     setState(isState)
-
 }
 
-
+export function defaultSetValidAll({ state, setState, fieldArr }) {
+    Object.keys(state.values).some(lab => {
+        state.hasValid[lab] = true
+    });
+    return
+}
 
 export const onChangeSelect = ({ hasSelect, evn, state, setState }) => {
 
@@ -172,7 +177,8 @@ export const initialFiledFunc = (field) => {
         obj.hasValid[label] = {}
         obj.hasValid[label]["regExp"] = ""
         obj.hasValid[label]["inValidMsg"] = ""
-        obj.hasValid[label]["valid"] = false
+        obj.hasValid[label]["valid"] = false;
+      
     })
     return obj
 }

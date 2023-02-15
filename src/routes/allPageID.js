@@ -92,10 +92,10 @@ export const GENERAL_LIST = 120
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
-export const ORDER_lIST_1 = 54
+export const ORDER_LIST_1 = 54
 
 export const ORDER_2 = 117
-export const ORDER_lIST_2 = 118
+export const ORDER_LIST_2 = 118
 
 export const GRN_ADD = 55
 export const GRN_lIST = 56

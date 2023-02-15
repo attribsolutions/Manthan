@@ -92,10 +92,10 @@ export const GENERAL_LIST ="/GeneralList"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
-export const ORDER_lIST_1 = "/OrderList_1"
+export const ORDER_LIST_1 = "/OrderList_1"
 
 export const ORDER_2 = "/Order_2"
-export const ORDER_lIST_2 = "/OrderList_2"
+export const ORDER_LIST_2 = "/OrderList_2"
 
 //******************************* Inventory Module ************************************//
 
@@ -104,6 +104,7 @@ export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
 
 export const CHALLAN_LIST ="/ChallanList"
+export const CHALLAN ="/Challan"
 
 //******************************* Production Module ************************************//
 
@@ -125,7 +126,6 @@ export const PRODUCTION_STP = "/Production_STP"
 
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
-
 
 //******************************* InterBranch Module ************************************//
 

@@ -11,10 +11,10 @@ function* Post_PartyItems_GneratorFunction({ data }) {
 
   try {
     const response = yield call(Party_Items, data);
-   
+
     yield put(PostPartyItemsSuccess(response));
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -67,21 +67,20 @@ function* editPartyItems_ID_GenratorFunction({ id, pageMode }) {
 
     const PartyItem = response.Data.map((item) => {
       item["itemCheck"] = false
-
       if (item.Party > 0) {
         Party = item;
-        { item.itemCheck = true }
+        item.itemCheck = true;
       }
       return item
     });
-    response.Data = { Party, PartyItem };
-
+    response.Data = { ...Party, PartyItem };
+    debugger
     yield put(editPartyItemIDSuccess(response));
   } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message Edit Party Items",
-    }));
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error Message Edit Party Items",
+    // }));
   }
 }
 

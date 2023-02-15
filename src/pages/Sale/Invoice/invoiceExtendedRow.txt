@@ -34,9 +34,9 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { GoButtonForinvoiceAdd, GoButtonForinvoiceAddSuccess, invoiceSaveActionSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
+import { invoiceSaveAction } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 import "./css.css"
@@ -93,7 +93,7 @@ const Invoice = (props) => {
         dispatch(GetCustomer())
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        dispatch(GoButtonForinvoiceAddSuccess([]))
 
     }, []);
 
@@ -164,8 +164,8 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postInvoiceMasterSuccess({ Status: false }))
-            dispatch(GoButton_post_For_Invoice_Success([]))
+            dispatch(invoiceSaveActionSuccess({ Status: false }))
+            dispatch(GoButtonForinvoiceAddSuccess([]))
             // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
@@ -195,8 +195,8 @@ const Invoice = (props) => {
         }
         else if (postMsg.Status === true) {
 
-            dispatch(postInvoiceMasterSuccess({ Status: false }))
-            dispatch(GoButton_post_For_Invoice_Success([]))
+            dispatch(invoiceSaveActionSuccess({ Status: false }))
+            dispatch(GoButtonForinvoiceAddSuccess([]))
 
             dispatch(AlertState({
                 Type: 4,
@@ -540,7 +540,7 @@ const Invoice = (props) => {
         } catch (w) { }
     }
     function InvoiceDateOnchange(y, v, e) {
-        dispatch(GoButton_post_For_Invoice_Success([]))
+        dispatch(GoButtonForinvoiceAddSuccess([]))
         onChangeDate({ e, v, state, setState })
     };
 
@@ -552,7 +552,7 @@ const Invoice = (props) => {
             v1.hasValid.Customer.valid = true
             return v1
         })
-        // dispatch(GoButton_post_For_Invoice_Success([]))
+        // dispatch(GoButtonForinvoiceAddSuccess([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -694,7 +694,7 @@ const Invoice = (props) => {
             OrderIDs: ""
         });
         mainSppinerOnOff({ id: goBtnId, state: true })
-        dispatch(GoButton_post_For_Invoice(jsonBody, goBtnId));
+        dispatch(GoButtonForinvoiceAdd(jsonBody, goBtnId));
 
         // }
     };
@@ -832,7 +832,7 @@ const Invoice = (props) => {
         else {
 
             mainSppinerOnOff({ id: saveBtnid, state: true })
-            dispatch(postInvoiceMaster(jsonBody, saveBtnid));
+            dispatch(invoiceSaveAction(jsonBody, saveBtnid));
         }
         // };
         debugger
@@ -1029,7 +1029,7 @@ const Invoice = (props) => {
                                                 //     defaultDate: values.InvoiceDate,
                                                 //     dateFormat: "Y-m-d",
                                                 // });
-                                                dispatch(GoButton_post_For_Invoice_Success([]))
+                                                dispatch(GoButtonForinvoiceAddSuccess([]))
                                             }}
                                         >Change</Button>
                                     }

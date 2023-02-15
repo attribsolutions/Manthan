@@ -3,46 +3,25 @@ import {
     DELETE_INVOICE_LIST_PAGE_SUCCESS,
     EDIT_INVOICE_LIST,
     EDIT_INVOICE_LIST_SUCCESS,
-    GET_INVOICE_LIST_PAGE,
-    GET_INVOICE_LIST_PAGE_SUCCESS,
+    INVOICE_LIST_GO_BUTTON_FILTER,
+    INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
     GO_BUTTON_FOR_INVOICE_ADD,
     GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
-    GO_BUTTON_POST_FOR_INVOICE,
-    GO_BUTTON_POST_FOR_INVOICE_SUCCESS,
-    POST_INVOICE_MASTER,
-    POST_INVOICE_MASTER_SUCCESS
+    INVOICE_SAVE_ADD_PAGE_ACTION,
+    INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS
 } from "./actionType";
 
-// Go Button Post API for Invoice Master
-export const GoButton_post_For_Invoice = (data, goBtnId) => ({
-    type: GO_BUTTON_POST_FOR_INVOICE,
-    data, goBtnId
-});
 
-export const GoButton_post_For_Invoice_Success = (data) => ({
-    type: GO_BUTTON_POST_FOR_INVOICE_SUCCESS,
-    payload: data,
-});
 
-// post api
-export const postInvoiceMaster = (data, saveBtnid) => ({
-    type: POST_INVOICE_MASTER,
-    data, saveBtnid
-});
-
-export const postInvoiceMasterSuccess = (data) => ({
-    type: POST_INVOICE_MASTER_SUCCESS,
-    payload: data,
-});
 
 //get listpage api
-export const getIssueListPage = (filters) => ({
-    type: GET_INVOICE_LIST_PAGE,
-    filters,
+export const invoiceListGoBtnfilter = (subPageMode, filters) => ({
+    type: INVOICE_LIST_GO_BUTTON_FILTER,
+    subPageMode, filters,
 });
 
-export const getIssueListPageSuccess = (data) => ({
-    type: GET_INVOICE_LIST_PAGE_SUCCESS,
+export const invoiceListGoBtnfilterSucccess = (data) => ({
+    type: INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
     payload: data,
 });
 
@@ -69,14 +48,24 @@ export const deleteInvoiceIdSuccess = (data) => ({
 });
 
 
-
 // Go Button Post API for Invoice Master
-export const GoButton_For_Invoice_Add = (subPageMode,data, goBtnId) => ({
+export const GoButtonForinvoiceAdd = (subPageMode, data, goBtnId) => ({
     type: GO_BUTTON_FOR_INVOICE_ADD,
     subPageMode, data, goBtnId
 });
 
-export const GoButton_For_Invoice_Add_Success = (data) => ({
+export const GoButtonForinvoiceAddSuccess = (data) => ({
     type: GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
+    payload: data,
+});
+
+// post api
+export const invoiceSaveAction = (subPageMode, data, saveBtnid) => ({
+    type: INVOICE_SAVE_ADD_PAGE_ACTION,
+    subPageMode, data, saveBtnid
+});
+
+export const invoiceSaveActionSuccess = (data) => ({
+    type: INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
     payload: data,
 });
