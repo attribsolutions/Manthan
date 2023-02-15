@@ -7,14 +7,14 @@ import {
   getMethodForVehicleList,
   editVehicleTypeId,
   delete_VehicleType_ID,
-  PostMethod_ForVehicleMasterSuccess,
+  PostMethod_ForVehicleMasterSuccess
 } from "../../../store/Administrator/VehicleRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+
 
 const VehicleList = (props) => {
 
@@ -63,7 +63,6 @@ const VehicleList = (props) => {
             masterPath={url.VEHICLE}
             ButtonMsgLable={"Vehicle"}
             deleteName={"VehicleNumber"}
-
           />
           : null
       }
