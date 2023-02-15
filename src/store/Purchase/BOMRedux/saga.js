@@ -58,10 +58,10 @@ function* get_BOMList_GenFunc({ filters }) {
    
   } catch (error) {
    
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error  Get BOMList",
-    }));
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error  Get BOMList",
+    // }));
   }
 }
 

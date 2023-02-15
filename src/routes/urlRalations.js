@@ -127,6 +127,9 @@ export const Production_Add_Mode = url.PRODUCTION_LIST
 export const InvoiceList = url.INVOICE_1
 export const Invoice = url.INVOICE_LIST_1
 
+export const ChallanList = url.CHALLAN
+export const Challan = url.CHALLAN_LIST
+
 //******************************* Inter Branch ************************************//
 
 export const OrderList_3 = url.ORDER_3
