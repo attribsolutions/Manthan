@@ -1,30 +1,23 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbReset, BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import {
-    deleteGRNId,
-    deleteGRNIdSuccess,
-    editGRNId, getGRNListPage,
-    grnlistfilters,
-    updateGRNIdSuccess
-} from "../../../store/Purchase/GRNRedux/actions";
-import {GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import PurchaseListPage, { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
-import { makechallan } from "../../../store/Inventory/ChallanRedux/actions";
+import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, getChallanListPage,  } from "../../../store/Inventory/ChallanRedux/actions";
 
-const GRNList = () => {
+const ChallanList = () => {
     const history = useHistory();
     const pageMode = history.location.pathname
     const dispatch = useDispatch();
@@ -32,34 +25,32 @@ const GRNList = () => {
     const reducers = useSelector(
         (state) => ({
             vender: state.SupplierReducer.vender,
-            tableList: state.GRNReducer.GRNList,
-            deleteMsg: state.GRNReducer.deleteMsg,
+            tableList: state.ChallanReducer.ChallanList,
+            deleteMsg: state.ChallanReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
-            grnlistFilter: state.GRNReducer.grnlistFilter,
+            ChallanlistFilter: state.ChallanReducer.ChallanlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, vender, tableList, grnlistFilter } = reducers;
-    const { fromdate, todate, venderSelect } = grnlistFilter;
+    const { userAccess, pageField, vender, tableList, ChallanlistFilter } = reducers;
+    const { fromdate, todate, venderSelect } = ChallanlistFilter;
 
     const action = {
-        getList: getGRNListPage,
-        editId: editGRNId,
-        deleteId: deleteGRNId,
-        postSucc: postMessage,
-        updateSucc: updateGRNIdSuccess,
-        deleteSucc: deleteGRNIdSuccess
+        // getList: getChallanListPage,
+        deleteId: deleteChallanId,
+        deleteSucc: deleteChallanIdSuccess
     }
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(56))
+        dispatch(commonPageFieldList(138))
         dispatch(GetVender())
         goButtonHandler()
+        dispatch(BreadcrumbReset())
     }, []);
 
     const venderOptions = vender.map((i) => ({
@@ -79,41 +70,42 @@ const GRNList = () => {
     }, [tableList])
 
     const makeBtnFunc = (list = []) => {
-        const id = list[0].id
+    
+        const obj = {...list[0], id: list[0].id }
+        console.log(obj)
         history.push({
-            pathname: url.CHALLAN_LIST,
+            pathname: url.GRN_ADD,
             pageMode: mode.mode2save
         })
-        dispatch(makechallan(id))
+        
     };
 
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: venderSelect === "" ? '' : venderSelect.value,
             Party: userParty(),
-            OrderType: order_Type.SaleOrder
+            Customer: venderSelect === "" ? '' : venderSelect.value,
         });
-        dispatch(getGRNListPage(jsonBody));
+        dispatch(getChallanListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...grnlistFilter }
+        let newObj = { ...ChallanlistFilter }
         newObj.fromdate = date
-        dispatch(grnlistfilters(newObj))
+        dispatch(challanlistfilters(newObj))
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...grnlistFilter }
+        let newObj = { ...ChallanlistFilter }
         newObj.todate = date
-        dispatch(grnlistfilters(newObj))
+        dispatch(challanlistfilters(newObj))
     }
 
     function venderOnchange(e) {
-        let newObj = { ...grnlistFilter }
+        let newObj = { ...ChallanlistFilter }
         newObj.venderSelect = e
-        dispatch(grnlistfilters(newObj))
+        dispatch(challanlistfilters(newObj))
     }
 
     return (
@@ -121,7 +113,6 @@ const GRNList = () => {
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_lIST} /> */}
-
             <div className="page-content">
                 {/* <Breadcrumb
                     pageHeading={"GRN List"}
@@ -179,7 +170,7 @@ const GRNList = () => {
                             <Col sm="5">
                                 <FormGroup className="mb-2 row mt-3 " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "115px" }}>Supplier Name</Label>
+                                        style={{ width: "115px" }}>Customer</Label>
                                     <Col md="5">
                                         <Select
                                             value={venderSelect}
@@ -207,17 +198,20 @@ const GRNList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            masterPath={url.GRN_ADD}
-                            ButtonMsgLable={"GRN"}
+                            // masterPath={url.GRN_ADD}
+                            ButtonMsgLable={"challan"}
                             // pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === url.GRN_lIST }
-                            makeBtnName={"Make Challan"}
-                            deleteName={"FullGRNNumber"}
-                            // pageMode={mode.defaultList}
+                            makeBtnShow={pageMode === url.CHALLAN_LIST}
+                            makeBtnName={"Make GRN"}
+                            // deleteName={"FullGRNNumber"}
+                            pageMode={mode.defaultList}
                             goButnFunc={goButtonHandler}
                         />
+
                         : null
+                      
+
                 }
 
             </div>
@@ -225,4 +219,4 @@ const GRNList = () => {
     )
 }
 
-export default GRNList;
+export default ChallanList;

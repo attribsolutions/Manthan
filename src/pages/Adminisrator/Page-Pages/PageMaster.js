@@ -434,7 +434,7 @@ const PageMaster = (props) => {
       CreatedBy: createdBy(),
       UpdatedBy: createdBy(),
       PagePageAccess: Access,
-      PageFieldMaster: pageType_DropdownSelect.value === 2 ? [] : PageFieldMaster,
+      PageFieldMaster:PageFieldMaster,
     })
 
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
@@ -454,10 +454,10 @@ const PageMaster = (props) => {
 
     if (pageMode === mode.edit) {
       dispatch(updateHPages(jsonBody, EditData.id));
-     
+
     } else {
       dispatch(saveHPages(jsonBody));
-   
+
     }
   };
 
@@ -510,7 +510,7 @@ const PageMaster = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"-70px" }}>
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
           {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE} /> */}
           <Container fluid>
@@ -522,7 +522,7 @@ const PageMaster = (props) => {
               onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
 
               <Col lg={12}>
-                <Card className="text-black" >
+                <Card className="text-black "  style={{minHeight:"100px"}}>
                   <CardHeader className="card-header   text-black c_card_header" >
                     <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -545,7 +545,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      {!(pageType_DropdownSelect.value === 2) ?
+                      {/* {!(pageType_DropdownSelect.value === 2) ? */}
                         <NavItem>
                           <NavLink
                             style={{ cursor: "pointer" }}
@@ -562,8 +562,8 @@ const PageMaster = (props) => {
                             <span className="d-none d-sm-block">Page Field</span>
                           </NavLink>
                         </NavItem>
-                        : <></>
-                      }
+                        {/* : <></> */}
+                      {/* } */}
 
                     </Nav>
 
@@ -975,20 +975,14 @@ const PageMaster = (props) => {
                         <PageFieldMaster_Tab
                           pageFieldTabTable={pageFieldTabTable}
                           setPageFieldTabTable={setPageFieldTabTable} >
-
                         </PageFieldMaster_Tab>
                       </TabPane>
 
                     </TabContent>
                     <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
                       <Col sm={2}>
-                        <div style={{ paddingLeft: "14px" }}>
+                        
 
-                          <SaveButton pageMode={pageMode}
-                            userAcc={userPageAccessState}
-                            editCreatedBy={editCreatedBy}
-                            module={"PageMaster"}
-                          />
 
 
 
@@ -1016,14 +1010,23 @@ const PageMaster = (props) => {
                                   <></>
                               )
                           } */}
-                        </div>
                       </Col>
                     </Row>
                   </CardBody>
+                  <div style={{ paddingLeft: "30px",paddingBottom:"10px" }}>
+                  <SaveButton pageMode={pageMode}
+                    userAcc={userPageAccessState}
+                    editCreatedBy={editCreatedBy}
+                    module={"PageMaster"}
+                  />
+                  </div>
                 </Card>
               </Col>
+
             </AvForm>
+
           </Container>
+
         </div>
       </React.Fragment >
     )

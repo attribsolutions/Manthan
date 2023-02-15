@@ -13,8 +13,6 @@ margin-bottom: -14px !important;
 }
 
 .custom_scroll_div{
-   
-
   margin-bottom: -7%;
     overflow-x: scroll;
     max-height: 400px;
@@ -22,6 +20,13 @@ margin-bottom: -14px !important;
     overflow-x: auto;
     }
 
+.Scroll_div{
+  margin-bottom: -3%;
+  overflow-x: scroll;
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
 .pagescroll{
     overflow-x: hidden !important ;
 }   

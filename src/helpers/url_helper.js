@@ -187,6 +187,10 @@ export const GRN_MAKE_API = "/MakeOrdersGrn"
 export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 
+//Challan
+export const CHALLAN_LIST_BY_FILTERS = "/Challan"
+
+
 
 //Bill Of Master
 export const BOM = '/Billofmaterial'

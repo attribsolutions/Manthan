@@ -48,33 +48,33 @@ const Breadcrumb = props => {
   }
 
   // New Button Handller
-  const NewButtonHandeller = () => {
+  // const NewButtonHandeller = () => {
 
-    if (pageMode === "add") {
+  //   if (pageMode === "add") {
 
-      let pathName = history.location.pathname
-      let userAcc = userAccess.find((inx) => {
-        return (`/${inx.ActualPagePath}` === pathName)
-      })
-      let listPagePath = userAccess.find((inx) => {
-        return (inx.id === userAcc.RelatedPageID)
-      })
-      if (listPagePath === undefined) {
-        return
-      }
-      history.push({
-        pathname: `/${listPagePath.ActualPagePath}`,
-      })
-    }
-    else {
-      history.push({
-        pathname: newBtnPagePath,
-        pageMode: pageMode
-      })
-    }
+  //     let pathName = history.location.pathname
+  //     let userAcc = userAccess.find((inx) => {
+  //       return (`/${inx.ActualPagePath}` === pathName)
+  //     })
+  //     let listPagePath = userAccess.find((inx) => {
+  //       return (inx.id === userAcc.RelatedPageID)
+  //     })
+  //     if (listPagePath === undefined) {
+  //       return
+  //     }
+  //     history.push({
+  //       pathname: `/${listPagePath.ActualPagePath}`,
+  //     })
+  //   }
+  //   else {
+  //     history.push({
+  //       pathname: newBtnPagePath,
+  //       pageMode: pageMode
+  //     })
+  //   }
 
 
-  }
+  // }
 
   // Onfocus Search Box
   useEffect(() => {
@@ -185,11 +185,11 @@ const Breadcrumb = props => {
               {
                 newBtnView ?
                   <div>
-                    <button type="button" className="btn btn-success"
+                    {/* <button type="button" className="btn btn-success"
                       data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                       onClick={NewButtonHandeller}>
                       New
-                    </button>
+                    </button> */}
                     <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px" }} >{pageHeading}</label>
 
                   </div>

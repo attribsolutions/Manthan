@@ -33,20 +33,14 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import {
-    editInvoiceListSuccess,
-    GoButtonForinvoiceAdd,
-    GoButtonForinvoiceAddSuccess,
-    invoiceSaveAction,
-    invoiceSaveActionSuccess
-} from "../../../store/Sales/Invoice/action";
+// import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
 import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+// import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
-import "./css.css"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+// import "./css.css"
 
-const Invoice = (props) => {
+const Challan = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -67,13 +61,13 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
-    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
         pageField,
         userAccess,
+        customer,
         GoButton = '',
         vendorSupplierCustomer
     } = useSelector((state) => ({
@@ -98,10 +92,11 @@ const Invoice = (props) => {
 
     useEffect(() => {
 
-        dispatch(GetVenderSupplierCustomer(subPageMode))
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.INVOICE_1))
-        dispatch(GoButtonForinvoiceAddSuccess([]))
+        // dispatch(GetVenderSupplierCustomer(subPageMode))
+        // dispatch(GetCustomer())
+        // dispatch(commonPageFieldSuccess(null));
+        // dispatch(commonPageField(pageId.INVOICE_1))
+        // dispatch(GoButton_post_For_Invoice_Success([]))
 
     }, []);
 
@@ -154,8 +149,8 @@ const Invoice = (props) => {
                     Party: userParty(),
                     OrderIDs: ""
                 });
-                dispatch(GoButtonForinvoiceAdd(jsonBody));
-                dispatch(editInvoiceListSuccess({ Status: false }))
+                // dispatch(GoButton_post_For_Invoice(jsonBody));
+                // dispatch(editInvoiceListSuccess({ Status: false }))
 
             }
         }
@@ -164,28 +159,47 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(invoiceSaveActionSuccess({ Status: false }))
-            dispatch(GoButtonForinvoiceAddSuccess([]))
+            // dispatch(postInvoiceMasterSuccess({ Status: false }))
+            // dispatch(GoButton_post_For_Invoice_Success([]))
+            // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
+            // dispatch(postBOMSuccess({ Status: false }))
+            // setState(() => resetFunction(fileds, state))// Clear form values 
+            // saveDissable(false);//save Button Is enable function
 
+            // dispatch(AlertState({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: "Item is out of stock",
+            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
+            // }))
             if (pageMode === mode.dropdownAdd) {
-                CustomAlert({
+                dispatch(AlertState({
                     Type: 1,
-                    Message: JSON.stringify(postMsg.Message),
-                })
+                    Status: true,
+                    Message: postMsg.Message,
+                }))
             }
             else {
-                CustomAlert({
+                dispatch(AlertState({
                     Type: 1,
-                    Message: JSON.stringify(postMsg.Message),
+                    Status: true,
+                    Message: postMsg.Message,
                     RedirectPath: url.INVOICE_LIST_1,
-                })
+                }))
             }
         }
         else if (postMsg.Status === true) {
-            CustomAlert({
+
+            // dispatch(postInvoiceMasterSuccess({ Status: false }))
+            // dispatch(GoButton_post_For_Invoice_Success([]))
+
+            dispatch(AlertState({
                 Type: 4,
+                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-            })
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
         }
     }, [postMsg])
 
@@ -199,7 +213,7 @@ const Invoice = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             // saveDissable(false);//Update Button Is enable function
-            dispatch(updateBOMListSuccess({ Status: false }));
+            // dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -217,6 +231,12 @@ const Invoice = (props) => {
         }
     }, [pageField])
 
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField]);
 
     useEffect(() => {
         showAllStockOnclick(showAllStockState)
@@ -393,7 +413,6 @@ const Invoice = (props) => {
                     // style={{ display: showAllStockState ? "none" : "block" }}
                     >
                         <Table className="table table-bordered table-responsive mb-1" >
-
                             <Thead  >
 
                                 <tr className="" style={{ zIndex: -3 }}>
@@ -518,12 +537,12 @@ const Invoice = (props) => {
         } catch (w) { }
     }
 
-    function InvoiceDateOnchange(y, v, e) {
-        dispatch(GoButtonForinvoiceAddSuccess([]))
+    function ChallanDateOnchange(y, v, e) {
+        // dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
     };
 
-    function CustomerOnchange(hasSelect, evn) {
+    function PartyOnchange(hasSelect, evn) {
 
         setState((i) => {
             const v1 = { ...i }
@@ -531,7 +550,7 @@ const Invoice = (props) => {
             v1.hasValid.Customer.valid = true
             return v1
         })
-        // dispatch(GoButtonForinvoiceAddSuccess([]))
+        // dispatch(GoButton_post_For_Invoice_Success([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -671,7 +690,7 @@ const Invoice = (props) => {
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButtonForinvoiceAdd(subPageMode, jsonBody, goBtnId));
+        // dispatch(GoButton_For_Invoice_Add(subPageMode, jsonBody, goBtnId));
 
         // }
     };
@@ -782,8 +801,9 @@ const Invoice = (props) => {
         }
 
         else {
+
             // saveDissable({ id: saveBtnid, state: true })
-            dispatch(invoiceSaveAction(subPageMode, jsonBody, saveBtnid));
+            // dispatch(postInvoiceMaster(jsonBody, saveBtnid));
         }
 
     }
@@ -798,11 +818,11 @@ const Invoice = (props) => {
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
-                                    <Col sm="6">
+                                <Col className=" mt-1 row " sm={12} >
+                                    <Col sm={3}>
                                         <FormGroup className="row mt-2 mb-3  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
-                                            <Col sm="7">
+                                            <Label className="mt-1" style={{ width: "110px" }}>Challan Date </Label>
+                                            <Col sm={7}>
                                                 <Flatpickr
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
@@ -813,7 +833,7 @@ const Invoice = (props) => {
                                                     options={{
                                                         dateFormat: "Y-m-d",
                                                     }}
-                                                    onChange={InvoiceDateOnchange}
+                                                    onChange={ChallanDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (
                                                     <span className="invalid-feedback">{isError.InvoiceDate}</span>
@@ -822,12 +842,11 @@ const Invoice = (props) => {
                                         </FormGroup>
                                     </Col>
 
-                                    <Col sm="6">
+                                    <Col  sm={3}>
                                         <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
-                                            <Col sm={7}>
+                                            <Label className="mt-2" style={{ width: "80px" }}> Party </Label>
+                                            <Col sm={8}>
                                                 <Select
-
                                                     name="Customer"
                                                     value={values.Customer}
                                                     isSearchable={true}
@@ -836,7 +855,28 @@ const Invoice = (props) => {
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={CustomerDropdown_Options}
-                                                    onChange={CustomerOnchange}
+                                                    onChange={PartyOnchange}
+                                                />
+                                                {isError.Customer.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm={3}>
+                                        <FormGroup className="row mt-2 mb-3 ">
+                                            <Label className="mt-2" style={{ width: "80px" }}> Item </Label>
+                                            <Col sm={8} >
+                                                <Select
+                                                    name="Customer"
+                                                    value={values.Customer}
+                                                    isSearchable={true}
+                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    id={'customerselect'}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={CustomerDropdown_Options}
+                                                    // onChange={CustomerOnchange}
 
                                                 />
                                                 {isError.Customer.length > 0 && (
@@ -845,18 +885,6 @@ const Invoice = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                </Col>
-
-                                <Col sm={1} className="mt-3">
-                                    {pageMode === mode.defaultsave ?
-                                        (OrderItemDetails.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
-                                            :
-                                            <Change_Button onClick={(e) => dispatch(GoButtonForinvoiceAddSuccess([]))} />
-                                        : null
-                                    }
-                                </Col>
-                                <Col>
                                 </Col>
                             </Row>
                         </Col>
@@ -926,4 +954,4 @@ const Invoice = (props) => {
     }
 };
 
-export default Invoice
+export default Challan;

@@ -18,8 +18,8 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
-    goButtonForOrderAdd,
-    goButtonForOrderAddSuccess,
+    GoButton_For_Order_Add,
+    GoButton_For_Order_AddSuccess,
     postOrder,
     postOrderSuccess,
     updateOrderId,
@@ -190,13 +190,13 @@ const SaleOrder = (props) => {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
             setTermsAndConTable(TermsAndConditions)
-            dispatch(goButtonForOrderAddSuccess(''))
+            dispatch(GoButton_For_Order_AddSuccess(''))
         }
     }, [goBtnOrderdata]);
 
     useEffect(() => {
         // if(subPageMode===){}
-        dispatch(goButtonForOrderAddSuccess(null))
+        dispatch(GoButton_For_Order_AddSuccess(null))
         const page_Id = pageId.BIllOf_MATERIALS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -229,7 +229,7 @@ const SaleOrder = (props) => {
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
-            dispatch(goButtonForOrderAddSuccess([]))
+            dispatch(GoButton_For_Order_AddSuccess([]))
             description = ''
             dispatch(AlertState({
                 Type: 1,
@@ -506,7 +506,7 @@ const SaleOrder = (props) => {
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id
         })
 
-        dispatch(goButtonForOrderAdd(jsonBody))
+        dispatch(GoButton_For_Order_Add(jsonBody))
     };
 
     function orderdateOnchange(e, date) {
@@ -750,7 +750,7 @@ const SaleOrder = (props) => {
                                             (orderItemTable.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
                                                 :
-                                                <Change_Button onClick={(e) => dispatch(goButtonForOrderAddSuccess([]))} />
+                                                <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
                                             : null
                                         }
                                     </Col>

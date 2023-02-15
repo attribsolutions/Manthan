@@ -111,25 +111,25 @@ const BreadcrumbFix = props => {
   }
 
   // New Button Handller
-  const NewButtonHandeller = () => {
+  // const NewButtonHandeller = () => {
 
 
 
-    // let pathName = history.location.pathname
-    // let userAcc = userAccess.find((inx) => {
-    //     return (`/${inx.ActualPagePath}` === pathName)
-    // })
-    // let listPagePath = userAccess.find((inx) => {
-    //     return (inx.id === userAcc.RelatedPageID)
-    // })
-    // if (listPagePath === undefined) {
-    //     return
-    // }
-    // debugger
-    history.push({
-      pathname: masterPage,
-    })
-  }
+  //   // let pathName = history.location.pathname
+  //   // let userAcc = userAccess.find((inx) => {
+  //   //     return (`/${inx.ActualPagePath}` === pathName)
+  //   // })
+  //   // let listPagePath = userAccess.find((inx) => {
+  //   //     return (inx.id === userAcc.RelatedPageID)
+  //   // })
+  //   // if (listPagePath === undefined) {
+  //   //     return
+  //   // }
+  //   // debugger
+  //   history.push({
+  //     pathname: masterPage,
+  //   })
+  // }
 
   useEffect(() => {
 

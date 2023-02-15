@@ -358,13 +358,13 @@ import React, { useEffect, useState } from "react"
 import { Row,  Modal, Button, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 import * as urlRalations from "../../routes/urlRalations"
 
 const BreadcrumbNew = (props) => {
-
+debugger
   const history = useHistory();
   const dispatch = useDispatch();
   // for Excel Download
@@ -389,9 +389,12 @@ const BreadcrumbNew = (props) => {
 
   useEffect(() => {
     dispatch(Breadcrumb_inputName(''))
+    // dispatch(BreadcrumbShowCountlabel())
+
 
   }, [])
   const {
+    
     breadShow = true,
     newBtnView = true,
     excelBtnView = true,
@@ -403,6 +406,7 @@ const BreadcrumbNew = (props) => {
   } = breadcrumbDetail;
 
   useEffect(() => {
+    debugger
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -428,6 +432,7 @@ const BreadcrumbNew = (props) => {
       })
     }
     else if (userAcc === undefined) {
+    
       setbreadcrumbDetail({
         // masterPage:masterPage,
         newBtnView: false,
@@ -455,7 +460,10 @@ const BreadcrumbNew = (props) => {
 
   //   })
   // }
+
+debugger
   const NewButtonHandeller = () => {
+  
     if (pageMode === "add") {
       let pathName = history.location.pathname
       let userAcc = breadcrum.userAccess.find((inx) => {
@@ -472,6 +480,8 @@ const BreadcrumbNew = (props) => {
       })
     }
     else {
+   
+      console.log(history,masterPage,pageMode)
       history.push({
         pathname: masterPage,
         pageMode: pageMode
@@ -490,7 +500,6 @@ const BreadcrumbNew = (props) => {
       }
     }
   }, [downBtnData])
-
   const DownloadInExcelButtonHanler = (event, values) => {
     // const exldata = downBtnData
     let list = []
@@ -595,12 +604,13 @@ const BreadcrumbNew = (props) => {
           <div className="d-flex" >
             <div className="navbar-brand-box" ></div>
             <div style={{ paddingLeft: "7px" }} >
+             
               {
                 newBtnView ?
                   <div >
                     <button type="button" className="btn btn-success"
                       data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                      onClick={NewButtonHandeller}>
+                      onClick={NewButtonHandeller }>
                       New
                     </button>
                     <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
