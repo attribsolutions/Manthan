@@ -76,7 +76,6 @@ const AlertSucc = () => {
         }
     };
 
-
     return (
         <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">

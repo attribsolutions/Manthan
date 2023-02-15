@@ -52,14 +52,10 @@ const ChallanList = () => {
         goButtonHandler()
     }, []);
 
-    
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
-
-  
-
 
     venderOptions.unshift({
         value: "",
