@@ -204,7 +204,7 @@ const userRoutes = [
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
-  { path: path.CHALLAN_LIST, component: Challan },
+  { path: path.CHALLAN, component: Challan },
 
   //******************************* Purchase Module ************************************//
 

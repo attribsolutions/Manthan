@@ -434,7 +434,7 @@ const PageMaster = (props) => {
       CreatedBy: createdBy(),
       UpdatedBy: createdBy(),
       PagePageAccess: Access,
-      PageFieldMaster: pageType_DropdownSelect.value === 2 ? [] : PageFieldMaster,
+      PageFieldMaster:PageFieldMaster,
     })
 
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
@@ -545,7 +545,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      {!(pageType_DropdownSelect.value === 2) ?
+                      {/* {!(pageType_DropdownSelect.value === 2) ? */}
                         <NavItem>
                           <NavLink
                             style={{ cursor: "pointer" }}
@@ -562,8 +562,8 @@ const PageMaster = (props) => {
                             <span className="d-none d-sm-block">Page Field</span>
                           </NavLink>
                         </NavItem>
-                        : <></>
-                      }
+                        {/* : <></> */}
+                      {/* } */}
 
                     </Nav>
 
