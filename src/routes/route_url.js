@@ -104,6 +104,7 @@ export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
 
 export const CHALLAN_LIST ="/ChallanList"
+export const CHALLAN ="/Challan"
 
 //******************************* Production Module ************************************//
 

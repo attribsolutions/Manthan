@@ -53,8 +53,6 @@ const ChallanList = () => {
     }, []);
 
     
-
-
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -207,7 +205,7 @@ const ChallanList = () => {
                             ButtonMsgLable={"challan"}
                             // pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === url.CHALLAN_LIST}
+                            // makeBtnShow={pageMode === url.CHALLAN_LIST}
                             makeBtnName={"Make GRN"}
                             // deleteName={"FullGRNNumber"}
                             pageMode={mode.defaultList}
