@@ -413,7 +413,6 @@ const Challan = (props) => {
                     // style={{ display: showAllStockState ? "none" : "block" }}
                     >
                         <Table className="table table-bordered table-responsive mb-1" >
-
                             <Thead  >
 
                                 <tr className="" style={{ zIndex: -3 }}>
@@ -538,12 +537,12 @@ const Challan = (props) => {
         } catch (w) { }
     }
 
-    function InvoiceDateOnchange(y, v, e) {
+    function ChallanDateOnchange(y, v, e) {
         // dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
     };
 
-    function CustomerOnchange(hasSelect, evn) {
+    function PartyOnchange(hasSelect, evn) {
 
         setState((i) => {
             const v1 = { ...i }
@@ -819,11 +818,11 @@ const Challan = (props) => {
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
-                                    <Col sm="6">
+                                <Col className=" mt-1 row " sm={12} >
+                                    <Col sm={3}>
                                         <FormGroup className="row mt-2 mb-3  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
-                                            <Col sm="7">
+                                            <Label className="mt-1" style={{ width: "110px" }}>Challan Date </Label>
+                                            <Col sm={7}>
                                                 <Flatpickr
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
@@ -834,7 +833,7 @@ const Challan = (props) => {
                                                     options={{
                                                         dateFormat: "Y-m-d",
                                                     }}
-                                                    onChange={InvoiceDateOnchange}
+                                                    onChange={ChallanDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (
                                                     <span className="invalid-feedback">{isError.InvoiceDate}</span>
@@ -843,12 +842,11 @@ const Challan = (props) => {
                                         </FormGroup>
                                     </Col>
 
-                                    <Col sm="6">
+                                    <Col  sm={3}>
                                         <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
-                                            <Col sm={7}>
+                                            <Label className="mt-2" style={{ width: "80px" }}> Party </Label>
+                                            <Col sm={8}>
                                                 <Select
-
                                                     name="Customer"
                                                     value={values.Customer}
                                                     isSearchable={true}
@@ -857,7 +855,28 @@ const Challan = (props) => {
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={CustomerDropdown_Options}
-                                                    onChange={CustomerOnchange}
+                                                    onChange={PartyOnchange}
+                                                />
+                                                {isError.Customer.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm={3}>
+                                        <FormGroup className="row mt-2 mb-3 ">
+                                            <Label className="mt-2" style={{ width: "80px" }}> Item </Label>
+                                            <Col sm={8} >
+                                                <Select
+                                                    name="Customer"
+                                                    value={values.Customer}
+                                                    isSearchable={true}
+                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    id={'customerselect'}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={CustomerDropdown_Options}
+                                                    // onChange={CustomerOnchange}
 
                                                 />
                                                 {isError.Customer.length > 0 && (
@@ -866,18 +885,6 @@ const Challan = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                </Col>
-
-                                <Col sm={1} className="mt-3">
-                                    {/* {pageMode === mode.defaultsave ?
-                                        (OrderItemDetails.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
-                                            :
-                                            // <Change_Button onClick={(e) => dispatch(GoButton_post_For_Invoice_Success([]))} />
-                                        : null
-                                    } */}
-                                </Col>
-                                <Col>
                                 </Col>
                             </Row>
                         </Col>
