@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbReset, BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import PurchaseListPage, { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
@@ -50,6 +50,7 @@ const ChallanList = () => {
         dispatch(commonPageFieldList(138))
         dispatch(GetVender())
         goButtonHandler()
+        dispatch(BreadcrumbReset())
     }, []);
 
     const venderOptions = vender.map((i) => ({
@@ -201,13 +202,16 @@ const ChallanList = () => {
                             ButtonMsgLable={"challan"}
                             // pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
-                            // makeBtnShow={pageMode === url.CHALLAN_LIST}
+                            makeBtnShow={pageMode === url.CHALLAN_LIST}
                             makeBtnName={"Make GRN"}
                             // deleteName={"FullGRNNumber"}
                             pageMode={mode.defaultList}
                             goButnFunc={goButtonHandler}
                         />
+
                         : null
+                      
+
                 }
 
             </div>
