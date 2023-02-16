@@ -358,13 +358,12 @@ import React, { useEffect, useState } from "react"
 import { Row,  Modal, Button, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 import * as urlRalations from "../../routes/urlRalations"
 
 const BreadcrumbNew = (props) => {
-debugger
   const history = useHistory();
   const dispatch = useDispatch();
   // for Excel Download
@@ -389,6 +388,8 @@ debugger
 
   useEffect(() => {
     dispatch(Breadcrumb_inputName(''))
+    // dispatch(BreadcrumbShowCountlabel())
+
 
   }, [])
   const {
@@ -404,7 +405,6 @@ debugger
   } = breadcrumbDetail;
 
   useEffect(() => {
-    debugger
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -459,7 +459,6 @@ debugger
   //   })
   // }
 
-debugger
   const NewButtonHandeller = () => {
   
     if (pageMode === "add") {

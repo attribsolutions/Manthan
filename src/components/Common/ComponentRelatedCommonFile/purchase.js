@@ -31,6 +31,7 @@ let searchProps = {
 }
 
 export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
+    debugger
 
     let iscall = 0
     if (paginationProps.dataSize) {

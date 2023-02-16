@@ -34,7 +34,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 // import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
-import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetCustomer, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 // import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
@@ -69,8 +69,10 @@ const Challan = (props) => {
         userAccess,
         customer,
         GoButton = '',
+        vender,
         vendorSupplierCustomer
     } = useSelector((state) => ({
+        vender: state.SupplierReducer.vender,
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -223,6 +225,9 @@ const Challan = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+    useEffect(() => {
+        dispatch(GetVender())
+    }, [])
 
     useEffect(() => {
         if (pageField) {
@@ -242,10 +247,9 @@ const Challan = (props) => {
         showAllStockOnclick(showAllStockState)
     }, [showAllStockState]);
 
-    const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
-        value: index.id,
-        label: index.Name,
-
+    const venderOptions = vender.map((i) => ({
+        value: i.id,
+        label: i.Name,
     }));
 
 
@@ -854,7 +858,7 @@ const Challan = (props) => {
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={CustomerDropdown_Options}
+                                                    options={venderOptions}
                                                     onChange={PartyOnchange}
                                                 />
                                                 {isError.Customer.length > 0 && (
@@ -875,7 +879,7 @@ const Challan = (props) => {
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={CustomerDropdown_Options}
+                                                    // options={CustomerDropdown_Options}
                                                     // onChange={CustomerOnchange}
 
                                                 />

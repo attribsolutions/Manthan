@@ -2,7 +2,8 @@ import {
   COMMON_BREADCRUMB_ALL_DETAIL,
   BREADCRUMB_ITEM_NAME,
   BREADCRUMB_SHOW_COUNT_LABLE,
-  BREADCRUMB_DOWN_BTN_DATA
+  BREADCRUMB_DOWN_BTN_DATA,
+  BREADCRUMB_REST
 } from "./actionType"
 
 
@@ -34,6 +35,10 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         downBtnData: action.payload,
+      }
+    case BREADCRUMB_REST:
+      return {
+        ...INIT_STATE,
       }
 
 

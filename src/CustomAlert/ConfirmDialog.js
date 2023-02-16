@@ -2,6 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { UncontrolledAlert } from 'reactstrap';
 import useConfirm from './useConfirm';
 
 
@@ -17,17 +18,17 @@ const ConfirmDialog = () => {
         switch (confirmState.Type) {
             case 1: component = <AlertSucc />
                 break;
-            case 2: component = <AlertDanger />
+            // case 2: component = <AlertDanger />
                 break;
-            case 3: component = <AlertInfo />
+            // case 3: component = <AlertInfo />
                 break;
-            case 4: component = <AlertWarning />
+            // case 4: component = <AlertWarning />
                 break;
-            case 5: component = <AlertPermission_1 />
+            // case 5: component = <AlertPermission_1 />
                 break;
-            case 6: component = <AlertPermission_2 />
+            // case 6: component = <AlertPermission_2 />
                 break;
-            case 7: component = <AlertPermission_3 />
+            // case 7: component = <AlertPermission_3 />
                 break;
         }
     }
@@ -132,7 +133,6 @@ const AlertWarning = () => {
 };
 
 const AlertInfo = () => {
-
     const { onCancel, confirmState } = useConfirm();
     const { Status = false, Message = "400 Error", } = confirmState;
 
@@ -151,6 +151,7 @@ const AlertInfo = () => {
         onCancel();
     };
     return (
+
         <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
@@ -165,8 +166,32 @@ const AlertInfo = () => {
                 </div>
             </div>
         </div>
+
+        // <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
+        //     <div className="modal-dialog modal-dialog-centered" role="document">
+        //         <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
+        //             {/* <div className="modal-content "> */}
+        //                 {/* <div className="px-4 mb-0 text-center alert alert-info alert-dismissible " role="alert"> */}
+        //                     <UncontrolledAlert color="info" className="mb-0">
+        //                         <i className="mdi mdi-alert-circle-outline me-2"></i>
+        //                         A simple info alert—check it out!
+        //                     </UncontrolledAlert>
+        //                     {/* <button type="button"
+        //                     className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
+        //                         className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
+        //                     <MessageFun msg={Message} />
+        //                     <button type="button" className="btn btn-primary " onClick={innerOk}>OK</button> */}
+        //                 {/* </div> */}
+        //             {/* </div> */}
+        //         </div>
+        //     </div>
+        // </div>
+
     )
 };
+
+
+
 
 
 const AlertDanger = () => {
@@ -376,20 +401,20 @@ const MessageFun = ({ msg }) => {
 }
 
 export async function CkeckAlert(method, url, response, body) {
-
+debugger
     const { data = '' } = response
-    const con1 = ((data.StatusCode === 200)) ;
-     const con2 = ((data.StatusCode === 204)) ;
-    const con3 = ((data.StatusCode === 226)) ;
-    
+    const con1 = ((data.StatusCode === 200));
+    const con2 = ((data.StatusCode === 204));
+    const con3 = ((data.StatusCode === 226));
+
     const con4 = ((data.StatusCode === 400));
-    
+
     const con5 = ((data.StatusCode === 406));
     const con6 = ((method === "post" || method === "put"))
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
-    } 
+    }
     // **********************************************************************************
     if (con1) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
