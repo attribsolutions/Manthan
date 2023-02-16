@@ -80,6 +80,7 @@ function* get_DriverList_DropDown_GenFun() {
 }
 
 // delete api 
+
 function* Delete_VehicleType_ID_GenratorFunction({ id }) {
   try {
   
@@ -88,10 +89,10 @@ function* Delete_VehicleType_ID_GenratorFunction({ id }) {
     yield put(deleteVehicleTypeIDSuccess(response))
   } catch (error) {
    
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error Message",
+    // }));
   }
 }
 

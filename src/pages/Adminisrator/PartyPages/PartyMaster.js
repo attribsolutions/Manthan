@@ -86,7 +86,7 @@ const PartyMaster = (props) => {
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
         userAccess: state.Login.RoleAccessUpdateData,
-        priceListByPartyType: state.PriceListReducer.priceListByPartyType,
+        priceListByPartyType: state.PriceListReducer.priceListByPartyType
 
     }));
 
@@ -364,9 +364,14 @@ const PartyMaster = (props) => {
                     Invoiceprefix: values.Invoiceprefix,
                     Grnprefix: values.Grnprefix,
                     Receiptprefix: values.Receiptprefix,
+                    Challanprefix: values.Challanprefix,
+                    WorkOrderprefix: values.WorkOrderprefix,
+                    MaterialIssueprefix: values.MaterialIssueprefix,
+                    Demandprefix: values.Demandprefix,
+                    IBChallanprefix: values.IBChallanprefix,
+                    IBInwardprefix: values.IBInwardprefix
                 }
             ]
-
         });
 
         if (pageMode === mode.edit) {
@@ -509,7 +514,6 @@ const PartyMaster = (props) => {
                                                                             type="text"
                                                                             placeholder="Please Enter Name"
                                                                             autoComplete='off'
-
                                                                             autoFocus={true}
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
@@ -587,7 +591,6 @@ const PartyMaster = (props) => {
                                                                             options={PartyTypeDropdown_Options}
                                                                             onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                         />
-
                                                                     </FormGroup>
                                                                 </Col>
 
@@ -797,7 +800,7 @@ const PartyMaster = (props) => {
                                                                 <Col>
                                                                     <FormGroup className="mb-3">
                                                                         <Row md="5">
-                                                                            <Label htmlFor="validationCustom01" > GRN Prefix</Label>
+                                                                            <Label htmlFor="validationCustom01"> GRN Prefix</Label>
                                                                             <AvField
                                                                                 value={PartyPrefix.length === 1 ? PartyPrefix[0].Grnprefix : ''}
                                                                                 type="text"
@@ -825,6 +828,102 @@ const PartyMaster = (props) => {
                                                                         </Row>
                                                                     </FormGroup>
                                                                 </Col>
+
+                                                                <Col>
+                                                                <FormGroup className="mt-3">
+                                                                        <Row md="5">
+                                                                            <Label htmlFor="validationCustom01"> Challan Prefix</Label>
+                                                                            <AvField
+                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Challanprefix : ''}
+                                                                                type="text"
+                                                                                autoComplete='off'
+                                                                                name="Challanprefix"
+                                                                                placeholder="Please Enter Challan Prefix"
+                                                                                className="form-control"
+                                                                            />
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col>
+                                                                <FormGroup className="mt-3">
+                                                                        <Row md="5">
+                                                                            <Label htmlFor="validationCustom01"> WorkOrder Prefix</Label>
+                                                                            <AvField
+                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].WorkOrderprefix : ''}
+                                                                                type="text"
+                                                                                autoComplete='off'
+                                                                                name="WorkOrderprefix"
+                                                                                placeholder="Please Enter WorkOrder Prefix"
+                                                                                className="form-control"
+                                                                            />
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col>
+                                                                <FormGroup className="mt-3">
+                                                                        <Row md="5">
+                                                                            <Label htmlFor="validationCustom01"> MaterialIssue Prefix</Label>
+                                                                            <AvField
+                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].MaterialIssueprefix : ''}
+                                                                                type="text"
+                                                                                autoComplete='off'
+                                                                                name="MaterialIssueprefix"
+                                                                                placeholder="Please Enter MaterialIssue Prefix"
+                                                                                className="form-control"
+                                                                            />
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col>
+                                                                <FormGroup className="mt-3">
+                                                                        <Row md="5">
+                                                                            <Label htmlFor="validationCustom01"> Demand Prefix</Label>
+                                                                            <AvField
+                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].Demandprefix : ''}
+                                                                                type="text"
+                                                                                autoComplete='off'
+                                                                                name="Demandprefix"
+                                                                                placeholder="Please Enter Demand Prefix"
+                                                                                className="form-control"
+                                                                            />
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col>
+                                                                <FormGroup className="mt-3">
+                                                                        <Row md="5">
+                                                                            <Label htmlFor="validationCustom01"> IBChallan Prefix</Label>
+                                                                            <AvField
+                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].IBChallanprefix : ''}
+                                                                                type="text"
+                                                                                autoComplete='off'
+                                                                                name="IBChallanprefix"
+                                                                                placeholder="Please Enter IBChallan Prefix"
+                                                                                className="form-control"
+                                                                            />
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
+
+                                                                <Col>
+                                                                <FormGroup className="mt-3">
+                                                                        <Row md="5">
+                                                                            <Label htmlFor="validationCustom01"> IBInward Prefix</Label>
+                                                                            <AvField
+                                                                                value={PartyPrefix.length === 1 ? PartyPrefix[0].IBInwardprefix : ''}
+                                                                                type="text"
+                                                                                autoComplete='off'
+                                                                                name="IBInwardprefix"
+                                                                                placeholder="Please Enter IBInward Prefix"
+                                                                                className="form-control"
+                                                                            />
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
                                                             </CardBody>
                                                         </Card>
                                                     </Col>
@@ -837,7 +936,7 @@ const PartyMaster = (props) => {
                         </AvForm>
                     </Container>
                 </div >
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else {

@@ -364,7 +364,6 @@ import * as XLSX from 'xlsx';
 import * as urlRalations from "../../routes/urlRalations"
 
 const BreadcrumbNew = (props) => {
-debugger
   const history = useHistory();
   const dispatch = useDispatch();
   // for Excel Download
@@ -406,7 +405,6 @@ debugger
   } = breadcrumbDetail;
 
   useEffect(() => {
-    debugger
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -461,7 +459,6 @@ debugger
   //   })
   // }
 
-debugger
   const NewButtonHandeller = () => {
   
     if (pageMode === "add") {
