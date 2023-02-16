@@ -18,17 +18,17 @@ const ConfirmDialog = () => {
         switch (confirmState.Type) {
             case 1: component = <AlertSucc />
                 break;
-            // case 2: component = <AlertDanger />
+            //  case 2: component = <AlertDanger />
                 break;
             // case 3: component = <AlertInfo />
                 break;
-            // case 4: component = <AlertWarning />
+             case 4: component = <AlertWarning />
                 break;
-            // case 5: component = <AlertPermission_1 />
+             case 5: component = <AlertPermission_1 />
                 break;
-            // case 6: component = <AlertPermission_2 />
+             case 6: component = <AlertPermission_2 />
                 break;
-            // case 7: component = <AlertPermission_3 />
+             case 7: component = <AlertPermission_3 />
                 break;
         }
     }

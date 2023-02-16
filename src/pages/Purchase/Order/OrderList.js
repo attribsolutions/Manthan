@@ -199,7 +199,7 @@ const OrderList = () => {
             Supplier: supplierSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder,
-            mode:subPageMode === url.ORDER_LIST_1?"": "mode2"
+            Mode:subPageMode === url.ORDER_LIST_1 ? "" : "mode2"
         });
 
         dispatch(getOrderListPage(subPageMode, jsonBody));
