@@ -131,6 +131,7 @@ const OrderList = () => {
     // }, [userAccess])
 
     useEffect(() => {
+        debugger
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
                 pathname: GRNitem.path,
@@ -197,7 +198,8 @@ const OrderList = () => {
             ToDate: todate,
             Supplier: supplierSelect.value,
             Customer: userParty(),
-            OrderType: order_Type.PurchaseOrder
+            OrderType: order_Type.PurchaseOrder,
+            mode:subPageMode === url.ORDER_LIST_1?"": "mode2"
         });
 
         dispatch(getOrderListPage(subPageMode, jsonBody));
