@@ -31,7 +31,6 @@ let searchProps = {
 }
 
 export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
-    debugger
 
     let iscall = 0
     if (paginationProps.dataSize) {
@@ -61,7 +60,7 @@ const PurchaseListPage = (props) => {
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
     const [tableList, settableList] = useState([]);
-    // debugger
+    
     const {
         editData,
         updateMsg,
@@ -112,16 +111,17 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
 
         let tableArr = props.reducers.tableList;
-        if ((pageUrl === url.GRN_STP)) {
-            let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
-                return i.Inward === "Open"
-            })
-            tableArr = OnlyInwardZeroRecord
-            settableList(OnlyInwardZeroRecord)
-        }
-        else {
-            settableList(props.reducers.tableList)
-        };
+        // if ((pageUrl === url.GRN_STP)) {
+        //     let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
+        //         return i.Inward === "Open"
+        //     })
+        //     tableArr = OnlyInwardZeroRecord
+        //     settableList(OnlyInwardZeroRecord)
+        // }
+        // else {
+        //     settableList(props.reducers.tableList)
+        // };
+        settableList(props.reducers.tableList)
 
         downList = []
         listObj = {}
@@ -314,41 +314,41 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        // if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
-            columns.push({
-                text: "Select",
-                dataField: "hasSelect",
-                sort: true,
-                formatter: (cellContent, rowData, key) => {
-                    rowData["hasSelect"] = false
-                    return (
-                        <div>
-                            <Input
-                                type="checkbox"
-                                className="mx-2"
-                                id={`checkhasSelect${rowData.id}`}
-                                defaultChecked={rowData.hasSelect}
-                                // disabled={rowData["isdisabled"]}
-                                key={rowData.hasSelect}
-                                onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
-                            />
-                            <Button
-                                type="button"
-                                className={makeBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
-                                onClick={() => { makeBtnHandler(rowData) }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span> </Button>
-                        </div>)
-                }
-            })
-        }
+        //     columns.push({
+        //         text: "Select",
+        //         dataField: "hasSelect",
+        //         sort: true,
+        //         formatter: (cellContent, rowData, key) => {
+        //             rowData["hasSelect"] = false
+        //             return (
+        //                 <div>
+        //                     <Input
+        //                         type="checkbox"
+        //                         className="mx-2"
+        //                         id={`checkhasSelect${rowData.id}`}
+        //                         defaultChecked={rowData.hasSelect}
+        //                         // disabled={rowData["isdisabled"]}
+        //                         key={rowData.hasSelect}
+        //                         onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
+        //                     />
+        //                     <Button
+        //                         type="button"
+        //                         className={makeBtnCss}
+        //                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+        //                         onClick={() => { makeBtnHandler(rowData) }}
+        //                     >
+        //                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
+        //                             className=" fas fa-file-invoice" ></span> </Button>
+        //                 </div>)
+        //         }
+        //     })
+        // }
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        else if ((makeBtnShow) && (fileds.length - 1 === k)) {
+         if ((makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
@@ -454,7 +454,7 @@ const PurchaseListPage = (props) => {
                         )}
                     </PaginationProvider>
 
-                    {
+                    {/* {
                         (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
@@ -471,7 +471,7 @@ const PurchaseListPage = (props) => {
                                 </div>
                             :
                             null
-                    }
+                    } */}
                     <Modal
                         isOpen={modal_edit}
                         toggle={() => {

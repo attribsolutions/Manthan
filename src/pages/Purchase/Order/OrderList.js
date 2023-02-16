@@ -41,7 +41,6 @@ const OrderList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
 
-
     const reducers = useSelector(
         (state) => ({
             supplier: state.SupplierReducer.vendorSupplierCustomer,
@@ -72,7 +71,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        debugger
+        
         let page_Id = '';
         let page_Mode = mode.defaultList;
 
@@ -85,16 +84,11 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_3) {
             page_Id = pageId.ORDER_LIST_3
         }
-        else if (subPageMode === url.IB_INWARD_STP) {
-            page_Id = pageId.IB_INWARD_STP
-            page_Mode = mode.mode2save
-        }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
             page_Mode = mode.mode2save
         };
-        setSubPageMode(page_Mode);
-        setPageMode(page_Id)
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
@@ -191,7 +185,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler() {
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -200,7 +194,7 @@ const OrderList = () => {
             OrderType: order_Type.PurchaseOrder
         });
 
-        dispatch(getOrderListPage(subPageMode, jsonBody));
+        dispatch(getOrderListPage(subPageMode,pageMode, jsonBody));
     }
 
     function fromdateOnchange(e, date) {
@@ -306,7 +300,7 @@ const OrderList = () => {
                             deleteName={"FullOrderNumber"}
                             page_Mode={pageMode}
                             // pageUrl={page_Url}
-                            // makeBtnShow={make_BtnShow}
+                            makeBtnShow={subPageMode===url.GRN_STP}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

@@ -401,7 +401,7 @@ const MessageFun = ({ msg }) => {
 }
 
 export async function CkeckAlert(method, url, response, body) {
-debugger
+
     const { data = '' } = response
     const con1 = ((data.StatusCode === 200));
     const con2 = ((data.StatusCode === 204));

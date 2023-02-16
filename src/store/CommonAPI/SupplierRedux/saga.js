@@ -90,20 +90,22 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
-  debugger
   let response;
   try {
-    if ((subPageMode === url.ORDER_1)||(subPageMode === url.ORDER_LIST_1)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(),"Company":userCompany() });//vendor mode 1
+
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_LIST_1)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });//vendor mode 1
     }
-    else if ((subPageMode === url.ORDER_2)||(subPageMode === url.ORDER_LIST_2)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(),"Company":userCompany() });//supplier mode 2
+    else if ((subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_LIST_2)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });//supplier mode 2
     }
-    else if ((subPageMode === url.INVOICE_1)||(subPageMode === url.INVOICE_2)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(),"Company":userCompany() });
+    else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     }
-    else if ((subPageMode === url.INVOICE_2)||(subPageMode === url.ORDER_3)) {
-      response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty(),});
+    else if ((subPageMode === url.INVOICE_2) || (subPageMode === url.INVOICE_LIST_2)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });
+      // response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
+
     };
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));

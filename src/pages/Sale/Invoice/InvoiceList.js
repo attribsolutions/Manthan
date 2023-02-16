@@ -14,7 +14,7 @@ import {
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     currentDate,
     excelDownCommonFunc,
@@ -25,6 +25,7 @@ import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
@@ -36,24 +37,44 @@ import {
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
 
+import "./css.css"
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+import 'sweetalert2/src/sweetalert2.scss'
+
+var toastMixin = Swal.mixin({
+    toast: true,
+    icon: 'success',
+    title: 'General Title',
+    className: "styleTitle",
+    animation: true,
+    position: 'bottom-right',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const subPageMode = history.location.pathname;
 
     const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(url.ORDER_LIST_1)
+    const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [userAccState, setUserAccState] = useState('');
-
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     // const [fromdate, setfromdate] = useState(currentDate);
     // const [todate, settodate] = useState(currentDate);
-    // const [customerSelect, setcustomerSelect] = useState({ value: '', label: "All" });
-    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, customerSelect: { value: '', label: "All" } });
+    // const [supplierSelect, setsupplierSelect] = useState({ value: '', label: "All" });
+    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
 
     const reducers = useSelector(
         (state) => ({
-            customer: state.SupplierReducer.customer,
+            supplier: state.SupplierReducer.vendorSupplierCustomer,
             tableList: state.InvoiceReducer.Invoicelist,
             GRNitem: state.GRNReducer.GRNitem,
             deleteMsg: state.InvoiceReducer.deleteMsg,
@@ -66,8 +87,8 @@ const InvoiceList = () => {
         })
     );
 
-    const { userAccess, pageField, customer, tableList, } = reducers;
-    const { fromdate, todate, customerSelect } = orderlistFilter;
+    const { userAccess, pageField, supplier, tableList, } = reducers;
+    const { fromdate, todate, supplierSelect } = orderlistFilter;
 
     const page_Id = pageId.INVOICE_LIST_2
 
@@ -82,22 +103,42 @@ const InvoiceList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(subPageMode)
-        // const page_Id = (hasPagePath === url.GRN_STP) ? pageId.GRN_STP : pageId.ORDER_lIST;
+        toastMixin.fire({
+            // title: 'Wrong Password',
+            // icon: 'error'
+          });
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+
+        if (subPageMode === url.INVOICE_LIST_1) {
+            page_Id = pageId.INVOICE_LIST_2
+        }
+        else if (subPageMode === url.INVOICE_LIST_2) {
+            page_Id = pageId.INVOICE_LIST_2
+        }
+        else if (subPageMode === url.IB_INWARD_STP) {
+            page_Id = pageId.IB_INWARD_STP
+            page_Mode = mode.mode2save
+        }
+        else if (subPageMode === url.GRN_STP) {
+            page_Id = pageId.GRN_STP
+            page_Mode = mode.mode2save
+        };
+
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
-        dispatch(GetCustomer())
+        dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler(true)
 
     }, []);
 
-    const customerOptions = customer.map((i) => ({
+    const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
-
-    customerOptions.unshift({
+    supplierOptions.unshift({
         value: "",
         label: " All"
     });
@@ -129,7 +170,7 @@ const InvoiceList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Customer: customerSelect.value === "" ? '' : customerSelect.value,
+            Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
             Party: userParty(),
         });
 
@@ -150,9 +191,9 @@ const InvoiceList = () => {
         setorderlistFilter(newObj)
     }
 
-    function customerOnchange(e) {
+    function supplierOnchange(e) {
         let newObj = { ...orderlistFilter }
-        newObj.customerSelect = e
+        newObj.supplierSelect = e
         // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
@@ -216,9 +257,9 @@ const InvoiceList = () => {
 
                                     <Select
                                         classNamePrefix="select2-Customer"
-                                        value={customerSelect}
-                                        options={customerOptions}
-                                        onChange={customerOnchange}
+                                        value={supplierSelect}
+                                        options={supplierOptions}
+                                        onChange={supplierOnchange}
                                     />
                                 </Col>
                             </FormGroup>
