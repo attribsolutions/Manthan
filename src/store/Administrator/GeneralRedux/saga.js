@@ -49,18 +49,16 @@ function* Post_Method_ForGeneral_GenFun({ data }) {
 
 // get api
 function* Post_General_List_GenratorFunction({ data }) {
-
-  
     try {
         const response = yield call(Post_General_List_Api, data);
         yield put(PostGenerallistSuccess(response.Data));
        
     } catch (error) {
        
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
+        // yield put(AlertState({
+        //     Type: 4,
+        //     Status: true, Message: "500 Error Message",
+        // }));
     }
 }
 
