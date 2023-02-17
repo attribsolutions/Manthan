@@ -11,8 +11,7 @@ import {
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID,
   editEmployeeSuccess,
-  updateEmployeeIDSuccess,
-
+  updateEmployeeIDSuccess
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
@@ -28,10 +27,10 @@ import {
   onChangeDate,
   onChangeSelect,
   onChangeText,
-  resetFunction,
+  resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -123,6 +122,7 @@ const AddEmployee = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
+      breadcrumbReturn({dispatch,userAcc});
     };
   }, [userAccess])
 
