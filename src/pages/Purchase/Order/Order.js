@@ -47,18 +47,22 @@ let editVal = {}
 
 function initialState(history) {
     let page_Id = '';
+   let  listPath=''
     let sub_Mode = history.location.pathname;
 
     if (sub_Mode === url.ORDER_1) {
         page_Id = pageId.ORDER_1;
+        listPath=url.ORDER_LIST_1
     }
     else if (sub_Mode === url.ORDER_2) {
-        page_Id = pageId.ORDER_2
+        page_Id = pageId.ORDER_2;
+        listPath=url.ORDER_LIST_2
     }
     else if (sub_Mode === url.ORDER_3) {
-        page_Id = pageId.ORDER_3
+        page_Id = pageId.ORDER_3;
+        listPath=url.ORDER_LIST_3;
     };
-    return page_Id
+    return {page_Id,listPath}
 };
 
 
@@ -73,7 +77,8 @@ const Order = (props) => {
 
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [page_id, setPage_id] = useState(() => initialState(history))
+    const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
+    const [listPath, setListPath] = useState(() => initialState(history).listPath)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -157,11 +162,11 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc);
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
-            if (FindPartyItemAccess) {
+            if ((FindPartyItemAccess)&&!(subPageMode===url.ORDER_3)) {
                 setFindPartyItemAccess(true)
             };
         };
@@ -199,7 +204,8 @@ const Order = (props) => {
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
 
-                const termsAndCondition = hasEditVal.TermsAndConditions.map(i => ({
+                const { TermsAndConditions = [] } = hasEditVal;
+                const termsAndCondition = TermsAndConditions.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
                     IsDeleted: 0
@@ -228,6 +234,7 @@ const Order = (props) => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
+            debugger
             setTermsAndConTable(TermsAndConditions)
             dispatch(GoButton_For_Order_AddSuccess(''))
         }
@@ -259,11 +266,11 @@ const Order = (props) => {
             const a = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: url.ORDER_LIST_1,
+                RedirectPath: listPath,
             })
             if (a) {
                 history.push({
-                    pathname: url.ORDER_LIST_1,
+                    pathname: listPath,
                 });
             }
 
@@ -281,7 +288,7 @@ const Order = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             history.push({
-                pathname: url.ORDER_LIST_1,
+                pathname: listPath,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
@@ -687,7 +694,7 @@ const Order = (props) => {
             // }));
             return
         }
-        if (termsAndCondition.length === 0) {
+        if ((termsAndCondition.length === 0)&&!(subPageMode===url.ORDER_3)) {
             await CustomAlert({
                 Type: 4,
                 Message: "Please Enter One Terms And Condition",
