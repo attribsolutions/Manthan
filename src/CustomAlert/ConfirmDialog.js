@@ -18,9 +18,9 @@ const ConfirmDialog = () => {
         switch (confirmState.Type) {
             case 1: component = <AlertSucc />
                 break;
-            //  case 2: component = <AlertDanger />
+             case 2: component = <AlertDanger />
                 break;
-            // case 3: component = <AlertInfo />
+             case 3: component = <AlertInfo />
                 break;
              case 4: component = <AlertWarning />
                 break;
@@ -167,25 +167,7 @@ const AlertInfo = () => {
             </div>
         </div>
 
-        // <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
-        //     <div className="modal-dialog modal-dialog-centered" role="document">
-        //         <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
-        //             {/* <div className="modal-content "> */}
-        //                 {/* <div className="px-4 mb-0 text-center alert alert-info alert-dismissible " role="alert"> */}
-        //                     <UncontrolledAlert color="info" className="mb-0">
-        //                         <i className="mdi mdi-alert-circle-outline me-2"></i>
-        //                         A simple info alert—check it out!
-        //                     </UncontrolledAlert>
-        //                     {/* <button type="button"
-        //                     className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
-        //                         className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
-        //                     <MessageFun msg={Message} />
-        //                     <button type="button" className="btn btn-primary " onClick={innerOk}>OK</button> */}
-        //                 {/* </div> */}
-        //             {/* </div> */}
-        //         </div>
-        //     </div>
-        // </div>
+     
 
     )
 };
@@ -421,8 +403,9 @@ export async function CkeckAlert(method, url, response, body) {
         return response.data
     } else if (con2) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
-        return Promise.reject(response)
+        // await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
+        // return Promise.reject(response)
+        return response.data
     }
     else if (con3) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)

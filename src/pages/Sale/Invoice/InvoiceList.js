@@ -8,6 +8,7 @@ import {
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import {
     BreadcrumbShowCountlabel,
+    CommonBreadcrumbDetails,
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
@@ -53,10 +54,10 @@ var toastMixin = Swal.mixin({
     timer: 3000,
     timerProgressBar: true,
     didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
-  });
+});
 
 const InvoiceList = () => {
 
@@ -67,6 +68,8 @@ const InvoiceList = () => {
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [userAccState, setUserAccState] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+
     // const [fromdate, setfromdate] = useState(currentDate);
     // const [todate, settodate] = useState(currentDate);
     // const [supplierSelect, setsupplierSelect] = useState({ value: '', label: "All" });
@@ -106,32 +109,37 @@ const InvoiceList = () => {
         toastMixin.fire({
             // title: 'Wrong Password',
             // icon: 'error'
-          });
+        });
         let page_Id = '';
         let page_Mode = mode.defaultList;
+        let master_Path = '';
+        let make_btn = false
 
         if (subPageMode === url.INVOICE_LIST_1) {
             page_Id = pageId.INVOICE_LIST_2
+            master_Path = url.INVOICE_1
         }
         else if (subPageMode === url.INVOICE_LIST_2) {
-            page_Id = pageId.INVOICE_LIST_2
+            page_Id = pageId.INVOICE_LIST_2;
+            master_Path = url.INVOICE_2
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.mode2save
+            make_btn = true;
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
             page_Mode = mode.mode2save
+            make_btn = true;
         };
-
+        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler(true)
-
     }, []);
 
     const supplierOptions = supplier.map((i) => ({
@@ -278,11 +286,11 @@ const InvoiceList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Invoice}
-                            masterPath={url.INVOICE_1}
+                            masterPath={otherState.masterPath}
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             pageMode={pageMode}
-                            makeBtnShow={pageMode === url.INVOICE_LIST_1 ? false : true}
+                            makeBtnShow={otherState.makeBtnShow}
                             // makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

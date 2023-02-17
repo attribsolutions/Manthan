@@ -124,8 +124,7 @@ export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-export const InvoiceList = url.INVOICE_1
-export const Invoice = url.INVOICE_LIST_1
+
 
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
@@ -138,6 +137,9 @@ export const Order_3 = url.ORDER_LIST_3
 export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST
 export const IB_INWARD_STP = url.INVOICE_LIST_2
+
+export const InvoiceList = url.INVOICE_1
+export const Invoice = url.INVOICE_LIST_1
 
 export const IB_Invoice_List = url.IB_INVOICE_STP
 export const IB_Invoice = url.INVOICE_LIST_2

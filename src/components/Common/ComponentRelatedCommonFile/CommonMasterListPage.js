@@ -13,7 +13,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
 import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
+import { breadcrumbReturn, excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import * as urlRalations from "../../../routes/urlRalations"
@@ -50,7 +50,6 @@ const CommonListPage = (props) => {
 
   const [userAccState, setUserAccState] = useState('');
   const [modal_edit, setmodal_edit] = useState(false);
-  const [masterPath, setmasterPath] = useState('');
 
 
   const {
@@ -80,7 +79,7 @@ const CommonListPage = (props) => {
     MasterModal,
     ButtonMsgLable,
     deleteName,
-    showBreadcrumb = true
+    masterPath,
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -88,36 +87,65 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
-
-
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
-
-      let MasterPagePath = userAccess.find((inx) => {
-        return (inx.id === userAcc.RelatedPageID)
-      })
-
-      if (!(MasterPagePath === undefined)) {
-        setmasterPath(`/${MasterPagePath.ActualPagePath}`)
-      }
-      dispatch(CommonBreadcrumbDetails({
-        bredcrumbItemName: '',
-        pageHeading: userAcc.PageHeading,
-        filterSize: "showCount Axtxtxtxtxtddddddddddddddddddddddddddddd",
-        userAccess: userAccess,
-        newBtnView: true,
-        excelBtnView: true,
-        showCount: true,
-        excelData: tableList,
-        masterPage: `/${MasterPagePath.ActualPagePath}`,
-        breadShow: true
-      }))
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, masterPath });
     }
-  }, [userAccess, tableList])
+
+    // const locationPath = history.location.pathname
+    // let userAcc = userAccess.find((inx) => {
+    //   return (`/${inx.ActualPagePath}` === locationPath)
+    // })
+    // if (!(userAcc === undefined)) {
+    //   setUserAccState(userAcc)
+
+    //   let MasterPagePath = userAccess.find((inx) => {
+    //     return (inx.id === userAcc.RelatedPageID)
+    //   })
+
+    //   if (!(MasterPagePath === undefined)) {
+    //     setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+    //   }
+    //   dispatch(CommonBreadcrumbDetails({
+    //     bredcrumbItemName: '',
+    //     pageHeading: userAcc.PageHeading,
+    //     filterSize: "showCount Axtxtxtxtxtddddddddddddddddddddddddddddd",
+    //     userAccess: userAccess,
+    //     newBtnView: true,
+    //     excelBtnView: true,
+    //     showCount: true,
+    //     excelData: tableList,
+    //     masterPage: `/${MasterPagePath.ActualPagePath}`,
+    //     breadShow: true
+    //   }))
+    // }
+
+
+
+  }, [userAccess]);
+
+
+  useEffect(() => {
+    let downList = [];
+    let listObj = {};
+
+    tableList.forEach((index1) => {
+      PageFieldMaster.forEach((index2) => {
+        if (index2.ShowInDownload) {
+          listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+          listObj[index2.ControlID] = index1[index2.ControlID]
+        }
+      })
+      downList.push(listObj)
+      listObj = {}
+    })
+    dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
+
+  }, [tableList])
 
   // this useEffect for MasterPagePath dynamically work 
   // useEffect(() => {
@@ -229,7 +257,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
- 
+
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
