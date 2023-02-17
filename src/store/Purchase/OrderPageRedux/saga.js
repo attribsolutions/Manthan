@@ -120,8 +120,8 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 // List Page API
 function* orderList_GoBtn_GenFunc(action) {
   try {
-debugger
-    const { subPageMode,pageMode, jsonBody } = action
+    debugger
+    const { subPageMode, pageMode, jsonBody } = action
     let response;
     let newList;
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)) {
@@ -129,12 +129,14 @@ debugger
     }
     else if (subPageMode === url.GRN_STP) {
       response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
-    }else if (subPageMode === url.ORDER_LIST_3) {
+    } else if (subPageMode === url.ORDER_LIST_3) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
-      yield put(getOrderListPageSuccess(response.Data))
-      return
+      // yield put(getOrderListPageSuccess(response.Data))
+      // return
     }
-
+    else {
+      yield put(getOrderListPageSuccess([]))
+    }
     newList = yield response.Data.map((i) => {
 
       var date = convertDatefunc(i.OrderDate)
