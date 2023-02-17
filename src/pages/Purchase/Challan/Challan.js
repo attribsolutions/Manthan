@@ -25,7 +25,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -37,6 +37,7 @@ import * as url from "../../../routes/route_url"
 import { GetCustomer, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 // import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { challanitemdropdown, GoButtonForchallanAdd, GoButtonForchallanAddSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 
 // import "./css.css"
 
@@ -68,21 +69,25 @@ const Challan = (props) => {
         pageField,
         userAccess,
         customer,
-        GoButton = '',
+        GoButton='',
         vender,
-        vendorSupplierCustomer
+        vendorSupplierCustomer,
+        gobutton_Add,
+        challanitems
     } = useSelector((state) => ({
+        challanitems:state.ChallanReducer.challanitems,
+        GoButton:state.ChallanReducer.GoButton,
         vender: state.SupplierReducer.vender,
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.SupplierReducer.customer,
-        GoButton: state.InvoiceReducer.gobutton_Add,
+        // GoButton: state.InvoiceReducer.GoButton,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
     }));
-
-    const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
+    const { Data = [] } = GoButton;
+    console.log(Data)
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -117,6 +122,8 @@ const Challan = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
+
         };
     }, [userAccess])
 
@@ -226,6 +233,10 @@ const Challan = (props) => {
         }
     }, [updateMsg, modalCss]);
     useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company:userCompany()
+        });
+        dispatch(challanitemdropdown(jsonBody))
         dispatch(GetVender())
     }, [])
 
@@ -252,8 +263,15 @@ const Challan = (props) => {
         label: i.Name,
     }));
 
+    
+    const ItemsOption = challanitems.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
 
     const pagesListColumns = [
+
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
@@ -262,6 +280,7 @@ const Challan = (props) => {
                     <div className="width-100">Item Name</div>)
             },
             formatter: (cellContent, index1) => {
+                debugger
 
 
                 return (
@@ -274,70 +293,71 @@ const Challan = (props) => {
             },
 
         },
-        {//***************Quantity********************************************************************* */
-            text: "Quantity",
-            dataField: "",
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div className="width-100">Quantity</div>)
-            },
-            formatter: (cellContent, user) => (
-                <div >
-                    <Input type="text"
-                        disabled={pageMode === 'edit' ? true : false}
-                        id={`OrderQty${user.id}`}
-                        style={{ textAlign: "right" }}
-                        className=" width-100"
-                        key={user.id}
-                        autoComplete="off"
-                        defaultValue={user.Quantity}
-                        onChange={(event) => orderQtyOnChange(event, user)}
-                    ></Input>
-                    <samp className="mt-1">Order Qty:{user.OrderQty} {user.UnitName}</samp>
-                </div>
+        // {//***************Quantity********************************************************************* */
+        //     text: "Quantity",
+        //     dataField: "",
+        //     headerFormatter: (cell, index1 = [], k) => {
+        //         return (
+        //             <div className="width-100">Quantity</div>)
+        //     },
+        //     formatter: (cellContent, user) => (
+        //         <div >
+        //             <Input type="text"
+        //                 disabled={pageMode === 'edit' ? true : false}
+        //                 id={`OrderQty${user.id}`}
+        //                 style={{ textAlign: "right" }}
+        //                 className=" width-100"
+        //                 key={user.id}
+        //                 autoComplete="off"
+        //                 defaultValue={user.Quantity}
+        //                 onChange={(event) => orderQtyOnChange(event, user)}
+        //             ></Input>
+        //             <samp className="mt-1">Order Qty:{user.OrderQty} {user.UnitName}</samp>
+        //         </div>
 
-            )
-        },
-        {//***************Unit Dropdown********************************************************************* */
-            text: "Unit",
-            dataField: "id",
+        //     )
+        // },
+        // {//***************Unit Dropdown********************************************************************* */
+        //     text: "Unit",
+        //     dataField: "id",
 
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div className="width-100" >Unit</div>)
-            },
-            formatter: (value, row, key) => {
+        //     headerFormatter: (cell, index1 = [], k) => {
+        //         return (
+        //             <div className="width-100" >Unit</div>)
+        //     },
+        //     formatter: (value, row, key) => {
 
-                return (
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        isDisabled={pageMode === 'edit' ? true : false}
-                        defaultValue={row.UnitDrop}
-                        // value={{value:row.Unit,label:row.UnitName}}
-                        className=" width-100"
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.Unit,
-                                ConversionUnit: i.ConversionUnit,
-                                Unitlabel: i.Unitlabel
-                            }))
-                        }
-                        onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
-                    >
-                    </Select >
-                )
-            },
-        },
+        //         return (
+        //             <Select
+        //                 classNamePrefix="select2-selection"
+        //                 id={"ddlUnit"}
+        //                 isDisabled={pageMode === 'edit' ? true : false}
+        //                 defaultValue={row.UnitDrop}
+        //                 // value={{value:row.Unit,label:row.UnitName}}
+        //                 className=" width-100"
+        //                 options={
+        //                     row.UnitDetails.map(i => ({
+        //                         label: i.UnitName,
+        //                         value: i.Unit,
+        //                         ConversionUnit: i.ConversionUnit,
+        //                         Unitlabel: i.Unitlabel
+        //                     }))
+        //                 }
+        //                 onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
+        //             >
+        //             </Select >
+        //         )
+        //     },
+        // },
         {//***************StockDetails********************************************************************* */
+            
             text: "Stock Details",
             dataField: "StockDetails",
             headerFormatter: (cell, index1 = [], k) => {
 
                 return (
                     <div className="d-flex flex-content-start">
-                        {OrderItemDetails.length > 0 ? <div>
+                        {Data.length > 0 ? <div>
                             <samp id="allplus-circle">
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
@@ -375,8 +395,9 @@ const Challan = (props) => {
                     </div>
                 )
             },
-
-            formatter: (cellContent, index1) => (
+            
+            formatter: (cellContent, index1 ) => (
+                
                 <div>
                     <div key={`plus-circle-icon${index1.id}`}>
                         {
@@ -416,6 +437,7 @@ const Challan = (props) => {
                         }}
                     // style={{ display: showAllStockState ? "none" : "block" }}
                     >
+            
                         <Table className="table table-bordered table-responsive mb-1" >
                             <Thead  >
 
@@ -440,54 +462,60 @@ const Challan = (props) => {
                                 </tr>
                             </Thead>
                             <Tbody  >
-                                {cellContent.map((index2) => {
-                                    return (
+                                {/* {cellContent.map((index2) => { */}
+                                     {/* return ( */}
                                         < tr key={index1.id} >
                                             <td>
                                                 <div style={{ width: "150px" }}>
-                                                    {index2.SystemBatchCode}
+                                                    {index1.SystemBatchCode}
                                                 </div>
                                             </td>
                                             <td>
                                                 <div style={{ width: "150px" }}>
-                                                    {index2.BatchCode}
+                                                    {index1.BatchCode}
                                                 </div>
                                             </td>
                                             <td>
                                                 <div style={{ width: "100px" }}>
-                                                    {convertDatefunc(index2.BatchDate)}
+                                                    {convertDatefunc(index1.BatchDate)}
                                                 </div>
                                             </td>
                                             <td>
                                                 <div style={{ width: "120px", textAlign: "right" }}>
-                                                    {`${index2.BaseUnitQuantity} ${index1.StockUnit}`}
+                                                    {`${index1.BaseUnitQuantity} ${index1.StockUnit}`}
                                                 </div>
                                             </td>
+
+                                            {/* <td>
+                                                <div style={{ width: "120px", textAlign: "right" }}>
+                                                    {`${index1.BaseUnitQuantity} ${index1.StockUnit}`}
+                                                </div>
+                                            </td> */}
                                             <td>
                                                 <div style={{ width: "150px" }}>
-                                                    <Input type="text"
+                                                    {/* <Input type="text"
                                                         disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
                                                         key={`batchQty${index1.id}-${index2.id}`}
                                                         id={`batchQty${index1.id}-${index2.id}`}
                                                         defaultValue={index2.Qty}
                                                         onChange={(event) => StockQtyOnChange(event, index1, index2)}
-                                                    ></Input>
+                                                    ></Input> */}
                                                 </div>
                                             </td>
                                         </tr>
-                                    )
-                                })}
+                                     {/* )  */}
+                                 {/* })}  */}
                             </Tbody>
                         </Table></div>
                 </div >
             ),
 
         },
-        {//***************Rate********************************************************************* */
-            text: "Rate",
-            dataField: "Rate",
-        }
+        // {//***************Rate********************************************************************* */
+        //     text: "Rate",
+        //     dataField: "Rate",
+        // }
 
     ];
 
@@ -507,8 +535,9 @@ const Challan = (props) => {
                 document.getElementById("allminus-circle").style.display = "none";
             }
         } catch (w) { }
+        Data.forEach(index1 => {
+debugger
 
-        OrderItemDetails.forEach(index1 => {
             if (!index1.StockTotal > 0) {
                 return
             }
@@ -547,14 +576,14 @@ const Challan = (props) => {
     };
 
     function PartyOnchange(hasSelect, evn) {
-
+debugger
         setState((i) => {
             const v1 = { ...i }
-            v1.values.Customer = hasSelect
-            v1.hasValid.Customer.valid = true
+            v1.values.Item = hasSelect
+            // v1.hasValid.Item.valid = true
             return v1
         })
-        // dispatch(GoButton_post_For_Invoice_Success([]))
+        dispatch(GoButtonForchallanAddSuccess([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -681,20 +710,15 @@ const Challan = (props) => {
     };
 
     function goButtonHandler(event) {
-
-        // }catch(e){}
-        // if (formValid(state, setState)) {
-        // debugger
-
+        
 
         const jsonBody = JSON.stringify({
-            FromDate: values.InvoiceDate,
-            Customer: values.Customer.value,
+           
             Party: userParty(),
-            OrderIDs: ""
+            Item:values.Item.value
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        // dispatch(GoButton_For_Invoice_Add(subPageMode, jsonBody, goBtnId));
+        dispatch(GoButtonForchallanAdd( jsonBody));
 
         // }
     };
@@ -706,7 +730,7 @@ const Challan = (props) => {
         const invoiceItems = []
         let grand_total = 0;
 
-        OrderItemDetails.forEach((index) => {
+        Data.forEach((index) => {
             if (index.StockInValid) {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                 return
@@ -773,13 +797,13 @@ const Challan = (props) => {
         const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
-            InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
+            // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
         });
 
         const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
-            IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
+            // IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
         });
 
         const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -832,7 +856,7 @@ const Challan = (props) => {
                                                     value={values.InvoiceDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
-                                                    disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                    disabled={(Data.length > 0 || pageMode === "edit") ? true : false}
 
                                                     options={{
                                                         dateFormat: "Y-m-d",
@@ -852,14 +876,14 @@ const Challan = (props) => {
                                             <Col sm={8}>
                                                 <Select
                                                     name="Customer"
-                                                    value={values.Customer}
+                                                    value={values.party}
                                                     isSearchable={true}
-                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    isDisabled={Data.length > 0 ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={venderOptions}
-                                                    onChange={PartyOnchange}
+                                                    // onChange={PartyOnchange}
                                                 />
                                                 {isError.Customer.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -873,14 +897,14 @@ const Challan = (props) => {
                                             <Col sm={8} >
                                                 <Select
                                                     name="Customer"
-                                                    value={values.Customer}
+                                                    value={values.Item}
                                                     isSearchable={true}
-                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    isDisabled={Data.length > 0 ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    // options={CustomerDropdown_Options}
-                                                    // onChange={CustomerOnchange}
+                                                    options={ItemsOption}
+                                                    onChange={PartyOnchange}
 
                                                 />
                                                 {isError.Customer.length > 0 && (
@@ -889,15 +913,24 @@ const Challan = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
+                                    <Col sm={2} className="mt-3">
+                                    {pageMode === mode.defaultsave ?
+                                        (Data.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(GoButtonForchallanAddSuccess([]))} />
+                                        : null
+                                    }
+                                </Col>
                                 </Col>
                             </Row>
                         </Col>
-
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
+                                
                                     keyField={"id"}
-                                    data={OrderItemDetails}
+                                    data={Data}
                                     columns={pagesListColumns}
 
                                     search
@@ -936,7 +969,7 @@ const Challan = (props) => {
 
                         </PaginationProvider>
 
-                        {OrderItemDetails.length > 0 ? <FormGroup>
+                        {Data.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
                                     //   onClick={onsave}

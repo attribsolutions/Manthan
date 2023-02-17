@@ -198,7 +198,7 @@ const ChallanList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            // masterPath={url.GRN_ADD}
+                            masterPath={url.CHALLAN}
                             ButtonMsgLable={"challan"}
                             // pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
