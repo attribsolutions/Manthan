@@ -255,7 +255,7 @@ const Challan = (props) => {
     }, [pageField]);
 
     useEffect(() => {
-        showAllStockOnclick(showAllStockState)
+        // showAllStockOnclick(showAllStockState)
     }, [showAllStockState]);
 
     const venderOptions = vender.map((i) => ({
@@ -281,7 +281,6 @@ const Challan = (props) => {
             },
             formatter: (cellContent, index1) => {
                 debugger
-
 
                 return (
                     <>
@@ -352,9 +351,9 @@ const Challan = (props) => {
         {//***************StockDetails********************************************************************* */
             
             text: "Stock Details",
-            dataField: "StockDetails",
+            dataField: "Item",
             headerFormatter: (cell, index1 = [], k) => {
-
+                debugger
                 return (
                     <div className="d-flex flex-content-start">
                         {Data.length > 0 ? <div>
@@ -365,7 +364,7 @@ const Challan = (props) => {
                                         display: showAllStockState ? "none" : "block"
                                     }}
                                     onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
+                                        // setShowAllStockState(!showAllStockState)
                                         // showAllStockOnclick(true) 
                                     }}
                                 >
@@ -379,7 +378,7 @@ const Challan = (props) => {
                                         display: showAllStockState ? "block" : "none"
                                     }}
                                     onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
+                                        // setShowAllStockState(!showAllStockState)
                                         // showAllStockOnclick(false)
                                     }}
                                 ></i>
@@ -398,6 +397,7 @@ const Challan = (props) => {
             
             formatter: (cellContent, index1 ) => (
                 
+                
                 <div>
                     <div key={`plus-circle-icon${index1.id}`}>
                         {
@@ -408,10 +408,10 @@ const Challan = (props) => {
                                             display: showAllStockState ? "none" : "block"
                                         }}
                                     >
-                                        <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
+                                        {/* <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
                                             style={{ position: "absolute", }}
                                             onClick={(e) => { showStockOnclick(index1, true) }}>
-                                        </i>
+                                        </i> */}
                                         <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
                                             {`Total Stock:${index1.StockTotal}`}</samp>
                                     </samp>
@@ -424,19 +424,19 @@ const Challan = (props) => {
                         >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                 style={{ position: "absolute", }}
-                                onClick={(e) => { showStockOnclick(index1, false) }}
+                                // onClick={(e) => { showStockOnclick(index1, false) }}
                             ></i>
                         </samp>
 
                     </div >
 
-                    <div id={`view${index1.id}`}
+                    {/* <div id={`view${index1.id}`}
                         style={{
                             backgroundColor: "#b9be511a",
                             display: showAllStockState ? "bolck" : "none"
                         }}
                     // style={{ display: showAllStockState ? "none" : "block" }}
-                    >
+                    > */}
             
                         <Table className="table table-bordered table-responsive mb-1" >
                             <Thead  >
@@ -445,7 +445,6 @@ const Challan = (props) => {
                                     <th className="">Batch Code </th>
                                     <th className="" >Supplier BatchCode</th>
                                     <th className="" >Batch Date</th>
-                                    {/* <th className="" >Batch Date</th> */}
 
 
                                     <th className="">
@@ -459,12 +458,15 @@ const Challan = (props) => {
                                         </div>
                                         <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
                                     </th>
+                                    <th className="" >Rate</th>
+
                                 </tr>
+
                             </Thead>
                             <Tbody  >
-                                {/* {cellContent.map((index2) => { */}
-                                     {/* return ( */}
-                                        < tr key={index1.id} >
+                                {Data.map((index1) => {
+                                     return (
+                                        < tr  >
                                             <td>
                                                 <div style={{ width: "150px" }}>
                                                     {index1.SystemBatchCode}
@@ -482,17 +484,17 @@ const Challan = (props) => {
                                             </td>
                                             <td>
                                                 <div style={{ width: "120px", textAlign: "right" }}>
-                                                    {`${index1.BaseUnitQuantity} ${index1.StockUnit}`}
+                                                    {`${index1.BaseUnitQuantity} `}
                                                 </div>
                                             </td>
 
-                                            {/* <td>
-                                                <div style={{ width: "120px", textAlign: "right" }}>
-                                                    {`${index1.BaseUnitQuantity} ${index1.StockUnit}`}
-                                                </div>
-                                            </td> */}
                                             <td>
-                                                <div style={{ width: "150px" }}>
+                                                <div style={{ width: "120px", textAlign: "right" }}>
+                                                    {`${index1.Rate} `}
+                                                </div>
+                                            </td>
+                                            {/* <td> */}
+                                                {/* <div style={{ width: "150px" }}> */}
                                                     {/* <Input type="text"
                                                         disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
@@ -501,14 +503,14 @@ const Challan = (props) => {
                                                         defaultValue={index2.Qty}
                                                         onChange={(event) => StockQtyOnChange(event, index1, index2)}
                                                     ></Input> */}
-                                                </div>
-                                            </td>
+                                                {/* </div> */}
+                                            {/* </td> */}
                                         </tr>
-                                     {/* )  */}
-                                 {/* })}  */}
+                                     ) 
+                                  })}  
                             </Tbody>
                         </Table></div>
-                </div >
+                // </div >
             ),
 
         },
@@ -525,50 +527,50 @@ const Challan = (props) => {
         custom: true,
     };
 
-    function showAllStockOnclick(isplus = false) {
-        try {
-            if (isplus) {
-                document.getElementById("allplus-circle").style.display = "none";
-                document.getElementById("allminus-circle").style.display = "block";
-            } else {
-                document.getElementById("allplus-circle").style.display = "block";
-                document.getElementById("allminus-circle").style.display = "none";
-            }
-        } catch (w) { }
-        Data.forEach(index1 => {
-debugger
+//     function showAllStockOnclick(isplus = false) {
+//         try {
+//             if (isplus) {
+//                 document.getElementById("allplus-circle").style.display = "none";
+//                 document.getElementById("allminus-circle").style.display = "block";
+//             } else {
+//                 document.getElementById("allplus-circle").style.display = "block";
+//                 document.getElementById("allminus-circle").style.display = "none";
+//             }
+//         } catch (w) { }
+//         Data.forEach(index1 => {
+// debugger
 
-            if (!index1.StockTotal > 0) {
-                return
-            }
-            try {
-                if (isplus) {
-                    document.getElementById(`view${index1.id}`).style.display = "block";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-                } else {
-                    document.getElementById(`view${index1.id}`).style.display = "none";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-                }
-            } catch (w) { }
-        })
+//             if (!index1.StockTotal > 0) {
+//                 return
+//             }
+//             try {
+//                 if (isplus) {
+//                     document.getElementById(`view${index1.id}`).style.display = "block";
+//                     document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+//                     document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+//                 } else {
+//                     document.getElementById(`view${index1.id}`).style.display = "none";
+//                     document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+//                     document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+//                 }
+//             } catch (w) { }
+//         })
 
 
-    }
-    function showStockOnclick(index1, isplus = false) {
-        try {
-            if (isplus) {
-                document.getElementById(`view${index1.id}`).style.display = "block";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-            } else {
-                document.getElementById(`view${index1.id}`).style.display = "none";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-            }
-        } catch (w) { }
-    }
+//     }
+//     function showStockOnclick(index1, isplus = false) {
+//         try {
+//             if (isplus) {
+//                 document.getElementById(`view${index1.id}`).style.display = "block";
+//                 document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+//                 document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+//             } else {
+//                 document.getElementById(`view${index1.id}`).style.display = "none";
+//                 document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+//                 document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+//             }
+//         } catch (w) { }
+//     }
 
     function ChallanDateOnchange(y, v, e) {
         // dispatch(GoButton_post_For_Invoice_Success([]))
