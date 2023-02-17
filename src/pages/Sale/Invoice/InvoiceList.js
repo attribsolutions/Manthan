@@ -90,7 +90,7 @@ const InvoiceList = () => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let master_Path = '';
-        let make_btn = false
+        let make_btn = false;
 
         if (subPageMode === url.INVOICE_LIST_1) {
             page_Id = pageId.INVOICE_LIST_2
@@ -105,6 +105,7 @@ const InvoiceList = () => {
             page_Mode = mode.mode2save
             make_btn = true;
         }
+        dispatch(GetVenderSupplierCustomer(""))
       
         setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
         setPageMode(page_Mode)

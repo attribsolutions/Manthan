@@ -72,7 +72,7 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let master_Path = '';
@@ -95,6 +95,7 @@ const OrderList = () => {
             page_Mode = mode.mode2save
             make_btn = true;
         };
+        dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -194,7 +195,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler() {
-        
+
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -204,7 +205,7 @@ const OrderList = () => {
             // Mode:subPageMode === mode.defaultList ? "" : "mode2"
         });
 
-        dispatch(getOrderListPage(subPageMode,pageMode, jsonBody));
+        dispatch(getOrderListPage(subPageMode, pageMode, jsonBody));
     }
 
     function fromdateOnchange(e, date) {
