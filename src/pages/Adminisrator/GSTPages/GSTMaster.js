@@ -33,7 +33,7 @@ import {
     postGSTMasterData,
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../routes/allPageID"
 
@@ -80,6 +80,7 @@ const GSTMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 

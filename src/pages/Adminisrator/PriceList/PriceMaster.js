@@ -37,6 +37,7 @@ import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
 import * as pageId from "../../../routes/allPageID"
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PriceMaster = (props) => {
     const dispatch = useDispatch();
@@ -94,6 +95,7 @@ const PriceMaster = (props) => {
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc);
+            breadcrumbReturn({dispatch,userAcc});
         }
     }, [userAccess]);
 

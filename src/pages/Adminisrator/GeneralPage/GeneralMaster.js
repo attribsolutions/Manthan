@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Card,
     CardBody,
@@ -8,7 +8,7 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+    Row
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -38,7 +38,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -106,6 +106,7 @@ const GeneralMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 

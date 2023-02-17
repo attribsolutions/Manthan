@@ -13,6 +13,7 @@ import PartyMaster from './PartyMaster';
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { MetaTags } from 'react-meta-tags';
+import * as url from "../../../routes/route_url";
 import BreadcrumbNew from '../../../components/Common/BreadcrumbNew';
 import * as pageId from "../../../routes/allPageID"
 
@@ -52,13 +53,14 @@ const PartyList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} /> */}
+             {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} />  */}
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={PartyMaster}
+                        masterPath={url.PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
                     />

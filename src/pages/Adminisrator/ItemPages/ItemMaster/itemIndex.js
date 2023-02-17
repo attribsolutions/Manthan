@@ -47,7 +47,7 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
@@ -166,6 +166,7 @@ const ItemsMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 

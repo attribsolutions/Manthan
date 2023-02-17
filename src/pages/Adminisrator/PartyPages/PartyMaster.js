@@ -39,7 +39,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -106,6 +106,7 @@ const PartyMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
