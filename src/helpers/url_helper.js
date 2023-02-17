@@ -183,6 +183,8 @@ export const ORDER_Edit_API = "OrderEdit"
 export const ORDER_TYPE_API = '/POType'
 
 // GRN
+
+export const GRN_STP_FOR_ORDER_lIST_goBtn = "/OrdersFilterSecond"
 export const GRN_MAKE_API = "/MakeOrdersGrn"
 export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"

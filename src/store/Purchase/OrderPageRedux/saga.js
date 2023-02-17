@@ -17,6 +17,7 @@ import {
   OrderPage_Edit_API,
   IBOrderPage_GoButton_API,
   IBOrderList_get_Filter_API,
+  GRN_STP_for_orderList_goBtn,
 } from "../../../helpers/backend_helper";
 
 import {
@@ -120,36 +121,40 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 function* orderList_GoBtn_GenFunc(action) {
   try {
 debugger
-    const { subPageMode, data } = action
+    const { subPageMode,pageMode, jsonBody } = action
     let response;
     let newList;
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)) {
-      response = yield call(OrderList_get_Filter_API, data); // GO-Botton Purchase Order 1 && 2 Add Page API
-      newList = yield response.Data.map((i) => {
-
-        var date = convertDatefunc(i.OrderDate)
-        var time = convertTimefunc(i.CreatedOn)
-        var DeliveryDate = convertDatefunc(i.DeliveryDate);
-        i["preOrderDate"] = i.OrderDate
-        i.OrderDate = (`${date} ${time}`)
-        i.DeliveryDate = (`${DeliveryDate}`)
-
-        if ((i.Inward === 0)) {
-          i.Inward = "Open"
-          i.forceEdit = false
-        } else {
-          i.Inward = "Close"
-          i.forceEdit = true
-        }
-        return i
-      })
-      yield put(getOrderListPageSuccess(newList))
+      response = yield call(OrderList_get_Filter_API, jsonBody); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
-    else if (subPageMode === url.ORDER_LIST_3) {
-      response = yield call(IBOrderList_get_Filter_API, data); // GO-Botton IB-invoice Add Page API
+    else if (subPageMode === url.GRN_STP) {
+      response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
+    }else if (subPageMode === url.ORDER_LIST_3) {
+      response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
       yield put(getOrderListPageSuccess(response.Data))
+      return
     }
-    
+
+    newList = yield response.Data.map((i) => {
+
+      var date = convertDatefunc(i.OrderDate)
+      var time = convertTimefunc(i.CreatedOn)
+      var DeliveryDate = convertDatefunc(i.DeliveryDate);
+      i["preOrderDate"] = i.OrderDate
+      debugger
+      i.OrderDate = (`${date} ${time}`)
+      i.DeliveryDate = (`${DeliveryDate}`)
+
+      if ((i.Inward === 0)) {
+        i.Inward = "Open"
+        i.forceEdit = false
+      } else {
+        i.Inward = "Close"
+        i.forceEdit = true
+      }
+      return i
+    })
+    yield put(getOrderListPageSuccess(newList))
 
     //  try {
 

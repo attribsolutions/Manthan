@@ -370,19 +370,19 @@ const BreadcrumbNew = (props) => {
 
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [downListKey, setDownListKey] = useState([]);
-  const [breadcrumbDetail, setbreadcrumbDetail] = useState({});
+  const [breadcrumbDetail1, setbreadcrumbDetail] = useState({});
 
-  const { downBtnData = [], userAccess, } = useSelector((state) => ({
+  const { downBtnData12 = [], userAccess, } = useSelector((state) => ({
     userAccess: state.Login.RoleAccessUpdateData,
     downBtnData: state.BreadcrumbReducer.downBtnData,
     PageList: state.H_Pages.HPagesListData,
   }));
 
   // const { pageId } = props;
-  let { showCountlabel = '', bredcrumbItemName = '', breadcrum } = useSelector((state) => ({
+  let { showCountlabel = '', bredcrumbItemName = '', breadcrumbDetail } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
-    breadcrum: state.BreadcrumbReducer.breadcrumbDetail,
+    breadcrumbDetail: state.BreadcrumbReducer.breadcrumbDetail,
 
   }));
 
@@ -393,54 +393,39 @@ const BreadcrumbNew = (props) => {
 
   }, [])
   const {
-    
-    breadShow = true,
-    newBtnView = true,
-    excelBtnView = true,
-    pageHeading = '',
-    CountLabel = true,
-    masterPage = "",
-    pageMode = "",
-    // breadcrumbDetail=[]
+    breadShow= true,
+    newBtnView= true,
+    excelBtnView= true,
+    pageHeading= '',
+    CountLabel= true,
+    masterPage= "",
+    pageMode= "",
+    downBtnData= [],
+    // showCountlabel= ''
   } = breadcrumbDetail;
 
-  useEffect(() => {
-    const locationPath = history.location.pathname
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
-    });
-    if (!(userAcc === undefined)) {
-      showCountlabel = '';
-      bredcrumbItemName = '';
-      const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
-      const isCountLabel = (userAcc.CountLabel);
-      const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));
-      // const isbreadshow = ((userAcc.IsEditPopuporComponent === true))
-      dispatch(Breadcrumb_inputName(''))
-
-      setbreadcrumbDetail({
-        // masterPage:masterPage,
-        newBtnView: isnewBtnView,
-        excelBtnView: isexcelBtnView,
-        pageHeading: userAcc.PageHeading,
-        CountLabel: isCountLabel,
-        // breadShow:isbreadshow,
-        masterPage: urlRalations[userAcc.ActualPagePath],
-
-      })
-    }
-    else if (userAcc === undefined) {
+  // useEffect(() => {
+  //   const locationPath = history.location.pathname
+  //   let userAcc = userAccess.find((inx) => {
+  //     return (`/${inx.ActualPagePath}` === locationPath)
+  //   });
+  //   if (!(userAcc === undefined)) {
+  //     showCountlabel = '';
+  //  
+  
+  //   }
+  //   else if (userAcc === undefined) {
     
-      setbreadcrumbDetail({
-        // masterPage:masterPage,
-        newBtnView: false,
-        excelBtnView: false,
-        pageHeading: false,
-        CountLabel: false,
-        // breadShow:isbreadshow,
-      })
-    }
-  }, [userAccess])
+  //     setbreadcrumbDetail({
+  //       // masterPage:masterPage,
+  //       newBtnView: false,
+  //       excelBtnView: false,
+  //       pageHeading: false,
+  //       CountLabel: false,
+  //       // breadShow:isbreadshow,
+  //     })
+  //   }
+  // }, [userAccess])
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -460,30 +445,30 @@ const BreadcrumbNew = (props) => {
   // }
 
   const NewButtonHandeller = () => {
-  
-    if (pageMode === "add") {
-      let pathName = history.location.pathname
-      let userAcc = breadcrum.userAccess.find((inx) => {
-        return (`/${inx.ActualPagePath}` === pathName)
-      })
-      let listPagePath = userAccess.find((inx) => {
-        return (inx.id === userAcc.RelatedPageID)
-      })
-      if (listPagePath === undefined) {
-        return
-      }
-      history.push({
-        pathname: `/${listPagePath.ActualPagePath}`,
-      })
-    }
-    else {
+  debugger
+    // if (pageMode === "add") {
+    //   let pathName = history.location.pathname
+    //   let userAcc = breadcrum.userAccess.find((inx) => {
+    //     return (`/${inx.ActualPagePath}` === pathName)
+    //   })
+    //   let listPagePath = userAccess.find((inx) => {
+    //     return (inx.id === userAcc.RelatedPageID)
+    //   })
+    //   if (listPagePath === undefined) {
+    //     return
+    //   }
+    //   history.push({
+    //     pathname: `/${listPagePath.ActualPagePath}`,
+    //   })
+    // }
+    // else {
    
-      console.log(history,masterPage,pageMode)
+    //   console.log(history,masterPage,pageMode)
       history.push({
         pathname: masterPage,
         pageMode: pageMode
       })
-    }
+    // }
 
 
   }

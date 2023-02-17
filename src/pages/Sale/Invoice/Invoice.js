@@ -25,7 +25,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -113,13 +113,13 @@ const Invoice = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
