@@ -372,7 +372,7 @@ const BreadcrumbNew = (props) => {
   const [downListKey, setDownListKey] = useState([]);
   const [breadcrumbDetail1, setbreadcrumbDetail] = useState({});
 
-  const { downBtnData = [], userAccess, } = useSelector((state) => ({
+  const { downBtnData12 = [], userAccess, } = useSelector((state) => ({
     userAccess: state.Login.RoleAccessUpdateData,
     downBtnData: state.BreadcrumbReducer.downBtnData,
     PageList: state.H_Pages.HPagesListData,
@@ -400,7 +400,7 @@ const BreadcrumbNew = (props) => {
     CountLabel= true,
     masterPage= "",
     pageMode= "",
-    // downBtnData= [],
+    downBtnData= [],
     // showCountlabel= ''
   } = breadcrumbDetail;
 

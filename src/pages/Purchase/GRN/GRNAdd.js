@@ -27,7 +27,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as url from "../../../routes/route_url";
@@ -87,6 +87,7 @@ const GRNAdd = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 

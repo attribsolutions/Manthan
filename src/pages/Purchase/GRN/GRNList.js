@@ -207,7 +207,7 @@ const GRNList = () => {
                             showBreadcrumb={false}
                             reducers={reducers}
                             MasterModal={Order}
-                            masterPath={url.GRN_ADD}
+                            masterPath={url.GRN_STP}
                             ButtonMsgLable={"GRN"}
                             // pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
