@@ -39,25 +39,6 @@ import {
 } from "../../../store/Sales/Invoice/action";
 
 import "./css.css"
-import Swal from 'sweetalert2/dist/sweetalert2.js'
-
-import 'sweetalert2/src/sweetalert2.scss'
-
-var toastMixin = Swal.mixin({
-    toast: true,
-    icon: 'success',
-    title: 'General Title',
-    className: "styleTitle",
-    animation: true,
-    position: 'bottom-right',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-});
 
 const InvoiceList = () => {
 
@@ -106,10 +87,7 @@ const InvoiceList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        toastMixin.fire({
-            // title: 'Wrong Password',
-            // icon: 'error'
-        });
+     
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let master_Path = '';
