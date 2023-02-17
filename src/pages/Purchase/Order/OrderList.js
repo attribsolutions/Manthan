@@ -40,6 +40,7 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
 
     const reducers = useSelector(
         (state) => ({
@@ -74,20 +75,27 @@ const OrderList = () => {
         
         let page_Id = '';
         let page_Mode = mode.defaultList;
+        let master_Path = '';
+        let make_btn = false
 
         if (subPageMode === url.ORDER_LIST_1) {
-            page_Id = pageId.ORDER_LIST_1
+            page_Id = pageId.ORDER_LIST_1;
+            master_Path = url.ORDER_1;
         }
         else if (subPageMode === url.ORDER_LIST_2) {
             page_Id = pageId.ORDER_LIST_2
+            master_Path = url.ORDER_2;
         }
         else if (subPageMode === url.ORDER_LIST_3) {
             page_Id = pageId.ORDER_LIST_3
+            master_Path = url.ORDER_3;
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
             page_Mode = mode.mode2save
+            make_btn = true;
         };
+        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -193,7 +201,7 @@ const OrderList = () => {
             Supplier: supplierSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder,
-            Mode:subPageMode === mode.defaultList ? "" : "mode2"
+            // Mode:subPageMode === mode.defaultList ? "" : "mode2"
         });
 
         dispatch(getOrderListPage(subPageMode,pageMode, jsonBody));
@@ -297,12 +305,12 @@ const OrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Order}
-                            masterPath={url.ORDER_1}
+                            masterPath={otherState.masterPath}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
                             page_Mode={pageMode}
                             // pageUrl={page_Url}
-                            makeBtnShow={subPageMode===url.GRN_STP}
+                            makeBtnShow={otherState.makeBtnShow}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}

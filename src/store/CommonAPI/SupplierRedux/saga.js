@@ -69,7 +69,7 @@ function* OrderType_GenFunc() {
 function* getVendorGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(),"Company":userCompany()});
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) { }
 }
@@ -77,14 +77,14 @@ function* getVendorGenFunc() {
 function* getSupplierGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(),"Company":userCompany() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) { }
 }
 
 function* getCustomerGenFunc() {
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(),"Company":userCompany() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) { }
 }
@@ -99,6 +99,9 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if ((subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_LIST_2)) {
       response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });//supplier mode 2
     }
+    else if ((subPageMode === url.ORDER_3) || (subPageMode === url.ORDER_LIST_3)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });//divisions mode 2
+    }
     else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     }
@@ -106,7 +109,9 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
       response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });
       // response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
 
-    };
+    } else {
+      response = { Data:[] }
+    }
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
