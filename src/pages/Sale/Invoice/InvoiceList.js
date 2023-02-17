@@ -45,7 +45,6 @@ const InvoiceList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const hasPagePath = history.location.pathname
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [userAccState, setUserAccState] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
@@ -99,18 +98,14 @@ const InvoiceList = () => {
         }
         else if (subPageMode === url.INVOICE_LIST_2) {
             page_Id = pageId.INVOICE_LIST_2;
-            master_Path = url.INVOICE_2
+            master_Path = url.ORDER_LIST_3
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.mode2save
             make_btn = true;
         }
-        else if (subPageMode === url.GRN_STP) {
-            page_Id = pageId.GRN_STP
-            page_Mode = mode.mode2save
-            make_btn = true;
-        };
+      
         setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))

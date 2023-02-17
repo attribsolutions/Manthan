@@ -157,7 +157,7 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc);
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
@@ -198,8 +198,9 @@ const Order = (props) => {
 
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
-
-                const termsAndCondition = hasEditVal.TermsAndConditions.map(i => ({
+                
+                const { TermsAndConditions = [] } = hasEditVal;
+                const termsAndCondition = TermsAndConditions.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
                     IsDeleted: 0
