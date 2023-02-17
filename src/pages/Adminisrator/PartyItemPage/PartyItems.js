@@ -83,7 +83,7 @@ const PartyItems = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
+debugger
     useEffect(() => {
         dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
@@ -111,7 +111,7 @@ const PartyItems = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc);
-            breadcrumbReturn({dispatch,userAcc});
+             breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -323,7 +323,7 @@ const PartyItems = (props) => {
                                                                     <Select
                                                                         name="Name"
                                                                         value={values.Name}
-                                                                        isDisabled={props.dropMode === "dropdownAdd" ? true : false}
+                                                                        isDisabled={pageMode === mode.assingLink? true : false}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
@@ -399,7 +399,7 @@ const PartyItems = (props) => {
                                 </PaginationProvider>
 
 
-                                {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                {(tableList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                     <SaveButton
                                         pageMode={pageMode}
                                         userAcc={userAccState}
