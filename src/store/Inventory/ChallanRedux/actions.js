@@ -10,10 +10,14 @@ import {
   GET_GRN_ITEM_MODE_2_SUCCESS,
   GET_GRN_LIST_PAGE,
   GET_GRN_LIST_PAGE_SUCCESS,
+  GO_BUTTON_CHALLAN_POST_API,
+  GO_BUTTON_CHALLAN_POST_API_SUCCESS,
+  ITEM_CHALLAN_POST_API,
   MAKE_CHALLAN_GET_API,
   MAKE_CHALLAN_GET_API_SUCCESS,
   POST_GRN_FROM_GRN_PAGE,
   POST_GRN_FROM_GRN_PAGE_SUCCESS,
+  POST_ITEM_CHALLAN_PAGE_SUCCESS,
   SET_CHALLAN_LIST_FILTERS,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS
@@ -40,6 +44,27 @@ export const makechallan = (id) => ({
   type: MAKE_CHALLAN_GET_API,
   id,
 });
+
+export const GoButtonForchallanAdd = ( data) => ({
+  type: GO_BUTTON_CHALLAN_POST_API,
+  data
+});
+
+export const GoButtonForchallanAddSuccess = (data) => ({
+  type: GO_BUTTON_CHALLAN_POST_API_SUCCESS,
+  payload: data,
+});
+
+export const challanitemdropdown = (data) => ({
+  type: ITEM_CHALLAN_POST_API,
+   data
+});
+
+export const challanitemdropdownSuccess = (data) => ({
+  type: POST_ITEM_CHALLAN_PAGE_SUCCESS,
+  payload: data,
+});
+
 
 export const makechallanSuccess = (data) => ({
   type: MAKE_CHALLAN_GET_API_SUCCESS,
