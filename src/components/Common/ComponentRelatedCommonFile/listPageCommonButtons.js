@@ -1,6 +1,7 @@
 import { Button } from "reactstrap";
 import * as mode from "../../../routes/PageMode"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { CommonBreadcrumbDetails } from "../../../store/actions";
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
@@ -53,7 +54,7 @@ export const listPageCommonButtonFunction = (props) => {
             PermissionAction: deleteActionFun,
             ID: rowData.id,
         })
-       
+
     }
 
 
@@ -388,4 +389,17 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //         // alert("Go btn dissable  error")
 //     }
 // }
+
+ export function breadcrumbReturn({ dispatch, userAcc ,masterPath=''}) {
+    const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
+    const isCountLabel = (userAcc.CountLabel);
+    const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));
+    dispatch(CommonBreadcrumbDetails({
+        masterPage: masterPath,
+        newBtnView: isnewBtnView,
+        excelBtnView: isexcelBtnView,
+        pageHeading: userAcc.PageHeading,
+        CountLabel: isCountLabel,
+    }))
+}
 

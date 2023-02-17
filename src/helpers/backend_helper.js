@@ -378,16 +378,24 @@ export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//
 export const OrderPage_Update_API = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
+
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 
 //GRN PAGE grn 
+export const GRN_STP_for_orderList_goBtn = (data) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn,data)// Get subModule For H_pages
 export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
 export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
 export const GRN_Post_API = (data) => post(url.GRN, data)//get api
 export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
 export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
 export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
+
+
+//Challan API
+export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
+export const Challan_delete_API = (id) => del(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Delete challan
+export const Challan_Make_API = (id) => get(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Make challan
 
 
 // BOM API

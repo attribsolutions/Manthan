@@ -27,12 +27,13 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 let initialTableData = []
 
@@ -86,6 +87,7 @@ const GRNAdd = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -584,25 +586,32 @@ const GRNAdd = (props) => {
 
         })
 
-
+        if (invoiceNo.length === 0) {
+            CustomAlert({
+                Type: 3,
+                Message: "Please Enter Invoice Number",
+            })
+            return
+        }
         if (itemArr.length === 0) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+            CustomAlert({
+                Type: 3,
                 Message: "Please Enter One Item Quantity",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
             return
         }
         if (isvalidMsg.length > 0) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+            CustomAlert({
+                Type: 3,
                 Message: isvalidMsg,
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: isvalidMsg,
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
             return
         }
         const jsonBody = JSON.stringify({

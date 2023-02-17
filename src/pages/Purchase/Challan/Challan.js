@@ -21,12 +21,11 @@ import {
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { convertDatefunc, createdBy, currentDate, mainSppinerOnOff, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { goButtonForMaterialIssue_Master_Action, } from "../../../store/Purchase/Matrial_Issue/action";
+import { convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -34,18 +33,21 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { GoButtonForinvoiceAdd, GoButtonForinvoiceAddSuccess, invoiceSaveActionSuccess } from "../../../store/Sales/Invoice/action";
-import { GetCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { invoiceSaveAction } from "../../../store/Sales/Invoice/action";
+// import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
+import { GetCustomer, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+// import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
-import "./css.css"
-const Invoice = (props) => {
+// import "./css.css"
+
+const Challan = (props) => {
 
     const dispatch = useDispatch();
-    const history = useHistory()
-    const goBtnId = `ADDGoBtn${pageId.INVOICE_1}`
-    const saveBtnid = `saveBtn${pageId.INVOICE_1}`
+    const history = useHistory();
+    const subPageMode = history.location.pathname
+
+    const goBtnId = `ADDGoBtn${subPageMode}`
+    const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
         // id: "",
@@ -58,9 +60,7 @@ const Invoice = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [Itemselect, setItemselect] = useState([])
-
-
+    const [showAllStockState, setShowAllStockState] = useState(true);
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -68,14 +68,18 @@ const Invoice = (props) => {
         pageField,
         userAccess,
         customer,
-        GoButton = ''
+        GoButton = '',
+        vender,
+        vendorSupplierCustomer
     } = useSelector((state) => ({
+        vender: state.SupplierReducer.vender,
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.SupplierReducer.customer,
-        GoButton: state.InvoiceReducer.GoButton
+        GoButton: state.InvoiceReducer.gobutton_Add,
+        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
     }));
 
     const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
@@ -89,11 +93,12 @@ const Invoice = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        const page_Id = pageId.INVOICE_1
-        dispatch(GetCustomer())
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(GoButtonForinvoiceAddSuccess([]))
+
+        // dispatch(GetVenderSupplierCustomer(subPageMode))
+        // dispatch(GetCustomer())
+        // dispatch(commonPageFieldSuccess(null));
+        // dispatch(commonPageField(pageId.INVOICE_1))
+        // dispatch(GoButton_post_For_Invoice_Success([]))
 
     }, []);
 
@@ -133,30 +138,22 @@ const Invoice = (props) => {
 
             if (hasEditVal) {
 
-                setItemselect(hasEditVal)
-                const { id, Item, Customer, WorkDate, EstimatedOutputQty, NumberOfLot } = hasEditVal
-                setState((i) => {
-                    i.values.InvoiceDate = currentDate
-                    i.values.Customer = { value: id, label: Customer, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
-                    i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.Customer.valid = true;
-                    i.hasValid.InvoiceDate.valid = true;
-                    i.hasValid.NumberOfLot.valid = true;
-                    i.hasValid.LotQuantity.valid = true;
-                    return i
-                })
+                const { Customer, CustomerName, } = hasEditVal
+                const { values, hasValid, } = { ...state }
+                hasValid.Customer.valid = true;
 
-                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+                values.Customer = { label: CustomerName, value: Customer };
+
+                //++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
                 const jsonBody = JSON.stringify({
-                    WorkOrder: id,
-                    Item: Item,
-                    Company: userCompany(),
+                    FromDate: hasEditVal.InvoiceDate,
+                    Customer: hasEditVal.Customer,
                     Party: userParty(),
-                    Quantity: parseInt(EstimatedOutputQty)
+                    OrderIDs: ""
                 });
+                // dispatch(GoButton_post_For_Invoice(jsonBody));
+                // dispatch(editInvoiceListSuccess({ Status: false }))
 
-                dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
             }
         }
     }, []);
@@ -164,8 +161,8 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(invoiceSaveActionSuccess({ Status: false }))
-            dispatch(GoButtonForinvoiceAddSuccess([]))
+            // dispatch(postInvoiceMasterSuccess({ Status: false }))
+            // dispatch(GoButton_post_For_Invoice_Success([]))
             // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             // dispatch(postBOMSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
@@ -177,7 +174,7 @@ const Invoice = (props) => {
             //     Message: "Item is out of stock",
             //     RedirectPath: url.MATERIAL_ISSUE_LIST,
             // }))
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -189,14 +186,14 @@ const Invoice = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.INVOICE_1,
+                    RedirectPath: url.INVOICE_LIST_1,
                 }))
             }
         }
         else if (postMsg.Status === true) {
 
-            dispatch(invoiceSaveActionSuccess({ Status: false }))
-            dispatch(GoButtonForinvoiceAddSuccess([]))
+            // dispatch(postInvoiceMasterSuccess({ Status: false }))
+            // dispatch(GoButton_post_For_Invoice_Success([]))
 
             dispatch(AlertState({
                 Type: 4,
@@ -218,7 +215,7 @@ const Invoice = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             // saveDissable(false);//Update Button Is enable function
-            dispatch(updateBOMListSuccess({ Status: false }));
+            // dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -228,6 +225,9 @@ const Invoice = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+    useEffect(() => {
+        dispatch(GetVender())
+    }, [])
 
     useEffect(() => {
         if (pageField) {
@@ -243,58 +243,23 @@ const Invoice = (props) => {
         }
     }, [pageField]);
 
+    useEffect(() => {
+        showAllStockOnclick(showAllStockState)
+    }, [showAllStockState]);
 
-    const CustomerDropdown_Options = customer.map((index) => ({
-        value: index.id,
-        label: index.Name,
-
+    const venderOptions = vender.map((i) => ({
+        value: i.id,
+        label: i.Name,
     }));
 
-    function showAllStockOnclick(isplus = false) {
-        try {
-            if (isplus) {
-                document.getElementById("allplus-circle").style.display = "none";
-                document.getElementById("allminus-circle").style.display = "block";
-            } else {
-                document.getElementById("allplus-circle").style.display = "block";
-                document.getElementById("allminus-circle").style.display = "none";
-            }
-        } catch (w) { }
 
-        OrderItemDetails.forEach(index1 => {
-            if (!index1.StockTotal > 0) {
-                return
-            }
-            try {
-                if (isplus) {
-                    document.getElementById(`view${index1.id}`).style.display = "block";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-                } else {
-                    document.getElementById(`view${index1.id}`).style.display = "none";
-                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-                }
-            } catch (w) { }
-        })
-
-
-    }
     const pagesListColumns = [
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
-            style: (cell, row, rowIndex, colIndex) => {
-                return {
-                    width: '10%',
-                    width: '10%'
-                };
-            },
-            headerStyle: (colum, colIndex) => {
-                return {
-                    width: '10%',
-                    width: '10%'
-                };
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-100">Item Name</div>)
             },
             formatter: (cellContent, index1) => {
 
@@ -312,23 +277,17 @@ const Invoice = (props) => {
         {//***************Quantity********************************************************************* */
             text: "Quantity",
             dataField: "",
-            style: (cell, row, rowIndex, colIndex) => {
-                return {
-                    width: '10%',
-                    width: '10%'
-                };
-            },
-            headerStyle: (colum, colIndex) => {
-                return {
-                    width: '10%',
-                    width: '10%'
-                };
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-100">Quantity</div>)
             },
             formatter: (cellContent, user) => (
                 <div >
                     <Input type="text"
+                        disabled={pageMode === 'edit' ? true : false}
                         id={`OrderQty${user.id}`}
                         style={{ textAlign: "right" }}
+                        className=" width-100"
                         key={user.id}
                         autoComplete="off"
                         defaultValue={user.Quantity}
@@ -341,18 +300,11 @@ const Invoice = (props) => {
         },
         {//***************Unit Dropdown********************************************************************* */
             text: "Unit",
-            dataField: "",
-            style: (cell, row, rowIndex, colIndex) => {
-                return {
-                    width: '10%',
-                    width: '10%'
-                };
-            },
-            headerStyle: (colum, colIndex) => {
-                return {
-                    width: '10%',
-                    width: '10%'
-                };
+            dataField: "id",
+
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-100" >Unit</div>)
             },
             formatter: (value, row, key) => {
 
@@ -360,8 +312,10 @@ const Invoice = (props) => {
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
+                        isDisabled={pageMode === 'edit' ? true : false}
                         defaultValue={row.UnitDrop}
                         // value={{value:row.Unit,label:row.UnitName}}
+                        className=" width-100"
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -375,14 +329,7 @@ const Invoice = (props) => {
                     </Select >
                 )
             },
-            headerStyle: (colum, colIndex) => {
-                return {
-                    maxWidth: "150px",
-                    minWidth: "150px", textAlign: 'center'
-                };
-            },
         },
-
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
@@ -390,23 +337,36 @@ const Invoice = (props) => {
 
                 return (
                     <div className="d-flex flex-content-start">
-                        <div>
-                            <samp id="allplus-circle" >
+                        {OrderItemDetails.length > 0 ? <div>
+                            <samp id="allplus-circle">
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
                                         position: "",
-                                        display: OrderItemDetails.length > 0 ? "block" : "none"
+                                        display: showAllStockState ? "none" : "block"
                                     }}
-                                    onClick={(e) => { showAllStockOnclick(true) }}>
+                                    onClick={(e) => {
+                                        setShowAllStockState(!showAllStockState)
+                                        // showAllStockOnclick(true) 
+                                    }}
+                                >
                                 </i>
                             </samp>
-                            <samp id="allminus-circle" style={{ display: "none" }}>
+                            <samp id="allminus-circle"  >
                                 <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{ position: "" }}
-                                    onClick={(e) => { showAllStockOnclick(false) }}
+                                    style={{
+                                        position: "",
+                                        // display: "none"
+                                        display: showAllStockState ? "block" : "none"
+                                    }}
+                                    onClick={(e) => {
+                                        setShowAllStockState(!showAllStockState)
+                                        // showAllStockOnclick(false)
+                                    }}
                                 ></i>
                             </samp>
                         </div>
+                            : null
+                        }
 
                         <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
                             <samp > Stock Details</samp>
@@ -418,40 +378,52 @@ const Invoice = (props) => {
 
             formatter: (cellContent, index1) => (
                 <div>
-                    <div >
-                        {(index1.StockTotal > 0) ?
-                            <>
-                                <samp id={`plus-circle${index1.id}`} >
-                                    <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
-                                        style={{ position: "absolute", }}
-                                        onClick={(e) => { showStockOnclick(index1, true) }}>
-                                    </i>
-                                    <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
-                                        {`Total Stock:${index1.StockTotal}`}</samp>
-                                </samp>
-                            </>
-                            : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>}
+                    <div key={`plus-circle-icon${index1.id}`}>
+                        {
+                            (index1.StockTotal > 0) ?
+                                <>
+                                    <samp key={`plus-circle${index1.id}`} id={`plus-circle${index1.id}`}
+                                        style={{
+                                            display: showAllStockState ? "none" : "block"
+                                        }}
+                                    >
+                                        <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
+                                            style={{ position: "absolute", }}
+                                            onClick={(e) => { showStockOnclick(index1, true) }}>
+                                        </i>
+                                        <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
+                                            {`Total Stock:${index1.StockTotal}`}</samp>
+                                    </samp>
+                                </>
+                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
+                        }
 
-                        <samp id={`minus-circle${index1.id}`} style={{ display: "none" }}>
+                        <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
+                            style={{ display: showAllStockState ? "block" : "none" }}
+                        >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                 style={{ position: "absolute", }}
                                 onClick={(e) => { showStockOnclick(index1, false) }}
                             ></i>
                         </samp>
 
-
                     </div >
 
-                    <div id={`view${index1.id}`} style={{ display: "none", backgroundColor: "#b9be511a" }}>
+                    <div id={`view${index1.id}`}
+                        style={{
+                            backgroundColor: "#b9be511a",
+                            display: showAllStockState ? "bolck" : "none"
+                        }}
+                    // style={{ display: showAllStockState ? "none" : "block" }}
+                    >
                         <Table className="table table-bordered table-responsive mb-1" >
-
                             <Thead  >
 
                                 <tr className="" style={{ zIndex: -3 }}>
                                     <th className="">Batch Code </th>
                                     <th className="" >Supplier BatchCode</th>
                                     <th className="" >Batch Date</th>
-                                    <th className="" >Batch Date</th>
+                                    {/* <th className="" >Batch Date</th> */}
 
 
                                     <th className="">
@@ -494,6 +466,7 @@ const Invoice = (props) => {
                                             <td>
                                                 <div style={{ width: "150px" }}>
                                                     <Input type="text"
+                                                        disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
                                                         key={`batchQty${index1.id}-${index2.id}`}
                                                         id={`batchQty${index1.id}-${index2.id}`}
@@ -510,8 +483,6 @@ const Invoice = (props) => {
                 </div >
             ),
 
-
-
         },
         {//***************Rate********************************************************************* */
             text: "Rate",
@@ -522,10 +493,40 @@ const Invoice = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: OrderItemDetails.length,
+        // totalSize: OrderItemDetails.length,
         custom: true,
     };
 
+    function showAllStockOnclick(isplus = false) {
+        try {
+            if (isplus) {
+                document.getElementById("allplus-circle").style.display = "none";
+                document.getElementById("allminus-circle").style.display = "block";
+            } else {
+                document.getElementById("allplus-circle").style.display = "block";
+                document.getElementById("allminus-circle").style.display = "none";
+            }
+        } catch (w) { }
+
+        OrderItemDetails.forEach(index1 => {
+            if (!index1.StockTotal > 0) {
+                return
+            }
+            try {
+                if (isplus) {
+                    document.getElementById(`view${index1.id}`).style.display = "block";
+                    document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+                    document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+                } else {
+                    document.getElementById(`view${index1.id}`).style.display = "none";
+                    document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+                    document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+                }
+            } catch (w) { }
+        })
+
+
+    }
     function showStockOnclick(index1, isplus = false) {
         try {
             if (isplus) {
@@ -539,12 +540,13 @@ const Invoice = (props) => {
             }
         } catch (w) { }
     }
-    function InvoiceDateOnchange(y, v, e) {
-        dispatch(GoButtonForinvoiceAddSuccess([]))
+
+    function ChallanDateOnchange(y, v, e) {
+        // dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
     };
 
-    function CustomerOnchange(hasSelect, evn) {
+    function PartyOnchange(hasSelect, evn) {
 
         setState((i) => {
             const v1 = { ...i }
@@ -552,7 +554,7 @@ const Invoice = (props) => {
             v1.hasValid.Customer.valid = true
             return v1
         })
-        // dispatch(GoButtonForinvoiceAddSuccess([]))
+        // dispatch(GoButton_post_For_Invoice_Success([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -632,11 +634,10 @@ const Invoice = (props) => {
             index.StockInValid = false
             index.StockInvalidMsg = null
             document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
+        } catch (e) { };
+        try {
             document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
         } catch (e) { };
-
-
-
 
     };
 
@@ -661,8 +662,6 @@ const Invoice = (props) => {
         event.target.value = val1;
         index.Quantity = val1
 
-
-
         stockDistributeFunc(index)
     };
 
@@ -671,7 +670,7 @@ const Invoice = (props) => {
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
-        // var n2 = Number(e.ConversionUnit);
+        // var n2 = Number(event.ConversionUnit);
         // const t1 = (n1 * n2).toFixed(2);
         // const t2 = index.StockUnit
 
@@ -681,20 +680,21 @@ const Invoice = (props) => {
         stockDistributeFunc(index)
     };
 
-
     function goButtonHandler(event) {
 
         // }catch(e){}
         // if (formValid(state, setState)) {
-        debugger
+        // debugger
+
+
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
             Customer: values.Customer.value,
             Party: userParty(),
             OrderIDs: ""
         });
-        mainSppinerOnOff({ id: goBtnId, state: true })
-        dispatch(GoButtonForinvoiceAdd(jsonBody, goBtnId));
+        GoBtnDissable({ id: goBtnId, state: true })
+        // dispatch(GoButton_For_Invoice_Add(subPageMode, jsonBody, goBtnId));
 
         // }
     };
@@ -703,55 +703,10 @@ const Invoice = (props) => {
         event.preventDefault();
 
         const validMsg = []
-        // var a = {
-        //     BatchCode: "A001",
-        //     Quantity: "10.00",
-        //     BaseUnitQuantity: "1.000",
-        //     MRP: null,
-        //     Rate: "100.00",
-        //     BasicAmount: "1000.00",
-        //     TaxType: "GST",
-        //     GSTPercentage: "5.00",
-        //     GSTAmount: "50.00",
-        //     Amount: "1050.00",
-        //     DiscountType: "",
-        //     Discount: "0",
-        //     DiscountAmount: "0",
-        //     CGST: "25.00",
-        //     SGST: "25.00",
-        //     IGST: "0.00",
-        //     CGSTPercentage: "2.50",
-        //     SGSTPercentage: "2.50",
-        //     IGSTPercentage: "0.00",
-        //     CreatedOn: "",
-        //     Item: 44,
-        //     Unit: 302,
-        //     BatchDate: "2023-01-01",
-        //     BatchID: 59
-        // }
-        const InvoiceItems = []
-        debugger
-        const InvoicesReferences = OrderIDs.map(i => ({ Order: i }))
-        let grandtotal = 0
+        const invoiceItems = []
+        let grand_total = 0;
 
         OrderItemDetails.forEach((index) => {
-
-            // let Stock = index.StockDetails.map((i) => {
-            //     return i.BaseUnitQuantity
-            // })
-            // var TotalStock = 0;
-            // Stock.forEach(x => {
-            //     TotalStock += parseFloat(x);
-            // });
-            // var OrderQty = parseFloat(index.Quantity)
-            // if (OrderQty > TotalStock) {
-            //     {
-            //         validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
-            //     };
-            // }
-            // if (index["invalid"]) {
-            //     validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
-            // };
             if (index.StockInValid) {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                 return
@@ -761,15 +716,15 @@ const Invoice = (props) => {
 
                 if (ele.Qty > 0) {
                     var demo = {
-                        Rate: index.Rate,
-                        GSTPercentage: index.GSTPercentage,
+                        Rate: ele.Rate,
+                        GSTPercentage: ele.GST,
                         Quantity: ele.Qty
                     }
                     const basicAmt = parseFloat(basicAmount(demo))
                     const cgstAmt = (GstAmount(demo))
                     const amount = Amount(demo)
-                    grandtotal = grandtotal + Number(amount)
-                    InvoiceItems.push({
+                    grand_total = grand_total + Number(amount)
+                    invoiceItems.push({
                         Item: index.Item,
                         Unit: index.UnitDrop.value,
                         BatchCode: ele.BatchCode,
@@ -778,17 +733,17 @@ const Invoice = (props) => {
                         BatchID: ele.id,
                         BaseUnitQuantity: ele.BaseUnitQuantity,
                         LiveBatch: ele.LiveBatche,
-                        MRP: null,
-                        Rate: index.Rate,
+                        MRP: ele.LiveBatcheMRPID,
+                        Rate: ele.Rate,
                         BasicAmount: basicAmt.toFixed(2),
                         GSTAmount: cgstAmt.toFixed(2),
-                        GST: index.GST,
+                        GST: ele.LiveBatcheGSTID,
                         CGST: (cgstAmt / 2).toFixed(2),
                         SGST: (cgstAmt / 2).toFixed(2),
                         IGST: 0,
-                        GSTPercentage: index.GSTPercentage,
-                        CGSTPercentage: (index.GSTPercentage / 2),
-                        SGSTPercentage: (index.GSTPercentage / 2),
+                        GSTPercentage: ele.GST,
+                        CGSTPercentage: (ele.GST / 2),
+                        SGSTPercentage: (ele.GST / 2),
                         IGSTPercentage: 0,
                         Amount: amount,
                         TaxType: 'GST',
@@ -800,7 +755,7 @@ const Invoice = (props) => {
             })
         })
 
-
+        debugger
         // if (formValid(state, setState)) {
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -812,175 +767,77 @@ const Invoice = (props) => {
             }));
             return
         }
-        const jsonBody = JSON.stringify({
+
+
+
+        const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             InvoiceDate: values.InvoiceDate,
+            InvoiceItems: invoiceItems,
+            InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
+        });
+
+        const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            IBChallanDate: values.InvoiceDate,
+            IBChallanItems: invoiceItems,
+            IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
+        });
+
+        const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             CustomerGSTTin: '41',
-            GrandTotal: Math.round(grandtotal),
-            RoundOffAmount: (grandtotal - Math.trunc(grandtotal)).toFixed(2),
+            GrandTotal: Math.round(grand_total),
+            RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
             Customer: values.Customer.value,
             Party: userParty(),
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            InvoiceItems: InvoiceItems,
-            InvoicesReferences: InvoicesReferences
+        });
+
+
+        let jsonBody;  //json body decleration 
+        if (subPageMode === url.INVOICE_1) {
+            jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+        } else if (subPageMode === url.INVOICE_2) {
+            jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_2_json() });
         }
-        );
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         if (pageMode === mode.edit) {
         }
 
         else {
 
-            mainSppinerOnOff({ id: saveBtnid, state: true })
-            dispatch(invoiceSaveAction(jsonBody, saveBtnid));
+            // saveDissable({ id: saveBtnid, state: true })
+            // dispatch(postInvoiceMaster(jsonBody, saveBtnid));
         }
-        // };
-        debugger
+
     }
-    const [state1, setState1] = useState({ expanded: [] })
-    const OrderItemDetails1 = [{
-        id: 1, name: "212"
-    }, {
-        id: 2, name: "212"
-    }, {
-        id: 3, name: "212"
-    }, {
-        id: 4, name: "212"
-    }];
-    const columns = [{
-        dataField: "id",
-        headerFormatter: (cell, index1 = [], k) => {
-            return (<div>
-                <samp>rate</samp>
-                <samp><i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                    style={{ position: "absolute", }}
-                    onClick={handleBtnClick}
-                ></i></samp>
-            </div>)
-        }
-
-    },
-    {
-        text: "name",
-        dataField: "name",
-        expandHeaderColumnRenderer: ({ isAnyExpands }) => {
-            if (isAnyExpands) {
-                return <b>-</b>;
-            }
-            return <b>+</b>;
-        },
-    },
-    {
-        text: "name",
-        dataField: "id",
-    }
-    ]
-
-
-    function handleBtnClick() {
-        debugger
-        if (!state1.expanded.includes(2)) {
-            setState1(() => ({
-                expanded: [...state1.expanded, 2]
-            }));
-        } else {
-            setState1(() => ({
-                expanded: state1.expanded.filter(x => x !== 2)
-            }));
-        }
-    };
-    const handleOnExpand = (row, isExpand, rowIndex, e) => {
-        debugger
-        if (isExpand) {
-            setState1(() => ({
-                expanded: [...state1.expanded, row.id]
-            }));
-        } else {
-            setState1(() => ({
-                expanded: state1.expanded.filter(x => x !== row.id)
-            }));
-        }
-    }
-
-    const expandRow1 = {
-        // showExpandColumn: true,
-        expandByColumnOnly: true,
-        showExpandColumn: true,
-        expanded: state1.expanded,
-        onExpand: handleOnExpand,
-        // expandHeaderColumnRenderer: ({ isAnyExpands }) => {
-        //   if (isAnyExpands) {
-        //     return <b>-</b>;
-        //   }
-        //   return <b>+</b>;
-        // },
-        expandColumnRenderer: ({ expanded }) => {
-
-            if (expanded) {
-                return (
-                    <b>-</b>
-                );
-            }
-            return (
-                <b>...</b>
-            );
-        },
-        className: (a, b, c) => {
-            if (c % 2 == 0) {
-                return 'expanding-even'
-            };
-            return 'expanding-odd'
-        },
-
-        parentClassName: (a, b, c) => {
-            if (c % 2 == 0) {
-                return 'expandparent-even'
-            };
-            return 'expandparent-odd'
-        },
-        renderer: (row, a, v, c) => {
-            debugger
-            return (
-                <div id="expand-body1">
-                    <div id="expand-body2">gjgjgsfjgfgjdgfdccccccccccccccccccccccccccccccccccccccccc</div>
-                </div>
-            )
-        },
-    };
-
-
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.INVOICE_1} /> */}
 
                 <div className="page-content" >
-                    <BootstrapTable
-                        keyField='id'
-                        data={OrderItemDetails1}
-                        columns={columns}
-                        expandRow={expandRow1}
-                    />
 
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
-                                <Col className=" mt-1 row  " sm={11} >
-                                    <Col sm="6">
+                                <Col className=" mt-1 row " sm={12} >
+                                    <Col sm={3}>
                                         <FormGroup className="row mt-2 mb-3  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.InvoiceDate} </Label>
-                                            <Col sm="7">
+                                            <Label className="mt-1" style={{ width: "110px" }}>Challan Date </Label>
+                                            <Col sm={7}>
                                                 <Flatpickr
                                                     name="InvoiceDate"
                                                     value={values.InvoiceDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
+                                                    disabled={(OrderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+
                                                     options={{
                                                         dateFormat: "Y-m-d",
                                                     }}
-                                                    onChange={InvoiceDateOnchange}
+                                                    onChange={ChallanDateOnchange}
                                                 />
                                                 {isError.InvoiceDate.length > 0 && (
                                                     <span className="invalid-feedback">{isError.InvoiceDate}</span>
@@ -989,12 +846,11 @@ const Invoice = (props) => {
                                         </FormGroup>
                                     </Col>
 
-                                    <Col sm="6">
+                                    <Col  sm={3}>
                                         <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.Customer} </Label>
-                                            <Col sm={7}>
+                                            <Label className="mt-2" style={{ width: "80px" }}> Party </Label>
+                                            <Col sm={8}>
                                                 <Select
-                                                    // isDisabled={values.Customer ? true : null}
                                                     name="Customer"
                                                     value={values.Customer}
                                                     isSearchable={true}
@@ -1002,8 +858,29 @@ const Invoice = (props) => {
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={CustomerDropdown_Options}
-                                                    onChange={CustomerOnchange}
+                                                    options={venderOptions}
+                                                    onChange={PartyOnchange}
+                                                />
+                                                {isError.Customer.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm={3}>
+                                        <FormGroup className="row mt-2 mb-3 ">
+                                            <Label className="mt-2" style={{ width: "80px" }}> Item </Label>
+                                            <Col sm={8} >
+                                                <Select
+                                                    name="Customer"
+                                                    value={values.Customer}
+                                                    isSearchable={true}
+                                                    isDisabled={OrderItemDetails.length > 0 ? true : false}
+                                                    id={'customerselect'}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    // options={CustomerDropdown_Options}
+                                                    // onChange={CustomerOnchange}
 
                                                 />
                                                 {isError.Customer.length > 0 && (
@@ -1012,29 +889,6 @@ const Invoice = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-
-                                </Col>
-                                <Col sm={1} className="mt-2">
-                                    {OrderItemDetails.length === 0 ?
-                                        <Button
-                                            color="btn btn-outline-success border-1 font-size-12 " style={{ marginTop: '3px' }}
-                                            onClick={(e) => goButtonHandler(e)}
-                                        >Go</Button>
-                                        :
-                                        <Button
-                                            color="btn btn-outline-info border-1 font-size-12 " style={{ marginTop: '3px' }}
-                                            onClick={(e) => {
-                                                // document.getElementById("myInput11").flatpickr({
-                                                //     maxDate: currentDate,
-                                                //     defaultDate: values.InvoiceDate,
-                                                //     dateFormat: "Y-m-d",
-                                                // });
-                                                dispatch(GoButtonForinvoiceAddSuccess([]))
-                                            }}
-                                        >Change</Button>
-                                    }
-                                </Col>
-                                <Col>
                                 </Col>
                             </Row>
                         </Col>
@@ -1104,4 +958,4 @@ const Invoice = (props) => {
     }
 };
 
-export default Invoice
+export default Challan;

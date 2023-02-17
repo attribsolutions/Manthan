@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -12,7 +11,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName } from "../../../store/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import {
     AlertState,
     commonPageField,
@@ -56,6 +55,7 @@ const CompanyGroupMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -123,9 +123,10 @@ const CompanyGroupMaster = (props) => {
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.IsSCM = IsSCM;
+                values.id = id
                 hasValid.Name.valid = true;
                 hasValid.IsSCM.valid = true;
-                values.id = id
+              
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -256,7 +257,7 @@ const CompanyGroupMaster = (props) => {
                                                                 value={values.Name}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                autoFocus={true}
+                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))

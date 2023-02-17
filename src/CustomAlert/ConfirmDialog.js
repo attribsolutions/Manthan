@@ -2,6 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { UncontrolledAlert } from 'reactstrap';
 import useConfirm from './useConfirm';
 
 
@@ -17,17 +18,17 @@ const ConfirmDialog = () => {
         switch (confirmState.Type) {
             case 1: component = <AlertSucc />
                 break;
-            case 2: component = <AlertDanger />
+             case 2: component = <AlertDanger />
                 break;
-            case 3: component = <AlertInfo />
+             case 3: component = <AlertInfo />
                 break;
-            case 4: component = <AlertWarning />
+             case 4: component = <AlertWarning />
                 break;
-            case 5: component = <AlertPermission_1 />
+             case 5: component = <AlertPermission_1 />
                 break;
-            case 6: component = <AlertPermission_2 />
+             case 6: component = <AlertPermission_2 />
                 break;
-            case 7: component = <AlertPermission_3 />
+             case 7: component = <AlertPermission_3 />
                 break;
         }
     }
@@ -75,7 +76,6 @@ const AlertSucc = () => {
             });
         }
     };
-
 
     return (
         <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
@@ -133,7 +133,6 @@ const AlertWarning = () => {
 };
 
 const AlertInfo = () => {
-
     const { onCancel, confirmState } = useConfirm();
     const { Status = false, Message = "400 Error", } = confirmState;
 
@@ -152,6 +151,7 @@ const AlertInfo = () => {
         onCancel();
     };
     return (
+
         <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
@@ -166,8 +166,14 @@ const AlertInfo = () => {
                 </div>
             </div>
         </div>
+
+     
+
     )
 };
+
+
+
 
 
 const AlertDanger = () => {
@@ -377,34 +383,36 @@ const MessageFun = ({ msg }) => {
 }
 
 export async function CkeckAlert(method, url, response, body) {
+
     const { data = '' } = response
-    const con1 = ((data.StatusCode === 200)) ;
-    const con2 = ((data.StatusCode === 204)) ;
-    const con3 = ((data.StatusCode === 200)) ;
-    
+    const con1 = ((data.StatusCode === 200));
+    const con2 = ((data.StatusCode === 204));
+    const con3 = ((data.StatusCode === 226));
+
     const con4 = ((data.StatusCode === 400));
-    
+
     const con5 = ((data.StatusCode === 406));
     const con6 = ((method === "post" || method === "put"))
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
-    } 
+    }
     // **********************************************************************************
     if (con1) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     } else if (con2) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
-        return Promise.reject(response)
-    }  else if (con2) {
+        // await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
+        // return Promise.reject(response)
+        return response.data
+    }
+    else if (con3) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
         return Promise.reject(response)
     }
-
-     else if (con4) {
+    else if (con4) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
         return Promise.reject(response)

@@ -3,6 +3,7 @@ import {
   COMMON_BREADCRUMB_ALL_DETAIL,
   BREADCRUMB_ITEM_NAME,
   BREADCRUMB_DOWN_BTN_DATA,
+  BREADCRUMB_REST,
 } from "./actionType";
 
 
@@ -25,6 +26,13 @@ export const BreadcrumbDownBtndata = (data) => ({
   type: BREADCRUMB_DOWN_BTN_DATA,
   payload: data,
 });
+
+export const BreadcrumbReset = (label) => {
+  return {
+    type: BREADCRUMB_REST,
+    payload: label,
+  }
+}
 
 
 // export const CommonBreadcrumbDetails_reducer = (props) => ({

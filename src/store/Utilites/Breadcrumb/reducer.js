@@ -2,14 +2,25 @@ import {
   COMMON_BREADCRUMB_ALL_DETAIL,
   BREADCRUMB_ITEM_NAME,
   BREADCRUMB_SHOW_COUNT_LABLE,
-  BREADCRUMB_DOWN_BTN_DATA
+  BREADCRUMB_DOWN_BTN_DATA,
+  BREADCRUMB_REST
 } from "./actionType"
 
 
 const INIT_STATE = {
-  bredcrumbItemName: '',
+  bredcrumbItemName: "",
   showCountlabel: '',
-  breadcrumbDetail: {},
+  breadcrumbDetail: {
+    breadShow: true,
+    newBtnView: true,
+    excelBtnView: true,
+    pageHeading: '',
+    CountLabel: true,
+    masterPage: "",
+    pageMode: "",
+    downBtnData: [],
+    showCountlabel: ''
+  },
   downBtnData: []
 }
 const BreadcrumbReducer = (state = INIT_STATE, action) => {
@@ -26,14 +37,20 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         showCountlabel: action.payload,
       }
     case COMMON_BREADCRUMB_ALL_DETAIL:
+      debugger
+      let payload = Object.assign({}, {...state.breadcrumbDetail},{... action.payload});
       return {
         ...state,
-        breadcrumbDetail: action.payload,
+        breadcrumbDetail: payload,
       }
     case BREADCRUMB_DOWN_BTN_DATA:
       return {
         ...state,
         downBtnData: action.payload,
+      }
+    case BREADCRUMB_REST:
+      return {
+        ...INIT_STATE,
       }
 
 

@@ -358,86 +358,74 @@ import React, { useEffect, useState } from "react"
 import { Row,  Modal, Button, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 import * as urlRalations from "../../routes/urlRalations"
 
 const BreadcrumbNew = (props) => {
-
   const history = useHistory();
   const dispatch = useDispatch();
   // for Excel Download
 
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [downListKey, setDownListKey] = useState([]);
-  const [breadcrumbDetail, setbreadcrumbDetail] = useState({});
+  const [breadcrumbDetail1, setbreadcrumbDetail] = useState({});
 
-  const { downBtnData = [], userAccess, } = useSelector((state) => ({
+  const { downBtnData12 = [], userAccess, } = useSelector((state) => ({
     userAccess: state.Login.RoleAccessUpdateData,
     downBtnData: state.BreadcrumbReducer.downBtnData,
     PageList: state.H_Pages.HPagesListData,
   }));
 
   // const { pageId } = props;
-  let { showCountlabel = '', bredcrumbItemName = '', breadcrum } = useSelector((state) => ({
+  let { showCountlabel = '', bredcrumbItemName = '', breadcrumbDetail } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
-    breadcrum: state.BreadcrumbReducer.breadcrumbDetail,
+    breadcrumbDetail: state.BreadcrumbReducer.breadcrumbDetail,
 
   }));
 
   useEffect(() => {
     dispatch(Breadcrumb_inputName(''))
+    // dispatch(BreadcrumbShowCountlabel())
+
 
   }, [])
   const {
-    breadShow = true,
-    newBtnView = true,
-    excelBtnView = true,
-    pageHeading = '',
-    CountLabel = true,
-    masterPage = "",
-    pageMode = "",
-    // breadcrumbDetail=[]
+    breadShow= true,
+    newBtnView= true,
+    excelBtnView= true,
+    pageHeading= '',
+    CountLabel= true,
+    masterPage= "",
+    pageMode= "",
+    downBtnData= [],
+    // showCountlabel= ''
   } = breadcrumbDetail;
 
-  useEffect(() => {
-    const locationPath = history.location.pathname
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
-    });
-    if (!(userAcc === undefined)) {
-      showCountlabel = '';
-      bredcrumbItemName = '';
-      const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
-      const isCountLabel = (userAcc.CountLabel);
-      const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));
-      // const isbreadshow = ((userAcc.IsEditPopuporComponent === true))
-      dispatch(Breadcrumb_inputName(''))
-
-      setbreadcrumbDetail({
-        // masterPage:masterPage,
-        newBtnView: isnewBtnView,
-        excelBtnView: isexcelBtnView,
-        pageHeading: userAcc.PageHeading,
-        CountLabel: isCountLabel,
-        // breadShow:isbreadshow,
-        masterPage: urlRalations[userAcc.ActualPagePath],
-
-      })
-    }
-    else if (userAcc === undefined) {
-      setbreadcrumbDetail({
-        // masterPage:masterPage,
-        newBtnView: false,
-        excelBtnView: false,
-        pageHeading: false,
-        CountLabel: false,
-        // breadShow:isbreadshow,
-      })
-    }
-  }, [userAccess])
+  // useEffect(() => {
+  //   const locationPath = history.location.pathname
+  //   let userAcc = userAccess.find((inx) => {
+  //     return (`/${inx.ActualPagePath}` === locationPath)
+  //   });
+  //   if (!(userAcc === undefined)) {
+  //     showCountlabel = '';
+  //  
+  
+  //   }
+  //   else if (userAcc === undefined) {
+    
+  //     setbreadcrumbDetail({
+  //       // masterPage:masterPage,
+  //       newBtnView: false,
+  //       excelBtnView: false,
+  //       pageHeading: false,
+  //       CountLabel: false,
+  //       // breadShow:isbreadshow,
+  //     })
+  //   }
+  // }, [userAccess])
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -455,28 +443,32 @@ const BreadcrumbNew = (props) => {
 
   //   })
   // }
+
   const NewButtonHandeller = () => {
-    if (pageMode === "add") {
-      let pathName = history.location.pathname
-      let userAcc = breadcrum.userAccess.find((inx) => {
-        return (`/${inx.ActualPagePath}` === pathName)
-      })
-      let listPagePath = userAccess.find((inx) => {
-        return (inx.id === userAcc.RelatedPageID)
-      })
-      if (listPagePath === undefined) {
-        return
-      }
-      history.push({
-        pathname: `/${listPagePath.ActualPagePath}`,
-      })
-    }
-    else {
+  debugger
+    // if (pageMode === "add") {
+    //   let pathName = history.location.pathname
+    //   let userAcc = breadcrum.userAccess.find((inx) => {
+    //     return (`/${inx.ActualPagePath}` === pathName)
+    //   })
+    //   let listPagePath = userAccess.find((inx) => {
+    //     return (inx.id === userAcc.RelatedPageID)
+    //   })
+    //   if (listPagePath === undefined) {
+    //     return
+    //   }
+    //   history.push({
+    //     pathname: `/${listPagePath.ActualPagePath}`,
+    //   })
+    // }
+    // else {
+   
+    //   console.log(history,masterPage,pageMode)
       history.push({
         pathname: masterPage,
         pageMode: pageMode
       })
-    }
+    // }
 
 
   }
@@ -490,7 +482,6 @@ const BreadcrumbNew = (props) => {
       }
     }
   }, [downBtnData])
-
   const DownloadInExcelButtonHanler = (event, values) => {
     // const exldata = downBtnData
     let list = []
@@ -595,12 +586,13 @@ const BreadcrumbNew = (props) => {
           <div className="d-flex" >
             <div className="navbar-brand-box" ></div>
             <div style={{ paddingLeft: "7px" }} >
+             
               {
                 newBtnView ?
                   <div >
                     <button type="button" className="btn btn-success"
                       data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                      onClick={NewButtonHandeller}>
+                      onClick={NewButtonHandeller }>
                       New
                     </button>
                     <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>

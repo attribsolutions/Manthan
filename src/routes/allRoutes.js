@@ -108,6 +108,8 @@ import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
+import ChallanList from "../pages/Purchase/Challan/ChallanList";
+import Challan from "../pages/Purchase/Challan/Challan";
 
 const userRoutes = [
 
@@ -200,13 +202,18 @@ const userRoutes = [
   { path: path.GENERAL, component: GeneralMaster },
   { path: path.GENERAL_LIST, component: GeneralList },
 
+  //******************************* Inventory Module ************************************//
+  { path: path.CHALLAN_LIST, component: ChallanList },
+  { path: path.CHALLAN, component: Challan },
+
   //******************************* Purchase Module ************************************//
 
+
   { path: path.ORDER_1, component: Order },
-  { path: path.ORDER_lIST_1, component: OrderList },
+  { path: path.ORDER_LIST_1, component: OrderList },
 
   { path: path.ORDER_2, component: Order },
-  { path: path.ORDER_lIST_2, component: OrderList },
+  { path: path.ORDER_LIST_2, component: OrderList },
 
   { path: path.GRN_lIST, component: GRNList },
   { path: path.GRN_ADD, component: GRNAdd },

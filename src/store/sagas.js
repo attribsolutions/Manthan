@@ -53,6 +53,7 @@ import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 import InvoiceSaga from "./Sales/Invoice/saga"
 // import IBOrderSaga from "./Inter Branch/IBOrderRedux/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
+import ChallanSaga from "./Inventory/ChallanRedux/saga"
 // import IB_Invoice from "./Inter Branch/IB_Invoice_Redux/saga"
 
 export default function* rootSaga() {
@@ -105,6 +106,8 @@ export default function* rootSaga() {
     // fork(IBOrderSaga),
     fork(InvoiceSaga),
     fork(InwardSaga),
+    fork(ChallanSaga)
+    
     // fork(IB_Invoice)
   ])
 }

@@ -53,6 +53,7 @@ import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
 import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
 import ProductionReducer from "./Purchase/ProductionRedux/reducer"
 import InvoiceReducer from "./Sales/Invoice/reducer"
+import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 
 import IBOrderReducer from "./Inter Branch/IBOrderRedux/reducer"
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
@@ -120,10 +121,10 @@ const rootReducer = combineReducers({
   WorkOrderReducer,
   MaterialIssueReducer,
   ProductionReducer,
-
   IBOrderReducer,
   InvoiceReducer,
   InwardReducer,
-  IBInvoiceReducer
+  IBInvoiceReducer,
+  ChallanReducer
 })
 export default rootReducer

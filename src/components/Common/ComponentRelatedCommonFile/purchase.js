@@ -10,8 +10,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
-import { listPageCommonButtonFunction, makeBtnCss }
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { breadcrumbReturn, listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
@@ -59,8 +59,8 @@ const PurchaseListPage = (props) => {
 
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
-    const [tableList, settableList] = useState([]);
-    // debugger
+    // const [tableList, settableList] = useState([]);
+
     const {
         editData,
         updateMsg,
@@ -68,6 +68,7 @@ const PurchaseListPage = (props) => {
         userAccess,
         postMsg,
         pageField,
+        tableList = []
     } = props.reducers;
 
     const {
@@ -94,7 +95,7 @@ const PurchaseListPage = (props) => {
         downBtnFunc = () => { },
     } = props;
 
-    const fileds = pageField.PageFieldMaster;
+    const { PageFieldMaster = [] } = { ...pageField };
 
 
     useEffect(() => {
@@ -104,29 +105,33 @@ const PurchaseListPage = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
+            setUserAccState(userAcc);
+            breadcrumbReturn({ dispatch, userAcc, masterPath });
         }
+
+
     }, [userAccess])
 
     useEffect(() => {
 
-        let tableArr = props.reducers.tableList;
-        if ((pageUrl === url.GRN_STP)) {
-            let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
-                return i.Inward === "Open"
-            })
-            tableArr = OnlyInwardZeroRecord
-            settableList(OnlyInwardZeroRecord)
-        }
-        else {
-            settableList(props.reducers.tableList)
-        };
+        // let tableArr = props.reducers.tableList;
+        // // if ((pageUrl === url.GRN_STP)) {
+        // //     let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
+        // //         return i.Inward === "Open"
+        // //     })
+        // //     tableArr = OnlyInwardZeroRecord
+        // //     settableList(OnlyInwardZeroRecord)
+        // // }
+        // // else {
+        // //     settableList(props.reducers.tableList)
+        // // };
+        // settableList(props.reducers.tableList)
 
         downList = []
         listObj = {}
 
-        tableArr.forEach((index1) => {
-            fileds.forEach((index2) => {
+        tableList.forEach((index1) => {
+            PageFieldMaster.forEach((index2) => {
                 if (index2.ShowInDownload) {
                     listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
                     listObj[index2.ControlID] = index1[index2.ControlID]
@@ -136,9 +141,10 @@ const PurchaseListPage = (props) => {
             listObj = {}
         })
 
-        dispatch(BreadcrumbDownBtndata(downList))
+        // dispatch(BreadcrumbDownBtndata(downList))
+        dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
 
-    }, [props.reducers.tableList])
+    }, [tableList])
 
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
@@ -238,10 +244,12 @@ const PurchaseListPage = (props) => {
     }, [editData]);
 
     function makeBtnHandler(rowData) {
+
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
         makeBtnFunc(arr)
+
     }
 
     function onSaveBtnClick() {
@@ -253,7 +261,7 @@ const PurchaseListPage = (props) => {
     }
 
     // ****** columns sort by sequnce
-    fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+    PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
         return a.ListPageSeq - b.ListPageSeq
     });
     // *******
@@ -292,7 +300,7 @@ const PurchaseListPage = (props) => {
     let sortLabel = ""
     const columns = []
 
-    fileds.forEach((i, k) => {
+    PageFieldMaster.forEach((i, k) => {
         if (i.ShowInListPage) {
             columns.push({
                 text: i.FieldLabel,
@@ -311,41 +319,41 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (fileds.length - 1 === k)) {
+        // if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
 
-            columns.push({
-                text: "Select",
-                dataField: "hasSelect",
-                sort: true,
-                formatter: (cellContent, rowData, key) => {
-                    rowData["hasSelect"] = false
-                    return (
-                        <div>
-                            <Input
-                                type="checkbox"
-                                className="mx-2"
-                                id={`checkhasSelect${rowData.id}`}
-                                defaultChecked={rowData.hasSelect}
-                                // disabled={rowData["isdisabled"]}
-                                key={rowData.hasSelect}
-                                onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
-                            />
-                            <Button
-                                type="button"
-                                className={makeBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
-                                onClick={() => { makeBtnHandler(rowData) }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span> </Button>
-                        </div>)
-                }
-            })
-        }
+        //     columns.push({
+        //         text: "Select",
+        //         dataField: "hasSelect",
+        //         sort: true,
+        //         formatter: (cellContent, rowData, key) => {
+        //             rowData["hasSelect"] = false
+        //             return (
+        //                 <div>
+        //                     <Input
+        //                         type="checkbox"
+        //                         className="mx-2"
+        //                         id={`checkhasSelect${rowData.id}`}
+        //                         defaultChecked={rowData.hasSelect}
+        //                         // disabled={rowData["isdisabled"]}
+        //                         key={rowData.hasSelect}
+        //                         onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
+        //                     />
+        //                     <Button
+        //                         type="button"
+        //                         className={makeBtnCss}
+        //                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+        //                         onClick={() => { makeBtnHandler(rowData) }}
+        //                     >
+        //                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
+        //                             className=" fas fa-file-invoice" ></span> </Button>
+        //                 </div>)
+        //         }
+        //     })
+        // }
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        else if ((makeBtnShow) && (fileds.length - 1 === k)) {
+        if ((makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
@@ -371,7 +379,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for List Page Action Button ================================
 
-        else if ((fileds.length - 1 === k)) {
+        else if ((PageFieldMaster.length - 1 === k)) {
             columns.push(
                 listPageCommonButtonFunction({
                     dispatchHook: dispatch,
@@ -451,7 +459,7 @@ const PurchaseListPage = (props) => {
                         )}
                     </PaginationProvider>
 
-                    {
+                    {/* {
                         (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
@@ -468,7 +476,7 @@ const PurchaseListPage = (props) => {
                                 </div>
                             :
                             null
-                    }
+                    } */}
                     <Modal
                         isOpen={modal_edit}
                         toggle={() => {
