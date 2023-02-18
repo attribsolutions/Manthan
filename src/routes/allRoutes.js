@@ -103,7 +103,7 @@ import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_L
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
 import ProductionList from "../pages/Purchase/Production/ProductionList";
 
-import ProductionReIssueList from "../pages/Purchase/ProductionReIssue/ProductionReIssueList";
+// import ProductionReIssueList from "../pages/Purchase/ProductionReIssue/ProductionReIssueList";
 
 import Invoice from "../pages/Sale/Invoice/Invoice";
 import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
@@ -112,6 +112,7 @@ import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
 import ChallanList from "../pages/Purchase/Challan/ChallanList";
 import Challan from "../pages/Purchase/Challan/Challan";
+import ProductionReIssueAdd from "../pages/Purchase/Production/ProductionRe-Issue/PrductionReIssueAdd";
 
 const userRoutes = [
 
@@ -234,8 +235,8 @@ const userRoutes = [
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
-
- { path: path.PRODUCTIONRE_ISSUE_LIST, component: ProductionReIssueList },
+  { path: "/ProductionReIssue", component: ProductionReIssueAdd },
+  
 
   { path: path.INVOICE_1, component: Invoice },
   { path: path.INVOICE_LIST_1, component: InvoiceList },
