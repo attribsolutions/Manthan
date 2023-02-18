@@ -434,6 +434,13 @@ export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
 export const Production_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
 
+// Production Re_Issue
+
+export const Production_ReIssue_save_API = (data) => post(url.PRODUCTION_POST_API, data)// go button postapi
+export const Production_ReIssue_get_API = (filters) => post(url.PRODUCTION_LIST_FILTER, filters)// go button postapi
+export const Production_ReIssue_Edit_API = (id) => get(`${url.PRODUCTION_POST_API}/${id}`)// make production to material Issue postapi
+export const Production_ReIssueproduction_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
+export const Production_ReIssue_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
 
 // Invoice
 export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi

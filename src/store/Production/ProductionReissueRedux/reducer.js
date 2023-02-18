@@ -26,15 +26,15 @@ const INIT_STATE = {
   unit:[]
 }
 
-const ProductionReducer = (state = INIT_STATE, action) => {
+const ProductionReIssueReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
 
-    case GET_PRODUCTION_RE_ISSUE_ITEM_MODE_2_SUCCESS:
-      return {
-        ...state,
-        produtionMake: action.payload,
-      }
+    // case GET_PRODUCTION_RE_ISSUE_ITEM_MODE_2_SUCCESS:
+    //   return {
+    //     ...state,
+    //     produtionMake: action.payload,
+    //   }
   
     case GET_PRODUCTION_RE_ISSUE_LIST_PAGE_SUCCESS:
       return {
@@ -67,4 +67,4 @@ const ProductionReducer = (state = INIT_STATE, action) => {
   }
 }
 
-export default ProductionReducer
+export default ProductionReIssueReducer
