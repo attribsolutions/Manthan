@@ -69,14 +69,14 @@ const Challan = (props) => {
         pageField,
         userAccess,
         customer,
-        GoButton='',
+        GoButton = [],
         vender,
         vendorSupplierCustomer,
         gobutton_Add,
         challanitems
     } = useSelector((state) => ({
-        challanitems:state.ChallanReducer.challanitems,
-        GoButton:state.ChallanReducer.GoButton,
+        challanitems: state.ChallanReducer.challanitems,
+        GoButton: state.ChallanReducer.GoButton,
         vender: state.SupplierReducer.vender,
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -86,8 +86,9 @@ const Challan = (props) => {
         // GoButton: state.InvoiceReducer.GoButton,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
     }));
-    const { Data = [] } = GoButton;
-    console.log(Data)
+
+
+
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -122,7 +123,7 @@ const Challan = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -234,7 +235,7 @@ const Challan = (props) => {
     }, [updateMsg, modalCss]);
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company:userCompany()
+            Company: userCompany()
         });
         dispatch(challanitemdropdown(jsonBody))
         dispatch(GetVender())
@@ -263,7 +264,7 @@ const Challan = (props) => {
         label: i.Name,
     }));
 
-    
+
     const ItemsOption = challanitems.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -280,7 +281,6 @@ const Challan = (props) => {
                     <div className="width-100">Item Name</div>)
             },
             formatter: (cellContent, index1) => {
-                debugger
 
                 return (
                     <>
@@ -349,14 +349,14 @@ const Challan = (props) => {
         //     },
         // },
         {//***************StockDetails********************************************************************* */
-            
+
             text: "Stock Details",
-            dataField: "Item",
+            dataField: "StockDetails",
             headerFormatter: (cell, index1 = [], k) => {
-                debugger
+
                 return (
                     <div className="d-flex flex-content-start">
-                        {Data.length > 0 ? <div>
+                        {GoButton.length > 0 ? <div>
                             <samp id="allplus-circle">
                                 <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
                                     style={{
@@ -394,10 +394,10 @@ const Challan = (props) => {
                     </div>
                 )
             },
-            
-            formatter: (cellContent, index1 ) => (
-                
-                
+
+            formatter: (cellContent, index1) => (
+
+
                 <div>
                     <div key={`plus-circle-icon${index1.id}`}>
                         {
@@ -424,7 +424,7 @@ const Challan = (props) => {
                         >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                 style={{ position: "absolute", }}
-                                // onClick={(e) => { showStockOnclick(index1, false) }}
+                            // onClick={(e) => { showStockOnclick(index1, false) }}
                             ></i>
                         </samp>
 
@@ -437,65 +437,64 @@ const Challan = (props) => {
                         }}
                     // style={{ display: showAllStockState ? "none" : "block" }}
                     > */}
-            
-                        <Table className="table table-bordered table-responsive mb-1" >
-                            <Thead  >
 
-                                <tr className="" style={{ zIndex: -3 }}>
-                                    <th className="">Batch Code </th>
-                                    <th className="" >Supplier BatchCode</th>
-                                    <th className="" >Batch Date</th>
+                    <Table className="table table-bordered table-responsive mb-1" >
+                        <Thead  >
 
-
-                                    <th className="">
-                                        <div>
-                                            <samp >Stock Quantity</samp>
-                                        </div>
-                                        <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp></th>
-                                    <th className="" >
-                                        <div>
-                                            <samp >Quantity</samp>
-                                        </div>
-                                        <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
+                            <tr className="" style={{ zIndex: -3 }}>
+                                <th className="">SystemBatchCode </th>
+                                <th className="" >BatchCode</th>
+                                <th className="" >Batch Date</th>
+                                <th className="">
+                                    <div>
+                                        <samp >BaseUnitQuantity</samp>
+                                    </div>
+                                    {/* <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp> */}
                                     </th>
-                                    <th className="" >Rate</th>
+                                <th className="" >
+                                    <div>
+                                        <samp >Rate</samp>
+                                    </div>
+                                    {/* <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp> */}
+                                </th>
+                                {/* <th className="" >Rate</th> */}
 
-                                </tr>
+                            </tr>
 
-                            </Thead>
-                            <Tbody  >
-                                {Data.map((index1) => {
-                                     return (
-                                        < tr  >
-                                            <td>
-                                                <div style={{ width: "150px" }}>
-                                                    {index1.SystemBatchCode}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "150px" }}>
-                                                    {index1.BatchCode}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "100px" }}>
-                                                    {convertDatefunc(index1.BatchDate)}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ width: "120px", textAlign: "right" }}>
-                                                    {`${index1.BaseUnitQuantity} `}
-                                                </div>
-                                            </td>
+                        </Thead>
+                        <Tbody  >
+                            {cellContent.map((index1) => {
+                                return (
+                                    < tr  >
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                {index1.SystemBatchCode}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                {index1.BatchCode}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "100px" }}>
+                                                {convertDatefunc(index1.BatchDate)}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
+                                                {`${index1.BaseUnitQuantity} `}
+                                            </div>
+                                        </td>
 
-                                            <td>
-                                                <div style={{ width: "120px", textAlign: "right" }}>
-                                                    {`${index1.Rate} `}
-                                                </div>
-                                            </td>
-                                            {/* <td> */}
-                                                {/* <div style={{ width: "150px" }}> */}
-                                                    {/* <Input type="text"
+                                        <td>
+                                            <div style={{ width: "120px", textAlign: "right" }}>
+                                                {`${index1.Rate} `}
+                                            </div>
+                                        </td>
+                                        {/* <td> */}
+                                        {/* <div style={{ width: "150px" }}> */}
+                                        {/* <Input type="text"
                                                         disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
                                                         key={`batchQty${index1.id}-${index2.id}`}
@@ -503,13 +502,13 @@ const Challan = (props) => {
                                                         defaultValue={index2.Qty}
                                                         onChange={(event) => StockQtyOnChange(event, index1, index2)}
                                                     ></Input> */}
-                                                {/* </div> */}
-                                            {/* </td> */}
-                                        </tr>
-                                     ) 
-                                  })}  
-                            </Tbody>
-                        </Table></div>
+                                        {/* </div> */}
+                                        {/* </td> */}
+                                    </tr>
+                                )
+                            })}
+                        </Tbody>
+                    </Table></div>
                 // </div >
             ),
 
@@ -527,50 +526,50 @@ const Challan = (props) => {
         custom: true,
     };
 
-//     function showAllStockOnclick(isplus = false) {
-//         try {
-//             if (isplus) {
-//                 document.getElementById("allplus-circle").style.display = "none";
-//                 document.getElementById("allminus-circle").style.display = "block";
-//             } else {
-//                 document.getElementById("allplus-circle").style.display = "block";
-//                 document.getElementById("allminus-circle").style.display = "none";
-//             }
-//         } catch (w) { }
-//         Data.forEach(index1 => {
-// debugger
+    //     function showAllStockOnclick(isplus = false) {
+    //         try {
+    //             if (isplus) {
+    //                 document.getElementById("allplus-circle").style.display = "none";
+    //                 document.getElementById("allminus-circle").style.display = "block";
+    //             } else {
+    //                 document.getElementById("allplus-circle").style.display = "block";
+    //                 document.getElementById("allminus-circle").style.display = "none";
+    //             }
+    //         } catch (w) { }
+    //         GoButton.forEach(index1 => {
+    // debugger
 
-//             if (!index1.StockTotal > 0) {
-//                 return
-//             }
-//             try {
-//                 if (isplus) {
-//                     document.getElementById(`view${index1.id}`).style.display = "block";
-//                     document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-//                     document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-//                 } else {
-//                     document.getElementById(`view${index1.id}`).style.display = "none";
-//                     document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-//                     document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-//                 }
-//             } catch (w) { }
-//         })
+    //             if (!index1.StockTotal > 0) {
+    //                 return
+    //             }
+    //             try {
+    //                 if (isplus) {
+    //                     document.getElementById(`view${index1.id}`).style.display = "block";
+    //                     document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+    //                     document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+    //                 } else {
+    //                     document.getElementById(`view${index1.id}`).style.display = "none";
+    //                     document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+    //                     document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+    //                 }
+    //             } catch (w) { }
+    //         })
 
 
-//     }
-//     function showStockOnclick(index1, isplus = false) {
-//         try {
-//             if (isplus) {
-//                 document.getElementById(`view${index1.id}`).style.display = "block";
-//                 document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-//                 document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-//             } else {
-//                 document.getElementById(`view${index1.id}`).style.display = "none";
-//                 document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-//                 document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-//             }
-//         } catch (w) { }
-//     }
+    //     }
+    //     function showStockOnclick(index1, isplus = false) {
+    //         try {
+    //             if (isplus) {
+    //                 document.getElementById(`view${index1.id}`).style.display = "block";
+    //                 document.getElementById(`plus-circle${index1.id}`).style.display = "none";
+    //                 document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+    //             } else {
+    //                 document.getElementById(`view${index1.id}`).style.display = "none";
+    //                 document.getElementById(`plus-circle${index1.id}`).style.display = "block";
+    //                 document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+    //             }
+    //         } catch (w) { }
+    //     }
 
     function ChallanDateOnchange(y, v, e) {
         // dispatch(GoButton_post_For_Invoice_Success([]))
@@ -578,7 +577,7 @@ const Challan = (props) => {
     };
 
     function PartyOnchange(hasSelect, evn) {
-debugger
+        debugger
         setState((i) => {
             const v1 = { ...i }
             v1.values.Item = hasSelect
@@ -712,15 +711,15 @@ debugger
     };
 
     function goButtonHandler(event) {
-        
+
 
         const jsonBody = JSON.stringify({
-           
+
             Party: userParty(),
-            Item:values.Item.value
+            Item: values.Item.value
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButtonForchallanAdd( jsonBody));
+        dispatch(GoButtonForchallanAdd(jsonBody));
 
         // }
     };
@@ -732,7 +731,7 @@ debugger
         const invoiceItems = []
         let grand_total = 0;
 
-        Data.forEach((index) => {
+        GoButton.forEach((index) => {
             if (index.StockInValid) {
                 validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
                 return
@@ -858,7 +857,7 @@ debugger
                                                     value={values.InvoiceDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
-                                                    disabled={(Data.length > 0 || pageMode === "edit") ? true : false}
+                                                    disabled={(GoButton.length > 0 || pageMode === "edit") ? true : false}
 
                                                     options={{
                                                         dateFormat: "Y-m-d",
@@ -872,7 +871,7 @@ debugger
                                         </FormGroup>
                                     </Col>
 
-                                    <Col  sm={3}>
+                                    <Col sm={3}>
                                         <FormGroup className="row mt-2 mb-3 ">
                                             <Label className="mt-2" style={{ width: "80px" }}> Party </Label>
                                             <Col sm={8}>
@@ -880,12 +879,12 @@ debugger
                                                     name="Customer"
                                                     value={values.party}
                                                     isSearchable={true}
-                                                    isDisabled={Data.length > 0 ? true : false}
+                                                    isDisabled={GoButton.length > 0 ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={venderOptions}
-                                                    // onChange={PartyOnchange}
+                                                // onChange={PartyOnchange}
                                                 />
                                                 {isError.Customer.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -901,7 +900,7 @@ debugger
                                                     name="Customer"
                                                     value={values.Item}
                                                     isSearchable={true}
-                                                    isDisabled={Data.length > 0 ? true : false}
+                                                    isDisabled={GoButton.length > 0 ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -916,23 +915,23 @@ debugger
                                         </FormGroup>
                                     </Col >
                                     <Col sm={2} className="mt-3">
-                                    {pageMode === mode.defaultsave ?
-                                        (Data.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
-                                            :
-                                            <Change_Button onClick={(e) => dispatch(GoButtonForchallanAddSuccess([]))} />
-                                        : null
-                                    }
-                                </Col>
+                                        {pageMode === mode.defaultsave ?
+                                            (GoButton.length === 0) ?
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                :
+                                                <Change_Button onClick={(e) => dispatch(GoButtonForchallanAddSuccess([]))} />
+                                            : null
+                                        }
+                                    </Col>
                                 </Col>
                             </Row>
                         </Col>
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-                                
+
                                     keyField={"id"}
-                                    data={Data}
+                                    data={GoButton}
                                     columns={pagesListColumns}
 
                                     search
@@ -971,7 +970,7 @@ debugger
 
                         </PaginationProvider>
 
-                        {Data.length > 0 ? <FormGroup>
+                        {GoButton.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
                                     //   onClick={onsave}

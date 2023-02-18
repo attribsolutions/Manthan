@@ -190,7 +190,9 @@ export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 
 //Challan
-export const CHALLAN_LIST_BY_FILTERS = "/Challan"
+export const CHALLAN_LIST_BY_FILTERS = "/ChallanFilter"
+
+export const CHALLAN_SAVE_GRN_LIST = "/Challan"
 export const CHALLAN_ITEMS = "/ChallanItems"
 export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
 
