@@ -168,7 +168,8 @@ const OrderList = () => {
                 challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
                 const jsonBody = JSON.stringify({
-                    OrderIDs: isGRNSelect
+                    OrderIDs: isGRNSelect,
+                    Mode:1
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
