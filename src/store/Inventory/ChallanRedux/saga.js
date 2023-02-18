@@ -94,11 +94,15 @@ function* get_Challan_GerFunc({ filters }) {
 function* gobutton_challan_genFunc({ data }) {
 
   try {
+    debugger
+    const arr = []
     const response = yield call(Challan_items_Stock_API, data);
-    yield put(GoButtonForchallanAddSuccess(response));
-   
+    arr.push({ StockDetails: response.Data,  })
+    yield put(GoButtonForchallanAddSuccess(arr));
+
+    debugger
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error postGRN API",
@@ -108,14 +112,14 @@ function* gobutton_challan_genFunc({ data }) {
 
 
 function* challan_item_genFunc({ data }) {
-debugger
+  debugger
   try {
     debugger
     const response = yield call(Challan_items_API, data);
     yield put(challanitemdropdownSuccess(response.Data));
-   
+
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error postGRN API",
