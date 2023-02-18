@@ -4,40 +4,32 @@ import {
   delete_Production_ReIssueIdSuccess,
   edit_Production_ReIssueIdSuccess,
   getProduction_ReIssueistPageSuccess,
-  getProduction_ReIssue_Mode2_Success,
-  getUnitIDForProdunctionSuccess,
-  post_Production_ReIssueSuccess,
+  Save_Production_ReIssueSuccess,
   update_Production_ReIssueIdSuccess,
 } from "./actions";
 import {
   Production_ReIssue_Delete_API,
   production_Edit_API,
   production_get_API,
-  production_Make_API,
-  Production_ReIssue_Post_API,
-  production_UnitDropdown_API,
-} from "../../../helpers/backend_helper";
+  Production_ReIssue_save_API,
+} from "./../../../helpers/backend_helper";
 
 import {
   DELETE_PRODUCTION_RE_ISSUE_ID,
-  GET_PRODUCTION_RE_ISSUE_ITEM_MODE_2,
   GET_PRODUCTION_RE_ISSUE_LIST_PAGE,
   SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE,
-  GET_UNIT_ID_FOR_PRODUNCTION,
   UPDATE_PRODUCTION_RE_ISSUE,
   EDIT_PRODUCTION_RE_ISSUE,
-  EDIT_PRODUCTION_RE_ISSUE_RE_ISSUE_FOR_PRODUCTION_RE_ISSUE_RE_ISSUE_PAGE,
 } from "./actionType";
-
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { AlertState } from "../../actions";
 
-function* postProduction_ReIssueGenFunc({ data }) {
+
+function* saveProduction_ReIssueGenFunc({ data }) {
 ;
   try {
-    const response = yield call(Production_ReIssue_Post_API, data);
-    yield put(post_Production_ReIssueSuccess(response));
+    const response = yield call(Production_ReIssue_save_API, data);
+    yield put(Save_Production_ReIssueSuccess(response));
    ;
   } catch (error) {
    ;
@@ -90,7 +82,7 @@ function* UpdateProduction_ReIssueGenFunc({ data, id }) {
 }
 
 // List Page API
-function* get_PRODUCTION_RE_ISSUE_GerFunc({ filters }) {
+function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
 ;
   try {
 
@@ -128,28 +120,28 @@ function* get_PRODUCTION_RE_ISSUE_GerFunc({ filters }) {
 }
 
 // List Page API
-function* getProduction_ReIssue_Mode2_GenFunc({ data }) {
-  const { jsonBody, pageMode, path } = data;
-;
-  try {
-    const response = yield call(production_Make_API, jsonBody);
-    response.Data = response.Data[0];
-    response["pageMode"] = pageMode;
-    response["path"] = path; //Pagepath
+// function* getProduction_ReIssue_Mode2_GenFunc({ data }) {
+//   const { jsonBody, pageMode, path } = data;
+// ;
+//   try {
+//     const response = yield call(production_Make_API, jsonBody);
+//     response.Data = response.Data[0];
+//     response["pageMode"] = pageMode;
+//     response["path"] = path; //Pagepath
 
-   ;
-    yield put(getProduction_ReIssue_Mode2_Success(response));
-  } catch (error) {
-   ;
-    yield put(
-      AlertState({
-        Type: 4,
-        Status: true,
-        Message: "500 Error get_PRODUCTION_RE_ISSUE Item API ",
-      })
-    );
-  }
-}
+//    ;
+//     // yield put(getProduction_ReIssue_Mode2_Success(response));
+//   } catch (error) {
+//    ;
+//     yield put(
+//       AlertState({
+//         Type: 4,
+//         Status: true,
+//         Message: "500 Error get_PRODUCTION_RE_ISSUE Item API ",
+//       })
+//     );
+//   }
+// }
 
 // Edit Production_ReIssue  Page API
 function* editProduction_ReIssue_GenFunc({ id, pageMode }) {
@@ -170,35 +162,34 @@ function* editProduction_ReIssue_GenFunc({ id, pageMode }) {
 };
 
 //  DesignationID dropdown list
-function* UnitIDForProduction_ReIssue_saga({ data }) {
-;
-  try {
-    const response = yield call(production_UnitDropdown_API, data);
-    const UnitDropdown = response.Data.map((index) => ({
-      value: index.id,
-      label: index.UnitName,
-    }));
-    yield put(getUnitIDForProdunctionSuccess(UnitDropdown));
-   ;
-  } catch (error) {
-   ;
-    yield put(
-      AlertState({
-        Type: 4,
-        Status: true,
-        Message: "500 Error Get Production_ReIssue Unit API ",
-      })
-    );
-  }
-}
+// function* UnitIDForProduction_ReIssue_saga({ data }) {
+// ;
+//   try {
+//     const response = yield call(production_UnitDropdown_API, data);
+//     const UnitDropdown = response.Data.map((index) => ({
+//       value: index.id,
+//       label: index.UnitName,
+//     }));
+//     yield put(getUnitIDForProdunctionSuccess(UnitDropdown));
+//    ;
+//   } catch (error) {
+//    ;
+//     yield put(
+//       AlertState({
+//         Type: 4,
+//         Status: true,
+//         Message: "500 Error Get Production_ReIssue Unit API ",
+//       })
+//     );
+//   }
+// }
 
 function* Production_ReIssueSaga() {
-  yield takeEvery(GET_PRODUCTION_RE_ISSUE_ITEM_MODE_2, getProduction_ReIssue_Mode2_GenFunc);
-  yield takeEvery(EDIT_PRODUCTION_RE_ISSUE_RE_ISSUE_FOR_PRODUCTION_RE_ISSUE_RE_ISSUE_PAGE, editProduction_ReIssue_GenFunc);
-  yield takeEvery(SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE, postProduction_ReIssueGenFunc);
+  yield takeEvery(EDIT_PRODUCTION_RE_ISSUE, editProduction_ReIssue_GenFunc);
+  yield takeEvery(SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE, saveProduction_ReIssueGenFunc);
   yield takeEvery(UPDATE_PRODUCTION_RE_ISSUE, UpdateProduction_ReIssueGenFunc);
   yield takeEvery(DELETE_PRODUCTION_RE_ISSUE_ID, DeleteProduction_ReIssueGenFunc);
-  yield takeEvery(GET_PRODUCTION_RE_ISSUE_LIST_PAGE, get_PRODUCTION_RE_ISSUE_GerFunc);
-  yield takeEvery(GET_UNIT_ID_FOR_PRODUNCTION, UnitIDForProduction_ReIssue_saga);
+  yield takeEvery(GET_PRODUCTION_RE_ISSUE_LIST_PAGE, ListFilter_Production_ReIssue_GerFunc);
+  // yield takeEvery(GET_UNIT_ID_FOR_PRODUNCTION, UnitIDForProduction_ReIssue_saga);
 }
 export default Production_ReIssueSaga;
