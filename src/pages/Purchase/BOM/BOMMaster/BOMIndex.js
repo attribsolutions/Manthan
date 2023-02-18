@@ -32,7 +32,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -106,6 +106,8 @@ const BOMMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
+
         };
     }, [userAccess])
 

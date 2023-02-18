@@ -191,7 +191,8 @@ export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 
 //Challan
 export const CHALLAN_LIST_BY_FILTERS = "/Challan"
-
+export const CHALLAN_ITEMS = "/ChallanItems"
+export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
 
 
 //Bill Of Master
