@@ -121,6 +121,8 @@ export const MATERIAL_ISSUE_STP = "/MaterialIssue_STP"
 export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
 export const PRODUCTION_STP = "/Production_STP"
+export const PRODUCTIONRE_ISSUE= "/ProductionReIssue"
+export const PRODUCTIONRE_ISSUE_LIST = "/ProductionReIssueList"
 
 //******************************* Sale Module  ************************************//
 

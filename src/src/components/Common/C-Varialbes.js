@@ -1,0 +1,1 @@
+export const order_Type = { PurchaseOrder: 1, SaleOrder: 2, }

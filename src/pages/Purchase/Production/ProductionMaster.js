@@ -14,7 +14,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,
@@ -189,6 +189,8 @@ const ProductionMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
+
         };
     }, [userAccess]);
 

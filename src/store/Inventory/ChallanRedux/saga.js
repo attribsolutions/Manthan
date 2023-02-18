@@ -1,20 +1,24 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
+  challanitemdropdownSuccess,
   deleteChallanIdSuccess,
   deleteGRNIdSuccess,
   getChallanListPageSuccess,
   getGRNListPageSuccess,
+  GoButtonForchallanAddSuccess,
   makechallanSuccess,
-  
+
 
 } from "./actions";
 import {
   Challan_delete_API,
   Challan_get_API,
+  Challan_items_API,
+  Challan_items_Stock_API,
   Challan_Make_API,
-  GRN_delete_API, 
-  GRN_get_API, 
+  GRN_delete_API,
+  GRN_get_API,
 } from "../../../helpers/backend_helper";
 
 import {
@@ -23,6 +27,8 @@ import {
   DELETE_GRN_FOR_GRN_PAGE,
   GET_CHALLAN_LIST_PAGE,
   GET_GRN_LIST_PAGE,
+  GO_BUTTON_CHALLAN_POST_API,
+  ITEM_CHALLAN_POST_API,
   MAKE_CHALLAN_GET_API,
 } from "./actionType";
 
@@ -33,10 +39,10 @@ import { convertDatefunc, convertTimefunc } from "../../../components/Common/Com
 function* DeleteChallanGenFunc({ id }) {
   try {
     const response = yield call(Challan_delete_API, id);
-   
+
     yield put(deleteChallanIdSuccess(response));
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error DeleteChallan API",
@@ -65,7 +71,6 @@ function* Make_Challan_GerFunc({ id }) {
 function* get_Challan_GerFunc({ filters }) {
   try {
     const response = yield call(Challan_get_API, filters);
-    debugger
     const newList = yield response.Data.map((i) => {
       var date = convertDatefunc(i.ChallanDate)
       var time = convertTimefunc(i.CreatedOn)
@@ -75,7 +80,7 @@ function* get_Challan_GerFunc({ filters }) {
     yield put(getChallanListPageSuccess(newList))
 
   } catch (error) {
-  
+
     // yield put(AlertState({
     //   Type: 4,
     //   Status: true, Message: "500 Error get_challan List API ",
@@ -83,9 +88,48 @@ function* get_Challan_GerFunc({ filters }) {
   }
 }
 
+
+
+
+function* gobutton_challan_genFunc({ data }) {
+
+  try {
+    const response = yield call(Challan_items_Stock_API, data);
+    yield put(GoButtonForchallanAddSuccess(response));
+   
+  } catch (error) {
+   
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error postGRN API",
+    }));
+  }
+};
+
+
+function* challan_item_genFunc({ data }) {
+debugger
+  try {
+    debugger
+    const response = yield call(Challan_items_API, data);
+    yield put(challanitemdropdownSuccess(response.Data));
+   
+  } catch (error) {
+   
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error postGRN API",
+    }));
+  }
+};
+
+
+
 // List Page API
 
 function* ChallanSaga() {
+  yield takeEvery(ITEM_CHALLAN_POST_API, challan_item_genFunc);
+  yield takeEvery(GO_BUTTON_CHALLAN_POST_API, gobutton_challan_genFunc);
   yield takeEvery(MAKE_CHALLAN_GET_API, Make_Challan_GerFunc);
   yield takeEvery(DELETE_CHALLAN_FOR_CHALLAN_PAGE, DeleteChallanGenFunc);
   yield takeEvery(GET_CHALLAN_LIST_PAGE, get_Challan_GerFunc);

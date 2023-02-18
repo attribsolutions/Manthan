@@ -397,6 +397,10 @@ export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, fil
 export const Challan_delete_API = (id) => del(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Delete challan
 export const Challan_Make_API = (id) => get(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Make challan
 
+export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS,data)//Make challan
+export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK,data)//Make challan
+
+
 
 // BOM API
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
