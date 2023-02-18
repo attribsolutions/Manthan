@@ -51,10 +51,10 @@ function* DeleteChallanGenFunc({ id }) {
 };
 
 //  Make challan API
-function* Make_Challan_GerFunc({ id }) {
+function* Make_Challan_GerFunc({ data }) {
   debugger
   try {
-    const response = yield call(Challan_Make_API, id);
+    const response = yield call(Challan_Make_API,data);
     debugger
     yield put(makechallanSuccess(response))
     debugger
