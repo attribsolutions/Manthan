@@ -40,9 +40,9 @@ export const getChallanListPageSuccess = (data) => ({
   payload: data,
 });
 
-export const makechallan = (id) => ({
+export const makechallan = (data) => ({
   type: MAKE_CHALLAN_GET_API,
-  id,
+  data,
 });
 
 export const GoButtonForchallanAdd = ( data) => ({
