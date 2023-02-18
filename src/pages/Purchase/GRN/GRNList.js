@@ -80,11 +80,20 @@ const GRNList = () => {
 
     const makeBtnFunc = (list = []) => {
         const id = list[0].id
+        const Customer =list[0].Customer
         history.push({
             pathname: url.CHALLAN_LIST,
             pageMode: mode.mode2save
         })
-        dispatch(makechallan(id))
+        const jsonBody = JSON.stringify({
+            FromDate: fromdate,
+            ToDate: todate,
+            Party: userParty(),
+            Customer:Customer,
+            GRN:id,
+        });
+        
+        dispatch(makechallan(jsonBody))
     };
 
     function goButtonHandler() {
