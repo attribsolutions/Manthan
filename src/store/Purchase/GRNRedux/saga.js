@@ -119,10 +119,10 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
     yield put(getGRN_itemMode2_Success(response))
   } catch (error) {
    
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error get_GRN Item API ",
-    }));
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error get_GRN Item API ",
+    // }));
   }
 }
 

@@ -47,22 +47,22 @@ let editVal = {}
 
 function initialState(history) {
     let page_Id = '';
-   let  listPath=''
+    let listPath = ''
     let sub_Mode = history.location.pathname;
 
     if (sub_Mode === url.ORDER_1) {
         page_Id = pageId.ORDER_1;
-        listPath=url.ORDER_LIST_1
+        listPath = url.ORDER_LIST_1
     }
     else if (sub_Mode === url.ORDER_2) {
         page_Id = pageId.ORDER_2;
-        listPath=url.ORDER_LIST_2
+        listPath = url.ORDER_LIST_2
     }
     else if (sub_Mode === url.ORDER_3) {
         page_Id = pageId.ORDER_3;
-        listPath=url.ORDER_LIST_3;
+        listPath = url.ORDER_LIST_3;
     };
-    return {page_Id,listPath}
+    return { page_Id, listPath }
 };
 
 
@@ -166,7 +166,7 @@ const Order = (props) => {
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
-            if ((FindPartyItemAccess)&&!(subPageMode===url.ORDER_3)) {
+            if ((FindPartyItemAccess) && !(subPageMode === url.ORDER_3)) {
                 setFindPartyItemAccess(true)
             };
         };
@@ -573,6 +573,7 @@ const Order = (props) => {
 
         const validMsg = []
         const itemArr = []
+        const isVDC_POvalidMsg = []
 
         function isChanged({ i, isedit, isdel }) {
             const basicAmt = parseFloat(basicAmount(i))
@@ -602,16 +603,44 @@ const Order = (props) => {
             itemArr.push(arr)
         };
 
-        function orderItem({ i, isedit }) {
-
-            if ((i.Quantity > 0) && (i.Rate > 0)) {
+        function orderItem({ i, isedit }) {  //isvdc_po logic
+            debugger
+            if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
                 var isdel = false;
-
                 isChanged({ i, isedit, isdel })
             }
-            else if ((i.Quantity < 1) && (i.editrowId)) {
+            else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
                 var isdel = true;
                 isChanged({ i, isedit, isdel })
+            }
+            else if ((i.Quantity > 0) && (i.Rate > 0)) {
+
+                if (i.Bom) {
+                    if ((itemArr.length === 0)) {
+                        const isdel = false;
+                        isChanged({ i, isedit, isdel })
+
+                    } else {
+                        if (isVDC_POvalidMsg.length === 0)
+                            isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                    }
+                } else {
+                    isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                }
+            }
+            else if ((i.Quantity < 1) && (i.editrowId)) {
+                if (i.Bom) {
+                    if ((itemArr.length === 0)) {
+                        const isdel = true;
+                        isChanged({ i, isedit, isdel })
+
+                    } else {
+                        if (isVDC_POvalidMsg.length === 0)
+                            isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                    }
+                } else {
+                    isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                }
             };
         }
 
@@ -626,7 +655,7 @@ const Order = (props) => {
             //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
             // }
 
-            else if (pageMode === "edit") {
+            else if (pageMode === mode.edit) {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
                 if (ischange && (i.poQty === 0)) {
@@ -642,7 +671,7 @@ const Order = (props) => {
                 }
             }
             else {
-                var isedit = 0;
+                const isedit = 0;
                 orderItem({ i, isedit })
             };
         })
@@ -650,7 +679,14 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-
+        debugger
+        if (isVDC_POvalidMsg.length > 0) {
+            await CustomAlert({
+                Type: 4,
+                Message: isVDC_POvalidMsg,
+            })
+            return
+        };
         if (validMsg.length > 0) {
             // dispatch(AlertState({
             //     Type: 4,
@@ -694,7 +730,7 @@ const Order = (props) => {
             // }));
             return
         }
-        if ((termsAndCondition.length === 0)&&!(subPageMode===url.ORDER_3)) {
+        if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_3)) {
             await CustomAlert({
                 Type: 4,
                 Message: "Please Enter One Terms And Condition",
