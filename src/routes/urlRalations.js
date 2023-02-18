@@ -11,8 +11,6 @@ export const SEARCH_BOX3 = "/SerachBox3"
 
 // *************************** Administration *******************************//
 
-
-
 export const ModuleMaster = url.MODULE_lIST
 export const ModuleList = url.MODULE
 
@@ -124,8 +122,8 @@ export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-
-
+export const ProductionReIssue = url.PRODUCTIONRE_ISSUE_LIST
+export const ProductionReIssueList = url.PRODUCTIONRE_ISSUE
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
 
