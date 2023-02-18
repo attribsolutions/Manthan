@@ -110,7 +110,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
       // response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
 
     } else {
-      response = { Data:[] }
+      response = { Data: [] }
     }
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
