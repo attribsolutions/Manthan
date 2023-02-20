@@ -37,7 +37,7 @@ import * as url from "../../../routes/route_url"
 import { GetCustomer, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 // import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
-import { challanitemdropdown, GoButtonForchallanAdd, GoButtonForchallanAddSuccess } from "../../../store/Inventory/ChallanRedux/actions";
+import { challanitemdropdown, GoButtonForchallanAdd, GoButtonForchallanAddSuccess, Postchallan } from "../../../store/Inventory/ChallanRedux/actions";
 
 // import "./css.css"
 
@@ -239,6 +239,7 @@ const Challan = (props) => {
         });
         dispatch(challanitemdropdown(jsonBody))
         dispatch(GetVender())
+        dispatch(GoButtonForchallanAddSuccess([]))
     }, [])
 
     useEffect(() => {
@@ -725,117 +726,178 @@ const Challan = (props) => {
     };
 
     const SaveHandler = (event) => {
+        debugger
         event.preventDefault();
 
         const validMsg = []
         const invoiceItems = []
         let grand_total = 0;
 
-        GoButton.forEach((index) => {
-            if (index.StockInValid) {
-                validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
-                return
-            };
+        // GoButton.forEach((index) => {
+        //     if (index.StockInValid) {
+        //         validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
+        //         return
+        //     };
 
-            index.StockDetails.forEach((ele) => {
+            // GoButton[0].StockDetails.forEach((ele) => {
+            //     if (ele.Qty > 0) {
+            //         var demo = {
+            //             Rate: ele.Rate,
+            //             GSTPercentage: ele.GST,
+            //             Quantity: ele.Qty
+            //         }
+            //         const basicAmt = parseFloat(basicAmount(demo))
+            //         const cgstAmt = (GstAmount(demo))
+            //         const amount = Amount(demo)
+            //         grand_total = grand_total + Number(amount)
+debugger
+                    const jsonBody = JSON.stringify({
 
-                if (ele.Qty > 0) {
-                    var demo = {
-                        Rate: ele.Rate,
-                        GSTPercentage: ele.GST,
-                        Quantity: ele.Qty
+                        GRN: "",
+                        ChallanDate: values.InvoiceDate,
+                        Party: userParty(),
+                        GrandTotal: "240.00",
+                        Customer: 28,
+                        CreatedBy: 15,
+                        UpdatedBy: 15,
+                        RoundOffAmount: "",
+                        ChallanItems: [
+                            {
+                                Item:values.Item.value,
+                                Quantity: "20.000",
+                                Unit: 817,
+                                BaseUnitQuantity: "10.000",
+                                MRP: null,
+                                ReferenceRate: "100.00",
+                                Rate: "100.00",
+                                BasicAmount: "2000.00",
+                                TaxType: "GST",
+                                GST: 53,
+                                GSTPercentage: "12.00",
+                                HSNCode: "1208",
+                                GSTAmount: "240.00",
+                                Amount: "2240.00",
+                                DiscountType: "0",
+                                Discount: "0.00",
+                                DiscountAmount: "0.00",
+                                CGST: "120.00",
+                                SGST: "120.00",
+                                IGST: "0.00",
+                                CGSTPercentage: "6.00",
+                                SGSTPercentage: "6.00",
+                                IGSTPercentage: "0.00",
+                                BatchDate: "2023-02-17",
+                                BatchCode: "0",
+                                SystemBatchDate: "2023-02-17",
+                                SystemBatchCode: "20230217_55_4_0"
+                            }
+                        ],
+                        BatchWiseLiveStockGRNID: [
+                            {
+                                id: 727,
+                                Item:values.Item.value,
+                                Quantity: "20.000",
+                                BaseUnitQuantity: "10.000",
+                                LiveBatche: 146,
+                                GRN: 526,
+                                Party:userParty()
+                            }
+                        ]
+                     
+                    });
+
+                    if (pageMode === mode.edit) {
                     }
-                    const basicAmt = parseFloat(basicAmount(demo))
-                    const cgstAmt = (GstAmount(demo))
-                    const amount = Amount(demo)
-                    grand_total = grand_total + Number(amount)
-                    invoiceItems.push({
-                        Item: index.Item,
-                        Unit: index.UnitDrop.value,
-                        BatchCode: ele.BatchCode,
-                        Quantity: ele.Qty,
-                        BatchDate: ele.BatchDate,
-                        BatchID: ele.id,
-                        BaseUnitQuantity: ele.BaseUnitQuantity,
-                        LiveBatch: ele.LiveBatche,
-                        MRP: ele.LiveBatcheMRPID,
-                        Rate: ele.Rate,
-                        BasicAmount: basicAmt.toFixed(2),
-                        GSTAmount: cgstAmt.toFixed(2),
-                        GST: ele.LiveBatcheGSTID,
-                        CGST: (cgstAmt / 2).toFixed(2),
-                        SGST: (cgstAmt / 2).toFixed(2),
-                        IGST: 0,
-                        GSTPercentage: ele.GST,
-                        CGSTPercentage: (ele.GST / 2),
-                        SGSTPercentage: (ele.GST / 2),
-                        IGSTPercentage: 0,
-                        Amount: amount,
-                        TaxType: 'GST',
-                        DiscountType: "",
-                        Discount: "0",
-                        DiscountAmount: "0",
-                    })
+            
+                    else {
+            
+                        // saveDissable({ id: saveBtnid, state: true })
+                        dispatch(Postchallan(jsonBody, saveBtnid));
+                    }
+
+                
+
+                    // invoiceItems.push({
+                    //     Item: index.Item,
+                    //     Unit: index.UnitDrop.value,
+                    //     BatchCode: ele.BatchCode,
+                    //     Quantity: ele.Qty,
+                    //     BatchDate: ele.BatchDate,
+                    //     BatchID: ele.id,
+                    //     BaseUnitQuantity: ele.BaseUnitQuantity,
+                    //     LiveBatch: ele.LiveBatche,
+                    //     MRP: ele.LiveBatcheMRPID,
+                    //     Rate: ele.Rate,
+                    //     BasicAmount: basicAmt.toFixed(2),
+                    //     GSTAmount: cgstAmt.toFixed(2),
+                    //     GST: ele.LiveBatcheGSTID,
+                    //     CGST: (cgstAmt / 2).toFixed(2),
+                    //     SGST: (cgstAmt / 2).toFixed(2),
+                    //     IGST: 0,
+                    //     GSTPercentage: ele.GST,
+                    //     CGSTPercentage: (ele.GST / 2),
+                    //     SGSTPercentage: (ele.GST / 2),
+                    //     IGSTPercentage: 0,
+                    //     Amount: amount,
+                    //     TaxType: 'GST',
+                    //     DiscountType: "",
+                    //     Discount: "0",
+                    //     DiscountAmount: "0",
+                    // })
                 }
-            })
-        })
+            // })
+        // })
 
-        debugger
         // if (formValid(state, setState)) {
-        if (validMsg.length > 0) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(validMsg),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-            return
-        }
+        // if (validMsg.length > 0) {
+        //     dispatch(AlertState({
+        //         Type: 4,
+        //         Status: true,
+        //         Message: JSON.stringify(validMsg),
+        //         RedirectPath: false,
+        //         AfterResponseAction: false
+        //     }));
+        //     return
+        // }
 
 
 
-        const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            InvoiceDate: values.InvoiceDate,
-            InvoiceItems: invoiceItems,
-            // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
-        });
+        // const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //     InvoiceDate: values.InvoiceDate,
+        //     InvoiceItems: invoiceItems,
+        //     // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
+        // });
 
-        const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            IBChallanDate: values.InvoiceDate,
-            IBChallanItems: invoiceItems,
-            // IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
-        });
+        // const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //     IBChallanDate: values.InvoiceDate,
+        //     IBChallanItems: invoiceItems,
+        //     // IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
+        // });
 
-        const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            CustomerGSTTin: '41',
-            GrandTotal: Math.round(grand_total),
-            RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-            Customer: values.Customer.value,
-            Party: userParty(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
-        });
+        // const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //     CustomerGSTTin: '41',
+        //     GrandTotal: Math.round(grand_total),
+        //     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+        //     Customer: values.Customer.value,
+        //     Party: userParty(),
+        //     CreatedBy: createdBy(),
+        //     UpdatedBy: createdBy(),
+        // });
 
 
-        let jsonBody;  //json body decleration 
-        if (subPageMode === url.INVOICE_1) {
-            jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-        } else if (subPageMode === url.INVOICE_2) {
-            jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_2_json() });
-        }
+       
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        if (pageMode === mode.edit) {
-        }
+        // if (pageMode === mode.edit) {
+        // }
 
-        else {
+        // else {
 
-            // saveDissable({ id: saveBtnid, state: true })
-            // dispatch(postInvoiceMaster(jsonBody, saveBtnid));
-        }
+        //     saveDissable({ id: saveBtnid, state: true })
+        //     dispatch(Postchallan(jsonBody, saveBtnid));
+        // }
 
-    }
+    // }
 
     if (!(userPageAccessState === '')) {
         return (

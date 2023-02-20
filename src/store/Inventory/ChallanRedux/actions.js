@@ -1,5 +1,7 @@
 import {
 
+  CHALLAN_POST_API,
+  CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
   EDIT_GRN_FOR_GRN_PAGE,
@@ -44,6 +46,18 @@ export const makechallan = (data) => ({
   type: MAKE_CHALLAN_GET_API,
   data,
 });
+
+
+export const Postchallan = ( data) => ({
+  type: CHALLAN_POST_API,
+  data
+});
+
+export const PostchallanSuccess = (data) => ({
+  type: CHALLAN_POST_API_SUCCESS,
+  payload: data,
+});
+
 
 export const GoButtonForchallanAdd = ( data) => ({
   type: GO_BUTTON_CHALLAN_POST_API,

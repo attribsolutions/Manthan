@@ -144,7 +144,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     const makeBtnFunc = (list = []) => {
-
+debugger
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []
@@ -169,7 +169,7 @@ const OrderList = () => {
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
-                    Mode:1
+                    Mode:list[0].POType===""?"":1
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
