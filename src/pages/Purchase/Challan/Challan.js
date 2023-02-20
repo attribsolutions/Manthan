@@ -916,7 +916,7 @@ debugger
                                             <Col sm={7}>
                                                 <Flatpickr
                                                     name="InvoiceDate"
-                                                    value={values.InvoiceDate}
+                                                    value={values.InvoiceDatere}
                                                     className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
                                                     disabled={(GoButton.length > 0 || pageMode === "edit") ? true : false}
