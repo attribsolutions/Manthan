@@ -16,6 +16,7 @@ import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, getChallanListPage,  } from "../../../store/Inventory/ChallanRedux/actions";
+import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 
 const ChallanList = () => {
     const history = useHistory();
@@ -70,7 +71,7 @@ const ChallanList = () => {
     }, [tableList])
 
     const makeBtnFunc = (list = []) => {
-    
+    debugger
         const obj = {...list[0], id: list[0].id }
         console.log(obj)
         history.push({
@@ -78,6 +79,12 @@ const ChallanList = () => {
             pageMode: mode.mode2save
         })
         
+        const jsonBody = JSON.stringify({
+            OrderIDs:list[0].id.toString(),
+            Mode:""
+        })
+
+        dispatch(getGRN_itemMode2({ jsonBody }))
     };
 
     function goButtonHandler() {
