@@ -6,6 +6,8 @@ import {
   GET_PRODUCTION_RE_ISSUE_ITEM_MODE_2_SUCCESS,
   GET_PRODUCTION_RE_ISSUE_LIST_PAGE_SUCCESS,
   GET_UNIT_ID_FOR_PRODUNCTION_SUCCESS,
+  GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE_SUCCESS,
+  ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS,
   SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE_SUCCESS,
   SET_PRODUCTION_RE_ISSUE_LIST_FILTERS,
   UPDATE_PRODUCTION_RE_ISSUE_SUCCESS,
@@ -22,8 +24,8 @@ const INIT_STATE = {
   ProductionList: [],
   grnItemList: [],
   produtionMake: { Status: false,  },
-  productionFilter: { fromdate: currentDate, todate: currentDate },
-  unit:[]
+  itemOption:[],
+  goButtonList:[]
 }
 
 const ProductionReIssueReducer = (state = INIT_STATE, action) => {
@@ -61,7 +63,18 @@ const ProductionReIssueReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       }
-    
+      case ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS:
+        return {
+          ...state,
+          itemOption: action.payload,
+        }
+      
+        case GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE_SUCCESS:
+          return {
+            ...state,
+           goButtonList: action.payload,
+          }
+        
     default:
       return state
   }

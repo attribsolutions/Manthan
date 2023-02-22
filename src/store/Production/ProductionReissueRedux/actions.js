@@ -8,6 +8,10 @@ import {
   GET_PRODUCTION_RE_ISSUE_LIST_PAGE_SUCCESS,
   GET_UNIT_ID_FOR_PRODUNCTION,
   GET_UNIT_ID_FOR_PRODUNCTION_SUCCESS,
+  GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE,
+  GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE_SUCCESS,
+  ITEM_FOR_PRODUNCTION_RE_ISSUE,
+  ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS,
   SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE,
   SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE_SUCCESS,
   UPDATE_PRODUCTION_RE_ISSUE,
@@ -75,4 +79,21 @@ export const delete_Production_ReIssueIdSuccess = (data) => ({
 //   payload: unitID,
 // });
 
+//Items dropDown  
+export const ItemForProdunction_ReIssue = (data) => ({
+  type: ITEM_FOR_PRODUNCTION_RE_ISSUE,
+  data,
+});
+export const ItemForProdunction_ReIssueSuccess = (items) => ({
+  type: ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS,
+  payload: items,
+});
 
+export const goBtnProduction_ReIssue_Addpage = (data) => ({
+  type: GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE,
+  data,
+});
+export const goBtnProduction_ReIssue_AddpageSuccess = (items) => ({
+  type: GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE_SUCCESS,
+  payload: items,
+});

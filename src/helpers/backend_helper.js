@@ -443,6 +443,8 @@ export const Production_ReIssue_get_API = (filters) => post(url.PRODUCTION_LIST_
 export const Production_ReIssue_Edit_API = (id) => get(`${url.PRODUCTION_POST_API}/${id}`)// make production to material Issue postapi
 export const Production_ReIssueproduction_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const Production_ReIssue_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
+export const Production_ReIssueItemDropdown_API = (data) => post(url.PRODUCTION_REIISUE_ITEM,data)// delete api
+export const Production_ReIssue_AddPageGOBtn_API = (data) => post(url.PRODUCTION_REIISUE_ITEM,data)// delete api
 
 // Invoice
 export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi
