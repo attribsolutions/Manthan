@@ -4,30 +4,40 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { PRODUCTION_LIST, PRODUCTION_MASTER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import {
-    getWorkOrderListPage,
     updateWorkOrderListSuccess
 } from "../../../store/Purchase/WorkOrder/action";
-import ProductionMaster from "./ProductionMaster";
-import { delete_ProductionId, delete_ProductionIdSuccess, edit_ProductionId, getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
+import {
+    delete_ProductionId,
+    delete_ProductionIdSuccess,
+    edit_ProductionId,
+    getProductionListPage,
+    Productionlistfilters
+} from "../../../store/Purchase/ProductionRedux/actions";
+
 import { MetaTags } from "react-meta-tags";
 import * as report from '../../../Reports/ReportIndex'
+
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import * as url from "../../../routes/route_url"
+
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Material_Issue_Edit_API, production_Edit_API } from "../../../helpers/backend_helper";
+import { production_Edit_API } from "../../../helpers/backend_helper";
+import ProductionMaster from "./ProductionMaster";
 
 const ProductionList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(PRODUCTION_LIST)
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+
     const [userAccState, setUserAccState] = useState('');
     const reducers = useSelector(
         (state) => ({
@@ -53,23 +63,37 @@ const ProductionList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
-        dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
+
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let master_Path = '';
+        let make_btn = false
+
+        if (subPageMode === url.PRODUCTION_LIST) {
+            page_Id = pageId.PRODUCTION_LIST;
+            master_Path = url.PRODUCTION_MASTER;
+        }
+
+        else if (subPageMode === url.PRODUCTION_REISSUE_STP) {
+            page_Id = pageId.PRODUCTION_REISSUE_STP
+                page_Mode = mode.mode2save
+            make_btn = true;
+        };
+        // dispatch(getOrderListPage(""))//for clear privious order list
+        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId.PRODUCTION_LIST))
+        dispatch(commonPageFieldList(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
         goButtonHandler(true)
     }, []);
-    const { userAccess, pageField, tableList, productionFilter } = reducers;
+
+    const { userAccess, pageField,  productionFilter } = reducers;
     const { fromdate, todate } = productionFilter
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList]);
-
+ 
     useEffect(() => {
-        
+
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId.PRODUCTION_LIST)
         })
@@ -77,10 +101,21 @@ const ProductionList = () => {
             setUserAccState(userAcc)
         }
     }, [userAccess])
+
+
     function downBtnFunc(row) {
         var ReportType = report.Stock;   //Stock
-        dispatch(getpdfReportdata(production_Edit_API,ReportType, row.id))
+        dispatch(getpdfReportdata(production_Edit_API, ReportType, row.id))
     }
+
+    // useEffect(() => {
+    //     if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+    //         history.push({
+    //             pathname: GRNitem.path,
+    //             page_Mode: GRNitem.page_Mode,
+    //         })
+    //     }
+    // }, [GRNitem])
 
     const goButtonHandler = (onload = false) => {
         let FromDate
@@ -99,15 +134,57 @@ const ProductionList = () => {
 
         dispatch(getProductionListPage(jsonBody));
     }
+
     function fromdateOnchange(e, date) {
         let newObj = { ...productionFilter }
         newObj.fromdate = date
         dispatch(Productionlistfilters(newObj))
     }
+
     function todateOnchange(e, date) {
         let newObj = { ...productionFilter }
         newObj.todate = date
         dispatch(Productionlistfilters(newObj))
+    }
+
+    const makeBtnFunc = (list = []) => {
+        history.push({
+            pathname: url.PRODUCTIONRE_ISSUE,
+            // page_Mode: ,
+        })
+        // var isGRNSelect = ''
+        // var challanNo = ''
+        // const grnRef = []
+        // if (list.length > 0) {
+        //     list.forEach(ele => {
+        //         if (ele.hasSelect) {
+        //             grnRef.push({
+        //                 Invoice: null,
+        //                 Order: ele.id,
+        //                 ChallanNo: ele.FullOrderNumber,
+        //                 Inward: false
+        //             });
+        //             isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+        //             challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+        //         }
+        //     });
+
+        //     if (isGRNSelect) {
+
+        //         isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+        //         challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+
+        //         const jsonBody = JSON.stringify({
+        //             OrderIDs: isGRNSelect,
+        //             Mode:list[0].POType===""?"":1
+        //         })
+
+        //         dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+
+        //     } else {
+        //         alert("Please Select Order1")
+        //     }
+        // }
     }
     return (
         <React.Fragment>
@@ -171,7 +248,11 @@ const ProductionList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={ProductionMaster}
-                            masterPath={PRODUCTION_MASTER}
+                            masterPath={otherState.masterPath}
+                            page_Mode={pageMode}
+                            makeBtnShow={otherState.makeBtnShow}
+                            makeBtnName={"make ReIssue"}
+                            makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"Production"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

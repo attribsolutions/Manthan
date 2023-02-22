@@ -66,7 +66,7 @@ const ProductionReIssueList = () => {
         // dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
         // dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.PRODUCTIONRE_ISSUE_LIST))
-        // goButtonHandler(true)
+        goButtonHandler(true)
     }, []);
 
     const { userAccess, pageField } = reducers;
@@ -180,7 +180,7 @@ const ProductionReIssueList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={ProductionReIssueAdd}
-                            masterPath={url.PRODUCTIONRE_ISSUE_STP}
+                            masterPath={url.PRODUCTION_REISSUE_STP}
                             ButtonMsgLable={"ProductionReIssue"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

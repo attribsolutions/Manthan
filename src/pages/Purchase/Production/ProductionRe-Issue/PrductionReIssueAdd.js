@@ -209,7 +209,7 @@ const ProductionReIssueAdd = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MATERIAL_ISSUE_LIST,
+                    RedirectPath: url.PRODUCTIONRE_ISSUE_LIST,
                 }))
             }
         }

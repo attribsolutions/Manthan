@@ -114,8 +114,10 @@ export const MATERIAL_ISSUE_STP = 125
 export const PRODUCTION_MASTER = 77
 export const PRODUCTION_LIST = 78
 export const PRODUCTION_STP = 123
+
 export const PRODUCTIONRE_ISSUE = 140
 export const PRODUCTIONRE_ISSUE_LIST = 141
+export const PRODUCTION_REISSUE_STP = 142
 
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
