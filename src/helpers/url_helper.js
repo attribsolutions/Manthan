@@ -223,6 +223,9 @@ export const PRODUCTION_RE_ISSUE_POST_API = '/Production'
 export const PRODUCTION_RE_ISSUE_LIST_FILTER = '/ProductionFilter'
 
 export const PRODUCTION_REIISUE_ITEM = '/ProductionMaterialIssueItem'
+export const PRODUCTION_REIISUE_SAVE = '/ProductionReIssue'
+export const PRODUCTION_REIISUE_LIST_FILTER = '/ProductionReIsssueFilter'
+
 
 
 //********************************** Inter Branch  **************************************/

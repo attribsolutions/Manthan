@@ -16,6 +16,7 @@ import {
   Production_ReIssue_save_API,
   Production_ReIssueItemDropdown_API,
   Production_ReIssue_AddPageGOBtn_API,
+  Production_ReIssue_get_API,
 } from "./../../../helpers/backend_helper";
 
 import {
@@ -26,6 +27,7 @@ import {
   EDIT_PRODUCTION_RE_ISSUE,
   ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS,
   GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE,
+  ITEM_FOR_PRODUNCTION_RE_ISSUE,
 } from "./actionType";
 import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { AlertState } from "../../actions";
@@ -89,10 +91,10 @@ function* UpdateProduction_ReIssueGenFunc({ data, id }) {
 
 // List Page API
 function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
-  ;
+  debugger
   try {
 
-    const response = yield call(production_get_API, filters);
+    const response = yield call(Production_ReIssue_get_API, filters);
     // const newList = yield response.Data.map((i) => {
     //   var date = convertDatefunc(i.GRNDate)
     //   var time = convertTimefunc(i.CreatedOn)
@@ -101,27 +103,26 @@ function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
     // })
 
     const newList = response.Data.map((index) => {
+      debugger
       index.Item = index.Item.Name;
-      var date = convertDatefunc(index.Production_ReIssueDate)
-      var batchdate = convertDatefunc(index.BatchDate)
+      var date = convertDatefunc(index.Date)
+      // var batchdate = convertDatefunc(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
-      var batchtime = convertTimefunc(index.CreatedOn)
-      index.Production_ReIssueDate = (`${date} ${time}`)
-      index.BatchDate = (`${batchdate} `)
+      // var batchtime = convertTimefunc(index.CreatedOn)
+      index.ProductionReIssueDate = (`${date} ${time}`)
+      // index.BatchDate = (`${batchdate} `)
 
+      if (index.ProductionItem) {
+        index.ProductionItem = index.ProductionItem.Name
+      } else {
+        index.ProductionItem = ''
+      }
       return index;
     });
     ;
     yield put(getProduction_ReIssueistPageSuccess(newList));
   } catch (error) {
-    ;
-    yield put(
-      AlertState({
-        Type: 4,
-        Status: true,
-        Message: "500 Error Get Production_ReIssue API",
-      })
-    );
+   
   }
 }
 
@@ -169,14 +170,9 @@ function* editProduction_ReIssue_GenFunc({ id, pageMode }) {
 
 //  items dropdown list
 function* itemsForProduction_ReIssue_GenFunc({ data }) {
-
   try {
     const response = yield call(Production_ReIssueItemDropdown_API, data);
-    const itemDrop = response.Data.map((index) => ({
-      value: index.id,
-      label: index.UnitName,
-    }));
-    yield put(ItemForProdunction_ReIssueSuccess(itemDrop));
+    yield put(ItemForProdunction_ReIssueSuccess(response.Data));
 
   } catch (error) { }
 }
@@ -197,7 +193,7 @@ function* Production_ReIssueSaga() {
   yield takeEvery(UPDATE_PRODUCTION_RE_ISSUE, UpdateProduction_ReIssueGenFunc);
   yield takeEvery(DELETE_PRODUCTION_RE_ISSUE_ID, DeleteProduction_ReIssueGenFunc);
   yield takeEvery(GET_PRODUCTION_RE_ISSUE_LIST_PAGE, ListFilter_Production_ReIssue_GerFunc);
-  yield takeEvery(ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS, itemsForProduction_ReIssue_GenFunc);
+  yield takeEvery(ITEM_FOR_PRODUNCTION_RE_ISSUE, itemsForProduction_ReIssue_GenFunc);
   yield takeEvery(GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE, goBtnForProduction_ReIssue_AddPage_GenFunc);
 }
 export default Production_ReIssueSaga;

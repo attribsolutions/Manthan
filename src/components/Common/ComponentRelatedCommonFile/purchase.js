@@ -127,22 +127,23 @@ const PurchaseListPage = (props) => {
         // // };
         // settableList(props.reducers.tableList)
 
-        downList = []
-        listObj = {}
-
-        tableList.forEach((index1) => {
-            PageFieldMaster.forEach((index2) => {
-                if (index2.ShowInDownload) {
-                    listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
-                    listObj[index2.ControlID] = index1[index2.ControlID]
-                }
-            })
-            downList.push(listObj)
+        if (tableList.length > 0) {
+            downList = []
             listObj = {}
-        })
 
-        // dispatch(BreadcrumbDownBtndata(downList))
-        dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
+            tableList.forEach((index1) => {
+                PageFieldMaster.forEach((index2) => {
+                    if (index2.ShowInDownload) {
+                        listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+                        listObj[index2.ControlID] = index1[index2.ControlID]
+                    }
+                })
+                downList.push(listObj)
+                listObj = {}
+            })
+            dispatch(BreadcrumbDownBtndata(downList))
+        }
+        // dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
 
     }, [tableList])
 

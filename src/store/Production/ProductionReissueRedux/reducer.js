@@ -21,11 +21,11 @@ const INIT_STATE = {
   editData: { Status: false, },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
-  ProductionList: [],
+  productionReIssueList: [],
   grnItemList: [],
-  produtionMake: { Status: false,  },
-  itemOption:[],
-  goButtonList:[]
+  produtionMake: { Status: false, },
+  productionReIssueItem: [],
+  goButtonList: []
 }
 
 const ProductionReIssueReducer = (state = INIT_STATE, action) => {
@@ -37,11 +37,11 @@ const ProductionReIssueReducer = (state = INIT_STATE, action) => {
     //     ...state,
     //     produtionMake: action.payload,
     //   }
-  
+
     case GET_PRODUCTION_RE_ISSUE_LIST_PAGE_SUCCESS:
       return {
         ...state,
-        ProductionList : action.payload,
+        productionReIssueList: action.payload,
       }
     case SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE_SUCCESS:
       return {
@@ -63,18 +63,18 @@ const ProductionReIssueReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       }
-      case ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS:
-        return {
-          ...state,
-          itemOption: action.payload,
-        }
-      
-        case GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE_SUCCESS:
-          return {
-            ...state,
-           goButtonList: action.payload,
-          }
-        
+    case ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS:
+      return {
+        ...state,
+        productionReIssueItem: action.payload,
+      }
+
+    case GO_BTN_FOR_PRODUNCTION_RE_ISSUE_ADD_PAGE_SUCCESS:
+      return {
+        ...state,
+        goButtonList: action.payload,
+      }
+
     default:
       return state
   }
