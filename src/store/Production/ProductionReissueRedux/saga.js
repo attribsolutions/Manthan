@@ -104,7 +104,7 @@ function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
 
     const newList = response.Data.map((index) => {
       debugger
-      index.Item = index.Item.Name;
+     
       var date = convertDatefunc(index.Date)
       // var batchdate = convertDatefunc(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
@@ -113,9 +113,9 @@ function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
       // index.BatchDate = (`${batchdate} `)
 
       if (index.ProductionItem) {
-        index.ProductionItem = index.ProductionItem.Name
+        index.ItemName = index.ProductionItem.Name
       } else {
-        index.ProductionItem = ''
+        index.ItemName = ''
       }
       return index;
     });
