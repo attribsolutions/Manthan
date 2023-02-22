@@ -235,10 +235,12 @@ const userRoutes = [
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
-  { path: "/ProductionReIssue", component: ProductionReIssueAdd },
-  { path: "/ProductionReIssueList", component: ProductionReIssueList },
   
-  
+  { path: path.PRODUCTIONRE_ISSUE, component: ProductionReIssueAdd },
+  { path: path.PRODUCTIONRE_ISSUE_LIST, component: ProductionReIssueList },
+  { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
+
+
   { path: path.INVOICE_1, component: Invoice },
   { path: path.INVOICE_LIST_1, component: InvoiceList },
 

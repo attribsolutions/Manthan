@@ -91,27 +91,14 @@ function* UpdateProduction_ReIssueGenFunc({ data, id }) {
 
 // List Page API
 function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
-  debugger
+ 
   try {
 
     const response = yield call(Production_ReIssue_get_API, filters);
-    // const newList = yield response.Data.map((i) => {
-    //   var date = convertDatefunc(i.GRNDate)
-    //   var time = convertTimefunc(i.CreatedOn)
-    //   i.GRNDate = (`${date} ${time}`)
-    //   return i
-    // })
-
     const newList = response.Data.map((index) => {
-      debugger
-     
       var date = convertDatefunc(index.Date)
-      // var batchdate = convertDatefunc(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
-      // var batchtime = convertTimefunc(index.CreatedOn)
       index.ProductionReIssueDate = (`${date} ${time}`)
-      // index.BatchDate = (`${batchdate} `)
-
       if (index.ProductionItem) {
         index.ItemName = index.ProductionItem.Name
       } else {
