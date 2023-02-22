@@ -1,5 +1,6 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
+  CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
   GET_CHALLAN_LIST_PAGE_SUCCESS,
   GO_BUTTON_CHALLAN_POST_API_SUCCESS,
@@ -19,7 +20,9 @@ const INIT_STATE = {
   ChallanlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: { value: '', label: "All" } },
   gobutton_Add:[],
   GoButton:[],
-  challanitems:[]
+  challanitems:[],
+  postMsg: { Status: false },
+
 
 }
 
@@ -57,6 +60,11 @@ const ChallanReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         deleteMsg: action.payload,
+      }
+      case CHALLAN_POST_API_SUCCESS:
+      return {
+        ...state,
+        postMsg: action.payload,
       }
     default:
       return state

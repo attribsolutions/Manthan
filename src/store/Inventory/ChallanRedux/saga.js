@@ -8,6 +8,7 @@ import {
   getGRNListPageSuccess,
   GoButtonForchallanAddSuccess,
   makechallanSuccess,
+  PostchallanSuccess,
 
 
 } from "./actions";
@@ -17,11 +18,13 @@ import {
   Challan_items_API,
   Challan_items_Stock_API,
   Challan_Make_API,
+  Challan_Post_API,
   GRN_delete_API,
   GRN_get_API,
 } from "../../../helpers/backend_helper";
 
 import {
+  CHALLAN_POST_API,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE,
   DELETE_CHALLAN_FOR_GRN_PAGE,
   DELETE_GRN_FOR_GRN_PAGE,
@@ -57,6 +60,22 @@ function* Make_Challan_GerFunc({ data }) {
     const response = yield call(Challan_Make_API,data);
     debugger
     yield put(makechallanSuccess(response))
+    debugger
+
+  } catch (error) {
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error get_challan List API ",
+    // }));
+  }
+}
+
+function* Post_Challan_GerFunc({ data }) {
+  debugger
+  try {
+    const response = yield call(Challan_Post_API,data);
+    debugger
+    yield put(PostchallanSuccess(response))
     debugger
 
   } catch (error) {
@@ -132,6 +151,8 @@ function* challan_item_genFunc({ data }) {
 // List Page API
 
 function* ChallanSaga() {
+  
+  yield takeEvery(CHALLAN_POST_API, Post_Challan_GerFunc);
   yield takeEvery(ITEM_CHALLAN_POST_API, challan_item_genFunc);
   yield takeEvery(GO_BUTTON_CHALLAN_POST_API, gobutton_challan_genFunc);
   yield takeEvery(MAKE_CHALLAN_GET_API, Make_Challan_GerFunc);
