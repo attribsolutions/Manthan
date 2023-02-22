@@ -219,6 +219,11 @@ export const PRODUCTION_LIST_FILTER = '/ProductionFilter'
 export const PRODUCTION_MAKE_API = '/MaterialIssueforProduction'
 export const PRODUCTION_UNIT_DROPDOWN_API = '/MCUnitDetails'
 
+export const PRODUCTION_RE_ISSUE_POST_API = '/Production'
+export const PRODUCTION_RE_ISSUE_LIST_FILTER = '/ProductionFilter'
+
+export const PRODUCTION_REIISUE_ITEM = '/ProductionMaterialIssueItem'
+
 
 //********************************** Inter Branch  **************************************/
 // Inter Branch Order

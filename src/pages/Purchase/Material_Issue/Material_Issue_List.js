@@ -191,7 +191,7 @@ const MaterialIssueList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={MaterialIssueMaster}
-                            masterPath={url.MATERIAL_ISSUE}
+                            masterPath={url.MATERIAL_ISSUE_STP}
                             ButtonMsgLable={"Material Issue"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

@@ -46,6 +46,7 @@ import * as mode from "../../../../routes/PageMode";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url"
 import { countlabelFunc } from "../../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { goBtnProduction_ReIssue_Addpage } from "../../../../store/Production/ProductionReissueRedux/actions";
 
 const ProductionReIssueAdd = (props) => {
 
@@ -53,10 +54,9 @@ const ProductionReIssueAdd = (props) => {
     const history = useHistory()
 
     const fileds = {
-        MaterialIssueDate: currentDate,
+        ProductionReIssueDate: currentDate,
         ItemName: "",
-        NumberOfLot: "",
-        LotQuantity: "",
+        PartyName: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -73,19 +73,26 @@ const ProductionReIssueAdd = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        Items,
-        GoButton = []
+        itemOption = [],
+        ItemsList,
+        goButtonList = []
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        Items: state.WorkOrderReducer.WorkOrderList,
-        GoButton: state.MaterialIssueReducer.GoButton
+        itemOption: state.CommonPageFieldReducer.pageField,
+        ItemsList: state.WorkOrderReducer.WorkOrderList,
+        goButtonList: state.ProductionReIssueReducer.goButtonList
     }));
-
+    debugger
     useEffect(() => {
-        const page_Id = pageId.MATERIAL_ISSUE
+        const page_Id = pageId.PRODUCTIONRE_ISSUE
+        // ItemForProdunction_ReIssue()
+        dispatch(goBtnProduction_ReIssue_Addpage({
+            "ProductionID": 169,
+            "PartyID" :4
+       }))
         dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -250,15 +257,15 @@ const ProductionReIssueAdd = (props) => {
         }
     }, [pageField]);
 
-    const ItemDropdown_Options = Items.map((index) => ({
-        value: index.id,
-        label: index.ItemName,
-        Quantity: index.Quantity,
-        Item: index.Item,
-        BomID: index.Bom,
-        Unit: index.Unit,
-        NumberOfLot: index.NumberOfLot
-    }));
+    // const ItemDropdown_Options = Items.map((index) => ({
+    //     value: index.id,
+    //     label: index.ItemName,
+    //     Quantity: index.Quantity,
+    //     Item: index.Item,
+    //     BomID: index.Bom,
+    //     Unit: index.Unit,
+    //     NumberOfLot: index.NumberOfLot
+    // }));
 
     const pagesListColumns = [
         {
@@ -345,7 +352,7 @@ const ProductionReIssueAdd = (props) => {
                                         <td>
                                             <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label
-                                                // onKeyDown={(e) => handleKeyDown(e, GoButton)}
+                                                // onKeyDown={(e) => handleKeyDown(e, goButtonList)}
                                                 >
                                                     {index.BaseUnitQuantity}
                                                 </Label>
@@ -378,7 +385,7 @@ const ProductionReIssueAdd = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: GoButton.length,
+        totalSize: goButtonList.length,
         custom: true,
     };
 
@@ -527,7 +534,7 @@ const ProductionReIssueAdd = (props) => {
         const validMsg = []
 
         const materialIssueItems = []
-        let ox = await GoButton.map((index) => {
+        let ox = await goButtonList.map((index) => {
 
             var TotalStock = 0;
             index.BatchesData.map(i => {
@@ -624,12 +631,12 @@ const ProductionReIssueAdd = (props) => {
                                 <Col className=" mt-1 row" sm={11} >
                                     <Col sm="6">
                                         <FormGroup className="row mt-2  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.MaterialIssueDate} </Label>
+                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.ProductionReIssueDate} </Label>
                                             <Col sm="7">
                                                 <Flatpickr
-                                                    name="MaterialIssueDate"
-                                                    value={values.MaterialIssueDate}
-                                                    // disabled={(GoButton.length > 0) ? true : false}
+                                                    name="ProductionReIssueDate"
+                                                    value={values.ProductionReIssueDate}
+                                                    // disabled={(goButtonList.length > 0) ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
@@ -639,12 +646,33 @@ const ProductionReIssueAdd = (props) => {
                                                     }}
                                                     onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 />
-                                                {isError.MaterialIssueDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
+                                                {isError.ProductionReIssueDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.ProductionReIssueDate}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>
                                     </Col>
+                                    {/* <Col sm="6">
+                                        <FormGroup className="row mt-2 ">
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.PartyName} </Label>
+                                            <Col sm={7}>
+                                                <Select
+                                                    // isDisabled={(values.ItemName) ? true : null}
+                                                    name="PartyName"
+                                                    value={values.PartyName}
+                                                    isDisabled={goButtonList.length > 0 ? true : false}
+                                                    isSearchable={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={itemOption}
+                                                    onChange={ItemOnchange}
+                                                />
+                                                {isError.PartyName.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col > */}
 
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 ">
@@ -654,11 +682,11 @@ const ProductionReIssueAdd = (props) => {
                                                     // isDisabled={(values.ItemName) ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
-                                                    isDisabled={GoButton.length > 0 ? true : false}
+                                                    isDisabled={goButtonList.length > 0 ? true : false}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={ItemDropdown_Options}
+                                                    options={itemOption}
                                                     onChange={ItemOnchange}
                                                 />
                                                 {isError.ItemName.length > 0 && (
@@ -667,12 +695,12 @@ const ProductionReIssueAdd = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                    
+
 
                                 </Col>
                                 <Col sm={1} className="mt-2 mb-2">
                                     {pageMode === mode.defaultsave ?
-                                        (GoButton.length === 0) ?
+                                        (goButtonList.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :
                                             <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
@@ -681,7 +709,7 @@ const ProductionReIssueAdd = (props) => {
                                 </Col>
                                 {/* <Col sm="1" className="mx-4 ">
                                     {pageMode === "save" ?
-                                        (GoButton.length === 0) ?
+                                        (goButtonList.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :
                                             <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
@@ -697,7 +725,7 @@ const ProductionReIssueAdd = (props) => {
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
                                     keyField={"id"}
-                                    data={GoButton}
+                                    data={goButtonList}
                                     columns={pagesListColumns}
                                     search
                                 >
@@ -732,7 +760,7 @@ const ProductionReIssueAdd = (props) => {
 
                         </PaginationProvider>
 
-                        {GoButton.length > 0 ? <FormGroup>
+                        {goButtonList.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
                                     //   onClick={onsave}
