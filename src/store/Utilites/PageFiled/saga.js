@@ -25,7 +25,7 @@ function* commonPageFiled_GenFunc({ pageId }) {
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
 
-
+debugger
   try {
     const response = yield call(commonPageFiled_API, pageId);
     yield put(commonPageFieldListSuccess(response.Data));
