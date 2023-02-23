@@ -8,7 +8,7 @@ import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
 // import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 // import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-// import { PRODUCTIONRE_ISSUE_LIST, PRODUCTIONRE_ISSUE} from "../../../routes/route_url";
+// import { PRODUCTION_REISSUE_LIST, PRODUCTION_REISSUE} from "../../../routes/route_url";
 // ;
 import { currentDate, excelDownCommonFunc } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as report from '../../../../Reports/ReportIndex';
@@ -65,7 +65,7 @@ const ProductionReIssueList = () => {
         // setpageMode(hasPagePath)
         // dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
         // dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId.PRODUCTIONRE_ISSUE_LIST))
+        dispatch(commonPageFieldList(pageId.PRODUCTION_REISSUE_LIST))
         goButtonHandler(true)
     }, []);
 
@@ -75,7 +75,7 @@ const ProductionReIssueList = () => {
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.PRODUCTIONRE_ISSUE_LIST)
+            return (inx.id === pageId.PRODUCTION_REISSUE_LIST)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)

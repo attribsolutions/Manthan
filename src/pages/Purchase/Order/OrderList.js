@@ -92,7 +92,7 @@ const OrderList = () => {
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
-            page_Mode = mode.mode2save
+            page_Mode = mode.modeSTPsave
             make_btn = true;
         };
         dispatch(getOrderListPage(""))//for clear privious order list
@@ -134,7 +134,6 @@ const OrderList = () => {
     // }, [userAccess])
 
     useEffect(() => {
-        debugger
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
                 pathname: GRNitem.path,
@@ -144,7 +143,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     const makeBtnFunc = (list = []) => {
-debugger
+
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []

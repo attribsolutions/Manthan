@@ -49,7 +49,7 @@ const WorkOrderList = () => {
     const { userAccess, pageField, tableList, workOrderlistFilters, GRNitem } = reducers;
     const { fromdate, todate } = workOrderlistFilters
     const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
-    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.mode2save : mode.defaultList;
+    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPsave : mode.defaultList;
 
     const action = {
         getList: getWorkOrderListPage,
@@ -120,7 +120,7 @@ const WorkOrderList = () => {
 
         history.push({
             pathname: url.MATERIAL_ISSUE,
-            pageMode: mode.mode2save,
+            pageMode: mode.modeSTPsave,
             [mode.editValue]: list[0]
         })
 

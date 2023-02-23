@@ -122,8 +122,8 @@ export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-export const ProductionReIssue = url.PRODUCTIONRE_ISSUE_LIST
-export const ProductionReIssueList = url.PRODUCTIONRE_ISSUE
+export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
+export const ProductionReIssueList = url.PRODUCTION_REISSUE
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
 

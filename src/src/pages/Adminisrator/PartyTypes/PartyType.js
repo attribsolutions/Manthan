@@ -55,7 +55,7 @@ const PartyType = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.mode2save);
+    const [pageMode, setPageMode] = useState(mode.modeSTPsave);
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
 

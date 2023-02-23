@@ -118,7 +118,7 @@ const ProductionMaster = (props) => {
 
 
 
-                // if (mode2Data.pageMode === mode.mode2save) {
+                // if (mode2Data.pageMode === mode.modeSTPsave) {
                 const { Item, ItemName, UnitName, Unit, id,
                     EstimatedQuantity = 0,
                     BestBefore = '',
@@ -157,7 +157,7 @@ const ProductionMaster = (props) => {
                     return i
                 })
 
-                if (insidePageMode === mode.mode2save) {
+                if (insidePageMode === mode.modeSTPsave) {
                     const jsonBody = JSON.stringify({
                         Item: Item
                     });
@@ -305,7 +305,7 @@ const ProductionMaster = (props) => {
                                                 value={values.ProductionDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-                                                disabled={pageMode === mode.mode2save || pageMode === mode.view ? true : false}
+                                                disabled={pageMode === mode.modeSTPsave || pageMode === mode.view ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",

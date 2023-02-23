@@ -75,7 +75,7 @@ const ChallanList = () => {
         console.log(obj)
         history.push({
             pathname: url.GRN_ADD,
-            pageMode: mode.mode2save
+            pageMode: mode.modeSTPsave
         })
         
     };

@@ -82,7 +82,7 @@ const GRNList = () => {
         const id = list[0].id
         history.push({
             pathname: url.CHALLAN_LIST,
-            pageMode: mode.mode2save
+            pageMode: mode.modeSTPsave
         })
         dispatch(makechallan(id))
     };

@@ -150,7 +150,7 @@ const MaterialIssueMaster = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                if (insidePageMode === mode.mode2save) {
+                if (insidePageMode === mode.modeSTPsave) {
                     const jsonBody = JSON.stringify({
                         WorkOrder: id,
                         Item: Item,
