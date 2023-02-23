@@ -168,7 +168,7 @@ const OrderList = () => {
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
-                    Mode:list[0].POType===""?"":1
+                    Mode: list[0].POType === "Challan" ? 2 : 1
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
