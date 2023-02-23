@@ -108,7 +108,6 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
   try {
     // debugger
     const response = yield call(GRN_Make_API, jsonBody);
-    response.Data = response.Data[0];
 
     response["pageMode"] = pageMode;
     response.Data["GRNReferences"] = grnRef;

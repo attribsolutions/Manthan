@@ -95,8 +95,8 @@ export const listPageCommonButtonFunction = (props) => {
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-invoice" ></span> </Button>
-                            : null
-                    }
+                            : <div></div>
+                    } 
                     {
                         //** if condition start
 
