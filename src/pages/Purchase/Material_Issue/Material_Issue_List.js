@@ -97,7 +97,7 @@ const MaterialIssueList = () => {
 
     const makeBtnFunc = (list = {}) => {
         debugger
-        const obj = {...list[0], EstimatedQuantity: list[0].LotQuantity }
+        const obj = { ...list[0], EstimatedQuantity: list[0].LotQuantity }
         history.push({
             pathname: url.PRODUCTION_MASTER,
             editValue: obj,
@@ -191,7 +191,8 @@ const MaterialIssueList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={MaterialIssueMaster}
-                            masterPath={url.MATERIAL_ISSUE_STP}
+                            masterPath={url.MATERIAL_ISSUE}
+                            newBtnPath={url.MATERIAL_ISSUE_STP}
                             ButtonMsgLable={"Material Issue"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

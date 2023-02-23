@@ -206,6 +206,7 @@ const ChallanList = () => {
                             reducers={reducers}
                             MasterModal={Order}
                             masterPath={url.CHALLAN}
+                            newBtnPath={url.CHALLAN}
                             ButtonMsgLable={"challan"}
                             // pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}

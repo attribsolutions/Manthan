@@ -40,7 +40,7 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -75,28 +75,34 @@ const OrderList = () => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
-        let master_Path = '';
-        let make_btn = false
+        let masterPath = '';
+        let makeBtnShow = false;
+        let newBtnPath = '';
+
 
         if (subPageMode === url.ORDER_LIST_1) {
             page_Id = pageId.ORDER_LIST_1;
-            master_Path = url.ORDER_1;
+            masterPath = url.ORDER_1;
+            newBtnPath = url.ORDER_1;
         }
         else if (subPageMode === url.ORDER_LIST_2) {
             page_Id = pageId.ORDER_LIST_2
-            master_Path = url.ORDER_2;
+            masterPath = url.ORDER_2;
+            newBtnPath = url.ORDER_2;
+
         }
         else if (subPageMode === url.ORDER_LIST_3) {
             page_Id = pageId.ORDER_LIST_3
-            master_Path = url.ORDER_3;
+            masterPath = url.ORDER_3;
+            newBtnPath = url.ORDER_3;
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
             page_Mode = mode.modeSTPsave
-            make_btn = true;
+            makeBtnShow = true;
         };
         dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -122,16 +128,7 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-    // useEffect(() => {
 
-    //     let userAcc = userAccess.find((inx) => {
-    //         return (inx.id === page_Id)
-    //     })
-    //     if (!(userAcc === undefined)) {
-    //         setUserAccState(userAcc)
-
-    //     }
-    // }, [userAccess])
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -168,7 +165,7 @@ const OrderList = () => {
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
-                    Mode:list[0].POType===""?"":1
+                    Mode: list[0].POType === "Challan" ? 2 : 1
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
@@ -305,18 +302,19 @@ const OrderList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Order}
                             masterPath={otherState.masterPath}
-                            ButtonMsgLable={"Order"}
-                            deleteName={"FullOrderNumber"}
-                            page_Mode={pageMode}
-                            // pageUrl={page_Url}
+                            newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
-                            makeBtnFunc={makeBtnFunc}
-                            makeBtnName={"Make GRN"}
+                            pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
+                            makeBtnFunc={makeBtnFunc}
+                            ButtonMsgLable={"Order"}
+                            deleteName={"FullOrderNumber"}
+                            makeBtnName={"Make GRN"}
+                            MasterModal={Order}
+
                         />
                         : null
                 }

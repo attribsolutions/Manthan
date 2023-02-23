@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -15,10 +15,11 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
-import {GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
+import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
@@ -26,8 +27,11 @@ import { makechallan } from "../../../store/Inventory/ChallanRedux/actions";
 
 const GRNList = () => {
     const history = useHistory();
-    const pageMode = history.location.pathname
     const dispatch = useDispatch();
+
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -56,8 +60,24 @@ const GRNList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let makeBtnShow = false
+        let newBtnPath = ''
+
+
+        if (subPageMode === url.GRN_lIST) {
+            page_Id = pageId.GRN_lIST;
+            masterPath = url.GRN_ADD;
+            newBtnPath = url.GRN_STP;
+            page_Mode = mode.modeSTPList
+            makeBtnShow = true;
+        }
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(56))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(GetVender())
         goButtonHandler()
     }, []);
@@ -72,15 +92,10 @@ const GRNList = () => {
         label: " All"
     });
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
 
     const makeBtnFunc = (list = []) => {
         const id = list[0].id
-        const Customer =list[0].Customer
+        const Customer = list[0].Customer
         history.push({
             pathname: url.CHALLAN_LIST,
             pageMode: mode.modeSTPsave
@@ -89,10 +104,10 @@ const GRNList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Party: userParty(),
-            Customer:Customer,
-            GRN:id,
+            Customer: Customer,
+            GRN: id,
         });
-        
+
         dispatch(makechallan(jsonBody))
     };
 
@@ -213,18 +228,20 @@ const GRNList = () => {
                     (pageField) ?
                         <PurchaseListPage
                             action={action}
-                            showBreadcrumb={false}
                             reducers={reducers}
-                            MasterModal={Order}
-                            masterPath={url.GRN_STP}
-                            ButtonMsgLable={"GRN"}
-                            // pageMode={pageMode}
+                            showBreadcrumb={false}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
+                            pageMode={pageMode}
+                            goButnFunc={goButtonHandler}
+                            // downBtnFunc={downBtnFunc}
+                            // editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === url.GRN_lIST }
+                            ButtonMsgLable={"GRN"}
                             makeBtnName={"Make Challan"}
                             deleteName={"FullGRNNumber"}
-                            // pageMode={mode.defaultList}
-                            goButnFunc={goButtonHandler}
+                            MasterModal={Order}
                         />
                         : null
                 }

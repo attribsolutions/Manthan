@@ -87,12 +87,13 @@ const PurchaseListPage = (props) => {
         masterPath,
         ButtonMsgLable,
         deleteName,
-        pageUrl,
         goButnFunc = () => { },
         makeBtnFunc = () => { },
         makeBtnShow,
         makeBtnName,
         downBtnFunc = () => { },
+        pageMode,
+        newBtnPath
     } = props;
 
     const { PageFieldMaster = [] } = { ...pageField };
@@ -106,27 +107,13 @@ const PurchaseListPage = (props) => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc, masterPath });
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath });
         }
 
 
     }, [userAccess])
 
     useEffect(() => {
-
-        // let tableArr = props.reducers.tableList;
-        // // if ((pageUrl === url.GRN_STP)) {
-        // //     let OnlyInwardZeroRecord = props.reducers.tableList.filter((i) => {
-        // //         return i.Inward === "Open"
-        // //     })
-        // //     tableArr = OnlyInwardZeroRecord
-        // //     settableList(OnlyInwardZeroRecord)
-        // // }
-        // // else {
-        // //     settableList(props.reducers.tableList)
-        // // };
-        // settableList(props.reducers.tableList)
-
         if (tableList.length > 0) {
             downList = []
             listObj = {}
@@ -143,7 +130,6 @@ const PurchaseListPage = (props) => {
             })
             dispatch(BreadcrumbDownBtndata(downList))
         }
-        // dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
 
     }, [tableList])
 
@@ -354,26 +340,27 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
+        if ((makeBtnShow) && (pageMode === mode.modeSTPsave) && (PageFieldMaster.length - 1 === k)) {
 
             columns.push({
-                text: "Select",
+                text: "Action",
                 dataField: "hasSelect",
                 sort: true,
                 formatter: (cellContent, rowData, key) => {
                     rowData["hasSelect"] = false
-                    return (
-                        <div>
-
-                            <Button
-                                type="button"
-                                className={makeBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
-                                onClick={() => { makeBtnHandler(rowData) }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span> </Button>
-                        </div>)
+                    // if (rowData.POType === 3) {
+                        return (
+                            <div>
+                                <Button
+                                    type="button"
+                                    className={makeBtnCss}
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                                    onClick={() => { makeBtnHandler(rowData) }}>
+                                    <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                        className=" fas fa-file-invoice" ></span>
+                                </Button>
+                            </div>)
+                    // }
                 }
             })
         }
@@ -392,7 +379,9 @@ const PurchaseListPage = (props) => {
                     downBtnFunc: downBtnFunc,
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
-                    editBodyfunc: editBodyfunc
+                    editBodyfunc: editBodyfunc,
+                    makeBtnFunc: makeBtnFunc,
+                    pageMode: pageMode,
                 })
             )
         }

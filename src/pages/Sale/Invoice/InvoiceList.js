@@ -48,7 +48,7 @@ const InvoiceList = () => {
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [userAccState, setUserAccState] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
     // const [fromdate, setfromdate] = useState(currentDate);
     // const [todate, settodate] = useState(currentDate);
@@ -86,28 +86,32 @@ const InvoiceList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-     
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
-        let master_Path = '';
-        let make_btn = false;
+        let masterPath = '';
+        let newBtnPath = false;
+        let makeBtnShow = false;
+        
 
         if (subPageMode === url.INVOICE_LIST_1) {
             page_Id = pageId.INVOICE_LIST_2
-            master_Path = url.INVOICE_1
+            masterPath = url.INVOICE_1
+            newBtnPath = url.INVOICE_1
         }
         else if (subPageMode === url.INVOICE_LIST_2) {
             page_Id = pageId.INVOICE_LIST_2;
-            master_Path = url.ORDER_LIST_3
+            masterPath = url.INVOICE_2
+            newBtnPath = url.ORDER_LIST_3
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.modeSTPsave
-            make_btn = true;
+            makeBtnShow = true;
         }
         dispatch(GetVenderSupplierCustomer(""))
-      
-        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
+
+        setOtherState({ masterPath, makeBtnShow,newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -256,20 +260,20 @@ const InvoiceList = () => {
                 {
                     (pageField) ?
                         <PurchaseListPage
+
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Invoice}
                             masterPath={otherState.masterPath}
-                            ButtonMsgLable={"Invoice"}
-                            deleteName={"FullInvoiceNumber"}
-                            pageMode={pageMode}
+                            newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
-                            // makeBtnFunc={makeBtnFunc}
-                            makeBtnName={"Make GRN"}
+                            pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            // editBodyfunc={editBodyfunc}
+
+                            ButtonMsgLable={"Invoice"}
+                            deleteName={"FullInvoiceNumber"}
+                            makeBtnName={"Make GRN"}
                             filters={orderlistFilter}
                         />
                         : null

@@ -32,12 +32,14 @@ const ProductionReIssueList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const hasPagePath = history.location.pathname
-    const [pageMode, setpageMode] = useState(mode.defaultList)
-    const [userAccState, setUserAccState] = useState('');
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: url.PRODUCTION_REISSUE, makeBtnShow: false, newBtnPath: url.PRODUCTION_REISSUE_STP });
+
+    const [userAccState, setUserAccState] = useState('');;
     const [todate, settodate] = useState(currentDate);
     const [fromdate, setfromdate] = useState(currentDate);
-    
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReIssueReducer.productionReIssueList,
@@ -62,9 +64,6 @@ const ProductionReIssueList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        // setpageMode(hasPagePath)
-        // dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
-        // dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.PRODUCTION_REISSUE_LIST))
         goButtonHandler(true)
     }, []);
@@ -119,6 +118,7 @@ const ProductionReIssueList = () => {
         // dispatch(ProductionReIssuelistfilters(newObj))
     }
     return (
+
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
@@ -179,13 +179,17 @@ const ProductionReIssueList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={ProductionReIssueAdd}
-                            masterPath={url.PRODUCTION_REISSUE_STP}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
+                            pageMode={pageMode}
+                            goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
+                            // makeBtnFunc={makeBtnFunc}
+
                             ButtonMsgLable={"ProductionReIssue"}
                             deleteName={"ItemName"}
-                            pageMode={pageMode}
-                            downBtnFunc={downBtnFunc}
-                            goButnFunc={goButtonHandler}
+                            MasterModal={ProductionReIssueAdd}
 
                         />
                         : null

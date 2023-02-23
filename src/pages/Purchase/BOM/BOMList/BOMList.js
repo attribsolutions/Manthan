@@ -115,16 +115,8 @@ const BOMList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.BIllOf_MATERIALS_LIST} /> */}
-
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={true}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} /> */}
-
+          
                 <div className="px-2   c_card_header text-black" >
                     <div className="row">
                         <Col sm="5">
@@ -186,6 +178,7 @@ const BOMList = () => {
                             showBreadcrumb={false}
                             MasterModal={BOMMaster}
                             masterPath={url.BIllOf_MATERIALS}
+                            newBtnPath={url.BIllOf_MATERIALS}
                             ButtonMsgLable={"BOM"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

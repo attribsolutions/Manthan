@@ -198,6 +198,7 @@ const WorkOrderList = () => {
                             showBreadcrumb={false}
                             MasterModal={WorkOrder}
                             masterPath={url.WORK_ORDER}
+                            newBtnPath={url.WORK_ORDER}
                             ButtonMsgLable={"Work Order"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
