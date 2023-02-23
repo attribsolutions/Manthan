@@ -21,9 +21,13 @@ export const listPageCommonButtonFunction = (props) => {
         ButtonMsgLable,
         deleteName,
         downBtnFunc,
-        editBodyfunc
+        editBodyfunc,
+        makeBtnFunc = () => { },
+        pageMode,
+        makeBtnName,
+        makeBtnShow = false
     } = props;
-
+    debugger
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
@@ -56,7 +60,14 @@ export const listPageCommonButtonFunction = (props) => {
         })
 
     }
+    function makeBtnHandler(rowData) {
 
+        rowData["hasSelect"] = true;
+        let arr = []
+        arr.push(rowData)
+        makeBtnFunc(arr)
+
+    }
 
     return ({
         text: "Action",
@@ -69,10 +80,23 @@ export const listPageCommonButtonFunction = (props) => {
 
         formatter: (cellContent, rowData) => {
             const forceEdit = rowData.forceEdit;
-            //    debugger
+            rowData["hasSelect"] = false
             return (
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
+
+                    {
+                        ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?
+                            < Button
+                                type="button"
+                                className={makeBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                                onClick={() => { makeBtnHandler(rowData) }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span> </Button>
+                            : null
+                    }
                     {
                         //** if condition start
 
@@ -118,21 +142,8 @@ export const listPageCommonButtonFunction = (props) => {
                     }
 
 
-                    {(userAccState.RoleAccess_IsDelete)
-                        ?
-                        <Button
-                            type="button"
-                            className={deltBtnCss}
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                            onClick={() => { deleteHandler(rowData) }}
-                        >
-                            <i className="mdi mdi-delete font-size-18"></i>
-                        </Button>
-                        /*chnage delete-self functionality  autho by- Rohit date: 22-08-022 
-                        line no 88 to 108
-                        */
-                        :
-                        ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
+                    {
+                        (userAccState.RoleAccess_IsDelete)
                             ?
                             <Button
                                 type="button"
@@ -142,29 +153,45 @@ export const listPageCommonButtonFunction = (props) => {
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>
+                            /*chnage delete-self functionality  autho by- Rohit date: 22-08-022 
+                            line no 88 to 108
+                            */
+                            :
+                            ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
+                                ?
+                                <Button
+                                    type="button"
+                                    className={deltBtnCss}
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
+                                    onClick={() => { deleteHandler(rowData) }}
+                                >
+                                    <i className="mdi mdi-delete font-size-18"></i>
+                                </Button>
+                                : null
+                    }
+                    {
+                        ((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
+                            <Button
+                                type="button"
+                                className={editSelfBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                                onClick={() => { copyHandler(rowData, mode.copy) }}
+                            >
+                                <i className="bx bxs-copy font-size-18 "></i>
+                            </Button>
                             : null
                     }
-                    {((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
-                        <Button
-                            type="button"
-                            className={editSelfBtnCss}
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                            onClick={() => { copyHandler(rowData, mode.copy) }}
-                        >
-                            <i className="bx bxs-copy font-size-18 "></i>
-                        </Button>
-                        : null
-                    }
-                    {((userAccState.RoleAccess_IsPrint)) ?
-                        <Button
-                            type="button"
-                            className={downBtnCss}
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
-                            onClick={() => { downHandler(rowData) }}
-                        >
-                            <i className="bx bx-printer font-size-18"></i>
-                        </Button>
-                        : null
+                    {
+                        ((userAccState.RoleAccess_IsPrint)) ?
+                            <Button
+                                type="button"
+                                className={downBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
+                                onClick={() => { downHandler(rowData) }}
+                            >
+                                <i className="bx bx-printer font-size-18"></i>
+                            </Button>
+                            : null
                     }
                     {/* {makeBtnShow ? <Button
                 type="button"
@@ -175,7 +202,7 @@ export const listPageCommonButtonFunction = (props) => {
                 <span style={{ marginLeft: "6px" ,marginRight:"6px"}} className=" fas fa-file-invoice" ></span> </Button>
                  : <></>} */}
 
-                </div>
+                </div >
             )
         }
     });
@@ -390,7 +417,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //     }
 // }
 
- export function breadcrumbReturn({ dispatch, userAcc ,masterPath=''}) {
+export function breadcrumbReturn({ dispatch, userAcc, masterPath = '' }) {
     const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
     const isCountLabel = (userAcc.CountLabel);
     const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));

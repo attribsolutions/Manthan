@@ -122,16 +122,7 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-    // useEffect(() => {
 
-    //     let userAcc = userAccess.find((inx) => {
-    //         return (inx.id === page_Id)
-    //     })
-    //     if (!(userAcc === undefined)) {
-    //         setUserAccState(userAcc)
-
-    //     }
-    // }, [userAccess])
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
@@ -305,18 +296,18 @@ const OrderList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Order}
                             masterPath={otherState.masterPath}
-                            ButtonMsgLable={"Order"}
-                            deleteName={"FullOrderNumber"}
-                            page_Mode={pageMode}
-                            // pageUrl={page_Url}
                             makeBtnShow={otherState.makeBtnShow}
-                            makeBtnFunc={makeBtnFunc}
-                            makeBtnName={"Make GRN"}
+                            pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
+                            makeBtnFunc={makeBtnFunc}
+                            ButtonMsgLable={"Order"}
+                            deleteName={"FullOrderNumber"}
+                            makeBtnName={"Make GRN"}
+                            MasterModal={Order}
+                            
                         />
                         : null
                 }
