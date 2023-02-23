@@ -417,12 +417,12 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //     }
 // }
 
-export function breadcrumbReturn({ dispatch, userAcc, masterPath = '' }) {
+export function breadcrumbReturn({ dispatch, userAcc, newBtnPath = '' }) {
     const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
     const isCountLabel = (userAcc.CountLabel);
     const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));
     dispatch(CommonBreadcrumbDetails({
-        masterPage: masterPath,
+        newBtnPath: newBtnPath,
         newBtnView: isnewBtnView,
         excelBtnView: isexcelBtnView,
         pageHeading: userAcc.PageHeading,

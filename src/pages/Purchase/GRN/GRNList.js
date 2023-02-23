@@ -31,7 +31,7 @@ const GRNList = () => {
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -62,16 +62,19 @@ const GRNList = () => {
     useEffect(() => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
-        let master_Path = '';
-        let make_btn = false
+        let masterPath = '';
+        let makeBtnShow = false
+        let newBtnPath = ''
+
 
         if (subPageMode === url.GRN_lIST) {
             page_Id = pageId.GRN_lIST;
-            master_Path = url.GRN_STP;
+            masterPath = url.GRN_ADD;
+            newBtnPath = url.GRN_STP;
             page_Mode = mode.modeSTPList
-            make_btn = true;
+            makeBtnShow = true;
         }
-        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -89,7 +92,7 @@ const GRNList = () => {
         label: " All"
     });
 
-   
+
     const makeBtnFunc = (list = []) => {
         const id = list[0].id
         const Customer = list[0].Customer
@@ -228,6 +231,7 @@ const GRNList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}

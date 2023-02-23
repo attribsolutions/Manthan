@@ -161,8 +161,8 @@ const MaterialIssueMaster = (props) => {
                     dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
                 } else if (insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
-                    dispatch(editMaterialIssueIdSuccess({ Status: false }))
                 }
+                dispatch(editMaterialIssueIdSuccess({ Status: false }))
 
             }
         }

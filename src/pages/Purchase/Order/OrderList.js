@@ -40,7 +40,7 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -75,28 +75,34 @@ const OrderList = () => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
-        let master_Path = '';
-        let make_btn = false
+        let masterPath = '';
+        let makeBtnShow = false;
+        let newBtnPath = '';
+
 
         if (subPageMode === url.ORDER_LIST_1) {
             page_Id = pageId.ORDER_LIST_1;
-            master_Path = url.ORDER_1;
+            masterPath = url.ORDER_1;
+            newBtnPath = url.ORDER_1;
         }
         else if (subPageMode === url.ORDER_LIST_2) {
             page_Id = pageId.ORDER_LIST_2
-            master_Path = url.ORDER_2;
+            masterPath = url.ORDER_2;
+            newBtnPath = url.ORDER_2;
+
         }
         else if (subPageMode === url.ORDER_LIST_3) {
             page_Id = pageId.ORDER_LIST_3
-            master_Path = url.ORDER_3;
+            masterPath = url.ORDER_3;
+            newBtnPath = url.ORDER_3;
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
             page_Mode = mode.modeSTPsave
-            make_btn = true;
+            makeBtnShow = true;
         };
         dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -297,6 +303,7 @@ const OrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
@@ -307,7 +314,7 @@ const OrderList = () => {
                             deleteName={"FullOrderNumber"}
                             makeBtnName={"Make GRN"}
                             MasterModal={Order}
-                            
+
                         />
                         : null
                 }

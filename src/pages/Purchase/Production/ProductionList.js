@@ -37,7 +37,7 @@ const ProductionList = () => {
     const history = useHistory();
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false ,newBtnPath:''});
 
     const [userAccState, setUserAccState] = useState('');
     const reducers = useSelector(
@@ -69,21 +69,23 @@ const ProductionList = () => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
-        let master_Path = '';
-        let make_btn = false
-
+        let masterPath = '';
+        let newBtnPath = '';
+        let makeBtnShow = false;
+        
         if (subPageMode === url.PRODUCTION_LIST) {
             page_Id = pageId.PRODUCTION_LIST;
-            master_Path = url.PRODUCTION_MASTER;
+            masterPath = url.PRODUCTION_MASTER;
+            newBtnPath=url.PRODUCTION_STP;
         }
 
         else if (subPageMode === url.PRODUCTION_REISSUE_STP) {
             page_Id = pageId.PRODUCTION_REISSUE_STP
             page_Mode = mode.modeSTPsave
-            make_btn = true;
+            makeBtnShow = true;
         };
         // dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath: master_Path, makeBtnShow: make_btn })
+        setOtherState({ masterPath, makeBtnShow,newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -223,17 +225,18 @@ const ProductionList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={ProductionMaster}
                             masterPath={otherState.masterPath}
-                            page_Mode={pageMode}
+                            newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
-                            makeBtnName={"make ReIssue"}
+                            pageMode={pageMode}
+                            goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
                             makeBtnFunc={makeBtnFunc}
+
+                            makeBtnName={"make ReIssue"}
                             ButtonMsgLable={"Production"}
                             deleteName={"ItemName"}
-                            pageMode={pageMode}
-                            downBtnFunc={downBtnFunc}
-                            goButnFunc={goButtonHandler}
+                            MasterModal={ProductionMaster}
 
                         />
                         : null

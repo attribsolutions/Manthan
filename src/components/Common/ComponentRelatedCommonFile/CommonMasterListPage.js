@@ -63,8 +63,6 @@ const CommonListPage = (props) => {
 
   } = props.reducers;
 
-
-
   const {
     getList,
     editId,
@@ -80,11 +78,10 @@ const CommonListPage = (props) => {
     ButtonMsgLable,
     deleteName,
     masterPath,
+
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
-
-
 
   useEffect(() => {
     const locationPath = history.location.pathname
@@ -93,39 +90,8 @@ const CommonListPage = (props) => {
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturn({ dispatch, userAcc, masterPath });
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: masterPath });
     }
-
-    // const locationPath = history.location.pathname
-    // let userAcc = userAccess.find((inx) => {
-    //   return (`/${inx.ActualPagePath}` === locationPath)
-    // })
-    // if (!(userAcc === undefined)) {
-    //   setUserAccState(userAcc)
-
-    //   let MasterPagePath = userAccess.find((inx) => {
-    //     return (inx.id === userAcc.RelatedPageID)
-    //   })
-
-    //   if (!(MasterPagePath === undefined)) {
-    //     setmasterPath(`/${MasterPagePath.ActualPagePath}`)
-    //   }
-    //   dispatch(CommonBreadcrumbDetails({
-    //     bredcrumbItemName: '',
-    //     pageHeading: userAcc.PageHeading,
-    //     filterSize: "showCount Axtxtxtxtxtddddddddddddddddddddddddddddd",
-    //     userAccess: userAccess,
-    //     newBtnView: true,
-    //     excelBtnView: true,
-    //     showCount: true,
-    //     excelData: tableList,
-    //     masterPage: `/${MasterPagePath.ActualPagePath}`,
-    //     breadShow: true
-    //   }))
-    // }
-
-
-
   }, [userAccess]);
 
 
@@ -147,29 +113,6 @@ const CommonListPage = (props) => {
 
   }, [tableList])
 
-  // this useEffect for MasterPagePath dynamically work 
-  // useEffect(() => {
-
-  //   const locationPath = history.location.pathname
-
-  //   let userAcc = userAccess.find((inx) => {
-  //     return (`/${inx.ActualPagePath}` === locationPath)
-  //   })
-
-  //   let MasterPagePath = userAccess.find((inx) => {
-  //     return (inx.id === userAcc.RelatedPageID)
-  //   })
-
-  //   if (!(MasterPagePath === undefined)) {
-  //     setmasterPath(`/${MasterPagePath.ActualPagePath}`)
-  //   }
-
-  // }, [userAccess])
-
-
-  const downList = useMemo(() => {
-    return excelDownCommonFunc({ tableList, PageFieldMaster })
-  }, [tableList])
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
@@ -333,24 +276,12 @@ const CommonListPage = (props) => {
           <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
-          {/* {showBreadcrumb==="dddd" ?
-            <Breadcrumb
-              pageHeading={userAccState.PageHeading}
-              newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-              showCount={true}
-              excelBtnView={(userAccState.RoleAccess_Exceldownload) ? true : false}
-              // handleDataChange={ }
-              excelData={downList}
-            />
-            : null
-          } */}
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
                 data={tableList}
                 columns={columns}
-                // search={ defaultSearch }
                 search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
@@ -359,13 +290,10 @@ const CommonListPage = (props) => {
                       <Col xl="12">
                         <div className="table-responsive table " >
                           <BootstrapTable
-                            //  expandRow={ expandRow }
-
                             keyField={"id"}
                             responsive
                             bordered={false}
                             defaultSorted={defaultSorted}
-                            // onDataSizeChange={handleDataChange}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
                             noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
@@ -388,21 +316,11 @@ const CommonListPage = (props) => {
               </ToolkitProvider>
             )}
           </PaginationProvider>
-          <Modal
-            isOpen={modal_edit}
-            toggle={() => {
-              tog_center();
-            }}
-            size="xl"
-          >
-
+          <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
             <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
           </Modal>
         </div>
-        {/* {(isRedirect) ? <Redirect to={{
-          pathname: masterPath,
-          state: editData.Data, relatatedPage: masterPath, pageMode: editData.pageMode
-        }} /> : null} */}
+
       </React.Fragment>
     );
   }

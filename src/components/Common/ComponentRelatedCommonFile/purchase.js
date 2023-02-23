@@ -92,7 +92,8 @@ const PurchaseListPage = (props) => {
         makeBtnShow,
         makeBtnName,
         downBtnFunc = () => { },
-        pageMode
+        pageMode,
+        newBtnPath
     } = props;
 
     const { PageFieldMaster = [] } = { ...pageField };
@@ -106,7 +107,7 @@ const PurchaseListPage = (props) => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc, masterPath });
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath });
         }
 
 
@@ -342,7 +343,7 @@ const PurchaseListPage = (props) => {
         if ((makeBtnShow) && (pageMode === mode.modeSTPsave) && (PageFieldMaster.length - 1 === k)) {
 
             columns.push({
-                text: "Select",
+                text: "Action",
                 dataField: "hasSelect",
                 sort: true,
                 formatter: (cellContent, rowData, key) => {
