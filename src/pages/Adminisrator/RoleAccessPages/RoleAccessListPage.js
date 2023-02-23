@@ -21,8 +21,8 @@ import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import { userCompany, userEmployeeID, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url"
+import { breadcrumbReturn, userCompany, userEmployeeID, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {
@@ -51,6 +51,7 @@ const RoleAccessListPage = () => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath:url.ROLEACCESS });
         }
     }, [userAccess])
 
