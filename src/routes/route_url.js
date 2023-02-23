@@ -122,8 +122,8 @@ export const PRODUCTION_MASTER = "/ProductionMaster"
 export const PRODUCTION_LIST = "/ProductionList"
 export const PRODUCTION_STP = "/Production_STP"
 
-export const PRODUCTIONRE_ISSUE = "/ProductionReIssue"
-export const PRODUCTIONRE_ISSUE_LIST = "/ProductionReIssueList"
+export const PRODUCTION_REISSUE = "/ProductionReIssue"
+export const PRODUCTION_REISSUE_LIST = "/ProductionReIssueList"
 export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 
 

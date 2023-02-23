@@ -54,7 +54,7 @@ const IB_Invoice_List = () => {
     const { fromdate, todate, CustomerSelect } = IB_InvoiceFilter;
 
     const hasPagePath = history.location.pathname;
-    const pageMode = (hasPagePath === url.IB_INWARD_STP) ? mode.mode2save : mode.defaultList;
+    const pageMode = (hasPagePath === url.IB_INWARD_STP) ? mode.modeSTPsave : mode.defaultList;
     const page_Id = (hasPagePath === url.IB_INWARD_STP) ? pageId.IB_INWARD_STP : pageId.INVOICE_LIST_2;
 
 
@@ -141,7 +141,7 @@ const IB_Invoice_List = () => {
         history.push({
             pathname: url.INWARD,
             // editValue: obj,
-            pageMode: mode.mode2save
+            pageMode: mode.modeSTPsave
         })
     };
     return (

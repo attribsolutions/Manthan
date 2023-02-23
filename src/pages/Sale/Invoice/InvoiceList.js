@@ -102,7 +102,7 @@ const InvoiceList = () => {
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
-            page_Mode = mode.mode2save
+            page_Mode = mode.modeSTPsave
             make_btn = true;
         }
         dispatch(GetVenderSupplierCustomer(""))

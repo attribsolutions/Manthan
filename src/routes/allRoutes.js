@@ -236,8 +236,8 @@ const userRoutes = [
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
   
-  { path: path.PRODUCTIONRE_ISSUE, component: ProductionReIssueAdd },
-  { path: path.PRODUCTIONRE_ISSUE_LIST, component: ProductionReIssueList },
+  { path: path.PRODUCTION_REISSUE, component: ProductionReIssueAdd },
+  { path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
   { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
 
 

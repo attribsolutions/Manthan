@@ -170,7 +170,7 @@ const IB_Invoice = (props) => {
         }
         const jsonBody = JSON.stringify({
             Customer: userParty(),
-            OrderIDs: pageMode === mode.mode2save ? EditData.id.toString() : "",
+            OrderIDs: pageMode === mode.modeSTPsave ? EditData.id.toString() : "",
             FromDate: InvoiceDate,
             Party: divisionSelect.value
 
@@ -399,7 +399,7 @@ const IB_Invoice = (props) => {
                                     style={{ width: "83px" }}>Division</Label>
                                 <Col sm="7">
                                     <Select
-                                        isDisabled={pageMode === mode.mode2save ? true : false}
+                                        isDisabled={pageMode === mode.modeSTPsave ? true : false}
                                         name="division"
                                         value={divisionSelect}
                                         isSearchable={true}
@@ -417,7 +417,7 @@ const IB_Invoice = (props) => {
                         </Col>
                         <Col sm="1" className="mx-2 mt-3">
                             {/* <Go_Button onClick={(e) => goButtonHandler()} /> */}
-                            {(pageMode === mode.defaultsave) || (pageMode === mode.mode2save) ?
+                            {(pageMode === mode.defaultsave) || (pageMode === mode.modeSTPsave) ?
                                 (IBOrderItemDetails.length === 0) ?
                                     < Go_Button onClick={(e) => goButtonHandler()} />
                                     :

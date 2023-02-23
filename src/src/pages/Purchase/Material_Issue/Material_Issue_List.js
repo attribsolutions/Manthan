@@ -48,7 +48,7 @@ const MaterialIssueList = () => {
     const { fromdate, todate } = materialIssuelistFilters;
 
     const hasPagePath = history.location.pathname;
-    const pageMode = (hasPagePath === url.PRODUCTION_STP) ? mode.mode2save : mode.defaultList;
+    const pageMode = (hasPagePath === url.PRODUCTION_STP) ? mode.modeSTPsave : mode.defaultList;
     const page_Id = (hasPagePath === url.PRODUCTION_STP) ? pageId.PRODUCTION_STP : pageId.MATERIAL_ISSUE_LIST;
 
     const action = {
@@ -101,7 +101,7 @@ const MaterialIssueList = () => {
         history.push({
             pathname: url.PRODUCTION_MASTER,
             editValue: obj,
-            pageMode: mode.mode2save
+            pageMode: mode.modeSTPsave
         })
     };
 

@@ -92,7 +92,7 @@ const OrderList = () => {
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
-            page_Mode = mode.mode2save
+            page_Mode = mode.modeSTPsave
             make_btn = true;
         };
         dispatch(getOrderListPage(""))//for clear privious order list

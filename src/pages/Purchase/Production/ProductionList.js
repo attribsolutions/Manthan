@@ -6,7 +6,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import {
     updateWorkOrderListSuccess
@@ -29,6 +29,7 @@ import * as url from "../../../routes/route_url"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
 import ProductionMaster from "./ProductionMaster";
+import { makeBtnProduction_ReIssue_STP_action } from "../../../store/Production/ProductionReissueRedux/actions";
 
 const ProductionList = () => {
 
@@ -49,6 +50,8 @@ const ProductionList = () => {
             productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            makeProductionReIssue: state.ProductionReIssueReducer.makeProductionReIssue,
+
         })
     );
 
@@ -76,7 +79,7 @@ const ProductionList = () => {
 
         else if (subPageMode === url.PRODUCTION_REISSUE_STP) {
             page_Id = pageId.PRODUCTION_REISSUE_STP
-                page_Mode = mode.mode2save
+            page_Mode = mode.modeSTPsave
             make_btn = true;
         };
         // dispatch(getOrderListPage(""))//for clear privious order list
@@ -88,10 +91,10 @@ const ProductionList = () => {
         goButtonHandler(true)
     }, []);
 
-    const { userAccess, pageField,  productionFilter } = reducers;
+    const { userAccess, pageField, productionFilter, makeProductionReIssue } = reducers;
     const { fromdate, todate } = productionFilter
 
- 
+
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
@@ -102,20 +105,20 @@ const ProductionList = () => {
         }
     }, [userAccess])
 
+    useEffect(() => {
+        if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
+            history.push({
+                pathname: makeProductionReIssue.path,
+                page_Mode: makeProductionReIssue.pageMode,
+            })
+        }
+    }, [makeProductionReIssue])
 
     function downBtnFunc(row) {
         var ReportType = report.Stock;   //Stock
         dispatch(getpdfReportdata(production_Edit_API, ReportType, row.id))
     }
 
-    // useEffect(() => {
-    //     if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-    //         history.push({
-    //             pathname: GRNitem.path,
-    //             page_Mode: GRNitem.page_Mode,
-    //         })
-    //     }
-    // }, [GRNitem])
 
     const goButtonHandler = (onload = false) => {
         let FromDate
@@ -148,44 +151,17 @@ const ProductionList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        history.push({
-            pathname: url.PRODUCTIONRE_ISSUE,
-            // page_Mode: ,
-        })
-        // var isGRNSelect = ''
-        // var challanNo = ''
-        // const grnRef = []
-        // if (list.length > 0) {
-        //     list.forEach(ele => {
-        //         if (ele.hasSelect) {
-        //             grnRef.push({
-        //                 Invoice: null,
-        //                 Order: ele.id,
-        //                 ChallanNo: ele.FullOrderNumber,
-        //                 Inward: false
-        //             });
-        //             isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-        //             challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-        //         }
-        //     });
+        try {
+            const jsonBody = JSON.stringify({
+                "ProductionID": list[0].id,
+                "PartyID": userParty()
+            })
+            const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id }
+            dispatch(makeBtnProduction_ReIssue_STP_action(body))
 
-        //     if (isGRNSelect) {
-
-        //         isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-        //         challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
-        //         const jsonBody = JSON.stringify({
-        //             OrderIDs: isGRNSelect,
-        //             Mode:list[0].POType===""?"":1
-        //         })
-
-        //         dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
-
-        //     } else {
-        //         alert("Please Select Order1")
-        //     }
-        // }
+        } catch (e) { }
     }
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>

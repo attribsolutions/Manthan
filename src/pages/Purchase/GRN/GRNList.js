@@ -83,7 +83,7 @@ const GRNList = () => {
         const Customer =list[0].Customer
         history.push({
             pathname: url.CHALLAN_LIST,
-            pageMode: mode.mode2save
+            pageMode: mode.modeSTPsave
         })
         const jsonBody = JSON.stringify({
             FromDate: fromdate,

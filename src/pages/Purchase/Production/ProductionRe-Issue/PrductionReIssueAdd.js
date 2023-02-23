@@ -1,6 +1,5 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Button,
     Col,
     FormGroup,
     Input,
@@ -19,7 +18,6 @@ import {
     formValid,
     initialFiledFunc,
     onChangeDate,
-    onChangeSelect,
 } from "./../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton }
@@ -34,9 +32,8 @@ import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
-    postMaterialIssue, postMaterialIssueSuccess
+    postMaterialIssueSuccess
 } from "../../../../store/Purchase/Matrial_Issue/action";
-
 
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -46,7 +43,8 @@ import * as mode from "../../../../routes/PageMode";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url"
 import { countlabelFunc } from "../../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { goBtnProduction_ReIssue_Addpage, ItemForProdunction_ReIssue, Save_Production_ReIssue, Save_Production_ReIssueSuccess } from "../../../../store/Production/ProductionReissueRedux/actions";
+import { Save_Production_ReIssue, Save_Production_ReIssueSuccess, makeBtnProduction_ReIssue_STP_actionSuccess, ItemForProdunction_ReIssueSuccess } from "../../../../store/Production/ProductionReissueRedux/actions";
+
 
 const ProductionReIssueAdd = (props) => {
 
@@ -56,17 +54,14 @@ const ProductionReIssueAdd = (props) => {
     const fileds = {
         ProductionReIssueDate: currentDate,
         ItemName: "",
-        PartyName: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    // const [Itemselect, setItemselect] = useState([])
-    // const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
+    const [itemOption, setItemOption] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -74,39 +69,32 @@ const ProductionReIssueAdd = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        // itemOption = [],
-        productionReIssueItems = [],
-        // goButtonList = []
+        makeProductionReIssue,
     } = useSelector((state) => ({
         postMsg: state.ProductionReIssueReducer.postMsg,
         updateMsg: state.ProductionReIssueReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        productionReIssueItems: state.ProductionReIssueReducer.productionReIssueItem,
         ItemsList: state.ProductionReIssueReducer.WorkOrderList,
-        // goButtonList: state.ProductionReIssueReducer.goButtonList
+        makeProductionReIssue: state.ProductionReIssueReducer.makeProductionReIssue
     }));
-
+    //****************************************************************** */
     useEffect(() => {
-        const page_Id = pageId.PRODUCTIONRE_ISSUE
-        // ItemForProdunction_ReIssue()
-        dispatch(ItemForProdunction_ReIssue({
-            "ProductionID": 169,
-            "PartyID": 4
-        }))
+        const page_Id = pageId.PRODUCTION_REISSUE
         dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
+    //****************************************************************** */
 
     const location = { ...history.location }
-
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+    //****************************************************************** */
 
     // userAccess useEffect
     useEffect(() => {
@@ -126,8 +114,24 @@ const ProductionReIssueAdd = (props) => {
             breadcrumbReturn({ dispatch, userAcc });
 
         };
-    }, [userAccess])
+    }, [userAccess]);
+    //****************************************************************** */
 
+    useEffect(() => {
+        if ((makeProductionReIssue.Status === true) && (makeProductionReIssue.StatusCode === 200)) {
+            const arr = makeProductionReIssue.Data.map((index) => ({
+                value: index.Item,
+                label: index.ItemName,
+                data: index,
+                productionId: makeProductionReIssue.productionId
+            }))
+            setItemOption(arr)
+            setPageMode(makeProductionReIssue.pageMode)
+            dispatch(makeBtnProduction_ReIssue_STP_actionSuccess({ Status: false }))
+        }
+
+    }, [makeProductionReIssue])
+    //****************************************************************** */
 
     useEffect(() => {
 
@@ -165,7 +169,7 @@ const ProductionReIssueAdd = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                if (insidePageMode === mode.mode2save) {
+                if (insidePageMode === mode.modeSTPsave) {
                     const jsonBody = JSON.stringify({
                         WorkOrder: id,
                         Item: Item,
@@ -182,6 +186,7 @@ const ProductionReIssueAdd = (props) => {
             }
         }
     }, [])
+    //****************************************************************** */
 
     useEffect(() => {
 
@@ -209,7 +214,7 @@ const ProductionReIssueAdd = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PRODUCTIONRE_ISSUE_LIST,
+                    RedirectPath: url.PRODUCTION_REISSUE_LIST,
                 }))
             }
         }
@@ -227,6 +232,7 @@ const ProductionReIssueAdd = (props) => {
             }));
         }
     }, [postMsg])
+    //****************************************************************** */
 
     useEffect(() => {
 
@@ -248,6 +254,7 @@ const ProductionReIssueAdd = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+    //****************************************************************** */
 
     useEffect(() => {
         if (pageField) {
@@ -255,23 +262,16 @@ const ProductionReIssueAdd = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
-
-
-    const itemOption = productionReIssueItems.map((index) => ({
-        value: index.Item,
-        label: index.ItemName,
-        data: index
-    }));
-
+    //****************************************************************** */
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
-            formatter: (cellContent, user) => {
+            formatter: (cellContent, index) => {
                 return (
                     <>
-                        <div><samp id={`ItemName${user.id}`}>{cellContent}</samp></div>
-                        <div><samp id={`ItemNameMsg${user.id}`} style={{ color: "red" }}></samp></div>
+                        <div><samp id={`ItemName${index.id}`}>{cellContent}</samp></div>
+                        <div><samp id={`ItemNameMsg${index.id}`} style={{ color: "red" }}></samp></div>
                     </>
 
                 )
@@ -298,12 +298,14 @@ const ProductionReIssueAdd = (props) => {
         {
             text: "Work Order Qty",
             // dataField: "Quantity",
-            formatter: (cellContent, user, k) => {
+            formatter: (cellContent, index, k) => {
 
                 return (<div>
-                    <Input onChange={(e) => {
-                        user.Quantity = Number(e.target.value)
-                    }}> </Input>
+                    <Input id={`OrderQty${index.id}`}
+                        onChange={(e) => {
+                            index.Quantity = Number(e.target.value)
+                            stockDistributeFunc(index)
+                        }}> </Input>
                 </div>)
             },
         },
@@ -386,12 +388,13 @@ const ProductionReIssueAdd = (props) => {
         },
 
     ]
-
+    //****************************************************************** */
     const pageOptions = {
         sizePerPage: 10,
         totalSize: goButtonList.length,
         custom: true,
     };
+    //****************************************************************** */
 
     function goButtonHandler(e) {
         // event.preventDefault();
@@ -411,6 +414,52 @@ const ProductionReIssueAdd = (props) => {
                 dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
             }
     }
+    //****************************************************************** */
+    function stockDistributeFunc(index) {
+        debugger
+        const v1 = index.Quantity;
+        let orderqty = Number(v1);
+
+        index.BatchesData = index.BatchesData.map(i2 => {
+
+            let stockqty = Number(i2.BaseUnitQuantity);
+
+            if ((orderqty > stockqty) && !(orderqty === 0)) {
+                orderqty = orderqty - stockqty
+                i2.Qty = stockqty.toFixed(3)
+            } else if ((orderqty <= stockqty) && (orderqty > 0)) {
+                i2.Qty = orderqty.toFixed(3)
+                orderqty = 0
+            }
+            else {
+                i2.Qty = 0;
+            }
+            try {
+                document.getElementById(`stock${index.id}-${i2.id}`).value = i2.Qty
+            } catch (e) { }
+            return i2
+        });
+
+        const t1 = (v1 * index.ConversionUnit);
+        const t2 = index.StockUnit;
+        const t3 = index.StockTotal;
+
+        if (t1 > t3) {
+            try {
+                document.getElementById(`OrderQty${index.id}`).value = t3.toFixed(3)
+            } catch (e) { }
+        };
+        try {
+            index.StockInValid = false
+            index.StockInvalidMsg = null
+            document.getElementById(`ItemNameMsg${index.id}`).style.display = "none";
+        } catch (e) { };
+        // try {
+        //     document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
+        // } catch (e) { };
+
+    };
+    //****************************************************************** */
 
     function ItemOnchange(event) {
         dispatch(Breadcrumb_inputName(event.label))
@@ -420,44 +469,9 @@ const ProductionReIssueAdd = (props) => {
             i.hasValid.ProductionReIssueDate.valid = true;
             return i
         })
-
-        setGoButtonList([{ ...event.data }])
+        setGoButtonList([{ ...event.data, ...{ productionId: event.productionId } }])
     }
-
-    // function Quantitychange(event) {
-
-    //     dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-    //     let value1 = Math.max('', Math.min(Itemselectonchange.value > 0 ?
-    //         Itemselectonchange.Quantity :
-    //         Itemselect.Quantity, Number(event.target.value)));
-    //     event.target.value = value1
-    //     if (event.target.value === "NaN") {
-    //         value1 = 0
-    //     }
-    //     // onChangeText({ event, state, setState });
-    //     setState((i) => {
-    //         i.values.LotQuantity = value1
-    //         // i.hasValid.NumberOfLot.valid = true;
-    //         i.hasValid.LotQuantity.valid = true;
-    //         return i
-    //     })
-    // }
-
-    // function NumberOfLotchange(event) {
-    //     dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-    //     let value1 = Math.max('', Math.min(Itemselect.NumberOfLot, Number(event.target.value)));
-    //     event.target.value = value1
-    //     if ((event.target.value === "NaN")) {
-    //         value1 = 0
-    //     }
-    //     // onChangeText({ event, state, setState });
-    //     setState((i) => {
-    //         i.values.NumberOfLot = value1
-    //         i.hasValid.NumberOfLot.valid = true;
-    //         // i.hasValid.LotQuantity.valid = true;
-    //         return i
-    //     })
-    // }
+    //****************************************************************** */
 
     const handleChange = (event, index1, index2) => {
 
@@ -489,7 +503,7 @@ const ProductionReIssueAdd = (props) => {
         Qtysum = Number(Qtysum) + Number(val1);
         index2.Qty = val1;
         let diffrence = Math.abs(index1.Quantity - Qtysum);
-
+debugger
         if ((Qtysum === index1.Quantity)) {
             try {
                 document.getElementById(`ItemName${index1.id}`).style.color = ""
@@ -509,12 +523,14 @@ const ProductionReIssueAdd = (props) => {
             } catch (e) { }
         }
     };
+    //****************************************************************** */
 
     const SaveHandler = async (event) => {
         event.preventDefault();
         const validMsg = []
-
+        let production_Id = ''
         const productionReIssue_Item = []
+        // goButtonList map function start +++++++++++++++++++++++++++++++++++++
         await goButtonList.map((index) => {
 
             var TotalStock = 0;
@@ -533,7 +549,7 @@ const ProductionReIssueAdd = (props) => {
                 validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
             };
 
-            function batch(ele) {
+            function batch(ele) {  // batch wise calcution start++++++++++++++++++++++++++
                 productionReIssue_Item.push({
                     Item: index.Item,
                     Unit: index.Unit,
@@ -546,16 +562,19 @@ const ProductionReIssueAdd = (props) => {
                     BatchID: ele.id,
                     LiveBatchID: ele.LiveBatchID
                 })
-            }
+            }                      // batch wise calcution end++++++++++++++++++++++++++++
+
             index.BatchesData.map((ele) => {
                 if (Number(ele.Qty) > 0) {
                     batch(ele)
                 }
             })
+
+            production_Id = index.productionId;
         })
+        // goButtonList map function end++++++++++++++++++++++++++++
 
-
-        if (formValid(state, setState)) {
+        if (formValid(state, setState)) { // formValid  ++++++++++++++++++++++++++++
             if (validMsg.length > 0) {
                 dispatch(AlertState({
                     Type: 4,
@@ -569,7 +588,7 @@ const ProductionReIssueAdd = (props) => {
 
             const jsonBody = JSON.stringify({
                 Date: values.ProductionReIssueDate,
-                ProductionID: 169,
+                ProductionID: production_Id,
                 ProductionItem: values.ItemName.value,
                 ProductionReIssueItems: productionReIssue_Item,
                 CreatedBy: createdBy(),
@@ -584,19 +603,17 @@ const ProductionReIssueAdd = (props) => {
             else {
                 dispatch(Save_Production_ReIssue(jsonBody));
             }
-            // debugger
+
         };
     }
+    //****************************************************************** */
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MATERIAL_ISSUE} /> */}
-
                 <div className="page-content" >
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                    /> */}
+
                     <form onSubmit={SaveHandler} noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
@@ -608,11 +625,9 @@ const ProductionReIssueAdd = (props) => {
                                                 <Flatpickr
                                                     name="ProductionReIssueDate"
                                                     value={values.ProductionReIssueDate}
-                                                    // disabled={(goButtonList.length > 0) ? true : false}
                                                     className="form-control d-block bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     options={{
-                                                        // altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
                                                     }}
@@ -624,34 +639,12 @@ const ProductionReIssueAdd = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col>
-                                    {/* <Col sm="6">
-                                        <FormGroup className="row mt-2 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.PartyName} </Label>
-                                            <Col sm={7}>
-                                                <Select
-                                                    // isDisabled={(values.ItemName) ? true : null}
-                                                    name="PartyName"
-                                                    value={values.PartyName}
-                                                    isDisabled={goButtonList.length > 0 ? true : false}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={itemOption}
-                                                    onChange={ItemOnchange}
-                                                />
-                                                {isError.PartyName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col > */}
 
                                     <Col sm="6">
                                         <FormGroup className="row mt-2 ">
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
                                             <Col sm={7}>
                                                 <Select
-                                                    // isDisabled={(values.ItemName) ? true : null}
                                                     name="ItemName"
                                                     value={values.ItemName}
                                                     isDisabled={goButtonList.length > 0 ? true : false}
@@ -671,7 +664,7 @@ const ProductionReIssueAdd = (props) => {
 
                                 </Col>
                                 <Col sm={1} className="mt-2 mb-2">
-                                    {pageMode === mode.defaultsave ?
+                                    {(pageMode === mode.modeSTPsave) ?
                                         (goButtonList.length === 0) ?
                                             < Go_Button onClick={(e) => goButtonHandler()} />
                                             :

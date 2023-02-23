@@ -62,7 +62,7 @@ const IBOrderList = () => {
     const { fromdate, todate, SupplierSelect, InOutSelect } = iborderdate;
 
     const hasPagePath = history.location.pathname;
-    const pageMode = (hasPagePath === url.IB_INVOICE_STP) ? mode.mode2save : mode.defaultList;
+    const pageMode = (hasPagePath === url.IB_INVOICE_STP) ? mode.modeSTPsave : mode.defaultList;
     const page_Id = (hasPagePath === url.IB_INVOICE_STP) ? pageId.IB_INVOICE_STP : pageId.IB_ORDER_LIST;
 
     const action = {
@@ -168,7 +168,7 @@ const IBOrderList = () => {
         history.push({
             pathname: url.INVOICE_2,
             editValue: obj,
-            pageMode: mode.mode2save
+            pageMode: mode.modeSTPsave
         })
     };
 
