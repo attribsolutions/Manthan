@@ -27,7 +27,7 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName,
         makeBtnShow = false
     } = props;
-    debugger
+
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
@@ -96,7 +96,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-invoice" ></span> </Button>
                             : <div></div>
-                    } 
+                    }
                     {
                         //** if condition start
 
@@ -430,3 +430,6 @@ export function breadcrumbReturn({ dispatch, userAcc, newBtnPath = '' }) {
     }))
 }
 
+export function CommonConsole(error) {
+    console.log(error);
+}

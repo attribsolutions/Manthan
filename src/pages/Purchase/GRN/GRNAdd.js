@@ -87,7 +87,7 @@ const GRNAdd = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -98,6 +98,8 @@ const GRNAdd = (props) => {
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const grnItems = items.Data
+            debugger
+
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
                 ele["poQuantity"] = ele.Quantity
@@ -110,16 +112,17 @@ const GRNAdd = (props) => {
 
             });
             initialTableData = []
-            let details = { ...grnItems }
-            initialTableData = details.OrderItem;
+            const grnDetails = { ...grnItems }
+
+            initialTableData = grnDetails.OrderItem;
             setgrnItemList(initialTableData)
-            details.OrderItem = []
+            grnDetails.OrderItem = []
 
-            setGrnDetail(details)
+            setGrnDetail(grnDetails)
 
-            let myArr = grnItems.challanNo.split(",");
-            let newArr = myArr.map(i => ({ Name: i, hascheck: false }))
-            setopenPOdata(details.GRNReferences)
+            const myArr = grnDetails.challanNo.split(",");
+            myArr.map(i => ({ Name: i, hascheck: false }))
+            setopenPOdata(grnDetails.GRNReferences)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
 
@@ -335,7 +338,7 @@ const GRNAdd = (props) => {
                             disabled={(row.GST === '') || (pageMode === mode.view) ? true : false}
                             onChange={e => {
                                 row["Rate"] = e.target.value;
-                                const qty = document.getElementById(`Quantity${k}`)
+                                const qty = document.getElementById(`Quantity${row.id}`)
                                 const val = e.target.value
                                 if (val > 0) {
                                     val_onChange(val, row, "rate")

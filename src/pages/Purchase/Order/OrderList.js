@@ -40,7 +40,7 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '' });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -58,7 +58,7 @@ const OrderList = () => {
     );
 
 
-    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" } } = orderlistFilter;
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, inOut = { value: 1, label: "IN-Order" } } = orderlistFilter;
     const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
 
 
@@ -78,7 +78,7 @@ const OrderList = () => {
         let masterPath = '';
         let makeBtnShow = false;
         let newBtnPath = '';
-
+        let makeBtnName = '';
 
         if (subPageMode === url.ORDER_LIST_1) {
             page_Id = pageId.ORDER_LIST_1;
@@ -89,20 +89,26 @@ const OrderList = () => {
             page_Id = pageId.ORDER_LIST_2
             masterPath = url.ORDER_2;
             newBtnPath = url.ORDER_2;
-
         }
         else if (subPageMode === url.ORDER_LIST_3) {
             page_Id = pageId.ORDER_LIST_3
             masterPath = url.ORDER_3;
             newBtnPath = url.ORDER_3;
         }
+        else if (subPageMode === url.IB_INVOICE_STP) {
+            page_Id = pageId.IB_INVOICE_STP
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+        }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
+            makeBtnName = "Make GRN"
         };
         dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -199,6 +205,7 @@ const OrderList = () => {
             Supplier: supplierSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder,
+            InOut: inOut.value
             // Mode:subPageMode === mode.defaultList ? "" : "mode2"
         });
 
@@ -223,7 +230,12 @@ const OrderList = () => {
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
         setorderlistFilter(newObj)
-        // dispatch(orderlistfilters(newObj))
+    }
+
+    function InOutOnchange(e) {
+        let newObj = { ...orderlistFilter }
+        newObj.inOut = e
+        setorderlistFilter(newObj)
     }
 
     return (
@@ -234,7 +246,7 @@ const OrderList = () => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm="3" className="">
+                        <Col sm={subPageMode === url.ORDER_LIST_3 ? 2 : 3} className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
@@ -254,7 +266,7 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="3" className="">
+                        <Col sm={subPageMode === url.ORDER_LIST_3 ? 2 : 3} className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
@@ -275,7 +287,7 @@ const OrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="5">
+                        <Col sm={subPageMode === url.ORDER_LIST_3 ? 4 : 5}>
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
 
@@ -290,6 +302,26 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col >
+                        {
+                            (subPageMode === url.ORDER_LIST_3) ?
+                                <Col sm="3">
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className="col-md-4 p-2"
+
+                                            style={{ width: "90px" }}>In/Out</Label>
+                                        <Col sm="5">
+                                            <Select
+                                                classNamePrefix="select2-Customer"
+                                                value={inOut}
+                                                options={[{ value: 1, label: "IN-Order" }, { value: 2, label: "Out-Order" }]}
+                                                onChange={InOutOnchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                                : null
+                        }
+
 
                         <Col sm="1" className="mt-3 ">
                             <Go_Button onClick={goButtonHandler} />
@@ -312,7 +344,7 @@ const OrderList = () => {
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"Order"}
                             deleteName={"FullOrderNumber"}
-                            makeBtnName={"Make GRN"}
+                            makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
 
                         />

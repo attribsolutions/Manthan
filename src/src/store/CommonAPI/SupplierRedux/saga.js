@@ -63,7 +63,7 @@ function* OrderType_GenFunc() {
   try {
     const response = yield call(get_OrderType_Api);
     yield put(getOrderTypeSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* getVendorGenFunc() {
@@ -71,7 +71,7 @@ function* getVendorGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });
     yield put(GetVenderSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* getSupplierGenFunc() {
@@ -79,14 +79,14 @@ function* getSupplierGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });
     yield put(getSupplierSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* getCustomerGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     yield put(GetCustomerSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {

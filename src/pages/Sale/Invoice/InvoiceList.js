@@ -102,7 +102,7 @@ const InvoiceList = () => {
         else if (subPageMode === url.INVOICE_LIST_2) {
             page_Id = pageId.INVOICE_LIST_2;
             masterPath = url.INVOICE_2
-            newBtnPath = url.ORDER_LIST_3
+            newBtnPath = url.IB_INVOICE_STP
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP

@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -37,11 +37,12 @@ const ChallanList = () => {
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
             ChallanlistFilter: state.ChallanReducer.ChallanlistFilter,
+            makeGRN: state.GRNReducer.GRNitem,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, vender, ChallanlistFilter } = reducers;
+    const { userAccess, pageField, vender, ChallanlistFilter, makeGRN } = reducers;
     const { fromdate, todate, venderSelect } = ChallanlistFilter;
 
     const action = {
@@ -74,6 +75,15 @@ const ChallanList = () => {
         dispatch(BreadcrumbReset())
     }, []);
 
+    useEffect(() => {
+        if (makeGRN.Status === true && makeGRN.StatusCode === 200) {
+            history.push({
+                pathname: makeGRN.path,
+                page_Mode: makeGRN.page_Mode,
+            })
+        }
+    }, [makeGRN])
+
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -88,19 +98,22 @@ const ChallanList = () => {
 
     const makeBtnFunc = (list = []) => {
         debugger
-        const obj = { ...list[0], id: list[0].id }
-        console.log(obj)
-        history.push({
-            pathname: url.GRN_ADD,
-            pageMode: mode.modeSTPsave
-        })
+        // const obj = { ...list[0], id: list[0].id }
+        // history.push({
+        //     pathname: url.GRN_ADD,
+        //     pageMode: mode.modeSTPsave
+        // })
+        const challanNo = list[0].FullChallanNumber
+        const grnRef = [{
+            Challan: list[0].id,
+            Inward: false
+        }];
 
         const jsonBody = JSON.stringify({
             OrderIDs: list[0].id.toString(),
-            Mode: ""
+            Mode: 2 // mode when challan to make GRN
         })
-
-        dispatch(getGRN_itemMode2({ jsonBody }))
+        dispatch(getGRN_itemMode2({ jsonBody, pageMode: mode.modeSTPsave, grnRef, path: url.GRN_ADD, challanNo }))
     };
 
     function goButtonHandler() {
