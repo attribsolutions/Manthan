@@ -59,7 +59,7 @@ function* changeLayout({ payload: layout }) {
       yield put(changeTopbarThemeAction("light"));
     }
     yield call(changeBodyAttribute, "data-layout", layout);
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -77,7 +77,7 @@ function* changeLayoutWidth({ payload: width }) {
       yield put(changeSidebarTypeAction("default"));
       yield call(changeBodyAttribute, "data-layout-size", width);
     }
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -87,7 +87,7 @@ function* changeLayoutWidth({ payload: width }) {
 function* changeLayoutPosition({ payload: theme }) {
   try {
     yield call(changeBodyAttribute, "data-layout-scrollable", theme);
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -97,7 +97,7 @@ function* changeLayoutPosition({ payload: theme }) {
 function* changeLeftSidebarTheme({ payload: theme }) {
   try {
     yield call(changeBodyAttribute, "data-sidebar", theme);
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -107,7 +107,7 @@ function* changeLeftSidebarTheme({ payload: theme }) {
 function* changeTopbarTheme({ payload: theme }) {
   try {
     yield call(changeBodyAttribute, "data-topbar", theme);
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -129,7 +129,7 @@ function* changelayoutMode({ payload: { layoutMode, layoutType } }) {
       yield put(changeTopbarThemeAction("dark"));
       yield call(changeBodyAttribute, "data-sidebar", "dark");
     }
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -152,7 +152,7 @@ function* changeLeftSidebarType({ payload: { sidebarType } }) {
         yield call(changeBodyAttribute, "data-sidebar-size", "lg");
         break;
     }
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**
@@ -161,7 +161,7 @@ function* changeLeftSidebarType({ payload: { sidebarType } }) {
 function* showRightSidebar() {
   try {
     yield call(manageBodyClass, "right-bar-enabled", "add");
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 /**

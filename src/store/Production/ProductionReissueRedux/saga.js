@@ -1,5 +1,4 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-
 import {
   delete_Production_ReIssueIdSuccess,
   edit_Production_ReIssueIdSuccess,
@@ -12,7 +11,6 @@ import {
 import {
   Production_ReIssue_Delete_API,
   production_Edit_API,
-  production_get_API,
   Production_ReIssue_save_API,
   Production_ReIssueItemDropdown_API,
   Production_ReIssue_AddPageGOBtn_API,
@@ -25,37 +23,35 @@ import {
   SAVE_PRODUCTION_RE_ISSUE_ADD_PAGE,
   UPDATE_PRODUCTION_RE_ISSUE,
   EDIT_PRODUCTION_RE_ISSUE,
-  ITEM_FOR_PRODUNCTION_RE_ISSUE_SUCCESS,
   MAKE_BTN_FOR_PRODUNCTION_RE_ISSUE_STP_ACTION,
   ITEM_FOR_PRODUNCTION_RE_ISSUE,
 } from "./actionType";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { AlertState } from "../../actions";
 
-// save  Production_ReIssue  Page API
-function* saveProduction_ReIssueGenFunc({ data }) {
+
+function* saveProduction_ReIssueGenFunc({ data }) {               // Save Production_ReIssue  genrator function
   try {
     const response = yield call(Production_ReIssue_save_API, data);
     yield put(Save_Production_ReIssueSuccess(response));
-  } catch (error) { }
+  } catch (error) { CommonConsole(error) }
 }
-// Delete Production_ReIssue
-function* DeleteProduction_ReIssueGenFunc({ id }) {
+
+function* DeleteProduction_ReIssueGenFunc({ id }) {               // Delete Production_ReIssue  genrator function
   try {
     const response = yield call(Production_ReIssue_Delete_API, id);
     yield put(delete_Production_ReIssueIdSuccess(response));
-  } catch (error) { }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* UpdateProduction_ReIssueGenFunc({ data, id }) {
+function* UpdateProduction_ReIssueGenFunc({ data, id }) {         //  Update Production_ReIssue  genrator function
   try {
     const response = yield call(id);
     yield put(update_Production_ReIssueIdSuccess(response));
-  } catch (error) { }
+  } catch (error) { CommonConsole(error) }
 }
 
-// List Page API
-function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
+function* ListFilter_Production_ReIssue_GerFunc({ filters }) {    //  Production_ReIssue List Page Filter API
   try {
     const response = yield call(Production_ReIssue_get_API, filters);
     const newList = response.Data.map((index) => {
@@ -70,11 +66,10 @@ function* ListFilter_Production_ReIssue_GerFunc({ filters }) {
       return index;
     });
     yield put(getProduction_ReIssueistPageSuccess(newList));
-  } catch (error) { }
+  } catch (error) { CommonConsole(error) }
 }
 
-// Edit Production_ReIssue  Page API
-function* editProduction_ReIssue_GenFunc({ id, pageMode }) {
+function* editProduction_ReIssue_GenFunc({ id, pageMode }) {      // Edit Production_ReIssue  Page API
   try {
     const response = yield call(production_Edit_API, id);
     response["pageMode"] = pageMode;
@@ -91,24 +86,22 @@ function* editProduction_ReIssue_GenFunc({ id, pageMode }) {
   };
 };
 
-//  Items dropdown list forn productionReIssue Add page
-function* itemsForProduction_ReIssue_GenFunc({ data }) {
+function* itemsForProduction_ReIssue_GenFunc({ data }) {          //  Items dropdown list forn productionReIssue Add page *
   try {
     const response = yield call(Production_ReIssueItemDropdown_API, data);
     yield put(ItemForProdunction_ReIssueSuccess(response.Data));
 
-  } catch (error) { }
+  } catch (error) { CommonConsole(error) }
 }
 
-//  make btn  production_ReIssue STP  page
-function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {
+function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {     //  make btn  production_ReIssue STP  page
   const { jsonBody, pageMode, path, produtionId } = data;
   try {
     const response = yield call(Production_ReIssue_AddPageGOBtn_API, jsonBody);
     const resp1 = { ...response, ...data }
     yield put(makeBtnProduction_ReIssue_STP_actionSuccess(resp1));
 
-  } catch (error) { }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* Production_ReIssueSaga() {

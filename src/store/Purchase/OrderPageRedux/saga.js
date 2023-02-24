@@ -129,7 +129,7 @@ function* orderList_GoBtn_GenFunc(action) {
     }
     else if (subPageMode === url.GRN_STP) {
       response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
-    } else if (subPageMode === url.ORDER_LIST_3) {
+    } else if ((subPageMode === url.ORDER_LIST_3)||(subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
       // yield put(getOrderListPageSuccess(response.Data))
       // return
