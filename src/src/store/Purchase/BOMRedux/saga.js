@@ -115,13 +115,7 @@ function* DeleteBOM_GenFunc({ id }) {
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error DeleteOrder",
-    }));
-  }
+   } catch (error) {CommonConsole(error) }
 }
 
 function* BOMSaga() {

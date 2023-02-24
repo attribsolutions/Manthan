@@ -1,26 +1,16 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, editBOMListID_forBOMPage_ApiCall, edit_BOMListID, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, edit_BOMListID, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, postBOMSuccess, updateBOMListSuccess } from "./action";
 import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, POST_BOM, UPDATE_BOM_LIST } from "./actionTypes";
 
 //post api
 function* Post_BOM_GenratorFunction({ data }) {
-
   try {
-
     const response = yield call(BOM_Post_API, data);
-   
     yield put(postBOMSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // GetItemUnits API
@@ -33,18 +23,12 @@ function* GetItemUnits_saga({ data }) {
       UnitID: data.UnitID,
     }))
     yield put(GetItemUnitsDrodownAPISuccess(UnitDataConvert));
-  } catch (error) {
-    console.log("GetItemUnits saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-// List Page API
+
 function* get_BOMList_GenFunc({ filters }) {
-
-
-
   try {
-
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
       i.id = `${i.id}/${i.Company}`;
@@ -53,75 +37,41 @@ function* get_BOMList_GenFunc({ filters }) {
       i.BomDate = (`${date} ${time}`)
       return i
     })
-   
     yield put(getBOMListPageSuccess(data))
-   
-  } catch (error) {
-   
-    // yield put(AlertState({
-    //   Type: 4,
-    //   Status: true, Message: "500 Error  Get BOMList",
-    // }));
-  }
+
+  } catch (error) { CommonConsole(error) }
 }
 
-// edit List page
+
 function* editBOMListGenFunc({ id1, pageMode }) {
-
-
   try {
     let response = yield call(edit_BOMListID, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
-   
     if (response.StatusCode === 200) yield put(editBOMListSuccess(response))
     else yield put(AlertState({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error BOM Edit Method ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* UpdateBOM_ID_GenFunc({ data, id1 }) {
-
   try {
-  
     const response = yield call(BOM_Update_API, data, id1);
-   
     yield put(updateBOMListSuccess(response))
-  }
-  catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error UpdateOrder",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* DeleteBOM_GenFunc({ id }) {
-
   try {
     const response = yield call(BOM_Delete_API, id);
-   
     if (response.StatusCode === 200) yield put(deleteBOMIdSuccess(response))
     else yield put(AlertState({
       Type: 4,
       Status: true, Message: JSON.stringify(response.Message),
     }));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error DeleteOrder",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* BOMSaga() {
