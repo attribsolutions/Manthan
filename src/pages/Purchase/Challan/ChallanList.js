@@ -1,27 +1,32 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect,  useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { BreadcrumbReset, BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import Order from "../Order/Order";
+import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage, { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
+import * as pageId from "../../../routes/allPageID"
+
 import { MetaTags } from "react-meta-tags";
-import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
-import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, getChallanListPage,  } from "../../../store/Inventory/ChallanRedux/actions";
+import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, getChallanListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import Challan from "./Challan";
 
 const ChallanList = () => {
+
     const history = useHistory();
-    const pageMode = history.location.pathname
     const dispatch = useDispatch();
+
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -36,19 +41,34 @@ const ChallanList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, vender, tableList, ChallanlistFilter } = reducers;
+    const { userAccess, pageField, vender, ChallanlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = ChallanlistFilter;
 
     const action = {
-        // getList: getChallanListPage,
         deleteId: deleteChallanId,
         deleteSucc: deleteChallanIdSuccess
     }
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let makeBtnShow = false
+        let newBtnPath = ''
+
+
+        if (subPageMode === url.CHALLAN_LIST) {
+            page_Id = pageId.CHALLAN_LIST;
+            masterPath = url.CHALLAN;
+            newBtnPath = url.CHALLAN;
+            page_Mode = mode.modeSTPList
+            makeBtnShow = true;
+        }
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(138))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(GetVender())
         goButtonHandler()
         dispatch(BreadcrumbReset())
@@ -64,24 +84,20 @@ const ChallanList = () => {
         label: " All"
     });
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
+
 
     const makeBtnFunc = (list = []) => {
-    debugger
-        const obj = {...list[0], id: list[0].id }
+        debugger
+        const obj = { ...list[0], id: list[0].id }
         console.log(obj)
         history.push({
             pathname: url.GRN_ADD,
             pageMode: mode.modeSTPsave
         })
-        
+
         const jsonBody = JSON.stringify({
-            OrderIDs:list[0].id.toString(),
-            Mode:""
+            OrderIDs: list[0].id.toString(),
+            Mode: ""
         })
 
         dispatch(getGRN_itemMode2({ jsonBody }))
@@ -119,16 +135,7 @@ const ChallanList = () => {
 
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_lIST} /> */}
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={"GRN List"}
-                    newBtnView={true}
-                    showCount={true}
-                    excelBtnView={true}
-                    pageMode={GRN_STP}
-                    newBtnPagePath={GRN_STP}
-                    excelData={downList} /> */}
 
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">
@@ -202,23 +209,23 @@ const ChallanList = () => {
                     (pageField) ?
                         <PurchaseListPage
                             action={action}
-                            showBreadcrumb={false}
                             reducers={reducers}
-                            MasterModal={Order}
-                            masterPath={url.CHALLAN}
-                            newBtnPath={url.CHALLAN}
-                            ButtonMsgLable={"challan"}
-                            // pageMode={pageMode}
-                            makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === url.CHALLAN_LIST}
-                            makeBtnName={"Make GRN"}
-                            // deleteName={"FullGRNNumber"}
-                            pageMode={mode.defaultList}
+                            showBreadcrumb={false}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
+                            pageMode={pageMode}
                             goButnFunc={goButtonHandler}
+                            // downBtnFunc={downBtnFunc}
+                            makeBtnFunc={makeBtnFunc}
+                            ButtonMsgLable={"challan"}
+                            makeBtnName={"Make GRN"}
+                            deleteName={"FullGRNNumber"}
+                            MasterModal={Challan}
                         />
 
                         : null
-                      
+
 
                 }
 

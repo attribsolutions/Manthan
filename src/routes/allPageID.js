@@ -134,3 +134,8 @@ export const IB_INWARD_STP = 133
 export const INVOICE_2 = 130
 export const INVOICE_LIST_2 = 131
 export const IB_INVOICE_STP = 132
+
+
+export const CHALLAN = 139
+export const CHALLAN_LIST = 138
+// export const IB_INVOICE_STP = 132
