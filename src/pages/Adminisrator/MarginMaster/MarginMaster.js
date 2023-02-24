@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -37,8 +36,6 @@ import {
 import { AvForm } from "availity-reactstrap-validation";
 import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import * as pageId from "../../../routes/allPageID"
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -411,8 +408,6 @@ const MarginMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MARGIN} /> */}
-                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {

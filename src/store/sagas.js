@@ -48,14 +48,12 @@ import GRNSaga from "./Purchase/GRNRedux/saga"
 import BOMSaga from "./Purchase/BOMRedux/saga"
 import WorkOrderSaga from "./Purchase/WorkOrder/saga"
 import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
-import ProductionSaga from "./Purchase/ProductionRedux/saga"
+import ProductionSaga from "./Production/ProductionRedux/saga"
 import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
 import InvoiceSaga from "./Sales/Invoice/saga"
-// import IBOrderSaga from "./Inter Branch/IBOrderRedux/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
 import ChallanSaga from "./Inventory/ChallanRedux/saga"
 import Production_ReIssueSaga from "./Production/ProductionReissueRedux/saga"
-// import IB_Invoice from "./Inter Branch/IB_Invoice_Redux/saga"
 
 export default function* rootSaga() {
   yield all([

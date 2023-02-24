@@ -35,7 +35,6 @@ import {
     get_PriceList_ForDropDown,
     postItemData,
     PostItemDataSuccess,
-    post_BrandName_dropdown,
     updateItemID,
     updateItemSuccess
 } from "../../../../store/Administrator/ItemsRedux/action";
@@ -48,10 +47,9 @@ import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
 import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
-import { GeneralMasterSubType, PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
+import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -310,7 +308,6 @@ const ItemsMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
         dispatch(getCategoryTypelist());
-        // dispatch(get_Category_By_CategoryType_ForDropDownAPI());
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
 

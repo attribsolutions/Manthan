@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -15,7 +14,6 @@ import {
   deleteItemID,
   deleteItemIdSuccess,
   editItemId,
-  editItemSuccess,
   getItemList,
   PostItemDataSuccess,
   updateItemSuccess,
@@ -226,19 +224,7 @@ console.log("editData",editData)
               >
                 {(toolkitProps) => (
                   <React.Fragment>
-                    <Breadcrumbs
-                      title={"Count :"}
-                      breadcrumbItem={userPageAccessState.PageHeading}
-                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
-                      isExcelButtonVisible={true}
-                      breadcrumbCount={`Items Count: ${pages.length}`}
-                      IsSearchVissible={true}
-                      ExcelData={pages}
-                    // RedirctPath={`/${btoa("ItemMaster")}`}
-                    // RedirctPath={`/ItemMaster`}
-                    />
-                    <Row>
+                                       <Row>
                       <Col xl="12">
                         <div className="table-responsive">
                           <BootstrapTable

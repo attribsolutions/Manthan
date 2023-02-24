@@ -9,7 +9,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 
 import { MetaTags } from "react-meta-tags";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
@@ -146,7 +145,6 @@ let pageModeProps=props.pageMode;
                 <MetaTags>
                     <title>Employee Type| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

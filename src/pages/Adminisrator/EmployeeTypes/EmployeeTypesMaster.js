@@ -10,7 +10,6 @@ import {
     Label,
     Row
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
 import {
     editEmployeeTypeSuccess,

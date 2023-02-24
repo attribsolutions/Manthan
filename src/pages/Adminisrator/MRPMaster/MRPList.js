@@ -18,7 +18,6 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../routes/allPageID"
 
 const MRPList = (props) => {
@@ -188,14 +187,7 @@ const MRPList = (props) => {
       <React.Fragment>
         <div className="page-content">
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP_lIST} /> */}
-          {/* <Breadcrumb
-            pageHeading={userAccState.PageHeading}
-            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-            showCount={true}
-            excelBtnView={true}
-            excelData={tableList}
-          /> */}
+      
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >

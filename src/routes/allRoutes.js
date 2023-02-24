@@ -1,4 +1,5 @@
 import React from "react"
+import * as path from "./route_url";
 import { Redirect } from "react-router-dom"
 
 //Dashboard
@@ -87,9 +88,8 @@ import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 import GeneralMaster from "../pages/Adminisrator/GeneralPage/GeneralMaster";
 import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
 
-import * as path from "./route_url";
-import GRNList from "../pages/Purchase/GRN/GRNList";
-import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
+import GRNList from "../pages/Inventory/GRN/GRNList";
+import GRNAdd from "../pages/Inventory/GRN/GRNAdd";
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
@@ -111,8 +111,8 @@ import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
-import ChallanList from "../pages/Purchase/Challan/ChallanList";
-import Challan from "../pages/Purchase/Challan/Challan";
+import ChallanList from "../pages/Inventory/Challan/ChallanList";
+import Challan from "../pages/Inventory/Challan/Challan";
 
 const userRoutes = [
 
@@ -209,6 +209,10 @@ const userRoutes = [
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
 
+  { path: path.GRN_lIST, component: GRNList },
+  { path: path.GRN_ADD, component: GRNAdd },
+  { path: path.GRN_STP, component: OrderList },
+
   //******************************* Purchase Module ************************************//
 
 
@@ -218,9 +222,8 @@ const userRoutes = [
   { path: path.ORDER_2, component: Order },
   { path: path.ORDER_LIST_2, component: OrderList },
 
-  { path: path.GRN_lIST, component: GRNList },
-  { path: path.GRN_ADD, component: GRNAdd },
-  { path: path.GRN_STP, component: OrderList },
+  //******************************* PRODUCTION  Module ************************************//
+
 
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
@@ -240,6 +243,7 @@ const userRoutes = [
   { path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
   { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
 
+  //******************************* Sale  Module ************************************//
 
   { path: path.INVOICE_1, component: Invoice },
   { path: path.INVOICE_LIST_1, component: InvoiceList },

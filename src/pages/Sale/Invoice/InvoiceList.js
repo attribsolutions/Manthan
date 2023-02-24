@@ -8,7 +8,6 @@ import {
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import {
     BreadcrumbShowCountlabel,
-    CommonBreadcrumbDetails,
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
@@ -30,15 +29,12 @@ import * as mode from "../../../routes/PageMode"
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
-import Invoice from "./Invoice";
 import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     editInvoiceList,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
-
-import "./css.css"
 
 const InvoiceList = () => {
 
@@ -187,7 +183,6 @@ const InvoiceList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
             <div className="page-content">
 

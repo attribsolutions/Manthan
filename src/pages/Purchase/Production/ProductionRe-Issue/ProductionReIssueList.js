@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useMemo } from "react";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom"
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
-// import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-// import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-// import { PRODUCTION_REISSUE_LIST, PRODUCTION_REISSUE} from "../../../routes/route_url";
-// ;
-import { currentDate, excelDownCommonFunc } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as report from '../../../../Reports/ReportIndex';
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
@@ -21,7 +16,7 @@ import {
     Save_Production_ReIssueSuccess,
     update_Production_ReIssueIdSuccess
 } from "../../../../store/Production/ProductionReissueRedux/actions";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../../store/actions";
+import { commonPageFieldList } from "../../../../store/actions";
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../../helpers/backend_helper";
 import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase";

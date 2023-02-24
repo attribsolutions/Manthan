@@ -5,7 +5,6 @@ import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
@@ -130,12 +129,7 @@ const WorkOrderList = () => {
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
             <div className="page-content">
-                {/* <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === url.WORK_ORDER_LIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} /> */}
+        
 
                 <div className="px-2   c_card_header text-black"  >
                     <div className="row" >

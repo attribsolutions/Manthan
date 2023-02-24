@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
+
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -19,8 +19,7 @@ import {
 } from "../../../store/Administrator/GSTRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+
 const GSTList = (props) => {
 
     const dispatch = useDispatch();
@@ -177,15 +176,7 @@ const GSTList = (props) => {
             <React.Fragment>
                 <div className="page-content">
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GST_LIST} /> */}
 
-                    {/* <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-                        showCount={true}
-                        excelBtnView={true}
-                        excelData={tableList}
-                    /> */}
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >

@@ -19,14 +19,12 @@ import {
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action"
 import {
     editPartyIDSuccess,
-    getAddressTypes,
     getCompany,
     getDistrictOnState,
     getPartyTypes,
@@ -106,7 +104,7 @@ const PartyMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -155,11 +153,6 @@ const PartyMaster = (props) => {
                     });
                 }
                 // ====================== Images tab ======================
-
-                // let ItemImagesDetails = hasEditVal.PartyAddress.map((index) => {
-                //     debugger
-                //     return index.fssaidocument
-                // })
 
                 setPartyPrefix(hasEditVal.PartyPrefix)
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
@@ -392,10 +385,8 @@ const PartyMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY} /> */}
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
-                            {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                             <Row>
                                 <Col lg={12}>
@@ -831,7 +822,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col>
-                                                                <FormGroup className="mt-3">
+                                                                    <FormGroup className="mt-3">
                                                                         <Row md="5">
                                                                             <Label htmlFor="validationCustom01"> Challan Prefix</Label>
                                                                             <AvField
@@ -847,7 +838,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col>
-                                                                <FormGroup className="mt-3">
+                                                                    <FormGroup className="mt-3">
                                                                         <Row md="5">
                                                                             <Label htmlFor="validationCustom01"> WorkOrder Prefix</Label>
                                                                             <AvField
@@ -863,7 +854,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col>
-                                                                <FormGroup className="mt-3">
+                                                                    <FormGroup className="mt-3">
                                                                         <Row md="5">
                                                                             <Label htmlFor="validationCustom01"> MaterialIssue Prefix</Label>
                                                                             <AvField
@@ -879,7 +870,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col>
-                                                                <FormGroup className="mt-3">
+                                                                    <FormGroup className="mt-3">
                                                                         <Row md="5">
                                                                             <Label htmlFor="validationCustom01"> Demand Prefix</Label>
                                                                             <AvField
@@ -895,7 +886,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col>
-                                                                <FormGroup className="mt-3">
+                                                                    <FormGroup className="mt-3">
                                                                         <Row md="5">
                                                                             <Label htmlFor="validationCustom01"> IBChallan Prefix</Label>
                                                                             <AvField
@@ -911,7 +902,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col>
-                                                                <FormGroup className="mt-3">
+                                                                    <FormGroup className="mt-3">
                                                                         <Row md="5">
                                                                             <Label htmlFor="validationCustom01"> IBInward Prefix</Label>
                                                                             <AvField

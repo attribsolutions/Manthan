@@ -1,27 +1,23 @@
 
-import React, { useEffect, useMemo, useState } from "react";
-import Breadcrumb from "../Breadcrumb3";
+import React, { useEffect,  useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-
 import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn, excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
+import { breadcrumbReturn,  listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-import * as urlRalations from "../../../routes/urlRalations"
+
+
 let sortType = "asc"
 let searchCount = 0
-let downList = []
-let listObj = {}
-
 
 let searchProps = {
   onClear: function onClear() { },

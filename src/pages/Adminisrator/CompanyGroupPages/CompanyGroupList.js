@@ -14,7 +14,6 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const CompanyGroupList = (props) => {
 
@@ -53,8 +52,6 @@ const CompanyGroupList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP_lIST} /> */}
-
       {
         (pageField) ?
           <CommonListPage

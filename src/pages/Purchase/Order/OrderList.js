@@ -155,9 +155,10 @@ const OrderList = () => {
                 if (ele.hasSelect) {
                     grnRef.push({
                         Invoice: null,
-                        Order: ele.id,
+                        Order: ele.POType === "Challan" ? '' : ele.id,
                         ChallanNo: ele.FullOrderNumber,
-                        Inward: false
+                        Inward: false,
+                        Challan: ele.POType === "Challan" ? ele.id : ''
                     });
                     isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                     challanNo = challanNo.concat(`${ele.FullOrderNumber},`)

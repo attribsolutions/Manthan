@@ -25,17 +25,13 @@ import {
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { GetCustomer, getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
+import { AlertState, BreadcrumbShowCountlabel,  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
-import '../../Order/div.css'
-import { ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import OrderPageTermsTable from "../Order/OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";

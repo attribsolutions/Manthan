@@ -40,10 +40,9 @@ import {
     invoiceSaveAction,
     invoiceSaveActionSuccess
 } from "../../../store/Sales/Invoice/action";
-import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
-import "./css.css"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Invoice = (props) => {
@@ -67,7 +66,7 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
-    
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -119,7 +118,7 @@ const Invoice = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 

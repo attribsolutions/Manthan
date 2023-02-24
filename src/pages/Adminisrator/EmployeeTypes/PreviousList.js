@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -201,16 +200,7 @@ const EmployeeTypeList = (props) => {
               >
                 {(toolkitProps) => (
                   <React.Fragment>
-                    <Breadcrumbs
-                      title={"Count :"}
-                      breadcrumbItem={userPageAccessState.PageHeading}
-                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`EmployeeType Count: ${TableListData.length}`}
-                      IsSearchVissible={true}
-                      ExcelData={TableListData}
-                      isExcelButtonVisible={true}
-                    />
+                   
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">
