@@ -286,6 +286,7 @@ const BOMMaster = (props) => {
                 CreatedBy: createdBy(),
                 Company: userCompany(),
                 BOMItems: BOMItems,
+                IsVDCItem: values.IsVDCItem,
                 ReferenceBom: BOMrefID
             });
             if (BOMItems.length === 0) {
@@ -453,6 +454,30 @@ const BOMMaster = (props) => {
                                                             setState((i) => {
                                                                 const a = { ...i }
                                                                 a.values.IsActive = e.target.checked;
+                                                                return a
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="6">
+                                    <FormGroup className=" row ">
+                                        <Row className="justify-content-md-left">
+                                            <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >IsVDCItem</Label>
+                                            <Col md={7} style={{ marginTop: '10px' }} >
+
+                                                <div className="form-check form-switch form-switch-md mb-3">
+                                                    <Input type="checkbox" className="form-check-input"
+                                                        checked={values.IsVDCItem}
+                                                        name="IsVDCItem"
+                                                        onChange={(e) => {
+                                                            setState((i) => {
+                                                                const a = { ...i }
+                                                                a.values.IsVDCItem = e.target.checked;
                                                                 return a
                                                             })
                                                         }}
