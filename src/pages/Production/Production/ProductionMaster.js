@@ -30,7 +30,7 @@ import {
     post_Production,
     post_ProductionSuccess,
     update_ProductionIdSuccess
-} from "../../../store/Purchase/ProductionRedux/actions";
+} from "../../../store/Production/ProductionRedux/actions";
 import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";

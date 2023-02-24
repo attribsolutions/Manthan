@@ -100,11 +100,11 @@ import WorkOrderList from "../pages/Purchase/WorkOrder/WorkOrderList";
 import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_IssueMaster";
 import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
 
-import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
-import ProductionList from "../pages/Purchase/Production/ProductionList";
+import ProductionMaster from "../pages/Production/Production/ProductionMaster";
+import ProductionList from "../pages/Production/Production/ProductionList";
 
-import ProductionReIssueAdd from "../pages/Purchase/Production/ProductionRe-Issue/PrductionReIssueAdd";
-import ProductionReIssueList from "../pages/Purchase/Production/ProductionRe-Issue/ProductionReIssueList";
+import ProductionReIssueAdd from "../pages/Production/ProductionRe-Issue/PrductionReIssueAdd";
+import ProductionReIssueList from "../pages/Production/ProductionRe-Issue/ProductionReIssueList";
 
 import Invoice from "../pages/Sale/Invoice/Invoice";
 import InvoiceList from "../pages/Sale/Invoice/InvoiceList";

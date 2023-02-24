@@ -9,41 +9,41 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../../store/actions";
+import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
     onChangeDate,
-} from "./../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton }
-    from "./../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+    from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     postBOMSuccess,
     updateBOMListSuccess
-} from "../../../../store/Purchase/BOMRedux/action";
+} from "../../../store/Purchase/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty }
-    from "./../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+    from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
     postMaterialIssueSuccess
-} from "../../../../store/Purchase/Matrial_Issue/action";
+} from "../../../store/Purchase/Matrial_Issue/action";
 
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
-import * as mode from "../../../../routes/PageMode";
-import * as pageId from "../../../../routes/allPageID"
-import * as url from "../../../../routes/route_url"
-import { countlabelFunc } from "../../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { Save_Production_ReIssue, Save_Production_ReIssueSuccess, makeBtnProduction_ReIssue_STP_actionSuccess, ItemForProdunction_ReIssueSuccess } from "../../../../store/Production/ProductionReissueRedux/actions";
+import * as mode from "../../../routes/PageMode";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url"
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { Save_Production_ReIssue, Save_Production_ReIssueSuccess, makeBtnProduction_ReIssue_STP_actionSuccess, ItemForProdunction_ReIssueSuccess } from "../../../store/Production/ProductionReissueRedux/actions";
 
 
 const ProductionReIssueAdd = (props) => {

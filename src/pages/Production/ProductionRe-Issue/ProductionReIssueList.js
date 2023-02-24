@@ -1,176 +1,127 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Button, Col, FormGroup, Label } from "reactstrap";
+import { useHistory } from "react-router-dom"
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { Button, Col, FormGroup, Label } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { useMemo } from "react";
-import {
-    updateWorkOrderListSuccess
-} from "../../../store/Purchase/WorkOrder/action";
-import {
-    delete_ProductionId,
-    delete_ProductionIdSuccess,
-    edit_ProductionId,
-    getProductionListPage,
-    Productionlistfilters
-} from "../../../store/Purchase/ProductionRedux/actions";
-
 import { MetaTags } from "react-meta-tags";
-import * as report from '../../../Reports/ReportIndex'
-
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
-import * as url from "../../../routes/route_url"
-
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as report from '../../../Reports/ReportIndex';
+import * as pageId from "../../../routes/allPageID";
+import * as mode from "../../../routes/PageMode";
+import * as url from "../../../routes/route_url";
+import {
+    delete_Production_ReIssueId, delete_Production_ReIssueIdSuccess,
+    edit_Production_ReIssueId, getProduction_ReIssueListPage,
+    Save_Production_ReIssueSuccess,
+    update_Production_ReIssueIdSuccess
+}
+from "../../../store/Production/ProductionReissueRedux/actions";
+//  from "../../store/Production/ProductionReissueRedux/actions";
+import { commonPageFieldList } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
-import ProductionMaster from "./ProductionMaster";
-import { makeBtnProduction_ReIssue_STP_action } from "../../../store/Production/ProductionReissueRedux/actions";
+import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import ProductionReIssueAdd from "./PrductionReIssueAdd";
 
-const ProductionList = () => {
+
+const ProductionReIssueList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false ,newBtnPath:''});
+    const [otherState, setOtherState] = useState({ masterPath: url.PRODUCTION_REISSUE, makeBtnShow: false, newBtnPath: url.PRODUCTION_REISSUE_STP });
 
-    const [userAccState, setUserAccState] = useState('');
+    const [userAccState, setUserAccState] = useState('');;
+    const [todate, settodate] = useState(currentDate);
+    const [fromdate, setfromdate] = useState(currentDate);
+
     const reducers = useSelector(
         (state) => ({
-            tableList: state.ProductionReducer.ProductionList,
-            deleteMsg: state.ProductionReducer.deleteMsg,
-            updateMsg: state.WorkOrderReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
-            editData: state.ProductionReducer.editData,
-            productionFilter: state.ProductionReducer.productionFilter,
+            tableList: state.ProductionReIssueReducer.productionReIssueList,
+            deleteMsg: state.ProductionReIssueReducer.deleteMsg,
+            updateMsg: state.ProductionReIssueReducer.updateMsg,
+            postMsg: state.ProductionReIssueReducer.postMsg,
+            editData: state.ProductionReIssueReducer.editData,
+            productionFilter: state.ProductionReIssueReducer.productionReIssueFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            makeProductionReIssue: state.ProductionReIssueReducer.makeProductionReIssue,
-
         })
     );
 
     const action = {
-        // getList: ,
-        editId: edit_ProductionId,
-        deleteId: delete_ProductionId,
-        postSucc: postMessage,
-        updateSucc: updateWorkOrderListSuccess,
-        deleteSucc: delete_ProductionIdSuccess
+        getList: getProduction_ReIssueListPage,
+        editId: edit_Production_ReIssueId,
+        deleteId: delete_Production_ReIssueId,
+        postSucc: Save_Production_ReIssueSuccess,
+        updateSucc: update_Production_ReIssueIdSuccess,
+        deleteSucc: delete_Production_ReIssueIdSuccess
     }
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-
-        let page_Id = '';
-        let page_Mode = mode.defaultList;
-        let masterPath = '';
-        let newBtnPath = '';
-        let makeBtnShow = false;
-        
-        if (subPageMode === url.PRODUCTION_LIST) {
-            page_Id = pageId.PRODUCTION_LIST;
-            masterPath = url.PRODUCTION_MASTER;
-            newBtnPath=url.PRODUCTION_STP;
-        }
-
-        else if (subPageMode === url.PRODUCTION_REISSUE_STP) {
-            page_Id = pageId.PRODUCTION_REISSUE_STP
-            page_Mode = mode.modeSTPsave
-            makeBtnShow = true;
-        };
-        // dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath, makeBtnShow,newBtnPath })
-        setPageMode(page_Mode)
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Production Count"} :0`))
+        dispatch(commonPageFieldList(pageId.PRODUCTION_REISSUE_LIST))
         goButtonHandler(true)
     }, []);
 
-    const { userAccess, pageField, productionFilter, makeProductionReIssue } = reducers;
-    const { fromdate, todate } = productionFilter
+    const { userAccess, pageField } = reducers;
 
 
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.PRODUCTION_LIST)
+            return (inx.id === pageId.PRODUCTION_REISSUE_LIST)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
     }, [userAccess])
 
-    useEffect(() => {
-        if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
-            history.push({
-                pathname: makeProductionReIssue.path,
-                page_Mode: makeProductionReIssue.pageMode,
-            })
-        }
-    }, [makeProductionReIssue])
-
     function downBtnFunc(row) {
         var ReportType = report.Stock;   //Stock
         dispatch(getpdfReportdata(production_Edit_API, ReportType, row.id))
     }
 
-
     const goButtonHandler = (onload = false) => {
-        let FromDate
-        let ToDate
-        if (onload) {
-            FromDate = currentDate;
-            ToDate = currentDate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
+        // let FromDate
+        // let ToDate
+        // if (onload) {
+        //     FromDate = currentDate;
+        //     ToDate = currentDate;
+        // } else {
+        //     ToDate = todate;
+        //     FromDate = fromdate;
+        // }
+        // debugger
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
+            FromDate: fromdate,
+            ToDate: todate,
         });
 
-        dispatch(getProductionListPage(jsonBody));
+        dispatch(getProduction_ReIssueListPage(jsonBody));
     }
-
     function fromdateOnchange(e, date) {
-        let newObj = { ...productionFilter }
-        newObj.fromdate = date
-        dispatch(Productionlistfilters(newObj))
+        setfromdate(date)
+        // let newObj = { ...productionReIssueFilter }
+        // newObj.fromdate = date
+        // dispatch(ProductionReIssuelistfilters(newObj))
     }
-
     function todateOnchange(e, date) {
-        let newObj = { ...productionFilter }
-        newObj.todate = date
-        dispatch(Productionlistfilters(newObj))
+        settodate(date)
+
+        // let newObj = { ...productionReIssueFilter }
+        // newObj.todate = date
+        // dispatch(ProductionReIssuelistfilters(newObj))
     }
-
-    const makeBtnFunc = (list = []) => {
-        try {
-            const jsonBody = JSON.stringify({
-                "ProductionID": list[0].id,
-                "PartyID": userParty()
-            })
-            const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id }
-            dispatch(makeBtnProduction_ReIssue_STP_action(body))
-
-        } catch (e) { }
-    }
-
     return (
+
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
             <div className="page-content">
 
-                <div className="px-2  c_card_header"  >
+                <div className="px-2  c_card_header">
                     <div className="row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
@@ -231,12 +182,11 @@ const ProductionList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            makeBtnFunc={makeBtnFunc}
+                            // makeBtnFunc={makeBtnFunc}
 
-                            makeBtnName={"make ReIssue"}
-                            ButtonMsgLable={"Production"}
+                            ButtonMsgLable={"ProductionReIssue"}
                             deleteName={"ItemName"}
-                            MasterModal={ProductionMaster}
+                            MasterModal={ProductionReIssueAdd}
 
                         />
                         : null
@@ -245,4 +195,4 @@ const ProductionList = () => {
         </React.Fragment>
     )
 }
-export default ProductionList;
+export default ProductionReIssueList;
