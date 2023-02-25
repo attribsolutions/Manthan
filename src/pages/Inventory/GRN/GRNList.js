@@ -114,7 +114,6 @@ const GRNList = () => {
             Customer: customer,
             GRN: id,
         });
-
         dispatch(makeChallanAction({jsonBody, pageMode:mode.modeSTPsave, path:url.CHALLAN_LIST}))
     };
 

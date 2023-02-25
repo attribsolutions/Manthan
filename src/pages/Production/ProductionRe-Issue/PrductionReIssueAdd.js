@@ -119,6 +119,7 @@ const ProductionReIssueAdd = (props) => {
 
     useEffect(() => {
         if ((makeProductionReIssue.Status === true) && (makeProductionReIssue.StatusCode === 200)) {
+            debugger
             const arr = makeProductionReIssue.Data.map((index) => ({
                 value: index.Item,
                 label: index.ItemName,
@@ -127,6 +128,7 @@ const ProductionReIssueAdd = (props) => {
             }))
             setItemOption(arr)
             setPageMode(makeProductionReIssue.pageMode)
+            setGoButtonList(makeProductionReIssue.Data)
             dispatch(makeBtnProduction_ReIssue_STP_actionSuccess({ Status: false }))
         }
 

@@ -276,7 +276,7 @@ const ProductionMaster = (props) => {
                 Division: 4,
                 GST: 8,
                 Unit: values.UnitName.value,
-                MRP: " ",
+                MRP: "",
                 Rate: 55,
                 Item: values.ItemName.value,
             });

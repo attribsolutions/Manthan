@@ -28,7 +28,7 @@ import * as url from "../../../routes/route_url"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
 import ProductionMaster from "./ProductionMaster";
-import { makeBtnProduction_ReIssue_STP_actionSuccess } from "../../../store/Production/ProductionReissueRedux/actions";
+import { makeBtnProduction_ReIssue_STP_action, makeBtnProduction_ReIssue_STP_actionSuccess } from "../../../store/Production/ProductionReissueRedux/actions";
 
 const ProductionList = () => {
 
@@ -152,13 +152,14 @@ const ProductionList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
+        debugger
         try {
             const jsonBody = JSON.stringify({
                 "ProductionID": list[0].id,
                 "PartyID": userParty()
             })
             const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id }
-            dispatch(makeBtnProduction_ReIssue_STP_actionSuccess(body))
+            dispatch(makeBtnProduction_ReIssue_STP_action(body))
 
         } catch (e) { }
     }
