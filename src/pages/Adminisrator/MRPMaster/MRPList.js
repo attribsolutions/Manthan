@@ -18,7 +18,6 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
