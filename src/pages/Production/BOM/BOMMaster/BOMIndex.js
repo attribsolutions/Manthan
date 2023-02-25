@@ -57,7 +57,8 @@ const BOMMaster = (props) => {
         EstimatedOutputQty: "",
         UnitName: "",
         Comment: "",
-        IsActive: true
+        IsActive: true,
+        IsVDCItem: false,
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -105,7 +106,7 @@ const BOMMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -132,7 +133,7 @@ const BOMMaster = (props) => {
                 setItemUnitOnEditData(ItemUnits)
                 // setItemUnitOptions(ItemUnits)
                 setEditData(hasEditVal);
-                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
+                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive, IsVDCItem } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.BomDate.valid = true;
@@ -141,6 +142,7 @@ const BOMMaster = (props) => {
                 hasValid.EstimatedOutputQty.valid = true;
                 hasValid.Comment.valid = true;
                 hasValid.IsActive.valid = true;
+                hasValid.IsVDCItem.valid = true;
 
                 values.id = id
                 values.BomDate = BomDate;
@@ -149,6 +151,7 @@ const BOMMaster = (props) => {
                 values.IsActive = IsActive;
                 values.ItemName = { label: ItemName, value: Item };
                 values.UnitName = { label: UnitName, value: Unit };
+                values.IsVDCItem = IsVDCItem;
                 setItemTabDetails(hasEditVal.BOMItems)
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editBOMListSuccess({ Status: false }))
@@ -261,7 +264,7 @@ const BOMMaster = (props) => {
         })
     }
 
-    const SaveHandler = ( event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
@@ -271,7 +274,7 @@ const BOMMaster = (props) => {
         if (formValid(state, setState)) {
 
             let BOMrefID = 0
-            if ((pageMode === mode.edit) ) {
+            if ((pageMode === mode.edit)) {
                 BOMrefID = EditData.id
             };
 
@@ -318,7 +321,7 @@ const BOMMaster = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-               
+
                     <form onSubmit={(event) => SaveHandler(event)} noValidate>
                         <div className="px-2 c_card_filter header text-black" >
                             <div className=" row  ">
