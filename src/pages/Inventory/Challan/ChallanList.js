@@ -16,7 +16,7 @@ import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, getChallanListPage, } from "../../../store/Inventory/ChallanRedux/actions";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
 
 const ChallanList = () => {

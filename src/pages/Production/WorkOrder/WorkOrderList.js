@@ -15,7 +15,7 @@ import {
     getWorkOrderListPage,
     updateWorkOrderListSuccess,
     WorkOrderlistfilters
-} from "../../../store/Purchase/WorkOrder/action";
+} from "../../../store/Production/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"

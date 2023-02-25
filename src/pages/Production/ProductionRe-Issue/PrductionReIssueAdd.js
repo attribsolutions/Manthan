@@ -33,7 +33,7 @@ import {
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
     postMaterialIssueSuccess
-} from "../../../store/Purchase/Matrial_Issue/action";
+} from "../../../store/Production/Matrial_Issue/action";
 
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";

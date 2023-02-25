@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import { currentDate,  userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     updateWorkOrderListSuccess
-} from "../../../store/Purchase/WorkOrder/action";
+} from "../../../store/Production/WorkOrder/action";
 import {
     delete_ProductionId,
     delete_ProductionIdSuccess,

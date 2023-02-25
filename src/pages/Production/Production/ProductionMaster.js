@@ -31,7 +31,7 @@ import {
     post_ProductionSuccess,
     update_ProductionIdSuccess
 } from "../../../store/Production/ProductionRedux/actions";
-import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
+import { getMaterialIssueListPage } from "../../../store/Production/Matrial_Issue/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";

@@ -14,7 +14,7 @@ import {
     editGRNId, getGRNListPage,
     grnlistfilters,
     updateGRNIdSuccess
-} from "../../../store/Purchase/GRNRedux/actions";
+} from "../../../store/Inventory/GRNRedux/actions";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"

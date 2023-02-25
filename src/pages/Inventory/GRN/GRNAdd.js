@@ -23,7 +23,7 @@ import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actio
 import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { breadcrumbReturn, createdBy, currentDate} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";

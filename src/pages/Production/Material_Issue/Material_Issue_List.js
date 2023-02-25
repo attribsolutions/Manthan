@@ -15,12 +15,12 @@ import {
     editMaterialIssueId,
     getMaterialIssueListPage,
     MaterialIssuelistfilters
-} from "../../../store/Purchase/Matrial_Issue/action";
+} from "../../../store/Production/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 import * as  mode from "../../../routes/PageMode";
 import { MetaTags } from "react-meta-tags";
-import { updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
+import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/action";
 
 const MaterialIssueList = () => {
 

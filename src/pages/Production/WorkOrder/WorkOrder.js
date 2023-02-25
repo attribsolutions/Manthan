@@ -38,7 +38,7 @@ import {
     postWorkOrderMaster,
     postWorkOrderMasterSuccess,
     updateWorkOrderList,
-} from "../../../store/Purchase/WorkOrder/action";
+} from "../../../store/Production/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";

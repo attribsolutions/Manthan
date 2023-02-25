@@ -16,7 +16,7 @@ import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonF
 import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import { getSupplier, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
