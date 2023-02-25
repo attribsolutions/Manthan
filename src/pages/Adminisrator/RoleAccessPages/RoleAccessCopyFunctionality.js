@@ -117,13 +117,7 @@ const RoleAccessCopyFunctionality = (props) => {
         <React.Fragment>
 
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
-                <Breadcrumb
-                    title={"Count :"}
-                    IsSearch={true}
-                    // breadcrumbItem={userPageAccessState.PageHeading}
-                    breadcrumbItem={"Copy Role Access"}
-                />
+                
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
                 </MetaTags>

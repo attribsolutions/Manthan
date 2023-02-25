@@ -532,18 +532,8 @@ const RoleAccessAdd = (props) => {
             <React.Fragment>
                 <div className="page-content text-black" style={{ minHeight: "600px" }} >
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS} /> */}
-                    {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                     <Container fluid>
-                        {/* <Card className="text-black"> */}
-                        {/* <CardHeader className="card-header   text-dark c_card_header"  >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader> */}
-
-                        {/* <Card className="mt-n2"> */}
                         <CardBody >
                             {
                                 !showTableOnUI ?
