@@ -19,6 +19,8 @@ import {
 } from "../../../store/Administrator/GSTRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import * as url from "../../../routes/route_url"
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const GSTList = (props) => {
 
@@ -47,6 +49,7 @@ const GSTList = (props) => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.GST });
         }
     }, [userAccess])
 

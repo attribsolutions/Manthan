@@ -18,7 +18,8 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url"
 const MarginList = (props) => {
 
   const dispatch = useDispatch();
@@ -46,7 +47,8 @@ const MarginList = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.MARGIN });
     }
   }, [userAccess])
 
