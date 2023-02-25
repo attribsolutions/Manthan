@@ -29,7 +29,8 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { challanitemdropdown, GoButtonForchallanAdd, GoButtonForchallanAddSuccess, Postchallan } from "../../../store/Inventory/ChallanRedux/actions";
+import { challanItemForDropdown, GoButtonForChallanAdd, GoButtonForChallanAddSuccess, saveChallan_ChallanAdd } from "../../../store/Inventory/ChallanRedux/actions";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Challan = (props) => {
 
@@ -41,9 +42,9 @@ const Challan = (props) => {
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
-        // id: "",
-        InvoiceDate: currentDate,
-        Customer: "",
+        ChallanDate: currentDate,
+        Party: "",
+        Item: ''
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -58,7 +59,6 @@ const Challan = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        customer,
         GoButton = [],
         vender,
         vendorSupplierCustomer,
@@ -73,10 +73,8 @@ const Challan = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.SupplierReducer.customer,
-        // GoButton: state.InvoiceReducer.GoButton,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
     }));
-
 
 
 
@@ -223,13 +221,14 @@ const Challan = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: userCompany()
         });
-        dispatch(challanitemdropdown(jsonBody))
+        dispatch(challanItemForDropdown(jsonBody))
         dispatch(GetVender())
-        dispatch(GoButtonForchallanAddSuccess([]))
+        dispatch(GoButtonForChallanAddSuccess([]))
     }, [])
 
     useEffect(() => {
@@ -246,9 +245,9 @@ const Challan = (props) => {
         }
     }, [pageField]);
 
-    useEffect(() => {
-        // showAllStockOnclick(showAllStockState)
-    }, [showAllStockState]);
+    // useEffect(() => {
+    //     // showAllStockOnclick(showAllStockState)
+    // }, [showAllStockState]);
 
     const venderOptions = vender.map((i) => ({
         value: i.id,
@@ -513,69 +512,31 @@ const Challan = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        // totalSize: OrderItemDetails.length,
         custom: true,
     };
 
-    //     function showAllStockOnclick(isplus = false) {
-    //         try {
-    //             if (isplus) {
-    //                 document.getElementById("allplus-circle").style.display = "none";
-    //                 document.getElementById("allminus-circle").style.display = "block";
-    //             } else {
-    //                 document.getElementById("allplus-circle").style.display = "block";
-    //                 document.getElementById("allminus-circle").style.display = "none";
-    //             }
-    //         } catch (w) { }
-    //         GoButton.forEach(index1 => {
-    // debugger
-
-    //             if (!index1.StockTotal > 0) {
-    //                 return
-    //             }
-    //             try {
-    //                 if (isplus) {
-    //                     document.getElementById(`view${index1.id}`).style.display = "block";
-    //                     document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-    //                     document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-    //                 } else {
-    //                     document.getElementById(`view${index1.id}`).style.display = "none";
-    //                     document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-    //                     document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-    //                 }
-    //             } catch (w) { }
-    //         })
-
-
-    //     }
-    //     function showStockOnclick(index1, isplus = false) {
-    //         try {
-    //             if (isplus) {
-    //                 document.getElementById(`view${index1.id}`).style.display = "block";
-    //                 document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-    //                 document.getElementById(`minus-circle${index1.id}`).style.display = "block";
-    //             } else {
-    //                 document.getElementById(`view${index1.id}`).style.display = "none";
-    //                 document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-    //                 document.getElementById(`minus-circle${index1.id}`).style.display = "none";
-    //             }
-    //         } catch (w) { }
-    //     }
 
     function ChallanDateOnchange(y, v, e) {
-        // dispatch(GoButton_post_For_Invoice_Success([]))
         onChangeDate({ e, v, state, setState })
     };
 
-    function PartyOnchange(hasSelect, evn) {
-        debugger
+    function partyOnChange(hasSelect, evn) {
+        setState((i) => {
+            const v1 = { ...i }
+            v1.values.Party = hasSelect
+            v1.hasValid.Party.valid = true
+            return v1
+        })
+        dispatch(GoButtonForChallanAddSuccess([]))
+    };
+    function itemOnChange(hasSelect, evn) {
         setState((i) => {
             const v1 = { ...i }
             v1.values.Item = hasSelect
-            // v1.hasValid.Item.valid = true
+            v1.hasValid.Item.valid = true
             return v1
         })
-        dispatch(GoButtonForchallanAddSuccess([]))
+        dispatch(GoButtonForChallanAddSuccess([]))
     };
 
     const StockQtyOnChange = (event, index1, index2) => {
@@ -703,16 +664,27 @@ const Challan = (props) => {
 
     function goButtonHandler(event) {
 
-
-        const jsonBody = JSON.stringify({
-
-            Party: userParty(),
-            Item: values.Item.value
-        });
-        GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButtonForchallanAdd(jsonBody));
-
-        // }
+        const validMsg = []
+        if (!(values.Item.value)) {
+            validMsg.push({ Item: "Please Select Item" })
+        };
+        if (!(values.Party.value)) {
+            validMsg.push({ Party: "Please Select Party" })
+        };
+        if (validMsg.length > 0) {
+            CustomAlert({
+                Type: 3,
+                Message:validMsg
+            })
+            return
+        } else {
+            const jsonBody = JSON.stringify({
+                Party: values.Party.value,
+                Item: values.Item.value
+            });
+            GoBtnDissable({ id: goBtnId, state: true })
+            dispatch(GoButtonForChallanAdd(jsonBody));
+        }
     };
 
     const SaveHandler = (event) => {
@@ -802,7 +774,7 @@ const Challan = (props) => {
         else {
 
             // saveDissable({ id: saveBtnid, state: true })
-            dispatch(Postchallan(jsonBody, saveBtnid));
+            dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
         }
 
 
@@ -884,7 +856,7 @@ const Challan = (props) => {
     // else {
 
     //     saveDissable({ id: saveBtnid, state: true })
-    //     dispatch(Postchallan(jsonBody, saveBtnid));
+    //     dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
     // }
 
     // }
@@ -905,8 +877,8 @@ const Challan = (props) => {
                                             <Label className="mt-1" style={{ width: "110px" }}>Challan Date </Label>
                                             <Col sm={7}>
                                                 <Flatpickr
-                                                    name="InvoiceDate"
-                                                    value={values.InvoiceDate}
+                                                    name="ChallanDate"
+                                                    value={values.ChallanDate}
                                                     className="form-control d-block bg-white text-dark"
                                                     id="myInput11"
                                                     disabled={(GoButton.length > 0 || pageMode === "edit") ? true : false}
@@ -916,8 +888,8 @@ const Challan = (props) => {
                                                     }}
                                                     onChange={ChallanDateOnchange}
                                                 />
-                                                {isError.InvoiceDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.InvoiceDate}</span>
+                                                {isError.ChallanDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.ChallanDate}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>
@@ -929,17 +901,17 @@ const Challan = (props) => {
                                             <Col sm={8}>
                                                 <Select
                                                     name="Customer"
-                                                    value={values.party}
+                                                    value={values.Party}
                                                     isSearchable={true}
                                                     isDisabled={GoButton.length > 0 ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={venderOptions}
-                                                // onChange={PartyOnchange}
+                                                    onChange={partyOnChange}
                                                 />
-                                                {isError.Customer.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                                {isError.Party.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Party}</small></span>
                                                 )}
                                             </Col>
                                         </FormGroup>
@@ -949,19 +921,19 @@ const Challan = (props) => {
                                             <Label className="mt-2" style={{ width: "80px" }}> Item </Label>
                                             <Col sm={8} >
                                                 <Select
-                                                    name="Customer"
+                                                    name="Item"
                                                     value={values.Item}
                                                     isSearchable={true}
-                                                    isDisabled={GoButton.length > 0 ? true : false}
+                                                    // isDisabled={(GoButton.length > 0) ? true : false}
                                                     id={'customerselect'}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={ItemsOption}
-                                                    onChange={PartyOnchange}
+                                                    onChange={itemOnChange}
 
                                                 />
-                                                {isError.Customer.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                                {isError.Item.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Item}</small></span>
                                                 )}
                                             </Col>
                                         </FormGroup>
@@ -971,7 +943,7 @@ const Challan = (props) => {
                                             (GoButton.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
                                                 :
-                                                <Change_Button onClick={(e) => dispatch(GoButtonForchallanAddSuccess([]))} />
+                                                <Change_Button onClick={(e) => dispatch(GoButtonForChallanAddSuccess([]))} />
                                             : null
                                         }
                                     </Col>

@@ -1,11 +1,11 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
-  challanitemdropdownSuccess,
+  challanItemForDropdownSuccess,
   deleteChallanIdSuccess,
-  getChallanListPageSuccess,
-  GoButtonForchallanAddSuccess,
-  makechallanSuccess,
-  PostchallanSuccess,
+  challanList_ForListPageSuccess,
+  GoButtonForChallanAddSuccess,
+  makeChallanActionSuccess,
+  saveChallan_ChallanAddSuccess,
 } from "./actions";
 import {
   Challan_delete_API,
@@ -18,10 +18,10 @@ import {
 import {
   CHALLAN_POST_API,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE,
-  GET_CHALLAN_LIST_PAGE,
+  CHALLAN_LIST_FOR_LIST_PAGE,
   GO_BUTTON_CHALLAN_POST_API,
-  ITEM_CHALLAN_POST_API,
-  MAKE_CHALLAN_GET_API,
+  ITEM_DROPDOWN_CHALLAN,
+  MAKE_CHALLAN_ACTION,
 } from "./actionType";
 import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
@@ -29,7 +29,7 @@ import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../compon
 function* Post_Challan_GerFunc({ data }) {                   // Save Challan  genrator function
   try {
     const response = yield call(Challan_Post_API, data);
-    yield put(PostchallanSuccess(response))
+    yield put(saveChallan_ChallanAddSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
@@ -42,7 +42,7 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
       i.ChallanDate = (`${date} ${time}`)
       return i
     })
-    yield put(getChallanListPageSuccess(newList))
+    yield put(challanList_ForListPageSuccess(newList))
 
   } catch (error) { CommonConsole(error) }
 }
@@ -55,10 +55,13 @@ function* DeleteChallanGenFunc({ id }) {                     // Delete Challan  
   } catch (error) { CommonConsole(error) }
 };
 
-function* Make_Challan_GerFunc({ data }) {                   // Make Chalan Challan  genrator function
+function* Make_Challan_GerFunc({ data }) {                  // Make Chalan Challan  genrator function
+  const { jsonBody, pageMode = '', path = '' } = data
   try {
-    const response = yield call(Challan_Make_API, data);
-    yield put(makechallanSuccess(response))
+    const response = yield call(Challan_Make_API, jsonBody);
+    response["pageMode"] = pageMode;
+    response["path"] = path; //Pagepath
+    yield put(makeChallanActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
@@ -67,24 +70,24 @@ function* gobutton_challan_genFunc({ data }) {              //  GoButton Challan
     const arr = []
     const response = yield call(Challan_items_Stock_API, data);
     arr.push({ StockDetails: response.Data, })
-    yield put(GoButtonForchallanAddSuccess(arr));
+    yield put(GoButtonForChallanAddSuccess(arr));
   } catch (error) { CommonConsole(error) }
 }
 
 function* itemDropDown_Challan_AddPage_genFunc({ data }) {   //  Challan Addpage  IttemDropDown genrator function
   try {
     const response = yield call(Challan_items_API, data);
-    yield put(challanitemdropdownSuccess(response.Data));
+    yield put(challanItemForDropdownSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* ChallanSaga() {
   yield takeEvery(CHALLAN_POST_API, Post_Challan_GerFunc);
-  yield takeEvery(GET_CHALLAN_LIST_PAGE, Challan_List_filterGerFunc);
+  yield takeEvery(CHALLAN_LIST_FOR_LIST_PAGE, Challan_List_filterGerFunc);
   yield takeEvery(GO_BUTTON_CHALLAN_POST_API, gobutton_challan_genFunc);
-  yield takeEvery(MAKE_CHALLAN_GET_API, Make_Challan_GerFunc);
+  yield takeEvery(MAKE_CHALLAN_ACTION, Make_Challan_GerFunc);
   yield takeEvery(DELETE_CHALLAN_FOR_CHALLAN_PAGE, DeleteChallanGenFunc);
-  yield takeEvery(ITEM_CHALLAN_POST_API, itemDropDown_Challan_AddPage_genFunc);
+  yield takeEvery(ITEM_DROPDOWN_CHALLAN, itemDropDown_Challan_AddPage_genFunc);
 }
 
 export default ChallanSaga;

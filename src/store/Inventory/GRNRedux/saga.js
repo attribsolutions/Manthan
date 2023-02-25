@@ -73,9 +73,9 @@ function* getGRNitem_Mode2_GenFunc({ data }) {         // Make_GRN Items  genrat
   try {
     const response = yield call(GRN_Make_API, jsonBody);
     response["pageMode"] = pageMode;
+    response["path"] = path; //Pagepath
     response.Data["GRNReferences"] = grnRef;
     response.Data["challanNo"] = challanNo;
-    response["path"] = path; //Pagepath
     yield put(getGRN_itemMode2_Success(response))
   } catch (error) { CommonConsole(error) }
 }

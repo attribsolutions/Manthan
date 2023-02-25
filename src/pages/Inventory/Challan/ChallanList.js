@@ -15,7 +15,7 @@ import * as pageId from "../../../routes/allPageID"
 
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, getChallanListPage, } from "../../../store/Inventory/ChallanRedux/actions";
+import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
 
@@ -123,7 +123,7 @@ const ChallanList = () => {
             Party: userParty(),
             Customer: venderSelect === "" ? '' : venderSelect.value,
         });
-        dispatch(getChallanListPage(jsonBody));
+        dispatch(challanList_ForListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {

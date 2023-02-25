@@ -23,7 +23,7 @@ import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
-import { makechallan } from "../../../store/Inventory/ChallanRedux/actions";
+import { makeChallanAction } from "../../../store/Inventory/ChallanRedux/actions";
 
 const GRNList = () => {
     const history = useHistory();
@@ -44,9 +44,11 @@ const GRNList = () => {
             grnlistFilter: state.GRNReducer.grnlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            makeChallan: state.ChallanReducer.makeChallan,
+
         })
     );
-    const { userAccess, pageField, vender, tableList, grnlistFilter } = reducers;
+    const { userAccess, pageField, vender, makeChallan, grnlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
     const action = {
@@ -82,6 +84,15 @@ const GRNList = () => {
         goButtonHandler()
     }, []);
 
+    useEffect(() => {
+        if (makeChallan.Status === true && makeChallan.StatusCode === 200) {
+            history.push({
+                pathname: makeChallan.path,
+                page_Mode: makeChallan.page_Mode,
+            })
+        }
+    }, [makeChallan])
+
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -95,20 +106,16 @@ const GRNList = () => {
 
     const makeBtnFunc = (list = []) => {
         const id = list[0].id
-        const Customer = list[0].Customer
-        history.push({
-            pathname: url.CHALLAN_LIST,
-            pageMode: mode.modeSTPsave
-        })
+        const customer = list[0].Customer
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Party: userParty(),
-            Customer: Customer,
+            Customer: customer,
             GRN: id,
         });
 
-        dispatch(makechallan(jsonBody))
+        dispatch(makeChallanAction({jsonBody, pageMode:mode.modeSTPsave, path:url.CHALLAN_LIST}))
     };
 
     function goButtonHandler() {
