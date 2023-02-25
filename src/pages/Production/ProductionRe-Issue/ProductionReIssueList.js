@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom"
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";

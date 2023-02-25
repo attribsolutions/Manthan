@@ -5,7 +5,7 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import Order from "../../Purchase/Order/Order";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import {

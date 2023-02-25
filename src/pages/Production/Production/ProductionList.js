@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
