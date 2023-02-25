@@ -164,7 +164,7 @@ const ItemsMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -453,7 +453,12 @@ const ItemsMaster = (props) => {
     }
 
     const CategoryType_Handler = (event) => {
-        dropDownValidation(event, "CategoryType")
+        dropDownValidation(event, "CategoryType");
+        setFormValue((i) => {
+            const a = { ...i };
+            a.Category = []
+            return { ...a }
+        })
         dispatch(get_Category_By_CategoryType_ForDropDownAPI(event.value))
     };
 
@@ -1076,7 +1081,7 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Category</Label>
                                                                         <Select
-                                                                            defaultValue={formValue.Category}
+                                                                          value={formValue.Category}
                                                                             isMulti={true}
                                                                             className="basic-multi-select"
                                                                             options={CategoryList_DropdownOptions}
@@ -1121,7 +1126,7 @@ const ItemsMaster = (props) => {
                                                                             styles={{
                                                                                 control: base => ({
                                                                                     ...base,
-                                                                                    border: inValidDrop.Category ? '1px solid red' : '',
+                                                                                    border: inValidDrop.BrandName ? '1px solid red' : '',
 
                                                                                 })
                                                                             }}
