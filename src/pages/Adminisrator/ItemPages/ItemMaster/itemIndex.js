@@ -1166,7 +1166,7 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
                                                                     <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Shelf Life</Label>
+                                                                        <Label htmlFor="validationCustom01">Shelf Life<samp className="text-secondary">/Day</samp></Label>
                                                                         <Input
                                                                             type="text"
                                                                             rows="1"
