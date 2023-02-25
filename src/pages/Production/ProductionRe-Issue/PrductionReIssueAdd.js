@@ -25,7 +25,7 @@ import { Change_Button, Go_Button, SaveButton }
 import {
     postBOMSuccess,
     updateBOMListSuccess
-} from "../../../store/Purchase/BOMRedux/action";
+} from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty }
     from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {

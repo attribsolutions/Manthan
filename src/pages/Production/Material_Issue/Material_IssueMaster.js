@@ -26,7 +26,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     postBOMSuccess,
     updateBOMListSuccess
-} from "../../../store/Purchase/BOMRedux/action";
+} from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";

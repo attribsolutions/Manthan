@@ -24,7 +24,7 @@ import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     updateBOMListSuccess
-} from "../../../store/Purchase/BOMRedux/action";
+} from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";

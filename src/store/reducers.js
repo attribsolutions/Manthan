@@ -8,9 +8,9 @@ import Login from "./auth/login/reducer"
 import Account from "./auth/register/reducer"
 import ForgetPassword from "./auth/forgetpwd/reducer"
 import Profile from "./auth/profile/reducer"
-
-//Administrator
 import SpinnerReducer from './Utilites/Spinner/reducer'
+
+//  *********************** Administrator ***********************
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
 import CommonError from './Utilites/CommonError/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
@@ -21,8 +21,7 @@ import PdfReportReducers from './Utilites/PdfReport/reducer'
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
 import H_Pages from './Administrator/HPagesRedux/reducer'
-import OrderReducer from "./Purchase/OrderPageRedux/reducer"
-import GRNReducer from "./Purchase/GRNRedux/reducer"
+
 import SupplierReducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
@@ -48,17 +47,27 @@ import GeneralReducer from "./Administrator/GeneralRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
-import BOMReducer from "./Purchase/BOMRedux/reducer"
-import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
-import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
-import ProductionReducer from "./Purchase/ProductionRedux/reducer"
+
+//  *********************** Purchase ***********************
+import OrderReducer from "./Purchase/OrderPageRedux/reducer"
+
+//  *********************** Production ***********************
+import BOMReducer from "./Production/BOMRedux/reducer"
+import WorkOrderReducer from "./Production/WorkOrder/reducer"
+import MaterialIssueReducer from "./Production/Matrial_Issue/reducer"
+import ProductionReducer from "./Production/ProductionRedux/reducer"
 import ProductionReIssueReducer from "./Production/ProductionReissueRedux/reducer"
-import InvoiceReducer from "./Sales/Invoice/reducer"
+
+//  *********************** Inventory ***********************
+import GRNReducer from "./Inventory/GRNRedux/reducer"
 import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 
-import IBOrderReducer from "./Inter Branch/IBOrderRedux/reducer"
+//  *********************** Sale ***********************
+import InvoiceReducer from "./Sales/Invoice/reducer"
+
+//  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
-import IBInvoiceReducer from "./Inter Branch/IB_Invoice_Redux/reducer"
+
 
 const rootReducer = combineReducers({
   Layout,
@@ -123,10 +132,10 @@ const rootReducer = combineReducers({
   MaterialIssueReducer,
   ProductionReducer,
   ProductionReIssueReducer,
-  IBOrderReducer,
+  // IBOrderReducer,
   InvoiceReducer,
   InwardReducer,
-  IBInvoiceReducer,
+  // IBInvoiceReducer,
   ChallanReducer
 })
 export default rootReducer

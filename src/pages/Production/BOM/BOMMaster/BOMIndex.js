@@ -30,7 +30,7 @@ import {
     postBOMSuccess,
     updateBOMList,
     updateBOMListSuccess
-} from "../../../../store/Purchase/BOMRedux/action";
+} from "../../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";

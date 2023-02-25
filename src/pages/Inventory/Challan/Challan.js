@@ -1,18 +1,15 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Button,
     Col,
     FormGroup,
-    Input,
     Label,
     Row,
     Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -22,10 +19,8 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import {
-    updateBOMListSuccess
-} from "../../../store/Purchase/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+import { breadcrumbReturn, convertDatefunc, currentDate, GoBtnDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -33,13 +28,8 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-// import { editInvoiceListSuccess, GoButton_post_For_Invoice, GoButton_post_For_Invoice_Success, postInvoiceMasterSuccess } from "../../../store/Sales/Invoice/action";
-import { GetCustomer, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-// import { postInvoiceMaster } from "../../../store/Sales/Invoice/action";
-import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { challanitemdropdown, GoButtonForchallanAdd, GoButtonForchallanAddSuccess, Postchallan } from "../../../store/Inventory/ChallanRedux/actions";
-
-// import "./css.css"
 
 const Challan = (props) => {
 
@@ -451,7 +441,7 @@ const Challan = (props) => {
                                         <samp >BaseUnitQuantity</samp>
                                     </div>
                                     {/* <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp> */}
-                                    </th>
+                                </th>
                                 <th className="" >
                                     <div>
                                         <samp >Rate</samp>
@@ -739,163 +729,163 @@ const Challan = (props) => {
         //         return
         //     };
 
-            // GoButton[0].StockDetails.forEach((ele) => {
-            //     if (ele.Qty > 0) {
-            //         var demo = {
-            //             Rate: ele.Rate,
-            //             GSTPercentage: ele.GST,
-            //             Quantity: ele.Qty
-            //         }
-            //         const basicAmt = parseFloat(basicAmount(demo))
-            //         const cgstAmt = (GstAmount(demo))
-            //         const amount = Amount(demo)
-            //         grand_total = grand_total + Number(amount)
-debugger
-                    const jsonBody = JSON.stringify({
+        // GoButton[0].StockDetails.forEach((ele) => {
+        //     if (ele.Qty > 0) {
+        //         var demo = {
+        //             Rate: ele.Rate,
+        //             GSTPercentage: ele.GST,
+        //             Quantity: ele.Qty
+        //         }
+        //         const basicAmt = parseFloat(basicAmount(demo))
+        //         const cgstAmt = (GstAmount(demo))
+        //         const amount = Amount(demo)
+        //         grand_total = grand_total + Number(amount)
+        debugger
+        const jsonBody = JSON.stringify({
 
-                        GRN: "",
-                        ChallanDate: values.InvoiceDate,
-                        Party: userParty(),
-                        GrandTotal: "240.00",
-                        Customer: 28,
-                        CreatedBy: 15,
-                        UpdatedBy: 15,
-                        RoundOffAmount: "",
-                        ChallanItems: [
-                            {
-                                Item:values.Item.value,
-                                Quantity: "20.000",
-                                Unit: 817,
-                                BaseUnitQuantity: "10.000",
-                                MRP: null,
-                                ReferenceRate: "100.00",
-                                Rate: "100.00",
-                                BasicAmount: "2000.00",
-                                TaxType: "GST",
-                                GST: 53,
-                                GSTPercentage: "12.00",
-                                HSNCode: "1208",
-                                GSTAmount: "240.00",
-                                Amount: "2240.00",
-                                DiscountType: "0",
-                                Discount: "0.00",
-                                DiscountAmount: "0.00",
-                                CGST: "120.00",
-                                SGST: "120.00",
-                                IGST: "0.00",
-                                CGSTPercentage: "6.00",
-                                SGSTPercentage: "6.00",
-                                IGSTPercentage: "0.00",
-                                BatchDate: "2023-02-17",
-                                BatchCode: "0",
-                                SystemBatchDate: "2023-02-17",
-                                SystemBatchCode: "20230217_55_4_0"
-                            }
-                        ],
-                        BatchWiseLiveStockGRNID: [
-                            {
-                                id: 727,
-                                Item:values.Item.value,
-                                Quantity: "20.000",
-                                BaseUnitQuantity: "10.000",
-                                LiveBatche: 146,
-                                GRN: 526,
-                                Party:userParty()
-                            }
-                        ]
-                     
-                    });
-
-                    if (pageMode === mode.edit) {
-                    }
-            
-                    else {
-            
-                        // saveDissable({ id: saveBtnid, state: true })
-                        dispatch(Postchallan(jsonBody, saveBtnid));
-                    }
-
-                
-
-                    // invoiceItems.push({
-                    //     Item: index.Item,
-                    //     Unit: index.UnitDrop.value,
-                    //     BatchCode: ele.BatchCode,
-                    //     Quantity: ele.Qty,
-                    //     BatchDate: ele.BatchDate,
-                    //     BatchID: ele.id,
-                    //     BaseUnitQuantity: ele.BaseUnitQuantity,
-                    //     LiveBatch: ele.LiveBatche,
-                    //     MRP: ele.LiveBatcheMRPID,
-                    //     Rate: ele.Rate,
-                    //     BasicAmount: basicAmt.toFixed(2),
-                    //     GSTAmount: cgstAmt.toFixed(2),
-                    //     GST: ele.LiveBatcheGSTID,
-                    //     CGST: (cgstAmt / 2).toFixed(2),
-                    //     SGST: (cgstAmt / 2).toFixed(2),
-                    //     IGST: 0,
-                    //     GSTPercentage: ele.GST,
-                    //     CGSTPercentage: (ele.GST / 2),
-                    //     SGSTPercentage: (ele.GST / 2),
-                    //     IGSTPercentage: 0,
-                    //     Amount: amount,
-                    //     TaxType: 'GST',
-                    //     DiscountType: "",
-                    //     Discount: "0",
-                    //     DiscountAmount: "0",
-                    // })
+            GRN: "",
+            ChallanDate: values.InvoiceDate,
+            Party: userParty(),
+            GrandTotal: "240.00",
+            Customer: 28,
+            CreatedBy: 15,
+            UpdatedBy: 15,
+            RoundOffAmount: "",
+            ChallanItems: [
+                {
+                    Item: values.Item.value,
+                    Quantity: "20.000",
+                    Unit: 817,
+                    BaseUnitQuantity: "10.000",
+                    MRP: null,
+                    ReferenceRate: "100.00",
+                    Rate: "100.00",
+                    BasicAmount: "2000.00",
+                    TaxType: "GST",
+                    GST: 53,
+                    GSTPercentage: "12.00",
+                    HSNCode: "1208",
+                    GSTAmount: "240.00",
+                    Amount: "2240.00",
+                    DiscountType: "0",
+                    Discount: "0.00",
+                    DiscountAmount: "0.00",
+                    CGST: "120.00",
+                    SGST: "120.00",
+                    IGST: "0.00",
+                    CGSTPercentage: "6.00",
+                    SGSTPercentage: "6.00",
+                    IGSTPercentage: "0.00",
+                    BatchDate: "2023-02-17",
+                    BatchCode: "0",
+                    SystemBatchDate: "2023-02-17",
+                    SystemBatchCode: "20230217_55_4_0"
                 }
-            // })
+            ],
+            BatchWiseLiveStockGRNID: [
+                {
+                    id: 727,
+                    Item: values.Item.value,
+                    Quantity: "20.000",
+                    BaseUnitQuantity: "10.000",
+                    LiveBatche: 146,
+                    GRN: 526,
+                    Party: userParty()
+                }
+            ]
+
+        });
+
+        if (pageMode === mode.edit) {
+        }
+
+        else {
+
+            // saveDissable({ id: saveBtnid, state: true })
+            dispatch(Postchallan(jsonBody, saveBtnid));
+        }
+
+
+
+        // invoiceItems.push({
+        //     Item: index.Item,
+        //     Unit: index.UnitDrop.value,
+        //     BatchCode: ele.BatchCode,
+        //     Quantity: ele.Qty,
+        //     BatchDate: ele.BatchDate,
+        //     BatchID: ele.id,
+        //     BaseUnitQuantity: ele.BaseUnitQuantity,
+        //     LiveBatch: ele.LiveBatche,
+        //     MRP: ele.LiveBatcheMRPID,
+        //     Rate: ele.Rate,
+        //     BasicAmount: basicAmt.toFixed(2),
+        //     GSTAmount: cgstAmt.toFixed(2),
+        //     GST: ele.LiveBatcheGSTID,
+        //     CGST: (cgstAmt / 2).toFixed(2),
+        //     SGST: (cgstAmt / 2).toFixed(2),
+        //     IGST: 0,
+        //     GSTPercentage: ele.GST,
+        //     CGSTPercentage: (ele.GST / 2),
+        //     SGSTPercentage: (ele.GST / 2),
+        //     IGSTPercentage: 0,
+        //     Amount: amount,
+        //     TaxType: 'GST',
+        //     DiscountType: "",
+        //     Discount: "0",
+        //     DiscountAmount: "0",
         // })
+    }
+    // })
+    // })
 
-        // if (formValid(state, setState)) {
-        // if (validMsg.length > 0) {
-        //     dispatch(AlertState({
-        //         Type: 4,
-        //         Status: true,
-        //         Message: JSON.stringify(validMsg),
-        //         RedirectPath: false,
-        //         AfterResponseAction: false
-        //     }));
-        //     return
-        // }
-
-
-
-        // const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        //     InvoiceDate: values.InvoiceDate,
-        //     InvoiceItems: invoiceItems,
-        //     // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
-        // });
-
-        // const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        //     IBChallanDate: values.InvoiceDate,
-        //     IBChallanItems: invoiceItems,
-        //     // IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
-        // });
-
-        // const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        //     CustomerGSTTin: '41',
-        //     GrandTotal: Math.round(grand_total),
-        //     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-        //     Customer: values.Customer.value,
-        //     Party: userParty(),
-        //     CreatedBy: createdBy(),
-        //     UpdatedBy: createdBy(),
-        // });
+    // if (formValid(state, setState)) {
+    // if (validMsg.length > 0) {
+    //     dispatch(AlertState({
+    //         Type: 4,
+    //         Status: true,
+    //         Message: JSON.stringify(validMsg),
+    //         RedirectPath: false,
+    //         AfterResponseAction: false
+    //     }));
+    //     return
+    // }
 
 
-       
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        // if (pageMode === mode.edit) {
-        // }
+    // const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //     InvoiceDate: values.InvoiceDate,
+    //     InvoiceItems: invoiceItems,
+    //     // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
+    // });
 
-        // else {
+    // const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //     IBChallanDate: values.InvoiceDate,
+    //     IBChallanItems: invoiceItems,
+    //     // IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
+    // });
 
-        //     saveDissable({ id: saveBtnid, state: true })
-        //     dispatch(Postchallan(jsonBody, saveBtnid));
-        // }
+    // const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //     CustomerGSTTin: '41',
+    //     GrandTotal: Math.round(grand_total),
+    //     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+    //     Customer: values.Customer.value,
+    //     Party: userParty(),
+    //     CreatedBy: createdBy(),
+    //     UpdatedBy: createdBy(),
+    // });
+
+
+
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // if (pageMode === mode.edit) {
+    // }
+
+    // else {
+
+    //     saveDissable({ id: saveBtnid, state: true })
+    //     dispatch(Postchallan(jsonBody, saveBtnid));
+    // }
 
     // }
 

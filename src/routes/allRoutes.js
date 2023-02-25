@@ -90,15 +90,19 @@ import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
 
 import GRNList from "../pages/Inventory/GRN/GRNList";
 import GRNAdd from "../pages/Inventory/GRN/GRNAdd";
+
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
-import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
-import BOMList from "../pages/Purchase/BOM/BOMList/BOMList";
-import WorkOrder from "../pages/Purchase/WorkOrder/WorkOrder";
-import WorkOrderList from "../pages/Purchase/WorkOrder/WorkOrderList";
-import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_IssueMaster";
-import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
+
+import BOMMaster from "../pages/Production/BOM/BOMMaster/BOMIndex";
+import BOMList from "../pages/Production/BOM/BOMList/BOMList";
+
+import WorkOrder from "../pages/Production/WorkOrder/WorkOrder";
+import WorkOrderList from "../pages/Production/WorkOrder/WorkOrderList";
+
+import MaterialIssueMaster from "../pages/Production/Material_Issue/Material_IssueMaster";
+import MaterialIssueList from "../pages/Production/Material_Issue/Material_Issue_List";
 
 import ProductionMaster from "../pages/Production/Production/ProductionMaster";
 import ProductionList from "../pages/Production/Production/ProductionList";
