@@ -10,13 +10,14 @@ import {
 import {
   OrderPage_Update_API,
   OrderPage_Delete_API,
-  OrderPage_Post_API,
+  OrderPage_Save_API_ForPO,
   OrderPage_GoButton_API,
   OrderList_get_Filter_API,
   OrderPage_Edit_API,
   IBOrderPage_GoButton_API,
   IBOrderList_get_Filter_API,
   GRN_STP_for_orderList_goBtn,
+  IBOrderPage_Save_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -62,9 +63,15 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
   } catch (error) { CommonConsole(error) }
 }
 
-function* saveOrder_GenFunc({ data }) {                  // Save  Order  Add Page by subPageMode 
+function* saveOrder_GenFunc({ jsonBody, subPageMode }) {
+
+  let response
   try {
-    const response = yield call(OrderPage_Post_API, data);
+    if (subPageMode === url.ORDER_3) {                   // Save  Order  Add Page by subPageMode 
+      response = yield call(IBOrderPage_Save_API, jsonBody);
+    } else {
+      response = yield call(OrderPage_Save_API_ForPO, jsonBody);
+    }
     yield put(postOrderSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -115,7 +122,7 @@ function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter b
     else if ((subPageMode === url.ORDER_LIST_3) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
-    else if ((subPageMode === url.ORDER_LIST_4) ) {
+    else if ((subPageMode === url.ORDER_LIST_4)) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     newList = yield response.Data.map((i) => {

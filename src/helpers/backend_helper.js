@@ -370,7 +370,7 @@ export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown 
 
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
 export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
-export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
+export const OrderPage_Save_API_ForPO = (data) => post(url.ORDER_PAGE_API, data)//get api
 export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
 export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
@@ -464,13 +464,13 @@ export const Invoice_2_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_2_SAVE}/
 
 // IBOrder
 export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//go button api
-export const IBOrderPage_Post_API = (data) => post(url.POST_API_FOR_IBORDER, data)//post api
+export const IBOrderPage_Save_API = (data) => post(url.SAVE_API_FOR_IBORDER, data)//post api
 export const IBOrderList_get_Filter_API = (filters) => post(url.IBORDER_LiST_BY_FILTERS, filters)//list page
 
 export const IB_Division_DROP_API = (data) => post(url.IB_DIVISION_DROPDOWN, data)//dropdown api
 export const IBOrderPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//edit
-export const IBOrderPage_Delete_API = (id) => del(`${url.POST_API_FOR_IBORDER}/${id}`)//delete
-export const IBOrderPage_Update_API = (data, id) => put(`${url.POST_API_FOR_IBORDER}/${id}`, data)//update
+export const IBOrderPage_Delete_API = (id) => del(`${url.SAVE_API_FOR_IBORDER}/${id}`)//delete
+export const IBOrderPage_Update_API = (data, id) => put(`${url.SAVE_API_FOR_IBORDER}/${id}`, data)//update
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
