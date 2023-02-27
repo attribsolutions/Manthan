@@ -1,7 +1,6 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { InvoiceFakeData } from "../../pages/Order/InvioceFakedata";
 import { Data } from "./DemoData";
 
 var pageHeder = function (doc,data) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import {
     Col,
@@ -11,7 +11,6 @@ import {
     Table
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -19,10 +18,11 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
+import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode";
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import * as mode from "../../../routes/PageMode";
 
 const Inward = (props) => {
 
@@ -42,13 +42,7 @@ const Inward = (props) => {
     }));
 
     const { InvoiceItems = [], PartyName = '', InvoiceNumber = '', id = '' } = InwardData
-    debugger
-    // InvoiceNumber
-    // FullInvoiceNumber
-    // InvoiceItems
-    // InvoiceDate
-
-    // userAccess useEffect
+   
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;

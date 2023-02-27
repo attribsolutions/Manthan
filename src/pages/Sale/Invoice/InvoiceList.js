@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import {
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import {
     BreadcrumbShowCountlabel,
-    CommonBreadcrumbDetails,
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
@@ -30,15 +29,12 @@ import * as mode from "../../../routes/PageMode"
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
-import Invoice from "./Invoice";
 import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     editInvoiceList,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
-
-import "./css.css"
 
 const InvoiceList = () => {
 
@@ -102,7 +98,7 @@ const InvoiceList = () => {
         else if (subPageMode === url.INVOICE_LIST_2) {
             page_Id = pageId.INVOICE_LIST_2;
             masterPath = url.INVOICE_2
-            newBtnPath = url.ORDER_LIST_3
+            newBtnPath = url.IB_INVOICE_STP
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
@@ -187,7 +183,6 @@ const InvoiceList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={page_Id} /> */}
 
             <div className="page-content">
 

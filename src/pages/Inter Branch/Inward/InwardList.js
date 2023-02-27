@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import Select from "react-select";
+import {  Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import {
-    BOMlistfilters,
-    deleteBOMId,
-    deleteBOMIdSuccess,
-    editBOMList,
-    getBOMListPage,
-    updateBOMListSuccess
-} from "../../../store/Purchase/BOMRedux/action";
+
 import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import Inward from "./Inward";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import * as pageId from "../../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
-import { currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate,  userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import Select from "react-select";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 const InwardList = () => {
@@ -55,10 +48,10 @@ const InwardList = () => {
 
     const action = {
         getList: getInwardListPage,
-        editId: editBOMList,
+        editId: ()=>{},
         deleteId: deleteInwardId,
         postSucc: postMessage,
-        updateSucc: updateBOMListSuccess,
+        updateSucc: ()=>{},
         deleteSucc: deleteInwardIdSuccess
     }
 

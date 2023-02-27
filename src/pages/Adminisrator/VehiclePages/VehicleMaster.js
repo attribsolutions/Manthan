@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -343,7 +342,6 @@ const VehicleMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.VEHICLE} /> */}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

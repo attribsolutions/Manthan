@@ -5,7 +5,6 @@ import {
     GET_BRANDTAG_API_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
-    GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_DIVISION_FOR_DROPDOWN_SUCCESS,
     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
@@ -15,9 +14,7 @@ import {
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_PARTY_FOR_DROPDOWN_SUCCESS,
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
-    GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
-    POST_BRAND_NAME_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
@@ -32,17 +29,15 @@ const INIT_STATE = {
     updateMsg: { Status: false },
     ItemGroupList: [],
     BaseUnit: [],
-    CategoryType: [],
-    CategoryByCategoryType: [],
-    SubCategoryByCategoryType: { Data: [], key: null },
     ImageType: [],
     MRPType: [],
     Division: [],
     Party: [],
     PriceList: [],
     GroupList: [],
-    SubGroupList: [],
+    CategoryType: [],
     Category: [],
+    SubGroupList: [],
     ItemTagList: [],
     BrandTagList: [],
 
@@ -113,20 +108,16 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 CategoryType: action.payload,
+                Category:[]
             }
 
-        case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
-            return {
-                ...state,
-                CategoryByCategoryType: action.payload,
-            }
+        // case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
+        //     return {
+        //         ...state,
+        //         CategoryByCategoryType: action.payload,
+        //     }
 
-        case GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
-            return {
-                ...state,
-                SubCategoryByCategoryType: action.payload,
-            }
-
+     
         case GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,

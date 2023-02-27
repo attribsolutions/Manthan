@@ -513,10 +513,7 @@ const PageMaster = (props) => {
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"-70px" }}>
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE} /> */}
           <Container fluid>
-            {/* Render Breadcrumbs */}
-
             <AvForm
               id="mainForm"
               name="mainForm"

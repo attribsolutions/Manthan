@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
   deleteItemIdSuccess,
   editItemSuccess,
@@ -10,14 +9,12 @@ import {
   getItemGroup_ForDropDownSuccess,
   getItemListSuccess, getItemtagSuccess, get_CategoryTypes_ForDropDown_Success,
   get_Category_By_CategoryType_ForDropDownAPI_Success,
-  get_Category_By_CategoryType_ForDropDown_Success,
   get_Division_ForDropDown_Success,
   get_Group_By_GroupType_ForDropDown_Success,
   get_ImageType_ForDropDown_Success,
   get_MRPTypes_ForDropDown_Success,
   get_Party_ForDropDown_Success,
   get_PriceList_ForDropDown_Success,
-  get_Sub_Category_By_CategoryType_ForDropDown_Success,
   get_Sub_Group_By_Group_ForDropDown_Success,
   PostItemDataSuccess,
   updateItemSuccess,
@@ -26,7 +23,6 @@ import {
   DELETE_ITEM_ID, EDIT_ITEM_ID,
   GET_BASEUNIT_FOR_DROPDOWN,
   GET_CATEGORYTYPE_FOR_DROPDOWN,
-  GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
   GET_DIVISION_FOR_DROPDOWN,
   GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
@@ -37,7 +33,6 @@ import {
   GET_MRPTYPE_FOR_DROPDOWN,
   GET_PARTY_FOR_DROPDOWN,
   GET_PRICE_LIST_FOR_DROPDOWN,
-  GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
   POST_ITEM_DATA,
   UPDATE_ITEM_ID
@@ -156,28 +151,9 @@ function* CategoryType_DropDown_GenratorFunction() {
 }
 
 
-// Category  API dependent on CategoryType api
-function* Category_DropDown_GenratorFunction({ id, key }) {
-  try {
-    const response = yield call(apiCall.Category_By_CategoryTypes_DropDown_API, id);
-    yield put(get_Category_By_CategoryType_ForDropDown_Success({ Data: response.Data, key: key }));
-  } catch (error) {
-    console.log("Category saga Page error", error);
-  }
-}
 
-//Sub Category API dependent on Category api 
-function* SubCategory_DropDown_GenratorFunction({ id, key }) {
-  try {
-    const response = yield call(apiCall.SubCategory_By_CategoryTypes_DropDown_API, id);
-    yield put(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: response.Data, key: key }));
-  } catch (error) {
-    console.log("Sub-Category saga page error", error);
-  }
-}
 
 function* ImageType_DropDown_GenratorFunction() {
-
   try {
     const response = yield call(apiCall.ImageType_Get_DropDown_API);
     yield put(get_ImageType_ForDropDown_Success(response.Data));
@@ -279,8 +255,7 @@ function* ItemsMastersSaga() {
   yield takeEvery(DELETE_ITEM_ID, Delete_Items_GenratorFunction);
   yield takeEvery(UPDATE_ITEM_ID, Update_Items_GenratorFunction);
   yield takeEvery(GET_CATEGORYTYPE_FOR_DROPDOWN, CategoryType_DropDown_GenratorFunction);
-  yield takeEvery(GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, Category_DropDown_GenratorFunction);
-  yield takeEvery(GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, SubCategory_DropDown_GenratorFunction);
+
   yield takeEvery(GET_BASEUNIT_FOR_DROPDOWN, BaseUnit_DropDown_GenratorFunction);
   yield takeEvery(GET_IMAGETYPE_FOR_DROPDOWN, ImageType_DropDown_GenratorFunction);
   yield takeEvery(GET_MRPTYPE_FOR_DROPDOWN, MRPType_DropDown_GenratorFunction);

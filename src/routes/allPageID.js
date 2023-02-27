@@ -97,6 +97,13 @@ export const ORDER_LIST_1 = 54
 export const ORDER_2 = 117
 export const ORDER_LIST_2 = 118
 
+
+export const ORDER_3 = 126
+export const ORDER_LIST_3 = 127
+
+export const ORDER_4 = 114
+export const ORDER_LIST_4 = 143
+
 export const GRN_ADD = 55
 export const GRN_lIST = 56
 export const GRN_STP = 124
@@ -124,8 +131,7 @@ export const INVOICE_LIST_1 = 122
 
 //******************************* Inter Branch ************************************//
 
-export const ORDER_3 = 126
-export const ORDER_LIST_3 = 127
+
 
 export const INWARD = 128
 export const INWARD_LIST = 129

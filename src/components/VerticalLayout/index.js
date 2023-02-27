@@ -18,17 +18,13 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
+import  BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
-import BreadcrumbFix from "./BradcrumbFix1";
-import BreadcrumbNew from "../Common/BreadcrumbNew";
-import * as pageId from "../../../src/routes/allPageID"
 import { useHistory } from "react-router-dom";
-import CommonListPage from "../Common/ComponentRelatedCommonFile/CommonMasterListPage";
 
 const Layout = props => {
   const dispatch = useDispatch();
   const history = useHistory()
-
 
   const {
     isPreloader,

@@ -20,7 +20,6 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AlertState } from "../../../store/actions";
@@ -36,7 +35,6 @@ import {
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PriceMaster = (props) => {
@@ -47,7 +45,6 @@ const PriceMaster = (props) => {
     let editDataGatingFromList = props.state;
 
     //SetState  Edit data Geting From Modules List component
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
 
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
@@ -350,7 +347,6 @@ const PriceMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE }/> */}
 
                 <Container fluid>
                     <Card className="text-black">

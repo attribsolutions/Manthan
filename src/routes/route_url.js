@@ -97,6 +97,9 @@ export const ORDER_LIST_1 = "/OrderList_1"
 export const ORDER_2 = "/Order_2"
 export const ORDER_LIST_2 = "/OrderList_2"
 
+export const ORDER_4 = '/Order_4'
+export const ORDER_LIST_4 = '/OrderList_4'
+
 //******************************* Inventory Module ************************************//
 
 export const GRN_STP = "/GRN_STP"

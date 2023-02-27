@@ -232,7 +232,7 @@ export const PRODUCTION_REIISUE_LIST_FILTER = '/ProductionReIsssueFilter'
 // Inter Branch Order
 export const GO_BUTTON_POST_API_FOR_IBORDER = '/InterBranchesItems'
 export const IB_DIVISION_DROPDOWN = '/InterBranches'
-export const POST_API_FOR_IBORDER = '/InterBranchesOrder'
+export const SAVE_API_FOR_IBORDER = '/InterBranchesOrder'
 export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 
 // Inward

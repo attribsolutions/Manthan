@@ -16,7 +16,7 @@ import {
   saveHPagesSuccess,
   updateHPagesSuccess,
 } from "../../../store/Administrator/HPagesRedux/actions";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+
 import HPageMaster from "./PageMaster";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";

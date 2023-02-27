@@ -24,7 +24,7 @@ import {
 } from "./actionType";
 
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {
@@ -63,7 +63,7 @@ function* OrderType_GenFunc() {
   try {
     const response = yield call(get_OrderType_Api);
     yield put(getOrderTypeSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* getVendorGenFunc() {
@@ -71,7 +71,7 @@ function* getVendorGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });
     yield put(GetVenderSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* getSupplierGenFunc() {
@@ -79,14 +79,14 @@ function* getSupplierGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });
     yield put(getSupplierSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* getCustomerGenFunc() {
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     yield put(GetCustomerSuccess(response.Data));
-  } catch (error) { }
+  } catch (error) {CommonConsole(error) }
 }
 
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
@@ -101,6 +101,9 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     }
     else if ((subPageMode === url.ORDER_3) || (subPageMode === url.ORDER_LIST_3)) {
       response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });//divisions mode 2
+    }
+    else if ((subPageMode === url.ORDER_4) || (subPageMode === url.ORDER_LIST_4)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });//divisions mode 2
     }
     else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });

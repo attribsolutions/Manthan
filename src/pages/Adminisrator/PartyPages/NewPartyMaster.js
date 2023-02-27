@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react"
 import MetaTags from "react-meta-tags"
 import './partymaster.scss'
 import {
-    Button,
     Card,
     CardBody,
     CardHeader,
@@ -17,14 +16,11 @@ import {
     NavLink,
     Row,
     TabContent,
-    Table,
     TabPane,
 } from "reactstrap"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action"
@@ -41,7 +37,6 @@ import {
 } from "../../../store/Administrator/PartyRedux/action"
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     onChangeSelect,
     onChangeText,
@@ -54,11 +49,6 @@ import { PARTY_lIST } from "../../../routes/route_url"
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
-    let pageModeProps = props.pageMode;
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
@@ -348,13 +338,6 @@ const PartyMaster = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            // dispatch(postPartyDataSuccess({ Status: false }))
-            // setCompanyList_dropdown_Select('')
-            // setPartyType_dropdown_Select('')
-            // setPriceList_dropdown_Select('')
-            // setDistrict_dropdown_Select('')
-            // setState_DropDown_select('')
-            // setMKupMkdown_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -522,9 +505,7 @@ const PartyMaster = (props) => {
                     </MetaTags>
                     <Container fluid>
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
-                            {/* Render Breadcrumbs */}
-                            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
-
+                            
                             <Row>
 
                                 <Col lg={12}>

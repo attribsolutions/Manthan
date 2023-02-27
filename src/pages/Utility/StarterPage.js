@@ -2,8 +2,6 @@ import React from "react";
 import MetaTags from 'react-meta-tags';
 import { Container } from "reactstrap";
 
-//Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const PagesStarter = () => {
     return (
@@ -13,8 +11,6 @@ const PagesStarter = () => {
                     <title>Starter Page | Minia - React Admin & Dashboard Template</title>
                 </MetaTags>
                 <Container fluid>
-                    {/* Render Breadcrumbs */}
-                    <Breadcrumbs title="Pages" breadcrumbItem="Starter Page" />
                 </Container>
             </div>
         </React.Fragment>

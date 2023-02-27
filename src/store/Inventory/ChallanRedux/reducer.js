@@ -2,11 +2,12 @@ import { currentDate } from "../../../components/Common/ComponentRelatedCommonFi
 import {
   CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
-  GET_CHALLAN_LIST_PAGE_SUCCESS,
+  CHALLAN_LIST_FOR_LIST_PAGE_SUCCESS,
   GO_BUTTON_CHALLAN_POST_API_SUCCESS,
   GO_BUTTON_FOR_CHALLAN_ADD_SUCCESS,
-  POST_ITEM_CHALLAN_PAGE_SUCCESS,
-  SET_CHALLAN_LIST_FILTERS,
+  ITEM_DROPDOWN_CHALLAN_SUCCESS,
+  CHALLAN_LIST_PAGE_FILTERS_PARAMETER,
+  MAKE_CHALLAN_ACTION_SUCCESS,
 
 } from "./actionType"
 
@@ -22,6 +23,7 @@ const INIT_STATE = {
   GoButton:[],
   challanitems:[],
   postMsg: { Status: false },
+  makeChallan:{Status:false}
 
 
 }
@@ -39,33 +41,40 @@ const ChallanReducer = (state = INIT_STATE, action) => {
           ...state,
           gobutton_Add: action.payload,
         }
-    case POST_ITEM_CHALLAN_PAGE_SUCCESS:
+
+    case ITEM_DROPDOWN_CHALLAN_SUCCESS:
       return {
         ...state,
         challanitems: action.payload,
       }
 
-    case SET_CHALLAN_LIST_FILTERS:
+    case CHALLAN_LIST_PAGE_FILTERS_PARAMETER: // challan LidtPage  (filters_paramerter)
       return {
         ...state,
         ChallanlistFilter: action.payload,
       }
-    case GET_CHALLAN_LIST_PAGE_SUCCESS:
+    case CHALLAN_LIST_FOR_LIST_PAGE_SUCCESS: // challan List  by filters
       return {
         ...state,
         ChallanList:action.payload,
       }
 
-    case DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS:
+    case DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS://Delete challan
       return {
         ...state,
         deleteMsg: action.payload,
       }
-      case CHALLAN_POST_API_SUCCESS:
+      case CHALLAN_POST_API_SUCCESS://SAVE challan
       return {
         ...state,
         postMsg: action.payload,
       }
+   case MAKE_CHALLAN_ACTION_SUCCESS: //Make  challan
+      return {
+        ...state,
+        makeChallan: action.payload,
+      }
+      
     default:
       return state
   }

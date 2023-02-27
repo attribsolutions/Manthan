@@ -1,3 +1,5 @@
+import { CommonConsole } from "./listPageCommonButtons";
+
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
     let isValid = true;
 
@@ -120,23 +122,24 @@ export const formValChange = ({ event, state, setState }) => {
 export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
+    try {
+        fieldArr.forEach(ele => {
+            Object.keys(values).some(lab => {
+                if (lab === ele.ControlID) {
+                    isState.fieldLabel[lab] = ele.FieldLabel;
+                    isState.hasValid[lab].regExp = ele.RegularExpression;
+                    isState.hasValid[lab].inValidMsg = ele.InValidMsg;
+                    if (ele.IsCompulsory) {
+                        isState.required[lab] = true
+                    }
+                    return true
+                };
 
-    fieldArr.forEach(ele => {
-        Object.keys(values).some(lab => {
-            if (lab === ele.ControlID) {
-                isState.fieldLabel[lab] = ele.FieldLabel;
-                isState.hasValid[lab].regExp = ele.RegularExpression;
-                isState.hasValid[lab].inValidMsg = ele.InValidMsg;
-                if (ele.IsCompulsory) {
-                    isState.required[lab] = true
-                }
-                return true
-            };
-
+            });
         });
-    });
 
-    setState(isState)
+        setState(isState)
+    } catch (e) { CommonConsole(e) }
 }
 
 export function defaultSetValidAll({ state, setState, fieldArr }) {
@@ -178,7 +181,7 @@ export const initialFiledFunc = (field) => {
         obj.hasValid[label]["regExp"] = ""
         obj.hasValid[label]["inValidMsg"] = ""
         obj.hasValid[label]["valid"] = false;
-      
+
     })
     return obj
 }

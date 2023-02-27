@@ -18,8 +18,6 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { withRouter } from "react-router-dom"
 
-//Import Breadcrumb
-import Breadcrumb from "../../components/Common/Breadcrumb"
 
 import avatar from "../../assets/images/users/avatar-1.jpg"
 // actions
@@ -69,8 +67,6 @@ const UserProfile = props => {
           <title>Profile | Minia - React Admin & Dashboard Template</title>
         </MetaTags>
         <Container fluid>
-          {/* Render Breadcrumb */}
-          <Breadcrumb title="Minia" breadcrumbItem="Profile" />
 
           <Row>
             <Col lg="12">

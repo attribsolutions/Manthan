@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import {
     Card,
     CardBody,
@@ -143,7 +142,7 @@ const CategoryTypeMaster = (props) => {
                         <MetaTags>
                             <title>CategoryTypeMaster| FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        {/* <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

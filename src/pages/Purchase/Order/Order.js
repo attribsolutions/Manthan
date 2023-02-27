@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
@@ -28,7 +28,6 @@ import {
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
-import '../../Order/div.css'
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -40,7 +39,6 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import * as pageId from "../../../routes/allPageID"
-import { Post_Division_Type_API } from "../../../helpers/backend_helper";
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 
 let editVal = {}
@@ -745,12 +743,20 @@ const Order = (props) => {
 
             return
         }
-        const jsonBody = JSON.stringify({
+        const po_JsonBody = {
             OrderDate: orderdate,
+            OrderAmount: orderAmount,
+            OrderItem: itemArr,
+        }
+        const IB_JsonBody = {
+            DemandDate: orderdate,
+            DemandAmount: orderAmount,
+            DemandItem: itemArr,
+        }
+        const comm_jsonBody = {
             DeliveryDate: deliverydate,
             Customer: division,
             Supplier: supplier,
-            OrderAmount: orderAmount,
             Description: description,
             BillingAddress: billAddr.value,
             ShippingAddress: shippAddr.value,
@@ -764,9 +770,17 @@ const Order = (props) => {
             POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            OrderItem: itemArr,
             OrderTermsAndConditions: termsAndCondition
-        });
+        };
+
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.ORDER_3) {
+            jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
+        } else {
+            jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
+        }
+        // +*********************************
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
@@ -775,7 +789,7 @@ const Order = (props) => {
 
         } else {
 
-            dispatch(postOrder(jsonBody))
+            dispatch(postOrder(jsonBody, subPageMode))
         }
 
     }

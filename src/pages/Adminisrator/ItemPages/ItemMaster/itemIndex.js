@@ -35,7 +35,6 @@ import {
     get_PriceList_ForDropDown,
     postItemData,
     PostItemDataSuccess,
-    post_BrandName_dropdown,
     updateItemID,
     updateItemSuccess
 } from "../../../../store/Administrator/ItemsRedux/action";
@@ -48,10 +47,9 @@ import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
 import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import BreadcrumbNew from "../../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
-import { GeneralMasterSubType, PostGenerallist } from "../../../../store/Administrator/GeneralRedux/action";
+import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -166,7 +164,7 @@ const ItemsMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -310,7 +308,6 @@ const ItemsMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
         dispatch(getCategoryTypelist());
-        // dispatch(get_Category_By_CategoryType_ForDropDownAPI());
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
 
@@ -456,7 +453,12 @@ const ItemsMaster = (props) => {
     }
 
     const CategoryType_Handler = (event) => {
-        dropDownValidation(event, "CategoryType")
+        dropDownValidation(event, "CategoryType");
+        setFormValue((i) => {
+            const a = { ...i };
+            a.Category = []
+            return { ...a }
+        })
         dispatch(get_Category_By_CategoryType_ForDropDownAPI(event.value))
     };
 
@@ -1079,7 +1081,7 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Category</Label>
                                                                         <Select
-                                                                            defaultValue={formValue.Category}
+                                                                          value={formValue.Category}
                                                                             isMulti={true}
                                                                             className="basic-multi-select"
                                                                             options={CategoryList_DropdownOptions}
@@ -1124,7 +1126,7 @@ const ItemsMaster = (props) => {
                                                                             styles={{
                                                                                 control: base => ({
                                                                                     ...base,
-                                                                                    border: inValidDrop.Category ? '1px solid red' : '',
+                                                                                    border: inValidDrop.BrandName ? '1px solid red' : '',
 
                                                                                 })
                                                                             }}
@@ -1169,7 +1171,7 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
                                                                     <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Shelf Life</Label>
+                                                                        <Label htmlFor="validationCustom01">Shelf Life<samp className="text-secondary">/Day</samp></Label>
                                                                         <Input
                                                                             type="text"
                                                                             rows="1"
