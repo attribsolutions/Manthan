@@ -8,7 +8,9 @@ import {
     GO_BUTTON_FOR_INVOICE_ADD,
     GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
     INVOICE_SAVE_ADD_PAGE_ACTION,
-    INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS
+    INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
+    MAKE_IB_INVOICE_ACTION,
+    MAKE_IB_INVOICE_ACTION_SUCCESS
 } from "./actionType";
 
 
@@ -49,9 +51,9 @@ export const deleteInvoiceIdSuccess = (data) => ({
 
 
 // Go Button Post API for Invoice Master
-export const GoButtonForinvoiceAdd = (subPageMode, data, goBtnId) => ({
+export const GoButtonForinvoiceAdd = (body) => ({
     type: GO_BUTTON_FOR_INVOICE_ADD,
-    subPageMode, data, goBtnId
+   body,
 });
 
 export const GoButtonForinvoiceAddSuccess = (data) => ({
@@ -67,5 +69,17 @@ export const invoiceSaveAction = (subPageMode, data, saveBtnid) => ({
 
 export const invoiceSaveActionSuccess = (data) => ({
     type: INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
+    payload: data,
+});
+
+
+// post api
+export const makeIB_InvoiceAction = (body) => ({
+    type: MAKE_IB_INVOICE_ACTION,
+    body
+});
+
+export const makeIB_InvoiceActionSuccess = (data) => ({
+    type: MAKE_IB_INVOICE_ACTION_SUCCESS,
     payload: data,
 });
