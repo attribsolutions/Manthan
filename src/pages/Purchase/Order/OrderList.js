@@ -95,6 +95,13 @@ const OrderList = () => {
             masterPath = url.ORDER_3;
             newBtnPath = url.ORDER_3;
         }
+        else if (subPageMode === url.ORDER_LIST_4) {
+            page_Id = pageId.ORDER_LIST_4
+            masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+        }
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
             page_Mode = mode.modeSTPsave
@@ -106,7 +113,7 @@ const OrderList = () => {
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make GRN"
-        };
+        }
         dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName })
         setPageMode(page_Mode)

@@ -226,6 +226,9 @@ const userRoutes = [
   { path: path.ORDER_2, component: Order },
   { path: path.ORDER_LIST_2, component: OrderList },
 
+  { path: path.ORDER_4, component: Order },
+  { path: path.ORDER_LIST_4, component: OrderList },
+  
   //******************************* PRODUCTION  Module ************************************//
 
 

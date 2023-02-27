@@ -111,11 +111,12 @@ function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter b
     }
     else if (subPageMode === url.GRN_STP) {
       response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
-    } else if ((subPageMode === url.ORDER_LIST_3) || (subPageMode === url.IB_INVOICE_STP)) {
+    }
+    else if ((subPageMode === url.ORDER_LIST_3) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
-    else {
-      yield put(getOrderListPageSuccess([]))
+    else if ((subPageMode === url.ORDER_LIST_4) ) {
+      response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     newList = yield response.Data.map((i) => {
 

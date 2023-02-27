@@ -12,14 +12,13 @@ import giftBox from "../../assets/images/giftbox.png";
 
 //i18n
 import { withTranslation } from "react-i18next";
-import * as url from "../../routes/route_url";
 import * as urlRel from "../../routes/urlRalations";
 // MetisMenu
 import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { roleAceessAction, roleAceessActionSuccess, } from "../../store/actions";
+import { roleAceessAction,  } from "../../store/actions";
 import { userCompany, userDetails, userEmployeeID, userParty } from "../Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const SidebarContent = (props) => {
@@ -30,11 +29,9 @@ const SidebarContent = (props) => {
   ;
   const {
     RoleAccessData,
-    afterLoginUserDetails,
     RoleAccessUpdateData,
   } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
-    afterLoginUserDetails: state.Login.afterLoginUserDetails,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
   }));
 
@@ -88,7 +85,6 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    // debugger
 
     let pathName = props.location.pathname
     let userAcc = RoleAccessUpdateData.find((inx) => {
@@ -117,7 +113,7 @@ const SidebarContent = (props) => {
       }
     };
     initMenu();
-  }, [props.location.pathname, activateParentDropdown]);
+  }, [props.location.pathname, activateParentDropdown,RoleAccessUpdateData]);
 
   useEffect(() => {
     ref.current.recalculate();
@@ -148,34 +144,6 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-            {/* <li>
-              <Link to="/#" className="has-arrow">
-                <FeatherIcon icon="home" />
-                <span>{props.t("Menu2")}</span>
-              </Link> */}
-            {/* <ul className="sub-menu"> */}
-            {/* {RoleAccessData.find((item) => {
-              debugger
-              return (
-                <li >
-                  <Link to="/#" className="has-arrow">
-                    <FeatherIcon icon="grid" />
-                    <span>{props.t(item.ModuleName)}</span>
-                  </Link>
-                  <ul className="sub-menu">
-                    {item.ModuleData.map((index, j) => {
-                      if (index.RoleAccess_IsShowOnMenu === true) {
-                        return (
-                          <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}` }}>{props.t(index.Name)}</Link>
-                          </li>
-                        )
-                      }
-                    })}
-                  </ul>
-                </li>
-              )
-            })} */}
             {RoleAccessData.map((item) => {
               return (
                 <li >
@@ -198,8 +166,6 @@ const SidebarContent = (props) => {
               )
             })}
           </ul>
-          {/* </li> */}
-          {/* </ul> */}
         </div>
       </SimpleBar>
     </React.Fragment>

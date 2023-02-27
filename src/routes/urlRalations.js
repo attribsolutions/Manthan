@@ -104,9 +104,10 @@ export const Order_1 = url.ORDER_LIST_1
 export const OrderList_2 = url.ORDER_2
 export const Order_2 = url.ORDER_LIST_2
 
-export const GRNList = url.GRN_STP
-export const GRN = url.GRN_lIST
-export const GRN_STP = url.GRN_lIST
+export const OrderList_4 = url.ORDER_4
+export const Order_4 = url.ORDER_LIST_4
+
+//******************************* Production ************************************//
 
 export const BOMList = url.BIllOf_MATERIALS
 export const BOM = url.BIllOf_MATERIALS_LIST
@@ -118,12 +119,19 @@ export const MaterialIssueList = url.MATERIAL_ISSUE_STP
 export const MaterialIssue = url.MATERIAL_ISSUE_LIST
 export const MaterialIssue_Add_Mode_2 = url.MATERIAL_ISSUE_LIST
 
+export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
+export const ProductionReIssueList = url.PRODUCTION_REISSUE
+
 export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
-export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
-export const ProductionReIssueList = url.PRODUCTION_REISSUE
+//******************************* Inventory  ************************************//
+
+export const GRNList = url.GRN_STP
+export const GRN = url.GRN_lIST
+export const GRN_STP = url.GRN_lIST
+
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
 

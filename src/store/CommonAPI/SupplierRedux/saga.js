@@ -102,6 +102,9 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if ((subPageMode === url.ORDER_3) || (subPageMode === url.ORDER_LIST_3)) {
       response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });//divisions mode 2
     }
+    else if ((subPageMode === url.ORDER_4) || (subPageMode === url.ORDER_LIST_4)) {
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });//divisions mode 2
+    }
     else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     }
