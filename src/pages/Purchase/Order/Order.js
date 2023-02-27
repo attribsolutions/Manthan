@@ -743,12 +743,20 @@ const Order = (props) => {
 
             return
         }
-        const jsonBody = JSON.stringify({
+        const po_JsonBody = {
             OrderDate: orderdate,
+            OrderAmount: orderAmount,
+            OrderItem: itemArr,
+        }
+        const IB_JsonBody = {
+            DemandDate: orderdate,
+            DemandAmount: orderAmount,
+            DemandItem: itemArr,
+        }
+        const comm_jsonBody = {
             DeliveryDate: deliverydate,
             Customer: division,
             Supplier: supplier,
-            OrderAmount: orderAmount,
             Description: description,
             BillingAddress: billAddr.value,
             ShippingAddress: shippAddr.value,
@@ -762,9 +770,17 @@ const Order = (props) => {
             POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            OrderItem: itemArr,
             OrderTermsAndConditions: termsAndCondition
-        });
+        };
+
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.ORDER_3) {
+            jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
+        } else {
+            jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
+        }
+        // +*********************************
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
