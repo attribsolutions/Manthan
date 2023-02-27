@@ -173,14 +173,16 @@ function* gobutton_invoiceAdd_genFunc(action) {
     if (subPageMode === url.INVOICE_1) {
       response = yield call(Invoice_1_GoButton_API, data); // GO-Botton SO-invoice Add Page API
     }
-    else if (subPageMode === url.INVOICE_2) {
+    else if (subPageMode === url.INVOICE_2|| subPageMode === url.IB_INVOICE_STP) {
       response = yield call(Invoice_2_GoButton_API, data); // GO-Botton IB-invoice Add Page API
     }
+   
     yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
   } catch (e) {
 
   }
 }
+// MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
   // yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
   yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)

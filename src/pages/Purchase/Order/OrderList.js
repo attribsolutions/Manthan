@@ -30,6 +30,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
+import { GoButtonForinvoiceAdd } from "../../../store/Sales/Invoice/action";
 
 
 const OrderList = () => {
@@ -153,41 +154,56 @@ const OrderList = () => {
     }, [GRNitem])
 
     const makeBtnFunc = (list = []) => {
-
-        var isGRNSelect = ''
-        var challanNo = ''
-        const grnRef = []
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.hasSelect) {
-                    grnRef.push({
-                        Invoice: null,
-                        Order: ele.POType === "Challan" ? '' : ele.id,
-                        ChallanNo: ele.FullOrderNumber,
-                        Inward: false,
-                        Challan: ele.POType === "Challan" ? ele.id : ''
-                    });
-                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-                }
+        debugger
+        const obj = list[0]
+        if (subPageMode === url.IB_INVOICE_STP) {
+            const jsonBody = JSON.stringify({
+                FromDate: obj.preOrderDate,
+                Customer: obj.CustomerID,
+                Party: userParty(),
+                OrderIDs: obj.id
             });
+            dispatch(GoButtonForinvoiceAdd(subPageMode, jsonBody));
+        }
+        else {
+            var isGRNSelect = ''
+            var challanNo = ''
+            const grnRef = []
+            if (list.length > 0) {
+                list.forEach(ele => {
+                    if (ele.hasSelect) {
+                        grnRef.push({
+                            Invoice: null,
+                            Order: ele.POType === "Challan" ? '' : ele.id,
+                            ChallanNo: ele.FullOrderNumber,
+                            Inward: false,
+                            Challan: ele.POType === "Challan" ? ele.id : ''
+                        });
+                        isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                        challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                    }
+                });
 
-            if (isGRNSelect) {
+                if (isGRNSelect) {
 
-                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+                    isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                    challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
-                const jsonBody = JSON.stringify({
-                    OrderIDs: isGRNSelect,
-                    Mode: list[0].POType === "Challan" ? 2 : 1
-                })
+                    const jsonBody = JSON.stringify({
+                        OrderIDs: isGRNSelect,
+                        Mode: list[0].POType === "Challan" ? 2 : 1
+                    })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
-            } else {
-                alert("Please Select Order1")
+                } else {
+                    alert("Please Select Order1")
+                }
             }
         }
+
+
+
     }
 
     function editBodyfunc(rowData, btnMode) {
