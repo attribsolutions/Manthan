@@ -274,7 +274,7 @@ const Challan = (props) => {
 
                 return (
                     <>
-                        <div><samp id={`ItemName${index1.id}`}>{}</samp></div>
+                        <div><samp id={`ItemName${index1.id}`}>{values.Item.label}</samp></div>
                         {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
                             : <></>}
                     </>
