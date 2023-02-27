@@ -558,7 +558,7 @@ const Challan = (props) => {
             return
         } else {
             const jsonBody = JSON.stringify({
-                Party: values.Party.value,
+                Party: userParty(),
                 Item: values.Item.value
             });
             GoBtnDissable({ id: goBtnId, state: true })
