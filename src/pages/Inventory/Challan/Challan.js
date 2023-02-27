@@ -274,7 +274,7 @@ const Challan = (props) => {
 
                 return (
                     <>
-                        <div><samp id={`ItemName${index1.id}`}>{cellContent}</samp></div>
+                        <div><samp id={`ItemName${index1.id}`}>{}</samp></div>
                         {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
                             : <></>}
                     </>
@@ -409,14 +409,14 @@ const Challan = (props) => {
                                 : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
                         }
 
-                        <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
+                        {/* <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
                             style={{ display: showAllStockState ? "block" : "none" }}
                         >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
                                 style={{ position: "absolute", }}
                             // onClick={(e) => { showStockOnclick(index1, false) }}
                             ></i>
-                        </samp>
+                        </samp> */}
 
                     </div >
 
@@ -437,7 +437,7 @@ const Challan = (props) => {
                                 <th className="" >Batch Date</th>
                                 <th className="">
                                     <div>
-                                        <samp >BaseUnitQuantity</samp>
+                                        <samp >Quantity</samp>
                                     </div>
                                     {/* <samp >{`(${index1.StockTotal} ${index1.StockUnit})`} </samp> */}
                                 </th>
@@ -530,6 +530,7 @@ const Challan = (props) => {
         dispatch(GoButtonForChallanAddSuccess([]))
     };
     function itemOnChange(hasSelect, evn) {
+        debugger
         setState((i) => {
             const v1 = { ...i }
             v1.values.Item = hasSelect
@@ -938,7 +939,7 @@ const Challan = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                    <Col sm={2} className="mt-3">
+                                    <Col sm={2} className="mt-2">
                                         {pageMode === mode.defaultsave ?
                                             (GoButton.length === 0) ?
                                                 < Go_Button onClick={(e) => goButtonHandler()} />
@@ -957,7 +958,6 @@ const Challan = (props) => {
                                     keyField={"id"}
                                     data={GoButton}
                                     columns={pagesListColumns}
-
                                     search
                                 >
                                     {(toolkitProps) => (
