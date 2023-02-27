@@ -86,15 +86,7 @@ const Challan = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    useEffect(() => {
-
-        // dispatch(GetVenderSupplierCustomer(subPageMode))
-        // dispatch(GetCustomer())
-        // dispatch(commonPageFieldSuccess(null));
-        // dispatch(commonPageField(pageId.INVOICE_1))
-        // dispatch(GoButton_post_For_Invoice_Success([]))
-
-    }, []);
+    
 
     // userAccess useEffect
     useEffect(() => {
@@ -245,10 +237,6 @@ const Challan = (props) => {
         }
     }, [pageField]);
 
-    // useEffect(() => {
-    //     // showAllStockOnclick(showAllStockState)
-    // }, [showAllStockState]);
-
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -282,62 +270,7 @@ const Challan = (props) => {
             },
 
         },
-        // {//***************Quantity********************************************************************* */
-        //     text: "Quantity",
-        //     dataField: "",
-        //     headerFormatter: (cell, index1 = [], k) => {
-        //         return (
-        //             <div className="width-100">Quantity</div>)
-        //     },
-        //     formatter: (cellContent, user) => (
-        //         <div >
-        //             <Input type="text"
-        //                 disabled={pageMode === 'edit' ? true : false}
-        //                 id={`OrderQty${user.id}`}
-        //                 style={{ textAlign: "right" }}
-        //                 className=" width-100"
-        //                 key={user.id}
-        //                 autoComplete="off"
-        //                 defaultValue={user.Quantity}
-        //                 onChange={(event) => orderQtyOnChange(event, user)}
-        //             ></Input>
-        //             <samp className="mt-1">Order Qty:{user.OrderQty} {user.UnitName}</samp>
-        //         </div>
-
-        //     )
-        // },
-        // {//***************Unit Dropdown********************************************************************* */
-        //     text: "Unit",
-        //     dataField: "id",
-
-        //     headerFormatter: (cell, index1 = [], k) => {
-        //         return (
-        //             <div className="width-100" >Unit</div>)
-        //     },
-        //     formatter: (value, row, key) => {
-
-        //         return (
-        //             <Select
-        //                 classNamePrefix="select2-selection"
-        //                 id={"ddlUnit"}
-        //                 isDisabled={pageMode === 'edit' ? true : false}
-        //                 defaultValue={row.UnitDrop}
-        //                 // value={{value:row.Unit,label:row.UnitName}}
-        //                 className=" width-100"
-        //                 options={
-        //                     row.UnitDetails.map(i => ({
-        //                         label: i.UnitName,
-        //                         value: i.Unit,
-        //                         ConversionUnit: i.ConversionUnit,
-        //                         Unitlabel: i.Unitlabel
-        //                     }))
-        //                 }
-        //                 onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
-        //             >
-        //             </Select >
-        //         )
-        //     },
-        // },
+       
         {//***************StockDetails********************************************************************* */
 
             text: "Stock Details",
@@ -346,37 +279,6 @@ const Challan = (props) => {
 
                 return (
                     <div className="d-flex flex-content-start">
-                        {GoButton.length > 0 ? <div>
-                            <samp id="allplus-circle">
-                                <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
-                                    style={{
-                                        position: "",
-                                        display: showAllStockState ? "none" : "block"
-                                    }}
-                                    onClick={(e) => {
-                                        // setShowAllStockState(!showAllStockState)
-                                        // showAllStockOnclick(true) 
-                                    }}
-                                >
-                                </i>
-                            </samp>
-                            <samp id="allminus-circle"  >
-                                <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{
-                                        position: "",
-                                        // display: "none"
-                                        display: showAllStockState ? "block" : "none"
-                                    }}
-                                    onClick={(e) => {
-                                        // setShowAllStockState(!showAllStockState)
-                                        // showAllStockOnclick(false)
-                                    }}
-                                ></i>
-                            </samp>
-                        </div>
-                            : null
-                        }
-
                         <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
                             <samp > Stock Details</samp>
                         </div>
@@ -398,39 +300,15 @@ const Challan = (props) => {
                                             display: showAllStockState ? "none" : "block"
                                         }}
                                     >
-                                        {/* <i className=" mdi mdi-plus-circle-outline text-primary font-size-16"
-                                            style={{ position: "absolute", }}
-                                            onClick={(e) => { showStockOnclick(index1, true) }}>
-                                        </i> */}
                                         <samp style={{ fontWeight: "bold", textShadow: 1, marginLeft: "20px" }}>
                                             {`Total Stock:${index1.StockTotal}`}</samp>
                                     </samp>
                                 </>
                                 : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
                         }
-
-                        {/* <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
-                            style={{ display: showAllStockState ? "block" : "none" }}
-                        >
-                            <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                style={{ position: "absolute", }}
-                            // onClick={(e) => { showStockOnclick(index1, false) }}
-                            ></i>
-                        </samp> */}
-
                     </div >
-
-                    {/* <div id={`view${index1.id}`}
-                        style={{
-                            backgroundColor: "#b9be511a",
-                            display: showAllStockState ? "bolck" : "none"
-                        }}
-                    // style={{ display: showAllStockState ? "none" : "block" }}
-                    > */}
-
                     <Table className="table table-bordered table-responsive mb-1" >
                         <Thead  >
-
                             <tr className="" style={{ zIndex: -3 }}>
                                 <th className="">SystemBatchCode </th>
                                 <th className="" >BatchCode</th>
@@ -771,96 +649,12 @@ const Challan = (props) => {
 
         if (pageMode === mode.edit) {
         }
-
         else {
-
             // saveDissable({ id: saveBtnid, state: true })
             dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
         }
-
-
-
-        // invoiceItems.push({
-        //     Item: index.Item,
-        //     Unit: index.UnitDrop.value,
-        //     BatchCode: ele.BatchCode,
-        //     Quantity: ele.Qty,
-        //     BatchDate: ele.BatchDate,
-        //     BatchID: ele.id,
-        //     BaseUnitQuantity: ele.BaseUnitQuantity,
-        //     LiveBatch: ele.LiveBatche,
-        //     MRP: ele.LiveBatcheMRPID,
-        //     Rate: ele.Rate,
-        //     BasicAmount: basicAmt.toFixed(2),
-        //     GSTAmount: cgstAmt.toFixed(2),
-        //     GST: ele.LiveBatcheGSTID,
-        //     CGST: (cgstAmt / 2).toFixed(2),
-        //     SGST: (cgstAmt / 2).toFixed(2),
-        //     IGST: 0,
-        //     GSTPercentage: ele.GST,
-        //     CGSTPercentage: (ele.GST / 2),
-        //     SGSTPercentage: (ele.GST / 2),
-        //     IGSTPercentage: 0,
-        //     Amount: amount,
-        //     TaxType: 'GST',
-        //     DiscountType: "",
-        //     Discount: "0",
-        //     DiscountAmount: "0",
-        // })
     }
-    // })
-    // })
-
-    // if (formValid(state, setState)) {
-    // if (validMsg.length > 0) {
-    //     dispatch(AlertState({
-    //         Type: 4,
-    //         Status: true,
-    //         Message: JSON.stringify(validMsg),
-    //         RedirectPath: false,
-    //         AfterResponseAction: false
-    //     }));
-    //     return
-    // }
-
-
-
-    // const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //     InvoiceDate: values.InvoiceDate,
-    //     InvoiceItems: invoiceItems,
-    //     // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
-    // });
-
-    // const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //     IBChallanDate: values.InvoiceDate,
-    //     IBChallanItems: invoiceItems,
-    //     // IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
-    // });
-
-    // const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //     CustomerGSTTin: '41',
-    //     GrandTotal: Math.round(grand_total),
-    //     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-    //     Customer: values.Customer.value,
-    //     Party: userParty(),
-    //     CreatedBy: createdBy(),
-    //     UpdatedBy: createdBy(),
-    // });
-
-
-
-    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // if (pageMode === mode.edit) {
-    // }
-
-    // else {
-
-    //     saveDissable({ id: saveBtnid, state: true })
-    //     dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
-    // }
-
-    // }
+    
 
     if (!(userPageAccessState === '')) {
         return (
