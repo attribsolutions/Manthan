@@ -30,6 +30,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
+import { GoButtonForinvoiceAdd, makeIB_InvoiceAction, makeIB_InvoiceActionSuccess } from "../../../store/Sales/Invoice/action";
 
 
 const OrderList = () => {
@@ -47,6 +48,7 @@ const OrderList = () => {
             supplier: state.SupplierReducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
+            makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
             deleteMsg: state.OrderReducer.deleteMsg,
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -59,7 +61,7 @@ const OrderList = () => {
 
 
     const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, inOut = { value: 1, label: "IN-Order" } } = orderlistFilter;
-    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
+    const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
 
     const action = {
@@ -152,40 +154,68 @@ const OrderList = () => {
         }
     }, [GRNitem])
 
+    useEffect(() => {
+        debugger
+        if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
+
+            history.push({
+                pathname: makeIBInvoice.path,
+                page_Mode: makeIBInvoice.page_Mode,
+            })
+        }
+    }, [makeIBInvoice])
+
+
     const makeBtnFunc = (list = []) => {
 
-        var isGRNSelect = ''
-        var challanNo = ''
-        const grnRef = []
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.hasSelect) {
-                    grnRef.push({
-                        Invoice: null,
-                        Order: ele.POType === "Challan" ? '' : ele.id,
-                        ChallanNo: ele.FullOrderNumber,
-                        Inward: false,
-                        Challan: ele.POType === "Challan" ? ele.id : ''
-                    });
-                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-                }
+        const obj = list[0]
+        if (subPageMode === url.IB_INVOICE_STP) {
+            const jsonBody = JSON.stringify({
+                FromDate: obj.preOrderDate,
+                Customer: obj.CustomerID,
+                Party: userParty(),
+                OrderIDs: `${obj.id}`
             });
+            const customer = {
+                value: obj.CustomerID,
+                label: obj.Customer
+            }
+            dispatch(makeIB_InvoiceAction({ jsonBody, path: url.INVOICE_2, pageMode: mode.defaultsave, customer }));
+        }
+        else {
+            var isGRNSelect = ''
+            var challanNo = ''
+            const grnRef = []
+            if (list.length > 0) {
+                list.forEach(ele => {
+                    if (ele.hasSelect) {
+                        grnRef.push({
+                            Invoice: null,
+                            Order: ele.POType === "Challan" ? '' : ele.id,
+                            ChallanNo: ele.FullOrderNumber,
+                            Inward: false,
+                            Challan: ele.POType === "Challan" ? ele.id : ''
+                        });
+                        isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                        challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                    }
+                });
 
-            if (isGRNSelect) {
+                if (isGRNSelect) {
 
-                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+                    isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                    challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
-                const jsonBody = JSON.stringify({
-                    OrderIDs: isGRNSelect,
-                    Mode: list[0].POType === "Challan" ? 2 : 1
-                })
+                    const jsonBody = JSON.stringify({
+                        OrderIDs: isGRNSelect,
+                        Mode: list[0].POType === "Challan" ? 2 : 1
+                    })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
-            } else {
-                alert("Please Select Order1")
+                } else {
+                    alert("Please Select Order1")
+                }
             }
         }
     }

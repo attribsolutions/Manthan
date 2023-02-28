@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  CommonConsole,
   convertDatefunc,
   GoBtnDissable,
   saveDissable
@@ -20,13 +21,15 @@ import {
   editInvoiceListSuccess,
   invoiceListGoBtnfilterSucccess,
   GoButtonForinvoiceAddSuccess,
-  invoiceSaveActionSuccess
+  invoiceSaveActionSuccess,
+  makeIB_InvoiceActionSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
   EDIT_INVOICE_LIST, INVOICE_LIST_GO_BUTTON_FILTER,
   GO_BUTTON_FOR_INVOICE_ADD,
-  INVOICE_SAVE_ADD_PAGE_ACTION
+  INVOICE_SAVE_ADD_PAGE_ACTION,
+  MAKE_IB_INVOICE_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 
@@ -51,10 +54,18 @@ function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
 }
 
 // Invoice List
-function* InvoiceListGenFunc({ subPageMode, filters }) {
-  debugger
+function* InvoiceListGenFunc(action) {
   try {
-    const response = yield call(Invoice_2_Get_Filter_API, filters);
+    debugger
+    const { subPageMode, filters } = action
+    let response;
+
+    if (subPageMode === url.INVOICE_LIST_1) {
+      response = yield call(Invoice_1_Get_Filter_API, filters);
+    } else if (subPageMode === url.INVOICE_LIST_2) {
+      response = yield call(Invoice_2_Get_Filter_API, filters);
+    }
+    
     const newList = yield response.Data.map((i) => {
       i.InvoiceDate = i.InvoiceDate;
       var date = convertDatefunc(i.InvoiceDate)
@@ -63,13 +74,7 @@ function* InvoiceListGenFunc({ subPageMode, filters }) {
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
 
-  } catch (error) {
-
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message in Work Order List ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // edit List page
@@ -80,13 +85,7 @@ function* editInvoiceListGenFunc({ id, pageMode }) {
     response.pageMode = pageMode
 
     yield put(editInvoiceListSuccess(response))
-  } catch (error) {
-
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Invoice Edit Method ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // Invoice List delete List page
@@ -97,19 +96,12 @@ function* DeleteInvoiceGenFunc({ id }) {
     const response = yield call(Invoice_1_Delete_API, id);
 
     yield put(deleteInvoiceIdSuccess(response));
-  } catch (error) {
-
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Merssage in Work Order List Delete Method "
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // GO-Botton SO-invoice Add Page API
 function* invoice_GoButton_dataConversion_Func(action) {
   const { response, goBtnId } = { ...action };
-  debugger
   try {
     let convResp = response.Data.OrderItemDetails.map(i1 => {
 
@@ -177,10 +169,25 @@ function* gobutton_invoiceAdd_genFunc(action) {
       response = yield call(Invoice_2_GoButton_API, data); // GO-Botton IB-invoice Add Page API
     }
     yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
-  } catch (e) {
-
-  }
+  } catch (error) { CommonConsole(error) }
 }
+
+function* makeIB_InvoiceGenFunc({ body }) {
+  try {
+    const { subPageMode, jsonBody, goBtnId, path, pageMode, customer } = body
+    const response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
+    response["path"] = path
+    response["page_Mode"] = pageMode
+    response["customer"] = customer
+
+    yield put(makeIB_InvoiceActionSuccess(response))
+    yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
+
+  } catch (error) { CommonConsole(error) }
+}
+
+
+// MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
   // yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
   yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
@@ -188,6 +195,7 @@ function* InvoiceSaga() {
   yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
   yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
   yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
+  yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
 
 }
 
