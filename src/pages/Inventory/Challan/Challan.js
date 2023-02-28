@@ -20,7 +20,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
-import { breadcrumbReturn, convertDatefunc, currentDate, GoBtnDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -31,6 +31,7 @@ import * as url from "../../../routes/route_url"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { challanItemForDropdown, GoButtonForChallanAdd, GoButtonForChallanAddSuccess, saveChallan_ChallanAdd } from "../../../store/Inventory/ChallanRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 const Challan = (props) => {
 
@@ -48,7 +49,7 @@ const Challan = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    const [challanItemList, setchallanItemList] = useState([]);
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -81,12 +82,11 @@ const Challan = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
-    
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -270,7 +270,7 @@ const Challan = (props) => {
             },
 
         },
-       
+
         {//***************StockDetails********************************************************************* */
 
             text: "Stock Details",
@@ -553,7 +553,7 @@ const Challan = (props) => {
         if (validMsg.length > 0) {
             CustomAlert({
                 Type: 3,
-                Message:validMsg
+                Message: validMsg
             })
             return
         } else {
@@ -566,95 +566,213 @@ const Challan = (props) => {
         }
     };
 
-    const SaveHandler = (event) => {
-        debugger
-        event.preventDefault();
-
-        const validMsg = []
-        const invoiceItems = []
+    const SaveHandler = (e,) => {
+        const itemArr = []
         let grand_total = 0;
 
-        // GoButton.forEach((index) => {
-        //     if (index.StockInValid) {
-        //         validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
-        //         return
-        //     };
-
-        // GoButton[0].StockDetails.forEach((ele) => {
-        //     if (ele.Qty > 0) {
-        //         var demo = {
-        //             Rate: ele.Rate,
-        //             GSTPercentage: ele.GST,
-        //             Quantity: ele.Qty
-        //         }
-        //         const basicAmt = parseFloat(basicAmount(demo))
-        //         const cgstAmt = (GstAmount(demo))
-        //         const amount = Amount(demo)
-        //         grand_total = grand_total + Number(amount)
+        console.log(itemArr)
         debugger
-        const jsonBody = JSON.stringify({
 
+        const isvalidMsg = [];
+        // const array =[]
+        GoButton[0].StockDetails.forEach(i => {
+            console.log(i)
+            // if ((i.Quantity > 0)) {
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
+            grand_total = grand_total + Number()
+
+
+            const arr = {
+                Item: values.Item.value,
+                Quantity: "20.000",
+                Unit: i.UnitName.id,
+                BaseUnitQuantity: i.BaseUnitQuantity,
+                MRP: null,
+                ReferenceRate: "100.00",
+                Rate: i.Rate,
+                BasicAmount: basicAmt.toFixed(2),
+                TaxType: "GST",
+                GST: i.GST,
+                GSTPercentage: "12.00",
+                HSNCode: "1208",
+                GSTAmount: cgstAmt.toFixed(2),
+                Amount: "2240.00",
+                DiscountType: "0",
+                Discount: "0.00",
+                DiscountAmount: "0.00",
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: "6.00",
+                SGSTPercentage: "6.00",
+                IGSTPercentage: 0,
+                BatchDate: i.BatchDate,
+                BatchCode: i.BatchCode,
+                SystemBatchDate: i.SystemBatchDate,
+                SystemBatchCode: i.SystemBatchCode,
+            }
+            // let isfound = itemArr.filter(ind => {
+            //     return ind.Item === i.Item
+            // })
+
+            // if (isfound.length > 0) {
+            //     let dubli = isfound.filter(ele => {
+            //         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
+            //         debugger
+            //         return condition
+            //     })
+                
+                // if ((i.Quantity > 0)) {
+                //     if (dubli.length === 0) {
+                        // itemArr.push(arr)
+
+                //     } else {
+                //         isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
+                //     }
+                // }
+            // } else
+             if ((i.GST > 0)) {
+                itemArr.push(arr)
+            }
+
+        })
+
+        // if (invoiceNo.length === 0) {
+        //     CustomAlert({
+        //         Type: 3,
+        //         Message: "Please Enter Invoice Number",
+        //     })
+        //     return
+        // }
+        // if (itemArr.length === 0) {
+        //     CustomAlert({
+        //         Type: 3,
+        //         Message: "Please Enter One Item Quantity",
+        //     })
+        //     return
+        // }
+        if (isvalidMsg.length > 0) {
+            CustomAlert({
+                Type: 3,
+                Message: isvalidMsg,
+            })
+            // dispatch(AlertState({
+            //     Type: 4,
+            //     Status: true,
+            //     Message: isvalidMsg,
+            //     RedirectPath: false,
+            //     AfterResponseAction: false
+            // }));
+            return
+        }
+      
+
+        const array = {
+            id: 727,
+            Item: values.Item.value,
+            Quantity: "20.000",
+            BaseUnitQuantity: "10.000",
+            LiveBatche: 146,
+            GRN: 526,
+            Party: userParty()
+
+
+        }
+debugger
+        const jsonBody = JSON.stringify({
             GRN: "",
             ChallanDate: values.InvoiceDate,
             Party: userParty(),
-            GrandTotal: "240.00",
-            Customer: 28,
-            CreatedBy: 15,
-            UpdatedBy: 15,
-            RoundOffAmount: "",
-            ChallanItems: [
-                {
-                    Item: values.Item.value,
-                    Quantity: "20.000",
-                    Unit: 817,
-                    BaseUnitQuantity: "10.000",
-                    MRP: null,
-                    ReferenceRate: "100.00",
-                    Rate: "100.00",
-                    BasicAmount: "2000.00",
-                    TaxType: "GST",
-                    GST: 53,
-                    GSTPercentage: "12.00",
-                    HSNCode: "1208",
-                    GSTAmount: "240.00",
-                    Amount: "2240.00",
-                    DiscountType: "0",
-                    Discount: "0.00",
-                    DiscountAmount: "0.00",
-                    CGST: "120.00",
-                    SGST: "120.00",
-                    IGST: "0.00",
-                    CGSTPercentage: "6.00",
-                    SGSTPercentage: "6.00",
-                    IGSTPercentage: "0.00",
-                    BatchDate: "2023-02-17",
-                    BatchCode: "0",
-                    SystemBatchDate: "2023-02-17",
-                    SystemBatchCode: "20230217_55_4_0"
-                }
-            ],
-            BatchWiseLiveStockGRNID: [
-                {
-                    id: 727,
-                    Item: values.Item.value,
-                    Quantity: "20.000",
-                    BaseUnitQuantity: "10.000",
-                    LiveBatche: 146,
-                    GRN: 526,
-                    Party: userParty()
-                }
-            ]
+            GrandTotal: Math.round(grand_total),
+            Customer: values.Party.value,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+            ChallanItems:itemArr,
+            BatchWiseLiveStockGRNID:array
 
         });
 
-        if (pageMode === mode.edit) {
-        }
-        else {
-            // saveDissable({ id: saveBtnid, state: true })
-            dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
+
+
+
+        // saveDissable(true);//save Button Is dissable function
+
+        if (pageMode === "edit") {
+        } else {
+debugger
+            dispatch(saveChallan_ChallanAdd(jsonBody))
         }
     }
-    
+
+
+    // const SaveHandler = (event) => {
+    //     debugger
+    //     event.preventDefault();
+
+    //     const jsonBody = JSON.stringify({
+    //         GRN: "",
+    //         ChallanDate: values.InvoiceDate,
+    //         Party: userParty(),
+    //         GrandTotal: GrandTotal,
+    //         Customer:values.Party.value ,
+    //         CreatedBy: 15,
+    //         UpdatedBy: 15,
+    //         RoundOffAmount: "",
+    //         ChallanItems: [
+    //             {
+    //                 Item: values.Item.value,
+    //                 Quantity: "20.000",
+    //                 Unit: 817,
+    //                 BaseUnitQuantity: "10.000",
+    //                 MRP: null,
+    //                 ReferenceRate: "100.00",
+    //                 Rate: "100.00",
+    //                 BasicAmount: "2000.00",
+    //                 TaxType: "GST",
+    //                 GST: 53,
+    //                 GSTPercentage: "12.00",
+    //                 HSNCode: "1208",
+    //                 GSTAmount: "240.00",
+    //                 Amount: "2240.00",
+    //                 DiscountType: "0",
+    //                 Discount: "0.00",
+    //                 DiscountAmount: "0.00",
+    //                 CGST: "120.00",
+    //                 SGST: "120.00",
+    //                 IGST: "0.00",
+    //                 CGSTPercentage: "6.00",
+    //                 SGSTPercentage: "6.00",
+    //                 IGSTPercentage: "0.00",
+    //                 BatchDate: "2023-02-17",
+    //                 BatchCode: "0",
+    //                 SystemBatchDate: "2023-02-17",
+    //                 SystemBatchCode: "20230217_55_4_0"
+    //             }
+    //         ],
+    //         BatchWiseLiveStockGRNID: [
+    //             {
+    //                 id: 727,
+    //                 Item: values.Item.value,
+    //                 Quantity: "20.000",
+    //                 BaseUnitQuantity: "10.000",
+    //                 LiveBatche: 146,
+    //                 GRN: 526,
+    //                 Party: userParty()
+    //             }
+    //         ]
+
+    //     });
+
+    //     if (pageMode === mode.edit) {
+    //     }
+    //     else {
+    //         // saveDissable({ id: saveBtnid, state: true })
+    //         dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
+    //     }
+    // }
+
 
     if (!(userPageAccessState === '')) {
         return (
