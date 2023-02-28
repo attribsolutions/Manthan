@@ -95,7 +95,6 @@ const GRNAdd = (props) => {
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const grnItems = items.Data
-            debugger
 
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
