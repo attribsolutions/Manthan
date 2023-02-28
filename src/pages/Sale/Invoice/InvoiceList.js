@@ -35,6 +35,7 @@ import {
     editInvoiceList,
     invoiceListGoBtnfilter
 } from "../../../store/Sales/Invoice/action";
+import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 
 const InvoiceList = () => {
 
@@ -88,7 +89,7 @@ const InvoiceList = () => {
         let masterPath = '';
         let newBtnPath = false;
         let makeBtnShow = false;
-        
+
 
         if (subPageMode === url.INVOICE_LIST_1) {
             page_Id = pageId.INVOICE_LIST_2
@@ -107,7 +108,7 @@ const InvoiceList = () => {
         }
         dispatch(GetVenderSupplierCustomer(""))
 
-        setOtherState({ masterPath, makeBtnShow,newBtnPath })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -179,6 +180,16 @@ const InvoiceList = () => {
         // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
+
+    const makeBtnFunc = (list = {}) => {
+        debugger
+        dispatch(makeInward(list[0].id))
+        history.push({
+            pathname: url.INWARD,
+            // editValue: obj,
+            // pageMode: mode.mode2save
+        })
+    };
 
     return (
         <React.Fragment>
@@ -266,6 +277,7 @@ const InvoiceList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
 
+                            makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}

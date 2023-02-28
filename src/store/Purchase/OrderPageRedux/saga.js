@@ -28,7 +28,7 @@ import {
   GET_ORDER_LIST_PAGE
 } from "./actionType";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { CommonConsole, convertDatefunc, convertTimefunc, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import *as url from "../../../routes/route_url"
 
 
@@ -127,12 +127,9 @@ function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter b
     }
     newList = yield response.Data.map((i) => {
 
-      var date = convertDatefunc(i.OrderDate)
-      var time = convertTimefunc(i.CreatedOn)
-      var DeliveryDate = convertDatefunc(i.DeliveryDate);
       i["preOrderDate"] = i.OrderDate
-      debugger
-      i.OrderDate = (`${date} ${time}`)
+      var DeliveryDate = convertDatefunc(i.DeliveryDate);
+      i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
       i.DeliveryDate = (`${DeliveryDate}`)
 
       if ((i.Inward === 0)) {

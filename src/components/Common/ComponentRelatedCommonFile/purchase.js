@@ -349,17 +349,17 @@ const PurchaseListPage = (props) => {
                 formatter: (cellContent, rowData, key) => {
                     rowData["hasSelect"] = false
                     // if (rowData.POType === 3) {
-                        return (
-                            <div>
-                                <Button
-                                    type="button"
-                                    className={makeBtnCss}
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
-                                    onClick={() => { makeBtnHandler(rowData) }}>
-                                    <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                        className=" fas fa-file-invoice" ></span>
-                                </Button>
-                            </div>)
+                    return (
+                        <div>
+                            <Button
+                                type="button"
+                                className={makeBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                                onClick={() => { makeBtnHandler(rowData) }}>
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span>
+                            </Button>
+                        </div>)
                     // }
                 }
             })
@@ -371,6 +371,7 @@ const PurchaseListPage = (props) => {
             columns.push(
                 listPageCommonButtonFunction({
                     dispatchHook: dispatch,
+                    subPageMode: history.location.pathname,
                     ButtonMsgLable: ButtonMsgLable,
                     deleteName: deleteName,
                     userAccState: userAccState,

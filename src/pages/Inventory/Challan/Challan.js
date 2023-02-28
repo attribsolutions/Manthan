@@ -2,6 +2,7 @@ import React, { useEffect, useState, } from "react";
 import {
     Col,
     FormGroup,
+    Input,
     Label,
     Row,
     Table
@@ -31,7 +32,7 @@ import * as url from "../../../routes/route_url"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { challanItemForDropdown, GoButtonForChallanAdd, GoButtonForChallanAddSuccess, saveChallan_ChallanAdd } from "../../../store/Inventory/ChallanRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 const Challan = (props) => {
 
@@ -82,6 +83,7 @@ const Challan = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -236,18 +238,14 @@ const Challan = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField]);
-
     const venderOptions = vender.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
-
-
     const ItemsOption = challanitems.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
-
 
     const pagesListColumns = [
 
@@ -270,6 +268,30 @@ const Challan = (props) => {
             },
 
         },
+         {//***************Quantity********************************************************************* */
+            text: "Quantity",
+            dataField: "",
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div className="width-60">Quantity</div>)
+            },
+            formatter: (cellContent, user) => (
+                <div >
+                    <Input type="text"
+                        // disabled={pageMode === 'edit' ? true : false}
+                        style={{ textAlign: "right" }}
+                        // className=" width-100"
+                        // // key={user.id}
+                        placeholder="Enter Quantity"
+                        // // autoComplete="off"
+                        // // defaultValue={user.Quantity}
+                        onChange={(event) => orderQtyOnChange(event, user)}
+                    ></Input>
+                    {/* <samp className="mt-1">Quantity:{user.OrderQty} {user.UnitName}</samp> */}
+                </div>
+
+            )
+        },
 
         {//***************StockDetails********************************************************************* */
 
@@ -289,7 +311,6 @@ const Challan = (props) => {
 
             formatter: (cellContent, index1) => (
 
-
                 <div>
                     <div key={`plus-circle-icon${index1.id}`}>
                         {
@@ -304,7 +325,7 @@ const Challan = (props) => {
                                             {`Total Stock:${index1.StockTotal}`}</samp>
                                     </samp>
                                 </>
-                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
+                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{}</samp>
                         }
                     </div >
                     <Table className="table table-bordered table-responsive mb-1" >
@@ -326,7 +347,6 @@ const Challan = (props) => {
                                     {/* <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp> */}
                                 </th>
                                 {/* <th className="" >Rate</th> */}
-
                             </tr>
 
                         </Thead>
@@ -504,24 +524,29 @@ const Challan = (props) => {
 
     function orderQtyOnChange(event, index) {
 
-
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
-        let val1 = 0;
-        if (result) {
-            let v1 = Number(index.StockTotal);
-            let v2 = Number(input) * Number(index.ConversionUnit)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 / Number(index.ConversionUnit) };
 
-        } else if (((index.Quantity >= 0) && (!(input === '')))) {
-            val1 = index.Quantity
-        } else {
-            val1 = 0
-        }
+        setState((i) => {
+            const v1 = { ...i }
+            v1.values.Quantity = input
+            return v1
+        })
+        // let val1 = 0;
+        // if (result) {
+        //     // let v1 = Number(index.StockTotal);
+        //     // let v2 = Number(input) * Number(index.ConversionUnit)
+        //     // if (v1 >= v2) { val1 = input }
+        //     // else { val1 = v1 / Number(index.ConversionUnit) };
 
-        event.target.value = val1;
-        index.Quantity = val1
+        // } else if (((index.Quantity >= 0) && (!(input === '')))) {
+        //     val1 = index.Quantity
+        // } else {
+        //     val1 = 0
+        // }
+
+        // event.target.value = val1;
+        // index.Quantity = val1
 
         stockDistributeFunc(index)
     };
@@ -576,41 +601,48 @@ const Challan = (props) => {
         const isvalidMsg = [];
         // const array =[]
         GoButton[0].StockDetails.forEach(i => {
+            var demo = {
+                Rate: i.Rate,
+                Quantity: values.Quantity
+            }
+            i["Quantity"]= values.Quantity
+
             console.log(i)
             // if ((i.Quantity > 0)) {
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
-            grand_total = grand_total + Number()
-
-
+           const amount =Amount(i)
+           debugger
+            grand_total = grand_total + Number(amount)
             const arr = {
                 Item: values.Item.value,
-                Quantity: "20.000",
+                Quantity: values.Quantity,
                 Unit: i.UnitName.id,
                 BaseUnitQuantity: i.BaseUnitQuantity,
-                MRP: null,
+                MRP: i.MRP,
                 ReferenceRate: "100.00",
                 Rate: i.Rate,
                 BasicAmount: basicAmt.toFixed(2),
                 TaxType: "GST",
                 GST: i.GST,
-                GSTPercentage: "12.00",
-                HSNCode: "1208",
+                GSTPercentage:i.GSTPercentage,
+                HSNCode:i.HSNCode,
                 GSTAmount: cgstAmt.toFixed(2),
-                Amount: "2240.00",
+                Amount: amount,
                 DiscountType: "0",
                 Discount: "0.00",
                 DiscountAmount: "0.00",
                 CGST: (cgstAmt / 2).toFixed(2),
                 SGST: (cgstAmt / 2).toFixed(2),
                 IGST: 0,
-                CGSTPercentage: "6.00",
-                SGSTPercentage: "6.00",
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
                 IGSTPercentage: 0,
                 BatchDate: i.BatchDate,
                 BatchCode: i.BatchCode,
                 SystemBatchDate: i.SystemBatchDate,
                 SystemBatchCode: i.SystemBatchCode,
+                BatchID:i.id,
             }
             // let isfound = itemArr.filter(ind => {
             //     return ind.Item === i.Item
@@ -632,26 +664,12 @@ const Challan = (props) => {
                 //     }
                 // }
             // } else
-             if ((i.GST > 0)) {
+             if ((i.GSTPercentage > 0)) {
                 itemArr.push(arr)
             }
 
         })
 
-        // if (invoiceNo.length === 0) {
-        //     CustomAlert({
-        //         Type: 3,
-        //         Message: "Please Enter Invoice Number",
-        //     })
-        //     return
-        // }
-        // if (itemArr.length === 0) {
-        //     CustomAlert({
-        //         Type: 3,
-        //         Message: "Please Enter One Item Quantity",
-        //     })
-        //     return
-        // }
         if (isvalidMsg.length > 0) {
             CustomAlert({
                 Type: 3,
@@ -666,38 +684,29 @@ const Challan = (props) => {
             // }));
             return
         }
-      
-
         const array = {
-            id: 727,
+            id:727,
             Item: values.Item.value,
             Quantity: "20.000",
             BaseUnitQuantity: "10.000",
             LiveBatche: 146,
             GRN: 526,
             Party: userParty()
-
-
         }
 debugger
         const jsonBody = JSON.stringify({
             GRN: "",
             ChallanDate: values.InvoiceDate,
             Party: userParty(),
-            GrandTotal: Math.round(grand_total),
+            GrandTotal: grand_total,
             Customer: values.Party.value,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+            RoundOffAmount: Math.round(grand_total),
             ChallanItems:itemArr,
-            BatchWiseLiveStockGRNID:array
+            // BatchWiseLiveStockGRNID:array
 
         });
-
-
-
-
-        // saveDissable(true);//save Button Is dissable function
 
         if (pageMode === "edit") {
         } else {
@@ -705,74 +714,6 @@ debugger
             dispatch(saveChallan_ChallanAdd(jsonBody))
         }
     }
-
-
-    // const SaveHandler = (event) => {
-    //     debugger
-    //     event.preventDefault();
-
-    //     const jsonBody = JSON.stringify({
-    //         GRN: "",
-    //         ChallanDate: values.InvoiceDate,
-    //         Party: userParty(),
-    //         GrandTotal: GrandTotal,
-    //         Customer:values.Party.value ,
-    //         CreatedBy: 15,
-    //         UpdatedBy: 15,
-    //         RoundOffAmount: "",
-    //         ChallanItems: [
-    //             {
-    //                 Item: values.Item.value,
-    //                 Quantity: "20.000",
-    //                 Unit: 817,
-    //                 BaseUnitQuantity: "10.000",
-    //                 MRP: null,
-    //                 ReferenceRate: "100.00",
-    //                 Rate: "100.00",
-    //                 BasicAmount: "2000.00",
-    //                 TaxType: "GST",
-    //                 GST: 53,
-    //                 GSTPercentage: "12.00",
-    //                 HSNCode: "1208",
-    //                 GSTAmount: "240.00",
-    //                 Amount: "2240.00",
-    //                 DiscountType: "0",
-    //                 Discount: "0.00",
-    //                 DiscountAmount: "0.00",
-    //                 CGST: "120.00",
-    //                 SGST: "120.00",
-    //                 IGST: "0.00",
-    //                 CGSTPercentage: "6.00",
-    //                 SGSTPercentage: "6.00",
-    //                 IGSTPercentage: "0.00",
-    //                 BatchDate: "2023-02-17",
-    //                 BatchCode: "0",
-    //                 SystemBatchDate: "2023-02-17",
-    //                 SystemBatchCode: "20230217_55_4_0"
-    //             }
-    //         ],
-    //         BatchWiseLiveStockGRNID: [
-    //             {
-    //                 id: 727,
-    //                 Item: values.Item.value,
-    //                 Quantity: "20.000",
-    //                 BaseUnitQuantity: "10.000",
-    //                 LiveBatche: 146,
-    //                 GRN: 526,
-    //                 Party: userParty()
-    //             }
-    //         ]
-
-    //     });
-
-    //     if (pageMode === mode.edit) {
-    //     }
-    //     else {
-    //         // saveDissable({ id: saveBtnid, state: true })
-    //         dispatch(saveChallan_ChallanAdd(jsonBody, saveBtnid));
-    //     }
-    // }
-
 
     if (!(userPageAccessState === '')) {
         return (
