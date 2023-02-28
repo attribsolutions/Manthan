@@ -677,7 +677,7 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-        debugger
+      
         if (isVDC_POvalidMsg.length > 0) {
             await CustomAlert({
                 Type: 4,

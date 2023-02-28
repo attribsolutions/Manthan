@@ -38,7 +38,8 @@ import {
     GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
     invoiceSaveAction,
-    invoiceSaveActionSuccess
+    invoiceSaveActionSuccess,
+    makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
@@ -74,7 +75,8 @@ const Invoice = (props) => {
         pageField,
         userAccess,
         GoButton = '',
-        vendorSupplierCustomer
+        vendorSupplierCustomer,
+        makeIBInvoice
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -83,6 +85,7 @@ const Invoice = (props) => {
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
+        makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
     }));
 
     const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
@@ -220,6 +223,21 @@ const Invoice = (props) => {
     useEffect(() => {
         showAllStockOnclick(showAllStockState)
     }, [showAllStockState]);
+
+
+    useEffect(() => {
+
+        if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = makeIBInvoice.customer;
+                obj.hasValid.Customer.valid = true;
+                return obj
+            })
+            dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
+        }
+    }, [makeIBInvoice])
+
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
@@ -755,7 +773,7 @@ const Invoice = (props) => {
         const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
-            IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
+            IBChallansReferences: OrderIDs.map(i => ({ Demand: i }))
         });
 
         const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -20,13 +20,15 @@ import {
   editInvoiceListSuccess,
   invoiceListGoBtnfilterSucccess,
   GoButtonForinvoiceAddSuccess,
-  invoiceSaveActionSuccess
+  invoiceSaveActionSuccess,
+  makeIB_InvoiceActionSuccess
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
   EDIT_INVOICE_LIST, INVOICE_LIST_GO_BUTTON_FILTER,
   GO_BUTTON_FOR_INVOICE_ADD,
-  INVOICE_SAVE_ADD_PAGE_ACTION
+  INVOICE_SAVE_ADD_PAGE_ACTION,
+  MAKE_IB_INVOICE_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
 
@@ -109,7 +111,6 @@ function* DeleteInvoiceGenFunc({ id }) {
 // GO-Botton SO-invoice Add Page API
 function* invoice_GoButton_dataConversion_Func(action) {
   const { response, goBtnId } = { ...action };
-  debugger
   try {
     let convResp = response.Data.OrderItemDetails.map(i1 => {
 
@@ -181,6 +182,23 @@ function* gobutton_invoiceAdd_genFunc(action) {
 
   }
 }
+function* makeIB_InvoiceGenFunc({ body }) {
+  try {
+    const { subPageMode, jsonBody, goBtnId, path, pageMode ,customer } = body
+    const response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
+    response["path"] = path
+    response["page_Mode"] = pageMode
+    response["customer"] = customer
+
+    yield put(makeIB_InvoiceActionSuccess(response))
+    yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
+  } catch (e) {
+
+  }
+}
+
+
+// MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
   // yield takeEvery(GO_BUTTON_POST_FOR_INVOICE, GoButtonSOInvoice_genfun)
   yield takeEvery(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
@@ -188,6 +206,7 @@ function* InvoiceSaga() {
   yield takeEvery(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
   yield takeEvery(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
   yield takeEvery(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
+  yield takeEvery(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
 
 }
 
