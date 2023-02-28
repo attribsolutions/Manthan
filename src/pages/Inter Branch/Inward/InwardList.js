@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Flatpickr from "react-flatpickr";
 import Select from "react-select";
-import {  Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
 import * as url from "../../../routes/route_url";
@@ -13,7 +13,7 @@ import Inward from "./Inward";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
-import { currentDate,  userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
@@ -48,10 +48,10 @@ const InwardList = () => {
 
     const action = {
         getList: getInwardListPage,
-        editId: ()=>{},
+        editId: () => { },
         deleteId: deleteInwardId,
         postSucc: postMessage,
-        updateSucc: ()=>{},
+        updateSucc: () => { },
         deleteSucc: deleteInwardIdSuccess
     }
 
@@ -193,8 +193,9 @@ const InwardList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Inward}
-                            masterPath={url.INWARD}
+                            masterPath={Inward}
+                            newBtnPath={url.IB_INWARD_STP}
+                            makeBtnShow={false}
                             ButtonMsgLable={"Inward"}
                             deleteName={"IBInwardNumber"}
                             pageMode={pageMode}

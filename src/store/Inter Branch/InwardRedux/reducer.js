@@ -1,11 +1,12 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { DELETE_INWARD_LIST_PAGE_SUCCESS, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, POST_INWARD_SUCCESS } from "./actionType"
+import { DELETE_INWARD_LIST_PAGE_SUCCESS, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, MAKE_INWARD_SUCCESS, POST_INWARD_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     postMsg: { Status: false },
     InwardList: [],
     deleteMsg: { Status: false },
     InwardlistFilter: { fromdate: currentDate, todate: currentDate, SupplierSelect: { value: '', label: "All" } },
+    makeInward:[]
 }
 
 const InwardReducer = (state = INIT_STATE, action) => {
@@ -16,7 +17,6 @@ const InwardReducer = (state = INIT_STATE, action) => {
                 ...state,
                 postMsg: action.payload,
             }
-
         case GET_INWARD_LIST_PAGE_SUCCESS:
             return {
                 ...state,
@@ -32,6 +32,11 @@ const InwardReducer = (state = INIT_STATE, action) => {
                 ...state,
                 deleteMsg: action.payload,
             }
+            case MAKE_INWARD_SUCCESS:
+                return {
+                    ...state,
+                    makeInward: action.payload,
+                }
         default:
             return state
     }

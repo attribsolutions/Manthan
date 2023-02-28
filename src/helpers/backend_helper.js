@@ -453,14 +453,13 @@ export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)//
 export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
 
-// Invoice
+//IB Invoice 2 
 export const Invoice_2_GoButton_API = (data) => post(url.INVOICE_2_ADD_PAGE_GO_BTN, data)// go button postapi
 export const Invoice_2_Save_API = (data) => post(url.INVOICE_2_SAVE, data)//  postapi
 export const Invoice_2_Get_Filter_API = (data) => post(url.INVOICE_2_lIST_FILTER, data)//  postapi
 export const Invoice_2_Delete_API = (id) => del(`${url.INVOICE_2_SAVE}/${id}`)// delete api
 export const Invoice_2_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_2_SAVE}/${id}`)// delete api
 //************************************Inter Branch ************************************/
-
 
 // IBOrder
 export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//go button api
@@ -476,6 +475,7 @@ export const IBOrderPage_Update_API = (data, id) => put(`${url.SAVE_API_FOR_IBOR
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
 export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// List Api
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
+export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/${id}`)// Inward post api
 
 // IB Invoice
 // export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
