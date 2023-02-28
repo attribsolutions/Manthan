@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   CommonConsole,
-  convertDatefunc,
+  concatDateAndTime,
   GoBtnDissable,
   saveDissable
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -13,9 +13,10 @@ import {
   Invoice_1_Get_Filter_API,
   Invoice_2_GoButton_API,
   Invoice_2_Save_API,
-  Invoice_2_Get_Filter_API
+  Invoice_2_Get_Filter_API,
+  Invoice_2_Edit_API_Singel_Get,
+  Invoice_2_Delete_API
 } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import {
   deleteInvoiceIdSuccess,
   editInvoiceListSuccess,
@@ -56,7 +57,6 @@ function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
 // Invoice List
 function* InvoiceListGenFunc(action) {
   try {
-    debugger
     const { subPageMode, filters } = action
     let response;
 
@@ -65,11 +65,10 @@ function* InvoiceListGenFunc(action) {
     } else if (subPageMode === url.INVOICE_LIST_2) {
       response = yield call(Invoice_2_Get_Filter_API, filters);
     }
-    
+    debugger
     const newList = yield response.Data.map((i) => {
-      i.InvoiceDate = i.InvoiceDate;
-      var date = convertDatefunc(i.InvoiceDate)
-      i.InvoiceDate = (date)
+      i["preInvoiceDate"] = i.InvoiceDate
+      i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
@@ -78,32 +77,44 @@ function* InvoiceListGenFunc(action) {
 }
 
 // edit List page
-function* editInvoiceListGenFunc({ id, pageMode }) {
-
+function* editInvoiceListGenFunc(action) {
   try {
-    let response = yield call(Invoice_1_Edit_API_Singel_Get, id);
-    response.pageMode = pageMode
+    const { subPageMode, pageMode, id } = action;
+    let response;
 
+    if (subPageMode === url.INVOICE_LIST_1) {
+      response = yield call(Invoice_1_Edit_API_Singel_Get, id);
+    } else if (subPageMode === url.INVOICE_LIST_2) {
+      response = yield call(Invoice_2_Edit_API_Singel_Get, id);
+    }
+
+    response.pageMode = pageMode
     yield put(editInvoiceListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 // Invoice List delete List page
-function* DeleteInvoiceGenFunc({ id }) {
-
-
+function* DeleteInvoiceGenFunc(action) {
+  debugger
   try {
-    const response = yield call(Invoice_1_Delete_API, id);
+    const { subPageMode, id } = action;
+    let response;
+
+    if (subPageMode === url.INVOICE_LIST_1) {
+      response = yield call(Invoice_1_Delete_API, id)
+    } else if (subPageMode === url.INVOICE_LIST_2) {
+      response = yield call(Invoice_2_Delete_API, id)
+    }
 
     yield put(deleteInvoiceIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 // GO-Botton SO-invoice Add Page API
-function* invoice_GoButton_dataConversion_Func(action) {
-  const { response, goBtnId } = { ...action };
+export function invoice_GoButton_dataConversion_Func(response) {
+
   try {
-    let convResp = response.Data.OrderItemDetails.map(i1 => {
+    let convResp = response.OrderItemDetails.map(i1 => {
 
       i1["OrderQty"] = i1.Quantity
       i1["UnitDrop"] = { value: i1.Unit, label: i1.UnitName, ConversionUnit: '1', Unitlabel: i1.UnitName }
@@ -148,9 +159,8 @@ function* invoice_GoButton_dataConversion_Func(action) {
       return i1
     })
 
-    response.Data.OrderItemDetails = convResp
-    yield GoBtnDissable({ id: goBtnId, state: false })
-    yield put(GoButtonForinvoiceAddSuccess(response.Data));
+    response.OrderItemDetails = convResp
+    return response
 
   } catch (error) {
 
@@ -158,17 +168,19 @@ function* invoice_GoButton_dataConversion_Func(action) {
 }
 
 
-function* gobutton_invoiceAdd_genFunc(action) {
+function* gobutton_invoiceAdd_genFunc({body}) {
   try {
-    const { subPageMode, data, goBtnId } = action
+    debugger
+    const { subPageMode, jsonBody, goBtnId } = body
     let response;
     if (subPageMode === url.INVOICE_1) {
-      response = yield call(Invoice_1_GoButton_API, data); // GO-Botton SO-invoice Add Page API
+      response = yield call(Invoice_1_GoButton_API, jsonBody); // GO-Botton SO-invoice Add Page API
     }
     else if (subPageMode === url.INVOICE_2) {
-      response = yield call(Invoice_2_GoButton_API, data); // GO-Botton IB-invoice Add Page API
+      response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
-    yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
+    yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
+    yield GoBtnDissable({ id: goBtnId, state: false })
   } catch (error) { CommonConsole(error) }
 }
 

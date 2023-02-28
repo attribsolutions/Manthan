@@ -15,6 +15,7 @@ export const listPageCommonButtonFunction = (props) => {
     const dispatch = props.dispatchHook;
     const userCreated = parseInt(localStorage.getItem("userId"))
     const {
+        subPageMode = '',
         userAccState,
         editActionFun,
         deleteActionFun,
@@ -38,26 +39,29 @@ export const listPageCommonButtonFunction = (props) => {
 
     function editHandler(rowData, btnmode) {
 
-        if (editBodyfunc) { editBodyfunc(rowData, btnmode) }
+        if (editBodyfunc) { editBodyfunc(rowData, btnmode, subPageMode) }
         else {
-            dispatch(editActionFun(rowData.id, btnmode,));
+            dispatch(editActionFun(rowData.id, btnmode, subPageMode));
         }
     };
 
     function copyHandler(rowData, btnmode) {
-        dispatch(editActionFun(rowData.id, btnmode));
+        dispatch(editActionFun(rowData.id, btnmode, subPageMode));
     }
     function downHandler(rowData) {
         downBtnFunc(rowData);
     };
 
     async function deleteHandler(rowData) {
-        await CustomAlert({
-            Type: 5,
+        const rep = await CustomAlert({
+            Type: 8,
             Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-            PermissionAction: deleteActionFun,
-            ID: rowData.id,
+            // PermissionAction: deleteActionFun,
+            // ID: rowData.id,
         })
+        if(rep){
+            dispatch(deleteActionFun(rowData.id,subPageMode))
+        }
 
     }
     function makeBtnHandler(rowData) {
@@ -342,6 +346,12 @@ export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++
     let hour = +hourString % 24;
     let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
     return (`(${convDate} ${time})`)
+}
+
+export function concatDateAndTime(date, time) { //+++++++++++time and date concate +++++++++++++++++++++++++++++++
+    const d = convertDatefunc(date)
+    const t = convertTimefunc(time)
+    return (`${d} ${t}`)
 }
 
 export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++++++++++++++++++++++++++++++
