@@ -23,7 +23,7 @@ import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
-import { makeChallanAction } from "../../../store/Inventory/ChallanRedux/actions";
+import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 
 const GRNList = () => {
     const history = useHistory();
@@ -86,11 +86,13 @@ const GRNList = () => {
 
     useEffect(() => {
         if (makeChallan.Status === true && makeChallan.StatusCode === 200) {
+            dispatch(makeChallanActionSuccess({Status:false}))
             history.push({
                 pathname: makeChallan.path,
                 page_Mode: makeChallan.page_Mode,
             })
         }
+
     }, [makeChallan])
 
     const venderOptions = vender.map((i) => ({
