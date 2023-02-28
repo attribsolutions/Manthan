@@ -238,7 +238,7 @@ export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 // Inward
 export const POST_API_FOR_INWARD = '/InterBranchInward'// Inward  addpage save Api
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//InwardList filter Api
-export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
+export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
 
 
 

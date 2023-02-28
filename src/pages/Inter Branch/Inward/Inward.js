@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -36,7 +36,7 @@ const Inward = (props) => {
         userAccess,
         InwardData
     } = useSelector((state) => ({
-        InwardData: state.IBInvoiceReducer.InwardData,
+        InwardData: state.InwardReducer.makeInward,
         postMsg: state.InwardReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
@@ -55,6 +55,7 @@ const Inward = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
