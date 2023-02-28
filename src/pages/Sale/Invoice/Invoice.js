@@ -45,6 +45,7 @@ import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedu
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { invoice_GoButton_dataConversion_Func } from "../../../store/Sales/Invoice/saga";
 
 const Invoice = (props) => {
 
@@ -156,7 +157,7 @@ const Invoice = (props) => {
                     Party: userParty(),
                     OrderIDs: ""
                 });
-                dispatch(GoButtonForinvoiceAdd(jsonBody));
+                dispatch(GoButtonForinvoiceAdd({ jsonBody }));
                 dispatch(editInvoiceListSuccess({ Status: false }))
 
             }
@@ -676,11 +677,6 @@ const Invoice = (props) => {
 
     function goButtonHandler(event) {
 
-        // }catch(e){}
-        // if (formValid(state, setState)) {
-        // debugger
-
-
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
             Customer: values.Customer.value,
@@ -688,7 +684,7 @@ const Invoice = (props) => {
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButtonForinvoiceAdd(subPageMode, jsonBody, goBtnId));
+        dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, goBtnId }));
 
         // }
     };

@@ -28,9 +28,9 @@ export const invoiceListGoBtnfilterSucccess = (data) => ({
 });
 
 // edit api
-export const editInvoiceList = (id, pageMode) => ({
+export const editInvoiceList = (id, pageMode, subPageMode) => ({
     type: EDIT_INVOICE_LIST,
-    id, pageMode
+    id, pageMode, subPageMode,
 })
 
 export const editInvoiceListSuccess = (editData) => ({
@@ -39,9 +39,9 @@ export const editInvoiceListSuccess = (editData) => ({
 })
 
 // listpage api
-export const deleteInvoiceId = (id) => ({
+export const deleteInvoiceId = (id, subPageMode) => ({
     type: DELETE_INVOICE_LIST_PAGE,
-    id,
+    id,subPageMode,
 });
 
 export const deleteInvoiceIdSuccess = (data) => ({
@@ -53,7 +53,7 @@ export const deleteInvoiceIdSuccess = (data) => ({
 // Go Button Post API for Invoice Master
 export const GoButtonForinvoiceAdd = (body) => ({
     type: GO_BUTTON_FOR_INVOICE_ADD,
-   body,
+    body,
 });
 
 export const GoButtonForinvoiceAddSuccess = (data) => ({

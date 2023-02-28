@@ -18,21 +18,23 @@ const ConfirmDialog = () => {
         switch (confirmState.Type) {
             case 1: component = <AlertSucc />
                 break;
-             case 2: component = <AlertDanger />
+            case 2: component = <AlertDanger />
                 break;
-             case 3: component = <AlertInfo />
+            case 3: component = <AlertInfo />
                 break;
-             case 4: component = <AlertWarning />
+            case 4: component = <AlertWarning />
                 break;
-             case 5: component = <AlertPermission_1 />
+            case 5: component = <AlertPermission_1 />
                 break;
-             case 6: component = <AlertPermission_2 />
+            case 6: component = <AlertPermission_2 />
                 break;
-             case 7: component = <AlertPermission_3 />
+            case 7: component = <AlertPermission_3 />
+                break;
+            case 8: component = <AlertPermission_4 />
                 break;
         }
     }
-
+    
     const portalElement = document.getElementById('portal');
     return createPortal(component, portalElement);
 };
@@ -167,7 +169,7 @@ const AlertInfo = () => {
             </div>
         </div>
 
-     
+
 
     )
 };
@@ -220,7 +222,8 @@ const AlertPermission_1 = () => {
         Status = false,
         Message = "400 Error",
         PermissionAction = false,
-        ID//ID=deleted ID
+        ID,//ID=deleted ID
+        subPageMode = ''
     } = confirmState;
 
     const outerNo = (e, no) => {
@@ -353,6 +356,49 @@ const AlertPermission_3 = () => {
                 </div>
             </div>
         </div>
+    )
+};
+
+const AlertPermission_4 = () => {
+
+    const { onConfirm, onCancel, confirmState } = useConfirm();
+    const {
+        Status = false,
+        Message = "400 Error",
+    } = confirmState;
+
+    const outerNo = (e, no) => {
+        if (no === 2) {
+            e.stopPropagation();
+            return;
+        } else {
+            e.stopPropagation();
+            onCancel();
+        };
+    };
+
+    const innerYes = (e) => {
+        e.stopPropagation();
+        onConfirm();
+    };
+
+    return (
+        <div id="c-alert1" className="modal fade show  transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
+                    <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
+                        className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true" >×</span></button><i
+                            className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
+
+                        <MessageFun msg={Message} />
+
+                        <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
+                            className="btn btn-danger " onClick={innerYes}>Yes</button><button type="button"
+                                className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
+                    </div>
+                </div>
+            </div >
+        </div >
     )
 };
 
