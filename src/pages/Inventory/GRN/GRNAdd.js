@@ -558,7 +558,7 @@ const GRNAdd = (props) => {
                 DiscountType: "0",
                 Discount: "0.00",
                 DiscountAmount: "0.00",
-                TaxType: "GST",
+                TaxType:"GST",
 
             }
             let isfound = itemArr.filter(ind => {
