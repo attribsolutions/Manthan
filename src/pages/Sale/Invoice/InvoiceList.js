@@ -43,13 +43,9 @@ const InvoiceList = () => {
     const history = useHistory();
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
-    const [userAccState, setUserAccState] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
-    // const [fromdate, setfromdate] = useState(currentDate);
-    // const [todate, settodate] = useState(currentDate);
-    // const [supplierSelect, setsupplierSelect] = useState({ value: '', label: "All" });
     const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
 
     const reducers = useSelector(
@@ -61,7 +57,7 @@ const InvoiceList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            orderlistFilter: state.OrderReducer.orderlistFilter,
+            // orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
@@ -69,8 +65,6 @@ const InvoiceList = () => {
 
     const { userAccess, pageField, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
-
-    const page_Id = pageId.INVOICE_LIST_2
 
     const action = {
         getList: invoiceListGoBtnfilter,
@@ -133,17 +127,6 @@ const InvoiceList = () => {
     }, [tableList])
 
 
-    useEffect(() => {
-
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-
-        }
-    }, [userAccess])
-
     function downBtnFunc(row) {
         var ReportType = report.invoice;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
@@ -163,21 +146,20 @@ const InvoiceList = () => {
     function fromdateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.fromdate = date
-        // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.todate = date
-        // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
+    debugger
 
     function supplierOnchange(e) {
+        debugger
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
-        // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
 
@@ -186,8 +168,6 @@ const InvoiceList = () => {
         dispatch(makeInward(list[0].id))
         history.push({
             pathname: url.INWARD,
-            // editValue: obj,
-            // pageMode: mode.mode2save
         })
     };
 
@@ -266,7 +246,6 @@ const InvoiceList = () => {
                 {
                     (pageField) ?
                         <PurchaseListPage
-
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
