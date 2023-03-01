@@ -186,6 +186,7 @@ const AddEmployee = (props) => {
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
         values.EmployeeParties = listItems;
+        dispatch(getDistrictOnState(State_id))
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         seteditCreatedBy(hasEditVal.CreatedBy)

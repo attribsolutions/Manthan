@@ -60,7 +60,7 @@ const OrderList = () => {
     );
 
 
-    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, inOut = { value: 1, label: "IN-Order" } } = orderlistFilter;
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, inOut = { value: 1, label: "Order Received" } } = orderlistFilter;
     const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
 
@@ -346,12 +346,12 @@ const OrderList = () => {
                                     <FormGroup className="mb-2 row mt-3 " >
                                         <Label className="col-md-4 p-2"
 
-                                            style={{ width: "90px" }}>In/Out</Label>
+                                            style={{ width: "90px" }}>List Type</Label>
                                         <Col sm="5">
                                             <Select
                                                 classNamePrefix="select2-Customer"
                                                 value={inOut}
-                                                options={[{ value: 1, label: "IN-Order" }, { value: 2, label: "Out-Order" }]}
+                                                options={[{ value: 1, label: "Order Received" }, { value: 2, label: "Order Given" }]}
                                                 onChange={InOutOnchange}
                                             />
                                         </Col>
