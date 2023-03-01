@@ -53,7 +53,7 @@ const ProductionReIssueAdd = (props) => {
 
     const fileds = {
         ProductionReIssueDate: currentDate,
-        ItemName: "",
+        ItemName: [],
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -118,6 +118,7 @@ const ProductionReIssueAdd = (props) => {
     //****************************************************************** */
 
     useEffect(() => {
+        debugger
         if ((makeProductionReIssue.Status === true) && (makeProductionReIssue.StatusCode === 200)) {
             debugger
             const arr = makeProductionReIssue.Data.map((index) => ({
@@ -126,68 +127,74 @@ const ProductionReIssueAdd = (props) => {
                 data: index,
                 productionId: makeProductionReIssue.productionId
             }))
+
             setItemOption(arr)
             setPageMode(makeProductionReIssue.pageMode)
             setGoButtonList(makeProductionReIssue.Data)
             dispatch(makeBtnProduction_ReIssue_STP_actionSuccess({ Status: false }))
+            const { Items } = makeProductionReIssue
+            setState((i) => {
+                i.values.ItemName = { value: Items.value, label: Items.label };
+                return i
+            })
         }
 
     }, [makeProductionReIssue])
     //****************************************************************** */
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     debugger
+    //     if ((hasShowloction || hasShowModal)) {
 
-        if ((hasShowloction || hasShowModal)) {
+    //         let hasEditVal = null
+    //         let insidePageMode = null
+    //         if (hasShowloction) {
+    //             insidePageMode = location.pageMode;
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location[mode.editValue]
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props[mode.editValue]
+    //             insidePageMode = props.pageMode;
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
 
-            let hasEditVal = null
-            let insidePageMode = null
-            if (hasShowloction) {
-                insidePageMode = location.pageMode;
-                setPageMode(location.pageMode)
-                hasEditVal = location[mode.editValue]
-            }
-            else if (hasShowModal) {
-                hasEditVal = props[mode.editValue]
-                insidePageMode = props.pageMode;
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
+    //         if (hasEditVal) {
+    //             debugger
+    //             // setItemselect(hasEditVal)
+    //             const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
+    //             // const { BatchesData = [] } = MaterialIssueItems
+    //             setState((i) => {
+    //                 i.values.MaterialIssueDate = currentDate
+    //                 i.values.ItemName = { value: Item, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
+    //                 i.values.NumberOfLot = NumberOfLot;
+    //                 i.values.LotQuantity = EstimatedOutputQty;
+    //                 i.hasValid.ItemName.valid = true;
+    //                 i.hasValid.MaterialIssueDate.valid = true;
+    //                 i.hasValid.NumberOfLot.valid = true;
+    //                 i.hasValid.LotQuantity.valid = true;
+    //                 return i
+    //             })
+    //             // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-            if (hasEditVal) {
+    //             if (insidePageMode === mode.modeSTPsave) {
+    //                 const jsonBody = JSON.stringify({
+    //                     WorkOrder: id,
+    //                     Item: Item,
+    //                     Company: userCompany(),
+    //                     Party: userParty(),
+    //                     Quantity: parseInt(EstimatedOutputQty)
+    //                 });
+    //                 dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
+    //             } else if (insidePageMode === mode.view) {
+    //                 dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
+    //                 dispatch(editMaterialIssueIdSuccess({ Status: false }))
+    //             }
 
-                // setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
-                // const { BatchesData = [] } = MaterialIssueItems
-                setState((i) => {
-                    i.values.MaterialIssueDate = currentDate
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
-                    i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = EstimatedOutputQty;
-                    i.hasValid.ItemName.valid = true;
-                    i.hasValid.MaterialIssueDate.valid = true;
-                    i.hasValid.NumberOfLot.valid = true;
-                    i.hasValid.LotQuantity.valid = true;
-                    return i
-                })
-                // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
-
-                if (insidePageMode === mode.modeSTPsave) {
-                    const jsonBody = JSON.stringify({
-                        WorkOrder: id,
-                        Item: Item,
-                        Company: userCompany(),
-                        Party: userParty(),
-                        Quantity: parseInt(EstimatedOutputQty)
-                    });
-                    dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
-                } else if (insidePageMode === mode.view) {
-                    dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
-                    dispatch(editMaterialIssueIdSuccess({ Status: false }))
-                }
-
-            }
-        }
-    }, [])
+    //         }
+    //     }
+    // }, [])
     //****************************************************************** */
 
     useEffect(() => {
@@ -275,7 +282,6 @@ const ProductionReIssueAdd = (props) => {
                         <div><samp id={`ItemName${index.id}`}>{cellContent}</samp></div>
                         <div><samp id={`ItemNameMsg${index.id}`} style={{ color: "red" }}></samp></div>
                     </>
-
                 )
             },
             style: (cellContent, user,) => {
@@ -291,7 +297,6 @@ const ProductionReIssueAdd = (props) => {
                 if (OrderQty > TotalStock) {
                     return {
                         color: "red",
-
                     };
                 }
             },
@@ -505,7 +510,7 @@ const ProductionReIssueAdd = (props) => {
         Qtysum = Number(Qtysum) + Number(val1);
         index2.Qty = val1;
         let diffrence = Math.abs(index1.Quantity - Qtysum);
-debugger
+
         if ((Qtysum === index1.Quantity)) {
             try {
                 document.getElementById(`ItemName${index1.id}`).style.color = ""
