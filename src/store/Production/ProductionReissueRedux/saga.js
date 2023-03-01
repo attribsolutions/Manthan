@@ -94,8 +94,9 @@ function* itemsForProduction_ReIssue_GenFunc({ data }) {          //  Items drop
   } catch (error) { CommonConsole(error) }
 }
 
-function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {     //  make btn  production_ReIssue STP  page
-  const { jsonBody, pageMode, path, produtionId } = data;
+function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {
+  debugger   //  make btn  production_ReIssue STP  page
+  const { jsonBody, pageMode, path, produtionId, Items } = data;
   try {
     const response = yield call(Production_ReIssue_AddPageGOBtn_API, jsonBody);
     const resp1 = { ...response, ...data }
