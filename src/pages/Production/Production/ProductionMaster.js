@@ -81,8 +81,6 @@ const ProductionMaster = (props) => {
         dispatch(getUnitIDForProdunctionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PRODUCTION_LIST))
-
-
     }, []);
 
     const location = { ...history.location }

@@ -27,8 +27,9 @@ import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess
- } from "../../../store/Production/Matrial_Issue/action";
+import {
+    editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess
+} from "../../../store/Production/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -106,7 +107,7 @@ const MaterialIssueMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -132,15 +133,15 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
+                const { id, Item, ItemName, WorkDate, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
                 // const { BatchesData = [] } = MaterialIssueItems
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: EstimatedOutputQty };
+                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: LotQuantity };
                     i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = EstimatedOutputQty;
+                    i.values.LotQuantity = LotQuantity;
                     i.hasValid.ItemName.valid = true;
                     i.hasValid.MaterialIssueDate.valid = true;
                     i.hasValid.NumberOfLot.valid = true;
@@ -149,20 +150,19 @@ const MaterialIssueMaster = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-                if (insidePageMode === mode.modeSTPsave) {
+                // if (insidePageMode === mode.modeSTPsave) {
                     const jsonBody = JSON.stringify({
                         WorkOrder: id,
                         Item: Item,
                         Company: userCompany(),
                         Party: userParty(),
-                        Quantity: parseInt(EstimatedOutputQty)
+                        Quantity: parseInt(LotQuantity)
                     });
                     dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
-                } else if (insidePageMode === mode.view) {
+                // } else if (insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
-                }
+                // }
                 dispatch(editMaterialIssueIdSuccess({ Status: false }))
-
             }
         }
     }, [])
@@ -516,7 +516,7 @@ const MaterialIssueMaster = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const validMsg = []
-      
+
         const materialIssueItems = []
         let ox = await GoButton.map((index) => {
 
@@ -535,7 +535,7 @@ const MaterialIssueMaster = (props) => {
             if (a) {
                 validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
             };
-            
+
             function batch(ele) {
                 materialIssueItems.push({
                     Item: index.Item,
@@ -550,7 +550,7 @@ const MaterialIssueMaster = (props) => {
                     LiveBatchID: ele.LiveBatchID
                 })
             }
-             index.BatchesData.map((ele) => {
+            index.BatchesData.map((ele) => {
                 // debugger
                 if (Number(ele.Qty) > 0) {
                     batch(ele)

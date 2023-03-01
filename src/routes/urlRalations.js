@@ -121,6 +121,7 @@ export const MaterialIssue_Add_Mode_2 = url.MATERIAL_ISSUE_LIST
 
 export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
 export const ProductionReIssueList = url.PRODUCTION_REISSUE
+export const ProductionReIssue_STP = url.PRODUCTION_REISSUE_STP
 
 export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP

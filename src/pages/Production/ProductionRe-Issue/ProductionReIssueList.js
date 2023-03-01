@@ -67,7 +67,6 @@ const ProductionReIssueList = () => {
 
     const { userAccess, pageField } = reducers;
 
-
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
