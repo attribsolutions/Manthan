@@ -129,8 +129,8 @@ function PageFieldMaster_Tab(props) {
                 >
                     <Table className="table table-bordered table-responsive ">
                         <Thead  >
-                            <tr style={{ zIndex: "23" }} className="">
-                                <th className="thsticky colorhead">Control ID</th>
+                            <tr  className="colorhead">
+                                <th className="thsticky colorhead" >Control ID</th>
                                 <th className="">Field Label</th>
                                 <th className="">Control Type</th>
                                 <th className="" >Field Validation</th>
@@ -150,7 +150,7 @@ function PageFieldMaster_Tab(props) {
 
                             {pageFieldTabTable.map((TableValue, key) => (
                                 <tr  >
-                                    <td className='thsticky 'style={{ zIndex:"10",}}>
+                                    <td className='thsticky 'style={{ zIndex:"1",}}>
                                         <div style={{ width: "150px", }}>
                                             <Input
                                                 type="text"
