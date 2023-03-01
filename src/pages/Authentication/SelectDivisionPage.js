@@ -1,21 +1,12 @@
-import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
+import { Row, Col, Container, Button } from "reactstrap"
 
-import { Row, Col, Alert, Container, Label, Button } from "reactstrap"
-
-//redux
 import { useSelector, useDispatch } from "react-redux"
 
-import { withRouter, Link, useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
-// availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
-
-
-/// tsdfddf Punam demotest
-// actions
-import { AlertState, getUserDetailsAction, loginUser, roleAceessAction } from "../../store/actions"
+import { getUserDetailsAction, resetRoleAccessAction, roleAceessAction } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -31,17 +22,16 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { loginError, divisionDropdown_redux } = useSelector(state => ({
+  const { divisionDropdown_redux } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
   }))
 
 
   useEffect(() => {
-
+    dispatch(resetRoleAccessAction())
     if (!(localStorage.getItem("userId"))) {
       history.push("/login")
-
     }
     else {
       dispatch(getUserDetailsAction(localStorage.getItem("userId")))
