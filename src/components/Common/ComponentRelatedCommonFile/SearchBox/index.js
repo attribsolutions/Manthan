@@ -7,7 +7,7 @@ export const MainSearchBox = () => {
     const [searchRoleData, setSearchRoleData] = useState([])
     // const  RoleAccessData=demoRolleAcess
     const { RoleAccessData, searchProps } = useSelector((state) => ({
-        RoleAccessData: state.Login.RoleData,
+        RoleAccessData: state.Login.roleAccessSidbarData,
         searchProps: state.BreadcrumbReducer.searchProps,
     }));
 

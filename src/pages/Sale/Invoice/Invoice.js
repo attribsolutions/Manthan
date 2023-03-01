@@ -164,7 +164,7 @@ const Invoice = (props) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(invoiceSaveActionSuccess({ Status: false }))
@@ -177,11 +177,19 @@ const Invoice = (props) => {
                 })
             }
             else {
-                CustomAlert({
+                const promise = await CustomAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
                 })
+                if (promise) {
+                    if (subPageMode === url.INVOICE_1) {
+                        history.push({ pathname: url.INVOICE_LIST_1 })
+                    }
+                    else if (subPageMode === url.INVOICE_2) {
+                        history.push({ pathname: url.INVOICE_LIST_2 })
+                    }
+                }
             }
         }
         else if (postMsg.Status === true) {
@@ -235,6 +243,7 @@ const Invoice = (props) => {
                 obj.hasValid.Customer.valid = true;
                 return obj
             })
+            goButtonHandler(makeIBInvoice);
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
     }, [makeIBInvoice])
@@ -675,11 +684,11 @@ const Invoice = (props) => {
         stockDistributeFunc(index)
     };
 
-    function goButtonHandler(event) {
+    function goButtonHandler(makeIBInvoice) {
 
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: values.Customer.value,
+            Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
             Party: userParty(),
             OrderIDs: ""
         });
