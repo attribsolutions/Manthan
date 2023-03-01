@@ -31,7 +31,7 @@ const SidebarContent = (props) => {
     RoleAccessData,
     RoleAccessUpdateData,
   } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
+    RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
   }));
 
