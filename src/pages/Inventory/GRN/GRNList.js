@@ -68,7 +68,6 @@ const GRNList = () => {
         let makeBtnShow = false
         let newBtnPath = ''
 
-
         if (subPageMode === url.GRN_lIST) {
             page_Id = pageId.GRN_lIST;
             masterPath = url.GRN_ADD;
@@ -107,13 +106,14 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
+        debugger
         const id = list[0].id
         const customer = list[0].Customer
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            Party: userParty(),
-            Customer: customer,
+            // FromDate: fromdate,
+            // ToDate: todate,
+            // Party: userParty(),
+            // Customer: customer,
             GRN: id,
         });
         dispatch(makeChallanAction({jsonBody, pageMode:mode.modeSTPsave, path:url.CHALLAN_LIST}))

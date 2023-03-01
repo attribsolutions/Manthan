@@ -696,7 +696,7 @@ const Challan = (props) => {
 debugger
         const jsonBody = JSON.stringify({
             GRN: "",
-            ChallanDate: values.InvoiceDate,
+            ChallanDate:values.ChallanDate,
             Party: userParty(),
             GrandTotal: grand_total,
             Customer: values.Party.value,
