@@ -57,13 +57,8 @@ function* user_save_GenratorFunction({ data }) {
     console.log("response", response)
    
     yield put(addUserSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+ 
 }
 
 //  Get list api
