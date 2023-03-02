@@ -56,7 +56,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
 
       yield response.Data.TermsAndConditions = termArr;
     }
-    else if (subPageMode === url.ORDER_3) {
+    else if (subPageMode === url.IB_ORDER) {
       response = yield call(IBOrderPage_GoButton_API, data); // GO-Botton IB-invoice Add Page API
     }
     yield put(GoButton_For_Order_AddSuccess(response.Data));
@@ -67,7 +67,7 @@ function* saveOrder_GenFunc({ jsonBody, subPageMode }) {
 
   let response
   try {
-    if (subPageMode === url.ORDER_3) {                   // Save  Order  Add Page by subPageMode 
+    if (subPageMode === url.IB_ORDER) {                   // Save  Order  Add Page by subPageMode 
       response = yield call(IBOrderPage_Save_API, jsonBody);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, jsonBody);
@@ -119,7 +119,7 @@ function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter b
     else if (subPageMode === url.GRN_STP) {
       response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
     }
-    else if ((subPageMode === url.ORDER_LIST_3) || (subPageMode === url.IB_INVOICE_STP)) {
+    else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.ORDER_LIST_4)) {

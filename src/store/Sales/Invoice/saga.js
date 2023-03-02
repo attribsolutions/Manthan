@@ -43,7 +43,7 @@ function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
     if (subPageMode === url.INVOICE_1) {
       let response = yield call(Invoice_1_Save_API, data);
       yield put(invoiceSaveActionSuccess(response))
-    } if (subPageMode === url.INVOICE_2) {
+    } if (subPageMode === url.IB_INVOICE) {
       let response = yield call(Invoice_2_Save_API, data);
       yield put(invoiceSaveActionSuccess(response))
     }
@@ -62,7 +62,7 @@ function* InvoiceListGenFunc(action) {
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Get_Filter_API, filters);
-    } else if (subPageMode === url.INVOICE_LIST_2) {
+    } else if (subPageMode === url.IB_INVOICE_LIST) {
       response = yield call(Invoice_2_Get_Filter_API, filters);
     }
     debugger
@@ -84,7 +84,7 @@ function* editInvoiceListGenFunc(action) {
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Edit_API_Singel_Get, id);
-    } else if (subPageMode === url.INVOICE_LIST_2) {
+    } else if (subPageMode === url.IB_INVOICE_LIST) {
       response = yield call(Invoice_2_Edit_API_Singel_Get, id);
     }
 
@@ -102,7 +102,7 @@ function* DeleteInvoiceGenFunc(action) {
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Delete_API, id)
-    } else if (subPageMode === url.INVOICE_LIST_2) {
+    } else if (subPageMode === url.IB_INVOICE_LIST) {
       response = yield call(Invoice_2_Delete_API, id)
     }
 
@@ -176,7 +176,7 @@ function* gobutton_invoiceAdd_genFunc({body}) {
     if (subPageMode === url.INVOICE_1) {
       response = yield call(Invoice_1_GoButton_API, jsonBody); // GO-Botton SO-invoice Add Page API
     }
-    else if (subPageMode === url.INVOICE_2) {
+    else if (subPageMode === url.IB_INVOICE) {
       response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));

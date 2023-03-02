@@ -256,15 +256,15 @@ const userRoutes = [
   { path: path.INVOICE_LIST_1, component: InvoiceList },
 
   //************************************** Inter Branch ********************************//
-  { path: path.ORDER_3, component: Order },
-  { path: path.ORDER_LIST_3, component: OrderList },
+  { path: path.IB_ORDER, component: Order },
+  { path: path.IB_ORDER_PO_LIST, component: OrderList },
 
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
   { path: path.IB_INWARD_STP, component: InvoiceList },
 
-  { path: path.INVOICE_LIST_2, component: InvoiceList },
-  { path: path.INVOICE_2, component: Invoice },
+  { path: path.IB_INVOICE_LIST, component: InvoiceList },
+  { path: path.IB_INVOICE, component: Invoice },
   { path: path.IB_INVOICE_STP, component: OrderList },
 
   // ************************************ Utility **************************************//

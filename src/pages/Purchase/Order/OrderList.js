@@ -92,10 +92,10 @@ const OrderList = () => {
             masterPath = url.ORDER_2;
             newBtnPath = url.ORDER_2;
         }
-        else if (subPageMode === url.ORDER_LIST_3) {
-            page_Id = pageId.ORDER_LIST_3
-            masterPath = url.ORDER_3;
-            newBtnPath = url.ORDER_3;
+        else if (subPageMode === url.IB_ORDER_PO_LIST) {
+            page_Id = pageId.IB_ORDER_PO_LIST
+            masterPath = url.IB_ORDER;
+            newBtnPath = url.IB_ORDER;
         }
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
@@ -180,7 +180,7 @@ const OrderList = () => {
                 value: obj.CustomerID,
                 label: obj.Customer
             }
-            dispatch(makeIB_InvoiceAction({ jsonBody, path: url.INVOICE_2, pageMode: mode.defaultsave, customer }));
+            dispatch(makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
         }
         else {
             var isGRNSelect = ''
@@ -284,7 +284,7 @@ const OrderList = () => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={subPageMode === url.ORDER_LIST_3 ? 2 : 3} className="">
+                        <Col sm={subPageMode === url.IB_ORDER_PO_LIST ? 2 : 3} className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
@@ -304,7 +304,7 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={subPageMode === url.ORDER_LIST_3 ? 2 : 3} className="">
+                        <Col sm={subPageMode === url.IB_ORDER_PO_LIST ? 2 : 3} className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
@@ -325,7 +325,7 @@ const OrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={subPageMode === url.ORDER_LIST_3 ? 4 : 5}>
+                        <Col sm={subPageMode === url.IB_ORDER_PO_LIST ? 4 : 5}>
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
 
@@ -341,7 +341,7 @@ const OrderList = () => {
                             </FormGroup>
                         </Col >
                         {
-                            (subPageMode === url.ORDER_LIST_3) ?
+                            (subPageMode === url.IB_ORDER_PO_LIST) ?
                                 <Col sm="3">
                                     <FormGroup className="mb-2 row mt-3 " >
                                         <Label className="col-md-4 p-2"
