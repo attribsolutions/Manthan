@@ -59,10 +59,10 @@ function* InvoiceListGenFunc(action) {
   try {
     const { subPageMode, filters } = action
     let response;
-
+debugger
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Get_Filter_API, filters);
-    } else if (subPageMode === url.IB_INVOICE_LIST ||subPageMode === url.IB_GRN_LIST) {
+    } else if (subPageMode === url.IB_INVOICE_LIST ||subPageMode === url.IB_GRN_LIST ||subPageMode === url.IB_INWARD_STP) {
       response = yield call(Invoice_2_Get_Filter_API, filters);
     }
    

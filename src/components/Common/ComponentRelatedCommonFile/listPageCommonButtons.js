@@ -28,7 +28,7 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName,
         makeBtnShow = false
     } = props;
-
+debugger
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */

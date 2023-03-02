@@ -125,10 +125,10 @@ const Inward = (props) => {
             GrandTotal: InwardData.GrandTotal,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            // Customer: InwardData.Customer,
-            // Supplier: InwardData.Party,
-            Supplier: InwardData.Customer,
-            Customer: InwardData.Party,
+            Customer: InwardData.Customer,
+            Supplier: InwardData.Party,
+            // Supplier: InwardData.Customer,
+            // Customer: InwardData.Party,
             
             InterBranchInwardItems: arr,
             InterBranchInwardReferences: [{

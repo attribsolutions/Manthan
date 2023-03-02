@@ -102,7 +102,8 @@ const OrderList = () => {
         else if (subPageMode === url.IB_ORDER_SO_LIST) {
             page_Id = pageId.IB_ORDER_SO_LIST
             masterPath = url.IB_ORDER;
-            // newBtnPath = url.IB_ORDER;
+            makeBtnShow = true;
+            makeBtnName = "Make IBInvoice"
             IBType = "IBSO"
         }
         else if (subPageMode === url.ORDER_LIST_4) {

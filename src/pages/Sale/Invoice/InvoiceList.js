@@ -106,6 +106,7 @@ const InvoiceList = () => {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
+            IBType = "IBGRN"
         }
 
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
