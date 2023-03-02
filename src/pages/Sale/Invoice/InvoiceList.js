@@ -95,12 +95,12 @@ const InvoiceList = () => {
             page_Id = pageId.IB_INVOICE_LIST;
             masterPath = url.IB_INVOICE
             newBtnPath = url.IB_INVOICE_STP
-            IBType="IBInvoice"
+            IBType = "IBInvoice"
         }
         else if (subPageMode === url.IB_GRN_LIST) {
             page_Id = pageId.IB_GRN_LIST;
             masterPath = url.IB_INVOICE
-            IBType="IBGRN"
+            IBType = "IBGRN"
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
@@ -109,13 +109,13 @@ const InvoiceList = () => {
         }
         dispatch(GetVenderSupplierCustomer(""))
 
-        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler(true)
+        goButtonHandler(IBType)
     }, []);
 
     const supplierOptions = supplier.map((i) => ({
@@ -139,13 +139,13 @@ const InvoiceList = () => {
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
-    function goButtonHandler() {
+    function goButtonHandler(IBType) {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
             Party: userParty(),
-            IBType: otherState.IBType
+            IBType: IBType
         });
 
         dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
