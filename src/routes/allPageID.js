@@ -97,9 +97,9 @@ export const ORDER_LIST_1 = 54
 export const ORDER_2 = 117
 export const ORDER_LIST_2 = 118
 
-
 export const IB_ORDER = 126
 export const IB_ORDER_PO_LIST = 127
+export const IB_ORDER_SO_LIST = 148
 
 export const ORDER_4 = 114
 export const ORDER_LIST_4 = 143

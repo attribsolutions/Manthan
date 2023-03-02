@@ -258,7 +258,8 @@ const userRoutes = [
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },
-
+  { path: path.IB_ORDER_SO_LIST, component: OrderList },
+  
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
   { path: path.IB_INWARD_STP, component: InvoiceList },

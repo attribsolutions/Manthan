@@ -96,7 +96,7 @@ function* itemsForProduction_ReIssue_GenFunc({ data }) {          //  Items drop
 
 function* makeBtnForProduction_ReIssue_STP_GenFunc({ data }) {
   debugger   //  make btn  production_ReIssue STP  page
-  const { jsonBody, pageMode, path, produtionId, Items } = data;
+  const { jsonBody} = data;
   try {
     const response = yield call(Production_ReIssue_AddPageGOBtn_API, jsonBody);
     const resp1 = { ...response, ...data }

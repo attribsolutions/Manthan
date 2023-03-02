@@ -226,9 +226,7 @@ export const PRODUCTION_REIISUE_ITEM = '/ProductionMaterialIssueItem'
 export const PRODUCTION_REIISUE_SAVE = '/ProductionReIssue'
 export const PRODUCTION_REIISUE_LIST_FILTER = '/ProductionReIsssueFilter'
 
-
-
-//********************************** Inter Branch  **************************************/
+/********************************** Inter Branch  **************************************/
 // Inter Branch Order
 export const GO_BUTTON_POST_API_FOR_IBORDER = '/InterBranchesItems'
 export const IB_DIVISION_DROPDOWN = '/InterBranches'

@@ -108,6 +108,7 @@ const ProductionList = () => {
     }, [userAccess])
 
     useEffect(() => {
+        debugger
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -156,8 +157,8 @@ const ProductionList = () => {
         var Items = { value: list[0].Item, label: list[0].ItemName }
         try {
             const jsonBody = JSON.stringify({
-                "ProductionID": list[0].id,
-                "PartyID": userParty()
+                ProductionID: list[0].id,
+                PartyID: userParty()
             })
             const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id, Items: Items }
             dispatch(makeBtnProduction_ReIssue_STP_action(body))

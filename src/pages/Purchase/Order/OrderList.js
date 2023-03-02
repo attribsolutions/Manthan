@@ -41,7 +41,7 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' ,IBType: ''});
 
     const reducers = useSelector(
         (state) => ({
@@ -60,7 +60,7 @@ const OrderList = () => {
     );
 
 
-    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, inOut = { value: 1, label: "Order Received" } } = orderlistFilter;
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" } ,} = orderlistFilter;
     const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
 
@@ -79,6 +79,7 @@ const OrderList = () => {
         let page_Mode = mode.defaultList;
         let masterPath = '';
         let makeBtnShow = false;
+        let IBType = '';
         let newBtnPath = '';
         let makeBtnName = '';
 
@@ -96,6 +97,13 @@ const OrderList = () => {
             page_Id = pageId.IB_ORDER_PO_LIST
             masterPath = url.IB_ORDER;
             newBtnPath = url.IB_ORDER;
+            IBType="IBPO"
+        }
+        else if (subPageMode === url.IB_ORDER_SO_LIST) {
+            page_Id = pageId.IB_ORDER_SO_LIST
+            masterPath = url.IB_ORDER;
+            // newBtnPath = url.IB_ORDER;
+            IBType="IBSO"
         }
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
@@ -123,7 +131,7 @@ const OrderList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler(true)
+        goButtonHandler(IBType)
 
     }, []);
 
@@ -235,16 +243,16 @@ const OrderList = () => {
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
     }
 
-    function goButtonHandler() {
-
+    function goButtonHandler(IBType) {
+        debugger
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Supplier: supplierSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder,
-            InOut: inOut.value
-            // Mode:subPageMode === mode.defaultList ? "" : "mode2"
+            IBType: IBType ? IBType : otherState.IBType
+            
         });
 
         dispatch(getOrderListPage(subPageMode, pageMode, jsonBody));
@@ -284,7 +292,7 @@ const OrderList = () => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={subPageMode === url.IB_ORDER_PO_LIST ? 2 : 3} className="">
+                        <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
@@ -304,7 +312,7 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={subPageMode === url.IB_ORDER_PO_LIST ? 2 : 3} className="">
+                        <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
@@ -325,7 +333,7 @@ const OrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={subPageMode === url.IB_ORDER_PO_LIST ? 4 : 5}>
+                        <Col sm="5">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
 
@@ -340,7 +348,7 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col >
-                        {
+                        {/* {
                             (subPageMode === url.IB_ORDER_PO_LIST) ?
                                 <Col sm="3">
                                     <FormGroup className="mb-2 row mt-3 " >
@@ -358,7 +366,7 @@ const OrderList = () => {
                                     </FormGroup>
                                 </Col >
                                 : null
-                        }
+                        } */}
 
 
                         <Col sm="1" className="mt-3 ">
