@@ -137,7 +137,7 @@ export const INVOICE_LIST_1 = "/InvoiceList_1"
 
 //******************************* InterBranch Module ************************************//
 
-export const IB_ORDER = "/Order_3" // IB Order
+export const IB_ORDER = "/IB_Order" // IB Order
 export const IB_ORDER_PO_LIST = "/IB_Order_PO_List" //IB Order List
 export const IB_ORDER_SO_LIST = "/IB_Order_SO_List" //IB Order List
 
