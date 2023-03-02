@@ -107,7 +107,6 @@ const InvoiceList = () => {
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
         }
-        dispatch(GetVenderSupplierCustomer(""))
 
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
@@ -145,7 +144,7 @@ const InvoiceList = () => {
             ToDate: todate,
             Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
             Party: userParty(),
-            IBType: IBType
+            IBType: IBType ? IBType : otherState.IBType
         });
 
         dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
