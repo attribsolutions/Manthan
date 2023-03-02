@@ -265,6 +265,7 @@ const userRoutes = [
   { path: path.IB_INWARD_STP, component: InvoiceList },
 
   { path: path.IB_INVOICE_LIST, component: InvoiceList },
+  { path: path.IB_GRN_LIST, component: InvoiceList },
   { path: path.IB_INVOICE, component: Invoice },
   { path: path.IB_INVOICE_STP, component: OrderList },
 

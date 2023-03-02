@@ -62,10 +62,10 @@ function* InvoiceListGenFunc(action) {
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Get_Filter_API, filters);
-    } else if (subPageMode === url.IB_INVOICE_LIST) {
+    } else if (subPageMode === url.IB_INVOICE_LIST ||subPageMode === url.IB_GRN_LIST) {
       response = yield call(Invoice_2_Get_Filter_API, filters);
     }
-    debugger
+   
     const newList = yield response.Data.map((i) => {
       i["preInvoiceDate"] = i.InvoiceDate
       i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
@@ -95,14 +95,13 @@ function* editInvoiceListGenFunc(action) {
 
 // Invoice List delete List page
 function* DeleteInvoiceGenFunc(action) {
-  debugger
   try {
     const { subPageMode, id } = action;
     let response;
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Delete_API, id)
-    } else if (subPageMode === url.IB_INVOICE_LIST) {
+    } else if (subPageMode === url.IB_INVOICE_LIST ) {
       response = yield call(Invoice_2_Delete_API, id)
     }
 
@@ -176,7 +175,7 @@ function* gobutton_invoiceAdd_genFunc({body}) {
     if (subPageMode === url.INVOICE_1) {
       response = yield call(Invoice_1_GoButton_API, jsonBody); // GO-Botton SO-invoice Add Page API
     }
-    else if (subPageMode === url.IB_INVOICE) {
+    else if (subPageMode === url.IB_INVOICE ) {
       response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
