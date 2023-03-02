@@ -99,7 +99,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if ((subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_LIST_2)) {
       response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });//supplier mode 2
     }
-    else if ((subPageMode === url.ORDER_3) || (subPageMode === url.ORDER_LIST_3)) {
+    else if ((subPageMode === url.IB_ORDER) || (subPageMode === url.IB_ORDER_PO_LIST)) {
       response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });//divisions mode 4
     }
     else if ((subPageMode === url.ORDER_4) || (subPageMode === url.ORDER_LIST_4)) {
@@ -108,7 +108,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
     }
-    else if ((subPageMode === url.INVOICE_2) || (subPageMode === url.INVOICE_LIST_2)) {
+    else if ((subPageMode === url.IB_INVOICE) || (subPageMode === url.IB_INVOICE_LIST)) {
       response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });
       // response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
     }

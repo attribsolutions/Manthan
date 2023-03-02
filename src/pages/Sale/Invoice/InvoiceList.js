@@ -86,13 +86,13 @@ const InvoiceList = () => {
 
 
         if (subPageMode === url.INVOICE_LIST_1) {
-            page_Id = pageId.INVOICE_LIST_2
+            page_Id = pageId.IB_INVOICE_LIST
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
         }
-        else if (subPageMode === url.INVOICE_LIST_2) {
-            page_Id = pageId.INVOICE_LIST_2;
-            masterPath = url.INVOICE_2
+        else if (subPageMode === url.IB_INVOICE_LIST) {
+            page_Id = pageId.IB_INVOICE_LIST;
+            masterPath = url.IB_INVOICE
             newBtnPath = url.IB_INVOICE_STP
         }
         else if (subPageMode === url.IB_INWARD_STP) {
@@ -179,6 +179,7 @@ const InvoiceList = () => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
+                        
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"

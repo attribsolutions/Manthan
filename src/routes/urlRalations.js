@@ -138,16 +138,16 @@ export const Challan = url.CHALLAN_LIST
 
 //******************************* Inter Branch ************************************//
 
-export const OrderList_3 = url.ORDER_3
-export const Order_3 = url.ORDER_LIST_3
+export const OrderList_3 = url.IB_ORDER
+export const Order_3 = url.IB_ORDER_PO_LIST
 
 export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST
-export const IB_INWARD_STP = url.INVOICE_LIST_2
+export const IB_INWARD_STP = url.IB_INVOICE_LIST
 
 export const InvoiceList = url.INVOICE_1
 export const Invoice = url.INVOICE_LIST_1
 
 export const IB_Invoice_List = url.IB_INVOICE_STP
-export const IB_Invoice = url.INVOICE_LIST_2
-export const IB_Invoice_STP = url.ORDER_LIST_3
+export const IB_Invoice = url.IB_INVOICE_LIST
+export const IB_Invoice_STP = url.IB_ORDER_PO_LIST

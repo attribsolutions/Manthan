@@ -186,8 +186,8 @@ const Invoice = (props) => {
                     if (subPageMode === url.INVOICE_1) {
                         history.push({ pathname: url.INVOICE_LIST_1 })
                     }
-                    else if (subPageMode === url.INVOICE_2) {
-                        history.push({ pathname: url.INVOICE_LIST_2 })
+                    else if (subPageMode === url.IB_INVOICE) {
+                        history.push({ pathname: url.IB_INVOICE_LIST })
                     }
                 }
             }
@@ -695,7 +695,6 @@ const Invoice = (props) => {
         GoBtnDissable({ id: goBtnId, state: true })
         dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, goBtnId }));
 
-        // }
     };
 
     const SaveHandler = (event) => {
@@ -795,7 +794,7 @@ const Invoice = (props) => {
         let jsonBody;  //json body decleration 
         if (subPageMode === url.INVOICE_1) {
             jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-        } else if (subPageMode === url.INVOICE_2) {
+        } else if (subPageMode === url.IB_INVOICE) {
             jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_2_json() });
         }
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
