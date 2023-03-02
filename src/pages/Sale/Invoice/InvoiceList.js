@@ -44,7 +44,7 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
     const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
 
@@ -81,6 +81,7 @@ const InvoiceList = () => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
+        let IBType = '';
         let newBtnPath = false;
         let makeBtnShow = false;
 
@@ -94,6 +95,12 @@ const InvoiceList = () => {
             page_Id = pageId.IB_INVOICE_LIST;
             masterPath = url.IB_INVOICE
             newBtnPath = url.IB_INVOICE_STP
+            IBType="IBInvoice"
+        }
+        else if (subPageMode === url.IB_GRN_LIST) {
+            page_Id = pageId.IB_GRN_LIST;
+            masterPath = url.IB_INVOICE
+            IBType="IBGRN"
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
@@ -138,6 +145,7 @@ const InvoiceList = () => {
             ToDate: todate,
             Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
             Party: userParty(),
+            IBType: otherState.IBType
         });
 
         dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
@@ -179,7 +187,7 @@ const InvoiceList = () => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        
+
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"

@@ -139,6 +139,7 @@ export const IB_INWARD_STP = 133
 
 export const IB_INVOICE = 130
 export const IB_INVOICE_LIST = 131
+export const IB_GRN_LIST = 146
 export const IB_INVOICE_STP = 132
 
 
