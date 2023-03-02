@@ -117,6 +117,7 @@ const OrderList = () => {
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
+            IBType = "IBSO"
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
