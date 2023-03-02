@@ -1,5 +1,4 @@
-import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Card,
@@ -10,7 +9,7 @@ import {
     FormGroup,
     Label,
     Row,
-    Table,
+    Table
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -22,7 +21,6 @@ import {
     updatePartySubParty,
     updatePartySubPartySuccess,
     getPartySubParty_For_party_dropdown,
-    getPartySubParty_For_party_dropdownSuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
     AlertState,
@@ -44,7 +42,7 @@ import {
     onChangeSelect,
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -117,6 +115,7 @@ const PartySubParty = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 

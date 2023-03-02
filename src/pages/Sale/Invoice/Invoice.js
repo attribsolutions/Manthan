@@ -24,7 +24,7 @@ import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     updateBOMListSuccess
-} from "../../../store/Purchase/BOMRedux/action";
+} from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -38,13 +38,14 @@ import {
     GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
     invoiceSaveAction,
-    invoiceSaveActionSuccess
+    invoiceSaveActionSuccess,
+    makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
-import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
-import "./css.css"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { invoice_GoButton_dataConversion_Func } from "../../../store/Sales/Invoice/saga";
 
 const Invoice = (props) => {
 
@@ -67,7 +68,7 @@ const Invoice = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
-    
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -75,7 +76,8 @@ const Invoice = (props) => {
         pageField,
         userAccess,
         GoButton = '',
-        vendorSupplierCustomer
+        vendorSupplierCustomer,
+        makeIBInvoice
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -84,6 +86,7 @@ const Invoice = (props) => {
         customer: state.SupplierReducer.customer,
         GoButton: state.InvoiceReducer.gobutton_Add,
         vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
+        makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
     }));
 
     const { OrderItemDetails = [], OrderIDs = [] } = GoButton;
@@ -119,7 +122,7 @@ const Invoice = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -154,14 +157,14 @@ const Invoice = (props) => {
                     Party: userParty(),
                     OrderIDs: ""
                 });
-                dispatch(GoButtonForinvoiceAdd(jsonBody));
+                dispatch(GoButtonForinvoiceAdd({ jsonBody }));
                 dispatch(editInvoiceListSuccess({ Status: false }))
 
             }
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(invoiceSaveActionSuccess({ Status: false }))
@@ -174,11 +177,19 @@ const Invoice = (props) => {
                 })
             }
             else {
-                CustomAlert({
+                const promise = await CustomAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
                 })
+                if (promise) {
+                    if (subPageMode === url.INVOICE_1) {
+                        history.push({ pathname: url.INVOICE_LIST_1 })
+                    }
+                    else if (subPageMode === url.IB_INVOICE) {
+                        history.push({ pathname: url.IB_INVOICE_LIST })
+                    }
+                }
             }
         }
         else if (postMsg.Status === true) {
@@ -221,6 +232,22 @@ const Invoice = (props) => {
     useEffect(() => {
         showAllStockOnclick(showAllStockState)
     }, [showAllStockState]);
+
+
+    useEffect(() => {
+
+        if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = makeIBInvoice.customer;
+                obj.hasValid.Customer.valid = true;
+                return obj
+            })
+            goButtonHandler(makeIBInvoice);
+            dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
+        }
+    }, [makeIBInvoice])
+
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
         value: index.id,
@@ -657,23 +684,17 @@ const Invoice = (props) => {
         stockDistributeFunc(index)
     };
 
-    function goButtonHandler(event) {
-
-        // }catch(e){}
-        // if (formValid(state, setState)) {
-        // debugger
-
+    function goButtonHandler(makeIBInvoice) {
 
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: values.Customer.value,
+            Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
             Party: userParty(),
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
-        dispatch(GoButtonForinvoiceAdd(subPageMode, jsonBody, goBtnId));
+        dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, goBtnId }));
 
-        // }
     };
 
     const SaveHandler = (event) => {
@@ -756,7 +777,7 @@ const Invoice = (props) => {
         const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
-            IBChallansReferences: OrderIDs.map(i => ({ Order: i }))
+            IBChallansReferences: OrderIDs.map(i => ({ Demand: i }))
         });
 
         const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -773,7 +794,7 @@ const Invoice = (props) => {
         let jsonBody;  //json body decleration 
         if (subPageMode === url.INVOICE_1) {
             jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-        } else if (subPageMode === url.INVOICE_2) {
+        } else if (subPageMode === url.IB_INVOICE) {
             jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_2_json() });
         }
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

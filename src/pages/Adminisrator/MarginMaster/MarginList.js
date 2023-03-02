@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -19,9 +18,8 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url"
 const MarginList = (props) => {
 
   const dispatch = useDispatch();
@@ -49,7 +47,8 @@ const MarginList = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.MARGIN });
     }
   }, [userAccess])
 
@@ -189,14 +188,6 @@ const MarginList = (props) => {
       <React.Fragment>
         <div className="page-content">
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MARGIN_lIST} /> */}
-          {/* <Breadcrumb
-            pageHeading={userAccState.PageHeading}
-            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-            showCount={true}
-            excelBtnView={true}
-            excelData={TableListData}
-          /> */}
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >

@@ -13,7 +13,6 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
 
 const RoleList = (props) => {
@@ -53,7 +52,6 @@ const RoleList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

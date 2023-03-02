@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Card,
     CardBody,
@@ -8,7 +8,7 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+    Row
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -32,11 +32,11 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
-    resetFunction,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -53,7 +53,6 @@ const GroupMaster = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -93,17 +92,15 @@ const GroupMaster = (props) => {
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
-
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -201,7 +198,6 @@ const GroupMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
     useEffect(() => {
 
         if (pageField) {
@@ -275,8 +271,8 @@ const GroupMaster = (props) => {
                                                                     autoComplete='off'
                                                                     autoFocus={true}
                                                                     onChange={(event) => {
-                                                                        onChangeText({ event, state, setState })
-                                                                        dispatch(Breadcrumb_inputName(event.target.value))
+                                                                        dispatch(Breadcrumb_inputName(event.target.value));
+                                                                        onChangeText({ event, state, setState });
                                                                     }}
                                                                 />
                                                                 {isError.Name.length > 0 && (

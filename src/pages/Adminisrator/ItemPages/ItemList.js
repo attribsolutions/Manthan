@@ -13,7 +13,6 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as pageId from "../../../routes/allPageID"
 
 const ItemsList = (props) => {
@@ -43,7 +42,7 @@ const ItemsList = (props) => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(26))
+    dispatch(commonPageFieldList(pageId.ITEM_lIST))
     dispatch(getItemList());
   }, []);
 

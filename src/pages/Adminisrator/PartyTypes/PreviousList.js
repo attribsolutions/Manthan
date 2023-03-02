@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -258,18 +257,6 @@ const PartyTypeList = (props) => {
                 >
                   {toolkitProps => (
                     <React.Fragment>
-                      <Breadcrumb
-                        title={"Count :"}
-                        breadcrumbItem={userPageAccessState.PageHeading}
-                        IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                        SearchProps={toolkitProps.searchProps}
-                        breadcrumbCount={`Module Count: ${TableListData.length}`}
-                        IsSearchVissible={true}
-                        isExcelButtonVisible={true}
-                        ExcelData={TableListData}
-                        RedirctPath={"/PartyType"}
-                      />
-                       
 
                       <Row>
                         <Col xl="12">

@@ -9,8 +9,6 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
-//Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -155,17 +153,7 @@ const ModulesList = () => {
                                 >
                                     {toolkitProps => (
                                         <React.Fragment>
-                                            <Breadcrumb
-                                                title={"Count :"}
-                                                breadcrumbItem={userPageAccessState.PageHeading}
-                                                IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                                SearchProps={toolkitProps.searchProps}
-                                                breadcrumbCount={`Module Count: ${TableListData.length}`}
-                                                IsSearchVissible={true}
-                                                isExcelButtonVisible={true}
-                                                ExcelData={TableListData}
-                                                RedirctPath={"/ModuleMaster"}
-                                            />
+                                           
                                             <Row>
                                                 <Col xl="12">
                                                     <div className="table-responsive">

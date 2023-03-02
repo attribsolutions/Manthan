@@ -24,7 +24,7 @@ export function SaveButton(props) {
             </button>
             :
             <></>
-          : (pageMode === mode.defaultsave || pageMode === mode.mode2save || pageMode === mode.dropdownAdd) ? (
+          : (pageMode === mode.defaultsave ||  pageMode === mode.copy || pageMode === mode.modeSTPsave || pageMode === mode.dropdownAdd || pageMode === mode.assingLink) ? (
             userAcc.RoleAccess_IsSave ?
               <button
                 type="submit"

@@ -5,7 +5,8 @@ export const view="view";
 export const copy="copy";
 export const isdelete="isdelete";
 export const dropdownAdd="dropdownAdd";
-export const mode2save="mode2save";
+export const modeSTPsave="modeSTPsave";
+export const modeSTPList="modeSTPList";
 
 export const  editValue="editValue" //Only for variable
 export const  assingLink="assingLink" //Only for order page assing Item Link

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -181,13 +180,6 @@ const MRPList = (props) => {
       dataField: "EffectiveDate",
       sort: true,
     },
-
-    // {
-    //     text: "CompanyName",
-    //     dataField: "CompanyName",
-    //     sort: true,
-    //   },
-
     {
       text: "DivisionName",
       dataField: "DivisionName",
@@ -269,20 +261,7 @@ const MRPList = (props) => {
                 >
                   {toolkitProps => (
                     <React.Fragment>
-                      <Breadcrumb
-                        title={"Count :"}
-                        breadcrumbItem={userPageAccessState.PageHeading}
-                        IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                        SearchProps={toolkitProps.searchProps}
-                        breadcrumbCount={`MRP Count: ${TableListData.length}`}
-                        IsSearchVissible={true}
-                        isExcelButtonVisible={true}
-                        ExcelData={TableListData}
-                        RedirctPath={"/MRPMaster"}
-                      />
-
-
-                      <Row>
+                                           <Row>
                         <Col xl="12">
                           <div className="table-responsive">
                             <BootstrapTable
@@ -290,8 +269,6 @@ const MRPList = (props) => {
                               responsive
                               bordered={true}
                               striped={false}
-                              // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
-                              // defaultSorted={commonDefaultSorted("Name")}
                               classes={"table align-middle table-nowrap table-hover"}
                               headerWrapperClasses={"thead-light"}
                               {...toolkitProps.baseProps}

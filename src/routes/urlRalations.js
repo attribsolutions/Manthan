@@ -11,8 +11,6 @@ export const SEARCH_BOX3 = "/SerachBox3"
 
 // *************************** Administration *******************************//
 
-
-
 export const ModuleMaster = url.MODULE_lIST
 export const ModuleList = url.MODULE
 
@@ -106,9 +104,10 @@ export const Order_1 = url.ORDER_LIST_1
 export const OrderList_2 = url.ORDER_2
 export const Order_2 = url.ORDER_LIST_2
 
-export const GRNList = url.GRN_STP
-export const GRN = url.GRN_lIST
-export const GRN_STP = url.GRN_lIST
+export const OrderList_4 = url.ORDER_4
+export const Order_4 = url.ORDER_LIST_4
+
+//******************************* Production ************************************//
 
 export const BOMList = url.BIllOf_MATERIALS
 export const BOM = url.BIllOf_MATERIALS_LIST
@@ -120,27 +119,35 @@ export const MaterialIssueList = url.MATERIAL_ISSUE_STP
 export const MaterialIssue = url.MATERIAL_ISSUE_LIST
 export const MaterialIssue_Add_Mode_2 = url.MATERIAL_ISSUE_LIST
 
+export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
+export const ProductionReIssueList = url.PRODUCTION_REISSUE
+export const ProductionReIssue_STP = url.PRODUCTION_REISSUE_STP
+
 export const ProductionMaster = url.PRODUCTION_LIST
 export const ProductionList = url.PRODUCTION_STP
 export const Production_Add_Mode = url.PRODUCTION_LIST
 
+//******************************* Inventory  ************************************//
 
+export const GRNList = url.GRN_STP
+export const GRN = url.GRN_lIST
+export const GRN_STP = url.GRN_lIST
 
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
 
 //******************************* Inter Branch ************************************//
 
-export const OrderList_3 = url.ORDER_3
-export const Order_3 = url.ORDER_LIST_3
+export const OrderList_3 = url.IB_ORDER
+export const Order_3 = url.IB_ORDER_PO_LIST
 
 export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST
-export const IB_INWARD_STP = url.INVOICE_LIST_2
+export const IB_INWARD_STP = url.IB_INVOICE_LIST
 
 export const InvoiceList = url.INVOICE_1
 export const Invoice = url.INVOICE_LIST_1
 
 export const IB_Invoice_List = url.IB_INVOICE_STP
-export const IB_Invoice = url.INVOICE_LIST_2
-export const IB_Invoice_STP = url.ORDER_LIST_3
+export const IB_Invoice = url.IB_INVOICE_LIST
+export const IB_Invoice_STP = url.IB_ORDER_PO_LIST

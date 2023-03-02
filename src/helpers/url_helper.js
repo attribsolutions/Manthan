@@ -190,8 +190,11 @@ export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 
 //Challan
-export const CHALLAN_LIST_BY_FILTERS = "/Challan"
+export const CHALLAN_LIST_BY_FILTERS = "/ChallanFilter"
 
+export const CHALLAN_SAVE_GRN_LIST = "/Challan"
+export const CHALLAN_ITEMS = "/ChallanItems"
+export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
 
 
 //Bill Of Master
@@ -216,18 +219,24 @@ export const PRODUCTION_LIST_FILTER = '/ProductionFilter'
 export const PRODUCTION_MAKE_API = '/MaterialIssueforProduction'
 export const PRODUCTION_UNIT_DROPDOWN_API = '/MCUnitDetails'
 
+export const PRODUCTION_RE_ISSUE_POST_API = '/Production'
+export const PRODUCTION_RE_ISSUE_LIST_FILTER = '/ProductionFilter'
 
-//********************************** Inter Branch  **************************************/
+export const PRODUCTION_REIISUE_ITEM = '/ProductionMaterialIssueItem'
+export const PRODUCTION_REIISUE_SAVE = '/ProductionReIssue'
+export const PRODUCTION_REIISUE_LIST_FILTER = '/ProductionReIsssueFilter'
+
+/********************************** Inter Branch  **************************************/
 // Inter Branch Order
 export const GO_BUTTON_POST_API_FOR_IBORDER = '/InterBranchesItems'
 export const IB_DIVISION_DROPDOWN = '/InterBranches'
-export const POST_API_FOR_IBORDER = '/InterBranchesOrder'
+export const SAVE_API_FOR_IBORDER = '/InterBranchesOrder'
 export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 
 // Inward
 export const POST_API_FOR_INWARD = '/InterBranchInward'// Inward  addpage save Api
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//InwardList filter Api
-export const INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
+export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
 
 
 

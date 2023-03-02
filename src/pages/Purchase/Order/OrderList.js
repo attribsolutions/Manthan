@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import {
     deleteOrderId,
@@ -16,7 +16,7 @@ import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonF
 import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import { getSupplier, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
@@ -30,6 +30,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
+import { GoButtonForinvoiceAdd, makeIB_InvoiceAction, makeIB_InvoiceActionSuccess } from "../../../store/Sales/Invoice/action";
 
 
 const OrderList = () => {
@@ -40,12 +41,14 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
 
     const reducers = useSelector(
         (state) => ({
             supplier: state.SupplierReducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
+            makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
             deleteMsg: state.OrderReducer.deleteMsg,
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -57,8 +60,8 @@ const OrderList = () => {
     );
 
 
-    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" } } = orderlistFilter;
-    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, } = orderlistFilter;
+    const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
 
     const action = {
@@ -71,29 +74,65 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let makeBtnShow = false;
+        let IBType = '';
+        let newBtnPath = '';
+        let makeBtnName = '';
 
         if (subPageMode === url.ORDER_LIST_1) {
-            page_Id = pageId.ORDER_LIST_1
+            page_Id = pageId.ORDER_LIST_1;
+            masterPath = url.ORDER_1;
+            newBtnPath = url.ORDER_1;
         }
         else if (subPageMode === url.ORDER_LIST_2) {
             page_Id = pageId.ORDER_LIST_2
+            masterPath = url.ORDER_2;
+            newBtnPath = url.ORDER_2;
         }
-        else if (subPageMode === url.ORDER_LIST_3) {
-            page_Id = pageId.ORDER_LIST_3
+        else if (subPageMode === url.IB_ORDER_PO_LIST) {
+            page_Id = pageId.IB_ORDER_PO_LIST
+            masterPath = url.IB_ORDER;
+            newBtnPath = url.IB_ORDER;
+            IBType = "IBPO"
+        }
+        else if (subPageMode === url.IB_ORDER_SO_LIST) {
+            page_Id = pageId.IB_ORDER_SO_LIST
+            masterPath = url.IB_ORDER;
+            // newBtnPath = url.IB_ORDER;
+            IBType = "IBSO"
+        }
+        else if (subPageMode === url.ORDER_LIST_4) {
+            page_Id = pageId.ORDER_LIST_4
+            masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+        }
+        else if (subPageMode === url.IB_INVOICE_STP) {
+            page_Id = pageId.IB_INVOICE_STP
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+            IBType = "IBSO"
         }
         else if (subPageMode === url.GRN_STP) {
             page_Id = pageId.GRN_STP
-            page_Mode = mode.mode2save
-        };
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make GRN"
+        }
+        dispatch(getOrderListPage(""))//for clear privious order list
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName ,IBType})
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler(true)
+        goButtonHandler({IBType})
 
     }, []);
 
@@ -113,19 +152,9 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-    // useEffect(() => {
 
-    //     let userAcc = userAccess.find((inx) => {
-    //         return (inx.id === page_Id)
-    //     })
-    //     if (!(userAcc === undefined)) {
-    //         setUserAccState(userAcc)
-
-    //     }
-    // }, [userAccess])
 
     useEffect(() => {
-        debugger
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
                 pathname: GRNitem.path,
@@ -134,38 +163,68 @@ const OrderList = () => {
         }
     }, [GRNitem])
 
+    useEffect(() => {
+        debugger
+        if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
+
+            history.push({
+                pathname: makeIBInvoice.path,
+                page_Mode: makeIBInvoice.page_Mode,
+            })
+        }
+    }, [makeIBInvoice])
+
+
     const makeBtnFunc = (list = []) => {
 
-        var isGRNSelect = ''
-        var challanNo = ''
-        const grnRef = []
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.hasSelect) {
-                    grnRef.push({
-                        Invoice: null,
-                        Order: ele.id,
-                        ChallanNo: ele.FullOrderNumber,
-                        Inward: false
-                    });
-                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-                }
+        const obj = list[0]
+        if (subPageMode === url.IB_INVOICE_STP) {
+            const jsonBody = JSON.stringify({
+                FromDate: obj.preOrderDate,
+                Customer: obj.CustomerID,
+                Party: userParty(),
+                OrderIDs: `${obj.id}`
             });
+            const customer = {
+                value: obj.CustomerID,
+                label: obj.Customer
+            }
+            dispatch(makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
+        }
+        else {
+            var isGRNSelect = ''
+            var challanNo = ''
+            const grnRef = []
+            if (list.length > 0) {
+                list.forEach(ele => {
+                    if (ele.hasSelect) {
+                        grnRef.push({
+                            Invoice: null,
+                            Order: ele.POType === "Challan" ? '' : ele.id,
+                            ChallanNo: ele.FullOrderNumber,
+                            Inward: false,
+                            Challan: ele.POType === "Challan" ? ele.id : ''
+                        });
+                        isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                        challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                    }
+                });
 
-            if (isGRNSelect) {
+                if (isGRNSelect) {
 
-                isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+                    isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                    challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
-                const jsonBody = JSON.stringify({
-                    OrderIDs: isGRNSelect
-                })
+                    const jsonBody = JSON.stringify({
+                        OrderIDs: isGRNSelect,
+                        Mode: list[0].POType === "Challan" ? 2 : 1
+                    })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
-            } else {
-                alert("Please Select Order1")
+                } else {
+                    alert("Please Select Order1")
+                }
             }
         }
     }
@@ -185,18 +244,18 @@ const OrderList = () => {
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
     }
 
-    function goButtonHandler() {
-        
+    function goButtonHandler({IBType}) {
+        debugger
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Supplier: supplierSelect.value,
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder,
-            Mode:subPageMode === mode.defaultList ? "" : "mode2"
+            IBType: IBType ? IBType : otherState.IBType
         });
 
-        dispatch(getOrderListPage(subPageMode,pageMode, jsonBody));
+        dispatch(getOrderListPage(subPageMode, pageMode, jsonBody));
     }
 
     function fromdateOnchange(e, date) {
@@ -217,7 +276,12 @@ const OrderList = () => {
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
         setorderlistFilter(newObj)
-        // dispatch(orderlistfilters(newObj))
+    }
+
+    function InOutOnchange(e) {
+        let newObj = { ...orderlistFilter }
+        newObj.inOut = e
+        setorderlistFilter(newObj)
     }
 
     return (
@@ -284,6 +348,26 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col >
+                        {/* {
+                            (subPageMode === url.IB_ORDER_PO_LIST) ?
+                                <Col sm="3">
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className="col-md-4 p-2"
+
+                                            style={{ width: "90px" }}>List Type</Label>
+                                        <Col sm="5">
+                                            <Select
+                                                classNamePrefix="select2-Customer"
+                                                value={inOut}
+                                                options={[{ value: 1, label: "Order Received" }, { value: 2, label: "Order Given" }]}
+                                                onChange={InOutOnchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                                : null
+                        } */}
+
 
                         <Col sm="1" className="mt-3 ">
                             <Go_Button onClick={goButtonHandler} />
@@ -296,18 +380,19 @@ const OrderList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Order}
-                            masterPath={url.ORDER_1}
-                            ButtonMsgLable={"Order"}
-                            deleteName={"FullOrderNumber"}
-                            page_Mode={pageMode}
-                            // pageUrl={page_Url}
-                            makeBtnShow={subPageMode===url.GRN_STP}
-                            makeBtnFunc={makeBtnFunc}
-                            makeBtnName={"Make GRN"}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
+                            pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
+                            makeBtnFunc={makeBtnFunc}
+                            ButtonMsgLable={"Order"}
+                            deleteName={"FullOrderNumber"}
+                            makeBtnName={otherState.makeBtnName}
+                            MasterModal={Order}
+
                         />
                         : null
                 }

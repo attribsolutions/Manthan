@@ -21,7 +21,7 @@ import {
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Breadcrumb from "../../../../components/Common/Breadcrumb";
+
 import { AvForm } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
@@ -1077,7 +1077,6 @@ const ItemsMaster = (props) => {
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
                             {/* Render Breadcrumbs */}
-                            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                             <Row>
 

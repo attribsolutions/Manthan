@@ -13,7 +13,8 @@ import {
   DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN,
   GET_SUPER_ADMIN_API,
   GET_SUPER_ADMIN_API_SUCCESS,
-  LOGOUT_REST
+  LOGOUT_REST,
+  RESET_ROLE_ACCESS_ACTION
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -113,6 +114,12 @@ export const postSuperAdminSuccess = (data) => ({
 export const logoutReset = (data) => {
   return {
     type: LOGOUT_REST,
+    payload: data,
+  }
+}
+export const resetRoleAccessAction = (data) => {
+  return {
+    type: RESET_ROLE_ACCESS_ACTION,
     payload: data,
   }
 }

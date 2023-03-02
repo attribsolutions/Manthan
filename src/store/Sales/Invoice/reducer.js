@@ -1,9 +1,12 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { DELETE_INVOICE_LIST_PAGE_SUCCESS, EDIT_INVOICE_LIST_SUCCESS, INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS, GO_BUTTON_FOR_INVOICE_ADD_SUCCESS, GO_BUTTON_POST_FOR_INVOICE_SUCCESS, INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS } from "./actionType"
+import { DELETE_INVOICE_LIST_PAGE_SUCCESS, EDIT_INVOICE_LIST_SUCCESS, INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
+     GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
+     INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS, 
+     MAKE_IB_INVOICE_ACTION_SUCCESS} from "./actionType"
 
 const INIT_STATE = {
     gobutton_Add: [],
-    GoButton: [],
+    makeIBInvoice: { Status: false },
     postMsg: { Status: false },
     editData: { Status: false },
     Invoicelist: [],
@@ -19,13 +22,6 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 gobutton_Add: action.payload,
-            }
-        
-        // GO Button 
-        case GO_BUTTON_POST_FOR_INVOICE_SUCCESS:
-            return {
-                ...state,
-                GoButton: action.payload,
             }
 
         case INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS:
@@ -48,6 +44,11 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 ...state,
                 deleteMsg: action.payload,
             }
+            case MAKE_IB_INVOICE_ACTION_SUCCESS:
+                return {
+                    ...state,
+                    makeIBInvoice: action.payload,
+                }
         default:
             return state
     }

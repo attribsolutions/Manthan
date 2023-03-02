@@ -18,7 +18,6 @@ import {
     editModuleIDSuccess,
     updateModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
 import {
     AlertState,
@@ -35,10 +34,9 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as mode from "../../../routes/PageMode"
 
 
@@ -103,6 +101,7 @@ const Modules = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -246,8 +245,6 @@ const Modules = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MODULE} /> */}
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                     <Container fluid  >
 
                         <Card className="text-black" >

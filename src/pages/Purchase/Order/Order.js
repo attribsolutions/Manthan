@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
@@ -28,7 +28,6 @@ import {
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
-import '../../Order/div.css'
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
@@ -40,25 +39,28 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import * as pageId from "../../../routes/allPageID"
-import { Post_Division_Type_API } from "../../../helpers/backend_helper";
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 
 let editVal = {}
 
 function initialState(history) {
     let page_Id = '';
+    let listPath = ''
     let sub_Mode = history.location.pathname;
 
     if (sub_Mode === url.ORDER_1) {
         page_Id = pageId.ORDER_1;
+        listPath = url.ORDER_LIST_1
     }
     else if (sub_Mode === url.ORDER_2) {
-        page_Id = pageId.ORDER_2
+        page_Id = pageId.ORDER_2;
+        listPath = url.ORDER_LIST_2
     }
-    else if (sub_Mode === url.ORDER_3) {
-        page_Id = pageId.ORDER_3
+    else if (sub_Mode === url.IB_ORDER) {
+        page_Id = pageId.IB_ORDER;
+        listPath = url.IB_ORDER_PO_LIST;
     };
-    return page_Id
+    return { page_Id, listPath }
 };
 
 
@@ -73,7 +75,8 @@ const Order = (props) => {
 
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [page_id, setPage_id] = useState(() => initialState(history))
+    const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
+    const [listPath, setListPath] = useState(() => initialState(history).listPath)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -157,11 +160,11 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc);
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
-            if (FindPartyItemAccess) {
+            if ((FindPartyItemAccess) && !(subPageMode === url.IB_ORDER)) {
                 setFindPartyItemAccess(true)
             };
         };
@@ -199,7 +202,8 @@ const Order = (props) => {
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
 
-                const termsAndCondition = hasEditVal.TermsAndConditions.map(i => ({
+                const { TermsAndConditions = [] } = hasEditVal;
+                const termsAndCondition = TermsAndConditions.map(i => ({
                     value: i.id,
                     label: i.TermsAndCondition,
                     IsDeleted: 0
@@ -228,6 +232,7 @@ const Order = (props) => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
+            debugger
             setTermsAndConTable(TermsAndConditions)
             dispatch(GoButton_For_Order_AddSuccess(''))
         }
@@ -259,11 +264,11 @@ const Order = (props) => {
             const a = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: url.ORDER_LIST_1,
+                RedirectPath: listPath,
             })
             if (a) {
                 history.push({
-                    pathname: url.ORDER_LIST_1,
+                    pathname: listPath,
                 });
             }
 
@@ -281,7 +286,7 @@ const Order = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             history.push({
-                pathname: url.ORDER_LIST_1,
+                pathname: listPath,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
@@ -566,6 +571,7 @@ const Order = (props) => {
 
         const validMsg = []
         const itemArr = []
+        const isVDC_POvalidMsg = []
 
         function isChanged({ i, isedit, isdel }) {
             const basicAmt = parseFloat(basicAmount(i))
@@ -595,16 +601,44 @@ const Order = (props) => {
             itemArr.push(arr)
         };
 
-        function orderItem({ i, isedit }) {
-
-            if ((i.Quantity > 0) && (i.Rate > 0)) {
+        function orderItem({ i, isedit }) {  //isvdc_po logic
+            debugger
+            if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
                 var isdel = false;
-
                 isChanged({ i, isedit, isdel })
             }
-            else if ((i.Quantity < 1) && (i.editrowId)) {
+            else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
                 var isdel = true;
                 isChanged({ i, isedit, isdel })
+            }
+            else if ((i.Quantity > 0) && (i.Rate > 0)) {
+
+                if (i.Bom) {
+                    if ((itemArr.length === 0)) {
+                        const isdel = false;
+                        isChanged({ i, isedit, isdel })
+
+                    } else {
+                        if (isVDC_POvalidMsg.length === 0)
+                            isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                    }
+                } else {
+                    isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                }
+            }
+            else if ((i.Quantity < 1) && (i.editrowId)) {
+                if (i.Bom) {
+                    if ((itemArr.length === 0)) {
+                        const isdel = true;
+                        isChanged({ i, isedit, isdel })
+
+                    } else {
+                        if (isVDC_POvalidMsg.length === 0)
+                            isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                    }
+                } else {
+                    isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                }
             };
         }
 
@@ -619,7 +653,7 @@ const Order = (props) => {
             //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
             // }
 
-            else if (pageMode === "edit") {
+            else if (pageMode === mode.edit) {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
                 if (ischange && (i.poQty === 0)) {
@@ -635,7 +669,7 @@ const Order = (props) => {
                 }
             }
             else {
-                var isedit = 0;
+                const isedit = 0;
                 orderItem({ i, isedit })
             };
         })
@@ -643,7 +677,14 @@ const Order = (props) => {
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted
         }))
-
+      
+        if (isVDC_POvalidMsg.length > 0) {
+            await CustomAlert({
+                Type: 4,
+                Message: isVDC_POvalidMsg,
+            })
+            return
+        };
         if (validMsg.length > 0) {
             // dispatch(AlertState({
             //     Type: 4,
@@ -687,7 +728,7 @@ const Order = (props) => {
             // }));
             return
         }
-        if (termsAndCondition.length === 0) {
+        if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
             await CustomAlert({
                 Type: 4,
                 Message: "Please Enter One Terms And Condition",
@@ -702,12 +743,20 @@ const Order = (props) => {
 
             return
         }
-        const jsonBody = JSON.stringify({
+        const po_JsonBody = {
             OrderDate: orderdate,
+            OrderAmount: orderAmount,
+            OrderItem: itemArr,
+        }
+        const IB_JsonBody = {
+            DemandDate: orderdate,
+            DemandAmount: orderAmount,
+            DemandItem: itemArr,
+        }
+        const comm_jsonBody = {
             DeliveryDate: deliverydate,
             Customer: division,
             Supplier: supplier,
-            OrderAmount: orderAmount,
             Description: description,
             BillingAddress: billAddr.value,
             ShippingAddress: shippAddr.value,
@@ -721,9 +770,17 @@ const Order = (props) => {
             POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
-            OrderItem: itemArr,
             OrderTermsAndConditions: termsAndCondition
-        });
+        };
+
+
+        let jsonBody;   //json body decleration 
+        if (subPageMode === url.IB_ORDER) {
+            jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
+        } else {
+            jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
+        }
+        // +*********************************
 
         saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
@@ -732,7 +789,7 @@ const Order = (props) => {
 
         } else {
 
-            dispatch(postOrder(jsonBody))
+            dispatch(postOrder(jsonBody, subPageMode))
         }
 
     }
@@ -816,7 +873,7 @@ const Order = (props) => {
                                 </FormGroup>
                             </div >
 
-                            {!(subPageMode === url.ORDER_3) ?
+                            {!(subPageMode === url.IB_ORDER) ?
                                 <div className="col col-6" >{/*  Delivery Date field */}
                                     <FormGroup className=" row mt-3 " >
                                         <Label className=" p-2"

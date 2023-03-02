@@ -14,7 +14,6 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const EmployeeTypeList = (props) => {
 

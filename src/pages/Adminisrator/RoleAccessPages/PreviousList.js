@@ -8,9 +8,6 @@ import paginationFactory, {
     PaginationProvider, PaginationListStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-
-//Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,15 +27,15 @@ const RoleAccessListPage = () => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
     const [copy_user_RowData, setCopy_user_RowData] = useState({});
-     
 
-    const { TableListData, RoleAccessModifiedinSingleArray,PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
+
+    const { TableListData, RoleAccessModifiedinSingleArray, PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
 
     }));
-    
+
 
     useEffect(() => {
         const locationPath = history.location.pathname
@@ -57,15 +54,14 @@ const RoleAccessListPage = () => {
     }, []);
 
     const EditPageHandler = (rowData) => {
-     debugger
-       if(rowData.Division_id===null) {
-        rowData.Division_id=0
-       }
-     
+        if (rowData.Division_id === null) {
+            rowData.Division_id = 0
+        }
+
         // let RelatedPageID = 0
         // const userPageAccess = history.location.state
 
-        let  RelatedPageID = userPageAccessState.RelatedPageID
+        let RelatedPageID = userPageAccessState.RelatedPageID
 
         const found = RoleAccessModifiedinSingleArray.find((element) => {
             return element.id === RelatedPageID
@@ -76,21 +72,21 @@ const RoleAccessListPage = () => {
                 pathname: `/${found.ActualPagePath}`,
                 // pathname: `/${found.ActualPagePath}`,
                 // state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
-                state:  rowData ,
+                state: rowData,
                 // relatatedPage:"/UserMaster"
             })
         }
     }
 
-    
+
     useEffect(() => {
-       
+
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
             dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
 
             dispatch(getRoleAccessListPage());
             // GoButton_Handler()
-            tog_center()   
+            tog_center()
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -114,7 +110,7 @@ const RoleAccessListPage = () => {
     const CopyHandeler = (event) => {
 
         setCopy_user_RowData(event)
-        tog_center()   
+        tog_center()
     };
 
 
@@ -160,13 +156,13 @@ const RoleAccessListPage = () => {
 
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
-                       <Button
-                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Copy RoleAccess"
-                            onClick={() => { CopyHandeler(RoleAccess); }}
-                        >
-                           copy
-                        </Button>
+                    <Button
+                        className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Copy RoleAccess"
+                        onClick={() => { CopyHandeler(RoleAccess); }}
+                    >
+                        copy
+                    </Button>
 
 
                     {((userPageAccessState.RoleAccess_IsEdit)) ?
@@ -246,18 +242,6 @@ const RoleAccessListPage = () => {
                                 >
                                     {toolkitProps => (
                                         <React.Fragment>
-                                            <Breadcrumb
-                                                title={"Count :"}
-                                                breadcrumbItem={userPageAccessState.PageHeading}
-                                                IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                                SearchProps={toolkitProps.searchProps}
-                                                IsSearchVissible={true}
-                                                defaultSorted={defaultSorted}
-                                                ExcelData={TableListData}
-                                                isExcelButtonVisible={true}
-                                                breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
-                                            // RedirctPath={"/moduleMaster"}
-                                            />
                                             <Row>
                                                 <Col xl="12">
                                                     <div className="table-responsive">
@@ -295,8 +279,8 @@ const RoleAccessListPage = () => {
                             toggle={() => { tog_center() }}
                             size="xl"
                         >
-                            <RoleAccessCopyFunctionality  state={copy_user_RowData} />
-                           
+                            <RoleAccessCopyFunctionality state={copy_user_RowData} />
+
                         </Modal>
                     </div>
                 </div>

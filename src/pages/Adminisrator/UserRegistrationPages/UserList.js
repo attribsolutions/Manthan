@@ -13,7 +13,7 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
+
 import * as pageId from "../../../routes/allPageID"
 
 const UserList = () => {

@@ -23,7 +23,6 @@ import {
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";

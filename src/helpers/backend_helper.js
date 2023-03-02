@@ -185,7 +185,6 @@ export const Division_Get_DropDown_API = (id) => get(`${url.DIVISION_DROPDOWN_AP
 export const Party_Get_DropDown_API = (id) => get(`${url.DIVISION_DROPDOWN_API}/${id}`)// Division DropDown api
 export const PriceList_Get_DropDown_API = () => get(url.PRICE_LIST)// PriceList DropDown api
 export const Category_By_CategoryTypes_DropDown_API = (id) => get(`${url.CATEGORY_DROPDOWN_API}/${id}`)//  GetCategoryByCategoryTypeID DropDown API
-export const SubCategory_By_CategoryTypes_DropDown_API = (id) => get(`${url.SUBCATEGORY_DROPDOWN_API}/${id}`)//  GetSubCategoryByCategoryID DropDown API
 export const Group_By_GroupTypes_DropDown_API = (id) => get(`${url.GET_GROUP_BY_GROUPTYPES_ID}/${id}`)//  GetGroupByGroupTypeID DropDown API
 export const SubGroup_By_Group_DropDown_API = (id) => get(`${url.GET_SUBGROUP_BY_GROUP_ID}/${id}`)// GetSubGroupByGroupID DropDown API
 export const Get_Item_Tag = () => get(url.GET_ITEM_TAG)// Get Item Tag Api
@@ -371,7 +370,7 @@ export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown 
 
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
 export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
-export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
+export const OrderPage_Save_API_ForPO = (data) => post(url.ORDER_PAGE_API, data)//get api
 export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
 export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
@@ -394,8 +393,14 @@ export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
-export const Challan_delete_API = (id) => del(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Delete challan
-export const Challan_Make_API = (id) => get(`${url.CHALLAN_LIST_BY_FILTERS}/${id}`)//Make challan
+export const Challan_delete_API = (id) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${id}`)//Delete challan
+export const Challan_Post_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST,data)//Make challan
+export const Challan_Make_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST,data)//Make challan
+
+
+export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS,data)//Make challan
+export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK,data)//Make challan
+
 
 
 // BOM API
@@ -430,6 +435,15 @@ export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
 export const Production_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
 
+// Production Re_Issue
+
+export const Production_ReIssue_save_API = (data) => post(url.PRODUCTION_REIISUE_SAVE, data)// go button postapi
+export const Production_ReIssue_get_API = (filters) => post(url.PRODUCTION_REIISUE_LIST_FILTER, filters)// go button postapi
+export const Production_ReIssue_Edit_API = (id) => get(`${url.PRODUCTION_POST_API}/${id}`)// make production to material Issue postapi
+export const Production_ReIssueproduction_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
+export const Production_ReIssue_Delete_API = (id) => del(`${url.PRODUCTION_REIISUE_SAVE}/${id}`)// delete api
+export const Production_ReIssueItemDropdown_API = (data) => post(url.PRODUCTION_REIISUE_ITEM,data)// delete api
+export const Production_ReIssue_AddPageGOBtn_API = (data) => post(url.PRODUCTION_REIISUE_ITEM,data)// delete api
 
 // Invoice
 export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi
@@ -439,7 +453,7 @@ export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)//
 export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
 
-// Invoice
+//IB Invoice 2 
 export const Invoice_2_GoButton_API = (data) => post(url.INVOICE_2_ADD_PAGE_GO_BTN, data)// go button postapi
 export const Invoice_2_Save_API = (data) => post(url.INVOICE_2_SAVE, data)//  postapi
 export const Invoice_2_Get_Filter_API = (data) => post(url.INVOICE_2_lIST_FILTER, data)//  postapi
@@ -447,21 +461,21 @@ export const Invoice_2_Delete_API = (id) => del(`${url.INVOICE_2_SAVE}/${id}`)//
 export const Invoice_2_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_2_SAVE}/${id}`)// delete api
 //************************************Inter Branch ************************************/
 
-
 // IBOrder
 export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//go button api
-export const IBOrderPage_Post_API = (data) => post(url.POST_API_FOR_IBORDER, data)//post api
+export const IBOrderPage_Save_API = (data) => post(url.SAVE_API_FOR_IBORDER, data)//post api
 export const IBOrderList_get_Filter_API = (filters) => post(url.IBORDER_LiST_BY_FILTERS, filters)//list page
 
 export const IB_Division_DROP_API = (data) => post(url.IB_DIVISION_DROPDOWN, data)//dropdown api
 export const IBOrderPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//edit
-export const IBOrderPage_Delete_API = (id) => del(`${url.POST_API_FOR_IBORDER}/${id}`)//delete
-export const IBOrderPage_Update_API = (data, id) => put(`${url.POST_API_FOR_IBORDER}/${id}`, data)//update
+export const IBOrderPage_Delete_API = (id) => del(`${url.SAVE_API_FOR_IBORDER}/${id}`)//delete
+export const IBOrderPage_Update_API = (data, id) => put(`${url.SAVE_API_FOR_IBORDER}/${id}`, data)//update
 
 // Inward
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
 export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// List Api
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
+export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/${id}`)// Inward post api
 
 // IB Invoice
 // export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api

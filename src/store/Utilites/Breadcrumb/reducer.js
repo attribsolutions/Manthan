@@ -11,11 +11,11 @@ const INIT_STATE = {
   bredcrumbItemName: "",
   showCountlabel: '',
   breadcrumbDetail: {
-    breadShow: true,
-    newBtnView: true,
-    excelBtnView: true,
+    breadShow: false,
+    newBtnView: false,
+    excelBtnView: false,
     pageHeading: '',
-    CountLabel: true,
+    CountLabel: false,
     masterPage: "",
     pageMode: "",
     downBtnData: [],
@@ -37,7 +37,6 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         showCountlabel: action.payload,
       }
     case COMMON_BREADCRUMB_ALL_DETAIL:
-      debugger
       let payload = Object.assign({}, {...state.breadcrumbDetail},{... action.payload});
       return {
         ...state,

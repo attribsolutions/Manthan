@@ -11,12 +11,10 @@ import {
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID,
   editEmployeeSuccess,
-  updateEmployeeIDSuccess,
-
+  updateEmployeeIDSuccess
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -28,10 +26,10 @@ import {
   onChangeDate,
   onChangeSelect,
   onChangeText,
-  resetFunction,
+  resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -123,6 +121,7 @@ const AddEmployee = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
+      breadcrumbReturn({dispatch,userAcc});
     };
   }, [userAccess])
 
@@ -187,6 +186,7 @@ const AddEmployee = (props) => {
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
         values.EmployeeParties = listItems;
+        dispatch(getDistrictOnState(State_id))
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         seteditCreatedBy(hasEditVal.CreatedBy)
@@ -377,7 +377,6 @@ const AddEmployee = (props) => {
     return (
       <React.Fragment>
         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEE} /> */}
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
 

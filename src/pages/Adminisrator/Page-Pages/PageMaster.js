@@ -39,7 +39,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -122,6 +122,7 @@ const PageMaster = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
+      breadcrumbReturn({dispatch,userAcc});
     };
   }, [userAccess])
 
@@ -512,10 +513,7 @@ const PageMaster = (props) => {
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"-70px" }}>
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PAGE} /> */}
           <Container fluid>
-            {/* Render Breadcrumbs */}
-
             <AvForm
               id="mainForm"
               name="mainForm"

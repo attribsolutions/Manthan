@@ -15,7 +15,6 @@ import {
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
@@ -299,7 +298,6 @@ const AddEmployee = (props) => {
           <MetaTags>
             <title>Employee Master| FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
           <Container fluid>
 

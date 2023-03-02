@@ -17,7 +17,6 @@ import SubGroupMaster from "./SubGroupMaster";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 
 const SubGroupList = (props) => {
 
@@ -54,7 +53,6 @@ const SubGroupList = (props) => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.SUBGROUP_LIST} /> */}
       {
         (pageField) ?
           <CommonListPage

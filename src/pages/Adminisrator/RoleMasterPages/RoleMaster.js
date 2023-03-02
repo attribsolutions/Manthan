@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+
 import {
   Card,
   CardBody,
@@ -38,10 +38,9 @@ import {
   resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import * as mode from "../../../routes/PageMode"
 
 const RoleMaster = (props) => {
@@ -111,6 +110,7 @@ const RoleMaster = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
+      breadcrumbReturn({dispatch,userAcc});
       dispatch(CommonBreadcrumbDetails({
         // bredcrumbItemName: '',
         pageHeading: userAcc.PageHeading,
@@ -280,7 +280,6 @@ const RoleMaster = (props) => {
         <div className="page-content" >
           <Container fluid>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLE} /> */}
             <Card className="text-black">
               <CardHeader className="card-header  text-black c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

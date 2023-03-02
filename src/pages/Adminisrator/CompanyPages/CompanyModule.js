@@ -12,7 +12,6 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
   editCompanyIDSuccess,
   PostCompanySubmit,
@@ -34,7 +33,7 @@ import {
   resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -104,7 +103,8 @@ const CompanyModule = (props) => {
     })
 
     if (userAcc) {
-      setUserPageAccessState(userAcc)
+      setUserPageAccessState(userAcc);
+      breadcrumbReturn({dispatch,userAcc});
     };
   }, [userAccess])
 

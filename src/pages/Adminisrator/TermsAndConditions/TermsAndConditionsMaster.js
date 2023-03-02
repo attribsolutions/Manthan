@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+
 import {
     Card,
     CardBody,
@@ -35,7 +35,7 @@ import {
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -92,6 +92,7 @@ const TermsAndConditionsMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -122,7 +123,7 @@ const TermsAndConditionsMaster = (props) => {
                 hasValid.IsDefault.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                // dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
 
             }

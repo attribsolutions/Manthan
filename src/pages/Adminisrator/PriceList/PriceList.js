@@ -12,7 +12,6 @@ import {
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { PRICE } from "../../../routes/route_url";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
 import { MetaTags } from "react-meta-tags";
 import * as pageId from "../../../routes/allPageID"
 
@@ -42,7 +41,7 @@ const PriceList = () => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(35))
+    dispatch(commonPageFieldList(pageId.PARTYITEM_LIST))
     dispatch(getPriceListPage());
   }, []);
 
@@ -52,7 +51,6 @@ const PriceList = () => {
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PRICE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage

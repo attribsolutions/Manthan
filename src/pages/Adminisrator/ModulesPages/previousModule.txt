@@ -20,7 +20,6 @@ import {
     PostModelsSubmitSuccess,
     editModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
@@ -157,7 +156,6 @@ const Modules = (props) => {
                     <MetaTags>
                         <title>Module| FoodERP-React FrontEnd</title>
                     </MetaTags>
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
                     <Container fluid  >
 
                         <Card className="text-black" >

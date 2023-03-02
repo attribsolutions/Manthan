@@ -37,7 +37,7 @@ import {
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -104,6 +104,7 @@ const CategoryMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -244,7 +245,6 @@ const CategoryMaster = (props) => {
             return (
                 <React.Fragment>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.CATEGORY} /> */}
 
                     <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                         <Container fluid>

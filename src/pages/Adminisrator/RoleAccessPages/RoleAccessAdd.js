@@ -35,9 +35,7 @@ import {
 import { fetchModelsList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import * as pageId from "../../../routes/allPageID"
-import { userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const RoleAccessAdd = (props) => {
@@ -111,6 +109,7 @@ const RoleAccessAdd = (props) => {
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({ dispatch, userAcc, });
         }
     }, [userAccess])
 
@@ -531,20 +530,10 @@ const RoleAccessAdd = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content text-black" style={{minHeight:"600px"}} >
+                <div className="page-content text-black" style={{ minHeight: "600px" }} >
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.ROLEACCESS} /> */}
-                    {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
-                    {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
 
                     <Container fluid>
-                        {/* <Card className="text-black"> */}
-                        {/* <CardHeader className="card-header   text-dark c_card_header"  >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader> */}
-
-                        {/* <Card className="mt-n2"> */}
                         <CardBody >
                             {
                                 !showTableOnUI ?
@@ -633,47 +622,46 @@ const RoleAccessAdd = (props) => {
                                     </>
                                     :
                                     <>
-                                      <Row style={{  backgroundColor: "#dddddd",}} className='mb-1 mt-n3 head '>
+                                        <Row style={{ backgroundColor: "#dddddd", }} className='mb-1 mt-n3 head '>
+                                            <Row sm={12} >
+                                                <Col sm={3} className="p-2 ">
+                                                    <Label className="p-2 col-sm-3">Role</Label>
+                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                        <h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                                </Col>
 
-                                                <Row sm={12} >
-                                                    <Col sm={3} className="p-2 ">
-                                                        <Label className="p-2 col-sm-3">Role</Label>
-                                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                            <h className="text-black">{role_dropdown_Select.label}</h></Button>
-                                                    </Col>
+                                                <Col sm={4} className="p-2 ">
+                                                    {(division_dropdown_Select.value > 0)
+                                                        ?
+                                                        <> <Label className=" p-2 col-sm-3">Division</Label>
+                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                <h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                                        </>
+                                                        : null}
+                                                </Col>
 
-                                                    <Col sm={4} className="p-2 ">
-                                                        {(division_dropdown_Select.value > 0)
-                                                            ?
-                                                            <> <Label className=" p-2 col-sm-3 ">Division</Label>
-                                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                                    <h className="text-black">{division_dropdown_Select.label}</h></Button>
-                                                            </>
-                                                            : null}
-                                                    </Col>
+                                                <Col sm={4} className="p-2 ">
+                                                    <Label className="p-2 col-sm-4">Company</Label>
+                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                        <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                </Col>
+                                                <Col sm={1} className="p-2 mt-1">
+                                                    <Button type="button"
+                                                        color="btn btn-outline-secondary"
+                                                        className="btn-sm"
+                                                        onClick={() => { ChangeButtonHandeler() }}>
+                                                        <h className="text-black">Change</h></Button>
 
-                                                    <Col sm={4} className="p-2 ">
-                                                        <Label className="p-2 col-sm-4">Company</Label>
-                                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                            <h className="text-black">{company_dropdown_Select.label}</h></Button>
-                                                    </Col>
-                                                    <Col sm={1} className="p-2 mt-1">
-                                                        <Button type="button"
-                                                            color="btn btn-outline-secondary"
-                                                            className="btn-sm"
-                                                            onClick={() => { ChangeButtonHandeler() }}>
-                                                            <h className="text-black">Change</h></Button>
+                                                </Col>
 
-                                                    </Col>
-
-                                                </Row>
                                             </Row>
+                                        </Row>
                                         <CardHeader className="card-header headbody  text-black" style={{ backgroundColor: "rgb(231 231 231)"}} >
-                                            <Row style={{  marginRight: "4px"}}>
+                                            <Row style={{ marginRight: "4px" }}>
                                                 <Col sm={4}>
                                                     <FormGroup className="row">
                                                         <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                        <Col sm={8}style={{ zIndex: "2" }}>
+                                                        <Col sm={8} style={{ zIndex:"3"}}>
                                                             <Select
                                                                 value={module_DropdownSelect}
                                                                 placeholder="select.."
@@ -688,7 +676,7 @@ const RoleAccessAdd = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className=" row ">
                                                         <Label className="col-sm-3 p-2">Page</Label>
-                                                        <Col sm={8} style={{zIndex:"2",}}>
+                                                        <Col sm={8} style={{ zIndex: "3"}}>
                                                             <Select
                                                                 value={page_DropdownSelect}
                                                                 placeholder="select.."
@@ -721,11 +709,12 @@ const RoleAccessAdd = (props) => {
                                                     >
                                                         <Table className="table table-bordered thead mt-3">
                                                             <thead >
-                                                                <tr style={{zIndex:"1",}}>
+                                                                <tr  className="colorhead" >
                                                                     {tableHederList.map((indx) => {
                                                                         if (indx.text === "IsShowOnMenu") {
                                                                             return (
                                                                                 <th colSpan={2} style={{
+                                                                                    
                                                                                     textAlign: "center",
                                                                                     verticalAlign: "middle",
                                                                                 }}>
@@ -739,12 +728,11 @@ const RoleAccessAdd = (props) => {
                                                                         else if ((indx.text === "PageName")) {
 
                                                                             return (
-                                                                                <th className="thsticky colorhead"  rowSpan={2}
-                                                                                    style={{
+                                                                                <th className="thsticky colorhead index" rowSpan={2}
+                                                                                    style={{  
                                                                                         
                                                                                         textAlign: "center",
                                                                                         verticalAlign: "middle",
-
                                                                                     }} >
 
                                                                                     {indx.text}
@@ -752,7 +740,7 @@ const RoleAccessAdd = (props) => {
                                                                             )
                                                                         }
                                                                         else {
-                                                                            return <th rowSpan={2} style={{ textAlign: "center", verticalAlign: "middle" }} >{indx.text}</th>
+                                                                            return <th rowSpan={2} style={{ textAlign: "center", verticalAlign: "middle",   }} >{indx.text}</th>
                                                                         }
 
                                                                     })}
@@ -784,20 +772,21 @@ const RoleAccessAdd = (props) => {
                                                                                     value={indx.RelatedPageID}
                                                                                 />
                                                                             </td>
-                                                                            <td className="thsticky" style={{zIndex:"0",}}>
+                                                                            <td className="thsticky" >
                                                                                 <div className="row ">
-                                                                                    <div className="text-left col">
+                                                                                    <div className="text-left col" >
                                                                                         {indx.PageName}
                                                                                     </div>
 
-                                                                                    <div className="text-right col col-3" style={{zIndex:""}}>
+                                                                                    <div className="text-right col col-3" >
                                                                                         <Input
+                                                        
                                                                                             type="hidden"
                                                                                             id={"PageID" + key}
                                                                                             name={"PageID" + key}
                                                                                             value={indx.PageID}
                                                                                         />
-                                                                                        <i className="mdi mdi-delete font-size-18 text-danger text-right" onClick={() => { DeleteRolePage_Handler(indx.ID) }}></i>
+                                                                                        <i  className="mdi mdi-delete font-size-18 text-danger text-right" onClick={() => { DeleteRolePage_Handler(indx.ID) }}></i>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>

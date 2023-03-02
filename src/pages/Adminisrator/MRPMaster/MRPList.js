@@ -18,8 +18,8 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import BreadcrumbNew from "../../../components/Common/BreadcrumbNew";
-import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url"
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const MRPList = (props) => {
 
@@ -48,7 +48,8 @@ const MRPList = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.MRP });
     }
   }, [userAccess])
 
@@ -58,7 +59,6 @@ const MRPList = (props) => {
   }, []);
 
   useEffect(() => {
-    debugger
     if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
@@ -83,7 +83,6 @@ const MRPList = (props) => {
 
   //select id for delete row
   const deleteHandeler = (CommonID) => {
-    debugger
     dispatch(
       AlertState({
         Type: 5,
@@ -188,14 +187,7 @@ const MRPList = (props) => {
       <React.Fragment>
         <div className="page-content">
           <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-          {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP_lIST} /> */}
-          {/* <Breadcrumb
-            pageHeading={userAccState.PageHeading}
-            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-            showCount={true}
-            excelBtnView={true}
-            excelData={tableList}
-          /> */}
+      
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >
