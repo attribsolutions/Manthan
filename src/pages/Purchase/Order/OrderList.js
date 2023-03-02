@@ -41,7 +41,7 @@ const OrderList = () => {
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' ,IBType: ''});
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -60,7 +60,7 @@ const OrderList = () => {
     );
 
 
-    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" } ,} = orderlistFilter;
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, } = orderlistFilter;
     const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
 
@@ -97,13 +97,13 @@ const OrderList = () => {
             page_Id = pageId.IB_ORDER_PO_LIST
             masterPath = url.IB_ORDER;
             newBtnPath = url.IB_ORDER;
-            IBType="IBPO"
+            IBType = "IBPO"
         }
         else if (subPageMode === url.IB_ORDER_SO_LIST) {
             page_Id = pageId.IB_ORDER_SO_LIST
             masterPath = url.IB_ORDER;
             // newBtnPath = url.IB_ORDER;
-            IBType="IBSO"
+            IBType = "IBSO"
         }
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
@@ -125,13 +125,13 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
         }
         dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName ,IBType})
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler(IBType)
+        goButtonHandler({IBType})
 
     }, []);
 
@@ -243,7 +243,7 @@ const OrderList = () => {
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
     }
 
-    function goButtonHandler(IBType) {
+    function goButtonHandler({IBType}) {
         debugger
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
@@ -252,7 +252,6 @@ const OrderList = () => {
             Customer: userParty(),
             OrderType: order_Type.PurchaseOrder,
             IBType: IBType ? IBType : otherState.IBType
-            
         });
 
         dispatch(getOrderListPage(subPageMode, pageMode, jsonBody));
