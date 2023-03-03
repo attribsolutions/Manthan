@@ -22,7 +22,7 @@ import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommo
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {
@@ -35,15 +35,15 @@ const RoleAccessListPage = () => {
     const [copy_user_RowData, setCopy_user_RowData] = useState({});
 
 
-    const { TableListData, userAccess, PostMessage_ForCopyRoleAccess,deleteMsg } = useSelector((state) => ({
+    const { TableListData, userAccess, PostMessage_ForCopyRoleAccess, deleteMsg } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
         userAccess: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
-        deleteMsg:state.RoleAccessReducer.deleteMsg,
+        deleteMsg: state.RoleAccessReducer.deleteMsg,
 
     }));
 
-   
+
     useEffect(() => {
         const locationPath = history.location.pathname
         let userAcc = userAccess.find((inx) => {
@@ -51,25 +51,30 @@ const RoleAccessListPage = () => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc, newBtnPath:url.ROLEACCESS });
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.ROLEACCESS });
         }
     }, [userAccess])
 
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(getRoleAccessListPage());
+        dispatch(getRoleAccessListPage(getListbodyFunc()));
     }, []);
 
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
+
     const EditPageHandler = (rowData) => {
-    
+
         if (rowData.Division_id === null) {
             rowData.Division_id = 0
         }
-
-        // let RelatedPageID = 0
-        // const userPageAccess = history.location.state
-
+       
         let RelatedPageID = userAccState.RelatedPageID
 
         const found = userAccess.find((element) => {
@@ -79,14 +84,11 @@ const RoleAccessListPage = () => {
         if (!(found === undefined)) {
             history.push({
                 pathname: `/${found.ActualPagePath}`,
-                // pathname: `/${found.ActualPagePath}`,
-                // state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
                 state: rowData,
-                // relatatedPage:"/UserMaster"
             })
         }
     }
-    
+
 
 
 
@@ -94,14 +96,12 @@ const RoleAccessListPage = () => {
     useEffect(() => {
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
             dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
-            dispatch(getRoleAccessListPage());
-            // GoButton_Handler()
+            dispatch(getRoleAccessListPage(getListbodyFunc()));
             tog_center()
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: PostMessage_ForCopyRoleAccess.Message,
-                AfterResponseAction: false
             }))
         }
         else if (PostMessage_ForCopyRoleAccess.Status === true) {
@@ -110,28 +110,24 @@ const RoleAccessListPage = () => {
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(PostMessage_ForCopyRoleAccess.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
             }));
         }
     }, [PostMessage_ForCopyRoleAccess])
 
     useEffect(() => {
-        
+
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(DeleteRoleAcessSuccess({ Status: false }));
-            dispatch(getRoleAccessListPage());
+            dispatch(getRoleAccessListPage(getListbodyFunc()));
             CustomAlert({
                 Type: 1,
                 Message: JSON.stringify(deleteMsg.Message),
-              
             })
-        } 
+        }
     }, [deleteMsg]);
 
     //select id for copy row
     const CopyHandeler = (event) => {
-
         setCopy_user_RowData(event)
         tog_center()
     };
@@ -139,32 +135,17 @@ const RoleAccessListPage = () => {
 
 
     //select id for delete row
-    const deleteHandeler = async(id, name) => {
-        // dispatch(
-        //     AlertState({
-        //         Type: 5,
-        //         Status: true,
-        //         Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
-        //         RedirectPath: false,
-        //         // PermissionAction: deleteItemID,
-        //         ID: id,
-        //     })
-        // );
-
-        const ispermission= await CustomAlert({
-                    Type: 7,
-                    Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
-                  
-                })
+    const deleteHandeler = async (id, name) => {
+        const ispermission = await CustomAlert({
+            Type: 7,
+            Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
+        })
         if (ispermission) {
             let role = id.Role_id
             let division = id.Division_id
             let company = id.Company_id
-            dispatch(DeleteRoleAcess(role,division,company))
-            
+            dispatch(DeleteRoleAcess(role, division, company))
         }
-       
-    
 
     };
 
