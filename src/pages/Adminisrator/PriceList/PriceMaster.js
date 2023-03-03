@@ -388,7 +388,7 @@ const PriceMaster = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <h1>You can add or remove class while drag and drop</h1>
 
-                <ul id="tree12" class="tree ">
+                {/* <ul id="tree12" class="tree ">
                      <li><a href="#">Sektör 1</a>
                          <ul>
                              <li><a href="#">Company Maintenance</a></li>
@@ -506,7 +506,7 @@ const PriceMaster = (props) => {
                              </li>
                          </ul>
                      </li>
-                 </ul>
+                 </ul> */}
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >
