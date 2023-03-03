@@ -386,7 +386,7 @@ const PriceMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <h1>You can add or remove class while drag and drop</h1>
+                {/* <h1>You can add or remove class while drag and drop</h1> */}
 
                 {/* <ul id="tree12" class="tree ">
                      <li><a href="#">Sektör 1</a>
