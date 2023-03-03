@@ -445,7 +445,7 @@ export async function CkeckAlert(method, url, response, body) {
         console.log(`${url}***=> ${method} Body =>`, body)
     }
     // **********************************************************************************
-    if (con1&&con7) {
+    if (con1||con7) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     } else if (con2) {
