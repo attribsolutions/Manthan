@@ -27,6 +27,7 @@ import {
     getRoles,
     GO_Button_HandlerForRoleAccessListPage,
     GO_Button_HandlerForRoleAccessListPage_Success,
+    loginUser,
     PageDropdownForRoleAccessList,
     PageDropdownForRoleAccessList_Success,
     PostMethodForRoleAccessListPage,
@@ -35,7 +36,7 @@ import {
 import { fetchModelsList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import { breadcrumbReturn} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const RoleAccessAdd = (props) => {
@@ -261,7 +262,7 @@ const RoleAccessAdd = (props) => {
     }
 
     const GoButton_Handler = () => {
-        
+
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
         var company = company_dropdown_Select.value
@@ -397,8 +398,8 @@ const RoleAccessAdd = (props) => {
             pageAccessElement["Division"] = (divisionID === 0 ? "" : divisionID)
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
-            pageAccessElement["CreatedBy"] = 1
-            pageAccessElement["UpdatedBy"] = 1
+            pageAccessElement["CreatedBy"] = loginUserID()
+            pageAccessElement["UpdatedBy"] = loginUserID()
             pageAccessElement["RolePageAccess"] = roleAccessArray
 
             if (roleAccessArray.length > 0) {
@@ -411,8 +412,8 @@ const RoleAccessAdd = (props) => {
                     pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
-                    pageAccessElement2["CreatedBy"] = 1
-                    pageAccessElement2["UpdatedBy"] = 1
+                    pageAccessElement2["CreatedBy"] = loginUserID()
+                    pageAccessElement2["UpdatedBy"] = loginUserID()
                     pageAccessElement2["RolePageAccess"] = roleAccessArray2
                     selectedItemArray.push(pageAccessElement2)
                     pageAccessElement2 = {}
@@ -656,12 +657,12 @@ const RoleAccessAdd = (props) => {
 
                                             </Row>
                                         </Row>
-                                        <CardHeader className="card-header headbody  text-black" style={{ backgroundColor: "rgb(231 231 231)"}} >
+                                        <CardHeader className="card-header headbody  text-black" style={{ backgroundColor: "rgb(231 231 231)" }} >
                                             <Row style={{ marginRight: "4px" }}>
                                                 <Col sm={4}>
                                                     <FormGroup className="row">
                                                         <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                        <Col sm={8} style={{ zIndex:"3"}}>
+                                                        <Col sm={8} style={{ zIndex: "3" }}>
                                                             <Select
                                                                 value={module_DropdownSelect}
                                                                 placeholder="select.."
@@ -676,7 +677,7 @@ const RoleAccessAdd = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className=" row ">
                                                         <Label className="col-sm-3 p-2">Page</Label>
-                                                        <Col sm={8} style={{ zIndex: "3"}}>
+                                                        <Col sm={8} style={{ zIndex: "3" }}>
                                                             <Select
                                                                 value={page_DropdownSelect}
                                                                 placeholder="select.."
@@ -709,12 +710,12 @@ const RoleAccessAdd = (props) => {
                                                     >
                                                         <Table className="table table-bordered thead mt-3">
                                                             <thead >
-                                                                <tr  className="colorhead" >
+                                                                <tr className="colorhead" >
                                                                     {tableHederList.map((indx) => {
                                                                         if (indx.text === "IsShowOnMenu") {
                                                                             return (
                                                                                 <th colSpan={2} style={{
-                                                                                    
+
                                                                                     textAlign: "center",
                                                                                     verticalAlign: "middle",
                                                                                 }}>
@@ -729,8 +730,8 @@ const RoleAccessAdd = (props) => {
 
                                                                             return (
                                                                                 <th className="thsticky colorhead index" rowSpan={2}
-                                                                                    style={{  
-                                                                                        
+                                                                                    style={{
+
                                                                                         textAlign: "center",
                                                                                         verticalAlign: "middle",
                                                                                     }} >
@@ -740,7 +741,7 @@ const RoleAccessAdd = (props) => {
                                                                             )
                                                                         }
                                                                         else {
-                                                                            return <th rowSpan={2} style={{ textAlign: "center", verticalAlign: "middle",   }} >{indx.text}</th>
+                                                                            return <th rowSpan={2} style={{ textAlign: "center", verticalAlign: "middle", }} >{indx.text}</th>
                                                                         }
 
                                                                     })}
@@ -780,13 +781,13 @@ const RoleAccessAdd = (props) => {
 
                                                                                     <div className="text-right col col-3" >
                                                                                         <Input
-                                                        
+
                                                                                             type="hidden"
                                                                                             id={"PageID" + key}
                                                                                             name={"PageID" + key}
                                                                                             value={indx.PageID}
                                                                                         />
-                                                                                        <i  className="mdi mdi-delete font-size-18 text-danger text-right" onClick={() => { DeleteRolePage_Handler(indx.ID) }}></i>
+                                                                                        <i className="mdi mdi-delete font-size-18 text-danger text-right" onClick={() => { DeleteRolePage_Handler(indx.ID) }}></i>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>
