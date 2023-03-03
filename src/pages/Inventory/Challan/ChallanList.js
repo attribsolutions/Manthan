@@ -97,7 +97,7 @@ const ChallanList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         // const obj = { ...list[0], id: list[0].id }
         // history.push({
         //     pathname: url.GRN_ADD,

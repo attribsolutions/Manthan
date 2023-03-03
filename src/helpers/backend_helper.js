@@ -452,13 +452,14 @@ export const Invoice_1_Get_Filter_API = (data) => post(url.INVOICE_1_lIST_FILTER
 export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
+const sppiner_true=true
 
 //IB Invoice 2 
-export const Invoice_2_GoButton_API = (data) => post(url.INVOICE_2_ADD_PAGE_GO_BTN, data)// go button postapi
-export const Invoice_2_Save_API = (data) => post(url.INVOICE_2_SAVE, data)//  postapi
-export const Invoice_2_Get_Filter_API = (data) => post(url.INVOICE_2_lIST_FILTER, data)//  postapi
-export const Invoice_2_Delete_API = (id) => del(`${url.INVOICE_2_SAVE}/${id}`)// delete api
-export const Invoice_2_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_2_SAVE}/${id}`)// delete api
+export const IB_Invoice_GoButton_API = (data) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, data)// go button postapi
+export const IB_Invoice_Save_API = (data) => post(url.IB_INVOICE_SAVE, data)//  postapi
+export const IB_Invoice_Get_Filter_API = (data) => post(url.IB_INVOICE_lIST_FILTER, sppiner_true,sppiner_true)//  postapi
+export const IB_Invoice_Delete_API = (id) => del(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
+export const IB_Invoice_Edit_API_Singel_Get = (id) => get(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
 //************************************Inter Branch ************************************/
 
 // IBOrder
@@ -481,7 +482,7 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
 // export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
 // export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
-// export const Post_IB_Invoice_API = (data) => post(url.INVOICE_2_SAVE, data)// Make IBInvoice api
+// export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
 
 export {
   getLoggedInUser,

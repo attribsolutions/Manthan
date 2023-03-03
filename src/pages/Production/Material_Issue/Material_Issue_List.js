@@ -96,7 +96,7 @@ const MaterialIssueList = () => {
     }, [produtionMake]);
 
     const makeBtnFunc = (list = {}) => {
-        debugger
+        
         const obj = { ...list[0], EstimatedQuantity: list[0].LotQuantity }
         history.push({
             pathname: url.PRODUCTION_MASTER,

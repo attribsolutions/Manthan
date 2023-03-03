@@ -67,7 +67,6 @@ const ProductionReIssueList = () => {
 
     const { userAccess, pageField } = reducers;
 
-
     useEffect(() => {
 
         let userAcc = userAccess.find((inx) => {
@@ -93,7 +92,7 @@ const ProductionReIssueList = () => {
         //     ToDate = todate;
         //     FromDate = fromdate;
         // }
-        // debugger
+        // 
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,

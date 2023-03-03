@@ -57,7 +57,7 @@ function MRPTable(props) {
   }
 
   const divisionOnchange = (e, row,editorProps, value, column, rowIndex, columnIndex) => {
-    debugger
+    
     row["DivisionName"] = e.label
     row["Division"] = e.value;
     row["ispty"] = true
@@ -72,7 +72,7 @@ function MRPTable(props) {
   }
 
   const MRP_onChange = (e, row, v) => {
-    debugger
+    
     row["MRP"] = e.target.value
     row["ispty"] = true
 

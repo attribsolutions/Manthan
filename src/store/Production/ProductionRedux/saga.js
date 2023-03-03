@@ -53,10 +53,12 @@ function* UpdateProductionGenFunc({ data, id }) {
 
 // List Page API
 function* get_PRODUCTION_GerFunc({ filters }) {
+  
   try {
     const response = yield call(production_get_API, filters);
     const newList = response.Data.map((index) => {
-      index.Item = index.Item.Name;
+      index.Item = index.Item;
+      
       var date = convertDatefunc(index.ProductionDate)
       var batchdate = convertDatefunc(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)

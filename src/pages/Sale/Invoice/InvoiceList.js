@@ -43,13 +43,9 @@ const InvoiceList = () => {
     const history = useHistory();
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
-    const [userAccState, setUserAccState] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
-    // const [fromdate, setfromdate] = useState(currentDate);
-    // const [todate, settodate] = useState(currentDate);
-    // const [supplierSelect, setsupplierSelect] = useState({ value: '', label: "All" });
     const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
 
     const reducers = useSelector(
@@ -61,7 +57,7 @@ const InvoiceList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            orderlistFilter: state.OrderReducer.orderlistFilter,
+            // orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
@@ -69,8 +65,6 @@ const InvoiceList = () => {
 
     const { userAccess, pageField, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
-
-    const page_Id = pageId.INVOICE_LIST_2
 
     const action = {
         getList: invoiceListGoBtnfilter,
@@ -87,34 +81,41 @@ const InvoiceList = () => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
+        let IBType = '';
         let newBtnPath = false;
         let makeBtnShow = false;
 
 
         if (subPageMode === url.INVOICE_LIST_1) {
-            page_Id = pageId.INVOICE_LIST_2
+            page_Id = pageId.IB_INVOICE_LIST
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
         }
-        else if (subPageMode === url.INVOICE_LIST_2) {
-            page_Id = pageId.INVOICE_LIST_2;
-            masterPath = url.INVOICE_2
+        else if (subPageMode === url.IB_INVOICE_LIST) {
+            page_Id = pageId.IB_INVOICE_LIST;
+            masterPath = url.IB_INVOICE
             newBtnPath = url.IB_INVOICE_STP
+            IBType = "IBInvoice"
+        }
+        else if (subPageMode === url.IB_GRN_LIST) {
+            page_Id = pageId.IB_GRN_LIST;
+            masterPath = url.IB_INVOICE
+            IBType = "IBGRN"
         }
         else if (subPageMode === url.IB_INWARD_STP) {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
+            IBType = "IBGRN"
         }
-        dispatch(GetVenderSupplierCustomer(""))
 
-        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler(true)
+        goButtonHandler({IBType})
     }, []);
 
     const supplierOptions = supplier.map((i) => ({
@@ -133,28 +134,18 @@ const InvoiceList = () => {
     }, [tableList])
 
 
-    useEffect(() => {
-
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-
-        }
-    }, [userAccess])
-
     function downBtnFunc(row) {
         var ReportType = report.invoice;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
-    function goButtonHandler() {
+    function goButtonHandler({IBType}) {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
             Party: userParty(),
+            IBType: IBType ? IBType : otherState.IBType
         });
 
         dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
@@ -163,31 +154,27 @@ const InvoiceList = () => {
     function fromdateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.fromdate = date
-        // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.todate = date
-        // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
 
     function supplierOnchange(e) {
+        
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
-        // dispatch(orderlistfilters(newObj))
         setorderlistFilter(newObj)
     }
 
     const makeBtnFunc = (list = {}) => {
-        debugger
+        
         dispatch(makeInward(list[0].id))
         history.push({
             pathname: url.INWARD,
-            // editValue: obj,
-            // pageMode: mode.mode2save
         })
     };
 
@@ -199,6 +186,7 @@ const InvoiceList = () => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
+
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
@@ -266,7 +254,6 @@ const InvoiceList = () => {
                 {
                     (pageField) ?
                         <PurchaseListPage
-
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

@@ -23,7 +23,7 @@ function* Post_PartyItems_GneratorFunction({ data }) {
 }
 
 function* getPartyItemGenFunc({ supplierId }) {
-  debugger
+  
   try {
     // const itemList = yield call(Items_Master_Get_API);
     const response = yield call(get_Party_Item_List, supplierId);
@@ -58,7 +58,7 @@ function* getPartyListGenFunc() {
 }
 
 function* editPartyItems_ID_GenratorFunction({ id, pageMode }) {
-  debugger
+  
   try {
     const response = yield call(edit_PartyItem_List_Api, id);
 
@@ -74,7 +74,7 @@ function* editPartyItems_ID_GenratorFunction({ id, pageMode }) {
       return item
     });
     response.Data = { ...Party, PartyItem };
-    debugger
+    
     yield put(editPartyItemIDSuccess(response));
   } catch (error) {
     // yield put(AlertState({

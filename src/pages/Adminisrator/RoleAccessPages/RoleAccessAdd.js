@@ -261,7 +261,7 @@ const RoleAccessAdd = (props) => {
     }
 
     const GoButton_Handler = () => {
-        debugger
+        
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
         var company = company_dropdown_Select.value
@@ -661,7 +661,7 @@ const RoleAccessAdd = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className="row">
                                                         <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                        <Col sm={8} style={{ zIndex:"2"}}>
+                                                        <Col sm={8} style={{ zIndex:"3"}}>
                                                             <Select
                                                                 value={module_DropdownSelect}
                                                                 placeholder="select.."
@@ -676,7 +676,7 @@ const RoleAccessAdd = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className=" row ">
                                                         <Label className="col-sm-3 p-2">Page</Label>
-                                                        <Col sm={8} style={{ zIndex: "2"}}>
+                                                        <Col sm={8} style={{ zIndex: "3"}}>
                                                             <Select
                                                                 value={page_DropdownSelect}
                                                                 placeholder="select.."

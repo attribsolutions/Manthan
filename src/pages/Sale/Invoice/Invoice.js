@@ -164,7 +164,7 @@ const Invoice = (props) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(invoiceSaveActionSuccess({ Status: false }))
@@ -177,11 +177,19 @@ const Invoice = (props) => {
                 })
             }
             else {
-                CustomAlert({
+                const promise = await CustomAlert({
                     Type: 1,
                     Message: JSON.stringify(postMsg.Message),
                     RedirectPath: url.INVOICE_LIST_1,
                 })
+                if (promise) {
+                    if (subPageMode === url.INVOICE_1) {
+                        history.push({ pathname: url.INVOICE_LIST_1 })
+                    }
+                    else if (subPageMode === url.IB_INVOICE) {
+                        history.push({ pathname: url.IB_INVOICE_LIST })
+                    }
+                }
             }
         }
         else if (postMsg.Status === true) {
@@ -235,6 +243,7 @@ const Invoice = (props) => {
                 obj.hasValid.Customer.valid = true;
                 return obj
             })
+            goButtonHandler(makeIBInvoice);
             dispatch(makeIB_InvoiceActionSuccess({ Status: false }))
         }
     }, [makeIBInvoice])
@@ -661,7 +670,7 @@ const Invoice = (props) => {
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
-        debugger
+        
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
@@ -675,18 +684,17 @@ const Invoice = (props) => {
         stockDistributeFunc(index)
     };
 
-    function goButtonHandler(event) {
+    function goButtonHandler(makeIBInvoice) {
 
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
-            Customer: values.Customer.value,
+            Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
             Party: userParty(),
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
         dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, goBtnId }));
 
-        // }
     };
 
     const SaveHandler = (event) => {
@@ -745,7 +753,7 @@ const Invoice = (props) => {
             })
         })
 
-        debugger
+        
         // if (formValid(state, setState)) {
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -766,7 +774,7 @@ const Invoice = (props) => {
             InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
         });
 
-        const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        const forIB_Invoice_json = () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
             IBChallansReferences: OrderIDs.map(i => ({ Demand: i }))
@@ -786,8 +794,8 @@ const Invoice = (props) => {
         let jsonBody;  //json body decleration 
         if (subPageMode === url.INVOICE_1) {
             jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-        } else if (subPageMode === url.INVOICE_2) {
-            jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_2_json() });
+        } else if (subPageMode === url.IB_INVOICE) {
+            jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
         }
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

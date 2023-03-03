@@ -66,7 +66,7 @@ function* get_MRPListPage_GenratorFunction() {
 
 //delete
 function* delete_MRPListPage_GenratorFunction({ CommonID }) {
-  debugger
+  
 
   try {
     const response = yield call(delete_MRPList_API, CommonID);

@@ -40,7 +40,7 @@ function* DeleteInward_GenFunc({ id }) {
 
 // //post api
 // function* Make_Inward_GenratorFunction({ data }) {
-//   debugger
+//   
 //   try {
 //     const response = yield call(Make_Inward_Post_API, data);
 //     yield put(makeInwardSuccess(response));

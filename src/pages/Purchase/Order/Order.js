@@ -56,9 +56,9 @@ function initialState(history) {
         page_Id = pageId.ORDER_2;
         listPath = url.ORDER_LIST_2
     }
-    else if (sub_Mode === url.ORDER_3) {
-        page_Id = pageId.ORDER_3;
-        listPath = url.ORDER_LIST_3;
+    else if (sub_Mode === url.IB_ORDER) {
+        page_Id = pageId.IB_ORDER;
+        listPath = url.IB_ORDER_PO_LIST;
     };
     return { page_Id, listPath }
 };
@@ -164,7 +164,7 @@ const Order = (props) => {
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
-            if ((FindPartyItemAccess) && !(subPageMode === url.ORDER_3)) {
+            if ((FindPartyItemAccess) && !(subPageMode === url.IB_ORDER)) {
                 setFindPartyItemAccess(true)
             };
         };
@@ -232,7 +232,7 @@ const Order = (props) => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
-            debugger
+            
             setTermsAndConTable(TermsAndConditions)
             dispatch(GoButton_For_Order_AddSuccess(''))
         }
@@ -602,7 +602,7 @@ const Order = (props) => {
         };
 
         function orderItem({ i, isedit }) {  //isvdc_po logic
-            debugger
+            
             if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
                 var isdel = false;
                 isChanged({ i, isedit, isdel })
@@ -728,7 +728,7 @@ const Order = (props) => {
             // }));
             return
         }
-        if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_3)) {
+        if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
             await CustomAlert({
                 Type: 4,
                 Message: "Please Enter One Terms And Condition",
@@ -775,7 +775,7 @@ const Order = (props) => {
 
 
         let jsonBody;   //json body decleration 
-        if (subPageMode === url.ORDER_3) {
+        if (subPageMode === url.IB_ORDER) {
             jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
         } else {
             jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
@@ -873,7 +873,7 @@ const Order = (props) => {
                                 </FormGroup>
                             </div >
 
-                            {!(subPageMode === url.ORDER_3) ?
+                            {!(subPageMode === url.IB_ORDER) ?
                                 <div className="col col-6" >{/*  Delivery Date field */}
                                     <FormGroup className=" row mt-3 " >
                                         <Label className=" p-2"

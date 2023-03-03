@@ -39,7 +39,7 @@ export default function TreeInput({ data = [] }) {
     }
 
     function fun2(data2) {
-        // debugger
+        // 
         return (
             // <li >
             <div style={{ paddingLeft: "20px" }} className={""} >

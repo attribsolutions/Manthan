@@ -11,7 +11,6 @@ border-radius: 5px;
 margin-bottom: -14px !important;
 
 }
-
 .custom_scroll_div{
   margin-bottom: -7%;
     overflow-x: scroll;
@@ -22,12 +21,22 @@ margin-bottom: -14px !important;
     }
 
 .Scroll_div{
-  margin-bottom: -3%;
+  position: sticky !important;
+  top: 200 !important;
+  margin-bottom: -2%;
   overflow-x: scroll;
-  max-height: 350px;
+  max-height: 550px;
   overflow-y: auto;
   overflow-x: auto;
 }
+
+.sticky{
+  // position:  fixed!important;
+  z-index: 23;
+
+}
+
+
 .pagescroll{
     overflow-x: hidden !important ;
 }   
@@ -40,17 +49,17 @@ margin-bottom: -14px !important;
   
 }
 .colorhead{
-  z-index: 1 !important;
+  z-index: 2 !important;
   position: sticky ;
   top: 0 !important;
   background-color: rgb(245, 245, 245) !important;
   
 }
 .index{
-  z-index: 4 !important;
+  z-index: 2 !important;
 }
 
+
+
+
     
-
-
-

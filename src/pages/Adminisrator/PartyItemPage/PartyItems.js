@@ -83,7 +83,7 @@ const PartyItems = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-debugger
+
     useEffect(() => {
         dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
@@ -222,9 +222,9 @@ debugger
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
-                debugger
+                
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
-                debugger
+                
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}

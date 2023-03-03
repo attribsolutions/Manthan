@@ -137,15 +137,17 @@ export const INVOICE_LIST_1 = "/InvoiceList_1"
 
 //******************************* InterBranch Module ************************************//
 
-export const ORDER_3 = "/Order_3" // IB Order
-export const ORDER_LIST_3 = "/OrderList_3" //IB Order List
+export const IB_ORDER = "/IB_Order" // IB Order
+export const IB_ORDER_PO_LIST = "/IB_Order_PO_List" //IB Order List
+export const IB_ORDER_SO_LIST = "/IB_Order_SO_List" //IB Order List
 
 export const INWARD = "/Inward"
 export const INWARD_LIST = "/InwardList"
 export const IB_INWARD_STP = "/IB_Inward_STP"
 
-export const INVOICE_2 = "/Invoice_2" // IB Invoice
-export const INVOICE_LIST_2 = "/InvoiceList_2" // IB Invoice List
+export const IB_INVOICE = "/IB_Invoice" // IB Invoice
+export const IB_INVOICE_LIST = "/IB_Invoice_List" // IB Invoice List
+export const IB_GRN_LIST = "/IB_GRN_List" // IB GRN List
 export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 
 

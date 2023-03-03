@@ -392,7 +392,7 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-        debugger
+        
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),

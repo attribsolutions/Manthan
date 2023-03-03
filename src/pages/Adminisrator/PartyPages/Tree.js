@@ -6,7 +6,7 @@ import './Tree.scss'
 
 export default function Tree(props) {
     const onchange = (e) => {
-        debugger
+        
         try {
             let targetDiv = document.getElementById("color")
             targetDiv.style.display = "none";
@@ -123,7 +123,7 @@ export default function Tree(props) {
 //     }
 
 //     function fun2(data2) {
-//         // debugger
+//         // 
 //         return (
 //             // <li >
 //             <div style={{ paddingLeft: "20px" }} className={""} >

@@ -7,7 +7,7 @@ export const MainSearchBox = () => {
     const [searchRoleData, setSearchRoleData] = useState([])
     // const  RoleAccessData=demoRolleAcess
     const { RoleAccessData, searchProps } = useSelector((state) => ({
-        RoleAccessData: state.Login.RoleData,
+        RoleAccessData: state.Login.roleAccessSidbarData,
         searchProps: state.BreadcrumbReducer.searchProps,
     }));
 
@@ -75,7 +75,7 @@ export const MainSearchBox = () => {
             });
             /*execute a function presses a key on the keyboard:*/
             inp.addEventListener("keydown", function (e) {
-                // debugger
+                // 
                 var x = document.getElementById(this.id + "autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
                 if (e.keyCode == 40) {

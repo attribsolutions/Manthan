@@ -35,7 +35,7 @@ const BreadcrumbFix = props => {
     userAccess: state.Login.RoleAccessUpdateData,
     downBtnData: state.BreadcrumbReducer.downBtnData,
   }));
-  // debugger
+  // 
   let { showCountlabel = '', bredcrumbItemName = '' } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
@@ -47,7 +47,7 @@ const BreadcrumbFix = props => {
   //   history.listen(location => {
   //     // dispatch(CommonBreadcrumbDetails(initialstate));
   //     setbreadcrumbDetail(initialstate)
-  //     debugger
+  //     
   //   });
   // }, [history])
 
@@ -75,7 +75,7 @@ const BreadcrumbFix = props => {
   } = breadcrumbDetail;
 
   var aaaa = ((CountLabel) && (showCountlabel.length > 0))
-  debugger
+  
   useEffect(() => {
 
     const locationPath = history.location.pathname
@@ -125,7 +125,7 @@ const BreadcrumbFix = props => {
   //   // if (listPagePath === undefined) {
   //   //     return
   //   // }
-  //   // debugger
+  //   // 
   //   history.push({
   //     pathname: masterPage,
   //   })
@@ -143,7 +143,7 @@ const BreadcrumbFix = props => {
   }, [downBtnData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    debugger
+    
     var list = []
     var object1 = {}
     var selectedValues = Object.keys(values);
@@ -168,7 +168,7 @@ const BreadcrumbFix = props => {
   }
 
   const handleChange = (e) => {
-    debugger
+    
     var chek = document.getElementById("checkAll")
     if (chek) {
       for (var i = 0; i < downListKey.length; i++) {

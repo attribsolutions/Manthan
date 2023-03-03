@@ -42,7 +42,7 @@ const Inward = (props) => {
     }));
 
     const { InvoiceItems = [], PartyName = '', InvoiceNumber = '', id = '' } = InwardData
-   
+
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -127,6 +127,9 @@ const Inward = (props) => {
             UpdatedBy: createdBy(),
             Customer: InwardData.Customer,
             Supplier: InwardData.Party,
+            // Supplier: InwardData.Customer,
+            // Customer: InwardData.Party,
+            
             InterBranchInwardItems: arr,
             InterBranchInwardReferences: [{
                 IBChallan: id

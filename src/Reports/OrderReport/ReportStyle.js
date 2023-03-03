@@ -286,7 +286,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            debugger
+            
 
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
@@ -591,7 +591,7 @@ export const pageFooter = (doc, data) => {
     doc.text(`Terms And Condition  `, 33, 775, "justify")
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(9)
-    debugger
+    
     doc.autoTable(terms);
     const slicedArray = terms.slice(0, 3);
     // doc.text(`${slicedArray[0]}`, 35, 793, "justify")

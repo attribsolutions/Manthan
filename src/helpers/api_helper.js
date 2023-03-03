@@ -1,4 +1,5 @@
 import axios from "axios"
+import { mainSppinerOnOff } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import { CkeckAlert } from "../CustomAlert/ConfirmDialog"
 
 const API_URL = "http://192.168.1.114:8000"
@@ -22,24 +23,30 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-export function get(url, config = {}) {
+export function get(url, isspinner, config = {}) {
   console.log("get api call")
-
+  // 
+  // if (isspinner) {
+  //   mainSppinerOnOff(true)
+  // }
   AuthonticationFunction();
   return axiosApi.get(url, { ...config })
     .then(response => {
-      return CkeckAlert("get", url, response);
+      return CkeckAlert("get", url, response, isspinner);
     })
     .catch(error => {
-      return CkeckAlert("get", url, error);
+      return CkeckAlert("get", url, error, isspinner);
     });
 
 
 }
 
-export function post(url, data, config = {}) {
+export function post(url, data, isspinner, config = {}) {
   console.log("Post api call")
-
+  // debugger
+  // if (isspinner) {
+  //   mainSppinerOnOff(true)
+  // }
   AuthonticationFunction();
   return axiosApi
     .post(url, data, {
@@ -49,16 +56,23 @@ export function post(url, data, config = {}) {
       }
     })
     .then(response => {
-      return CkeckAlert("post", url, response,data);
+     
+      // setTimeout(function () {
+      //   mainSppinerOnOff(false)
+      // }, 100000);
+      return CkeckAlert("post", url, response, data, isspinner);
     })
     .catch(error => {
-      return CkeckAlert("post", url, error,data);
+      // setTimeout(function () {
+      //   mainSppinerOnOff(false)
+      // }, 5000);
+      return CkeckAlert("post", url, error, data, isspinner);
     });
 };
 
 
 export function put(url, data, config = {}) {
- 
+
   console.log(" put api call")
   AuthonticationFunction();
   return axiosApi
@@ -69,7 +83,7 @@ export function put(url, data, config = {}) {
       }
     })
     .then(response => {
-      return CkeckAlert("put", url, response,data);
+      return CkeckAlert("put", url, response, data);
     })
     .catch(error => {
       return CkeckAlert("put", url, error,);
@@ -91,7 +105,7 @@ export function del(url, config = {}) {
 
 // for forget password
 export function postForget(url, data, config = {}) {
-  // debugger
+  // 
   // AuthonticationFunction();
   return axiosApi
     .post(url, data, {

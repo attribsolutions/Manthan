@@ -27,7 +27,7 @@ export default function UnitConverstion(props) {
     function addRow_Handler(ID) {
         let a1 = { ...unitConversionInitial, id: ID + 1 }
         const newarr = [...TableData, a1]
-        debugger
+        
         settable(newarr)
     }
 
@@ -35,7 +35,7 @@ export default function UnitConverstion(props) {
         const found = TableData.filter((i) => {
             return !(i.id === Id)
         })
-        debugger
+        
         settable(found)
     }
 

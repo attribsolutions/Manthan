@@ -97,9 +97,9 @@ export const ORDER_LIST_1 = 54
 export const ORDER_2 = 117
 export const ORDER_LIST_2 = 118
 
-
-export const ORDER_3 = 126
-export const ORDER_LIST_3 = 127
+export const IB_ORDER = 126
+export const IB_ORDER_PO_LIST = 127
+export const IB_ORDER_SO_LIST = 147
 
 export const ORDER_4 = 114
 export const ORDER_LIST_4 = 143
@@ -131,16 +131,14 @@ export const INVOICE_LIST_1 = 122
 
 //******************************* Inter Branch ************************************//
 
-
-
 export const INWARD = 128
 export const INWARD_LIST = 129
 export const IB_INWARD_STP = 133
 
-export const INVOICE_2 = 130
-export const INVOICE_LIST_2 = 131
+export const IB_INVOICE = 130
+export const IB_INVOICE_LIST = 131
+export const IB_GRN_LIST = 146
 export const IB_INVOICE_STP = 132
-
 
 export const CHALLAN = 139
 export const CHALLAN_LIST = 138

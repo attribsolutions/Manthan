@@ -7,8 +7,6 @@ import FeatherIcon from "feather-icons-react";
 // //Import Scrollbar
 import SimpleBar from "simplebar-react";
 
-//Import images
-import giftBox from "../../assets/images/giftbox.png";
 
 //i18n
 import { withTranslation } from "react-i18next";
@@ -31,7 +29,7 @@ const SidebarContent = (props) => {
     RoleAccessData,
     RoleAccessUpdateData,
   } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
+    RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
   }));
 
@@ -98,7 +96,7 @@ const SidebarContent = (props) => {
     }
 
     const initMenu = () => {
-      // debugger
+      // 
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");

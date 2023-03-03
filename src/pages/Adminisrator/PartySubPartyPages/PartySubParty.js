@@ -321,11 +321,11 @@ const PartySubParty = (props) => {
             const jsonBody = JSON.stringify(arr);
             saveDissable(true);//save Button Is dissable function
             if (pageMode === mode.edit) {
-                debugger
+                
                 dispatch(updatePartySubParty(jsonBody, values.id,));
             }
             else {
-                debugger
+                
 
                 dispatch(postPartySubParty(jsonBody));
             }

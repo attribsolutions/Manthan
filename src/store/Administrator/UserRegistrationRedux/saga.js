@@ -25,6 +25,7 @@ import {
 } from "./actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // employee dropdown list
 function* EmployeelistDropdown_GenratorFunction() {
@@ -42,9 +43,8 @@ function* RolesListDropdoun_GenratorFunction() {
     const response = yield call(RolesListDropdown_For_UserRegistration_API);
     yield put(getRolesSuccess(response.Data));
 
-  } catch (error) {
-    console.log("Rolelist  saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
+
 }
 
 // post api
@@ -57,13 +57,8 @@ function* user_save_GenratorFunction({ data }) {
     console.log("response", response)
    
     yield put(addUserSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+ 
 }
 
 //  Get list api
@@ -73,13 +68,8 @@ function* Fetch_UserList_GenratorFunction() {
     const response = yield call(User_Component_GetMethod_API);
     yield put(getUserSuccess(response.Data));
    
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+  
 }
 
 // delete api 
@@ -89,13 +79,8 @@ function* Delete_UserList_GenratorFunction({ id }) {
     const response = yield call(User_Component_Delete_Method_API, id);
    
     yield put(deleteSuccess(response))
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+
 }
 
 // edit api
@@ -104,12 +89,8 @@ function* Edit_UserList_GenratorFunction({ id, pageMode }) {
     const response = yield call(User_Component_EditById_API, id);
     response.pageMode = pageMode
     yield put(editSuccess(response));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+  
 }
 
 function* Update_User_GenratorFunction({ data, id }) {
@@ -120,14 +101,8 @@ function* Update_User_GenratorFunction({ data, id }) {
     console.log("update response", response)
    
     yield put(updateSuccess(response))
-  }
-  catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+ 
 }
 
 function* Get_UserPartiesForUserMaster_GenratorFunction({ id }) {
@@ -142,13 +117,8 @@ function* Get_UserPartiesForUserMaster_GenratorFunction({ id }) {
     //   }
     // ))
     yield put(GetUserPartiesForUserMastePageSuccess(response.Data))
-  }
-  catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+ 
 }
 
 function* UserRegistrationSaga() {

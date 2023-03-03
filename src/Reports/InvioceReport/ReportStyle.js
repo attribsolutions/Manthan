@@ -14,7 +14,7 @@ export const pageHeder = (doc, data) => {
     doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
-    debugger
+    
     if (data.ReportType===invoice) {
         doc.setFontSize(15)
         doc.text('TAX INVOICE', 200, 40,)  

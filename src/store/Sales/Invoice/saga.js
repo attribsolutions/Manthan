@@ -11,11 +11,11 @@ import {
   Invoice_1_Delete_API,
   Invoice_1_Edit_API_Singel_Get,
   Invoice_1_Get_Filter_API,
-  Invoice_2_GoButton_API,
-  Invoice_2_Save_API,
-  Invoice_2_Get_Filter_API,
-  Invoice_2_Edit_API_Singel_Get,
-  Invoice_2_Delete_API
+  IB_Invoice_GoButton_API,
+  IB_Invoice_Save_API,
+  IB_Invoice_Get_Filter_API,
+  IB_Invoice_Edit_API_Singel_Get,
+  IB_Invoice_Delete_API
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -43,8 +43,8 @@ function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
     if (subPageMode === url.INVOICE_1) {
       let response = yield call(Invoice_1_Save_API, data);
       yield put(invoiceSaveActionSuccess(response))
-    } if (subPageMode === url.INVOICE_2) {
-      let response = yield call(Invoice_2_Save_API, data);
+    } if (subPageMode === url.IB_INVOICE) {
+      let response = yield call(IB_Invoice_Save_API, data);
       yield put(invoiceSaveActionSuccess(response))
     }
     saveDissable({ id: saveBtnid, state: false })
@@ -62,10 +62,10 @@ function* InvoiceListGenFunc(action) {
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Get_Filter_API, filters);
-    } else if (subPageMode === url.INVOICE_LIST_2) {
-      response = yield call(Invoice_2_Get_Filter_API, filters);
+    } else if (subPageMode === url.IB_INVOICE_LIST ||subPageMode === url.IB_GRN_LIST ||subPageMode === url.IB_INWARD_STP) {
+      response = yield call(IB_Invoice_Get_Filter_API, filters);
     }
-    debugger
+   
     const newList = yield response.Data.map((i) => {
       i["preInvoiceDate"] = i.InvoiceDate
       i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
@@ -84,8 +84,8 @@ function* editInvoiceListGenFunc(action) {
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Edit_API_Singel_Get, id);
-    } else if (subPageMode === url.INVOICE_LIST_2) {
-      response = yield call(Invoice_2_Edit_API_Singel_Get, id);
+    } else if (subPageMode === url.IB_INVOICE_LIST) {
+      response = yield call(IB_Invoice_Edit_API_Singel_Get, id);
     }
 
     response.pageMode = pageMode
@@ -95,15 +95,14 @@ function* editInvoiceListGenFunc(action) {
 
 // Invoice List delete List page
 function* DeleteInvoiceGenFunc(action) {
-  debugger
   try {
     const { subPageMode, id } = action;
     let response;
 
     if (subPageMode === url.INVOICE_LIST_1) {
       response = yield call(Invoice_1_Delete_API, id)
-    } else if (subPageMode === url.INVOICE_LIST_2) {
-      response = yield call(Invoice_2_Delete_API, id)
+    } else if (subPageMode === url.IB_INVOICE_LIST ) {
+      response = yield call(IB_Invoice_Delete_API, id)
     }
 
     yield put(deleteInvoiceIdSuccess(response));
@@ -170,14 +169,14 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
 function* gobutton_invoiceAdd_genFunc({body}) {
   try {
-    debugger
+    
     const { subPageMode, jsonBody, goBtnId } = body
     let response;
     if (subPageMode === url.INVOICE_1) {
       response = yield call(Invoice_1_GoButton_API, jsonBody); // GO-Botton SO-invoice Add Page API
     }
-    else if (subPageMode === url.INVOICE_2) {
-      response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
+    else if (subPageMode === url.IB_INVOICE ) {
+      response = yield call(IB_Invoice_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
     yield GoBtnDissable({ id: goBtnId, state: false })
@@ -187,7 +186,7 @@ function* gobutton_invoiceAdd_genFunc({body}) {
 function* makeIB_InvoiceGenFunc({ body }) {
   try {
     const { subPageMode, jsonBody, goBtnId, path, pageMode, customer } = body
-    const response = yield call(Invoice_2_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
+    const response = yield call(IB_Invoice_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = customer

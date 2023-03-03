@@ -99,7 +99,7 @@ const VehicleMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+        
         //   if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
@@ -202,7 +202,7 @@ const VehicleMaster = (props) => {
     // }
 
     const FormSubmitButton_Handler = (event, values) => {
-        debugger
+        
         var division = divisionData.map(i => ({ Division: i.value }))
 
         const jsonBody = JSON.stringify({

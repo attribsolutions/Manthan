@@ -6,7 +6,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate,  userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -36,7 +36,7 @@ const ProductionList = () => {
     const history = useHistory();
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false ,newBtnPath:''});
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
 
     const [userAccState, setUserAccState] = useState('');
     const reducers = useSelector(
@@ -71,20 +71,21 @@ const ProductionList = () => {
         let masterPath = '';
         let newBtnPath = '';
         let makeBtnShow = false;
-        
+
         if (subPageMode === url.PRODUCTION_LIST) {
             page_Id = pageId.PRODUCTION_LIST;
             masterPath = url.PRODUCTION_MASTER;
-            newBtnPath=url.PRODUCTION_STP;
+            newBtnPath = url.PRODUCTION_STP;
         }
 
         else if (subPageMode === url.PRODUCTION_REISSUE_STP) {
             page_Id = pageId.PRODUCTION_REISSUE_STP
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
-        };
+        }
+
         // dispatch(getOrderListPage(""))//for clear privious order list
-        setOtherState({ masterPath, makeBtnShow,newBtnPath })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
@@ -107,6 +108,7 @@ const ProductionList = () => {
     }, [userAccess])
 
     useEffect(() => {
+        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -119,7 +121,6 @@ const ProductionList = () => {
         var ReportType = report.Stock;   //Stock
         dispatch(getpdfReportdata(production_Edit_API, ReportType, row.id))
     }
-
 
     const goButtonHandler = (onload = false) => {
         let FromDate
@@ -135,7 +136,7 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-
+        
         dispatch(getProductionListPage(jsonBody));
     }
 
@@ -152,13 +153,14 @@ const ProductionList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
+        var Items = { value: list[0].Item, label: list[0].ItemName }
         try {
             const jsonBody = JSON.stringify({
-                "ProductionID": list[0].id,
-                "PartyID": userParty()
+                ProductionID: list[0].id,
+                PartyID: userParty()
             })
-            const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id }
+            const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id, Items: Items }
             dispatch(makeBtnProduction_ReIssue_STP_action(body))
 
         } catch (e) { }

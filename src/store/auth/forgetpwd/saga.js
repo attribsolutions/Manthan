@@ -27,7 +27,7 @@ import { Python_FoodERP_postJwtForgetPwd_SendOTP, Python_FoodERP_postJwtForgetPw
 
 
 function* sendOTP_GnerFun({ user }) {
-  debugger
+  
   try {
    
     const response = yield call(Python_FoodERP_postJwtForgetPwd_SendOTP, user)
@@ -46,7 +46,7 @@ function* sendOTP_GnerFun({ user }) {
 
 function* changePassword_GnerFun({ data }) {
   try {
-debugger
+
     const response = yield call(Python_FoodERP_postJwtForgetPwd_Verify_OTP, data)
     //  "Reset link are sended to your mailbox, check there first"
 

@@ -25,7 +25,7 @@ function AddressDetailsTable(props) {
         props.func(newtableData)
     }
     //   function myFunction() {
-    //     debugger
+    //     
     //     /* Access image by id and change
     //     the display property to block*/
     //     document.getElementById('images')
@@ -44,7 +44,7 @@ function AddressDetailsTable(props) {
 
 
         var x = document.getElementById("add-img");
-        debugger
+        
 
         if (x.style.display === "none") {
             x.src = row.fssaidocument
@@ -55,7 +55,7 @@ function AddressDetailsTable(props) {
     }
 
     const tableRows = props.tableData.map((info, key) => {
-        debugger
+        
         const pic = info.fssaidocument
         return (
             <tr>

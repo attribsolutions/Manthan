@@ -72,7 +72,7 @@ function GroupTab(props) {
     };
 
     const Group_Handler = (event) => {
-        debugger
+        
         const found = props.tableData.find(element => {
             return element.Group == event.value
         });
@@ -92,7 +92,7 @@ function GroupTab(props) {
 
     const addRowsHandler = (e) => {
 
-        debugger
+        
         const val = {
             GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
