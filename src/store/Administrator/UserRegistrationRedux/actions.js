@@ -3,8 +3,8 @@ import{
     GET_ROLE_SUCCESS,
     ADD_USER, 
     ADD_USER_SUCCESS,
-    GET_USER,
-    GET_USER_SUCCESS,
+    GET_USER_LIST_FOR_USER,
+    GET_USER_LIST_FOR_USER_SUCCESS,
     DELETE_USER,
     DELETE_SUCCESS,
     EDIT_USER,
@@ -50,12 +50,13 @@ import{
   });
   
   //get Registration api
-  export const getUser = () => ({
-    type: GET_USER,
+  export const getUser = (jsonbody) => ({
+    type: GET_USER_LIST_FOR_USER,
+    jsonbody,
   });
   
   export const getUserSuccess = (data) => ({
-    type: GET_USER_SUCCESS,
+    type: GET_USER_LIST_FOR_USER_SUCCESS,
     payload:data,
   });
   
