@@ -14,7 +14,7 @@ import Inward from "./Inward";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
-import { currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getSupplier, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
@@ -80,7 +80,7 @@ const InwardList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Customer: userParty(),
+            Customer: loginPartyID(),
             Supplier: SupplierSelect.value,
         });
         dispatch(getInwardListPage(jsonBody));

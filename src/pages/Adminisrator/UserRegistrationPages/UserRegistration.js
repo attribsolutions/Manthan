@@ -28,7 +28,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 
 import * as mode from "../../../routes/PageMode"
@@ -111,7 +111,7 @@ const AddUser = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
-      breadcrumbReturn({dispatch,userAcc});
+      breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])
 
@@ -265,8 +265,8 @@ const AddUser = (props) => {
       isSendOTP: values.isSendOTP,
       isLoginUsingMobile: values.isLoginUsingMobile,
       isLoginUsingEmail: values.isLoginUsingEmail,
-      CreatedBy: createdBy(),
-      UpdatedBy: createdBy(),
+      CreatedBy: loginUserID(),
+      UpdatedBy: loginUserID(),
       UserRole: partyRoleData
     })
 
@@ -546,12 +546,12 @@ const AddUser = (props) => {
                                 <Row>
                                   <Col sm={2}>
                                     <div>
-                                    <SaveButton
-                                  pageMode={pageMode}
-                                  userAcc={userPageAccessState}
-                                  editCreatedBy={editCreatedBy}
-                                  module={"User"}
-                                />
+                                      <SaveButton
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                        module={"User"}
+                                      />
                                       {/* {
                                         pageMode === mode.edit ?
                                           userPageAccessState.RoleAccess_IsEdit ?

@@ -42,7 +42,7 @@ import {
     onChangeSelect,
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -306,8 +306,8 @@ const PartySubParty = (props) => {
                 }
 
                 const ramain = {
-                    CreatedBy: createdBy(),
-                    UpdatedBy: createdBy(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
                     PartyID: Division_dropdown_Select.value,
                 }
 

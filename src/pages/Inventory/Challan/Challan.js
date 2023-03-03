@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -138,7 +138,7 @@ const Challan = (props) => {
                 const jsonBody = JSON.stringify({
                     FromDate: hasEditVal.InvoiceDate,
                     Customer: hasEditVal.Customer,
-                    Party: userParty(),
+                    Party: loginPartyID(),
                     OrderIDs: ""
                 });
                 // dispatch(GoButton_post_For_Invoice(jsonBody));
@@ -218,7 +218,7 @@ const Challan = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: userCompany()
+            Company: loginCompanyID()
         });
         dispatch(challanItemForDropdown(jsonBody))
         dispatch(GetVender())
@@ -583,7 +583,7 @@ const Challan = (props) => {
             return
         } else {
             const jsonBody = JSON.stringify({
-                Party: userParty(),
+                Party: loginPartyID(),
                 Item: values.Item.value
             });
             GoBtnDissable({ id: goBtnId, state: true })
@@ -691,17 +691,17 @@ const Challan = (props) => {
             BaseUnitQuantity: "10.000",
             LiveBatche: 146,
             GRN: 526,
-            Party: userParty()
+            Party: loginPartyID()
         }
 
         const jsonBody = JSON.stringify({
             GRN: "",
             ChallanDate:values.ChallanDate,
-            Party: userParty(),
+            Party: loginPartyID(),
             GrandTotal: grand_total,
             Customer: values.Party.value,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             RoundOffAmount: Math.round(grand_total),
             ChallanItems:itemArr,
             // BatchWiseLiveStockGRNID:array

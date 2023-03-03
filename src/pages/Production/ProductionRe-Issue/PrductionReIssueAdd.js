@@ -26,7 +26,7 @@ import {
     postBOMSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty }
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
     from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     editMaterialIssueIdSuccess,
@@ -182,8 +182,8 @@ const ProductionReIssueAdd = (props) => {
     //                 const jsonBody = JSON.stringify({
     //                     WorkOrder: id,
     //                     Item: Item,
-    //                     Company: userCompany(),
-    //                     Party: userParty(),
+    //                     Company: loginCompanyID(),
+    //                     Party: loginPartyID(),
     //                     Quantity: parseInt(EstimatedOutputQty)
     //                 });
     //                 dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
@@ -413,8 +413,8 @@ const ProductionReIssueAdd = (props) => {
                 const jsonBody = JSON.stringify({
                     WorkOrder: values.ItemName.value,
                     Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
                     Quantity: parseInt(values.LotQuantity)
                 });
 
@@ -598,10 +598,10 @@ const ProductionReIssueAdd = (props) => {
                 ProductionID: production_Id,
                 ProductionItem: values.ItemName.value,
                 ProductionReIssueItems: productionReIssue_Item,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                Company: loginCompanyID(),
+                Party: loginPartyID(),
             }
             );
 

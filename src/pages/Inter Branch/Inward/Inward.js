@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { breadcrumbReturn, createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -123,8 +123,8 @@ const Inward = (props) => {
             IBInwardNumber: InwardData.InvoiceNumber,
             FullIBInwardNumber: InwardData.FullInvoiceNumber,
             GrandTotal: InwardData.GrandTotal,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             Customer: InwardData.Customer,
             Supplier: InwardData.Party,
             // Supplier: InwardData.Customer,

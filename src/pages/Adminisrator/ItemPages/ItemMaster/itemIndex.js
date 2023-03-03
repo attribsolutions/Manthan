@@ -46,7 +46,7 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
@@ -170,7 +170,7 @@ const ItemsMaster = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: userCompany(),
+            Company: loginCompanyID(),
             TypeID: 1
         });
         dispatch(GeneralMasterSubType(jsonBody));
@@ -660,8 +660,8 @@ const ItemsMaster = (props) => {
                 BaseUnitID: formValue.BaseUnit.value,
                 BrandName: ItemBrandName.toString(),
                 Tag: formValue.Tag,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
                 ItemCategoryDetails: ItemCategoryDetails,
                 ItemUnitDetails: itemUnitDetails,
 
@@ -681,8 +681,8 @@ const ItemsMaster = (props) => {
                 ItemShelfLife: [
                     {
                         Days: formValue.ShelfLife,
-                        CreatedBy: createdBy(),
-                        UpdatedBy: createdBy(),
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
                         IsAdd: true
                     }
                 ]
