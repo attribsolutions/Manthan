@@ -63,6 +63,9 @@ export const CategoryList = url.CATEGORY
 export const VehicleMaster = url.VEHICLE_lIST
 export const VehicleList = url.VEHICLE
 
+export const RoutesMaster = url.ROUTES_LIST
+export const RoutesList = url.ROUTES
+
 export const GroupTypeMaster = url.GROUPTYPE_lIST
 export const GroupTypeList = url.GROUPTYPE
 

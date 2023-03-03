@@ -48,7 +48,7 @@ import GeneralSaga from "./Administrator/GeneralRedux/saga"
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
-
+import RoutesSaga from "./Administrator/RoutesRedux/saga"
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -103,6 +103,7 @@ export default function* rootSaga() {
     fork(MRPMasterSaga),
     fork(MarginMasterSaga),
     fork(TermsAndConditionsSaga),
+    fork(RoutesSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
     fork(SubGroupSaga),

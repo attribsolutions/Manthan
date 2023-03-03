@@ -47,7 +47,7 @@ import GeneralReducer from "./Administrator/GeneralRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
-
+import RoutesReducer from "./Administrator/RoutesRedux/reducer"
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 
@@ -124,6 +124,7 @@ const rootReducer = combineReducers({
   MRPMasterReducer,
   MarginMasterReducer,
   TermsAndConditionsReducer,
+  RoutesReducer,
   GroupTypeReducer,
   GSTReducer,
   PartyItemsReducer,
