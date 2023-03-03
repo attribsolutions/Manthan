@@ -14,6 +14,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
+import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const Employee_List = () => {
 
@@ -38,15 +39,22 @@ const Employee_List = () => {
     updateSucc: updateEmployeeIDSuccess,
     deleteSucc: deleteEmployeeIDSuccess
   }
-
+ 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     const page_Id = pageId.EMPLOYEE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getEmployeelist());
+    dispatch(getEmployeelist(getListbodyFunc()));
   }, []);
 
+  function getListbodyFunc() {
+    return JSON.stringify({
+        UserID: loginUserID(),
+        RoleID: loginRoleID(),
+        CompanyID: loginCompanyID()
+    })
+}
   const { pageField, userAccess = [] } = reducers
 
   return (
@@ -62,6 +70,7 @@ const Employee_List = () => {
             masterPath={url.EMPLOYEE}
             ButtonMsgLable={"Employee"}
             deleteName={"Name"}
+            getListbodyFunc={getListbodyFunc}
           />
           : null
       }
