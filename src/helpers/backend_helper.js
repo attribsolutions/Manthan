@@ -194,7 +194,7 @@ export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_SUB_TY
 
 
 // Party Master
-export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
+export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API,jsonbody)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
 export const Party_Master_Delete_API = (id) => del(`${url.PARTY_MASTER_API}/${id}`)// delete api
 export const Party_Master_Edit_API = (id) => get(`${url.PARTY_MASTER_API}/${id}`)// edit api

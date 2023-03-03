@@ -73,6 +73,7 @@ export const ITEMS_GROUP_API = "/ItemGroups"
 
 // Party Master 
 export const PARTY_MASTER_API = "/Parties"
+export const PARTY_MASTER_FILTER_API = "/PartiesFilter"
 export const GetDistrictOnState = "/GetDistrictOnState"
 export const PRICELIST = "/PriceList"
 export const ADDRESSTYPES = "/AddressTypes"
