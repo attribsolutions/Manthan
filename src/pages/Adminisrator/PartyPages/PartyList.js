@@ -15,6 +15,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import { MetaTags } from 'react-meta-tags';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
+import { loginCompanyID, loginRoleID, loginUserID } from '../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -44,9 +45,16 @@ const PartyList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.PARTY_lIST))
-        dispatch(getPartyListAPI());
+        dispatch(getPartyListAPI(getListbodyFunc()));
     }, []);
 
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
     const { pageField ,userAccess=[]} = reducers
 
     return (
@@ -62,6 +70,7 @@ const PartyList = () => {
                         masterPath={url.PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
+                        getListbodyFunc={getListbodyFunc}
                     />
                     : null
             }

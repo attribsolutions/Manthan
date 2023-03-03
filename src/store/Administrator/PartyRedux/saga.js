@@ -30,10 +30,10 @@ import {
   GET_COMPANY
 } from "./actionTypes";
 
-function* Get_Party_GenratorFunction() {
+function* Get_Party_GenratorFunction({jsonbody}) {
 
   try {
-    const response = yield call(Party_Master_Get_API);
+    const response = yield call(Party_Master_Get_API,jsonbody);
 
     function address(arr) {
       let result = ''
