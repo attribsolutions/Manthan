@@ -42,6 +42,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {
 
@@ -85,9 +86,10 @@ const PartyItems = (props) => {
         }));
 
     useEffect(() => {
+        const page_Id = pageId.PARTYITEM
         dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(36))
+        dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI())
         dispatch(getGroupList());
     }, []);
