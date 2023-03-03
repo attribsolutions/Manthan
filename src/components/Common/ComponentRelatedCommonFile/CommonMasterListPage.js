@@ -71,7 +71,7 @@ const CommonListPage = (props) => {
   } = props.action
 
   const {
-    getListJsonbody = () => { },
+    getListbodyFunc =()=> {},
     MasterModal,
     ButtonMsgLable,
     deleteName,
@@ -125,7 +125,7 @@ const CommonListPage = (props) => {
         Message: updateMsg.Message,
       })
       if (promise) {
-        getList(getListJsonbody)
+        getList(getListbodyFunc())
       }
       tog_center();
     } else if (updateMsg.Status === true) {
@@ -141,7 +141,7 @@ const CommonListPage = (props) => {
   }, [updateMsg]);
 
 
-  useEffect(async () => {
+  useEffect( async() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
 
@@ -150,7 +150,7 @@ const CommonListPage = (props) => {
         Message: deleteMsg.Message,
       })
       if (promise) {
-        getList(getListJsonbody)
+        getList(getListbodyFunc())
       }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
@@ -168,7 +168,7 @@ const CommonListPage = (props) => {
       dispatch(postSucc({ Status: false }))
       saveDissable(false);//+++++++++save Button Is enable function
       tog_center();
-      dispatch(getList(getListJsonbody));
+      dispatch(getList(getListbodyFunc()));
       CustomAlert({
         Type: 1,
         Message: JSON.stringify(deleteMsg.Message),
