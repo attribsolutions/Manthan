@@ -122,7 +122,7 @@ export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_CO
 export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_LIST_FOR_DROPDOWN_API_URL)//get api for Dropdown_list data 
 export const RolesListDropdown_For_UserRegistration_API = () => get(url.ROLE_API_URL)
 export const User_Component_PostMethod_API = (data) => post(url.REGISTRATION_API_URL, data)//post for (save and update) User_Component
-export const User_Component_GetMethod_API = () => get(url.USER_API_URL) //Get User_Component
+export const User_Component_GetMethod_API = (jsonbody) => post(url.USER_API_URL,jsonbody) //Get User_Component
 export const User_Component_Delete_Method_API = (id) => del(`${url.USER_API_URL}/${id}`) // delete api
 export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id}`) // edit api
 export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/${id}`, data) // update api
@@ -214,7 +214,7 @@ export const GetRoleListForRoleAccessList_Page_Api = (id1, id2) => get(`${url.GE
 export const GO_Button_HandlerForRoleAccessList_Api = (id1, id2, id3) => get(`${url.GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}/${id3}`) //get api role List 
 export const AddPageHandlerForRoleAccessList_Api = (id1) => get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
 export const PostMethod_HandlerForRoleAccessList_Api = (data) => post(url.ROLE_ACCESS, data) //post api role Access List 
-export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
+export const Get_RoleAccess_List_Page_Api = (jsonbody) => post(url.GET_ROLEACCESS_LIST_PAGE_API,jsonbody)//get RoleAccess List Page API
 export const Post_CopyRoleAccess_for_RoleAccess_Api = (data) => post(url.POST_COPY_ROLE_ACCESS_API, data)//POST COPY  RoleAccess API
 export const Delete_RoleAccess_Api = (role,division,company) => del(`${url.DELETE_ROLE_ACCESS_API}/${role}/${division}/${company}`)//POST COPY  RoleAccess API
 

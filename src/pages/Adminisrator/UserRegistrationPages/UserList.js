@@ -15,6 +15,7 @@ import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
 import * as pageId from "../../../routes/allPageID"
+import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const UserList = () => {
     const dispatch = useDispatch();
@@ -42,11 +43,18 @@ const UserList = () => {
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(14))
-        dispatch(getUser());
+        dispatch(commonPageFieldList(pageId.USER_lIST))
+        dispatch(getUser(getListbodyFunc()));
     }, []);
 
-    const { pageField,userAccess=[] } = reducers
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
+    const { pageField, userAccess = [] } = reducers
 
     return (
         <React.Fragment>
@@ -62,6 +70,7 @@ const UserList = () => {
                         masterPath={USER}
                         ButtonMsgLable={"User"}
                         deleteName={"LoginName"}
+                        getListbodyFunc={getListbodyFunc}
                     />
                     : null
             }
