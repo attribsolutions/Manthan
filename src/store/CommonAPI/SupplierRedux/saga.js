@@ -92,7 +92,7 @@ function* getCustomerGenFunc() {
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
   let response;
   try {
-    debugger
+    
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });//vendor mode 1
     }

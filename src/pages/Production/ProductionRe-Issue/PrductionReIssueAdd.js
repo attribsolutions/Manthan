@@ -118,9 +118,9 @@ const ProductionReIssueAdd = (props) => {
     //****************************************************************** */
 
     useEffect(() => {
-        debugger
+        
         if ((makeProductionReIssue.Status === true) && (makeProductionReIssue.StatusCode === 200)) {
-            debugger
+            
             const arr = makeProductionReIssue.Data.map((index) => ({
                 value: index.Item,
                 label: index.ItemName,
@@ -143,7 +143,7 @@ const ProductionReIssueAdd = (props) => {
     //****************************************************************** */
 
     // useEffect(() => {
-    //     debugger
+    //     
     //     if ((hasShowloction || hasShowModal)) {
 
     //         let hasEditVal = null
@@ -161,7 +161,7 @@ const ProductionReIssueAdd = (props) => {
     //         }
 
     //         if (hasEditVal) {
-    //             debugger
+    //             
     //             // setItemselect(hasEditVal)
     //             const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
     //             // const { BatchesData = [] } = MaterialIssueItems
@@ -423,7 +423,7 @@ const ProductionReIssueAdd = (props) => {
     }
     //****************************************************************** */
     function stockDistributeFunc(index) {
-        debugger
+        
         const v1 = index.Quantity;
         let orderqty = Number(v1);
 

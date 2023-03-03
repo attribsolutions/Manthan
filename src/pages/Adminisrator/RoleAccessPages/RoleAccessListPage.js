@@ -117,7 +117,7 @@ const RoleAccessListPage = () => {
     }, [PostMessage_ForCopyRoleAccess])
 
     useEffect(() => {
-        debugger
+        
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(DeleteRoleAcessSuccess({ Status: false }));
             dispatch(getRoleAccessListPage());

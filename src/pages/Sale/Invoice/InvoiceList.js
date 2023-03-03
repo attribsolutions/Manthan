@@ -162,17 +162,16 @@ const InvoiceList = () => {
         newObj.todate = date
         setorderlistFilter(newObj)
     }
-    debugger
 
     function supplierOnchange(e) {
-        debugger
+        
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
         setorderlistFilter(newObj)
     }
 
     const makeBtnFunc = (list = {}) => {
-        debugger
+        
         dispatch(makeInward(list[0].id))
         history.push({
             pathname: url.INWARD,

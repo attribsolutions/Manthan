@@ -54,7 +54,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-        debugger
+        
         if (!(editDataGatingFromList === undefined)) {
             var C_props = editDataGatingFromList
 

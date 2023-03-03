@@ -215,7 +215,7 @@ const DriverList = (props) => {
                 // <QualityRanger { ...editorProps } value={ value } />
                 <>
                     <Input type="checkbox" />
-                    <Input type="text" onChange={(e)=>{debugger}}></Input>
+                    <Input type="text" onChange={(e)=>{}}></Input>
                     <Select
                                                                         defaultValue={options[0]}
                                                                         isSearchable={false}
@@ -378,11 +378,11 @@ export default DriverList;
 //                 dataField: "price",
 //                 text: "Product Price",
 //                 editable: (content, row, rowIndex, columnIndex) => {
-//                     debugger
+//                     
 //                 },
 //                 events: {
 //                     onchange:(a,b,c,d)=>{
-//                         debugger
+//                         
 //                     }
 //                 }
 //             },
@@ -390,7 +390,7 @@ export default DriverList;
 //                 dataField: "color",
 //                 text: "Color",
 //                 formatter: (e1, column1, columnIndex1, row1, rowIndex1) => {
-//                     debugger
+//                     
 //                     return (
 //                         <div
 //                         // style={{ width: "25px", height: "25px", backgroundColor: cell }}
@@ -402,9 +402,9 @@ export default DriverList;
 
 //                 events: {
 //                     onClick: (e, column, columnIndex, row, rowIndex) => {
-//                         debugger
+//                         
 //                         column.formatter = (e1, column1, columnIndex1, row1, rowIndex1) => {
-//                             debugger
+//                             
 //                             return (
 //                                 <div
 //                                 // style={{ width: "25px", height: "25px", backgroundColor: cell }}

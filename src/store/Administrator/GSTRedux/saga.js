@@ -53,7 +53,7 @@ function* get_GSTListPage_GenratorFunction() {
 
 //delete
 function* delete_GSTListPage_GenratorFunction({ CommonID }) {
-  debugger
+  
 
   try {
     const response = yield call(delete_GSTList_API, CommonID);

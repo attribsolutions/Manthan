@@ -28,7 +28,6 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName,
         makeBtnShow = false
     } = props;
-debugger
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
@@ -367,7 +366,7 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
-        debugger
+        
         if (state) {
             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
         } else {
@@ -380,7 +379,8 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
 }
 export function mainSppinerOnOff(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
-        document.getElementById("overlay").style.display = state ? "block" : "none";
+        // document.getElementById("overlay").style.display = state ? "block" : "none";
+        document.getElementById("preloader").style.display =  state ? "block" : "none";
     } catch (e) { alert("button sppiner error") }
     // try {
     //     document.getElementById(`${id}`).disabled = state;
@@ -394,7 +394,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
-        debugger
+        
         if (state) {
             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
         } else {
@@ -415,7 +415,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //     try {
 //         const btn = document.getElementById(id);
 //         btn.disabled = state;
-//         debugger
+//         
 //         if (state) {
 //             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
 //         } else {

@@ -133,7 +133,7 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+                
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
                 // const { BatchesData = [] } = MaterialIssueItems
@@ -551,7 +551,7 @@ const MaterialIssueMaster = (props) => {
                 })
             }
             index.BatchesData.map((ele) => {
-                // debugger
+                // 
                 if (Number(ele.Qty) > 0) {
                     batch(ele)
                 }
@@ -596,7 +596,7 @@ const MaterialIssueMaster = (props) => {
             else {
                 dispatch(postMaterialIssue(jsonBody));
             }
-            // debugger
+            // 
         };
     }
 

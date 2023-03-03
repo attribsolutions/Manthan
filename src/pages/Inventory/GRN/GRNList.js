@@ -106,7 +106,7 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         const id = list[0].id
         const customer = list[0].Customer
         const jsonBody = JSON.stringify({

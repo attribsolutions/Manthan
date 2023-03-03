@@ -324,7 +324,7 @@ const MarginMaster = (props) => {
             dataField: "Margin",
             sort: true,
             formatter: (cellContent, user) => {
-                debugger
+                
                 if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
                     user["margin"] = true
                 } else {

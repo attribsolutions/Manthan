@@ -178,7 +178,7 @@ const GroupMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        debugger
+        
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values

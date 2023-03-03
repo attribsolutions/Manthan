@@ -93,7 +93,7 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
     });
     yield obj.MaterialIssueItems = newArr
     yield response.Data = obj;
-    debugger
+    
     yield put(editMaterialIssueIdSuccess(response));
     // console.log("editmaterial", JSON.stringify(response.Data))
 

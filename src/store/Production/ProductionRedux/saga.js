@@ -53,7 +53,7 @@ function* UpdateProductionGenFunc({ data, id }) {
 
 // List Page API
 function* get_PRODUCTION_GerFunc({ filters }) {
-  debugger
+  
   try {
     const response = yield call(production_get_API, filters);
     const newList = response.Data.map((index) => {

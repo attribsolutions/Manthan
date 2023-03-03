@@ -32,7 +32,7 @@ export const PageHedercolumns = [
 
 
 //     OrderItem.forEach(element => {
-//         debugger
+//         
 //         if (Gst === 0) { Gst = element.GSTPercentage };
 //         if ((Gst === element.GSTPercentage)) {
 //             totalQuantity = Number(totalQuantity) + Number(element.Quantity)

@@ -37,7 +37,7 @@ function ItemTab(props) {
     }));
 
     function ContentItem_Handler(e) {
-        debugger
+        
         setUnitSelect('')
         setContentItemSelect(e)
         let Item = Items.filter((index) => {
@@ -66,7 +66,7 @@ function ItemTab(props) {
         if ((unitSelect === "")) {
             invalidMsg1.push(`Unit Is Required`)
         };
-        debugger
+        
         if ((contentItemSelect === "")
             || (unitSelect === "")
             || (Quantity === "")
@@ -109,7 +109,7 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
-        debugger
+        
         let val = event.target.value
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if (result) {

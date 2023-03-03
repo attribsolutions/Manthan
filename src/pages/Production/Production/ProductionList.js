@@ -108,7 +108,7 @@ const ProductionList = () => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -136,7 +136,7 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-        debugger
+        
         dispatch(getProductionListPage(jsonBody));
     }
 
@@ -153,7 +153,7 @@ const ProductionList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         var Items = { value: list[0].Item, label: list[0].ItemName }
         try {
             const jsonBody = JSON.stringify({

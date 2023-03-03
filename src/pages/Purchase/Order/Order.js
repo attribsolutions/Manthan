@@ -232,7 +232,7 @@ const Order = (props) => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
-            debugger
+            
             setTermsAndConTable(TermsAndConditions)
             dispatch(GoButton_For_Order_AddSuccess(''))
         }
@@ -602,7 +602,7 @@ const Order = (props) => {
         };
 
         function orderItem({ i, isedit }) {  //isvdc_po logic
-            debugger
+            
             if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
                 var isdel = false;
                 isChanged({ i, isedit, isdel })

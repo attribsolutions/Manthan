@@ -239,7 +239,7 @@ const ItemsMaster = (props) => {
                 //     setImageTabTable(imageTabTable)
                 // }
                 // let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
-                //     debugger
+                //     
                 //     if (index.ItemImagesDetails.length === 0) {
                 //         return setImageTabTable(imageTabTable)
                 //     }
@@ -545,7 +545,7 @@ const ItemsMaster = (props) => {
             // ====================== Unit conversion *****start ======================
 
             const itemUnitDetails = []
-            // debugger
+            // 
             baseUnitTableData.forEach((index, key) => {
                 let val1 = index.Conversion
                 const unit1 = index.Unit.value;
@@ -649,7 +649,7 @@ const ItemsMaster = (props) => {
                 );
                 return;
             }
-            debugger
+            
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -726,7 +726,7 @@ const ItemsMaster = (props) => {
     })
 
     const handleChange = event => {
-        // debugger
+        // 
         dispatch(Breadcrumb_inputName(event.target.value));
         CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
         var searchtext = event.target.value

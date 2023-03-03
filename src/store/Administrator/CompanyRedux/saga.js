@@ -70,7 +70,7 @@ function* editCompany_ID({ id,pageMode }) {
 }
 
 function* update_Company({ updateData, ID }) {
-  debugger
+  
   try {
   
     const response = yield call(updateCompany_ID, updateData, ID);

@@ -244,8 +244,8 @@ export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Ap
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
 export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 
 
-//   Invoice_2==Inter Branch Invoice
-export const INVOICE_2_lIST_FILTER = '/BranchInvoiceFilter'//invoice_2_List filter Api
-export const INVOICE_2_SAVE = '/BranchInvoice'// invoice_2  addpage save Api
-export const INVOICE_2_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// invoice_2 addpage GoButton Api 
+//   IB_INVOICE==Inter Branch Invoice
+export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List filter Api
+export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
+export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOICE addpage GoButton Api 
 

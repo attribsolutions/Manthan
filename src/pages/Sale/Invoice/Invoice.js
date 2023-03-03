@@ -670,7 +670,7 @@ const Invoice = (props) => {
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
-        debugger
+        
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
@@ -753,7 +753,7 @@ const Invoice = (props) => {
             })
         })
 
-        debugger
+        
         // if (formValid(state, setState)) {
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -774,7 +774,7 @@ const Invoice = (props) => {
             InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
         });
 
-        const forInvoice_2_json = () => ({    //   Json Body Generate For Invoice_2  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        const forIB_Invoice_json = () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
             IBChallansReferences: OrderIDs.map(i => ({ Demand: i }))
@@ -795,7 +795,7 @@ const Invoice = (props) => {
         if (subPageMode === url.INVOICE_1) {
             jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
         } else if (subPageMode === url.IB_INVOICE) {
-            jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_2_json() });
+            jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
         }
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

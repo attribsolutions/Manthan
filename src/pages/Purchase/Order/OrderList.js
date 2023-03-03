@@ -165,7 +165,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     useEffect(() => {
-        debugger
+        
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
 
             history.push({
@@ -246,7 +246,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler({IBType}) {
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,

@@ -36,7 +36,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
 
   yield delay(400)
   try {
-    debugger
+    
     const { subPageMode, data } = action
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2)) {
@@ -109,7 +109,7 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {         // Update Order by subP
 
 function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter by subPageMode
   try {
-    debugger
+    
     const { subPageMode, pageMode, jsonBody } = action
     let response;
     let newList;

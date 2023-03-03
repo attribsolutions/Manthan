@@ -523,7 +523,7 @@ const GRNAdd = (props) => {
     }
 
     const saveHandeller = (e, values) => {
-        // debugger
+        // 
         const itemArr = []
         const isvalidMsg = [];
 
@@ -567,10 +567,10 @@ const GRNAdd = (props) => {
             if (isfound.length > 0) {
                 let dubli = isfound.filter(ele => {
                     let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-                    debugger
+                    
                     return condition
                 })
-                debugger
+                
                 if ((i.Quantity > 0)) {
                     if (dubli.length === 0) {
                         itemArr.push(arr)

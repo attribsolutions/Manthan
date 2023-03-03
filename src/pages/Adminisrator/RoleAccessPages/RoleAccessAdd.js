@@ -261,7 +261,7 @@ const RoleAccessAdd = (props) => {
     }
 
     const GoButton_Handler = () => {
-        debugger
+        
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
         var company = company_dropdown_Select.value

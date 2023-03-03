@@ -439,12 +439,13 @@ export async function CkeckAlert(method, url, response, body) {
 
     const con5 = ((data.StatusCode === 406));
     const con6 = ((method === "post" || method === "put"))
+    const con7 = ((data.StatusCode === 100));
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
     }
     // **********************************************************************************
-    if (con1) {
+    if (con1&&con7) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     } else if (con2) {

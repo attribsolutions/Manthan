@@ -77,7 +77,7 @@ export default function SearchBox() {
 
 
 
-            debugger
+            
             for (const person of results) {
                 const resultItem = document.createElement('li')
                 resultItem.classList.add('result-item')

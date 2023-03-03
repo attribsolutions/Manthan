@@ -83,7 +83,7 @@ const Challan = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-    debugger
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -428,7 +428,7 @@ const Challan = (props) => {
         dispatch(GoButtonForChallanAddSuccess([]))
     };
     function itemOnChange(hasSelect, evn) {
-        debugger
+        
         setState((i) => {
             const v1 = { ...i }
             v1.values.Item = hasSelect
@@ -552,7 +552,7 @@ const Challan = (props) => {
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
-        debugger
+        
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
@@ -596,7 +596,7 @@ const Challan = (props) => {
         let grand_total = 0;
 
         console.log(itemArr)
-        debugger
+        
 
         const isvalidMsg = [];
         // const array =[]
@@ -612,7 +612,7 @@ const Challan = (props) => {
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
            const amount =Amount(i)
-           debugger
+           
             grand_total = grand_total + Number(amount)
             const arr = {
                 Item: values.Item.value,
@@ -651,7 +651,7 @@ const Challan = (props) => {
             // if (isfound.length > 0) {
             //     let dubli = isfound.filter(ele => {
             //         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-            //         debugger
+            //         
             //         return condition
             //     })
                 
@@ -693,7 +693,7 @@ const Challan = (props) => {
             GRN: 526,
             Party: userParty()
         }
-debugger
+
         const jsonBody = JSON.stringify({
             GRN: "",
             ChallanDate:values.ChallanDate,
@@ -710,7 +710,7 @@ debugger
 
         if (pageMode === "edit") {
         } else {
-debugger
+
             dispatch(saveChallan_ChallanAdd(jsonBody))
         }
     }
