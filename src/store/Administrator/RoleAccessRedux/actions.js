@@ -74,8 +74,9 @@ export const PostMethod_ForRoleAccessListPage_Success = (data) => ({
 
 
 // For RoleAccess List Page
-export const getRoleAccessListPage = () => ({
+export const getRoleAccessListPage = (jsonbody) => ({
   type: GET_ROLEACCESS_LIST_PAGE,
+  jsonbody,
 });
 
 export const getRoleAccessListPageSuccess = (data) => ({
