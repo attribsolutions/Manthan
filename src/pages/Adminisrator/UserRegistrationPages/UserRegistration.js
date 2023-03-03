@@ -111,7 +111,7 @@ const AddUser = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
-      breadcrumbReturn({dispatch,userAcc});
+      breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])
 
@@ -265,8 +265,6 @@ const AddUser = (props) => {
       isSendOTP: values.isSendOTP,
       isLoginUsingMobile: values.isLoginUsingMobile,
       isLoginUsingEmail: values.isLoginUsingEmail,
-      CompanyID:loginCompanyID(),
-      UserID:loginUserID(),
       CreatedBy: loginUserID(),
       UpdatedBy: loginUserID(),
       UserRole: partyRoleData
@@ -548,12 +546,12 @@ const AddUser = (props) => {
                                 <Row>
                                   <Col sm={2}>
                                     <div>
-                                    <SaveButton
-                                  pageMode={pageMode}
-                                  userAcc={userPageAccessState}
-                                  editCreatedBy={editCreatedBy}
-                                  module={"User"}
-                                />
+                                      <SaveButton
+                                        pageMode={pageMode}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                        module={"User"}
+                                      />
                                       {/* {
                                         pageMode === mode.edit ?
                                           userPageAccessState.RoleAccess_IsEdit ?
