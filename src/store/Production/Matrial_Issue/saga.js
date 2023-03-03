@@ -1,24 +1,22 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { Material_Issue_Delete_API, Material_Issue_Edit_API, Material_Issue_Get_API, Material_Issue_GoButton_Post_API, Material_Issue_Post_API } from "../../../helpers/backend_helper";
-import { Data } from "../../../Reports/InvioceReport/DemoData";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { deleteMaterialIssueIdSuccess, editMaterialIssueIdSuccess, getMaterialIssueListPageSuccess, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssueSuccess } from "./action";
 import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MATERIAL_ISSUE_LIST_PAGE, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, POST_MATERIAL_ISSUE } from "./actionType";
 
 // GO Botton Post API
 function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
-
+  debugger
   try {
-    const response = yield call(Material_Issue_GoButton_Post_API, data);
+    const { jsonBody } = data;
+    const response = yield call(Material_Issue_GoButton_Post_API, jsonBody);
     response.Data.forEach(i1 => {
       i1.BatchesData.forEach(i2 => {
         i2.Qty = '';
       });
     });
-
     let convResp = []
+    const resp1 = { ...response, ...convResp, ...data }
     yield convResp = response.Data.map(i1 => {
       let count = Number(i1.Quantity)
 
@@ -42,19 +40,10 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
       return i1
     })
 
-   
-    console.log("gobtn", JSON.stringify(convResp))
-    yield put(goButtonForMaterialIssue_Master_ActionSuccess(convResp));
+    yield put(goButtonForMaterialIssue_Master_ActionSuccess(resp1));
 
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message Go Button in Work Order ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
-
 
 function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
   try {
@@ -93,44 +82,23 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
     });
     yield obj.MaterialIssueItems = newArr
     yield response.Data = obj;
-    
+    debugger
     yield put(editMaterialIssueIdSuccess(response));
     // console.log("editmaterial", JSON.stringify(response.Data))
-
-
-  } catch (error) {
-    //
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Merssage in Material Issue edit Api "
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 //post api
 function* save_Material_Issue_Genfun({ data }) {
-
-
   try {
-
     const response = yield call(Material_Issue_Post_API, data);
-   
     yield put(postMaterialIssueSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // get Work Order List API Using post method
 function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
-
-
   try {
-
     const response = yield call(Material_Issue_Get_API, filters);
     const newList = yield response.Data.map((i) => {
       var date = convertDatefunc(i.MaterialIssueDate)
@@ -139,36 +107,17 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
       return i
     })
     yield put(getMaterialIssueListPageSuccess(newList));
-   
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message in Work Order List ",
-    }));
-  }
-}
 
+  } catch (error) { CommonConsole(error) }
+}
 
 function* Delete_Metrialissue_listpage_GenFunc({ id }) {
-
-
   try {
     const response = yield call(Material_Issue_Delete_API, id);
-   
+
     yield put(deleteMaterialIssueIdSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Merssage in Material issue delete Api "
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
-
-
-
-
 
 function* MaterialIssueSaga() {
   yield takeEvery(POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, GoButton_MaterialIssue_masterPage_genfun)
@@ -176,8 +125,6 @@ function* MaterialIssueSaga() {
   yield takeEvery(GET_MATERIAL_ISSUE_LIST_PAGE, GoButton_MaterialIssue_listpage_GenFunc)
   yield takeEvery(DELETE_MATERIAL_ISSUE_LIST_PAGE, Delete_Metrialissue_listpage_GenFunc)
   yield takeEvery(EDIT_MATERIAL_ISSUE_LIST_PAGE, edit_Metrialissue_listpage_GenFunc)
-
-
 }
 
 export default MaterialIssueSaga;
