@@ -12,6 +12,7 @@ import HPageMaster from "./PageMaster";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { PAGE } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 export default function PageList() {
 
@@ -39,8 +40,9 @@ export default function PageList() {
 
   // Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.PAGE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(8))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(GetHpageListData());
   }, []);
 

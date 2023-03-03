@@ -62,7 +62,7 @@ function GroupTab(props) {
     };
 
     const addRowsHandler = (e) => {
-        debugger;
+        ;
         const val = {
             GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,

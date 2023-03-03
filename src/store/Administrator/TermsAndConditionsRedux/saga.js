@@ -80,7 +80,7 @@ function* Delete_TermsAndCondtions_GenratorFunction({id }) {
 
 // edit api
 function* Edit_TermsAndCondtions_GenratorFunction({ id,pageMode }) {
-  debugger
+  
   try {
     const response = yield call(edit_TermsAndCondtions_Master_API, id);
     response.pageMode=pageMode

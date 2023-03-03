@@ -18,7 +18,7 @@ import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI
 import {
     currentDate,
     excelDownCommonFunc,
-    userParty
+    loginPartyID
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -106,6 +106,7 @@ const InvoiceList = () => {
             page_Id = pageId.IB_INWARD_STP
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
+            IBType = "IBGRN"
         }
 
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
@@ -143,7 +144,7 @@ const InvoiceList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-            Party: userParty(),
+            Party: loginPartyID(),
             IBType: IBType ? IBType : otherState.IBType
         });
 
@@ -161,17 +162,16 @@ const InvoiceList = () => {
         newObj.todate = date
         setorderlistFilter(newObj)
     }
-    debugger
 
     function supplierOnchange(e) {
-        debugger
+        
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
         setorderlistFilter(newObj)
     }
 
     const makeBtnFunc = (list = {}) => {
-        debugger
+        
         dispatch(makeInward(list[0].id))
         history.push({
             pathname: url.INWARD,

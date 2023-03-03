@@ -19,7 +19,7 @@ export default function Index() {
 
 
     const onSubmit = e => {
-        debugger
+        
         e.preventDefault();
         if (formValid(state)) {
             console.log(state)
@@ -29,7 +29,7 @@ export default function Index() {
     };
 
     const formValChange = e => {
-        debugger
+        
         e.preventDefault();
         const { name, value } = e.target;
         let isError = { ...state.isError };
@@ -61,7 +61,7 @@ export default function Index() {
 
 
     const formValid = ({ isError, ...rest }) => {
-        debugger
+        
         let isValid = false;
         Object.values(isError).forEach(val => {
 

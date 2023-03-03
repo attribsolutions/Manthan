@@ -42,6 +42,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {
 
@@ -83,11 +84,12 @@ const PartyItems = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-debugger
+
     useEffect(() => {
+        const page_Id = pageId.PARTYITEM
         dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(36))
+        dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI())
         dispatch(getGroupList());
     }, []);
@@ -222,9 +224,9 @@ debugger
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
-                debugger
+                
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
-                debugger
+                
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}

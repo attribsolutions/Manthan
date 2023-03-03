@@ -8,7 +8,7 @@ export const mySearchProps = (props) => {
 let priviousSerach = null
 export const MySearch = () => {
     // useEffect(() => {
-    //     debugger
+    //     
     //     if (priviousSerach) {
     //         props1.onSearch(len);
     //         priviousSerach = null
@@ -17,7 +17,7 @@ export const MySearch = () => {
 
     let input;
     const handleClick = () => {
-        debugger
+        
         var len = input.value
         priviousSerach = len
         if (!(len[0] === "/")) {

@@ -23,12 +23,12 @@ import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     breadcrumbReturn,
-    createdBy,
+    loginUserID,
     currentDate,
     GoBtnDissable,
     saveDissable,
-    userCompany,
-    userParty
+    loginCompanyID,
+    loginPartyID
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     editWorkOrderListSuccess,
@@ -252,8 +252,8 @@ const WorkOrder = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
             ToDate: currentDate,
-            Company: userCompany(),
-            Party: userParty()
+            Company: loginCompanyID(),
+            Party: loginPartyID()
         });
         dispatch(getBOMList(jsonBody));
     }, [])
@@ -392,12 +392,12 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-        debugger
+        
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
             Quantity: parseFloat(values.Quantity),
-            Party: userParty()
+            Party: loginPartyID()
         });
         // GoBtnDissable({ id: goBtnID1, state: true })
         dispatch(postGoButtonForWorkOrder_Master(jsonBody, goBtnID1));
@@ -420,10 +420,10 @@ const WorkOrder = (props) => {
             Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
             NumberOfLot: values.NumberOfLot,
             Quantity: parseFloat(values.Quantity).toFixed(3),
-            Company: userCompany(),
-            Party: userParty(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            Company: loginCompanyID(),
+            Party: loginPartyID(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             WorkOrderItems: WorkOrderItems
         });
 

@@ -24,13 +24,13 @@ import {
 } from "./actionType";
 
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { CommonConsole, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {
 
   try {
-    const response = yield call(Party_Master_Edit_API, userParty());
+    const response = yield call(Party_Master_Edit_API, loginPartyID());
     let first = [], secd = [], newArr = []
     const arr = response.Data.PartyAddress;
     arr.forEach((i, k) => {
@@ -50,12 +50,7 @@ function* supplierAddressGenFunc() {
     newArr = [...first, ...secd]
 
     yield put(getSupplierAddressSuccess(newArr));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error for Party API ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // OrderType Dropdown
@@ -69,7 +64,7 @@ function* OrderType_GenFunc() {
 function* getVendorGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID() });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -77,14 +72,14 @@ function* getVendorGenFunc() {
 function* getSupplierGenFunc() {
 
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID() });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* getCustomerGenFunc() {
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
+    const response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() });
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -92,28 +87,28 @@ function* getCustomerGenFunc() {
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
   let response;
   try {
-    debugger
+    
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_LIST_1)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": userParty(), "Company": userCompany() });//vendor mode 1
+      response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID() });//vendor mode 1
     }
     else if ((subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_LIST_2)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": userParty(), "Company": userCompany() });//supplier mode 2
+      response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": loginPartyID(), "Company": loginCompanyID() });//supplier mode 2
     }
     else if ((subPageMode === url.IB_ORDER) || (subPageMode === url.IB_ORDER_PO_LIST)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });//divisions mode 4
+      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": loginPartyID(), "Company": loginCompanyID() });//divisions mode 4
     }
     else if ((subPageMode === url.ORDER_4) || (subPageMode === url.ORDER_LIST_4)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });//Customer mode 3
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() });//Customer mode 3
     }
     else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": userParty(), "Company": userCompany() });
+      response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() });
     }
     else if ((subPageMode === url.IB_INVOICE) || (subPageMode === url.IB_INVOICE_LIST)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });
-      // response = yield call(IB_Division_DROP_API, { "Company": userCompany(), "Party": userParty() });
+      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": loginPartyID(), "Company": loginCompanyID() });
+      // response = yield call(IB_Division_DROP_API, { "Company": loginCompanyID(), "Party": loginPartyID() });
     }
     else if ((subPageMode === url.INWARD) || (subPageMode === url.INWARD_LIST)) {
-      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": userParty(), "Company": userCompany() });
+      response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": loginPartyID(), "Company": loginCompanyID() });
     } else {
       response = { Data: [] }
     }

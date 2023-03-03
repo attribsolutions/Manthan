@@ -119,7 +119,7 @@ export const ReportFotterColumns = [
 ];
 
 export const ReportHederRows = (data) => {
-   debugger
+   
     var reportArray = [
         [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
         [`${data.CustomerName}`, `${data.PartyName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],

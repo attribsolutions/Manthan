@@ -6,7 +6,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -108,7 +108,7 @@ const ProductionList = () => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -136,7 +136,7 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-        debugger
+        
         dispatch(getProductionListPage(jsonBody));
     }
 
@@ -153,12 +153,12 @@ const ProductionList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         var Items = { value: list[0].Item, label: list[0].ItemName }
         try {
             const jsonBody = JSON.stringify({
                 ProductionID: list[0].id,
-                PartyID: userParty()
+                PartyID: loginPartyID()
             })
             const body = { jsonBody, pageMode, path: url.PRODUCTION_REISSUE, productionId: list[0].id, Items: Items }
             dispatch(makeBtnProduction_ReIssue_STP_action(body))

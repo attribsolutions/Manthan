@@ -22,7 +22,7 @@ import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommo
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn, userCompany, userEmployeeID, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {
@@ -117,7 +117,7 @@ const RoleAccessListPage = () => {
     }, [PostMessage_ForCopyRoleAccess])
 
     useEffect(() => {
-        debugger
+        
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(DeleteRoleAcessSuccess({ Status: false }));
             dispatch(getRoleAccessListPage());

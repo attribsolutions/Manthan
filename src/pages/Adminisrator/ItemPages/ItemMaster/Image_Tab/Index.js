@@ -46,7 +46,7 @@ export default function Image(props) {
         }
 
     const onchangeHandler = async (event, key, type) => {
-            debugger
+            
             const found1 = imageTable.find(element => {
                 return element.ImageType.value === event.value
             });

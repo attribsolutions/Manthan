@@ -84,7 +84,7 @@ const GSTList = (props) => {
 
     //select id for delete row
     const deleteHandeler = (CommonID) => {
-        debugger
+        
         dispatch(
             AlertState({
                 Type: 5,

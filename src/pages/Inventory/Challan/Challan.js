@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -83,7 +83,7 @@ const Challan = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-    debugger
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -138,7 +138,7 @@ const Challan = (props) => {
                 const jsonBody = JSON.stringify({
                     FromDate: hasEditVal.InvoiceDate,
                     Customer: hasEditVal.Customer,
-                    Party: userParty(),
+                    Party: loginPartyID(),
                     OrderIDs: ""
                 });
                 // dispatch(GoButton_post_For_Invoice(jsonBody));
@@ -218,7 +218,7 @@ const Challan = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: userCompany()
+            Company: loginCompanyID()
         });
         dispatch(challanItemForDropdown(jsonBody))
         dispatch(GetVender())
@@ -428,7 +428,7 @@ const Challan = (props) => {
         dispatch(GoButtonForChallanAddSuccess([]))
     };
     function itemOnChange(hasSelect, evn) {
-        debugger
+        
         setState((i) => {
             const v1 = { ...i }
             v1.values.Item = hasSelect
@@ -552,7 +552,7 @@ const Challan = (props) => {
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
-        debugger
+        
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
@@ -583,7 +583,7 @@ const Challan = (props) => {
             return
         } else {
             const jsonBody = JSON.stringify({
-                Party: userParty(),
+                Party: loginPartyID(),
                 Item: values.Item.value
             });
             GoBtnDissable({ id: goBtnId, state: true })
@@ -596,7 +596,7 @@ const Challan = (props) => {
         let grand_total = 0;
 
         console.log(itemArr)
-        debugger
+        
 
         const isvalidMsg = [];
         // const array =[]
@@ -612,7 +612,7 @@ const Challan = (props) => {
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
            const amount =Amount(i)
-           debugger
+           
             grand_total = grand_total + Number(amount)
             const arr = {
                 Item: values.Item.value,
@@ -651,7 +651,7 @@ const Challan = (props) => {
             // if (isfound.length > 0) {
             //     let dubli = isfound.filter(ele => {
             //         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-            //         debugger
+            //         
             //         return condition
             //     })
                 
@@ -691,17 +691,17 @@ const Challan = (props) => {
             BaseUnitQuantity: "10.000",
             LiveBatche: 146,
             GRN: 526,
-            Party: userParty()
+            Party: loginPartyID()
         }
-debugger
+
         const jsonBody = JSON.stringify({
             GRN: "",
             ChallanDate:values.ChallanDate,
-            Party: userParty(),
+            Party: loginPartyID(),
             GrandTotal: grand_total,
             Customer: values.Party.value,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             RoundOffAmount: Math.round(grand_total),
             ChallanItems:itemArr,
             // BatchWiseLiveStockGRNID:array
@@ -710,7 +710,7 @@ debugger
 
         if (pageMode === "edit") {
         } else {
-debugger
+
             dispatch(saveChallan_ChallanAdd(jsonBody))
         }
     }

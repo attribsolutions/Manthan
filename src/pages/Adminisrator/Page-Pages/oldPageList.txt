@@ -146,7 +146,7 @@ export default function PageList() {
     }
   }, [editData]);
 
-debugger
+
   const pageOptions = {
     sizePerPage: 15,
     // totalSize: HPageListData.length, // replace later with size(users),

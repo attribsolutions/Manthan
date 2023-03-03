@@ -28,7 +28,6 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName,
         makeBtnShow = false
     } = props;
-
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
@@ -59,8 +58,8 @@ export const listPageCommonButtonFunction = (props) => {
             // PermissionAction: deleteActionFun,
             // ID: rowData.id,
         })
-        if(rep){
-            dispatch(deleteActionFun(rowData.id,subPageMode))
+        if (rep) {
+            dispatch(deleteActionFun(rowData.id, subPageMode))
         }
 
     }
@@ -290,15 +289,22 @@ export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++
     return currentDate
 }
 
-export const userDetails = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginUserDetails = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     let user_Details = null
     try {
         user_Details = JSON.parse(localStorage.getItem('roleId'))
     } catch (e) { alert("Common user_Details  Error") }
     return user_Details
 }
+export const loginRoleID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+    try {
+        const detail = JSON.parse(localStorage.getItem('roleId'))
+        return detail.Role
+    } catch (e) { alert("Common Role ID  Error") }
+    return null
+}
 
-export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
+export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let created_By = 0
     try {
         created_By = JSON.parse(localStorage.getItem('userId'))
@@ -306,27 +312,27 @@ export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id++++++++
     return created_By
 }
 
-export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { alert("Common userCompany  Error") }
+    } catch (e) { alert("Common loginCompanyID  Error") }
     return user_Company
 }
 
-export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
     let user_Party = 0
     try {
         user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
-    } catch (e) { alert("Common userParty Func  Error") }
+    } catch (e) { alert("Common loginPartyID Func  Error") }
     return user_Party
 }
 
-export const userEmployeeID = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
     let user_EmployeeID = 0
     try {
         user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
-    } catch (e) { alert("Common userEmployeeID Func  Error") }
+    } catch (e) { alert("Common loginEmployeeID Func  Error") }
     return user_EmployeeID
 }
 
@@ -367,7 +373,7 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
-        debugger
+
         if (state) {
             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
         } else {
@@ -380,7 +386,8 @@ export function saveDissable({ id = '', state = false }) {//++++++++++++++++++++
 }
 export function mainSppinerOnOff(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
-        document.getElementById("overlay").style.display = state ? "block" : "none";
+        // document.getElementById("overlay").style.display = state ? "block" : "none";
+        document.getElementById("preloader").style.display = state ? "block" : "none";
     } catch (e) { alert("button sppiner error") }
     // try {
     //     document.getElementById(`${id}`).disabled = state;
@@ -394,7 +401,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
     try {
         const btn = document.getElementById(id);
         btn.disabled = state;
-        debugger
+
         if (state) {
             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
         } else {
@@ -415,7 +422,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 //     try {
 //         const btn = document.getElementById(id);
 //         btn.disabled = state;
-//         debugger
+//         
 //         if (state) {
 //             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
 //         } else {

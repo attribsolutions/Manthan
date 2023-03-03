@@ -32,7 +32,7 @@ import {
     postGSTMasterData,
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
-import { breadcrumbReturn, createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 import * as pageId from "../../../routes/allPageID"
 
@@ -372,10 +372,10 @@ const GSTMaster = (props) => {
     const handleValidSubmit = (event, values) => {
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
-            Company: userCompany(),
-            CreatedBy: createdBy(),
+            Company: loginCompanyID(),
+            CreatedBy: loginUserID(),
             IsDeleted: 0,
-            UpdatedBy: createdBy(),
+            UpdatedBy: loginUserID(),
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,

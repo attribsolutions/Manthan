@@ -85,7 +85,7 @@ const ForgetPasswordPage = props => {
   function handleValidSubmit1(event, values) {
     var paswd = values.password1
     var pawdcn = values.passwordcon
-    debugger
+    
     if (!(paswd === pawdcn)) {
       // setPaswErr("form-control is-invalid mb-2")
       setPaswErr(true)

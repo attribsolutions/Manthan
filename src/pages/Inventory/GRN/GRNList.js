@@ -16,7 +16,7 @@ import {
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -106,13 +106,13 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         const id = list[0].id
         const customer = list[0].Customer
         const jsonBody = JSON.stringify({
             // FromDate: fromdate,
             // ToDate: todate,
-            // Party: userParty(),
+            // Party: loginPartyID(),
             // Customer: customer,
             GRN: id,
         });
@@ -124,7 +124,7 @@ const GRNList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Supplier: venderSelect === "" ? '' : venderSelect.value,
-            Party: userParty(),
+            Party: loginPartyID(),
             OrderType: order_Type.SaleOrder
         });
         dispatch(getGRNListPage(jsonBody));

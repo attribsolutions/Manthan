@@ -17,7 +17,7 @@ import {
   get_Division_ForDropDown,
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import { createdBy, userCompany } from "../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginUserID, loginCompanyID } from "../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function MRPTab(props) {
   const dispatch = useDispatch();
@@ -71,9 +71,9 @@ function MRPTab(props) {
       Party: partyName === "" ? "" : partyName.value,
       EffectiveDate: effectiveDate,
       MRP: MRP,
-      CreatedBy:createdBy(),
-      UpdatedBy:createdBy(),
-      Company: userCompany(),
+      CreatedBy:loginUserID(),
+      UpdatedBy:loginUserID(),
+      Company: loginCompanyID(),
       IsDeleted:0,
       CommonID:0,
       IsAdd:true

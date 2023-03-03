@@ -26,7 +26,7 @@ import {
     postBOMSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty }
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
     from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     editMaterialIssueIdSuccess,
@@ -118,9 +118,9 @@ const ProductionReIssueAdd = (props) => {
     //****************************************************************** */
 
     useEffect(() => {
-        debugger
+        
         if ((makeProductionReIssue.Status === true) && (makeProductionReIssue.StatusCode === 200)) {
-            debugger
+            
             const arr = makeProductionReIssue.Data.map((index) => ({
                 value: index.Item,
                 label: index.ItemName,
@@ -143,7 +143,7 @@ const ProductionReIssueAdd = (props) => {
     //****************************************************************** */
 
     // useEffect(() => {
-    //     debugger
+    //     
     //     if ((hasShowloction || hasShowModal)) {
 
     //         let hasEditVal = null
@@ -161,7 +161,7 @@ const ProductionReIssueAdd = (props) => {
     //         }
 
     //         if (hasEditVal) {
-    //             debugger
+    //             
     //             // setItemselect(hasEditVal)
     //             const { id, Item, ItemName, WorkDate, EstimatedOutputQty, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
     //             // const { BatchesData = [] } = MaterialIssueItems
@@ -182,8 +182,8 @@ const ProductionReIssueAdd = (props) => {
     //                 const jsonBody = JSON.stringify({
     //                     WorkOrder: id,
     //                     Item: Item,
-    //                     Company: userCompany(),
-    //                     Party: userParty(),
+    //                     Company: loginCompanyID(),
+    //                     Party: loginPartyID(),
     //                     Quantity: parseInt(EstimatedOutputQty)
     //                 });
     //                 dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
@@ -413,8 +413,8 @@ const ProductionReIssueAdd = (props) => {
                 const jsonBody = JSON.stringify({
                     WorkOrder: values.ItemName.value,
                     Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
                     Quantity: parseInt(values.LotQuantity)
                 });
 
@@ -423,7 +423,7 @@ const ProductionReIssueAdd = (props) => {
     }
     //****************************************************************** */
     function stockDistributeFunc(index) {
-        debugger
+        
         const v1 = index.Quantity;
         let orderqty = Number(v1);
 
@@ -598,10 +598,10 @@ const ProductionReIssueAdd = (props) => {
                 ProductionID: production_Id,
                 ProductionItem: values.ItemName.value,
                 ProductionReIssueItems: productionReIssue_Item,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                Company: loginCompanyID(),
+                Party: loginPartyID(),
             }
             );
 

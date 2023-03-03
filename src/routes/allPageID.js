@@ -131,8 +131,6 @@ export const INVOICE_LIST_1 = 122
 
 //******************************* Inter Branch ************************************//
 
-
-
 export const INWARD = 128
 export const INWARD_LIST = 129
 export const IB_INWARD_STP = 133
@@ -141,7 +139,6 @@ export const IB_INVOICE = 130
 export const IB_INVOICE_LIST = 131
 export const IB_GRN_LIST = 146
 export const IB_INVOICE_STP = 132
-
 
 export const CHALLAN = 139
 export const CHALLAN_LIST = 138

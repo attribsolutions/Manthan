@@ -6,7 +6,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import {
     deleteWorkOrderId,
@@ -21,6 +21,7 @@ import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
+import { goButtonForMaterialIssue_Master_Action } from "../../../store/Production/Matrial_Issue/action";
 
 const WorkOrderList = () => {
 
@@ -42,10 +43,11 @@ const WorkOrderList = () => {
             workOrderlistFilters: state.WorkOrderReducer.workOrderlistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            makeProductionReIssue: state.MaterialIssueReducer.GoButton
         })
     );
 
-    const { userAccess, pageField, tableList, workOrderlistFilters, GRNitem } = reducers;
+    const { userAccess, pageField, tableList, workOrderlistFilters, makeProductionReIssue } = reducers;
     const { fromdate, todate } = workOrderlistFilters
     const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
     const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPsave : mode.defaultList;
@@ -86,14 +88,15 @@ const WorkOrderList = () => {
         }
     }, [userAccess])
 
-    // useEffect(() => {
-    //     if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-    //         history.push({
-    //             pathname: GRNitem.path,
-    //             pageMode: GRNitem.pageMode,
-    //         })
-    //     }
-    // }, [GRNitem])
+    useEffect(() => {
+        debugger
+        if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
+            history.push({
+                pathname: makeProductionReIssue.path,
+                page_Mode: makeProductionReIssue.pageMode,
+            })
+        }
+    }, [makeProductionReIssue])
 
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
@@ -115,21 +118,42 @@ const WorkOrderList = () => {
         dispatch(WorkOrderlistfilters(newObj))
     }
 
+
     const makeBtnFunc = (list = []) => {
+        debugger
+        // history.push({
+        //     pathname: url.MATERIAL_ISSUE,
+        //     pageMode: mode.modeSTPsave,
+        //     [mode.editValue]: list[0]
+        // })
+        // const jsonBody = JSON.stringify({
+        //     WorkOrder: id,
+        //     Item: Item,
+        //     Company: loginCompanyID(),
+        //     Party: loginPartyID(),
+        //     Quantity: parseInt(Quantity)
+        // });
+        // dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
+        var jsonData = list[0]
+        try {
+            const jsonBody = JSON.stringify({
+                WorkOrder: jsonData.id,
+                Item: jsonData.Item,
+                Company: loginCompanyID(),
+                Party: loginPartyID(),
+                Quantity: parseInt(jsonData.Quantity)
+            })
+            const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }
+            dispatch(goButtonForMaterialIssue_Master_Action(body))
 
-        history.push({
-            pathname: url.MATERIAL_ISSUE,
-            pageMode: mode.modeSTPsave,
-            [mode.editValue]: list[0]
-        })
-
+        } catch (e) { }
     }
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
             <div className="page-content">
-        
+
 
                 <div className="px-2   c_card_header text-black"  >
                     <div className="row" >

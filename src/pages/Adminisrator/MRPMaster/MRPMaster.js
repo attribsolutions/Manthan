@@ -38,7 +38,7 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturn, createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 
 const MRPMaster = (props) => {
@@ -376,9 +376,9 @@ const MRPMaster = (props) => {
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
             EffectiveDate: effectiveDate,
-            Company: userCompany(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            Company: loginCompanyID(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             IsDeleted: 0,
             IsAdd: true,
             Item: index.Item,

@@ -138,7 +138,7 @@ const Layout = props => {
   };
 
   useEffect(() => {
-    // debugger
+    // 
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.RelatedPageIDPath}` === locationPath)

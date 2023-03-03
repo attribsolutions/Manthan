@@ -1,5 +1,5 @@
 
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -11,9 +11,10 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn,  listPageCommonButtonFunction, saveDissable }
+import { breadcrumbReturn, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 let sortType = "asc"
@@ -70,6 +71,7 @@ const CommonListPage = (props) => {
   } = props.action
 
   const {
+    getListbodyFunc =()=> {},
     MasterModal,
     ButtonMsgLable,
     deleteName,
@@ -111,56 +113,51 @@ const CommonListPage = (props) => {
 
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
-  useEffect(() => {
+  useEffect(async () => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
       saveDissable(false);//+++++++++save Button Is enable function
 
       dispatch(updateSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: updateMsg.Message,
-          AfterResponseAction: getList,
-        })
-      );
+
+      const promise = await CustomAlert({
+        Type: 1,
+        Message: updateMsg.Message,
+      })
+      if (promise) {
+        getList(getListbodyFunc())
+      }
       tog_center();
     } else if (updateMsg.Status === true) {
 
       saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMsg.Message),
-        })
-      );
+      CustomAlert({
+        Type: 3,
+        Message: JSON.stringify(updateMsg.Message),
+      })
+
     }
   }, [updateMsg]);
 
 
-  useEffect(() => {
+  useEffect( async() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: deleteMsg.Message,
-          AfterResponseAction: getList,
-        })
-      );
+
+      const promise = await CustomAlert({
+        Type: 1,
+        Message: deleteMsg.Message,
+      })
+      if (promise) {
+        getList(getListbodyFunc())
+      }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(deleteMsg.Message),
-        })
-      );
+      CustomAlert({
+        Type: 3,
+        Message: JSON.stringify(deleteMsg.Message),
+      })
     }
   }, [deleteMsg]);
 
@@ -171,24 +168,20 @@ const CommonListPage = (props) => {
       dispatch(postSucc({ Status: false }))
       saveDissable(false);//+++++++++save Button Is enable function
       tog_center();
-      dispatch(getList());
-      dispatch(AlertState({
+      dispatch(getList(getListbodyFunc()));
+      CustomAlert({
         Type: 1,
-        Status: true,
-        Message: postMsg.Message,
-      }))
+        Message: JSON.stringify(deleteMsg.Message),
+      })
     }
 
     else if ((postMsg.Status === true)) {
       saveDissable(false);//+++++++++save Button Is enable function
       dispatch(postSucc({ Status: false }))
-      dispatch(AlertState({
+      CustomAlert({
         Type: 4,
-        Status: true,
-        Message: JSON.stringify(postMsg.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+        Message: JSON.stringify(deleteMsg.Message),
+      })
     }
 
 

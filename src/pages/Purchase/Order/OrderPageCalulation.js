@@ -25,7 +25,7 @@ export const GstAmount = (i) => {
 }
 
 export const Amount = (i) => {
-debugger
+
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
     const total = gstAmt + parseFloat(baseAmt)

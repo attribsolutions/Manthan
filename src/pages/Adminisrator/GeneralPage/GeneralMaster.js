@@ -38,7 +38,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -151,7 +151,7 @@ const GeneralMaster = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Company: userCompany(),
+            Company: loginCompanyID(),
         });
         dispatch(PostType(jsonBody));
     }, []);
@@ -228,10 +228,10 @@ const GeneralMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 TypeID: values.TypeName.value,
-                Company: userCompany(),
+                Company: loginCompanyID(),
                 IsActive: values.IsActive,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy()
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID()
             });
 
             saveDissable(true);//save Button Is dissable function

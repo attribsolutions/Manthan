@@ -217,7 +217,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            debugger
+            
             if (data1.row.cells[2].raw === "Total") {
                 // data1.row.cells[0].colSpan = 3
                 // data1.row.cells[4].colSpan = 2

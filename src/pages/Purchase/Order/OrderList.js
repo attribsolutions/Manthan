@@ -18,7 +18,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import { getSupplier, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -102,7 +102,8 @@ const OrderList = () => {
         else if (subPageMode === url.IB_ORDER_SO_LIST) {
             page_Id = pageId.IB_ORDER_SO_LIST
             masterPath = url.IB_ORDER;
-            // newBtnPath = url.IB_ORDER;
+            makeBtnShow = true;
+            makeBtnName = "Make IBInvoice"
             IBType = "IBSO"
         }
         else if (subPageMode === url.ORDER_LIST_4) {
@@ -164,7 +165,7 @@ const OrderList = () => {
     }, [GRNitem])
 
     useEffect(() => {
-        debugger
+        
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
 
             history.push({
@@ -182,7 +183,7 @@ const OrderList = () => {
             const jsonBody = JSON.stringify({
                 FromDate: obj.preOrderDate,
                 Customer: obj.CustomerID,
-                Party: userParty(),
+                Party: loginPartyID(),
                 OrderIDs: `${obj.id}`
             });
             const customer = {
@@ -245,12 +246,12 @@ const OrderList = () => {
     }
 
     function goButtonHandler({IBType}) {
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
             Supplier: supplierSelect.value,
-            Customer: userParty(),
+            Customer: loginPartyID(),
             OrderType: order_Type.PurchaseOrder,
             IBType: IBType ? IBType : otherState.IBType
         });
