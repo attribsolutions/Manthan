@@ -92,7 +92,7 @@ const PriceMaster = (props) => {
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc);
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         }
     }, [userAccess]);
 
@@ -187,6 +187,7 @@ const PriceMaster = (props) => {
             ID: price.value
         }));
     }
+
     function sub_Price_Add_Handler() {
         var textInp1 = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
@@ -199,6 +200,7 @@ const PriceMaster = (props) => {
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
+                CalculationPath:"3",
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -224,6 +226,7 @@ const PriceMaster = (props) => {
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
                 Company: 1,
+                CalculationPath:"3",
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: 1,
@@ -336,8 +339,44 @@ const PriceMaster = (props) => {
             </div>
         )
     }
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+    var tree = document.getElementById("tree12");
+    if (tree) {
+        tree.querySelectorAll("ul").forEach(function (el, key, parent) {
+            var elm = el.parentNode;
+            elm.classList.add("branch");
+            var x = document.createElement("i");
+            x.classList.add("indicator");
+            x.classList.add("bi-folder-plus");
+            elm.insertBefore(x, elm.firstChild);
+            el.classList.add("collapse");
+
+            elm.addEventListener(
+                "click",
+                function (event) {
+                    if (elm === event.target || elm === event.target.parentNode) {
+                        if (el.classList.contains("collapse")) {
+                            el.classList.add("expand");
+                            el.classList.remove("collapse");
+                            x.classList.remove("bi bi-box-arrow-right");
+                            x.classList.add("bi bi-check-square");
+                        } else {
+                            el.classList.add("collapse");
+                            el.classList.remove("expand");
+                            x.classList.remove("bi bi-box-arrow-right");
+                            x.classList.add("bi bi-check-square");
+                        }
+                    }
+                },
+                false
+            );
+        });
+    }
+
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -347,7 +386,127 @@ const PriceMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <h1>You can add or remove class while drag and drop</h1> */}
 
+                {/* <ul id="tree12" class="tree ">
+                     <li><a href="#">Sektör 1</a>
+                         <ul>
+                             <li><a href="#">Company Maintenance</a></li>
+                             <li><a href="#">Employees</a>
+                                 <ul>
+                                     <li><a href="#">Reports</a>
+                                         <ul>
+                                             <li><a href="#">Report1</a></li>
+                                             <li><a href="#">Report2</a></li>
+                                             <li><a href="#">Report3</a></li>
+                                         </ul>
+                                     </li>
+                                     <li>Employee Maint.</li>
+                                 </ul>
+                             </li>
+                             <li>Human Resources</li>
+                         </ul>
+                     </li>
+                     <li>Sektör 2
+                         <ul>
+                             <li>Alt Sektör</li>
+                             <li>Company Maintenance</li>
+                             <li>Employees
+                                 <ul>
+                                     <li>Reports
+                                         <ul>
+                                             <li>Report1</li>
+                                             <li>Report2</li>
+                                             <li>Report3</li>
+                                         </ul>
+                                     </li>
+                                     <li>Employee Maint.</li>
+                                 </ul>
+                             </li>
+                             <li>Human Resources</li>
+                         </ul>
+                     </li>
+                     <li>Sektör 3
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 4
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 5
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 6
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 7
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                 </ul> */}
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >
