@@ -53,8 +53,9 @@ export const getState = () => ({
   });
   
 /// get Empoyee list 
-  export const getEmployeelist = () => ({
+  export const getEmployeelist = (jsonbody) => ({
     type: GET_EMPLOYEE_LIST,
+    jsonbody,
 });
 
 export const getEmployeelistSuccess = (pages) => ({

@@ -11,17 +11,14 @@ import {
   getEmployeelistSuccess,
   deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, get_EmployeeTypesID_Success, Get_CompanyName_By_EmployeeTypeID_Success, Get_PartyName_By_EmployeeTypeID_Success,
 } from "./action";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 ///  DesignationID dropdown list
 function* DesignationID_saga() {
   try {
     const response = yield call(getDesignationID_For_Dropdown);
     yield put(getDesignationIDSuccess(response.Data));
-  } catch (error) {
-    console.log("DesignationID_saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 //// EmployeeType drop down api
@@ -29,9 +26,7 @@ function* EmployeeType_saga() {
   try {
     const response = yield call(getEmployeeType_For_Dropdown);
     yield put(getEmployeeTypeESuccess(response.Data));
-  } catch (error) {
-    console.log("EmployeeType_saga  page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 ///State  dropdown api
@@ -39,9 +34,7 @@ function* State_saga() {
   try {
     const response = yield call(getState_For_Dropdown);
     yield put(getStateESuccess(response.Data));
-  } catch (error) {
-    console.log("State_saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 
@@ -54,30 +47,18 @@ function* Submit_Employee_GenratorFunction({ Data }) {
     console.log("post response in saga file", response)
    
     yield put(PostEmployeeSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 /// get api
 
-function* Get_EmployeeList_GenratorFunction() {
+function* Get_EmployeeList_GenratorFunction({jsonbody}) {
 
   try {
-    const response = yield call(get_EmployeelistApi);
+    const response = yield call(get_EmployeelistApi,jsonbody);
     yield put(getEmployeelistSuccess(response.Data));
    
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 //// delete api 
 
@@ -87,13 +68,7 @@ function* Delete_EmployeeID_GenratorFunction({ id }) {
     const response = yield call(detelet_EmployeeID, id);
    
     yield put(deleteEmployeeIDSuccess(response))
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* Edit_EmployeeID_GenratorFunction({ id,pageMode }) {
@@ -103,12 +78,7 @@ function* Edit_EmployeeID_GenratorFunction({ id,pageMode }) {
     yield put(editEmployeeSuccess(response));
     console.log("response in saga", response)
 
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
@@ -117,14 +87,7 @@ function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
     const response = yield call(update_EmployeeAPI, updateData, ID);
    
     yield put(updateEmployeeIDSuccess(response))
-  }
-  catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // Company Name API dependent on Employee Types api
@@ -132,9 +95,7 @@ function* Get_CompanyName_By_EmployeeTypesID_GenratorFunction({ id }) {
   try {
     const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown,id);
     yield put(Get_CompanyName_By_EmployeeTypeID_Success(response.Data));
-  } catch (error) {
-    console.log("Company Name By Employee Types ID page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* M_EmployeeSaga() {
