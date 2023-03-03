@@ -50,12 +50,7 @@ function* supplierAddressGenFunc() {
     newArr = [...first, ...secd]
 
     yield put(getSupplierAddressSuccess(newArr));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error for Party API ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // OrderType Dropdown
