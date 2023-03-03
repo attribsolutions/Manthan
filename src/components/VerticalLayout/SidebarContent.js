@@ -17,7 +17,7 @@ import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roleAceessAction,  } from "../../store/actions";
-import { userCompany, userDetails, userEmployeeID, userParty } from "../Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const SidebarContent = (props) => {
   const ref = useRef();
@@ -35,11 +35,11 @@ const SidebarContent = (props) => {
 
   useEffect(() => {
     if (RoleAccessUpdateData.length <= 0) {
-      let role = userDetails()
+      let role = loginUserDetails()
       if (role) {
-        let party = userParty()
-        let employee = userEmployeeID();
-        let company = userCompany();
+        let party = loginPartyID()
+        let employee = loginEmployeeID();
+        let company = loginCompanyID();
         dispatch(roleAceessAction(party, employee, company))
       };
     }

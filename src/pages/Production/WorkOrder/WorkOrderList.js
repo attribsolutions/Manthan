@@ -6,7 +6,7 @@ import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSucce
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import {
     deleteWorkOrderId,
@@ -129,8 +129,8 @@ const WorkOrderList = () => {
         // const jsonBody = JSON.stringify({
         //     WorkOrder: id,
         //     Item: Item,
-        //     Company: userCompany(),
-        //     Party: userParty(),
+        //     Company: loginCompanyID(),
+        //     Party: loginPartyID(),
         //     Quantity: parseInt(Quantity)
         // });
         // dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
@@ -139,8 +139,8 @@ const WorkOrderList = () => {
             const jsonBody = JSON.stringify({
                 WorkOrder: jsonData.id,
                 Item: jsonData.Item,
-                Company: userCompany(),
-                Party: userParty(),
+                Company: loginCompanyID(),
+                Party: loginPartyID(),
                 Quantity: parseInt(jsonData.Quantity)
             })
             const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }

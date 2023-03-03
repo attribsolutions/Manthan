@@ -39,7 +39,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
-import { breadcrumbReturn, createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -432,8 +432,8 @@ const PageMaster = (props) => {
       RelatedPageID: (pageType_DropdownSelect.value === 2) ? relatedPage_DropdownSelect.value : 0,
       IsDivisionRequired: values.IsDivisionRequired,
       IsEditPopuporComponent: values.IsEditPopuporComponent,
-      CreatedBy: createdBy(),
-      UpdatedBy: createdBy(),
+      CreatedBy: loginUserID(),
+      UpdatedBy: loginUserID(),
       PagePageAccess: Access,
       PageFieldMaster:PageFieldMaster,
     })

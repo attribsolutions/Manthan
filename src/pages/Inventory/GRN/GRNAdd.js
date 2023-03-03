@@ -25,7 +25,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Or
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, createdBy, currentDate} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -620,7 +620,7 @@ const GRNAdd = (props) => {
             GrandTotal: orderAmount,
             Party: grnDetail.Supplier,
             InvoiceNumber: invoiceNo,
-            CreatedBy: createdBy(),
+            CreatedBy: loginUserID(),
             UpdatedBy: 1,
             GRNItems: itemArr,
             GRNReferences: openPOdata

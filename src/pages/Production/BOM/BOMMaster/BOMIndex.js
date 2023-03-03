@@ -31,7 +31,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -285,8 +285,8 @@ const BOMMaster = (props) => {
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
                 Unit: values.UnitName.value,
-                CreatedBy: createdBy(),
-                Company: userCompany(),
+                CreatedBy: loginUserID(),
+                Company: loginCompanyID(),
                 BOMItems: BOMItems,
                 IsVDCItem: values.IsVDCItem,
                 ReferenceBom: BOMrefID

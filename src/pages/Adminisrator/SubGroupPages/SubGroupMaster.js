@@ -39,7 +39,7 @@ import {
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -229,9 +229,9 @@ const SubGroupMaster = (props) => {
                 id: values.id,
                 Name: values.Name,
                 Group: values.GroupName.value,
-                CreatedBy: createdBy(),
+                CreatedBy: loginUserID(),
                 CreatedOn: "2022-11-19T00:00:00",
-                UpdatedBy: createdBy(),
+                UpdatedBy: loginUserID(),
                 UpdatedOn: "2022-11-19T00:00:00"
             });
 

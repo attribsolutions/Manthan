@@ -31,7 +31,7 @@ import {
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -205,9 +205,9 @@ const GroupTypeMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 IsReserved: values.IsReserved,
-                CreatedBy: createdBy(),
+                CreatedBy: loginUserID(),
                 CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy: createdBy(),
+                UpdatedBy: loginUserID(),
                 UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 

@@ -14,7 +14,7 @@ import logo from "../../assets/images/logo-sm.svg"
 //Import config
 import CarouselPage from "./CarouselPage"
 import Select from "react-select";
-import { userCompany } from "../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { loginCompanyID } from "../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -51,7 +51,7 @@ const SelectDivisionPage = props => {
       }
 
       localStorage.setItem("roleId", JSON.stringify(value))
-      dispatch(roleAceessAction(party, employee, userCompany()))
+      dispatch(roleAceessAction(party, employee, loginCompanyID()))
       history.push("/Dashboard")
     }
   }, [divisionDropdown_redux])
@@ -78,7 +78,7 @@ const SelectDivisionPage = props => {
       var party = value.Party_id
 
       localStorage.setItem("roleId", JSON.stringify(value))
-      dispatch(roleAceessAction(party, employee, userCompany()))
+      dispatch(roleAceessAction(party, employee, loginCompanyID()))
       history.push("/Dashboard")
     }
 

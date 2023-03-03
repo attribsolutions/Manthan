@@ -18,7 +18,7 @@ import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI
 import {
     currentDate,
     excelDownCommonFunc,
-    userParty
+    loginPartyID
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -144,7 +144,7 @@ const InvoiceList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-            Party: userParty(),
+            Party: loginPartyID(),
             IBType: IBType ? IBType : otherState.IBType
         });
 

@@ -35,7 +35,7 @@ import {
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -201,8 +201,8 @@ const TermsAndConditionsMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 IsDefault: values.IsDefault,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy()
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID()
             });
 
             saveDissable(true);//save Button Is dissable function

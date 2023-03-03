@@ -34,7 +34,7 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
-import { breadcrumbReturn, createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 
 const MarginMaster = (props) => {
@@ -382,9 +382,9 @@ const MarginMaster = (props) => {
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
             EffectiveDate: effectiveDate,
-            Company: userCompany(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            Company: loginCompanyID(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             IsDeleted: 0,
             Item: index.Item,
             Margin: index.Margin,

@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -537,7 +537,7 @@ const Order = (props) => {
 
         const jsonBody = JSON.stringify({
             Party: supplierSelect.value,
-            Customer: userParty(),
+            Customer: loginPartyID(),
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id
         })
@@ -566,7 +566,7 @@ const Order = (props) => {
     };
 
     const saveHandeller = async () => {
-        const division = userParty();
+        const division = loginPartyID();
         const supplier = supplierSelect.value;
 
         const validMsg = []
@@ -768,8 +768,8 @@ const Order = (props) => {
             POType: orderTypeSelect.value,
             POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
             POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             OrderTermsAndConditions: termsAndCondition
         };
 

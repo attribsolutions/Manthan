@@ -28,7 +28,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 
 import * as mode from "../../../routes/PageMode"
@@ -265,8 +265,10 @@ const AddUser = (props) => {
       isSendOTP: values.isSendOTP,
       isLoginUsingMobile: values.isLoginUsingMobile,
       isLoginUsingEmail: values.isLoginUsingEmail,
-      CreatedBy: createdBy(),
-      UpdatedBy: createdBy(),
+      CompanyID:loginCompanyID(),
+      UserID:loginUserID(),
+      CreatedBy: loginUserID(),
+      UpdatedBy: loginUserID(),
       UserRole: partyRoleData
     })
 

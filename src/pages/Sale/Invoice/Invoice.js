@@ -25,7 +25,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, GoBtnDissable, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, saveDissable, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -154,7 +154,7 @@ const Invoice = (props) => {
                 const jsonBody = JSON.stringify({
                     FromDate: hasEditVal.InvoiceDate,
                     Customer: hasEditVal.Customer,
-                    Party: userParty(),
+                    Party: loginPartyID(),
                     OrderIDs: ""
                 });
                 dispatch(GoButtonForinvoiceAdd({ jsonBody }));
@@ -689,7 +689,7 @@ const Invoice = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: values.InvoiceDate,
             Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-            Party: userParty(),
+            Party: loginPartyID(),
             OrderIDs: ""
         });
         GoBtnDissable({ id: goBtnId, state: true })
@@ -785,9 +785,9 @@ const Invoice = (props) => {
             GrandTotal: Math.round(grand_total),
             RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
             Customer: values.Customer.value,
-            Party: userParty(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            Party: loginPartyID(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
         });
 
 
