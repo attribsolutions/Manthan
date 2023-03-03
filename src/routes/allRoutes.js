@@ -118,6 +118,8 @@ import InwardList from "../pages/Inter Branch/Inward/InwardList";
 import ChallanList from "../pages/Inventory/Challan/ChallanList";
 import Challan from "../pages/Inventory/Challan/Challan";
 
+import RoutesMaster from "../pages/Adminisrator/RoutesPages/RoutesMaster";
+import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -208,6 +210,9 @@ const userRoutes = [
 
   { path: path.GENERAL, component: GeneralMaster },
   { path: path.GENERAL_LIST, component: GeneralList },
+
+  { path: path.ROUTES, component: RoutesMaster },
+  { path: path.ROUTES_LIST, component: RoutesList },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

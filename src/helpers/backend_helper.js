@@ -366,6 +366,14 @@ export const edit_General_List_Api = (id) => get(`${url.GENERAL_API}/${id}`)// e
 export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${id}`, data)// update api
 export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
 
+//Routes API
+export const Post_Routes_Master_API = (data) => post(url.ROUTES_FOR_MASTER, data)// post api
+export const Post_Routes_List_Api = (data) => post(url.ROUTES_FOR_LIST,data) // post api
+export const detelet_Routes_List_Api = (id) => del(`${url.ROUTES_FOR_MASTER}/${id}`) // delete api
+export const edit_Routes_List_Api = (id) => get(`${url.ROUTES_FOR_MASTER}/${id}`) // edit api
+export const update_Routes_List_Api = (data, id) => put(`${url.ROUTES_FOR_MASTER}/${id}`, data)// update
+
+
 // Order Page api  
 
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api

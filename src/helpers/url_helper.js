@@ -171,6 +171,10 @@ export const PARTY_SUB_PARTY_DROPDOWN_API = '/PartySubParty' // PartySubParty dr
 export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
+//Routes
+export const ROUTES_FOR_LIST = '/RoutesList ' 
+export const ROUTES_FOR_MASTER = '/Routes' 
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
