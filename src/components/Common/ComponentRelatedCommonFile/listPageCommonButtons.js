@@ -289,7 +289,7 @@ export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++
     return currentDate
 }
 
-export const userDetails = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginUserDetails = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     let user_Details = null
     try {
         user_Details = JSON.parse(localStorage.getItem('roleId'))
@@ -297,7 +297,7 @@ export const userDetails = () => {//+++++++++++++++++++++ Seesion Company Id++++
     return user_Details
 }
 
-export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
+export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let created_By = 0
     try {
         created_By = JSON.parse(localStorage.getItem('userId'))
@@ -305,27 +305,27 @@ export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id++++++++
     return created_By
 }
 
-export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { alert("Common userCompany  Error") }
+    } catch (e) { alert("Common loginCompanyID  Error") }
     return user_Company
 }
 
-export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
     let user_Party = 0
     try {
         user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
-    } catch (e) { alert("Common userParty Func  Error") }
+    } catch (e) { alert("Common loginPartyID Func  Error") }
     return user_Party
 }
 
-export const userEmployeeID = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
     let user_EmployeeID = 0
     try {
         user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
-    } catch (e) { alert("Common userEmployeeID Func  Error") }
+    } catch (e) { alert("Common loginEmployeeID Func  Error") }
     return user_EmployeeID
 }
 

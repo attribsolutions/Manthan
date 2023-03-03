@@ -15,7 +15,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew"
-import { userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const GeneralList = (props) => {
@@ -55,7 +55,7 @@ const GeneralList = (props) => {
      
         const jsonBody = JSON.stringify({
             TypeID: 2,
-            Company: userCompany(),
+            Company: loginCompanyID(),
         });
         dispatch(PostGenerallist(jsonBody));
     }, []);

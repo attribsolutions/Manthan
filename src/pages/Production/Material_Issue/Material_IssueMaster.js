@@ -26,7 +26,7 @@ import {
     postBOMSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
     editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
@@ -184,8 +184,8 @@ const MaterialIssueMaster = (props) => {
                 //     const jsonBody = JSON.stringify({
                 //         WorkOrder: id,
                 //         Item: Item,
-                //         Company: userCompany(),
-                //         Party: userParty(),
+                //         Company: loginCompanyID(),
+                //         Party: loginPartyID(),
                 //         Quantity: parseInt(LotQuantity)
                 //     });
                 //     dispatch(goButtonForMaterialIssue_Master_Action(jsonBody));
@@ -431,8 +431,8 @@ const MaterialIssueMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     WorkOrder: values.ItemName.value,
                     Item: values.ItemName.Item,
-                    Company: userCompany(),
-                    Party: userParty(),
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
                     Quantity: parseInt(values.LotQuantity)
                 });
                 const body = { jsonBody, pageMode }
@@ -610,10 +610,10 @@ debugger
                 MaterialIssueDate: values.MaterialIssueDate,
                 NumberOfLot: values.NumberOfLot,
                 LotQuantity: values.LotQuantity,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                Company: userCompany(),
-                Party: userParty(),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                Company: loginCompanyID(),
+                Party: loginPartyID(),
                 Item: Itemselect.Item,
                 Unit: Itemselect.Unit,
                 MaterialIssueItems: materialIssueItems,

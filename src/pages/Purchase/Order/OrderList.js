@@ -18,7 +18,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import { getSupplier, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
@@ -183,7 +183,7 @@ const OrderList = () => {
             const jsonBody = JSON.stringify({
                 FromDate: obj.preOrderDate,
                 Customer: obj.CustomerID,
-                Party: userParty(),
+                Party: loginPartyID(),
                 OrderIDs: `${obj.id}`
             });
             const customer = {
@@ -251,7 +251,7 @@ const OrderList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Supplier: supplierSelect.value,
-            Customer: userParty(),
+            Customer: loginPartyID(),
             OrderType: order_Type.PurchaseOrder,
             IBType: IBType ? IBType : otherState.IBType
         });

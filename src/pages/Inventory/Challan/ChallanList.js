@@ -8,7 +8,7 @@ import Select from "react-select";
 import Flatpickr from "react-flatpickr";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -120,7 +120,7 @@ const ChallanList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Party: userParty(),
+            Party: loginPartyID(),
             Customer: venderSelect === "" ? '' : venderSelect.value,
         });
         dispatch(challanList_ForListPage(jsonBody));

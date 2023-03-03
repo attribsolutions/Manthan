@@ -1,12 +1,12 @@
 import { Button } from "reactstrap"
-import { createdBy } from "./listPageCommonButtons";
+import { loginUserID } from "./listPageCommonButtons";
 import * as mode from "../../../routes/PageMode"
 
 export function SaveButton(props) {
 
   const { pageMode, userAcc, module, onClick, editCreatedBy = {}, id = '' } = props
 
-  const isCreated = (createdBy() === editCreatedBy)
+  const isCreated = (loginUserID() === editCreatedBy)
 
   return (
     <div>

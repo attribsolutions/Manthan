@@ -33,7 +33,7 @@ import {
   resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -237,8 +237,8 @@ const CompanyModule = (props) => {
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
         CompanyGroup: values.CompanyGroupName.value,
-        CreatedBy: createdBy(),
-        UpdatedBy: createdBy(),
+        CreatedBy: loginUserID(),
+        UpdatedBy: loginUserID(),
       });
 
       saveDissable(true);//save Button Is dissable function
