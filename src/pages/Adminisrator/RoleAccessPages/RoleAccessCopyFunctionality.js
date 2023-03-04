@@ -12,6 +12,7 @@ import {
     PostMethod_ForCopyRoleAccessFor_Role_Success
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
+import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 
 const RoleAccessCopyFunctionality = (props) => {
@@ -24,6 +25,8 @@ const RoleAccessCopyFunctionality = (props) => {
 
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showTableOnUI, setShowTableOnUI] = useState(false)
+    const [company_dropdown_Select, setCompany_dropdown_Select] = useState("");
+
 
     // const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("edit");
@@ -36,15 +39,19 @@ const RoleAccessCopyFunctionality = (props) => {
     //Access redux store Data 
     const { Roles_redux,
         DivisionTypes_redux,
+        company
     } = useSelector((state) => ({
         DivisionTypes_redux: state.PartyMasterReducer.partyList,
         Roles_redux: state.User_Registration_Reducer.Roles,
+        company: state.Company.companyList,
+
     }));
 
 
     useEffect(() => {
         dispatch(getRoles());
         dispatch(getPartyListAPI());
+        dispatch(fetchCompanyList());
 
     }, []);
 
@@ -54,6 +61,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+        debugger
         
         if (!(editDataGatingFromList === undefined)) {
             var C_props = editDataGatingFromList
@@ -63,11 +71,16 @@ const RoleAccessCopyFunctionality = (props) => {
                 divisionId = 0
             }
             var roleId = C_props.Role_id
+            var Company_id = C_props.Company_id
+
+            
 
             if (roleId > 0) {
 
                 setCopyRole_Dropdown_Select({ label: C_props.RoleName, value: roleId })
                 setCopyDivision_dropdown_Select({ label: C_props.DivisionName, value: divisionId })
+                setCompany_dropdown_Select({ label: C_props.CompanyName, value: Company_id })
+                
             }
         }
 
@@ -84,6 +97,10 @@ const RoleAccessCopyFunctionality = (props) => {
         label: Data.Name
     }));
 
+    const CompanyValues = company.map((i) => ({
+        value: i.id,
+        label: i.Name
+    }));
 
 
     function newRoleDropDown_onChangeHandler(e) {
@@ -124,10 +141,6 @@ const RoleAccessCopyFunctionality = (props) => {
                 <Container fluid>
 
                     <Card className="text-black" >
-
-
-
-
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
 
                             <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
@@ -145,6 +158,11 @@ const RoleAccessCopyFunctionality = (props) => {
                                     </Col>
                                     : null
                                 }
+                                 <Col sm={4} className="p-2 ">
+                                                    <Label className="p-2 col-sm-4">Company</Label>
+                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                        <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                </Col>
                                 {/* <Col md="4" className="p-2 text-end">
                                                     <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
                                                 </Col> */}
@@ -183,6 +201,20 @@ const RoleAccessCopyFunctionality = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
+                                <Col sm={4} className="">
+                                                    <FormGroup className="mb-3 row" >
+                                                        <Label className="col-sm-3 p-2">Company</Label>
+                                                        <Col md="9">
+                                                            <Select
+                                                                value={company_dropdown_Select}
+                                                                className="rounded-bottom"
+                                                                placeholder="Select..."
+                                                                options={CompanyValues}
+                                                                onChange={(e) => { setCompany_dropdown_Select(e) }}
+                                                            />
+                                                        </Col>
+                                                    </FormGroup>
+                                                </Col>
 
                                 <Col md="3" className="mt- ">
                                     <Button type="button" color="primary" onClick={() => { CopyButton_Handler() }}>Copy Role</Button>
