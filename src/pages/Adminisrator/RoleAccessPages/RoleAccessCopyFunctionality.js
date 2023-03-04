@@ -13,6 +13,7 @@ import {
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const RoleAccessCopyFunctionality = (props) => {
@@ -50,7 +51,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     useEffect(() => {
         dispatch(getRoles());
-        dispatch(getPartyListAPI());
+        dispatch(getPartyListAPI(getListbodyFunc()));
         dispatch(fetchCompanyList());
 
     }, []);
@@ -86,7 +87,13 @@ const RoleAccessCopyFunctionality = (props) => {
 
     }, [history]);
 
-
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
     const newDivisionTypesOption = DivisionTypes_redux.map((Data) => ({
         value: Data.id,
         label: Data.Name
