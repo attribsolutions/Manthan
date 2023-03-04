@@ -96,6 +96,8 @@ export const ROUTES_LIST = 150
 export const SALESMAN = 151
 export const SALESMAN_LIST = 152
 
+export const CREDITLIMIT = 153
+export const CREDITLIMIT_LIST = 154
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53

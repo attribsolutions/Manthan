@@ -125,7 +125,8 @@ import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
 import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
-
+import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
+import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -222,6 +223,9 @@ const userRoutes = [
 
   { path: path.SALESMAN, component: SalesManMaster },
   { path: path.SALESMAN_LIST, component: SalesManList },
+
+  { path: path.CREDITLIMIT, component: CreditLimitMaster },
+  // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

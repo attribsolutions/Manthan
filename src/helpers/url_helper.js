@@ -181,6 +181,9 @@ export const ROUTES_FOR_MASTER = '/Routes'
 export const SALESMAN_FOR_LIST = '/SalesmanList ' 
 export const SALESMAN_FOR_MASTER = '/Salesman' 
 
+// Credit Limit 
+export const ROUTES_DROPDOWN  = '/RoutesList' 
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"

@@ -102,6 +102,8 @@ export const SubGroupMaster = url.SUBGROUP_LIST
 export const GeneralList = url.GENERAL
 export const GeneralMaster = url.GENERAL_LIST
 
+export const CreditLimitMaster = url.CREDITLIMIT_LIST
+export const CreditLimitList = url.CREDITLIMIT
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1

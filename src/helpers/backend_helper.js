@@ -498,6 +498,14 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
 // export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
 
+//CREDITLIMIT
+export const Post_CreditLimit_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+export const CreditLimit_GoButton_Post_API =(data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+
+// export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
+// export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
+// export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
+// export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
 export {
   getLoggedInUser,
   isUserAuthenticated,

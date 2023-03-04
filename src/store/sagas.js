@@ -67,6 +67,7 @@ import Production_ReIssueSaga from "./Production/ProductionReissueRedux/saga"
 //  *********************** Sale ***********************
 import InvoiceSaga from "./Sales/Invoice/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
+import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -106,6 +107,7 @@ export default function* rootSaga() {
     fork(TermsAndConditionsSaga),
     fork(RoutesSaga),
     fork(SalesManSaga),
+    fork(CreditLimitSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
     fork(SubGroupSaga),
