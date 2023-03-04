@@ -36,7 +36,7 @@ import {
 import { fetchModelsList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const RoleAccessAdd = (props) => {
@@ -116,7 +116,7 @@ const RoleAccessAdd = (props) => {
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
-        dispatch(getPartyListAPI());//for division dropdown API
+        dispatch(getPartyListAPI(getListbodyFunc()));//for division dropdown API
         dispatch(getRoles());//for Role  dropdown API
         dispatch(fetchModelsList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
@@ -210,7 +210,6 @@ const RoleAccessAdd = (props) => {
         }
     ]
 
-
     const DivisionTypesValues = partyList.map((i) => ({
         value: i.id,
         label: i.Name
@@ -225,7 +224,6 @@ const RoleAccessAdd = (props) => {
         value: i.id,
         label: i.Name
     }));
-
 
     const Module_DropdownOption = ModuleData.map((i) => ({
         value: i.id,
@@ -247,7 +245,14 @@ const RoleAccessAdd = (props) => {
         setDivision_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
-
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
+    
     // for module dropdown
     const Module_DropdownSelectHandller = (e) => {
         var module = e.value;
