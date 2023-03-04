@@ -422,10 +422,10 @@ const CompanyModule = (props) => {
                             </Col>
 
                             <Col md="1">  </Col>
-                            <FormGroup className="mb-2 col col-sm-5">
+                            <FormGroup className="mb-2 col col-sm-3 mt-4">
                               <Row className="justify-content-md-left">
                                 <Label className="col-sm-4 col-form-label" >{fieldLabel.IsSCM}</Label>
-                                <Col md={2} style={{ marginTop: '11px', marginLeft: "1cm" }} >
+                                <Col md={1} style={{ marginTop: '9px',  }} >
 
                                   <div className="form-check form-switch form-switch-md mb-3" >
                                     <Input type="checkbox" className="form-check-input"
