@@ -17,7 +17,6 @@ import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import Select from "react-select";
 import {
     getPartyListAPI,
-    GetPartyTypeByDivisionTypeID,
 } from "../../../store/Administrator/PartyRedux/action";
 import { Tbody } from "react-super-responsive-table";
 import { MetaTags } from "react-meta-tags";
@@ -27,7 +26,6 @@ import {
     getRoles,
     GO_Button_HandlerForRoleAccessListPage,
     GO_Button_HandlerForRoleAccessListPage_Success,
-    loginUser,
     PageDropdownForRoleAccessList,
     PageDropdownForRoleAccessList_Success,
     PostMethodForRoleAccessListPage,
@@ -36,7 +34,7 @@ import {
 import { fetchModelsList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import { breadcrumbReturn, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const RoleAccessAdd = (props) => {
@@ -116,7 +114,7 @@ const RoleAccessAdd = (props) => {
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
-        dispatch(getPartyListAPI(getListbodyFunc()));//for division dropdown API
+        dispatch(getPartyListAPI());//for division dropdown API
         dispatch(getRoles());//for Role  dropdown API
         dispatch(fetchModelsList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
@@ -245,14 +243,6 @@ const RoleAccessAdd = (props) => {
         setDivision_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
-    function getListbodyFunc() {
-        return JSON.stringify({
-            UserID: loginUserID(),
-            RoleID: loginRoleID(),
-            CompanyID: loginCompanyID()
-        })
-    }
-    
     // for module dropdown
     const Module_DropdownSelectHandller = (e) => {
         var module = e.value;

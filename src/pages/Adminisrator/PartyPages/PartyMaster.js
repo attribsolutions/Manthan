@@ -27,7 +27,6 @@ import {
     editPartyIDSuccess,
     getCompany,
     getDistrictOnState,
-    getPartyTypes,
     getPriceList,
     postPartyData,
     postPartyDataSuccess,
@@ -41,6 +40,7 @@ import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -80,7 +80,7 @@ const PartyMaster = (props) => {
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Company: state.PartyMasterReducer.Company,
-        PartyTypes: state.PartyMasterReducer.PartyTypes,
+        PartyTypes: state.PartyTypeReducer.ListData,
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -164,7 +164,7 @@ const PartyMaster = (props) => {
     useEffect(() => {
         dispatch(getState());
         dispatch(getPriceList());
-        dispatch(getPartyTypes());
+        dispatch(getPartyTypelist());
         dispatch(getCompany());
     }, [dispatch]);
 
