@@ -4,14 +4,22 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import {
   commonPageFieldList,
   commonPageFieldListSuccess,
- 
 } from "../../../store/actions";
-import { SUBGROUP } from "../../../routes/route_url";
-// import GroupMaster from "./GroupMaster";
-import { deleteSubGrouplistSuccess, delete_SubGroupList_ID, editSubGroupID, getSubGroupList, postSubGroupSuccess, updateSubgroupIDSuccess } from "../../../store/Administrator/SubGroupsRedux/action";
+import {
+  deleteSubGrouplistSuccess,
+  delete_SubGroupList_ID,
+  editSubGroupID,
+  getSubGroupList,
+  postSubGroupSuccess,
+  updateSubgroupIDSuccess
+} from "../../../store/Administrator/SubGroupsRedux/action";
 import SubGroupMaster from "./SubGroupMaster";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
 
 const SubGroupList = (props) => {
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -26,42 +34,37 @@ const SubGroupList = (props) => {
   );
 
   const action = {
-    getList:getSubGroupList,
+    getList: getSubGroupList,
     editId: editSubGroupID,
     deleteId: delete_SubGroupList_ID,
     postSucc: postSubGroupSuccess,
     updateSucc: updateSubgroupIDSuccess,
     deleteSucc: deleteSubGrouplistSuccess
-
   }
   useEffect(() => {
+    const page_Id = pageId.SUBGROUP_LIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(63))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getSubGroupList());
-
-    
-    
-
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={SubGroupMaster}
-            masterPath={SUBGROUP}
+            masterPath={url.SUBGROUP}
             ButtonMsgLable={"SubGroup"}
             deleteName={"Name"}
-          
           />
           : null
       }
-
     </React.Fragment>
   )
 }

@@ -19,7 +19,8 @@ const CustomAlert = () => {
     AfterResponseAction = false,
     PermissionAction = false,
     RedirectPath = false,
-    PermissionFunction = () => { }
+    PermissionFunction = () => { },
+    permissionValueReturn
   } = AlertData;
 
   //  Alert Modal Show and Hide Controller
@@ -74,11 +75,22 @@ const CustomAlert = () => {
       PermissionFunction()
     };
   }
+  function Permission_Ok_handeler7() {
+    dispatch(AlertShow({ Status: false }));
+    if (PermissionFunction) {
+      PermissionFunction(permissionValueReturn)
+    };
+  }
+  function cancel_handeler7() {
+    PermissionFunction(false)
+    tog_standard();
+  }
   return (
     <React.Fragment>
       <Modal
         isOpen={AlertData.Status}
         toggle={() => { tog_standard() }}
+        centered
       >
         {(Type === 1) &&
           <UncontrolledAlert color="success" className="px-6 mb-0 text-center">
@@ -189,6 +201,34 @@ const CustomAlert = () => {
                 className="btn btn-danger w-xm waves-effect waves-light"
                 onClick={() => {
                   cancel_handeler()
+                }}
+              >
+                No
+              </button>
+            </div>
+          </UncontrolledAlert>
+        }
+        {(Type === 7) &&
+          <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
+            <i className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
+            <p>
+              <h5>{Message}</h5></p>
+            <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
+              <button
+                type="button"
+                className="btn btn-danger "
+                onClick={() => {
+                  Permission_Ok_handeler7()
+                }}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+
+                className="btn btn-success w-xm waves-effect waves-light"
+                onClick={() => {
+                  cancel_handeler7()
                 }}
               >
                 No

@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -38,8 +38,8 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../routes/allPageID"
 
 const MRPMaster = (props) => {
 
@@ -71,9 +71,10 @@ const MRPMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-    console.log("Go button List Data", TableData)
+
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -89,7 +90,8 @@ const MRPMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserPageAccessState(userAcc);
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -135,7 +137,6 @@ const MRPMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
-            formRef.current.reset();
             setDivision_dropdown_Select('')
             setEffectiveDate('')
             setParty_dropdown_Select('')
@@ -216,7 +217,7 @@ const MRPMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e,user) => {
+    const MRPHandler = (e, user) => {
 
         user["MRP"] = e.target.value
     }
@@ -224,7 +225,6 @@ const MRPMaster = (props) => {
     const CurrentMRPHandler = (e, user) => {
         user["CurrentMRP"] = e.target.value
     }
-
     //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(
@@ -238,7 +238,6 @@ const MRPMaster = (props) => {
             })
         );
     };
-
     const GoButton_Handler = (event, values) => {
 
         let division = { ...division_dropdown_Select }
@@ -273,7 +272,7 @@ const MRPMaster = (props) => {
             text: "Current MRP",
             dataField: "CurrentMRP",
             sort: true,
-            formatter: (cellContent,user) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -284,8 +283,8 @@ const MRPMaster = (props) => {
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e,user)}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => CurrentMRPHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -315,9 +314,9 @@ const MRPMaster = (props) => {
             text: "MRP ",
             dataField: "MRP",
             sort: true,
-           
-            formatter: (cellContent,user) => {
-                
+
+            formatter: (cellContent, user) => {
+
                 if (((cellContent > 0) && (user["mrp"] === undefined) || user.mrp)) {
                     user["mrp"] = true
                 } else {
@@ -332,8 +331,8 @@ const MRPMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.mrp}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e,user)}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => MRPHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -373,29 +372,25 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
             EffectiveDate: effectiveDate,
-            Company: userCompany(),
-            CreatedBy: createdBy(),
-            UpdatedBy: createdBy(),
+            Company: loginCompanyID(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             IsDeleted: 0,
             IsAdd: true,
             Item: index.Item,
             MRP: index.MRP,
             id: index.id
-
         }))
 
         const Find = ItemData.filter((index) => {
             return (!(index.MRP === '') && (index.id === ''))
         })
-
         const jsonBody = JSON.stringify(Find)
         dispatch(postMRPMasterData(jsonBody));
-        console.log("post Data", jsonBody)
 
     };
 
@@ -403,14 +398,12 @@ const MRPMaster = (props) => {
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
-                <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.MRP} /> */}
+                {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -418,26 +411,21 @@ const MRPMaster = (props) => {
                         }}
                         ref={formRef}
                     >
-
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
-
                             <CardBody>
-
                                 <Row >
-                                    <Col md={12}>
+                                    <Col>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
-
-
                                             <CardHeader className="card-header   text-black c_card_body" >
                                                 <Row className="mt-3 " >
-                                                    <Col xs="3">
+                                                    <Col sm={3}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-4 p-2 ml-n4">Division</Label>
-                                                            <Col >
+                                                            <Label className="col-sm-6 p-2 " style={{ width: "2cm" }}>Division</Label>
+                                                            <Col sm={8} >
                                                                 <Select
                                                                     value={division_dropdown_Select}
                                                                     options={Division_DropdownOptions}
@@ -451,10 +439,10 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col xs="3" >
+                                                    <Col sm={3} >
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4" style={{}} >Party Name</Label>
-                                                            <Col >
+                                                            <Label className="col-sm-6 p-2" style={{ width: "2.5cm" }} >Party Name</Label>
+                                                            <Col sm={8} >
                                                                 <Select
                                                                     value={party_dropdown_Select}
                                                                     options={PartyDropdown_Options}
@@ -468,10 +456,10 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col sm="">
-                                                        <FormGroup className="mb-3 row col-lm-4 ">
-                                                            <Label className="col-sm-6 p-2 ml-n5">EffectiveDate</Label>
-                                                            <Col>
+                                                    <Col sm={4}>
+                                                        <FormGroup className="mb-3 row col ">
+                                                            <Label className="col-sm-6 p-2 " style={{ width: "2.9cm" }}>EffectiveDate</Label>
+                                                            <Col sm={8}>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
@@ -489,11 +477,10 @@ const MRPMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col >
-                                                    <Col xs="2" style={{ margin: "0.1cm" }} >
+                                                    <Col sm={1} style={{}} >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
                                                 </Row>
-
                                             </CardHeader>
                                         </Card>
                                     </Col>
@@ -517,9 +504,7 @@ const MRPMaster = (props) => {
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
-                                                                        // defaultSorted={defaultSorted}
                                                                         classes={"table  table-bordered"}
-                                                                        // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
                                                                     />

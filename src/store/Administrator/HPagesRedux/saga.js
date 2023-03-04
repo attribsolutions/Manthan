@@ -8,11 +8,10 @@ import {
   getH_ModulesSuccess,
   getPageAccess_DropDown_API_Success,
   getPageListSuccess,
+  getPageTypeSuccess,
   saveHPagesSuccess,
   updateHPagesSuccess,
 } from "./actions";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
   ControlTypes_DropDown_Api,
   deletHPagesUsingID_API,
@@ -22,6 +21,7 @@ import {
   get_Module_HPages,
   saveHPagesAPI,
   showPagesListOnPageAccess_DropDown_List,
+  get_PageType_HPages,
   showPagesListOnPageType_DropDown_List,
   updateHPages
 } from "../../../helpers/backend_helper";
@@ -34,110 +34,69 @@ import {
   GET_H_SUB_MODULES,
   GET_PAGEACCESS_DROPDOWN_API,
   GET_PAGELIST,
+  GET_PAGETYPE,
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function* fetchHPagesList_GneratorFunction() {
-  yield put(SpinnerState(true))
   try {
     const response = yield call(Fetch_HPagesListApi);
     yield put(GetHpageListDataSuccess(response.Data));
-    yield put(SpinnerState(false))
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* GetH_Modules() {
   try {
-
     const response = yield call(get_Module_HPages);
     yield put(getH_ModulesSuccess(response.Data))
-  } catch (error) {
-    yield put(AlertState({
-      Type: 3,
-      Status: true,
-      Message: " get_Module_HPages Network error Message",
-      RedirectPath: false,
-      AfterResponseAction: false
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* saveHPageSaga_GneratorFunction({ Data }) {
-  yield put(SpinnerState(true))
   try {
     const response = yield call(saveHPagesAPI, Data);
-    yield put(SpinnerState(false))
     yield put(saveHPagesSuccess(response));
-    console.log("Post response", response)
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* editHpages_ID({ id,pageMode }) {
+function* editHpages_ID({ id, pageMode }) {
   try {
     let response = yield call(edit_HPageID, id);
-    response.pageMode=pageMode
+    response.pageMode = pageMode
     yield put(editHPagesIDSuccess(response));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* update_HPagesUsingID_GenratorFunction({ data, id }) {
   try {
-    yield put(SpinnerState(true))
     const response = yield call(updateHPages, data, id);
-
-    yield put(SpinnerState(false))
     yield put(updateHPagesSuccess(response))
-    console.log("update response in saga ", response)
-  }
-  catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* deleteHpagesUsingID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
     const response = yield call(deletHPagesUsingID_API, id);
-    yield put(SpinnerState(false))
     yield put(deleteModuleIDSuccess(response))
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
+
 //  PageType dropdown list
 function* PageList_DropDown_GenratorFunction() {
   try {
     const response = yield call(showPagesListOnPageType_DropDown_List);
     yield put(getPageListSuccess(response.Data));
-  } catch (error) {
-    console.log("PageList_saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
+}
+
+//  PageType dropdown list
+function* PageType_DropDown_GenratorFunction() {
+  try {
+    const response = yield call(get_PageType_HPages);
+    yield put(getPageTypeSuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
 }
 
 //  PageAccess dropdown list
@@ -145,9 +104,7 @@ function* PageAccess_DropDown_GenratorFunction() {
   try {
     const response = yield call(showPagesListOnPageAccess_DropDown_List);
     yield put(getPageAccess_DropDown_API_Success(response.Data));
-  } catch (error) {
-    console.log("PageList_saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 //  Control Types dropdown list
@@ -155,18 +112,17 @@ function* ControlTypes_DropDown_GenratorFunction() {
   try {
     const response = yield call(ControlTypes_DropDown_Api);
     yield put(getControlTypesSuccess(response.Data));
-  } catch (error) {
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 //  Field Validations dropdown list
 function* FieldValidations_DropDown_GenratorFunction({ id }) {
   try {
-    const response = yield call(GetFieldValidationOnControlType_DropDown_API,id);
+    const response = yield call(GetFieldValidationOnControlType_DropDown_API, id);
     yield put(getFieldValidationsSuccess(response.Data));
-  } catch (error) {
-  }
+  } catch (error) { CommonConsole(error) }
 }
+
 function* HPageSaga() {
   yield takeEvery(SAVE_HPAGES, saveHPageSaga_GneratorFunction)
   yield takeEvery(GET_HPAGES_LIST_DATA, fetchHPagesList_GneratorFunction);
@@ -175,6 +131,7 @@ function* HPageSaga() {
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
   yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
+  yield takeEvery(GET_PAGETYPE, PageType_DropDown_GenratorFunction)
   yield takeEvery(GET_PAGEACCESS_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
   yield takeEvery(GET_CONTROL_TYPES, ControlTypes_DropDown_GenratorFunction)
   yield takeEvery(GET_FIELD_VALIDATIONS, FieldValidations_DropDown_GenratorFunction)

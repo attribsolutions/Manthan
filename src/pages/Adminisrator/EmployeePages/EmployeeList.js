@@ -11,8 +11,13 @@ import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const Employee_List = () => {
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -23,36 +28,40 @@ const Employee_List = () => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.M_EmployeesReducer.postMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
-    );
+  );
 
-    const action = {
-      getList: getEmployeelist,
-      editId: editEmployeeeId,
-      deleteId: delete_Employee_ID,
-      postSucc: PostEmployeeSuccess,
-      updateSucc: updateEmployeeIDSuccess,
-      deleteSucc: deleteEmployeeIDSuccess
-    }
+  const action = {
+    getList: getEmployeelist,
+    editId: editEmployeeeId,
+    deleteId: delete_Employee_ID,
+    postSucc: PostEmployeeSuccess,
+    updateSucc: updateEmployeeIDSuccess,
+    deleteSucc: deleteEmployeeIDSuccess
+  }
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.EMPLOYEE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(12))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getEmployeelist());
   }, []);
 
-  const { pageField } = reducers
+
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={AddEmployee}
+            masterPath={url.EMPLOYEE}
             ButtonMsgLable={"Employee"}
             deleteName={"Name"}
           />
@@ -62,5 +71,5 @@ const Employee_List = () => {
     </React.Fragment>
   )
 }
-  
+
 export default Employee_List;

@@ -10,9 +10,10 @@ import {
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { EMPLOYEETYPE } from "../../../routes/route_url";
-
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
 
 const EmployeeTypeList = (props) => {
 
@@ -26,7 +27,6 @@ const EmployeeTypeList = (props) => {
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.EmployeeTypeReducer.PostEmployeeType,
       pageField: state.CommonPageFieldReducer.pageFieldList
-
     })
   );
 
@@ -39,31 +39,32 @@ const EmployeeTypeList = (props) => {
     deleteSucc: deleteEmployeeTypeIDSuccess
   }
 
-
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.EMPLOYEETYPE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(47))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getEmployeeTypelist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField,userAccess=[] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.EMPLOYEETYPE_lIST} /> */}
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={EmployeeTypesMaster}
-            masterPath={EMPLOYEETYPE}
+            masterPath={url.EMPLOYEETYPE}
             ButtonMsgLable={"Employee Type"}
             deleteName={"Name"}
           />
           : null
       }
-
     </React.Fragment>
   )
 }

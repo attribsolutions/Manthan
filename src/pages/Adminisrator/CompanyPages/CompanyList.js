@@ -10,13 +10,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { COMPANY } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
 
 const CompanyList = () => {
     const dispatch = useDispatch();
-
     const reducers = useSelector(
         (state) => ({
             tableList: state.Company.companyList,
@@ -29,7 +29,6 @@ const CompanyList = () => {
         })
     );
 
-
     const action = {
         getList: fetchCompanyList,
         editId: editCompanyID,
@@ -39,25 +38,26 @@ const CompanyList = () => {
         deleteSucc: deleteCompanyIDSuccess
     }
 
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = pageId.COMPANY_lIST
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(2))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(fetchCompanyList());
     }, []);
 
-    const { pageField } = reducers;
-    debugger
+    const { pageField,userAccess=[] } = reducers;
+
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={CompanyModule}
-                        masterPath={COMPANY}
+                        masterPath={url.COMPANY}
                         ButtonMsgLable={"Company"}
                         deleteName={"Name"}
                     />

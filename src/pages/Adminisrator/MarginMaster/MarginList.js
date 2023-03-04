@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -19,7 +18,8 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url"
 const MarginList = (props) => {
 
   const dispatch = useDispatch();
@@ -32,24 +32,25 @@ const MarginList = (props) => {
   const {
     TableListData,
     deleteMessage,
-    RoleAccessModifiedinSingleArray,
+    userAccess,
   } = useSelector(
     (state) => ({
       TableListData: state.MarginMasterReducer.MarginList,
       deleteMessage: state.MarginMasterReducer.deleteMsg,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      userAccess: state.Login.RoleAccessUpdateData,
     })
   );
 
   useEffect(() => {
     const locationPath = history.location.pathname
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.MARGIN });
     }
-  }, [RoleAccessModifiedinSingleArray])
+  }, [userAccess])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -98,7 +99,7 @@ const MarginList = (props) => {
 
     let RelatedPageID = userAccState.RelatedPageID
 
-    const found = RoleAccessModifiedinSingleArray.find((element) => {
+    const found = userAccess.find((element) => {
       return element.id === RelatedPageID
     })
 
@@ -186,16 +187,7 @@ const MarginList = (props) => {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags>
-            <title>MarginList| FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <Breadcrumb
-            pageHeading={userAccState.PageHeading}
-            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-            showCount={true}
-            excelBtnView={true}
-            excelData={TableListData}
-          />
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >
@@ -208,22 +200,22 @@ const MarginList = (props) => {
               >
                 {toolkitProps => (
                   <React.Fragment>
-                        <div className="table-responsive">
-                          <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={true}
-                            striped={false}
-                            classes={"table align-middle table-nowrap table-hover"}
-                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                            headerWrapperClasses={"thead-light"}
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
-                          />
-                          {countlabelFunc(toolkitProps, paginationProps, dispatch, "Margin")}
-                          {mySearchProps(toolkitProps.searchProps)}
-                        </div>
-                    
+                    <div className="table-responsive">
+                      <BootstrapTable
+                        keyField={"id"}
+                        responsive
+                        bordered={true}
+                        striped={false}
+                        classes={"table align-middle table-nowrap table-hover"}
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        headerWrapperClasses={"thead-light"}
+                        {...toolkitProps.baseProps}
+                        {...paginationTableProps}
+                      />
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "Margin")}
+                      {mySearchProps(toolkitProps.searchProps)}
+                    </div>
+
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">
                         <PaginationListStandalone

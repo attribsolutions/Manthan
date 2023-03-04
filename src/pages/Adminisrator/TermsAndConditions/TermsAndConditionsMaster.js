@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+
 import {
     Card,
     CardBody,
@@ -11,21 +11,23 @@ import {
     Label,
     Row,
 } from "reactstrap";
-
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {
+    AlertState,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
 import {
     EditTermsAndCondtions_Success,
     postTermAndCondition,
@@ -33,16 +35,27 @@ import {
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { TERMS_AND_CONDITION_LIST } from "../../../routes/route_url";
-import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import * as mode from "../../../routes/PageMode";
 
 const TermsAndConditionsMaster = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+
+    const fileds = {
+        id: "",
+        Name: "",
+        IsDefault: false
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
@@ -53,28 +66,19 @@ const TermsAndConditionsMaster = (props) => {
     }));
 
     useEffect(() => {
-        dispatch(commonPageField(42))
+        const page_Id = pageId.TERMS_AND_CONDITION
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
     }, []);
-
-    {/** Dyanamic Page access state and OnChange function */ }
-
-    const fileds = {
-        Name: "",
-        id: ""
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    //userAccess useEffect
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -83,13 +87,12 @@ const TermsAndConditionsMaster = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -97,7 +100,6 @@ const TermsAndConditionsMaster = (props) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -108,30 +110,33 @@ const TermsAndConditionsMaster = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
 
-                const { id, Name } = hasEditVal
+                const { id, Name, IsDefault } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
+
                 values.id = id
+                values.Name = Name;
+                values.IsDefault = IsDefault;
 
                 hasValid.Name.valid = true;
+                hasValid.IsDefault.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                // dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
 
             }
             dispatch(EditTermsAndCondtions_Success({ Status: false }))
         }
     }, [])
-
     useEffect(() => {
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postTermAndConditionSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -139,18 +144,17 @@ const TermsAndConditionsMaster = (props) => {
                     Message: postMsg.Message,
                 }))
             }
-
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: TERMS_AND_CONDITION_LIST,
+                    RedirectPath: url.TERMS_AND_CONDITION_LIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(postTermAndConditionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -163,14 +167,15 @@ const TermsAndConditionsMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            saveDissable(false); //save Button Is enable function
             history.push({
-                pathname: TERMS_AND_CONDITION_LIST,
+                pathname: url.TERMS_AND_CONDITION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false); //Update Button Is enable function
             dispatch(UpdateTermsAndCondtions_Success({ Status: false }));
             dispatch(
                 AlertState({
@@ -182,7 +187,6 @@ const TermsAndConditionsMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
     useEffect(() => {
 
         if (pageField) {
@@ -191,41 +195,37 @@ const TermsAndConditionsMaster = (props) => {
         }
     }, [pageField])
 
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
+                IsDefault: values.IsDefault,
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID()
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
             }
             else {
                 dispatch(postTermAndCondition(jsonBody))
             }
-
         }
     };
-
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
-
+                        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                        {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.TERMS_AND_CONDITION} /> */}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -233,7 +233,7 @@ const TermsAndConditionsMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -252,24 +252,48 @@ const TermsAndConditionsMaster = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(Breadcrumb_inputName(event.target.value))
+                                                                    // dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-3">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label className="col-sm-4 col-form-label" >{fieldLabel.IsDefault}</Label>
+                                                                    <Col md={2} style={{ marginTop: '9px', marginLeft: "1cm" }} >
 
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsDefault}
+                                                                                name="IsDefault"
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsDefault = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton
+                                                                        pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"TermsAndCondtionsMaster"}
                                                                     />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
-
                                                     </Row>
                                                 </CardBody>
                                             </Card>
@@ -277,9 +301,7 @@ const TermsAndConditionsMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>

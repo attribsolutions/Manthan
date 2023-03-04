@@ -10,18 +10,20 @@ import {
   postGroupSuccess,
   updategroupIDSuccess,
 } from "../../../store/actions";
-import { PARTYITEM_LIST } from "../../../routes/route_url";
 import PartyItems from "./PartyItems";
-import { GetPartyList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { editPartyItemID, GetPartyList, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import * as pageId from "../../../routes/allPageID";
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
 
 const PartyItemsList = (props) => {
-  debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
       tableList: state.PartyItemsReducer.partyList,
       editData: state.PartyItemsReducer.editData,
-      updateMsg: state.PartyItemsReducer.updateMsg,
+      updateMsg: state.PartyItemsReducer.postMsg,
       deleteMsg: state.PartyItemsReducer.deleteMsg,
       postMsg: state.PartyItemsReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
@@ -30,37 +32,38 @@ const PartyItemsList = (props) => {
   );
 
   const action = {
-    getList:GetPartyList,
-    editId: editGroupID,
+    getList: GetPartyList,
+    editId: editPartyItemID,
     deleteId: delete_GroupList_ID,
     postSucc: postGroupSuccess,
-    updateSucc: updategroupIDSuccess,
+    updateSucc: PostPartyItemsSuccess,
     deleteSucc: deleteGrouplistSuccess
 
   }
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(62))
+    dispatch(commonPageFieldList(pageId.PARTYITEM_LIST))
     dispatch(GetPartyList());
-    
-    
+
+
 
   }, []);
 
-  const { pageField } = reducers
+  const { pageField ,userAccess=[]} = reducers
 
   return (
     <React.Fragment>
+       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={PartyItems}
-            masterPath={PARTYITEM_LIST}
-            ButtonMsgLable={"Group"}
+            masterPath={url.PARTYITEM}
+            ButtonMsgLable={"Party Items"}
             deleteName={"Name"}
-          
+
           />
           : null
       }

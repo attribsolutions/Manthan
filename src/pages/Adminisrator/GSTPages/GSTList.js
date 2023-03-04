@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
+
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -19,6 +19,8 @@ import {
 } from "../../../store/Administrator/GSTRedux/action";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import * as url from "../../../routes/route_url"
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const GSTList = (props) => {
 
@@ -47,6 +49,7 @@ const GSTList = (props) => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.GST });
         }
     }, [userAccess])
 
@@ -81,7 +84,7 @@ const GSTList = (props) => {
 
     //select id for delete row
     const deleteHandeler = (CommonID) => {
-        debugger
+        
         dispatch(
             AlertState({
                 Type: 5,
@@ -175,17 +178,8 @@ const GSTList = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags>
-                        <title>GST List| FoodERP-React FrontEnd</title>
-                    </MetaTags>
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                    <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-                        showCount={true}
-                        excelBtnView={true}
-                        excelData={tableList}
-                    />
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >

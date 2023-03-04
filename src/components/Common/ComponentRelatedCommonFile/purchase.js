@@ -1,22 +1,23 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../Breadcrumb3";
-import { Col, Input, Modal, Row } from "reactstrap";
+import { Button, Col, Input, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { listPageCommonButtonFunction }
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { breadcrumbReturn, listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-import { GST_ADD_Mode_2 } from "../../../routes/route_url";
+import C_Report from "./C_Report";
+import * as url from "../../../routes/route_url";
+import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 let sortType = "asc"
 let searchCount = 0
@@ -37,11 +38,19 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
     }
 
     if (!(iscall === searchCount)) {
-        dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
+        dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
         searchCount = paginationProps.dataSize
     }
     searchProps = toolkitProps.searchProps
 }
+
+export async function isAlertFunc(type, Msg) {
+    await CustomAlert({
+        Type: type,
+        Message: Msg.Message,
+        isFunc: true,
+    })
+};
 
 const PurchaseListPage = (props) => {
 
@@ -50,16 +59,16 @@ const PurchaseListPage = (props) => {
 
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
+    // const [tableList, settableList] = useState([]);
 
     const {
-        tableList,
         editData,
         updateMsg,
         deleteMsg,
         userAccess,
         postMsg,
-        pageField
-
+        pageField,
+        tableList = []
     } = props.reducers;
 
     const {
@@ -73,16 +82,21 @@ const PurchaseListPage = (props) => {
     } = props.action
 
     const {
+        editBodyfunc,
         MasterModal,
         masterPath,
         ButtonMsgLable,
         deleteName,
-        pageMode,
         goButnFunc = () => { },
-        onsavefunc = () => { },
+        makeBtnFunc = () => { },
+        makeBtnShow,
+        makeBtnName,
+        downBtnFunc = () => { },
+        pageMode,
+        newBtnPath
     } = props;
 
-    const fileds = pageField.PageFieldMaster;
+    const { PageFieldMaster = [] } = { ...pageField };
 
 
     useEffect(() => {
@@ -92,24 +106,30 @@ const PurchaseListPage = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
+            setUserAccState(userAcc);
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath });
         }
+
+
     }, [userAccess])
 
     useEffect(() => {
-        downList = []
-        listObj = {}
-
-        tableList.forEach((index1) => {
-            fileds.forEach((index2) => {
-                if (index2.ShowInDownload) {
-                    listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
-                    listObj[index2.ControlID] = index1[index2.ControlID]
-                }
-            })
-            downList.push(listObj)
+        if (tableList.length > 0) {
+            downList = []
             listObj = {}
-        })
+
+            tableList.forEach((index1) => {
+                PageFieldMaster.forEach((index2) => {
+                    if (index2.ShowInDownload) {
+                        listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+                        listObj[index2.ControlID] = index1[index2.ControlID]
+                    }
+                })
+                downList.push(listObj)
+                listObj = {}
+            })
+            dispatch(BreadcrumbDownBtndata(downList))
+        }
 
     }, [tableList])
 
@@ -117,57 +137,48 @@ const PurchaseListPage = (props) => {
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
 
+        // async function isAlertFunc(type) {
+        //     await CustomAlert({
+        //         Type: type,
+        //         Message: updateMsg.Message,
+        //         isFunc: true,
+        //     })
+        // }
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
-            goButnFunc()
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: updateMsg.Message,
-                    isFunc: true,
-                })
-            );
+            goButnFunc();
+            isAlertFunc(1, updateMsg);
             tog_center();
         } else if (updateMsg.Status === true) {
             dispatch(updateSucc({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            isAlertFunc(3, updateMsg);
         }
     }, [updateMsg]);
-
-
 
     useEffect(() => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
-            dispatch(
-                AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMsg.Message,
-                })
-            );
+            // dispatch(
+            isAlertFunc(1, deleteMsg)
+            // CustomAlert({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: deleteMsg.Message,
+            // })
+            // );
         } else if (deleteMsg.Status === true) {
             dispatch(deleteSucc({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMsg.Message),
-                })
-            );
+            // dispatch(
+            isAlertFunc(3, deleteMsg)
+            // CustomAlert({
+            //     Type: 3,
+            //     Status: true,
+            //     Message: JSON.stringify(deleteMsg.Message),
+            // })
+            // );
         }
     }, [deleteMsg]);
-
-
-
 
     useEffect(() => {
 
@@ -175,37 +186,41 @@ const PurchaseListPage = (props) => {
             dispatch(postSucc({ Status: false }))
             tog_center();
             dispatch(getList());
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: postMsg.Message,
-            }))
+            isAlertFunc(1, postMsg)
+            // dispatch(
+            // CustomAlert({
+            //     Type: 1,
+            //     Status: true,
+            //     Message: postMsg.Message,
+            // })
+            // )
         }
 
         else if ((postMsg.Status === true)) {
             dispatch(postSucc({ Status: false }))
-            dispatch(AlertState({
+            // dispatch(
+
+            CustomAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
-            }));
+            })
+            // );
         }
 
 
     }, [postMsg])
 
 
-
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-
         if (editData.Status === true) {
             if (pageField.IsEditPopuporComponent) {
                 history.push({
                     pathname: masterPath,
-                    editValue: editData.Data,
+                    [mode.editValue]: editData.Data,
                     pageMode: editData.pageMode,
                 })
             }
@@ -215,23 +230,64 @@ const PurchaseListPage = (props) => {
         }
     }, [editData]);
 
+    function makeBtnHandler(rowData) {
 
+        rowData["hasSelect"] = true;
+        let arr = []
+        arr.push(rowData)
+        makeBtnFunc(arr)
+
+    }
+
+    function onSaveBtnClick() {
+        makeBtnFunc(tableList);
+    }
 
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     }
 
-
     // ****** columns sort by sequnce
-    fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+    PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
         return a.ListPageSeq - b.ListPageSeq
     });
     // *******
 
+    //**** GRNMode2_ list multilple make_GRN checkBox selection Onchange ********************/
+
+    function GRNMode2_checkBtnOnchange(e, rowData) {
+
+        let isEvent = e.target.checked
+        rowData.hasSelect = isEvent
+
+        let found = tableList.filter(i => (i.hasSelect))
+
+        tableList.map((ele, k) => {
+            if (found.length === 1 && isEvent) {
+                // validation only show checkbox =supplier and same 
+                if (!(ele.SupplierID === rowData.SupplierID) || !(ele.POType === rowData.POType)) {
+                    try {
+                        document.getElementById(`checkhasSelect${ele.id}`).disabled = true
+                        document.getElementById(`checkhasSelect${ele.id}`).style.border = "white"
+                    }
+                    catch (e) { }
+                };
+            }
+            else if (found.length === 0 && !isEvent) {
+                try {
+                    document.getElementById(`checkhasSelect${ele.id}`).disabled = false
+                    document.getElementById(`checkhasSelect${ele.id}`).style.border = ""
+                }
+                catch (e) { }
+            };
+        })
+
+    }
+
     let sortLabel = ""
     const columns = []
 
-    fileds.forEach((i, k) => {
+    PageFieldMaster.forEach((i, k) => {
         if (i.ShowInListPage) {
             columns.push({
                 text: i.FieldLabel,
@@ -250,36 +306,87 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === GST_ADD_Mode_2) && (fileds.length - 1 === k)) {
+        // if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
+
+        //     columns.push({
+        //         text: "Select",
+        //         dataField: "hasSelect",
+        //         sort: true,
+        //         formatter: (cellContent, rowData, key) => {
+        //             rowData["hasSelect"] = false
+        //             return (
+        //                 <div>
+        //                     <Input
+        //                         type="checkbox"
+        //                         className="mx-2"
+        //                         id={`checkhasSelect${rowData.id}`}
+        //                         defaultChecked={rowData.hasSelect}
+        //                         // disabled={rowData["isdisabled"]}
+        //                         key={rowData.hasSelect}
+        //                         onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
+        //                     />
+        //                     <Button
+        //                         type="button"
+        //                         className={makeBtnCss}
+        //                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+        //                         onClick={() => { makeBtnHandler(rowData) }}
+        //                     >
+        //                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
+        //                             className=" fas fa-file-invoice" ></span> </Button>
+        //                 </div>)
+        //         }
+        //     })
+        // }
+
+        // ======================== for GRNMode2 Page Action Button ================================
+
+        if ((makeBtnShow) && (pageMode === mode.modeSTPsave) && (PageFieldMaster.length - 1 === k)) {
+
             columns.push({
-                text: "Select",
-                dataField: "GRNSelect",
+                text: "Action",
+                dataField: "hasSelect",
                 sort: true,
-                formatter: (cellContent, item, key) => {
-                    item["GRNSelect"] = false
+                formatter: (cellContent, rowData, key) => {
+                    rowData["hasSelect"] = false
+                    // if (rowData.POType === 3) {
                     return (
-                        <Input type="checkbox"
-                            defaultChecked={item.GRNSelect}
-                            onChange={e => item.GRNSelect = e.target.checked}
-                        />)
+                        <div>
+                            <Button
+                                type="button"
+                                className={makeBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                                onClick={() => { makeBtnHandler(rowData) }}>
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span>
+                            </Button>
+                        </div>)
+                    // }
                 }
             })
         }
+
         // ======================== for List Page Action Button ================================
 
-        else if ((fileds.length - 1 === k)) {
-            columns.push(listPageCommonButtonFunction({
-                dispatchHook: dispatch,
-                ButtonMsgLable: ButtonMsgLable,
-                deleteName: deleteName,
-                userAccState: userAccState,
-                editActionFun: editId,
-                deleteActionFun: deleteId
-            })
+        else if ((PageFieldMaster.length - 1 === k)) {
+            columns.push(
+                listPageCommonButtonFunction({
+                    dispatchHook: dispatch,
+                    subPageMode: history.location.pathname,
+                    ButtonMsgLable: ButtonMsgLable,
+                    deleteName: deleteName,
+                    userAccState: userAccState,
+                    editActionFun: editId,
+                    deleteActionFun: deleteId,
+                    downBtnFunc: downBtnFunc,
+                    makeBtnShow: makeBtnShow,
+                    makeBtnName: makeBtnName,
+                    editBodyfunc: editBodyfunc,
+                    makeBtnFunc: makeBtnFunc,
+                    pageMode: pageMode,
+                })
             )
         }
     })
-
 
     const defaultSorted = [
         {
@@ -293,16 +400,14 @@ const PurchaseListPage = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
-    function onSaveBtnClick() {
-        onsavefunc(tableList);
 
-    }
     if (!(userAccState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
+
                 <div >
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
@@ -316,7 +421,7 @@ const PurchaseListPage = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table-responsive mt-3">
+                                                <div className="table-responsive mt-1">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive
@@ -343,27 +448,26 @@ const PurchaseListPage = (props) => {
                                 )}
                             </ToolkitProvider>
                         )}
-
-
                     </PaginationProvider>
 
-                    {
-                        (pageMode === GST_ADD_Mode_2 )?
-
-                            <div className="button_save " style={{ paddingBottom: 'center' }}>
-                                <button
-                                    id='form_submmit'
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md  bt_save"
-                                    onClick={onSaveBtnClick}
-                                >
-                                    <i class="fas fa-edit me-2"></i>Make GRN
-                                </button>
-                            </div>
+                    {/* {
+                        (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
+                            (tableList.length == 0) ? null :
+                                <div className=" " style={{ paddingBottom: 'center' }}>
+                                    <button
+                                        style={{ marginTop: "-10px" }}
+                                        id='form_submmit'
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                        className="btn btn-primary w-md  "
+                                        onClick={onSaveBtnClick}
+                                    >
+                                        <i class="fas fa-edit me-2"></i>{makeBtnName}
+                                    </button>
+                                </div>
                             :
                             null
-                    }
+                    } */}
                     <Modal
                         isOpen={modal_edit}
                         toggle={() => {
@@ -371,12 +475,12 @@ const PurchaseListPage = (props) => {
                         }}
                         size="xl"
                     >
-
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
+
                     </Modal>
                 </div>
 
-
+                <C_Report />
             </React.Fragment>
         );
     }

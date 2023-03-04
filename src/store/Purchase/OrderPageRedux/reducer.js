@@ -8,23 +8,31 @@ import {
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
+  // ORDER_ADD_FILTERS,
 } from "./actionType"
 
 // const date = currentDate;
 
 const INIT_STATE = {
-  orderItem: [],
+  goBtnOrderAdd: null,
   postMsg: { Status: false },
   editData: { Status: false, Items: [] },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: ''}
+  orderlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: {value:'', label:"All"} },
+  // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
 
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    // case ORDER_ADD_FILTERS:
+    //   return {
+    //     ...state,
+    //     orderAddFilter: action.payload,
+    //   }
 
     case ORDER_LIST_FILTERS:
       return {
@@ -35,7 +43,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        orderItem: action.payload,
+        goBtnOrderAdd: action.payload,
       }
 
     case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:

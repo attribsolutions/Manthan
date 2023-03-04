@@ -10,7 +10,6 @@ import {
     FormGroup,
     Input,
 } from "reactstrap";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostModelsSubmit,
@@ -19,62 +18,72 @@ import {
     editModuleIDSuccess,
     updateModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {
+    AlertState,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { MODULE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 
 
 const Modules = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, pageField, userAccess, updateMsg } = useSelector((state) => ({
-        postMsg: state.Modules.modulesSubmitSuccesss,
-        updateMsg: state.Modules.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-
-    }));
-
-    useEffect(() => {
-        dispatch(commonPageField(5))
-    }, []);
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
         Name: "",
         DisplayIndex: "",
         Icon: "",
-        isActive: false,
+        isActive: true,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { postMsg,
+        pageField,
+        userAccess,
+        updateMsg } = useSelector((state) => ({
+            postMsg: state.Modules.modulesSubmitSuccesss,
+            updateMsg: state.Modules.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
+
+    useEffect(() => {
+        const page_Id = pageId.MODULE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -92,13 +101,13 @@ const Modules = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -129,7 +138,7 @@ const Modules = (props) => {
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Modules))
-
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editModuleIDSuccess({ Status: false }))
         }
@@ -140,8 +149,10 @@ const Modules = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -154,12 +165,12 @@ const Modules = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: MODULE_lIST,
+                    RedirectPath: url.MODULE_lIST,
 
                 }))
             }
         } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -173,13 +184,13 @@ const Modules = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname: MODULE_lIST,
+                pathname: url.MODULE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateModuleIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -200,7 +211,7 @@ const Modules = (props) => {
     }, [pageField])
 
     //'Save' And 'Update' Button Handller
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -208,13 +219,13 @@ const Modules = (props) => {
                 DisplayIndex: values.DisplayIndex,
                 isActive: values.isActive,
                 Icon: values.Icon,
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === 'edit') {
+            if (pageMode === mode.edit) {
                 dispatch(updateModuleID(jsonBody, values.id));
                 console.log("update jsonBody", jsonBody)
             }
@@ -227,16 +238,13 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags>
-                        <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                    </MetaTags>
-                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <Container fluid  >
 
                         <Card className="text-black" >
@@ -245,7 +253,7 @@ const Modules = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}  >
@@ -317,11 +325,17 @@ const Modules = (props) => {
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.isActive}  </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3" >
+                                                                <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
-                                                                        defaultChecked={values.isActive}
+                                                                        checked={values.isActive}
                                                                         name="isActive"
-                                                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                                                        onChange={(e) => {
+                                                                            setState((i) => {
+                                                                                const a = { ...i }
+                                                                                a.values.isActive = e.target.checked;
+                                                                                return a
+                                                                            })
+                                                                        }}
                                                                     />
                                                                 </div>
                                                             </Col>
@@ -331,7 +345,9 @@ const Modules = (props) => {
                                                     <FormGroup >
                                                         <Row >
                                                             <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                <SaveButton pageMode={pageMode}
+                                                                    userAcc={userPageAccessState}
+                                                                    editCreatedBy={editCreatedBy}
                                                                     module={"Modules"}
                                                                 />
                                                             </Col>
@@ -357,11 +373,3 @@ const Modules = (props) => {
     }
 };
 export default Modules
-// if (!(userPageAccessState === '')) {
-
-// }
-// else {
-//     return (
-//         <React.Fragment></React.Fragment>
-//     )
-// }

@@ -1,8 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import './pricemaster.scss'
-
-
-
 import {
     Button,
     Card,
@@ -21,34 +18,24 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-
-import { Breadcrumb_inputName, AlertState } from "../../../store/actions";
+import { AlertState } from "../../../store/actions";
 import {
     delete_PriceList,
     delete_PriceListSuccess,
     getPriceListData,
     postPriceListData,
     postPriceListDataSuccess,
-    editPriceList,
     updatePriceList,
     updatePriceListSuccess
-
-
 } from "../../../store/Administrator/PriceList/action";
-import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-
-
-
+import * as pageId from "../../../routes/allPageID"
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const PriceMaster = (props) => {
     const dispatch = useDispatch();
@@ -56,27 +43,19 @@ const PriceMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
 
     //SetState  Edit data Geting From Modules List component
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
-
 
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-
-
     const [menu, setMenu] = useState(false);
     const [dropOpen, setDropOpen] = useState(false);
-    const [dropOpen2, setDropOpen2] = useState(false);
-
     const [currentPrice, setCurrentPrice] = useState({ Name: '' });
     const [hasPartySelect, setHasPartySelect] = useState(false);
     const [priceList, setPriceList] = useState('');
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
@@ -84,51 +63,44 @@ const PriceMaster = (props) => {
         priceListByPartyType,
         deleteAPIResponse,
         updateMessage,
-        // editData,
         PartyTypes,
         PriceList,
-        RoleAccessModifiedinSingleArray
+        userAccess
     } = useSelector((state) => ({
         PostAPIResponse: state.PriceListReducer.postMsg,
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
         updateMessage: state.PriceListReducer.updateMessage,
-        // editData: state.PriceListReducer.editData,
-        PartyTypes: state.PartyMasterReducer.PartyTypes,
-        PriceList: state.ItemMastersReducer.PriceList,
+        PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
-
-    // const [state, setState] = useState(initialFiledFunc())
-    // debugger
-    // const values = { ...state.values }
 
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined;
         if (editDataGatingFromList === undefined) {
             let locationPath = history.location.pathname;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            userAcc = userAccess.find((inx) => {
                 return `/${inx.ActualPagePath}` === locationPath;
             });
         } else if (!(editDataGatingFromList === undefined)) {
             let relatatedPage = props.relatatedPage;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            userAcc = userAccess.find((inx) => {
                 return `/${inx.ActualPagePath}` === relatatedPage;
             });
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc);
+            breadcrumbReturn({ dispatch, userAcc });
         }
-    }, [RoleAccessModifiedinSingleArray]);
+    }, [userAccess]);
 
     useEffect(() => {
-        dispatch(getPartyTypes());
+        dispatch(getPartyTypelist());
     }, [dispatch]);
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setpartyType_dropdown_Select('')
             dispatch(postPriceListDataSuccess({ Status: false }))
             dispatch(getPriceListData(partyType_dropdown_Select.value))
             setDropOpen(false)
@@ -144,49 +116,33 @@ const PriceMaster = (props) => {
 
     useEffect(() => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
-            // setpartyType_dropdown_Select('')
             dispatch(delete_PriceListSuccess({ Status: false }))
             dispatch(getPriceListData(partyType_dropdown_Select.value))
-            // setDropOpen(!dropOpen)
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: deleteAPIResponse.Message,
                 RedirectPath: '',
-
             }))
-
         }
-
     }, [deleteAPIResponse])
-
 
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-            // setpartyType_dropdown_Select('')
             dispatch(updatePriceListSuccess({ Status: false }))
             dispatch(getPriceListData(partyType_dropdown_Select.value))
-            // setDropOpen(!dropOpen)
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: updateMessage.Message,
                 RedirectPath: '',
-
             }))
-
         }
-
     }, [updateMessage])
 
     const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
-    }));
-
-    const PriceList_DropdownOptions = PriceList.map((data) => ({
-        value: data.id,
-        label: data.Name
     }));
 
     function goButtonHandler() {
@@ -205,15 +161,12 @@ const PriceMaster = (props) => {
         setCurrentPrice(price)
         setDropOpen(true)
 
-        // if(price.id==0){
-        //     sub_Price_Add_Handler()
-        // }
     }
     // Edit handler
     const dropOpen_EditHandler = price => {
-         
+
         price["mode"] = "edit"
-        
+
         setCurrentPrice(price)
         setDropOpen(true)
 
@@ -227,19 +180,20 @@ const PriceMaster = (props) => {
             ID: price.value
         }));
     }
+
     function sub_Price_Add_Handler() {
         var textInp1 = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
             alert("please enter value")
         } else {
-            debugger
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
                 Name: textInp1.value,
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
-                PriceList:PriceList.value,
+                PriceList: PriceList.value,
+                CalculationPath: "3",
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -250,36 +204,31 @@ const PriceMaster = (props) => {
         }
 
     }
-    // // edit price handler
-    function sub_Price_edit_Handler () {
-        debugger
-
+    // edit price handler
+    function sub_Price_edit_Handler() {
         var textInp1 = document.getElementById("txtsubprice")
-        // var id = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
             alert("please enter value")
         } else {
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
-                id:currentPrice.value,
+                id: currentPrice.value,
                 Name: textInp1.value,
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
-                PriceList:PriceList.value,
+                PriceList: PriceList.value,
                 Company: 1,
+                CalculationPath: "3",
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: 1,
                 UpdatedOn: "2022-07-18T00:00:00",
-                
             });
-            dispatch(updatePriceList(jsonBody,currentPrice.value));
+            dispatch(updatePriceList(jsonBody, currentPrice.value));
         }
-
     }
 
-    
     const onclickselect = function () {
         const hasNone = document.getElementById("color").style;
 
@@ -292,15 +241,11 @@ const PriceMaster = (props) => {
 
     // drop down tree
     const test1 = () => {
-  
-
-
 
         return (
             <>
                 <div id="color"  >
                     <div style={{ width: "6cm", marginBottom: "-60px" }} id="">
-
                         <Tree id="tree" data={priceListByPartyType} priceList={PriceList_dropdown_Select}
                             func1={setPriceList_dropdown_Select} />
                     </div>
@@ -308,38 +253,6 @@ const PriceMaster = (props) => {
 
             </>
         )
-
-
-        // return (
-        //     <>
-        //         <Modal
-        //             isOpen={dropOpen2}
-        //             toggle={() => { setDropOpen2(!dropOpen2) }}
-        //             size="sm"
-        //             centered={true}
-        //         // backdrop={'static'}
-        //         >
-        //             <div>
-        //                 <div className="text-center mt-2">
-        //                     {/* <Label className="text-primary text-center "> {priceList.label}</Label> */}
-        //                     <Input type="button" className="btn btn-light text-primary"
-
-        //                         onClick={() => {
-        //                             // sub_Price_Add_Handler()
-        //                         }}
-        //                         value={PriceList_dropdown_Select.label}
-        //                     />
-
-
-        //                 </div>
-        //                 <Tree data={priceListByPartyType} priceList={PriceList_dropdown_Select}
-        //                     func1={setPriceList_dropdown_Select} func2={setDropOpen2} />
-        //             </div>
-
-        //         </Modal>
-
-        //     </>
-        // )
     }
 
     const toggle = () => {
@@ -357,13 +270,10 @@ const PriceMaster = (props) => {
     }
 
     function fun2(node) {
-    
 
         return (
             <div style={{ paddingLeft: "50px" }} className={"pricelistclass"} >
                 <div className='row justify-content-center mt-n4'>
-                    {/* <div className='row-justify-content'> */}
-
                     <div className=' col-10'>
                         <Input
                             type="text"
@@ -371,7 +281,7 @@ const PriceMaster = (props) => {
                             defaultValue={node.label} >
                         </Input>
                     </div>
-                    {/* <div className=' col-1 al-end'> */}
+
                     <div className=' col-1 al-end'>
 
                         <Input
@@ -380,7 +290,6 @@ const PriceMaster = (props) => {
                             defaultChecked={node.MkUpMkDn}
                             disabled={true}
                         />
-
                     </div>
                     <div className=' col-1 '>
                         <i className="mdi mdi-pencil font-size-12"
@@ -392,28 +301,24 @@ const PriceMaster = (props) => {
                             <DropdownToggle className="btn header-item " tag="button">
 
                             </DropdownToggle>
-                            {/* <DropdownMenu className="language-switch dropdown-menu-end" > */}
+
                             <DropdownMenu className="dropdown_menu dropdown-menu-end" id="drop-downcss" >
-
-
                                 <DropdownItem
                                     key={node.value}
                                     onClick={(e) => { dropOpen_ONClickHandler(node) }}
                                     de
                                 >
-
                                     <span className="align-middle text-black" >{"Add Sub-List"}</span>
                                 </DropdownItem>
 
                                 <DropdownItem
                                     key={node.value}
-                                    onClick={(e) => {dropOpen_EditHandler(node) }}
+                                    onClick={(e) => { dropOpen_EditHandler(node) }}
                                 >
                                     <span className="align-middle text-black" >{"Edit"}</span>
                                 </DropdownItem>
 
                                 <DropdownItem
-                                    // key={node.value}
                                     onClick={() => delete_PriceList_Handler(node)}
                                 >
                                     <span className="align-middle text-danger"> {"Delete"} </span>
@@ -425,17 +330,46 @@ const PriceMaster = (props) => {
                     {node.children ? fun1(node.children) : null}
                 </div>
             </div>
-
         )
+    }
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+    var tree = document.getElementById("tree12");
+    if (tree) {
+        tree.querySelectorAll("ul").forEach(function (el, key, parent) {
+            var elm = el.parentNode;
+            elm.classList.add("branch");
+            var x = document.createElement("i");
+            x.classList.add("indicator");
+            x.classList.add("bi-folder-plus");
+            elm.insertBefore(x, elm.firstChild);
+            el.classList.add("collapse");
+
+            elm.addEventListener(
+                "click",
+                function (event) {
+                    if (elm === event.target || elm === event.target.parentNode) {
+                        if (el.classList.contains("collapse")) {
+                            el.classList.add("expand");
+                            el.classList.remove("collapse");
+                            x.classList.remove("bi bi-box-arrow-right");
+                            x.classList.add("bi bi-check-square");
+                        } else {
+                            el.classList.add("collapse");
+                            el.classList.remove("expand");
+                            x.classList.remove("bi bi-box-arrow-right");
+                            x.classList.add("bi bi-check-square");
+                        }
+                    }
+                },
+                false
+            );
+        });
     }
 
-  
-    
 
-
-
-
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -443,11 +377,129 @@ const PriceMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"5cm" }} >
-                <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+            <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+                {/* <h1>You can add or remove class while drag and drop</h1> */}
+
+                {/* <ul id="tree12" class="tree ">
+                     <li><a href="#">Sektör 1</a>
+                         <ul>
+                             <li><a href="#">Company Maintenance</a></li>
+                             <li><a href="#">Employees</a>
+                                 <ul>
+                                     <li><a href="#">Reports</a>
+                                         <ul>
+                                             <li><a href="#">Report1</a></li>
+                                             <li><a href="#">Report2</a></li>
+                                             <li><a href="#">Report3</a></li>
+                                         </ul>
+                                     </li>
+                                     <li>Employee Maint.</li>
+                                 </ul>
+                             </li>
+                             <li>Human Resources</li>
+                         </ul>
+                     </li>
+                     <li>Sektör 2
+                         <ul>
+                             <li>Alt Sektör</li>
+                             <li>Company Maintenance</li>
+                             <li>Employees
+                                 <ul>
+                                     <li>Reports
+                                         <ul>
+                                             <li>Report1</li>
+                                             <li>Report2</li>
+                                             <li>Report3</li>
+                                         </ul>
+                                     </li>
+                                     <li>Employee Maint.</li>
+                                 </ul>
+                             </li>
+                             <li>Human Resources</li>
+                         </ul>
+                     </li>
+                     <li>Sektör 3
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 4
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 5
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 6
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                     <li>Sektör 7
+                         <ul>
+                             <li>Alt Sektör 1
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                             <li>Alt Sektör 2
+                                 <ul>
+                                     <li>Alt Sektör 1</li>
+                                     <li>Alt Sektör 2</li>
+                                 </ul>
+                             </li>
+                         </ul>
+                     </li>
+                 </ul> */}
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >
@@ -455,22 +507,10 @@ const PriceMaster = (props) => {
                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                         </CardHeader>
 
-                        {/* <DropdownTreeSelect
-                            texts={{ placeholder: ' search price list', }}
-                            data={data} onChange={onChange}
-                            onAction={onAction}
-                            onNodeToggle={onNodeToggle}
-                        /> */}
-                        {/* <DropdownTreeSelect
-                            data={data}
-                            onChange={onChange}
-                            className="bootstrap-demo"
-                        /> */}
                         <CardBody className=" vh-10 0 text-black" >
                             <Row className="">
                                 <Col md={12}>
                                     <Card style={{ backgroundColor: "whitesmoke" }}>
-
 
                                         <CardHeader className="card-header   text-black  " style={{ backgroundColor: "#e9e9ef" }} >
                                             <Row className="mt-3">
@@ -479,38 +519,30 @@ const PriceMaster = (props) => {
                                                     <FormGroup className="mb-3 row ">
                                                         <Label className="col-sm-3 p-2 ml-n4 ">Party Type</Label>
                                                         <Col md="9" style={{}}>
-                                                        
-                                                           
-                                                            <Select 
+                                                            <Select
                                                                 value={partyType_dropdown_Select}
                                                                 options={PartyTypeDropdown_Options}
                                                                 className="rounded-bottom"
                                                                 placeholder="select"
-                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e)}}
-                                                                classNamePrefix="select2-selection"  
-                                                                
+                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                classNamePrefix="select2-selection"
                                                             />
-                                                                
-                                                            
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
+
                                                 <Col md="3" className="mt- ">
                                                     <Button type="button" color="primary" onClick={(e) => { goButtonHandler() }}>Go</Button>
                                                 </Col>
-
                                             </Row>
                                         </CardHeader>
                                         {hasPartySelect ?
                                             <div className={" row mt-4"}>
-
                                                 <Modal
-                                                    //    onAfterOpen={dropOpen_ONClickHandler}
                                                     isOpen={dropOpen}
                                                     toggle={() => { setDropOpen(!dropOpen) }}
                                                     size="sm"
                                                     centered={true}
-                                                // backdrop={'static'}
                                                 >
                                                     <div className="modal-header">
                                                         {currentPrice.mode === "save" ?
@@ -531,50 +563,24 @@ const PriceMaster = (props) => {
 
                                                     <div className="modal-body">
                                                         {currentPrice.mode === "edit" ?
-                                                        
+
                                                             <Row className="justify-content-md-left">
                                                                 <Label className="col-3 col-form-label" >Price List</Label>
                                                                 <Col className="col-9">
-                                                                    {/* <Select
-                                                                    id={`dropPriceList-${0}`}
-                                                                    value={priceList}
-                                                                    options={PriceList_DropdownOptions}
-                                                                    onChange={(e) => setPriceList(e)}
-                                                                /> */}
+                                                                    <Input id="Input"
+                                                                        value={priceList.label}
+                                                                        placeholder="Select..."
+                                                                        onClick={onclickselect}
+                                                                    >
+                                                                    </Input>
 
-                                                               {/* <label>id={currentPrice.value} </label> */}
-
-                                                               <Input id="Input"
-                                                                            value={priceList.label}
-                                                                            placeholder="Select..."
-                                                                            // defaultValue={}
-                                                                            // onChange={(e) => setDropOpen(!dropOpen)}
-                                                                            onClick={onclickselect}
-                                                                        >
-                                                                        </Input>
-
-                                                                        {test1()}
-
-                                                                        {/* value={PriceList_dropdown_Select.label} */}
-
-
-                                                    
-
-
-
-
+                                                                    {test1()}
                                                                 </Col>
-
                                                             </Row>
                                                             : null}
 
                                                         {currentPrice.mode === "edit" ?
-
-
                                                             <Row className="mt-2">
-
-
-                                                                
                                                                 <span className="form-label text-primary text-center">{currentPrice.Name}</span>
                                                                 <Label htmlFor="horizontal-firstname-input"
                                                                     className="col-3 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
@@ -582,8 +588,6 @@ const PriceMaster = (props) => {
                                                                     <Input type="text" id='txtsubprice'
                                                                         defaultValue={currentPrice.label}
                                                                     />
-
-
                                                                 </Col>
                                                             </Row>
                                                             : <Row className="mt-2">
@@ -592,10 +596,7 @@ const PriceMaster = (props) => {
                                                                     className="col-4 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
                                                                 <Col style={{ marginTop: '9px' }} >
                                                                     <Input type="text" id='txtsubprice'
-
                                                                     />
-
-
                                                                 </Col>
                                                             </Row>}
 
@@ -606,7 +607,6 @@ const PriceMaster = (props) => {
                                                                     defaultChecked={currentPrice.MkUpMkDn} />
                                                             </Col>
                                                         </Row>
-
                                                     </div>
 
                                                     <div className="modal-footer">
@@ -635,9 +635,7 @@ const PriceMaster = (props) => {
                                                     <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
                                                     <Card>
                                                         <CardBody className="mt-3">
-
                                                             {fun1(priceListByPartyType)}
-
                                                             {((priceListByPartyType.length === 0)) ?
                                                                 <div className='row justify-content-center mt-n4 '>
                                                                     <div className=' col-10'>
@@ -654,24 +652,13 @@ const PriceMaster = (props) => {
                                                                 <Col >
                                                                     <Button type="button" color="primary" onClick={(e) => { dropOpen_ONClickHandler({ value: 0, }) }}>
                                                                         <i className="dripicons-plus"></i> Add Sub-Rate</Button>
-
-
                                                                 </Col>
                                                                 <Col className="col col-4">
-
-
-                                                                    {/* <button type="button" className="btn btn-light"
-                                                                        onClick={() => {
-                                                                            // sub_Price_Add_Handler()
-                                                                        }} >change party Type</button> */}
-
                                                                 </Col>
                                                             </Row>
                                                         </CardFooter>
-
                                                     </Card>
                                                 </Col>
-
                                             </div>
                                             : null
                                         }
@@ -682,7 +669,6 @@ const PriceMaster = (props) => {
 
                         </CardBody>
                     </Card>
-
                 </Container>
             </div>
         </React.Fragment>

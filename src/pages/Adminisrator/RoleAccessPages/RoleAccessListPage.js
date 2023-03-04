@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from "react"
 import { Row, Col, Modal, Button } from "reactstrap"
 import MetaTags from 'react-meta-tags'
-
 // datatable related plugins
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, {
     PaginationProvider, PaginationListStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-
-//Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    DeleteRoleAcess,
+    DeleteRoleAcessSuccess,
     getRoleAccessListPage,
     PostMethod_ForCopyRoleAccessFor_Role_Success,
-
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url"
+import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {
 
@@ -34,69 +35,73 @@ const RoleAccessListPage = () => {
     const [copy_user_RowData, setCopy_user_RowData] = useState({});
 
 
-    const { TableListData, RoleAccessModifiedinSingleArray, PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
+    const { TableListData, userAccess, PostMessage_ForCopyRoleAccess, deleteMsg } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
+        deleteMsg: state.RoleAccessReducer.deleteMsg,
 
     }));
 
+
     useEffect(() => {
         const locationPath = history.location.pathname
-        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
+            breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.ROLEACCESS });
         }
-    }, [RoleAccessModifiedinSingleArray])
+    }, [userAccess])
 
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(getRoleAccessListPage());
+        dispatch(getRoleAccessListPage(getListbodyFunc()));
     }, []);
 
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
+
     const EditPageHandler = (rowData) => {
-        debugger
+
         if (rowData.Division_id === null) {
             rowData.Division_id = 0
         }
-
-        // let RelatedPageID = 0
-        // const userPageAccess = history.location.state
-
+       
         let RelatedPageID = userAccState.RelatedPageID
 
-        const found = RoleAccessModifiedinSingleArray.find((element) => {
+        const found = userAccess.find((element) => {
             return element.id === RelatedPageID
         })
 
         if (!(found === undefined)) {
             history.push({
                 pathname: `/${found.ActualPagePath}`,
-                // pathname: `/${found.ActualPagePath}`,
-                // state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
                 state: rowData,
-                // relatatedPage:"/UserMaster"
             })
         }
     }
 
 
-    useEffect(() => {
 
+
+
+    useEffect(() => {
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
             dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
-
-            dispatch(getRoleAccessListPage());
-            // GoButton_Handler()
+            dispatch(getRoleAccessListPage(getListbodyFunc()));
             tog_center()
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: PostMessage_ForCopyRoleAccess.Message,
-                AfterResponseAction: false
             }))
         }
         else if (PostMessage_ForCopyRoleAccess.Status === true) {
@@ -105,15 +110,24 @@ const RoleAccessListPage = () => {
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(PostMessage_ForCopyRoleAccess.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
             }));
         }
     }, [PostMessage_ForCopyRoleAccess])
 
+    useEffect(() => {
+
+        if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
+            dispatch(DeleteRoleAcessSuccess({ Status: false }));
+            dispatch(getRoleAccessListPage(getListbodyFunc()));
+            CustomAlert({
+                Type: 1,
+                Message: JSON.stringify(deleteMsg.Message),
+            })
+        }
+    }, [deleteMsg]);
+
     //select id for copy row
     const CopyHandeler = (event) => {
-
         setCopy_user_RowData(event)
         tog_center()
     };
@@ -121,17 +135,18 @@ const RoleAccessListPage = () => {
 
 
     //select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(
-            AlertState({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this item : "${name}"`,
-                RedirectPath: false,
-                // PermissionAction: deleteItemID,
-                ID: id,
-            })
-        );
+    const deleteHandeler = async (id, name) => {
+        const ispermission = await CustomAlert({
+            Type: 7,
+            Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
+        })
+        if (ispermission) {
+            let role = id.Role_id
+            let division = id.Division_id
+            let company = id.Company_id
+            dispatch(DeleteRoleAcess(role, division, company))
+        }
+
     };
 
     // Modules list component table columns 
@@ -196,7 +211,7 @@ const RoleAccessListPage = () => {
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete RoleAccess"
-                            onClick={() => { deleteHandeler(RoleAccess.id, RoleAccess.Name); }}
+                            onClick={() => { deleteHandeler(RoleAccess); }}
                         >
                             <i className="mdi mdi-delete font-size-18"></i>
                         </Button>
@@ -228,16 +243,7 @@ const RoleAccessListPage = () => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags>
-                        <title>RoleAccess List Page| FoodERP-React FrontEnd</title>
-                    </MetaTags>
-                    <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-                        showCount={true}
-                        excelBtnView={true}
-                        excelData={TableListData}
-                    />
+                    <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                         keyField='id'

@@ -1,57 +1,31 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { GroupTypes_API, GroupTypes_Delete_API, GroupTypes_Edit_API, GroupTypes_Post_API, GroupTypes_Update_API } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { deleteGroupType_IDSuccess, editGroupTypeIdSuccess, getGroupTypeslistSuccess, PostGroupTypeSubmitSuccess, updateGroupTypeIDSuccess } from "./action";
 import { DELETE_GROUP_TYPE_ID, EDIT_GROUP_TYPE_ID, GET_GROUP_TYPES_LIST, POST_GROUP_TYPE_SUBMIT, UPDATE_GROUP_TYPE_ID } from "./actionType";
 
 // get api
 function* Get_GropuTypeList_GenratorFunction() {
-    yield put(SpinnerState(true))
     try {
         const response = yield call(GroupTypes_API);
         yield put(getGroupTypeslistSuccess(response.Data));
-        yield put(SpinnerState(false))
-    } catch (error) {
-        yield put(SpinnerState(false))
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 //post api
 function* Submit_GroupType_GenratorFunction({ data }) {
-   
-    yield put(SpinnerState(true))
     try {
         const response = yield call(GroupTypes_Post_API, data);
-        yield put(SpinnerState(false))
         yield put(PostGroupTypeSubmitSuccess(response));
-    } catch (error) {
-        yield put(SpinnerState(false))
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // delete api 
 function* Delete_GroupTypeID_GenratorFunction({ id }) {
     try {
-        yield put(SpinnerState(true))
         const response = yield call(GroupTypes_Delete_API, id);
-        yield put(SpinnerState(false))
         yield put(deleteGroupType_IDSuccess(response))
-    } catch (error) {
-        yield put(SpinnerState(false))
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* Edit_GroupTypeID_GenratorFunction({ id, pageMode }) {
@@ -59,30 +33,14 @@ function* Edit_GroupTypeID_GenratorFunction({ id, pageMode }) {
         const response = yield call(GroupTypes_Edit_API, id);
         response.pageMode = pageMode
         yield put(editGroupTypeIdSuccess(response));
-        console.log("response in saga", response)
-
-    } catch (error) {
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* Update_GroupTypeID_GenratorFunction({ updateData, ID }) {
     try {
-        yield put(SpinnerState(true))
         const response = yield call(GroupTypes_Update_API, updateData, ID);
-        yield put(SpinnerState(false))
         yield put(updateGroupTypeIDSuccess(response))
-    }
-    catch (error) {
-        yield put(SpinnerState(false))
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* GroupTypeSaga() {

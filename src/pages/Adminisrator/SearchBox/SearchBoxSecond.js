@@ -92,7 +92,7 @@ export default function SearchBoxSecond() {
             });
             /*execute a function presses a key on the keyboard:*/
             inp.addEventListener("keydown", function (e) {
-                // debugger
+                // 
                 var x = document.getElementById(this.id + "autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
                 if (e.keyCode == 40) {
@@ -264,7 +264,7 @@ const handleClick = () => {
     props2.onSearch(input.value);
 };
 function onChange2() {
-    debugger
+    
     var a = input.value
 
     if (!(a[0] === "/")) {
@@ -280,10 +280,11 @@ function onChange2() {
 
 
 const MySearch = () => {
+    
 
     let input;
     const handleClick = (e) => {
-        debugger
+        
         var a = e.target.value
 
     if (!(a[0] === "/")) {
@@ -297,7 +298,7 @@ const MySearch = () => {
     return (
         <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
             <div className="position-relative">
-                <input
+                {/* <input
                     id="myInput"
                     className="form-control"
                     placeholder="Search..."
@@ -306,7 +307,7 @@ const MySearch = () => {
                     type="text"
                     onChange={handleClick}
                     name="myCountry"
-                />
+                /> */}
                 <button className="btn btn-primary"
                     onClick={handleClick}
                     type="button">

@@ -1,22 +1,24 @@
 import { call, delay, put, takeEvery } from "redux-saga/effects";
-
 import {
   deleteOrderIdSuccess,
-  goButtonSuccess,
   postOrderSuccess,
   editOrderIdSuccess,
   updateOrderIdSuccess,
   getOrderListPageSuccess,
+  GoButton_For_Order_AddSuccess,
 } from "./actions";
 import {
-  editOrderID_forOrderPage_ApiCall,
-  UpdateOrder_ID_ApiCall,
-  deleteOrderID_forOrderPage_ApiCall,
-  OrderPage_Post_API,
+  OrderPage_Update_API,
+  OrderPage_Delete_API,
+  OrderPage_Save_API_ForPO,
   OrderPage_GoButton_API,
-  Order_get_API,
+  OrderList_get_Filter_API,
+  OrderPage_Edit_API,
+  IBOrderPage_GoButton_API,
+  IBOrderList_get_Filter_API,
+  GRN_STP_for_orderList_goBtn,
+  IBOrderPage_Save_API,
 } from "../../../helpers/backend_helper";
-
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
   EDIT_ORDER_FOR_ORDER_PAGE,
@@ -25,114 +27,74 @@ import {
   POST_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE
 } from "./actionType";
-
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import *as url from "../../../routes/route_url"
 
 
-function* goButtonGenFunc({ data, hasEditVal }) {
+function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
 
-  yield GoBtnDissable(true)
-  yield delay(500)
+  yield delay(400)
   try {
-    const response = yield call(OrderPage_GoButton_API, data);
-    debugger
-    if (hasEditVal) {
-      yield response.Data.forEach(element => {
-        hasEditVal.OrderItem.forEach(ele => {
-          if (element.id === ele.Item) {
-            element["inpRate"] = ele.Rate
-            element["inpQty"] = ele.Quantity
-            element["totalAmount"] = ele.Amount
-            element["UOM"] = ele.Unit
-            element["UOMLabel"] = ele.UnitName
-            element["inpBaseUnitQty"] = ele.BaseUnitQuantity
-            // **======== update mode required  variables======********
-            element["poRate"] = ele.Rate
-            element["poQty"] = ele.Quantity
-            element["poBaseUnitQty"] = ele.BaseUnitQuantity
-            element["editrowId"] = ele.id
-          }
+    
+    const { subPageMode, data } = action
+    let response;
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2)) {
+      response = yield call(OrderPage_GoButton_API, data); // GO-Botton Purchase Order 1 && 2 Add Page API
+      yield response.Data.OrderItems.forEach((ele, k) => {
+        ele["id"] = k + 1
+      });
+      const termArr = []
+      var term = response.Data.TermsAndConditions
+      yield term.forEach((ele, k) => {
+        termArr.push({
+          value: ele.id,
+          label: ele.TermsAndCondition,
+          IsDeleted: 0
         })
       });
+
+      yield response.Data.TermsAndConditions = termArr;
     }
-
-    yield response.Data.forEach(row => {
-      
-      if (row.poRate === undefined) { row["poRate"] = '' }
-      if (row.poQty === undefined) { row["poQty"] = 0 }
-      if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
-
-      if (row["inpRate"] === undefined) { row["inpRate"] = '' }
-      if (row["inpQty"] === undefined) { row["inpQty"] = '' }
-      if (row["totalAmount"] === undefined) { row["totalAmount"] = 0 }
-    });
-
-    yield put(goButtonSuccess(response.Data));
-    yield GoBtnDissable(false)
-  } catch (error) {
-    yield GoBtnDissable(false)
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Go Button-Order Page",
-    }));
-  }
+    else if (subPageMode === url.IB_ORDER) {
+      response = yield call(IBOrderPage_GoButton_API, data); // GO-Botton IB-invoice Add Page API
+    }
+    yield put(GoButton_For_Order_AddSuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
 }
 
-function* postOrder_GenFunc({ data }) {
+function* saveOrder_GenFunc({ jsonBody, subPageMode }) {
 
-  yield put(SpinnerState(true))
+  let response
   try {
-    const response = yield call(OrderPage_Post_API, data);
+    if (subPageMode === url.IB_ORDER) {                   // Save  Order  Add Page by subPageMode 
+      response = yield call(IBOrderPage_Save_API, jsonBody);
+    } else {
+      response = yield call(OrderPage_Save_API_ForPO, jsonBody);
+    }
     yield put(postOrderSuccess(response));
-    yield put(SpinnerState(false))
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Post Order",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* editOrderGenFunc({ id, pageMode }) {
-
-  yield put(SpinnerState(true))
+function* editOrderGenFunc({ jsonBody, pageMode }) {     //  Edit Order by subPageMode
   try {
-    const response = yield call(editOrderID_forOrderPage_ApiCall, id);
+    const response = yield call(OrderPage_Edit_API, jsonBody);
     response.pageMode = pageMode
-    yield put(SpinnerState(false))
     yield put(editOrderIdSuccess(response));
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Edit Order",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* DeleteOrder_GenFunc({ id }) {
-  yield put(SpinnerState(true))
+function* DeleteOrder_GenFunc({ id }) {                  // Delete Order by subPageMode
   try {
-    const response = yield call(deleteOrderID_forOrderPage_ApiCall, id);
-    yield put(SpinnerState(false))
+    const response = yield call(OrderPage_Delete_API, id);
     yield put(deleteOrderIdSuccess(response));
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error DeleteOrder",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* UpdateOrder_ID_GenFunc({ data, id }) {
-
+function* UpdateOrder_ID_GenFunc({ data, id }) {         // Update Order by subPageMode
   try {
     yield saveDissable(true)
-    const response = yield call(UpdateOrder_ID_ApiCall, data, id);
+    const response = yield call(OrderPage_Update_API, data, id);
     yield put(updateOrderIdSuccess(response))
     yield saveDissable(false)
   }
@@ -145,39 +107,52 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
   }
 }
 
-// List Page API
-function* get_OrderList_GenFunc({ filters }) {
-
-  // yield GoBtnDissable(true)
-  yield delay(500)
+function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter by subPageMode
   try {
-    const response = yield call(Order_get_API, filters);
-    const newList = yield response.Data.map((i) => {
-      var date = convertDatefunc(i.OrderDate)
-      var time = convertTimefunc(i.CreatedOn)
-      i.OrderDate = (`${date} ${time}`)
+    
+    const { subPageMode, pageMode, jsonBody } = action
+    let response;
+    let newList;
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)) {
+      response = yield call(OrderList_get_Filter_API, jsonBody); // GO-Botton Purchase Order 1 && 2 Add Page API
+    }
+    else if (subPageMode === url.GRN_STP) {
+      response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
+    }
+    else if ((subPageMode === url.IB_ORDER_PO_LIST) ||(subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
+      response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
+    }
+    else if ((subPageMode === url.ORDER_LIST_4)) {
+      response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
+    }
+    newList = yield response.Data.map((i) => {
+
+      i["preOrderDate"] = i.OrderDate
+      var DeliveryDate = convertDatefunc(i.DeliveryDate);
+      i.OrderDate = concatDateAndTime(i.OrderDate, i.CreatedOn)
+      i.DeliveryDate = (`${DeliveryDate}`)
+
+      if ((i.Inward === 0)) {
+        i.Inward = "Open"
+        i.forceEdit = false
+      } else {
+        i.Inward = "Close"
+        i.forceEdit = true
+      }
       return i
     })
     yield put(getOrderListPageSuccess(newList))
-    // yield GoBtnDissable(false)
 
-  } catch (error) {
-    yield GoBtnDissable(false)
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error  Get OrderList",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* OrderPageSaga() {
-
   yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
-  yield takeEvery(POST_ORDER_FROM_ORDER_PAGE, postOrder_GenFunc);
+  yield takeEvery(POST_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
   yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
   yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
-  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderList_GenFunc);
+  yield takeEvery(GET_ORDER_LIST_PAGE, orderList_GoBtn_GenFunc);
 }
 
 export default OrderPageSaga;

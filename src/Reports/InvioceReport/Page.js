@@ -3,19 +3,22 @@ import "jspdf-autotable";
 import * as style from './ReportStyle'
 
 var pageHeder = function (doc,data) {
-    // style.pageBorder(doc,data);
-    style.pageHeder(doc,data);
+    style.pageBorder(doc,data);
+    style.pageHeder(doc,data);     //Title
     style.reportHeder1(doc,data);
     style.reportHeder2(doc,data);
+    style.reportHeder3(doc,data);    //Invoice ID , Date  
+    
 };
-function reportBody(doc, data) {
+function reportBody(doc, data) { 
     style.tableBody(doc, data);
 }
 function pageFooter(doc,data) {
-    // style.reportFooter(doc,data);
     style.pageFooter(doc,data);
+    style.reportFooter(doc,data);
 }
- const generate=(data)=> {
+
+ const InvioceReport=(data)=> {
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc,data);
     reportBody(doc, data);
@@ -26,4 +29,4 @@ function pageFooter(doc,data) {
     window.open(doc.output('dataurlnewwindow'));
     return(<></>);
 }
-export default generate;
+export default InvioceReport;

@@ -25,13 +25,13 @@ import { PaginationListStandalone } from "react-bootstrap-table2-paginator";
 
 // Get List Page API
 function* Get_Vehicle_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(get_Vehicle_API);
     yield put(getMethod_ForVehicleListSuccess(response.Data));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -40,13 +40,13 @@ function* Get_Vehicle_GenratorFunction() {
 }
 // post api
 function* Post_Method_ForVehicle_GenFun({ data }) {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_Vehicle_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(PostMethod_ForVehicleMasterSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -80,18 +80,19 @@ function* get_DriverList_DropDown_GenFun() {
 }
 
 // delete api 
+
 function* Delete_VehicleType_ID_GenratorFunction({ id }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(detelet_VehicleType_List_Api, id);
-    yield put(SpinnerState(false))
+   
     yield put(deleteVehicleTypeIDSuccess(response))
   } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
+   
+    // yield put(AlertState({
+    //   Type: 4,
+    //   Status: true, Message: "500 Error Message",
+    // }));
   }
 }
 
@@ -114,13 +115,13 @@ function* Edit_VehicleType_ID_GenratorFunction({ id ,pageMode}) {
 // update api
 function* Update_VehicleType_ID_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_VehicleType_List_Api, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateVehicleTypeIDSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

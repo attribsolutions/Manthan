@@ -4,12 +4,14 @@ import {
     deletePartySubPartySuccess,
     editPartySubPartySuccess,
     getPartySubPartylistSuccess,
+    getPartySubParty_For_party_dropdownSuccess,
     postPartySubPartySuccess,
     updatePartySubPartySuccess,
 } from "./action";
 
 import {
     PartySubParty_Delete_API,
+    PartySubParty_Dropdown_Get_API,
     PartySubParty_Edit_API,
     PartySubParty_Get_API,
     PartySubParty_Post_API,
@@ -22,16 +24,16 @@ import {
     UPDATE_PARTY_SUB_PARTY,
     GET_PARTY_SUB_PARTY_LIST,
     POST_PARTY_SUB_PARTY,
-  
+    GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
+
 } from "./actionType"
 
 import { AlertState } from "../../actions";
 
 function* getListGenFunc() {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(PartySubParty_Get_API);
-
         // const data = response.Data.map((index) => ({
         //     StateId: index.State.id,
         //     State: index.State.Name,
@@ -55,54 +57,49 @@ function* getListGenFunc() {
         //     MkUpMkDn: index.MkUpMkDn,
         //     isActive: index.isActive,
         //     id: index.id
-
         // }));
-
         // yield put(getPartySubPartylistSuccess(data));
         // console.log("response in saga", response)
-      yield put(getPartySubPartylistSuccess(response.Data));
-        yield put(SpinnerState(false))
+        yield put(getPartySubPartylistSuccess(response.Data));
+       
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
         }));
     }
 }
-
 
 function* postGenFunc({ data }) {
-    yield put(SpinnerState(true))
+  
     try {
         const response = yield call(PartySubParty_Post_API, data);
-        yield put(SpinnerState(false))
+       
         yield put(postPartySubPartySuccess(response));
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
         }));
     }
 }
-
 
 function* deleteGenFunc({ id }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(PartySubParty_Delete_API, id);
-        yield put(SpinnerState(false))
+       
         yield put(deletePartySubPartySuccess(response))
     } catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
         }));
     }
 }
-
 
 function* editGenFunc({ id, pageMode }) {
     try {
@@ -117,16 +114,15 @@ function* editGenFunc({ id, pageMode }) {
     }
 }
 
-
 function* updateGenFunc({ updateData, ID }) {
     try {
-        yield put(SpinnerState(true))
+      
         const response = yield call(PartySubParty_Update_API, updateData, ID);
-        yield put(SpinnerState(false))
+       
         yield put(updatePartySubPartySuccess(response))
     }
     catch (error) {
-        yield put(SpinnerState(false))
+       
         yield put(AlertState({
             Type: 4,
             Status: true, Message: "500 Error Message",
@@ -134,13 +130,27 @@ function* updateGenFunc({ updateData, ID }) {
     }
 }
 
-
+function* getPartySubPartyGenFunc({id}) {
+  
+    try {
+        const response = yield call(PartySubParty_Dropdown_Get_API,id);
+        yield put(getPartySubParty_For_party_dropdownSuccess(response.Data));
+       
+    } catch (error) {
+       
+        yield put(AlertState({
+            Type: 4,
+            Status: true, Message: "500 Error Message PartySubParty list dropdown",
+        }));
+    }
+}
 function* PartySubPartysaga() {
     yield takeEvery(GET_PARTY_SUB_PARTY_LIST, getListGenFunc)
     yield takeEvery(POST_PARTY_SUB_PARTY, postGenFunc)
     yield takeEvery(EDIT_PARTY_SUB_PARTY, editGenFunc)
     yield takeEvery(UPDATE_PARTY_SUB_PARTY, updateGenFunc)
     yield takeEvery(DELETE_PARTY_SUB_PARTY, deleteGenFunc)
+    yield takeEvery(GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, getPartySubPartyGenFunc)
 }
 
 export default PartySubPartysaga;

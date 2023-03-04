@@ -8,24 +8,21 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, divisionDropdownSelectSuccess, getUserDetailsAction, getUserDetailsActionSuccess, loginSuccess,
+  apiError, divisionDropdownSelectSuccess,  getUserDetailsActionSuccess, loginSuccess,
   logoutUserSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
-  roleAceessAction,
   roleAceessActionSuccess
 } from "./actions"
 
-import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
   divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall,
   getUserDetails_afterLogin_ApiCall,
   post_SuperAdmin,
-  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List, UserPartiesForUserMaster_API
+  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List, 
 } from "../../../helpers/backend_helper"
 import { AlertState } from "../../actions"
 
-const fireBaseBackend = getFirebaseBackend()
 
 function* loginUser({ payload: { user, history } }) {
 
@@ -56,7 +53,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-
+  debugger
   try {
 
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
@@ -65,6 +62,12 @@ function* afterLoginUserDetails_genFun({ id }) {
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
+    if(response.Data.IsSCMCompany){
+      localStorage.setItem("IsSCMCompany", 1)
+    }
+    else{
+      localStorage.setItem("IsSCMCompany", 0)
+    }
     var employee = response.Data.EmployeeID;
 
     const response2 = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employee,)
@@ -79,21 +82,21 @@ function* logoutUser({ payload: { history } }) {
   try {
     localStorage.removeItem("authUser")
 
-    if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-      const response = yield call(fireBaseBackend.logout)
-      yield put(logoutUserSuccess(response))
-    }
+    // if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
+    //   const response = yield call(fireBaseBackend.logout)
+    //   yield put(logoutUserSuccess(response))
+    // }
     history.push("/login")
   } catch (error) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction({ id1, id2, }) {
+function* RoleAccessGenratorFunction({party, employee,company }) {
 
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, id1, id2,);
+    const RoleResponse = yield call(RoleAccessApi_url,party, employee,company);
 
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
@@ -143,19 +146,16 @@ function* RoleAccessGenratorFunction({ id1, id2, }) {
   } catch (error) {
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error : RoleAccess Api",
+      Status: true, Message: "500 Error : RoleAccess get Api",
     }));
   }
 }
 
 function* Post_SuperAdmin_API_GenratorFunction() {
-  // yield put(SpinnerState(true))
   try {
     const response = yield call(post_SuperAdmin);
     yield put(postSuperAdminSuccess(response.Data));
-    // yield put(SpinnerState(false))
   } catch (error) {
-    // / yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

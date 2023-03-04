@@ -6,19 +6,23 @@ import AuthSaga from "./auth/login/saga"
 import ForgetSaga from "./auth/forgetpwd/saga"
 import ProfileSaga from "./auth/profile/saga"
 import LayoutSaga from "./layout/saga"
-//Import spinner
+
+// *********************** Breadcrumb ***********************
+import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
+
+// {/*   *********************** spinner ***********************
 import Spinner_Saga from "./Utilites/Spinner/saga"
-//import AlertSagas 
+
+//    *********************** Alert ***********************
 import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
 import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
 import CommonPageField_Saga from "./Utilites/PageFiled/saga"
+import pdfReport_Saga from "./Utilites/PdfReport/saga"
 
-
-// import  Module saga
+//    *********************** Module ***********************
 import ModulesSaga from "./Administrator/ModulesRedux/saga"
 import CompanySaga from "./Administrator/CompanyRedux/saga"
 import HPageSaga from "./Administrator/HPagesRedux/saga"
-import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 import M_EmployeeSaga from "./Administrator/M_EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"
@@ -38,18 +42,32 @@ import MarginMasterSaga from "./Administrator/MarginMasterRedux/saga"
 import TermsAndConditionsSaga from "./Administrator/TermsAndConditionsRedux/saga"
 import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 import GSTSaga from "./Administrator/GSTRedux/saga"
-
 import GroupSaga from "./Administrator/GroupRedux/saga"
 import SubGroupSaga from "./Administrator/SubGroupsRedux/saga"
-
+import GeneralSaga from "./Administrator/GeneralRedux/saga"
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
-
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
-import GRNSaga from "./Purchase/GRNRedux/saga"
-import BOMSaga from "./Purchase/BOMRedux/saga"
-import WorkOrderSaga from "./Purchase/WorkOrder/saga"
-import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
+import RoutesSaga from "./Administrator/RoutesRedux/saga"
+import SalesManSaga from "./Administrator/SalesManRedux/saga"
+//    *********************** Purchase ***********************
+import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
+
+//    *********************** Inventory ***********************
+import GRNSaga from "./Inventory/GRNRedux/saga"
+import ChallanSaga from "./Inventory/ChallanRedux/saga"
+
+//    *********************** Prduction ***********************
+import BOMSaga from "./Production/BOMRedux/saga"
+import WorkOrderSaga from "./Production/WorkOrder/saga"
+import MaterialIssueSaga from "./Production/Matrial_Issue/saga"
+import ProductionSaga from "./Production/ProductionRedux/saga"
+import Production_ReIssueSaga from "./Production/ProductionReissueRedux/saga"
+
+//  *********************** Sale ***********************
+import InvoiceSaga from "./Sales/Invoice/saga"
+import InwardSaga from "./Inter Branch/InwardRedux/saga"
+import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -60,8 +78,9 @@ export default function* rootSaga() {
     fork(LayoutSaga),
     fork(Spinner_Saga),
     fork(CustomSearch_Saga),
+    fork(Breadcrumb_Saga),
     fork(CommonPageField_Saga),
-    
+    fork(pdfReport_Saga),
     fork(Alert_Saga),
     fork(SupplierSaga),
     fork(ModulesSaga),
@@ -86,14 +105,23 @@ export default function* rootSaga() {
     fork(MRPMasterSaga),
     fork(MarginMasterSaga),
     fork(TermsAndConditionsSaga),
+    fork(RoutesSaga),
+    fork(SalesManSaga),
+    fork(CreditLimitSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
     fork(SubGroupSaga),
+    fork(GeneralSaga),
     fork(GSTSaga),
     fork(PartySubPartysaga),
     fork(PartyItemssaga),
     fork(BOMSaga),
     fork(WorkOrderSaga),
     fork(MaterialIssueSaga),
+    fork(ProductionSaga),
+    fork(InvoiceSaga),
+    fork(InwardSaga),
+    fork(ChallanSaga),
+    fork(Production_ReIssueSaga),
   ])
 }

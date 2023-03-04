@@ -12,6 +12,10 @@ import {
 import PartyMaster from './PartyMaster';
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { MetaTags } from 'react-meta-tags';
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import { loginCompanyID, loginRoleID, loginUserID } from '../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -40,20 +44,23 @@ const PartyList = () => {
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(18))
+        dispatch(commonPageFieldList(pageId.PARTY_lIST))
         dispatch(getPartyListAPI());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField, userAccess = [] } = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} />  */}
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={PartyMaster}
+                        masterPath={url.PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
                     />

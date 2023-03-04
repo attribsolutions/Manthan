@@ -20,7 +20,7 @@ import {
 } from "reactstrap";
 import MetaTags from "react-meta-tags"
 //Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+
 import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
@@ -136,7 +136,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    debugger
+    
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -364,7 +364,7 @@ const PageMaster = (props) => {
   }
 
   function arrow_value(key) {
-    debugger
+    
     pageFieldTabTable[key].DefaultSort = 2
 
     var x = document.getElementById("up");
@@ -386,7 +386,7 @@ const PageMaster = (props) => {
   }
 
   function PageField_onChange_Handler(event, type = '', key) {
-    debugger
+    
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
@@ -603,7 +603,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-debugger
+
     let Access = []
     PageAccess.forEach((element, key) => {
       var check = document.getElementById(`checkbox${key}`).checked

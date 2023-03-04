@@ -10,10 +10,11 @@ import {
   ROLE_ACCESS_API_UPDATE_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN,
   GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
-  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
+  DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN,
   GET_SUPER_ADMIN_API,
   GET_SUPER_ADMIN_API_SUCCESS,
-  LOGOUT_REST
+  LOGOUT_REST,
+  RESET_ROLE_ACCESS_ACTION
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -34,7 +35,7 @@ export const logoutUser = history => {
   return {
     type: LOGOUT_USER,
     payload: { history },
-    user:null
+    user: null
   }
 }
 
@@ -59,60 +60,66 @@ export const socialLogin = (data, history, type) => {
   }
 }
 
-export  const getUserDetailsAction=(id)=>{
-  return{
-    type:GET_USER_DETAILS_AFTER_LOGIN,
+export const getUserDetailsAction = (id) => {
+  return {
+    type: GET_USER_DETAILS_AFTER_LOGIN,
     id,
   }
 }
 
-export  const divisionDropdownSelectSuccess=(data)=>{
-  return{
-    type:DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
+export const divisionDropdownSelectSuccess = (data) => {
+  return {
+    type: DIVISION_DROPDOWN_SUCCESS_AFTER_LOGIN,
     payload: data,
   }
 }
 
-  export  const getUserDetailsActionSuccess=(data)=>{
-    return{
-      type:GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
-      payload: data,
-    }
-    }
-
-export  const roleAceessAction=(id1,id2,id3)=>{
-return{
-  type:ROLE_ACCESS_API_CALL,
-  id1,id2,id3,
-}
-}
-export  const roleAceessActionSuccess=(data)=>{
-  return{
-    type:ROLE_ACCESS_API_CALL_SUCCESS,
+export const getUserDetailsActionSuccess = (data) => {
+  return {
+    type: GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
     payload: data,
   }
+}
+
+export const roleAceessAction = (party, employee, company) => {
+  return {
+    type: ROLE_ACCESS_API_CALL,
+    party, employee, company,
   }
+}
+export const roleAceessActionSuccess = (data) => {
+  return {
+    type: ROLE_ACCESS_API_CALL_SUCCESS,
+    payload: data,
+  }
+}
 
-  export  const RoleAccessUpdateSuccess=(data)=>{
-    return{
-      type:ROLE_ACCESS_API_UPDATE_SUCCESS,
-      payload: data,
-    }
-    }
+export const RoleAccessUpdateSuccess = (data) => {
+  return {
+    type: ROLE_ACCESS_API_UPDATE_SUCCESS,
+    payload: data,
+  }
+}
 
-    export const postSuperAdmin = () => ({
-      type: GET_SUPER_ADMIN_API,
-  });
-  
-  export const postSuperAdminSuccess = (data) => ({
-      type: GET_SUPER_ADMIN_API_SUCCESS,
-      payload:data,
-  });
-  
+export const postSuperAdmin = () => ({
+  type: GET_SUPER_ADMIN_API,
+});
 
-  export  const logoutReset=(data)=>{
-    return{
-      type: LOGOUT_REST,
-      payload: data,
-    }
-    }
+export const postSuperAdminSuccess = (data) => ({
+  type: GET_SUPER_ADMIN_API_SUCCESS,
+  payload: data,
+});
+
+
+export const logoutReset = (data) => {
+  return {
+    type: LOGOUT_REST,
+    payload: data,
+  }
+}
+export const resetRoleAccessAction = (data) => {
+  return {
+    type: RESET_ROLE_ACCESS_ACTION,
+    payload: data,
+  }
+}

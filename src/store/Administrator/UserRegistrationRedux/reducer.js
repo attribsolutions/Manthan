@@ -1,7 +1,7 @@
 import {
     GET_ROLE_SUCCESS,
     ADD_USER_SUCCESS,
-    GET_USER_SUCCESS,
+    GET_USER_LIST_FOR_USER_SUCCESS,
     UPDATE_SUCCESS,
     EDIT_SUCCESS,
     DELETE_SUCCESS,
@@ -40,7 +40,7 @@ import {
               };
   
                 //// get Registration api
-          case GET_USER_SUCCESS:
+          case GET_USER_LIST_FOR_USER_SUCCESS:
             return {
               ...state,
               pages: action.payload,

@@ -1,16 +1,21 @@
 import { Button } from "reactstrap"
+import { loginUserID } from "./listPageCommonButtons";
+import * as mode from "../../../routes/PageMode"
 
 export function SaveButton(props) {
 
-  const { pageMode, userAcc, module, onClick } = props
+  const { pageMode, userAcc, module, onClick, editCreatedBy = {}, id = '' } = props
+
+  const isCreated = (loginUserID() === editCreatedBy)
+
   return (
     <div>
       {
-        pageMode === "edit" ?
-          (userAcc.RoleAccess_IsEdit) || (userAcc.RoleAccess_IsEditSelf) ?
+        pageMode === mode.edit ?
+          (userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) && (isCreated)) ?
             <button
               type="submit"
-              id='form_submmit'
+              id={id}
               data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Update ${module}`}
               className="btn btn-success w-md"
               onClick={onClick}
@@ -19,11 +24,11 @@ export function SaveButton(props) {
             </button>
             :
             <></>
-          : (
+          : (pageMode === mode.defaultsave ||  pageMode === mode.copy || pageMode === mode.modeSTPsave || pageMode === mode.dropdownAdd || pageMode === mode.assingLink) ? (
             userAcc.RoleAccess_IsSave ?
               <button
                 type="submit"
-                id='form_submmit'
+                id={id}
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Save ${module}`}
                 className="btn btn-primary w-md"
                 onClick={onClick}
@@ -32,6 +37,7 @@ export function SaveButton(props) {
               :
               <></>
           )
+            : <></>
       }
     </div>
   )
@@ -39,12 +45,28 @@ export function SaveButton(props) {
 
 
 export function Go_Button(props) {
-  const { onClick } = props
+  const { onClick, id } = props
+  return (
+    // <div className="spinner-grow t"   role="status" >
+    <Button
+      id={id} type="button"
+
+      color="btn btn-outline-success border-1 font-size-12 mb-2 "
+      onClick={onClick}
+    >
+
+      Go</Button>
+    // </div>
+  )
+}
+
+export function Change_Button(props) {
+  const { onClick, id } = props
   return (
     <Button
-      id="gobtn_submmit" type="button"
-      color="btn btn-outline-success border-2 font-size-12 mb-2 "
+      id={id} type="button"
+      color="btn btn-outline-info border-1 font-size-12 "
       onClick={onClick}
-    >Go</Button>
+    >Change</Button>
   )
 }

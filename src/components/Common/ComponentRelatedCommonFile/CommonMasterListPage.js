@@ -1,27 +1,24 @@
 
-import React, { useEffect, useMemo, useState } from "react";
-import Breadcrumb from "../Breadcrumb3";
+import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-
-import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { excelDownCommonFunc, listPageCommonButtonFunction }
+import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { breadcrumbReturn, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+
 
 let sortType = "asc"
 let searchCount = 0
-let downList = []
-let listObj = {}
-
 
 let searchProps = {
   onClear: function onClear() { },
@@ -37,7 +34,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   }
 
   if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
+    dispatch(BreadcrumbShowCountlabel(`${ButtonMsgLable} Count :${iscall}`))
     searchCount = paginationProps.dataSize
   }
   searchProps = toolkitProps.searchProps
@@ -50,7 +47,6 @@ const CommonListPage = (props) => {
 
   const [userAccState, setUserAccState] = useState('');
   const [modal_edit, setmodal_edit] = useState(false);
-  const [masterPath, setmasterPath] = useState('');
 
 
   const {
@@ -64,8 +60,6 @@ const CommonListPage = (props) => {
 
   } = props.reducers;
 
-
-
   const {
     getList,
     editId,
@@ -77,100 +71,93 @@ const CommonListPage = (props) => {
   } = props.action
 
   const {
+    getListbodyFunc =()=> {},
     MasterModal,
     ButtonMsgLable,
     deleteName,
-    showBreadcrumb = true
+    masterPath,
+
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
 
-
-
   useEffect(() => {
-    debugger
-
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: masterPath });
     }
-  }, [userAccess])
+  }, [userAccess]);
 
-  // this useEffect for MasterPagePath dynamically work 
+
   useEffect(() => {
-    debugger
+    let downList = [];
+    let listObj = {};
 
-    const locationPath = history.location.pathname
-
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
+    tableList.forEach((index1) => {
+      PageFieldMaster.forEach((index2) => {
+        if (index2.ShowInDownload) {
+          listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+          listObj[index2.ControlID] = index1[index2.ControlID]
+        }
+      })
+      downList.push(listObj)
+      listObj = {}
     })
+    dispatch(CommonBreadcrumbDetails({ downBtnData: downList }))
 
-    let MasterPagePath = userAccess.find((inx) => {
-      return (inx.id === userAcc.RelatedPageID)
-    })
-
-    if (!(MasterPagePath === undefined)) {
-      setmasterPath(`/${MasterPagePath.ActualPagePath}`)
-    }
-
-  }, [userAccess])
-
-
-  const downList = useMemo(() => {
-    return excelDownCommonFunc({ tableList, PageFieldMaster })
   }, [tableList])
 
+
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
-  useEffect(() => {
+  useEffect(async () => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+      saveDissable(false);//+++++++++save Button Is enable function
+
       dispatch(updateSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: updateMsg.Message,
-          AfterResponseAction: getList,
-        })
-      );
+
+      const promise = await CustomAlert({
+        Type: 1,
+        Message: updateMsg.Message,
+      })
+      if (promise) {
+        getList(getListbodyFunc())
+      }
       tog_center();
     } else if (updateMsg.Status === true) {
+
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMsg.Message),
-        })
-      );
+      CustomAlert({
+        Type: 3,
+        Message: JSON.stringify(updateMsg.Message),
+      })
+
     }
   }, [updateMsg]);
 
 
-  useEffect(() => {
+  useEffect( async() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: deleteMsg.Message,
-          AfterResponseAction: getList,
-        })
-      );
+
+      const promise = await CustomAlert({
+        Type: 1,
+        Message: deleteMsg.Message,
+      })
+      if (promise) {
+        getList(getListbodyFunc())
+      }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(deleteMsg.Message),
-        })
-      );
+      CustomAlert({
+        Type: 3,
+        Message: JSON.stringify(deleteMsg.Message),
+      })
     }
   }, [deleteMsg]);
 
@@ -179,24 +166,22 @@ const CommonListPage = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postSucc({ Status: false }))
+      saveDissable(false);//+++++++++save Button Is enable function
       tog_center();
-      dispatch(getList());
-      dispatch(AlertState({
+      dispatch(getList(getListbodyFunc()));
+      CustomAlert({
         Type: 1,
-        Status: true,
-        Message: postMsg.Message,
-      }))
+        Message: JSON.stringify(deleteMsg.Message),
+      })
     }
 
     else if ((postMsg.Status === true)) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(postSucc({ Status: false }))
-      dispatch(AlertState({
+      CustomAlert({
         Type: 4,
-        Status: true,
-        Message: JSON.stringify(postMsg.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+        Message: JSON.stringify(deleteMsg.Message),
+      })
     }
 
 
@@ -280,24 +265,12 @@ const CommonListPage = (props) => {
           <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
-          {showBreadcrumb ?
-            <Breadcrumb
-              pageHeading={userAccState.PageHeading}
-              newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-              showCount={true}
-              excelBtnView={(userAccState.RoleAccess_Exceldownload)  ? true : false}
-              // handleDataChange={ }
-          excelData={downList}
-            />
-          : null
-          }
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
                 data={tableList}
                 columns={columns}
-                // search={ defaultSearch }
                 search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
@@ -306,13 +279,10 @@ const CommonListPage = (props) => {
                       <Col xl="12">
                         <div className="table-responsive table " >
                           <BootstrapTable
-                            //  expandRow={ expandRow }
-
                             keyField={"id"}
                             responsive
                             bordered={false}
                             defaultSorted={defaultSorted}
-                            // onDataSizeChange={handleDataChange}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
                             noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
@@ -335,21 +305,11 @@ const CommonListPage = (props) => {
               </ToolkitProvider>
             )}
           </PaginationProvider>
-          <Modal
-            isOpen={modal_edit}
-            toggle={() => {
-              tog_center();
-            }}
-            size="xl"
-          >
-
+          <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
             <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
           </Modal>
         </div>
-        {/* {(isRedirect) ? <Redirect to={{
-          pathname: masterPath,
-          state: editData.Data, relatatedPage: masterPath, pageMode: editData.pageMode
-        }} /> : null} */}
+
       </React.Fragment>
     );
   }

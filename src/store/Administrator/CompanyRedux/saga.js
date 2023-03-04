@@ -1,8 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-import {  deleteCompanyIDSuccess, editCompanyIDSuccess,  fetchCompanyListSuccess, getCompanyGroupSuccess, PostCompanySubmitSuccess, updateCompanyIDSuccess } from "./actions";
+import { deleteCompanyIDSuccess, editCompanyIDSuccess, fetchCompanyListSuccess, getCompanyGroupSuccess, PostCompanySubmitSuccess, updateCompanyIDSuccess } from "./actions";
 import {
   DELETE_COMPANY_ID,
   EDIT_COMPANY_ID,
@@ -10,92 +9,50 @@ import {
   GET_COMPANYGROUP,
   POST_COMPANY_SUBMIT,
   UPDATE_COMPANY_ID,
-
 } from "./actionType";
 
 function* fetch_CompanyList_data() {
-  yield put(SpinnerState(true))
   try {
     const response = yield call(fetch_CompanyList);
     yield put(fetchCompanyListSuccess(response.Data));
-    yield put(SpinnerState(false))
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* SubmitCompanyModules({ data }) {
-  yield put(SpinnerState(true))
   try {
     const response = yield call(postSubmit_Company, data);
-    yield put(SpinnerState(false))
     yield put(PostCompanySubmitSuccess(response));
-    console.log("response",response)
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* deleteCompany_ID({ id }) {
   try {
-    yield put(SpinnerState(true))
     const response = yield call(delete_CompanyID, id);
-    yield put(SpinnerState(false))
     yield put(deleteCompanyIDSuccess(response))
-    console.log("delete response",response)
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* editCompany_ID({ id,pageMode }) {
+function* editCompany_ID({ id, pageMode }) {
   try {
     const response = yield call(edit_CompanyID, id);
-    response.pageMode=pageMode
+    response.pageMode = pageMode
     yield put(editCompanyIDSuccess(response));
-  } catch (error) {
-    yield put(AlertState({ Type: 4, 
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* update_Company({ updateData, ID }) {
-  debugger
   try {
-    yield put(SpinnerState(true))
     const response = yield call(updateCompany_ID, updateData, ID);
-    yield put(SpinnerState(false))
     yield put(updateCompanyIDSuccess(response))
-    console.log("saga response",response)
-  }
-  
-  catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 /// CompanyGroupDropdown
 function* CompanyGroup() {
   try {
-  
     const response = yield call(getCompanyGroup);
     yield put(getCompanyGroupSuccess(response.Data));
-  } catch (error) {
-    console.log("CompanyGroup saga page error", error);
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* CompanySaga() {

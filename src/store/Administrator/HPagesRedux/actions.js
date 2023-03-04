@@ -18,7 +18,9 @@ import {
   GET_CONTROL_TYPES,
   GET_CONTROL_TYPES_SUCCESS,
   GET_FIELD_VALIDATIONS,
-  GET_FIELD_VALIDATIONS_SUCCESS
+  GET_FIELD_VALIDATIONS_SUCCESS,
+  GET_PAGETYPE,
+  GET_PAGETYPE_SUCCESS,
 } from "./actionType";
 
 export const getH_Modules = () => ({
@@ -69,15 +71,15 @@ export const deleteHpagesUsingID = (id) => ({
   id,
 });
 export const deleteModuleIDSuccess = (deleteModuleID) => ({
-  type: DELETE_H_MODULE_ID_SUCCESS  ,
+  type: DELETE_H_MODULE_ID_SUCCESS,
   payload: deleteModuleID,
 });
 
 
 //Edit Modules Using Id
-export const editHPagesID = (id,pageMode) => ({
+export const editHPagesID = (id, pageMode) => ({
   type: EDIT_H_PAGES_ID,
-  id,pageMode
+  id, pageMode
 });
 export const editHPagesIDSuccess = (editData) => ({
   type: EDIT_H_PAGES_ID_SUCCESS,
@@ -103,6 +105,17 @@ export const getPageListSuccess = (data) => ({
   payload: data,
 });
 
+// PageType dropdown api 
+export const getPageType = (id) => ({
+  type: GET_PAGETYPE,
+  id,
+});
+export const getPageTypeSuccess = (data) => ({
+  type: GET_PAGETYPE_SUCCESS,
+  payload: data,
+});
+
+
 // PageAccess dropdown api 
 export const getPageAccess_DropDown_API = (id) => ({
   type: GET_PAGEACCESS_DROPDOWN_API,
@@ -119,7 +132,7 @@ export const getControlTypes = () => ({
 });
 
 export const getControlTypesSuccess = (data) => ({
-  type:GET_CONTROL_TYPES_SUCCESS ,
+  type: GET_CONTROL_TYPES_SUCCESS,
   payload: data,
 });
 // FieldValidations

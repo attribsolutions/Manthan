@@ -1,84 +1,66 @@
 import React from 'react'
-import { useDispatch } from 'react-redux';
 import Select from 'react-select'
 import { Tbody, Thead } from 'react-super-responsive-table'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row, Table } from 'reactstrap'
-import { AlertState } from '../../../../../store/actions';
+import { unitConversionInitial } from '../itemIndex';
 
 export default function UnitConverstion(props) {
-    const dispatch = useDispatch();
 
     const { pageMode, formValue, TableData = [], BaseUnit = [], } = props.state;
-    const { settable, setFormValue } = props
 
+    const { settable, setFormValue } = props
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-
     function baseunitOnchange(event) {
+
         const val = { ...formValue }
+        const a1 = { ...unitConversionInitial, Unit: event, Conversion: 1, IsBase: true }
         val["BaseUnit"] = event
         setFormValue(val)
+        settable([a1])
     }
 
-
-    function addRow_Handler() {
-
-        const newarr = [...TableData, {
-            Conversion: '',
-            Unit: '',
-            IsBase: false
-        }]
+    function addRow_Handler(ID) {
+        let a1 = { ...unitConversionInitial, id: ID + 1 }
+        const newarr = [...TableData, a1]
+        
         settable(newarr)
     }
-    function deleteRow_Handler(key) {
 
-        const found = TableData.filter((i, k) => {
-            return !(k === key)
+    function deleteRow_Handler(Id) {
+        const found = TableData.filter((i) => {
+            return !(i.id === Id)
         })
-
+        
         settable(found)
     }
-    function baseUnit2_onChange(event, type, key) {
 
-        let newSelectValue = ''
+    function baseUnit2_onChange(event, type = '', Id) {
+        settable(e1 => {
+            const newarr = e1.map((index) => {
 
-        const found = TableData.find((i, k) => {
-            return (k === key)
+                if (((type === 'POUnit') && !(index.id === Id))) {
+                    index.POUnit = false
+                };
+                if (((type === 'SOUnit') && !(index.id === Id))) {
+                    index.SOUnit = false
+                };
+                if (index.id === Id) { index[type] = event };
+                return index
+            })
+            return (newarr)
         })
+    };
 
-        if (type === "Conversion") {
-            var conv = event.target.value
-
-
-            newSelectValue = {
-                Conversion: conv,
-                Unit: found.Unit,
-                IsBase: found.IsBase
-            }
-        }
-        else if (type === 'Unit') {
-
-            newSelectValue = {
-                Conversion: found.Conversion,
-                Unit: event,
-                IsBase: found.IsBase
-            }
-        }
-
-        let newTabArr = TableData.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        settable(newTabArr)
-    }
-
+    //start  => BaseUnit DropDown select id(array value) ,Table BaseUnit dropdown option filter is notinclude BaseUnit DropDown select +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     let BaseUnit_DropdownOptions2 = []
     BaseUnit.forEach(myFunction);
     function myFunction(item, index, arr) {
- 
+
         if (!(formValue.BaseUnit.label === item.Name)) {
             BaseUnit_DropdownOptions2[index] = {
                 value: item.id,
@@ -86,12 +68,11 @@ export default function UnitConverstion(props) {
             };
         }
     }
+    //end Table BaseUnit dropdown option ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     const tbodyfunction = () => {
-
         const newarr = []
-
         TableData.forEach((index, key) => {
-
             newarr.push(
                 (
                     <tr >
@@ -101,64 +82,101 @@ export default function UnitConverstion(props) {
                                 <Col md={7}>
                                     <Select
                                         id={`dropUnit-${key}`}
+                                        isDisabled={(key === 0) ? true : false}
                                         placeholder="Select..."
                                         value={index.Unit}
                                         options={BaseUnit_DropdownOptions2}
-                                        onChange={(e) => baseUnit2_onChange(e, "Unit", key)}
+                                        onChange={(e) => baseUnit2_onChange(e, "Unit", index.id)}
                                     />
                                 </Col>
                                 < Label className=" col-sm-2 col-form-label">=</Label>
                             </Row>
                         </td>
+
                         <td>
                             <Row>
                                 <Col>
                                     <Input
                                         type="text"
                                         id={`txtConversion${key}`}
-                                        placeholder="Select..."
+                                        placeholder="Select"
+                                        disabled={(key === 0) ? true : false}
                                         autoComplete="off"
-                                        defaultValue={index.Conversion}
-                                        onChange={(e) => baseUnit2_onChange(e, "Conversion", key,)}
+                                        value={index.Conversion}
+                                        onChange={(event) => baseUnit2_onChange(event.target.value, "Conversion", index.id)}
                                     >
-
                                     </Input>
                                 </Col>
                                 <Label className=" col-sm-4 col-form-label"> {formValue.BaseUnit.label}</Label>
                             </Row>
                         </td>
 
+                        <td >
+                            <div>
+                                <Input
+                                    type="radio"
+                                    // id={`POUnit-${key}`}
+                                    key={`POUnit-${index.id}`}
+                                    // name={"btnPOUnit"}
+                                    checked={index.POUnit}
+                                    // value={TableData[key].POUnit}
+                                    onChange={(e) => baseUnit2_onChange(e.target.checked, "POUnit", index.id)}
+                                >
+                                </Input>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div>
+                                <Input
+                                    type="radio"
+                                    // id={`SOUnit-${key}`}
+                                    // name={'btnSOUnit'}
+                                    key={`SOUnit-${index.id}`}
+                                    checked={index.SOUnit}
+                                    // value={TableData[key].SOUnit}
+                                    onChange={(e) => baseUnit2_onChange(e.target.checked, "SOUnit", index.id)}
+                                >
+                                </Input>
+                            </div>
+                        </td>
+
                         <td>
                             {(TableData.length === key + 1) ?
+                                //Table show Only length is greter than =1
+
                                 <Row className="">
                                     <Col md={6} className=" mt-3">
-                                        {(TableData.length > 1) ? <>
-                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                deleteRow_Handler(key)
-                                            }} >
-                                            </i>
-                                        </> : <Col md={6} ></Col>}
+                                        {(TableData.length > 1) ?
+                                            //(Add New RowButton and delete Button) vissible Last Index Of The table row
+                                            <>
+                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                    deleteRow_Handler(index.id)
+                                                }} >
+                                                </i>
+                                            </> : <Col md={6} ></Col>}
 
                                     </Col>
 
-                                    <Col md={6} style={{marginRight:""}}>
+                                    <Col md={6} style={{ marginRight: "" }}>
                                         <Button
-                                        style={{marginLeft:"-0.6cm"}}
-                                        className=" button_add"
-                                        color="btn btn-outline-primary border-2 font-size-12"
+                                            style={{ marginLeft: "-0.6cm" }}
+                                            className=" button_add"
+                                            color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
-                                            onClick={() => { addRow_Handler(key) }}
+                                            onClick={() => { addRow_Handler(index.id) }}
                                         >
-                                            <i className="dripicons-plus"></i>
+                                            <i className="dripicons-plus "></i>
                                         </Button>
                                     </Col>
                                 </Row>
                                 :
-
-                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                    deleteRow_Handler(key)
+                                //if BaseUnit Id and table-Unit id same then Selete Button hide
+                                (!(index.IsBase)) ? < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                    deleteRow_Handler(index.id)
                                 }} >
                                 </i>
+                                    : <></>
                             }
                         </td>
                     </tr>
@@ -167,9 +185,7 @@ export default function UnitConverstion(props) {
 
         });
         return newarr
-
     }
-
 
     return (
         <div>
@@ -198,6 +214,8 @@ export default function UnitConverstion(props) {
                                         <tr>
                                             <th className="col-sm-3">Unit Name</th>
                                             <th className="col-sm-3 text-center">Conversion To Base Unit </th>
+                                            <th className="col-sm-1 text-center">PO Unit</th>
+                                            <th className="col-sm-1 text-center">SO Unit</th>
                                             <th className="col-sm-2">Action</th>
                                         </tr>
                                     </Thead>

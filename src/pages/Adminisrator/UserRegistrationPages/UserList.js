@@ -10,12 +10,14 @@ import {
     addUserSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
 
+import * as pageId from "../../../routes/allPageID"
+import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const UserList = () => {
-    debugger
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
@@ -26,7 +28,6 @@ const UserList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.User_Registration_Reducer.AddUserMessage,
             pageField: state.CommonPageFieldReducer.pageFieldList
-
         })
     );
 
@@ -42,14 +43,23 @@ const UserList = () => {
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(14))
-        dispatch(getUser());
+        dispatch(commonPageFieldList(pageId.USER_lIST))
+        dispatch(getUser(getListbodyFunc()));
     }, []);
 
-    const { pageField } = reducers
+    function getListbodyFunc() {
+        return JSON.stringify({
+            UserID: loginUserID(),
+            RoleID: loginRoleID(),
+            CompanyID: loginCompanyID()
+        })
+    }
+    const { pageField, userAccess = [] } = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER_lIST} /> */}
             {
                 (pageField) ?
                     <CommonListPage
@@ -60,6 +70,7 @@ const UserList = () => {
                         masterPath={USER}
                         ButtonMsgLable={"User"}
                         deleteName={"LoginName"}
+                        getListbodyFunc={getListbodyFunc}
                     />
                     : null
             }

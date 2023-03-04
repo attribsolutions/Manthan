@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
@@ -15,7 +15,6 @@ function AddressDetailsTable(props) {
     };
 
     function defaultChangeHandler(key) {
-
         const newtableData = props.tableData.map((ele, k) => {
             ele.IsDefault = false;
             if (k === key) {
@@ -25,13 +24,55 @@ function AddressDetailsTable(props) {
         });
         props.func(newtableData)
     }
-    const tableRows = props.tableData.map((info, key) => {
+    //   function myFunction() {
+    //     
+    //     /* Access image by id and change
+    //     the display property to block*/
+    //     document.getElementById('images')
+    //             .style.display = "block";
 
+    // //     document.getElementById('')
+    // //             .style.display = "none";
+    // }
+
+    // useEffect(() => {
+    //     var x = document.getElementById("add-img");
+    //     x.style.display = "none";
+    // }, []);
+
+    function myFunction(row) {
+
+
+        var x = document.getElementById("add-img");
+        
+
+        if (x.style.display === "none") {
+            x.src = row.fssaidocument
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    const tableRows = props.tableData.map((info, key) => {
+        
+        const pic = info.fssaidocument
         return (
             <tr>
                 <td>{info.Address}</td>
                 <td>{info.FSSAINo}</td>
                 <td>{info.FSSAIExipry}</td>
+                <td>
+                    {/* {info.fssaidocument} */}
+                    { }
+                    <button
+                        type='button'
+                        // id='myImg'
+                        onClick={() => { myFunction(info) }}
+                        className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
+                        Show Image
+                    </button>
+                </td>
                 <td>{info.PIN}</td>
                 < td><Input type="radio"
                     name="btnradio"
@@ -50,7 +91,7 @@ function AddressDetailsTable(props) {
                     >
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
-                   
+
                 </td>
             </tr>
         );
@@ -59,6 +100,7 @@ function AddressDetailsTable(props) {
     return (
         <>
             <div>
+                < img id='add-img' className='abc1' src={''} />
                 {props.tableData.length > 0 ?
                     <Table className="table table-bordered table-hover">
                         <Thead>
@@ -66,6 +108,7 @@ function AddressDetailsTable(props) {
                                 <th className="col col-sm-3">Address</th>
                                 <th className="col col-sm-3">FSSAINo</th>
                                 <th className="col col-sm-3">FSSAIExipry</th>
+                                <th className="col col-sm-3">FSSAI Document</th>
                                 <th className="col col-sm-3">PIN</th>
                                 <th className="col col-sm-3">IsDefault</th>
                                 <th className="col col-sm-3">{"Action"}</th>

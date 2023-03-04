@@ -42,10 +42,7 @@ import {
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import { MainSearchBox, } from '../Common/ComponentRelatedCommonFile/SearchBox/index';
 
-
-
 const Header = props => {
-  const dispatch = useDispatch();
   const { onChangeLayoutMode } = props;
   const [search, setsearch] = useState(false)
   const [socialDrp, setsocialDrp] = useState(false)
@@ -54,9 +51,6 @@ const Header = props => {
   const [open, setOpen] = useState(false);
 
 
-  function searchFunctionHandller(e) {
-    dispatch(CustomSearchInput(e.target.value))
-  }
   /**
    * Rightsidebar drawer
    */
@@ -115,9 +109,9 @@ const Header = props => {
               <i className="fa fa-fw fa-bars"></i>
             </button>
             {/* <SearchBoxSecond/> */}
-            <MainSearchBox/>
-             
-           
+            <MainSearchBox />
+
+
             {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />
@@ -255,6 +249,28 @@ const Header = props => {
                       </Link>
                     </Col>
                   </Row>
+
+                  <Row className="g-0">
+                    <Col>
+                      <Link className="dropdown-icon-item" to="#">
+                        <img src={dropbox} alt="dropbox" />
+                        <span>Dropbox</span>
+                      </Link>
+                    </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="#">
+                        <img src={mail_chimp} alt="mail_chimp" />
+                        <span>Mail Chimp</span>
+                      </Link>
+                    </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="#">
+                        <img src={slack} alt="slack" />
+                        <span>Slack</span>
+                      </Link>
+                    </Col>
+                  </Row>
+
                 </div>
               </DropdownMenu>
             </Dropdown>

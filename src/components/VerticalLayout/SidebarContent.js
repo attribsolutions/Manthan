@@ -7,51 +7,41 @@ import FeatherIcon from "feather-icons-react";
 // //Import Scrollbar
 import SimpleBar from "simplebar-react";
 
-//Import images
-import giftBox from "../../assets/images/giftbox.png";
 
 //i18n
 import { withTranslation } from "react-i18next";
-
+import * as urlRel from "../../routes/urlRalations";
 // MetisMenu
 import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { roleAceessAction } from "../../store/actions";
-import { WindowScrollController } from "@fullcalendar/react";
+import { roleAceessAction,  } from "../../store/actions";
+import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const SidebarContent = (props) => {
   const ref = useRef();
   const dispatch = useDispatch();
-
-
-
   // const  RoleAccessData=demoRolleAcess
 
   ;
   const {
     RoleAccessData,
-    afterLoginUserDetails,
     RoleAccessUpdateData,
   } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
-    afterLoginUserDetails: state.Login.afterLoginUserDetails,
+    RoleAccessData: state.Login.roleAccessSidbarData,
     RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
   }));
 
   useEffect(() => {
     if (RoleAccessUpdateData.length <= 0) {
-      var role = JSON.parse(localStorage.getItem("roleId"))
-      if (!(role === undefined) && !(role === null)) {
-        var party = role.Party_id
-        var employee = role.Employee_id;
-        dispatch(roleAceessAction(party, employee))
+      let role = loginUserDetails()
+      if (role) {
+        let party = loginPartyID()
+        let employee = loginEmployeeID();
+        let company = loginCompanyID();
+        dispatch(roleAceessAction(party, employee, company))
       };
-
-
-      // dispatch(getUserDetailsAction(user))
-      // roleAceessAction()
     }
   }, [])
 
@@ -95,22 +85,18 @@ const SidebarContent = (props) => {
   useEffect(() => {
 
     let pathName = props.location.pathname
-
     let userAcc = RoleAccessUpdateData.find((inx) => {
       const path = inx.ActualPagePath.toLowerCase()
       return (`/${path}` === (pathName.toLowerCase()))
     })
-    if (userAcc === undefined) {
-    }
+    if (userAcc === undefined) { }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
-      let listPagePath = RoleAccessUpdateData.find((inx) => {
-        return ((inx.id === userAcc.RelatedPageID))
-      })
-      if (!(listPagePath === undefined)) {
-        pathName = `/${listPagePath.ActualPagePath}`
-      }
+      pathName = urlRel[`${userAcc.ActualPagePath}`]
+
     }
+
     const initMenu = () => {
+      // 
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
@@ -125,10 +111,12 @@ const SidebarContent = (props) => {
       }
     };
     initMenu();
-  }, [props.location.pathname, activateParentDropdown]);
+  }, [props.location.pathname, activateParentDropdown,RoleAccessUpdateData]);
+
   useEffect(() => {
     ref.current.recalculate();
   });
+
   function scrollElement(item) {
     if (item) {
       const currentPosition = item.offsetTop;
@@ -137,6 +125,7 @@ const SidebarContent = (props) => {
       }
     }
   }
+
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
@@ -153,42 +142,7 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-
-
-            {/* <li>
-              <Link to="/#" className="has-arrow">
-                <FeatherIcon icon="home" />
-                <span>{props.t("Menu2")}</span>
-              </Link> */}
-            {/* <ul className="sub-menu"> */}
-
-            {/* {RoleAccessData.find((item) => {
-              debugger
-              return (
-                <li >
-                  <Link to="/#" className="has-arrow">
-                    <FeatherIcon icon="grid" />
-                    <span>{props.t(item.ModuleName)}</span>
-                  </Link>
-                  <ul className="sub-menu">
-                    {item.ModuleData.map((index, j) => {
-                      if (index.RoleAccess_IsShowOnMenu === true) {
-                        return (
-                          <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}` }}>{props.t(index.Name)}</Link>
-                          </li>
-                        )
-                      }
-                    })}
-                  </ul>
-                </li>
-              )
-            })} */}
-
-
-
             {RoleAccessData.map((item) => {
-            
               return (
                 <li >
                   <Link to="/#" className="has-arrow">
@@ -210,8 +164,6 @@ const SidebarContent = (props) => {
               )
             })}
           </ul>
-          {/* </li> */}
-          {/* </ul> */}
         </div>
       </SimpleBar>
     </React.Fragment>

@@ -33,8 +33,8 @@ function GroupTab(props) {
 
     useEffect(() => {
         dispatch(getGroupTypeslist());
-        dispatch(get_Group_By_GroupType_ForDropDown());
-        dispatch(get_Sub_Group_By_Group_ForDropDown());
+        // dispatch(get_Group_By_GroupType_ForDropDown());
+        // dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
 
 
@@ -72,7 +72,7 @@ function GroupTab(props) {
     };
 
     const Group_Handler = (event) => {
-        debugger
+        
         const found = props.tableData.find(element => {
             return element.Group == event.value
         });
@@ -92,7 +92,7 @@ function GroupTab(props) {
 
     const addRowsHandler = (e) => {
 
-        debugger
+        
         const val = {
             GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
@@ -186,11 +186,9 @@ function GroupTab(props) {
                                 </Row>
                             </Col>
                             <Col md={1}>
-
                                 <Row className="mt-3 ">
                                     <Col >
                                         <Button
-                                         
                                              className=" button_add"
                                              color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"

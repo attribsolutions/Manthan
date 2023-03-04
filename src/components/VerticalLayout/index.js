@@ -18,8 +18,13 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
+import  BreadcrumbNew from "../../components/Common/BreadcrumbNew"
+
+import { useHistory } from "react-router-dom";
+
 const Layout = props => {
   const dispatch = useDispatch();
+  const history = useHistory()
 
   const {
     isPreloader,
@@ -29,7 +34,9 @@ const Layout = props => {
     leftSideBarTheme,
     layoutMode,
     layoutType,
-    leftSidebarTypes
+    leftSidebarTypes,
+    userAccess,
+    pageField,
   } = useSelector(state => ({
     isPreloader: state.Layout.isPreloader,
     leftSideBarType: state.Layout.leftSideBarType,
@@ -38,7 +45,9 @@ const Layout = props => {
     leftSideBarTheme: state.Layout.leftSideBarTheme,
     layoutMode: state.Layout.layoutMode,
     layoutType: state.Layout.layoutType,
-    leftSidebarTypes: state.Layout.leftSidebarTypes
+    leftSidebarTypes: state.Layout.leftSidebarTypes,
+    userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageFieldList
   }));
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -54,20 +63,24 @@ const Layout = props => {
   /*
   layout  settings
   */
-
   useEffect(() => {
+    // document.body.addEventListener("click", hideRightbar, true);
+    
+    try{
     if (isPreloader === true) {
       document.getElementById("preloader").style.display = "block";
-      document.getElementById("status").style.display = "block";
+      // document.getElementById("status").style.display = "block";
 
       setTimeout(function () {
         document.getElementById("preloader").style.display = "none";
-        document.getElementById("status").style.display = "none";
-      }, 2500);
+        // document.getElementById("status").style.display = "none";
+      }, 1000);
     } else {
       document.getElementById("preloader").style.display = "none";
-      document.getElementById("status").style.display = "none";
+      
+      // document.getElementById("status").style.display = "none";
     }
+    }catch(e){}
   }, [isPreloader]);
 
   useEffect(() => {
@@ -124,9 +137,20 @@ const Layout = props => {
     }
   };
 
+  useEffect(() => {
+    // 
+    const locationPath = history.location.pathname
+    let userAcc = userAccess.find((inx) => {
+      return (`/${inx.RelatedPageIDPath}` === locationPath)
+      
+    });
+  
+     
+  }, []);
+  // pageId={pageId.GROUP_lIST}
   return (
     <React.Fragment>
-      <div id="preloader">
+      {/* <div id="preloaderq">
         <div id="status">
           <div className="spinner-chase">
             <div className="chase-dot" />
@@ -137,13 +161,18 @@ const Layout = props => {
             <div className="chase-dot" />
           </div>
         </div>
-      </div>
+      </div> */}
+      <div className="pace pace-active" id="preloader">
+        <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+          <div className="pace-progress-inner"></div>
+        </div>
+        <div className="pace-activity"></div></div>
 
       <div id="layout-wrapper">
         <CustomAlert/>
-       
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
+      <BreadcrumbNew />
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}

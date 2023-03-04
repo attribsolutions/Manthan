@@ -11,7 +11,7 @@ const Logout = props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    debugger
+    
     dispatch(logoutUser(props.history))
     dispatch(logoutReset())
   }, [dispatch, props.history])

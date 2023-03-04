@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -13,9 +12,8 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,34 +28,19 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { CATEGORYTYPE_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 
 const CategoryTypeMaster = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
-        postMsg: state.categoryTypeReducer.PostData,
-        updateMsg: state.categoryTypeReducer.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
-
-    useEffect(() => {
-        dispatch(commonPageField(21))
-    }, []);
-
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -66,15 +49,35 @@ const CategoryTypeMaster = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState( mode.defaultsave);
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { postMsg,
+        updateMsg,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            postMsg: state.categoryTypeReducer.PostData,
+            updateMsg: state.categoryTypeReducer.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
+
+    useEffect(() => {
+        const page_Id = pageId.CATEGORYTYPE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
-
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -91,6 +94,7 @@ const CategoryTypeMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -122,6 +126,7 @@ const CategoryTypeMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
         }
@@ -131,8 +136,9 @@ const CategoryTypeMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -140,18 +146,17 @@ const CategoryTypeMaster = (props) => {
                     Message: postMsg.Message,
                 }))
             }
-
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: CATEGORYTYPE_lIST,
+                    RedirectPath: url.CATEGORYTYPE_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(getCategoryTypelistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -165,13 +170,13 @@ const CategoryTypeMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname: CATEGORYTYPE_lIST,
+                pathname: url.CATEGORYTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateCategoryTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -192,16 +197,18 @@ const CategoryTypeMaster = (props) => {
         }
     }, [pageField])
 
-    const formSubmitHandler = (event) => {
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID()
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === "edit") {
+            if (pageMode === mode.edit) {
                 dispatch(updateCategoryTypeID(jsonBody, values.id));
             }
             else {
@@ -212,17 +219,15 @@ const CategoryTypeMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+               
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header">
@@ -231,7 +236,7 @@ const CategoryTypeMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler}noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -261,7 +266,9 @@ const CategoryTypeMaster = (props) => {
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"CategoryTypeMaster"}
                                                                     />
                                                                 </Col>

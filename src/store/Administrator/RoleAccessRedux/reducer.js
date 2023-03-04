@@ -1,6 +1,7 @@
 import { LOGOUT_REST } from "../../auth/login/actionTypes"
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
+  DELETE_ROLE_ACCESS_lIST_SUCCESS,
   GET_ROLEACCESS_LIST_PAGE_SUCCESS,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
@@ -9,12 +10,14 @@ import {
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
 } from "./actionType"
 
+
 const INIT_STATE = {
   PageDropdownForRoleAccess: [],
   RoleListDataForRoleListPage: [],
   AddPage_PageMasterListForRoleAccess: [],
   GO_buttonPageMasterListForRoleAccess: [],
   PostMessage_ForRoleAccessList: { Status: false },
+  deleteMsg:{ Status:false },
   RoleAccessListPage: [],
   PostMessage_ForCopyRoleAccess: { Status: false },
 }
@@ -25,7 +28,7 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
     case GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
       return {
         ...state,
-        RoleListDataForRoleListPage: action.payload,
+        RoleListDataForRoleListPage:action.payload,
       }
 
     case PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS:
@@ -59,16 +62,21 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         RoleAccessListPage: action.payload,
       }
 
- //  post copy role access 
- 
+    //  post copy role access 
 
-   case POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS:
-    return{
-         ...state,
-         PostMessage_ForCopyRoleAccess: action.payload,
-    }
 
-  
+    case POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS:
+      return {
+        ...state,
+        PostMessage_ForCopyRoleAccess: action.payload,
+      }
+
+
+    case DELETE_ROLE_ACCESS_lIST_SUCCESS:
+      return {
+        ...state,
+        deleteMsg:action.payload,
+      }
     default:
       return state
   }

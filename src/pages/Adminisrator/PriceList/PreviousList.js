@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -27,7 +26,7 @@ import { listPageCommonButtonFunction }
 from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PriceList = (props) => {
-debugger
+
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -214,17 +213,7 @@ console.log("TableListData",TableListData)
               >
                 {(toolkitProps) => (
                   <React.Fragment>
-                    <Breadcrumbs
-                      title={"Count :"}
-                      breadcrumbItem={userPageAccessState.PageHeading}
-                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`Product Count: ${TableListData.length}`}
-                      IsSearchVissible={true}
-                      RedirctPath={`/PriceMaster`}
-                      isExcelButtonVisible={true}
-                      ExcelData={TableListData}
-                    />
+                 
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">

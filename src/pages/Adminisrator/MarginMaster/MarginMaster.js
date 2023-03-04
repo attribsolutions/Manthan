@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -35,14 +34,13 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editMode = history.location.pageMode;
 
     //SetState  Edit data Geting From Modules List component
@@ -67,7 +65,7 @@ const MarginMaster = (props) => {
         PriceList: state.ItemMastersReducer.PriceList,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-    console.log("tabledata", TableData)
+
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -86,6 +84,7 @@ const MarginMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -174,8 +173,7 @@ const MarginMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e,user) => {
-        debugger
+    const MarginHandler = (e, user) => {
         user["Margin"] = e.target.value
     }
 
@@ -194,13 +192,27 @@ const MarginMaster = (props) => {
             EffectiveDate: effectiveDate
         });
         if (!(priceList.value)) {
-            alert("PriceList not select")
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "PriceList not select",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
         }
         else if (!(effectiveDate)) {
-            alert("EffectiveDate not select")
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "EffectiveDate not select",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
         }
+
         dispatch(postGoButtonForMargin_Master(jsonBody))
-        console.log("Go Button Post Json", jsonBody)
     };
 
     //select id for delete row
@@ -221,7 +233,6 @@ const MarginMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMarginMasterDataSuccess({ Status: false }))
-            formRef.current.reset();
             setPartyName_dropdown_Select('')
             setEffectiveDate('')
             setpriceList_dropdown_Select('')
@@ -238,7 +249,7 @@ const MarginMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/MarginList',
+                    RedirectPath: url.MARGIN_lIST,
                 }))
             }
         }
@@ -271,7 +282,7 @@ const MarginMaster = (props) => {
             text: "Current Margin",
             dataField: "CurrentMargin",
             sort: true,
-            formatter: (cellContent,user) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -281,7 +292,7 @@ const MarginMaster = (props) => {
                                     type="text"
                                     disabled={true}
                                     defaultValue={cellContent}
-                                    className="col col-sm text-center"
+                                    className="col col-sm text-end"
                                     onChange={(e) => CurrentMRPHandler(e, user)}
                                 />
                             </FormGroup>
@@ -307,13 +318,13 @@ const MarginMaster = (props) => {
                 </>
             ),
         },
-       
+
         {
             text: "Margin ",
             dataField: "Margin",
             sort: true,
-            formatter: (cellContent,user) => {
-                debugger
+            formatter: (cellContent, user) => {
+                
                 if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
                     user["margin"] = true
                 } else {
@@ -328,8 +339,8 @@ const MarginMaster = (props) => {
                                     type="text"
                                     defaultValue={cellContent}
                                     disabled={user.margin}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e,user)}
+                                    className="col col-sm text-end"
+                                    onChange={(e) => MarginHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -367,14 +378,13 @@ const MarginMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
             EffectiveDate: effectiveDate,
-            Company:userCompany(),
-            CreatedBy:createdBy(),
-            UpdatedBy: createdBy(),
+            Company: loginCompanyID(),
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
             IsDeleted: 0,
             Item: index.Item,
             Margin: index.Margin,
@@ -388,7 +398,6 @@ const MarginMaster = (props) => {
         const jsonBody = JSON.stringify(Find)
 
         dispatch(postMarginMasterData(jsonBody));
-        console.log("jsonBody", jsonBody)
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -397,14 +406,9 @@ const MarginMaster = (props) => {
 
 
     return (
-        <React.Fragment
-        
-        >
+        <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                <MetaTags>
-                    <title>PartyType| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -417,19 +421,16 @@ const MarginMaster = (props) => {
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
-
-                            <CardBody className=" vh-10 0 text-black" style={{marginBottom:"4cm"}}>
+                            <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
                                 <Row className="">
                                     <Col md={12} >
-                                        <Card style={{ backgroundColor: "whitesmoke"  }}>
-
-
+                                        <Card style={{ backgroundColor: "whitesmoke" }}>
                                             <CardHeader className="card-header   text-black c_card_body "  >
                                                 <Row className="mt-3">
-                                                    <Col md="3">
+                                                    <Col sm={3}>
                                                         <FormGroup className="mb-3 row">
                                                             <Label className="col-sm-4 p-2 ml-n4 ">PriceList</Label>
-                                                            <Col md="8">
+                                                            <Col sm={8}>
                                                                 <Select
                                                                     value={priceList_dropdown_Select}
                                                                     options={PriceList_DropdownOptions}
@@ -438,16 +439,14 @@ const MarginMaster = (props) => {
                                                                     placeholder="select"
                                                                     onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
                                                                     classNamePrefix="select2-selection"
-
                                                                 />
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-
-                                                    <Col md="3">
+                                                    <Col sm={3}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ">Party Name</Label>
-                                                            <Col md="9" style={{  }}>
+                                                            <Label className="col-sm-3 p-2" style={{ width: "2.5cm" }}>Party Name</Label>
+                                                            <Col sm={8} style={{}}>
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
@@ -456,23 +455,21 @@ const MarginMaster = (props) => {
                                                                     placeholder="select"
                                                                     onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                     classNamePrefix="select2-selection"
-
                                                                 />
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-
-                                                    <Col md="3">
+                                                    <Col sm={4}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-md-6 p-2" >EffectiveDate</Label>
-                                                            <Col md="6">
+                                                            <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>EffectiveDate</Label>
+                                                            <Col sm={8}>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
                                                                     isDisabled={editMode === "edit" ? true : false}
                                                                     className="form-control d-block p-2 bg-white text-dark"
-                                                                    placeholder=" Please Enter FSSAI Exipry"
+                                                                    placeholder=" Please Enter EffectiveDate"
                                                                     options={{
                                                                         altInput: true,
                                                                         altFormat: "F j, Y",
@@ -483,10 +480,9 @@ const MarginMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col sm="2" >
+                                                    <Col sm={1}>
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12 " onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
-
                                                 </Row>
                                             </CardHeader>
                                         </Card>

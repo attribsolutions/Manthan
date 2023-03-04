@@ -11,7 +11,10 @@ import {
 import Modules from "./Modules";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import { MODULE } from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
+
 const ModulesList = () => {
 
     const dispatch = useDispatch();
@@ -38,28 +41,29 @@ const ModulesList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = pageId.MODULE_lIST
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(6))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(fetchModelsList());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField ,userAccess=[]} = reducers
 
     return (
         <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={Modules}
-                        masterPath={MODULE}
+                        masterPath={url.MODULE}
                         ButtonMsgLable={"Module"}
                         deleteName={"Name"}
                     />
                     : null
             }
-
         </React.Fragment>
     )
 }

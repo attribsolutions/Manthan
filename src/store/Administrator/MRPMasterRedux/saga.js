@@ -32,14 +32,14 @@ import {
 
 function* Post_MRPMaster_GenratorFunction({ Data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(Post_MRPMaster_API, Data);
-    yield put(SpinnerState(false))
+   
     yield put(postMRPMasterDataSuccess(response));
     console.log("response", response)
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -49,14 +49,14 @@ function* Post_MRPMaster_GenratorFunction({ Data }) {
 
 // List Page API
 function* get_MRPListPage_GenratorFunction() {
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GetMRPList_For_Listpage);
-    yield put(SpinnerState(false))
+   
     yield put(getMRPListPageSuccess(response.Data))
   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -66,14 +66,14 @@ function* get_MRPListPage_GenratorFunction() {
 
 //delete
 function* delete_MRPListPage_GenratorFunction({ CommonID }) {
-  debugger
-  yield put(SpinnerState(true))
+  
+
   try {
     const response = yield call(delete_MRPList_API, CommonID);
-    yield put(SpinnerState(false))
+   
     yield put(delete_MRPListSuccess(response));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -100,13 +100,13 @@ function* Edit_MRPListPage_GenratorFunction({ id, pageMode }) {
 // update api
 function* Update_MRPListPage_GenratorFunction({ updateData, ID }) {
   try {
-    yield put(SpinnerState(true))
+  
     const response = yield call(update_MRPList, updateData, ID);
-    yield put(SpinnerState(false))
+   
     yield put(updateMRPListSuccess(response))
   }
   catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -116,13 +116,13 @@ function* Update_MRPListPage_GenratorFunction({ updateData, ID }) {
 
 function* MRPGoButton_post_GenratorFunction({ data }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(GoButton_Post_API, data);
-    yield put(SpinnerState(false))
+   
     yield put(postGoButtonForMRP_MasterSuccess(response.Data));
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -133,14 +133,14 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
 // delete api MRP Master PageL
 function* deleteId_for_MasterPage_GenratorFunction({ id }) {
 
-  yield put(SpinnerState(true))
+
   try {
     const response = yield call(MRP_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteID_In_MasterPageSuccess(response));
-    yield put(SpinnerState(false))
+   
   } catch (error) {
-    yield put(SpinnerState(false))
+   
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",

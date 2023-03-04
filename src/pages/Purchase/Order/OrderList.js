@@ -1,88 +1,151 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
-import "flatpickr/dist/themes/material_blue.css"
+
 import Flatpickr from "react-flatpickr";
 import {
     deleteOrderId,
     deleteOrderIdSuccess,
-    editOrderIdSuccess,
     editOrderId,
     getOrderListPage,
     updateOrderIdSuccess,
     orderlistfilters,
-    // getOrderList
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
-import {  Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
-import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import {  excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
+import { getSupplier, GetVender, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import * as report from '../../../Reports/ReportIndex'
+import * as url from "../../../routes/route_url";
+import * as mode from "../../../routes/PageMode";
+import * as pageId from "../../../routes/allPageID"
+import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+
+import { MetaTags } from "react-meta-tags";
+import { order_Type } from "../../../components/Common/C-Varialbes";
+import { GoButtonForinvoiceAdd, makeIB_InvoiceAction, makeIB_InvoiceActionSuccess } from "../../../store/Sales/Invoice/action";
 
 
 const OrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const hasPagePath = history.location.pathname
-    // const hasShowloction = history.location.hasOwnProperty("renderMode")
-
-    // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
-    const [pageMode, setpageMode] = useState(ORDER_lIST)
-    const [userAccState, setUserAccState] = useState('');
+    // const [userAccState, setUserAccState] = useState('');
+    const [orderlistFilter, setorderlistFilter] = useState('');
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.SupplierReducer.supplier,
+            supplier: state.SupplierReducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
+            makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
             deleteMsg: state.OrderReducer.deleteMsg,
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
-            orderlistFilter: state.OrderReducer.orderlistFilter,
+            // orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
-    const { fromdate, todate, supplierSelect } = orderlistFilter;
+
+
+    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, } = orderlistFilter;
+    const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
+
 
     const action = {
         getList: getOrderListPage,
-        editId: editOrderId,
         deleteId: deleteOrderId,
         postSucc: postMessage,
         updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteOrderIdSuccess
     }
 
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        setpageMode(hasPagePath)
-        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
+
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let makeBtnShow = false;
+        let IBType = '';
+        let newBtnPath = '';
+        let makeBtnName = '';
+
+        if (subPageMode === url.ORDER_LIST_1) {
+            page_Id = pageId.ORDER_LIST_1;
+            masterPath = url.ORDER_1;
+            newBtnPath = url.ORDER_1;
+        }
+        else if (subPageMode === url.ORDER_LIST_2) {
+            page_Id = pageId.ORDER_LIST_2
+            masterPath = url.ORDER_2;
+            newBtnPath = url.ORDER_2;
+        }
+        else if (subPageMode === url.IB_ORDER_PO_LIST) {
+            page_Id = pageId.IB_ORDER_PO_LIST
+            masterPath = url.IB_ORDER;
+            newBtnPath = url.IB_ORDER;
+            IBType = "IBPO"
+        }
+        else if (subPageMode === url.IB_ORDER_SO_LIST) {
+            page_Id = pageId.IB_ORDER_SO_LIST
+            masterPath = url.IB_ORDER;
+            makeBtnShow = true;
+            makeBtnName = "Make IBInvoice"
+            IBType = "IBSO"
+        }
+        else if (subPageMode === url.ORDER_LIST_4) {
+            page_Id = pageId.ORDER_LIST_4
+            masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+        }
+        else if (subPageMode === url.IB_INVOICE_STP) {
+            page_Id = pageId.IB_INVOICE_STP
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+            IBType = "IBSO"
+        }
+        else if (subPageMode === url.GRN_STP) {
+            page_Id = pageId.GRN_STP
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make GRN"
+        }
+        dispatch(getOrderListPage(""))//for clear privious order list
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName ,IBType})
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId))
-        dispatch(BreadcrumbFilterSize(`${"Orders Count"} :0`))
-        dispatch(getSupplier());
-        goButtonHandler(true)
+        dispatch(commonPageFieldList(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
+        dispatch(GetVenderSupplierCustomer(subPageMode))
+        goButtonHandler({IBType})
 
     }, []);
 
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
-        label: i.Supplier,
+        label: i.Name,
     }));
+
+    supplierOptions.unshift({
+        value: "",
+        label: " All"
+    });
 
     const downList = useMemo(() => {
         let PageFieldMaster = []
@@ -91,99 +154,145 @@ const OrderList = () => {
     }, [tableList])
 
 
-    useEffect(() => {
-        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
-        }
-    }, [userAccess])
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
                 pathname: GRNitem.path,
-                pageMode: GRNitem.pageMode,
+                page_Mode: GRNitem.page_Mode,
             })
         }
     }, [GRNitem])
 
-    const onsavefunc = (list = []) => {
-        var isGRNSelect = ''
-        var challanNo = ''
-        const grnRef = []
-        if (list.length > 0) {
-            list.forEach(ele => {
-                if (ele.GRNSelect) {
-                    grnRef.push({
-                        Invoice: null,
-                        Order: ele.id,
-                        ChallanNo: ele.FullOrderNumber
-                    });
-                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
-                }
+    useEffect(() => {
+        
+        if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
+
+            history.push({
+                pathname: makeIBInvoice.path,
+                page_Mode: makeIBInvoice.page_Mode,
+            })
+        }
+    }, [makeIBInvoice])
+
+
+    const makeBtnFunc = (list = []) => {
+
+        const obj = list[0]
+        if (subPageMode === url.IB_INVOICE_STP) {
+            const jsonBody = JSON.stringify({
+                FromDate: obj.preOrderDate,
+                Customer: obj.CustomerID,
+                Party: loginPartyID(),
+                OrderIDs: `${obj.id}`
             });
+            const customer = {
+                value: obj.CustomerID,
+                label: obj.Customer
+            }
+            dispatch(makeIB_InvoiceAction({ jsonBody, path: url.IB_INVOICE, pageMode: mode.defaultsave, customer }));
+        }
+        else {
+            var isGRNSelect = ''
+            var challanNo = ''
+            const grnRef = []
+            if (list.length > 0) {
+                list.forEach(ele => {
+                    if (ele.hasSelect) {
+                        grnRef.push({
+                            Invoice: null,
+                            Order: ele.POType === "Challan" ? '' : ele.id,
+                            ChallanNo: ele.FullOrderNumber,
+                            Inward: false,
+                            Challan: ele.POType === "Challan" ? ele.id : ''
+                        });
+                        isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                        challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                    }
+                });
 
-            if (isGRNSelect) {
-                const withoutLastComma = isGRNSelect.replace(/,*$/, '');
-                const jsonBody = JSON.stringify({
-                    OrderIDs: withoutLastComma
-                })
+                if (isGRNSelect) {
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, GRN_ADD, grnRef, challanNo }))
+                    isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
+                    challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
-            } else {
-                alert("Please Select Order1")
+                    const jsonBody = JSON.stringify({
+                        OrderIDs: isGRNSelect,
+                        Mode: list[0].POType === "Challan" ? 2 : 1
+                    })
+
+                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+
+                } else {
+                    alert("Please Select Order1")
+                }
             }
         }
-
     }
 
-    function goButtonHandler() {
+    function editBodyfunc(rowData, btnMode) {
+        const jsonBody = JSON.stringify({
+            Party: rowData.SupplierID,
+            Customer: rowData.CustomerID,
+            EffectiveDate: rowData.preOrderDate,
+            OrderID: rowData.id
+        })
+        dispatch(editOrderId(jsonBody, btnMode));
+    }
 
+    function downBtnFunc(row) {
+        var ReportType = report.order1;
+        dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
+    }
+
+    function goButtonHandler({IBType}) {
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
-            Customer: userParty(),
+            Supplier: supplierSelect.value,
+            Customer: loginPartyID(),
+            OrderType: order_Type.PurchaseOrder,
+            IBType: IBType ? IBType : otherState.IBType
         });
 
-        dispatch(getOrderListPage(jsonBody));
+        dispatch(getOrderListPage(subPageMode, pageMode, jsonBody));
     }
 
     function fromdateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.fromdate = date
-        dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
+        // dispatch(orderlistfilters(newObj))
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.todate = date
-        dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
+        // dispatch(orderlistfilters(newObj))
     }
 
     function supplierOnchange(e) {
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
-        dispatch(orderlistfilters(newObj))
+        setorderlistFilter(newObj)
+    }
+
+    function InOutOnchange(e) {
+        let newObj = { ...orderlistFilter }
+        newObj.inOut = e
+        setorderlistFilter(newObj)
     }
 
     return (
         <React.Fragment>
-            <div className="page-content">
-                <Breadcrumb
-                    pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === ORDER_lIST) ? true : false}
-                    showCount={true}
-                    excelBtnView={true}
-                    excelData={downList} />
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <div className="px-2  mt-n1 c_card_filter" >
-                    <div className=" row" style={{ marginBottom: "-12px" }}>
+            <div className="page-content">
+
+                <div className="px-2   c_card_filter text-black" >
+                    <div className="row" >
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
@@ -231,7 +340,6 @@ const OrderList = () => {
 
                                     style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col sm="5">
-
                                     <Select
                                         classNamePrefix="select2-Customer"
                                         value={supplierSelect}
@@ -241,12 +349,28 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col >
+                        {/* {
+                            (subPageMode === url.IB_ORDER_PO_LIST) ?
+                                <Col sm="3">
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className="col-md-4 p-2"
+
+                                            style={{ width: "90px" }}>List Type</Label>
+                                        <Col sm="5">
+                                            <Select
+                                                classNamePrefix="select2-Customer"
+                                                value={inOut}
+                                                options={[{ value: 1, label: "Order Received" }, { value: 2, label: "Order Given" }]}
+                                                onChange={InOutOnchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                                : null
+                        } */}
+
 
                         <Col sm="1" className="mt-3 ">
-                            {/* <Button id="gobtn_submmit" type="button"
-                                color="btn btn-outline-success border-2 font-size-12 mb-2 "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button> */}
                             <Go_Button onClick={goButtonHandler} />
                         </Col>
                     </div>
@@ -257,13 +381,18 @@ const OrderList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Order}
-                            masterPath={ORDER}
-                            ButtonMsgLable={"Order"}
-                            deleteName={"OrderDate"}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
-                            onsavefunc={onsavefunc}
                             goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
+                            editBodyfunc={editBodyfunc}
+                            makeBtnFunc={makeBtnFunc}
+                            ButtonMsgLable={"Order"}
+                            deleteName={"FullOrderNumber"}
+                            makeBtnName={otherState.makeBtnName}
+                            MasterModal={Order}
 
                         />
                         : null

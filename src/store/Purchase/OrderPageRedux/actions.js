@@ -1,4 +1,3 @@
-import { ORDER_LiST_BY_FILTERS } from '../../../helpers/url_helper';
 import {
   GET_DIVISIONORDER_LIST,
   GET_DIVISIONORDER_LIST_SUCCESS,
@@ -15,30 +14,34 @@ import {
   POST_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
   GET_ORDER_LIST_PAGE_SUCCESS,
-  ORDER_LIST_FILTERS
+  ORDER_LIST_FILTERS,
+  // ORDER_ADD_FILTERS
 } from './actionType'
 
 
-
+// export const orderAddfilters = filter => ({
+//   type: ORDER_ADD_FILTERS,
+//   payload: filter,
+// })
 export const orderlistfilters = filter => ({
   type: ORDER_LIST_FILTERS,
   payload: filter,
 })
 
-export const goButton = (data, hasEditVal) => ({
+export const GoButton_For_Order_Add = (subPageMode, data) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
-  data, hasEditVal,
+  subPageMode, data,
 });
 
-export const goButtonSuccess = list => ({
+export const GoButton_For_Order_AddSuccess = list => ({
   type: GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   payload: list,
 })
 
 //get listpage api
-export const getOrderListPage = (filters) => ({
+export const getOrderListPage = (subPageMode, pageMode, jsonBody) => ({
   type: GET_ORDER_LIST_PAGE,
-  filters,
+  subPageMode, pageMode, jsonBody,
 });
 
 export const getOrderListPageSuccess = (data) => ({
@@ -47,9 +50,9 @@ export const getOrderListPageSuccess = (data) => ({
 });
 
 
-export const postOrder = (data) => ({
+export const postOrder = (jsonBody, subPageMode) => ({
   type: POST_ORDER_FROM_ORDER_PAGE,
-  data
+  jsonBody, subPageMode,
 });
 export const postOrderSuccess = (msg) => ({
   type: POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
@@ -57,9 +60,9 @@ export const postOrderSuccess = (msg) => ({
 });
 
 
-export const editOrderId = (id, pageMode) => ({
+export const editOrderId = (jsonBody, pageMode) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE,
-  id, pageMode
+  jsonBody, pageMode
 });
 export const editOrderIdSuccess = (data) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,

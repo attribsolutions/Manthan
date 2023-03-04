@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -19,6 +18,8 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import * as url from "../../../routes/route_url"
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const MRPList = (props) => {
 
@@ -47,7 +48,8 @@ const MRPList = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserAccState(userAcc)
+      setUserAccState(userAcc);
+      breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.MRP });
     }
   }, [userAccess])
 
@@ -57,7 +59,6 @@ const MRPList = (props) => {
   }, []);
 
   useEffect(() => {
-    debugger
     if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
@@ -82,7 +83,6 @@ const MRPList = (props) => {
 
   //select id for delete row
   const deleteHandeler = (CommonID) => {
-    debugger
     dispatch(
       AlertState({
         Type: 5,
@@ -186,16 +186,8 @@ const MRPList = (props) => {
     return (
       <React.Fragment>
         <div className="page-content">
-          <MetaTags>
-            <title>MRP List| FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <Breadcrumb
-            pageHeading={userAccState.PageHeading}
-            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-            showCount={true}
-            excelBtnView={true}
-            excelData={tableList}
-          />
+          <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+      
           <PaginationProvider
             pagination={paginationFactory(pageOptions)}
           >
@@ -208,22 +200,22 @@ const MRPList = (props) => {
               >
                 {toolkitProps => (
                   <React.Fragment>
-                        <div className="table-responsive">
-                          <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={true}
-                            striped={false}
-                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                            classes={"table align-middle table-nowrap table-hover"}
-                            headerWrapperClasses={"thead-light"}
+                    <div className="table-responsive">
+                      <BootstrapTable
+                        keyField={"id"}
+                        responsive
+                        bordered={true}
+                        striped={false}
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        classes={"table align-middle table-nowrap table-hover"}
+                        headerWrapperClasses={"thead-light"}
 
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
-                          />
-                          {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                          {mySearchProps(toolkitProps.searchProps)}
-                        </div>
+                        {...toolkitProps.baseProps}
+                        {...paginationTableProps}
+                      />
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                      {mySearchProps(toolkitProps.searchProps)}
+                    </div>
 
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">

@@ -1,4 +1,5 @@
 import React from "react"
+import * as path from "./route_url";
 import { Redirect } from "react-router-dom"
 
 //Dashboard
@@ -84,23 +85,51 @@ import OrderList from "../pages/Purchase/Order/OrderList"
 
 import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
-import * as path from "./route_url";
-import GRNList from "../pages/Purchase/GRN/GRNList";
-import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
+import GeneralMaster from "../pages/Adminisrator/GeneralPage/GeneralMaster";
+import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
+
+import GRNList from "../pages/Inventory/GRN/GRNList";
+import GRNAdd from "../pages/Inventory/GRN/GRNAdd";
+
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
-import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
-import BOMList from "../pages/Purchase/BOM/BOMList/BOMList";
-import WorkOrder from "../pages/Purchase/WorkOrder/WorkOrder";
-import WorkOrderList from "../pages/Purchase/WorkOrder/WorkOrderList";
-import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_IssueMaster";
-import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
 
+import BOMMaster from "../pages/Production/BOM/BOMMaster/BOMIndex";
+import BOMList from "../pages/Production/BOM/BOMList/BOMList";
+
+import WorkOrder from "../pages/Production/WorkOrder/WorkOrder";
+import WorkOrderList from "../pages/Production/WorkOrder/WorkOrderList";
+
+import MaterialIssueMaster from "../pages/Production/Material_Issue/Material_IssueMaster";
+import MaterialIssueList from "../pages/Production/Material_Issue/Material_Issue_List";
+
+import ProductionMaster from "../pages/Production/Production/ProductionMaster";
+import ProductionList from "../pages/Production/Production/ProductionList";
+
+import ProductionReIssueAdd from "../pages/Production/ProductionRe-Issue/PrductionReIssueAdd";
+import ProductionReIssueList from "../pages/Production/ProductionRe-Issue/ProductionReIssueList";
+
+import Invoice from "../pages/Sale/Invoice/Invoice";
+import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
+
+import Inward from "../pages/Inter Branch/Inward/Inward";
+import InwardList from "../pages/Inter Branch/Inward/InwardList";
+import ChallanList from "../pages/Inventory/Challan/ChallanList";
+import Challan from "../pages/Inventory/Challan/Challan";
+
+import RoutesMaster from "../pages/Adminisrator/RoutesPages/RoutesMaster";
+import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
+
+import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
+import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
+import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
+import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
+import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
+import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 const userRoutes = [
 
-  { path: "/dashboard", component: Dashboard },
-
+  // *************************** Administration *******************************//
   { path: path.MODULE, component: Modules },
   { path: path.MODULE_lIST, component: ModulesList },
 
@@ -110,32 +139,26 @@ const userRoutes = [
   { path: path.PAGE_lIST, component: PageList },
   { path: path.PAGE, component: PageMaster },
 
-  { path: path.ORDER, component: Order },
-  { path: path.ORDER_lIST, component: OrderList },
-
-
-  { path: path.GRN_lIST, component: GRNList },
-  { path: path.GRN_ADD, component: GRNAdd },
-  { path: path.GST_ADD_Mode_2, component: OrderList },
-
   { path: path.USER, component: AddUser },
   { path: path.USER_lIST, component: UserList },
 
-  { path: path.EMPLOYEE, component: AddEmployee },
-  { path: path.EMPLOYEE_lIST, component: Employee_List },
+  { path: path.ROLEACCESS, component: RoleAccessAdd },
+  { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
+  { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
 
   { path: path.ROLE, component: RoleMaster },
   { path: path.ROLE_lIST, component: RoleList },
+
+  // ******************************* Master Module ******************************//
+
+  { path: path.EMPLOYEE, component: AddEmployee },
+  { path: path.EMPLOYEE_lIST, component: Employee_List },
 
   { path: path.ITEM, component: ItemsMaster },
   { path: path.ITEM_lIST, component: ItemsList },
 
   { path: path.PARTY_lIST, component: PartyList },
   { path: path.PARTY, component: PartyMaster },
-
-  { path: path.ROLEACCESS, component: RoleAccessAdd },
-  { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
-  { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
   { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
@@ -192,8 +215,40 @@ const userRoutes = [
   { path: path.SUBGROUP, component: SubGroupMaster },
   { path: path.SUBGROUP_LIST, component: SubGroupList },
 
+  { path: path.GENERAL, component: GeneralMaster },
+  { path: path.GENERAL_LIST, component: GeneralList },
 
-  // { path:"/demo", component: demo },
+  { path: path.ROUTES, component: RoutesMaster },
+  { path: path.ROUTES_LIST, component: RoutesList },
+
+  { path: path.SALESMAN, component: SalesManMaster },
+  { path: path.SALESMAN_LIST, component: SalesManList },
+
+  { path: path.CREDITLIMIT, component: CreditLimitMaster },
+  // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
+
+  //******************************* Inventory Module ************************************//
+  { path: path.CHALLAN_LIST, component: ChallanList },
+  { path: path.CHALLAN, component: Challan },
+
+  { path: path.GRN_lIST, component: GRNList },
+  { path: path.GRN_ADD, component: GRNAdd },
+  { path: path.GRN_STP, component: OrderList },
+
+  //******************************* Purchase Module ************************************//
+
+
+  { path: path.ORDER_1, component: Order },
+  { path: path.ORDER_LIST_1, component: OrderList },
+
+  { path: path.ORDER_2, component: Order },
+  { path: path.ORDER_LIST_2, component: OrderList },
+
+  { path: path.ORDER_4, component: Order },
+  { path: path.ORDER_LIST_4, component: OrderList },
+  
+  //******************************* PRODUCTION  Module ************************************//
+
 
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
@@ -203,16 +258,46 @@ const userRoutes = [
 
   { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
   { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
-  
+  { path: path.MATERIAL_ISSUE_STP, component: WorkOrderList },
 
+  { path: path.PRODUCTION_MASTER, component: ProductionMaster },
+  { path: path.PRODUCTION_LIST, component: ProductionList },
+  { path: path.PRODUCTION_STP, component: MaterialIssueList },
+  
+  { path: path.PRODUCTION_REISSUE, component: ProductionReIssueAdd },
+  { path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
+  { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
+
+  //******************************* Sale  Module ************************************//
+
+  { path: path.INVOICE_1, component: Invoice },
+  { path: path.INVOICE_LIST_1, component: InvoiceList },
+
+  { path: path.LOADING_SHEET, component: LoadingSheet },
+  { path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
+  //************************************** Inter Branch ********************************//
+  { path: path.IB_ORDER, component: Order },
+  { path: path.IB_ORDER_PO_LIST, component: OrderList },
+  { path: path.IB_ORDER_SO_LIST, component: OrderList },
+  
+  { path: path.INWARD, component: Inward },
+  { path: path.INWARD_LIST, component: InwardList },
+  { path: path.IB_INWARD_STP, component: InvoiceList },
+
+  { path: path.IB_INVOICE_LIST, component: InvoiceList },
+  { path: path.IB_GRN_LIST, component: InvoiceList },
+  { path: path.IB_INVOICE, component: Invoice },
+  { path: path.IB_INVOICE_STP, component: OrderList },
+
+  // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
+
+  { path: "/dashboard", component: Dashboard },
 
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
-
-
 
 ]
 

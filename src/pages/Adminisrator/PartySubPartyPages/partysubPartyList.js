@@ -10,8 +10,10 @@ import {
   postPartySubPartySuccess,
   updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
-import { PARTY_SUB_PARTY } from "../../../routes/route_url";
 import PartySubParty from "./PartySubParty";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
+import { MetaTags } from "react-meta-tags";
 
 const PartySubPartyList = () => {
   const dispatch = useDispatch();
@@ -38,22 +40,24 @@ const PartySubPartyList = () => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.PARTY_SUB_PARTY_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(58))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getPartySubPartylist());
   }, []);
 
-  const { pageField } = reducers
+  const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
+      <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {
         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={PartySubParty}
-            masterPath={PARTY_SUB_PARTY}
+            masterPath={url.PARTY_SUB_PARTY}
             ButtonMsgLable={"PartySubParty"}
             deleteName={"PartySubParty"}
           />

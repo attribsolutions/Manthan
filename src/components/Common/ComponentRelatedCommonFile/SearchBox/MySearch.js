@@ -2,15 +2,13 @@ import { useEffect } from "react";
 
 
 let props1 = { onSearch: function onSearch() { } }
-
 export const mySearchProps = (props) => {
     props1 = props;
 };
 let priviousSerach = null
 export const MySearch = () => {
-
     // useEffect(() => {
-    //     debugger
+    //     
     //     if (priviousSerach) {
     //         props1.onSearch(len);
     //         priviousSerach = null
@@ -19,6 +17,7 @@ export const MySearch = () => {
 
     let input;
     const handleClick = () => {
+        
         var len = input.value
         priviousSerach = len
         if (!(len[0] === "/")) {

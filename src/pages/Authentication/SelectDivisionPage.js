@@ -1,21 +1,12 @@
-import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
+import { Row, Col, Container, Button } from "reactstrap"
 
-import { Row, Col, Alert, Container, Label, Button } from "reactstrap"
-
-//redux
 import { useSelector, useDispatch } from "react-redux"
 
-import { withRouter, Link, useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
-// availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
-
-
-/// tsdfddf Punam demotest
-// actions
-import { getUserDetailsAction, loginUser, roleAceessAction } from "../../store/actions"
+import { getUserDetailsAction, resetRoleAccessAction, roleAceessAction } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -23,6 +14,7 @@ import logo from "../../assets/images/logo-sm.svg"
 //Import config
 import CarouselPage from "./CarouselPage"
 import Select from "react-select";
+import { loginCompanyID } from "../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()
@@ -30,17 +22,16 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { loginError, divisionDropdown_redux } = useSelector(state => ({
+  const { divisionDropdown_redux } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
   }))
 
 
   useEffect(() => {
-
+    dispatch(resetRoleAccessAction())
     if (!(localStorage.getItem("userId"))) {
       history.push("/login")
-
     }
     else {
       dispatch(getUserDetailsAction(localStorage.getItem("userId")))
@@ -48,20 +39,19 @@ const SelectDivisionPage = props => {
   }, [])
 
   useEffect(() => {
-// debugger
+    
     if (divisionDropdown_redux.length === 1) {
 
       let value = divisionDropdown_redux[0]
       let employee = value.Employee_id;
       let party = value.Party_id
-      if((party===null)){
-        party=0;
-        value.Party_id=0
+      if ((party === null)) {
+        party = 0;
+        value.Party_id = 0
       }
 
-
       localStorage.setItem("roleId", JSON.stringify(value))
-      dispatch(roleAceessAction(party, employee))
+      dispatch(roleAceessAction(party, employee, loginCompanyID()))
       history.push("/Dashboard")
     }
   }, [divisionDropdown_redux])
@@ -80,14 +70,18 @@ const SelectDivisionPage = props => {
   }));
 
   function goButtonHandller() {
-debugger
-    let value = divisionDropdown_redux[divisionDropdowSelect.value]
-    var employee = value.Employee_id;
-    var party = value.Party_id
+    
+    if (!(divisionDropdowSelect.value === undefined)) {
 
-    localStorage.setItem("roleId", JSON.stringify(value))
-    dispatch(roleAceessAction(party, employee))
-    history.push("/Dashboard")
+      let value = divisionDropdown_redux[divisionDropdowSelect.value]
+      var employee = value.Employee_id;
+      var party = value.Party_id
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      dispatch(roleAceessAction(party, employee, loginCompanyID()))
+      history.push("/Dashboard")
+    }
+
 
   }
   return (
@@ -107,12 +101,16 @@ debugger
                         <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
                       </Link>
                     </div>
+
                     <div className="auth-content my-auto">
+                      {/* <div className="mb-3">
+                        <h5 className="text-danger" >Please Select Division...!</h5>
+                      </div> */}
+
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Select Role to Continue FoodERP.</p>
                       </div>
-
 
                       <div className="mb-3">
                         {/* <Label className="form-label font-size-13 "></Label> */}

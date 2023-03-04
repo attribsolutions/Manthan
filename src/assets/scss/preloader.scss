@@ -9,6 +9,12 @@
 
 // pace
 
+#preloader{
+  display: none;
+  z-index: 12;
+  background: #0511ec !important;
+
+}
 .pace {
   -webkit-pointer-events: none;
   pointer-events: none;
@@ -19,10 +25,10 @@
   .pace-progress {
     background: linear-gradient(
       to right,
-      $primary 20%,
-      $success 40%,
-      $info 60%,
-      $warning 80%,
+      $warning 20%,
+      $warning 40%,
+      $danger 60%,
+      $danger 80%,
       $danger 100%
     );
 
@@ -49,7 +55,7 @@
   right: 0;
   width: 150px;
   height: 150px;
-  background: $primary;
+  background:#e7eb08;
   -webkit-transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
   -webkit-transform: translateX(100%) translateY(-100%) rotate(45deg);
@@ -73,7 +79,7 @@
   width: 20px;
   height: 20px;
   border: solid 2px transparent;
-  border-top-color: $white;
+  border-top-color: $danger;
   border-left-color: $white;
   border-radius: 50%;
   -webkit-animation: pace-spinner 400ms linear infinite;

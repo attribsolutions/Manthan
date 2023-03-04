@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Input, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -216,7 +215,7 @@ const DriverList = (props) => {
                 // <QualityRanger { ...editorProps } value={ value } />
                 <>
                     <Input type="checkbox" />
-                    <Input type="text" onChange={(e)=>{debugger}}></Input>
+                    <Input type="text" onChange={(e)=>{}}></Input>
                     <Select
                                                                         defaultValue={options[0]}
                                                                         isSearchable={false}
@@ -287,17 +286,7 @@ const DriverList = (props) => {
                             >
                                 {(toolkitProps) => (
                                     <React.Fragment>
-                                        <Breadcrumbs
-                                            title={"Count :"}
-                                            breadcrumbItem={userPageAccessState.PageHeading}
-                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                            SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={`Product Count: ${TableListData.length}`}
-                                            IsSearchVissible={true}
-                                            RedirctPath={`/DriverMaster`}
-                                            isExcelButtonVisible={true}
-                                            ExcelData={TableListData}
-                                        />
+                                        
                                         <Row>
                                             <Col xl="12">
                                                 <div className="table-responsive">
@@ -389,11 +378,11 @@ export default DriverList;
 //                 dataField: "price",
 //                 text: "Product Price",
 //                 editable: (content, row, rowIndex, columnIndex) => {
-//                     debugger
+//                     
 //                 },
 //                 events: {
 //                     onchange:(a,b,c,d)=>{
-//                         debugger
+//                         
 //                     }
 //                 }
 //             },
@@ -401,7 +390,7 @@ export default DriverList;
 //                 dataField: "color",
 //                 text: "Color",
 //                 formatter: (e1, column1, columnIndex1, row1, rowIndex1) => {
-//                     debugger
+//                     
 //                     return (
 //                         <div
 //                         // style={{ width: "25px", height: "25px", backgroundColor: cell }}
@@ -413,9 +402,9 @@ export default DriverList;
 
 //                 events: {
 //                     onClick: (e, column, columnIndex, row, rowIndex) => {
-//                         debugger
+//                         
 //                         column.formatter = (e1, column1, columnIndex1, row1, rowIndex1) => {
-//                             debugger
+//                             
 //                             return (
 //                                 <div
 //                                 // style={{ width: "25px", height: "25px", backgroundColor: cell }}
