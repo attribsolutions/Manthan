@@ -36,6 +36,8 @@ import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
 import * as pageId from "../../../routes/allPageID"
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { getPartySubPartylist } from "../../../store/Administrator/PartySubPartyRedux/action";
+import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const PriceMaster = (props) => {
     const dispatch = useDispatch();
@@ -70,7 +72,7 @@ const PriceMaster = (props) => {
         PostAPIResponse: state.PriceListReducer.postMsg,
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
         updateMessage: state.PriceListReducer.updateMessage,
-        PartyTypes: state.PartyMasterReducer.PartyTypes,
+        PartyTypes: state.PartyTypeReducer.ListData,
         PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -97,7 +99,7 @@ const PriceMaster = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
-        dispatch(getPartyTypes());
+        dispatch(getPartyTypelist());
     }, [dispatch]);
 
     useEffect(() => {

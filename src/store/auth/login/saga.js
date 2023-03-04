@@ -53,6 +53,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
+  debugger
   try {
 
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
@@ -61,6 +62,12 @@ function* afterLoginUserDetails_genFun({ id }) {
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
+    if(response.Data.IsSCMCompany){
+      localStorage.setItem("IsSCMCompany", 1)
+    }
+    else{
+      localStorage.setItem("IsSCMCompany", 0)
+    }
     var employee = response.Data.EmployeeID;
 
     const response2 = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employee,)
