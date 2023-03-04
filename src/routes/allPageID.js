@@ -93,6 +93,10 @@ export const GENERAL_LIST = 120
 export const ROUTES = 149
 export const ROUTES_LIST = 150
 
+export const SALESMAN = 151
+export const SALESMAN_LIST = 152
+
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54

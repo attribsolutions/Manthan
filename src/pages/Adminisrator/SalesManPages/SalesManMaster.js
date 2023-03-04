@@ -17,13 +17,13 @@ import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForRoutesMaster,
-    PostMethod_ForRoutesMasterAPISuccess,
-    editRoutesIDSuccess,
-    updateRoutesID,
-    PostRouteslistSuccess,
-    updateRoutesIDSuccess,
-} from "../../../store/Administrator/RoutesRedux/actions";
+    PostMethodForSalesManMaster,
+    PostMethod_ForSalesManMasterAPISuccess,
+    editSalesManIDSuccess,
+    updateSalesManID,
+    PostSalesManlistSuccess,
+    updateSalesManIDSuccess,
+} from "../../../store/Administrator/SalesManRedux/actions";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -37,7 +37,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 
-const RoutesMaster = (props) => {
+const SalesManMaster = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
@@ -45,13 +45,14 @@ const RoutesMaster = (props) => {
     const fileds = {
         id: "",
         Name: "",
-        IsActive:false
+        MobileNo: "",
+        IsActive: false
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    const [EditData, setEditData] = useState('');
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState( mode.defaultsave);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -60,14 +61,14 @@ const RoutesMaster = (props) => {
         updateMsg,
         pageField,
         userAccess } = useSelector((state) => ({
-            postMsg: state.RoutesReducer.PostData,
-            updateMsg: state.RoutesReducer.updateMessage,
+            postMsg: state.SalesManReducer.PostData,
+            updateMsg: state.SalesManReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
     useEffect(() => {
-        const page_Id = pageId.ROUTES
+        const page_Id = pageId.SALESMAN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -95,7 +96,7 @@ const RoutesMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -118,26 +119,28 @@ const RoutesMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name,IsActive } = hasEditVal
+                const { id, Name, IsActive, MobileNo } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.id = id;
-                values.IsActive= IsActive
+                values.MobileNo = MobileNo;
+                values.IsActive = IsActive
 
                 hasValid.Name.valid = true;
                 hasValid.IsActive.valid = true;
+                hasValid.MobileNo.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
-            dispatch(editRoutesIDSuccess({ Status: false }))
+            dispatch(editSalesManIDSuccess({ Status: false }))
         }
     }, [])
 
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostMethod_ForRoutesMasterAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForSalesManMasterAPISuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -153,13 +156,13 @@ const RoutesMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.ROUTES_LIST,
+                    RedirectPath: url.SALESMAN_LIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
             saveDissable(false);//save Button Is enable function
-            dispatch(PostRouteslistSuccess({ Status: false }))
+            dispatch(PostSalesManlistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -175,11 +178,11 @@ const RoutesMaster = (props) => {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname: url.ROUTES_LIST,
+                pathname: url.SALESMAN_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
-            dispatch(updateRoutesIDSuccess({ Status: false }));
+            dispatch(updateSalesManIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -204,9 +207,10 @@ const RoutesMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsActive:values.IsActive,
-                Party:loginPartyID(),
-                Company:loginCompanyID(),
+                MobileNo: values.MobileNo,
+                IsActive: values.IsActive,
+                Party: loginPartyID(),
+                Company: loginCompanyID(),
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID()
             });
@@ -214,10 +218,10 @@ const RoutesMaster = (props) => {
             saveDissable(true);//save Button Is dissable function
 
             if (pageMode === mode.edit) {
-                dispatch(updateRoutesID(jsonBody, values.id));
+                dispatch(updateSalesManID(jsonBody, values.id));
             }
             else {
-                dispatch(PostMethodForRoutesMaster(jsonBody))
+                dispatch(PostMethodForSalesManMaster(jsonBody))
             }
         }
     };
@@ -230,7 +234,7 @@ const RoutesMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-               
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
@@ -268,9 +272,28 @@ const RoutesMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
+                                                        <Row>
+                                                            <FormGroup className="mt-3 col col-sm-4 ">
+                                                                <Label htmlFor="validationCustom01">Mobile Number </Label>
+                                                                <Input
+                                                                    name="MobileNo"
+                                                                    value={values.MobileNo}
+                                                                    type="text"
+                                                                    className={isError.MobileNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    placeholder="Please Enter Mobile"
+                                                                    autoComplete='off'
+                                                                    onChange={(event) => {
+                                                                        onChangeText({ event, state, setState })
+                                                                    }}
+                                                                />
+                                                                {isError.MobileNo.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.MobileNo}</span>
+                                                                )}
+                                                            </FormGroup>
+                                                        </Row>
 
                                                         <Row>
-                                                            <FormGroup className="mt-3 col col-sm-5">
+                                                            <FormGroup className="mt-4 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsActive}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
@@ -326,5 +349,5 @@ const RoutesMaster = (props) => {
     }
 };
 
-export default RoutesMaster
+export default SalesManMaster
 

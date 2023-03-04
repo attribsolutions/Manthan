@@ -120,6 +120,10 @@ import Challan from "../pages/Inventory/Challan/Challan";
 
 import RoutesMaster from "../pages/Adminisrator/RoutesPages/RoutesMaster";
 import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
+
+import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
+import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
+
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -213,6 +217,9 @@ const userRoutes = [
 
   { path: path.ROUTES, component: RoutesMaster },
   { path: path.ROUTES_LIST, component: RoutesList },
+
+  { path: path.SALESMAN, component: SalesManMaster },
+  { path: path.SALESMAN_LIST, component: SalesManList },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
