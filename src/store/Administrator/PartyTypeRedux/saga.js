@@ -11,28 +11,23 @@ function* Post_Party_Type_GneratorFunction({ data }) {
 
   try {
     const response = yield call(Post_Party_Type_API, data);
-
     yield put(PostPartyTypeAPISuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 // get api
 function* Get_PartyType_List_GenratorFunction() {
-  debugger
-  try {
-    
-    const response = yield call(get_PartyType_List_Api, 0,loginIsSCMCompany());
-    yield put(getPartyTypelistSuccess(response.Data));
 
+  try {
+    const response = yield call(get_PartyType_List_Api, 0, loginIsSCMCompany());
+    yield put(getPartyTypelistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 // delete api 
 function* Delete_PartyType_ID_GenratorFunction({ id }) {
   try {
-
     const response = yield call(detelet_PartyType_List_Api, id);
-
     yield put(deletePartyTypeIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
