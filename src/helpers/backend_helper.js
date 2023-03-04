@@ -228,7 +228,7 @@ export const update_EmployeeType_List_Api = (data, id) => put(`${url.EMPLOYEE_TY
 
 // Party Type API
 export const Post_Party_Type_API = (data) => post(url.PARTYTYPES_API, data)// post api
-export const get_PartyType_List_Api = () => get(url.PARTYTYPES_API) // get api
+export const get_PartyType_List_Api = (id1,id2) =>get(`${url.PARTYTYPES_API}/${id1}/${id2}`) // get api
 export const detelet_PartyType_List_Api = (id) => del(`${url.PARTYTYPES_API}/${id}`) // delete api
 export const edit_PartyType_List_Api = (id) => get(`${url.PARTYTYPES_API}/${id}`) // edit api
 export const update_PartyType_List_Api = (data, id) => put(`${url.PARTYTYPES_API}/${id}`, data)// update 
@@ -373,6 +373,12 @@ export const detelet_Routes_List_Api = (id) => del(`${url.ROUTES_FOR_MASTER}/${i
 export const edit_Routes_List_Api = (id) => get(`${url.ROUTES_FOR_MASTER}/${id}`) // edit api
 export const update_Routes_List_Api = (data, id) => put(`${url.ROUTES_FOR_MASTER}/${id}`, data)// update
 
+//salesMan API
+export const Post_SalesMan_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
+export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
+export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
+export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
 
 // Order Page api  
 
