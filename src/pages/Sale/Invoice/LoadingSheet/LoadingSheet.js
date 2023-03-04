@@ -47,9 +47,6 @@ const LoadingSheet = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
-    const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [ItemUnitOptions, setItemUnitOptions] = useState([]);
-    const [ItemUnitOnEditData, setItemUnitOnEditData] = useState([]);
 
     const fileds = {
         id: "",
@@ -58,7 +55,6 @@ const LoadingSheet = (props) => {
         ToDate: "",
         RouteName: "",
         VehicleNumber: "",
-
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -132,7 +128,6 @@ const LoadingSheet = (props) => {
                     value: data.Unit,
                     label: data.UnitName
                 }))
-                setItemUnitOnEditData(ItemUnits)
                 // setItemUnitOptions(ItemUnits)
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive, IsVDCItem } = hasEditVal
@@ -158,7 +153,6 @@ const LoadingSheet = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editBOMListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
@@ -200,7 +194,6 @@ const LoadingSheet = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
@@ -230,21 +223,11 @@ const LoadingSheet = (props) => {
     }, [updateMsg, modalCss]);
 
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-    useEffect(() => {
-
-        const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Company: loginCompanyID()
-        });
-        dispatch(PostRouteslist(jsonBody));
-    }, []);
 
     const RouteName_Options = RoutesList.map((index) => ({
         value: index.id,
