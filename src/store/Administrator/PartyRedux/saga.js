@@ -170,17 +170,6 @@ function* GetAddressTypes_saga({ }) {
   }
 }
 
-//get partytypes
-function* GetPartyTypes_saga({ }) {
-  try {
-    const response = yield call(GetPartyTypes_For_Dropdown);
-    yield put(getPartyTypesSuccess(response.Data));
-  } catch (error) {
-    console.log("GetPartyTypes_saga page error", error);
-  }
-}
-
-
 //get Company
 function* GetCompany_saga({ }) {
   try {
@@ -190,7 +179,6 @@ function* GetCompany_saga({ }) {
     console.log("GetCompany_saga page error", error);
   }
 }
-
 
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 function* GetPartyTypeByDivisionTypeID_GenratorFunction({ id }) {
@@ -220,7 +208,6 @@ function* PartyMasterSaga() {
   yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
   yield takeEvery(GET_PRICELIST, GetPriceList_saga);
   yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
-  yield takeEvery(GET_PARTYTYPES, GetPartyTypes_saga);
   yield takeEvery(GET_COMPANY, GetCompany_saga);
   yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenratorFunction);
   yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenratorFunction);
