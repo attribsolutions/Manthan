@@ -11,7 +11,7 @@ import {
   getEmployeelistSuccess,
   deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, get_EmployeeTypesID_Success, Get_CompanyName_By_EmployeeTypeID_Success, Get_PartyName_By_EmployeeTypeID_Success,
 } from "./action";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 ///  DesignationID dropdown list
 function* DesignationID_saga() {
@@ -37,44 +37,41 @@ function* State_saga() {
   } catch (error) { CommonConsole(error) }
 }
 
-
 ///post api
-
 function* Submit_Employee_GenratorFunction({ Data }) {
-
   try {
     const response = yield call(post_EmployeeData, Data);
     console.log("post response in saga file", response)
-   
     yield put(PostEmployeeSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 /// get api
 
-function* Get_EmployeeList_GenratorFunction({jsonbody}) {
-
+function* Get_EmployeeList_GenratorFunction() {
   try {
-    const response = yield call(get_EmployeelistApi,jsonbody);
+    const jsonBody = {
+      "UserID": loginUserID(),
+      "RoleID": loginRoleID(),
+      "CompanyID": loginCompanyID()
+    }
+    const response = yield call(get_EmployeelistApi, jsonBody);
     yield put(getEmployeelistSuccess(response.Data));
-   
   } catch (error) { CommonConsole(error) }
 }
-//// delete api 
 
+//// delete api 
 function* Delete_EmployeeID_GenratorFunction({ id }) {
   try {
-  
     const response = yield call(detelet_EmployeeID, id);
-   
     yield put(deleteEmployeeIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_EmployeeID_GenratorFunction({ id,pageMode }) {
+function* Edit_EmployeeID_GenratorFunction({ id, pageMode }) {
   try {
     const response = yield call(edit_EmployeeAPI, id);
-    response.pageMode=pageMode
+    response.pageMode = pageMode
     yield put(editEmployeeSuccess(response));
     console.log("response in saga", response)
 
@@ -83,9 +80,7 @@ function* Edit_EmployeeID_GenratorFunction({ id,pageMode }) {
 
 function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
   try {
-  
     const response = yield call(update_EmployeeAPI, updateData, ID);
-   
     yield put(updateEmployeeIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
@@ -93,7 +88,7 @@ function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
 // Company Name API dependent on Employee Types api
 function* Get_CompanyName_By_EmployeeTypesID_GenratorFunction({ id }) {
   try {
-    const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown,id);
+    const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown, id);
     yield put(Get_CompanyName_By_EmployeeTypeID_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }

@@ -8,8 +8,6 @@ import {
     POST_TYPE,
     GENERAL_MASTER_SUB_TYPE
 } from "./actionType";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
     post_Type_API,
     Post_General_API,
@@ -18,7 +16,6 @@ import {
     Post_General_List_Api,
     update_General_List_Api,
     GeneralMasterSubType_API,
-
 } from "../../../helpers/backend_helper";
 import {
     PostMethodForGeneralSuccess,
@@ -29,53 +26,30 @@ import {
     PostGenerallistSuccess,
     GeneralMasterSubType_Success
 } from "./action";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // post api
 function* Post_Method_ForGeneral_GenFun({ data }) {
-  
     try {
         const response = yield call(Post_General_API, data);
-       
         yield put(PostMethodForGeneralSuccess(response));
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
-
 
 // get api
 function* Post_General_List_GenratorFunction({ data }) {
     try {
         const response = yield call(Post_General_List_Api, data);
         yield put(PostGenerallistSuccess(response.Data));
-       
-    } catch (error) {
-       
-        // yield put(AlertState({
-        //     Type: 4,
-        //     Status: true, Message: "500 Error Message",
-        // }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // delete api 
 function* Delete_General_ID_GenratorFunction({ id }) {
     try {
-      
         const response = yield call(delete_General_List_Api, id);
-       
         yield put(deleteGeneralIDSuccess(response))
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // edit api
@@ -84,63 +58,30 @@ function* Edit_General_ID_GenratorFunction({ id, pageMode }) {
         const response = yield call(edit_General_List_Api, id);
         response.pageMode = pageMode
         yield put(editGeneralIDSuccess(response));
-        console.log("response in saga", response)
-
-    } catch (error) {
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // update api
 function* Update_General_ID_GenratorFunction({ updateData, ID }) {
     try {
-      
         const response = yield call(update_General_List_Api, updateData, ID);
-       
         yield put(updateGeneralIDSuccess(response))
-    }
-    catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 /// Type Dropdown
 function* Post_Type_GenFun({ data }) {
-
-  
     try {
         const response = yield call(post_Type_API, data);
-       
         yield put(PostTypeSuccess(response.Data));
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* GeneralMasterSubType_Genfun({ data }) {
-  
     try {
         const response = yield call(GeneralMasterSubType_API, data);
-       
         yield put(GeneralMasterSubType_Success(response.Data));
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* GeneralSaga() {
