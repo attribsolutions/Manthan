@@ -25,7 +25,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showTableOnUI, setShowTableOnUI] = useState(false)
-    const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
+    const [company_dropdown_Select, setCompany_dropdown_Select] = useState("");
 
 
     // const [EditData, setEditData] = useState([]);
@@ -61,6 +61,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+        debugger
         
         if (!(editDataGatingFromList === undefined)) {
             var C_props = editDataGatingFromList
@@ -70,11 +71,16 @@ const RoleAccessCopyFunctionality = (props) => {
                 divisionId = 0
             }
             var roleId = C_props.Role_id
+            var Company_id = C_props.Company_id
+
+            
 
             if (roleId > 0) {
 
                 setCopyRole_Dropdown_Select({ label: C_props.RoleName, value: roleId })
                 setCopyDivision_dropdown_Select({ label: C_props.DivisionName, value: divisionId })
+                setCompany_dropdown_Select({ label: C_props.CompanyName, value: Company_id })
+                
             }
         }
 
@@ -135,10 +141,6 @@ const RoleAccessCopyFunctionality = (props) => {
                 <Container fluid>
 
                     <Card className="text-black" >
-
-
-
-
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
 
                             <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
@@ -156,6 +158,11 @@ const RoleAccessCopyFunctionality = (props) => {
                                     </Col>
                                     : null
                                 }
+                                 <Col sm={4} className="p-2 ">
+                                                    <Label className="p-2 col-sm-4">Company</Label>
+                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                        <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                                </Col>
                                 {/* <Col md="4" className="p-2 text-end">
                                                     <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
                                                 </Col> */}
