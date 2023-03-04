@@ -151,9 +151,13 @@ export const InwardList = url.IB_INWARD_STP
 export const Inward = url.INWARD_LIST
 export const IB_INWARD_STP = url.IB_INVOICE_LIST
 
-export const InvoiceList = url.INVOICE_1
-export const Invoice = url.INVOICE_LIST_1
-
 export const IB_Invoice_List = url.IB_INVOICE_STP
 export const IB_Invoice = url.IB_INVOICE_LIST
 export const IB_Invoice_STP = url.IB_ORDER_PO_LIST
+
+//******************************* Sales ************************************//
+export const InvoiceList = url.INVOICE_1
+export const Invoice = url.INVOICE_LIST_1
+
+export const Loading_Sheet_List =url.LOADING_SHEET
+export const Loading_Sheet =url.LOADING_SHEET_LIST
