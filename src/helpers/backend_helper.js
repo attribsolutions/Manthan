@@ -112,7 +112,7 @@ export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
 export const post_EmployeeData = (data) => post(url.EMPLOYEE_API_URL, data) //save And Update
-export const get_EmployeelistApi = () => get(url.EMPLOYEE_API_URL) // get api
+export const get_EmployeelistApi = (jsonbody) => post(url.EMPLOYEE_FILTER_API_URL,jsonbody) // list api using post method
 export const detelet_EmployeeID = (id) => del(`${url.EMPLOYEE_API_URL}/${id}`) // delete api
 export const edit_EmployeeAPI = (id) => get(`${url.EMPLOYEE_API_URL}/${id}`) // edit api
 export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${id}`, data)// update 
@@ -194,7 +194,7 @@ export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_SUB_TY
 
 
 // Party Master
-export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
+export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API,jsonbody)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
 export const Party_Master_Delete_API = (id) => del(`${url.PARTY_MASTER_API}/${id}`)// delete api
 export const Party_Master_Edit_API = (id) => get(`${url.PARTY_MASTER_API}/${id}`)// edit api

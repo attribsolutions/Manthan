@@ -54,6 +54,7 @@ export const GET_EMPLOYEE_TYPE = "/EmployeeTypes"
 export const GET_STATE = "/States"
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL = "/Employees"
+export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"
 export const GET_COMPANY_BY_EMPLOYEETYPES_ID = "/GetCompanyByEmployeeType" //CompanyByEmployeeType
 // Role Master
 export const ROLE_MASTER_API = "/Roles" // role get api
@@ -72,6 +73,7 @@ export const ITEMS_GROUP_API = "/ItemGroups"
 
 // Party Master 
 export const PARTY_MASTER_API = "/Parties"
+export const PARTY_MASTER_FILTER_API = "/PartiesFilter"
 export const GetDistrictOnState = "/GetDistrictOnState"
 export const PRICELIST = "/PriceList"
 export const ADDRESSTYPES = "/AddressTypes"
