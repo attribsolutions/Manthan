@@ -64,6 +64,9 @@ export const GROUPTYPE_lIST = "/GroupTypeList"
 export const ROUTES = "/RoutesMaster"
 export const ROUTES_LIST = "/RoutesList"
 
+export const SALESMAN = "/SalesManMaster"
+export const SALESMAN_LIST = "/SalesManList"
+
 export const GROUP = "/GroupMaster"
 export const GROUP_lIST = "/GroupList"
 

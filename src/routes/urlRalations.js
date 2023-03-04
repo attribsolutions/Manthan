@@ -66,6 +66,9 @@ export const VehicleList = url.VEHICLE
 export const RoutesMaster = url.ROUTES_LIST
 export const RoutesList = url.ROUTES
 
+export const SalesManMaster = url.SALESMAN_LIST
+export const SalesManList = url.SALESMAN
+
 export const GroupTypeMaster = url.GROUPTYPE_lIST
 export const GroupTypeList = url.GROUPTYPE
 
