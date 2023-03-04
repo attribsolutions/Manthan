@@ -105,31 +105,15 @@ export const getAddressTypesSuccess = (data) => ({
   payload: data,
 });
 
-//get PartyType dropdown api
-export const getPartyTypes = () => ({
-  type: GET_PARTYTYPES,
-
-
-});
-export const getPartyTypesSuccess = (data) => ({
-  type: GET_PARTYTYPES_SUCCESS,
-  payload: data,
-});
-
-
-
 //get company dropdown api
 export const getCompany = () => ({
   type: GET_COMPANY,
-
-
 });
+
 export const getCompanySuccess = (data) => ({
   type: GET_COMPANY_SUCCESS,
   payload: data,
 });
-
-
 
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 export const GetPartyTypeByDivisionTypeID = (id) => ({
