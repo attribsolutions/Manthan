@@ -141,6 +141,8 @@ export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
 
+export const LOADING_SHEET ="/Loading_Sheet"
+export const LOADING_SHEET_LIST ="/Loading_Sheet_List"
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order

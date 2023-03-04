@@ -150,3 +150,8 @@ export const IB_INVOICE_STP = 132
 export const CHALLAN = 139
 export const CHALLAN_LIST = 138
 // export const IB_INVOICE_STP = 132
+
+//******************************* Sales ************************************//
+
+export const LOADING_SHEET = 155
+export const LOADING_SHEET_LIST = 156
