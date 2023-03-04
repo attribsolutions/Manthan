@@ -228,7 +228,7 @@ export const update_EmployeeType_List_Api = (data, id) => put(`${url.EMPLOYEE_TY
 
 // Party Type API
 export const Post_Party_Type_API = (data) => post(url.PARTYTYPES_API, data)// post api
-export const get_PartyType_List_Api = () => get(url.PARTYTYPES_API) // get api
+export const get_PartyType_List_Api = (id1,id2) =>get(`${url.PARTYTYPES_API}/${id1}/${id2}`) // get api
 export const detelet_PartyType_List_Api = (id) => del(`${url.PARTYTYPES_API}/${id}`) // delete api
 export const edit_PartyType_List_Api = (id) => get(`${url.PARTYTYPES_API}/${id}`) // edit api
 export const update_PartyType_List_Api = (data, id) => put(`${url.PARTYTYPES_API}/${id}`, data)// update 
