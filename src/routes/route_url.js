@@ -117,7 +117,12 @@ export const GRN_ADD = "/GRN"
 export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
+//*******************************All report page ************************************//
+export const REPORT = "/Report"
+
 //******************************* Production Module ************************************//
+
+
 
 export const BIllOf_MATERIALS = "/BOM"
 export const BIllOf_MATERIALS_LIST = "/BOMList"
