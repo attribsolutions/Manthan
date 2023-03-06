@@ -161,9 +161,6 @@ export const tableBody = (doc, data) => {
     const { OrderItem = [] } = data
 
     console.log(tableRow)
-    //    const a= OrderItem.forEach((element) => {
-    //         element.Comment
-    //     })
 
     var options = {
         didParseCell: (data1) => {
