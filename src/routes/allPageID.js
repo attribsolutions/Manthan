@@ -90,6 +90,15 @@ export const SUBGROUP_LIST = 63
 export const GENERAL = 119
 export const GENERAL_LIST = 120
 
+export const ROUTES = 149
+export const ROUTES_LIST = 150
+
+export const SALESMAN = 151
+export const SALESMAN_LIST = 152
+
+export const CREDITLIMIT = 153
+export const CREDITLIMIT_LIST = 154
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
@@ -143,3 +152,8 @@ export const IB_INVOICE_STP = 132
 export const CHALLAN = 139
 export const CHALLAN_LIST = 138
 // export const IB_INVOICE_STP = 132
+
+//******************************* Sales ************************************//
+
+export const LOADING_SHEET = 155
+export const LOADING_SHEET_LIST = 156

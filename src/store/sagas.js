@@ -48,7 +48,8 @@ import GeneralSaga from "./Administrator/GeneralRedux/saga"
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
-
+import RoutesSaga from "./Administrator/RoutesRedux/saga"
+import SalesManSaga from "./Administrator/SalesManRedux/saga"
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -66,6 +67,7 @@ import Production_ReIssueSaga from "./Production/ProductionReissueRedux/saga"
 //  *********************** Sale ***********************
 import InvoiceSaga from "./Sales/Invoice/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
+import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -103,6 +105,9 @@ export default function* rootSaga() {
     fork(MRPMasterSaga),
     fork(MarginMasterSaga),
     fork(TermsAndConditionsSaga),
+    fork(RoutesSaga),
+    fork(SalesManSaga),
+    fork(CreditLimitSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
     fork(SubGroupSaga),

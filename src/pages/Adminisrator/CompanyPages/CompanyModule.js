@@ -51,7 +51,8 @@ const CompanyModule = (props) => {
     PhoneNo: "",
     CompanyAbbreviation: "",
     EmailID: "",
-    CompanyGroupName: ""
+    CompanyGroupName: "",
+    IsSCM: false
   }
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -104,7 +105,7 @@ const CompanyModule = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc);
-      breadcrumbReturn({dispatch,userAcc});
+      breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])
 
@@ -125,7 +126,7 @@ const CompanyModule = (props) => {
 
       if (hasEditVal) {
 
-        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName } = hasEditVal
+        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName,IsSCM } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -135,12 +136,14 @@ const CompanyModule = (props) => {
         hasValid.CompanyAbbreviation.valid = true;
         hasValid.EmailID.valid = true;
         hasValid.CompanyGroupName.valid = true;
+        hasValid.IsSCM.valid = true;
 
         values.id = id
         values.Name = Name
         values.Address = Address;
         values.GSTIN = GSTIN;
         values.PhoneNo = PhoneNo;
+        values.IsSCM=IsSCM;
         values.CompanyAbbreviation = CompanyAbbreviation;
         values.EmailID = EmailID;
         values.CompanyGroupName = { label: CompanyGroupName, value: CompanyGroup };
@@ -237,6 +240,7 @@ const CompanyModule = (props) => {
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
         CompanyGroup: values.CompanyGroupName.value,
+        IsSCM:values.IsSCM,
         CreatedBy: loginUserID(),
         UpdatedBy: loginUserID(),
       });
@@ -416,6 +420,29 @@ const CompanyModule = (props) => {
                                 )}
                               </FormGroup>
                             </Col>
+
+                            <Col md="1">  </Col>
+                            <FormGroup className="mb-2 col col-sm-3 mt-4">
+                              <Row className="justify-content-md-left">
+                                <Label className="col-sm-4 col-form-label" >{fieldLabel.IsSCM}</Label>
+                                <Col md={1} style={{ marginTop: '9px',  }} >
+
+                                  <div className="form-check form-switch form-switch-md mb-3" >
+                                    <Input type="checkbox" className="form-check-input"
+                                      checked={values.IsSCM}
+                                      name="IsSCM"
+                                      onChange={(e) => {
+                                        setState((i) => {
+                                          const a = { ...i }
+                                          a.values.IsSCM = e.target.checked;
+                                          return a
+                                        })
+                                      }}
+                                    />
+                                  </div>
+                                </Col>
+                              </Row>
+                            </FormGroup>
                           </Row>
 
                           <FormGroup className="mt-2">

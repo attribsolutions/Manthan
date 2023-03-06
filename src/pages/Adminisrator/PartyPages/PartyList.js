@@ -45,22 +45,15 @@ const PartyList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.PARTY_lIST))
-        dispatch(getPartyListAPI(getListbodyFunc()));
+        dispatch(getPartyListAPI());
     }, []);
 
-    function getListbodyFunc() {
-        return JSON.stringify({
-            UserID: loginUserID(),
-            RoleID: loginRoleID(),
-            CompanyID: loginCompanyID()
-        })
-    }
-    const { pageField ,userAccess=[]} = reducers
+    const { pageField, userAccess = [] } = reducers
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-             {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} />  */}
+            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.PARTY_lIST} />  */}
             {
                 (pageField) ?
                     <CommonListPage
@@ -70,7 +63,6 @@ const PartyList = () => {
                         masterPath={url.PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
-                        getListbodyFunc={getListbodyFunc}
                     />
                     : null
             }

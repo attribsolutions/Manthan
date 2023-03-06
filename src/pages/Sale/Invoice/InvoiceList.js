@@ -273,8 +273,6 @@ const InvoiceList = () => {
                         : null
                 }
             </div>
-
-
         </React.Fragment>
     )
 }

@@ -17,7 +17,6 @@ import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import Select from "react-select";
 import {
     getPartyListAPI,
-    GetPartyTypeByDivisionTypeID,
 } from "../../../store/Administrator/PartyRedux/action";
 import { Tbody } from "react-super-responsive-table";
 import { MetaTags } from "react-meta-tags";
@@ -27,7 +26,6 @@ import {
     getRoles,
     GO_Button_HandlerForRoleAccessListPage,
     GO_Button_HandlerForRoleAccessListPage_Success,
-    loginUser,
     PageDropdownForRoleAccessList,
     PageDropdownForRoleAccessList_Success,
     PostMethodForRoleAccessListPage,
@@ -210,7 +208,6 @@ const RoleAccessAdd = (props) => {
         }
     ]
 
-
     const DivisionTypesValues = partyList.map((i) => ({
         value: i.id,
         label: i.Name
@@ -225,7 +222,6 @@ const RoleAccessAdd = (props) => {
         value: i.id,
         label: i.Name
     }));
-
 
     const Module_DropdownOption = ModuleData.map((i) => ({
         value: i.id,
@@ -247,7 +243,6 @@ const RoleAccessAdd = (props) => {
         setDivision_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
-
     // for module dropdown
     const Module_DropdownSelectHandller = (e) => {
         var module = e.value;

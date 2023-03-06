@@ -228,9 +228,9 @@ export const update_EmployeeType_List_Api = (data, id) => put(`${url.EMPLOYEE_TY
 
 // Party Type API
 export const Post_Party_Type_API = (data) => post(url.PARTYTYPES_API, data)// post api
-export const get_PartyType_List_Api = () => get(url.PARTYTYPES_API) // get api
+export const get_PartyType_List_Api = (id1,id2) =>get(`${url.PARTYTYPES_API}/${id1}/${id2}`) // get api
 export const detelet_PartyType_List_Api = (id) => del(`${url.PARTYTYPES_API}/${id}`) // delete api
-export const edit_PartyType_List_Api = (id) => get(`${url.PARTYTYPES_API}/${id}`) // edit api
+export const edit_PartyType_List_Api = (id,loginIsSCMCompany) => get(`${url.PARTYTYPES_API}/${id}/${loginIsSCMCompany}`) // edit api
 export const update_PartyType_List_Api = (data, id) => put(`${url.PARTYTYPES_API}/${id}`, data)// update 
 
 // Division Types API
@@ -366,6 +366,20 @@ export const edit_General_List_Api = (id) => get(`${url.GENERAL_API}/${id}`)// e
 export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${id}`, data)// update api
 export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
 
+//Routes API
+export const Post_Routes_Master_API = (data) => post(url.ROUTES_FOR_MASTER, data)// post api
+export const Post_Routes_List_Api = (data) => post(url.ROUTES_FOR_LIST,data) // post api
+export const detelet_Routes_List_Api = (id) => del(`${url.ROUTES_FOR_MASTER}/${id}`) // delete api
+export const edit_Routes_List_Api = (id) => get(`${url.ROUTES_FOR_MASTER}/${id}`) // edit api
+export const update_Routes_List_Api = (data, id) => put(`${url.ROUTES_FOR_MASTER}/${id}`, data)// update
+
+//salesMan API
+export const Post_SalesMan_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
+export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
+export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
+export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
+
 // Order Page api  
 
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
@@ -457,7 +471,7 @@ const sppiner_true=true
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = (data) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, data)// go button postapi
 export const IB_Invoice_Save_API = (data) => post(url.IB_INVOICE_SAVE, data)//  postapi
-export const IB_Invoice_Get_Filter_API = (data) => post(url.IB_INVOICE_lIST_FILTER, sppiner_true,sppiner_true)//  postapi
+export const IB_Invoice_Get_Filter_API = (data) => post(url.IB_INVOICE_lIST_FILTER, data,sppiner_true)//  postapi
 export const IB_Invoice_Delete_API = (id) => del(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
 export const IB_Invoice_Edit_API_Singel_Get = (id) => get(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
 //************************************Inter Branch ************************************/
@@ -484,6 +498,14 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
 // export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
 
+//CREDITLIMIT
+export const Post_CreditLimit_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+export const CreditLimit_GoButton_Post_API =(data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+
+// export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
+// export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
+// export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
+// export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
 export {
   getLoggedInUser,
   isUserAuthenticated,

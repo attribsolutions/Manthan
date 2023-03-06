@@ -32,10 +32,10 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
 import * as pageId from "../../../routes/allPageID"
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const PriceMaster = (props) => {
     const dispatch = useDispatch();
@@ -70,8 +70,7 @@ const PriceMaster = (props) => {
         PostAPIResponse: state.PriceListReducer.postMsg,
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
         updateMessage: state.PriceListReducer.updateMessage,
-        PartyTypes: state.PartyMasterReducer.PartyTypes,
-        PriceList: state.ItemMastersReducer.PriceList,
+        PartyTypes: state.PartyTypeReducer.ListData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
@@ -97,7 +96,7 @@ const PriceMaster = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
-        dispatch(getPartyTypes());
+        dispatch(getPartyTypelist());
     }, [dispatch]);
 
     useEffect(() => {
@@ -128,7 +127,6 @@ const PriceMaster = (props) => {
         }
     }, [deleteAPIResponse])
 
-
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updatePriceListSuccess({ Status: false }))
@@ -145,11 +143,6 @@ const PriceMaster = (props) => {
     const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
-    }));
-
-    const PriceList_DropdownOptions = PriceList.map((data) => ({
-        value: data.id,
-        label: data.Name
     }));
 
     function goButtonHandler() {
@@ -200,7 +193,7 @@ const PriceMaster = (props) => {
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
-                CalculationPath:"3",
+                CalculationPath: "3",
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -226,7 +219,7 @@ const PriceMaster = (props) => {
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
                 Company: 1,
-                CalculationPath:"3",
+                CalculationPath: "3",
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: 1,

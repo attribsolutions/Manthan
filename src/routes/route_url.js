@@ -61,6 +61,12 @@ export const VEHICLE_lIST = "/VehicleList"
 export const GROUPTYPE = "/GroupTypeMaster"
 export const GROUPTYPE_lIST = "/GroupTypeList"
 
+export const ROUTES = "/RoutesMaster"
+export const ROUTES_LIST = "/RoutesList"
+
+export const SALESMAN = "/SalesManMaster"
+export const SALESMAN_LIST = "/SalesManList"
+
 export const GROUP = "/GroupMaster"
 export const GROUP_lIST = "/GroupList"
 
@@ -90,6 +96,8 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const GENERAL = "/GeneralMaster"
 export const GENERAL_LIST = "/GeneralList"
 
+export const CREDITLIMIT = "/CreditLimitMaster"
+export const CREDITLIMIT_LIST = "/CreditLimitList"
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
@@ -135,6 +143,8 @@ export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
 
+export const LOADING_SHEET ="/Loading_Sheet"
+export const LOADING_SHEET_LIST ="/Loading_Sheet_List"
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order

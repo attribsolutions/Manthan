@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { GetPriceList_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API, GetAddressTypes_For_Dropdown, GetParty_For_Dropdown, GetPartyTypes_For_Dropdown, GetCompany_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -30,11 +31,14 @@ import {
   GET_COMPANY
 } from "./actionTypes";
 
-function* Get_Party_GenratorFunction({jsonbody}) {
-
+function* Get_Party_GenratorFunction() {
+  const jsonBody = {
+    "UserID": loginUserID(),
+    "RoleID": loginRoleID(),
+    "CompanyID": loginCompanyID()
+  }
   try {
-    const response = yield call(Party_Master_Get_API,jsonbody);
-
+    const response = yield call(Party_Master_Get_API, jsonBody);
     function address(arr) {
       let result = ''
       const ind = arr.PartyAddress.find((index) => {
@@ -63,10 +67,10 @@ function* Get_Party_GenratorFunction({jsonbody}) {
     });
 
 
-   
+
     yield put(getPartyListAPISuccess(data1))
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error for Get Party  ",
@@ -78,10 +82,10 @@ function* Submit_Party_GenratorFunction({ Data }) {
 
   try {
     const response = yield call(Party_Master_Post_API, Data);
-   
+
     yield put(postPartyDataSuccess(response));
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -91,12 +95,12 @@ function* Submit_Party_GenratorFunction({ Data }) {
 
 function* Delete_Party_GenratorFunction({ id }) {
   try {
-  
+
     const response = yield call(Party_Master_Delete_API, id);
-   
+
     yield put(deletePartyIDSuccess(response))
   } catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -123,13 +127,13 @@ function* Edit_Party_GenratorFunction({ id, pageMode }) {
 function* Update_Party_GenratorFunction({ updateData, id }) {
 
   try {
-  
+
     const response = yield call(Party_Master_Update_API, updateData, id);
-   
+
     yield put(updatePartyIDSuccess(response))
   }
   catch (error) {
-   
+
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
@@ -166,17 +170,6 @@ function* GetAddressTypes_saga({ }) {
   }
 }
 
-//get partytypes
-function* GetPartyTypes_saga({ }) {
-  try {
-    const response = yield call(GetPartyTypes_For_Dropdown);
-    yield put(getPartyTypesSuccess(response.Data));
-  } catch (error) {
-    console.log("GetPartyTypes_saga page error", error);
-  }
-}
-
-
 //get Company
 function* GetCompany_saga({ }) {
   try {
@@ -186,7 +179,6 @@ function* GetCompany_saga({ }) {
     console.log("GetCompany_saga page error", error);
   }
 }
-
 
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 function* GetPartyTypeByDivisionTypeID_GenratorFunction({ id }) {
@@ -216,7 +208,6 @@ function* PartyMasterSaga() {
   yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
   yield takeEvery(GET_PRICELIST, GetPriceList_saga);
   yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
-  yield takeEvery(GET_PARTYTYPES, GetPartyTypes_saga);
   yield takeEvery(GET_COMPANY, GetCompany_saga);
   yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenratorFunction);
   yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenratorFunction);

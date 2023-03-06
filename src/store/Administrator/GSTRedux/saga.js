@@ -1,7 +1,12 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { delete_GSTList_API, GetGSTList_For_Listpage, GoButton_Post_API_For_GSTMaster, GSTList_Delete_API, GST_MasterPage_delete_API, Post_GSTMaster_API } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import {
+  delete_GSTList_API,
+  GetGSTList_For_Listpage,
+  GoButton_Post_API_For_GSTMaster,
+  GST_MasterPage_delete_API,
+  Post_GSTMaster_API
+} from "../../../helpers/backend_helper";
 import {
   deleteGSTForMasterPageSuccess,
   deleteGSTListPageSuccess,
@@ -18,91 +23,45 @@ import {
 } from "./actionType";
 
 function* Post_GSTMaster_GenratorFunction({ Data }) {
-
-
   try {
     const response = yield call(Post_GSTMaster_API, Data);
-   
     yield put(postGSTMasterDataSuccess(response));
-    console.log("response", response)
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
-
 
 //listpage
 function* get_GSTListPage_GenratorFunction() {
 
   try {
     const response = yield call(GetGSTList_For_Listpage);
-   
+
     yield put(getGSTListPageSuccess(response.Data));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 //delete
 function* delete_GSTListPage_GenratorFunction({ CommonID }) {
-  
-
   try {
     const response = yield call(delete_GSTList_API, CommonID);
-   
     yield put(deleteGSTListPageSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* GSTGoButton_post_GenratorFunction({ data }) {
-
-
   try {
     const response = yield call(GoButton_Post_API_For_GSTMaster, data);
-   
     yield put(postGoButtonForGST_Master_Success(response.Data));
-    console.log("response",response)
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 // delete api for GST Master
 function* deleteId_for_GSTMaster_GenratorFunction({ id }) {
   try {
-  
     const response = yield call(GST_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteGSTForMasterPageSuccess(response))
-   
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
-
-
 
 function* GSTSaga() {
   yield takeEvery(POST_GST_MASTER_DATA, Post_GSTMaster_GenratorFunction);

@@ -6,7 +6,6 @@ import {
     GET_DISTRICT_ON_STATE_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_PRICELIST_SUCCESS,
-    GET_PARTYTYPES_SUCCESS,
     GET_COMPANY_SUCCESS,
     GET_ADDRESSTYPES_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
@@ -20,10 +19,9 @@ const INIT_STATE = {
     deleteMessage: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
-    DistrictOnState:[],
-    PartyTypes:[],
-    Company:[],
-    AddressTypes:[]
+    DistrictOnState: [],
+    Company: [],
+    AddressTypes: []
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
@@ -36,7 +34,6 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             }
 
         // post api
-     
         case POST_PARTY_DATA_SUCCESS:
             return {
                 ...state,
@@ -64,57 +61,47 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 updateMessage: action.payload,
             };
 
-       // GetDistrictOnState API
+        // GetDistrictOnState API
         case GET_DISTRICT_ON_STATE_SUCCESS:
             return {
-              ...state,
-              DistrictOnState: action.payload,
+                ...state,
+                DistrictOnState: action.payload,
             };
-  
 
         //get PriceList
         case GET_PRICELIST_SUCCESS:
             return {
-              ...state,
-              PriceList: action.payload,
+                ...state,
+                PriceList: action.payload,
             };
-  
 
-          //get addresstypes
-         case GET_ADDRESSTYPES_SUCCESS:
+        //get addresstypes
+        case GET_ADDRESSTYPES_SUCCESS:
             return {
-            ...state,
-            AddressTypes: action.payload,
+                ...state,
+                AddressTypes: action.payload,
             };
-
-            //get partytypes
-            case GET_PARTYTYPES_SUCCESS:
-          return {
-               ...state,
-            PartyTypes: action.payload,
-               };
-
 
         //get company
         case GET_COMPANY_SUCCESS:
-         return {
-         ...state,
-        Company: action.payload,
-         };
-
-
-          // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
-        case GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS:
             return {
-              ...state,
-              PartyTypes: action.payload,
+                ...state,
+                Company: action.payload,
             };
 
-            // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
+
+        // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
+        case GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS:
+            return {
+                ...state,
+                PartyTypes: action.payload,
+            };
+
+        // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
         case GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS:
             return {
-              ...state,
-              CompanyName: action.payload,
+                ...state,
+                CompanyName: action.payload,
             };
         default:
             return state;
