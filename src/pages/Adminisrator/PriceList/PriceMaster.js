@@ -32,10 +32,7 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
-import Tree from "../PartyPages/Tree";
-import * as pageId from "../../../routes/allPageID"
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -212,9 +209,7 @@ const PriceMaster = (props) => {
         if (textInp1.value === "") {
             invaildMsg.push({ Alert: "Please Enter SubPrice" })
         }
-        else if (textInp1.value === "") {
-            invaildMsg.push({ Alert: "Please Enter CalculationPath" })
-        };
+
         if (invaildMsg.length > 0) {
             CustomAlert({ Type: 3, Message: invaildMsg })
         }
@@ -226,7 +221,7 @@ const PriceMaster = (props) => {
                 pathNo = pathNo.concat(`${ele.value},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
+            setcalculationPathstate([])
             return JSON.stringify({
                 id: currentPrice.value,
                 Name: textInp1.value,
@@ -234,12 +229,10 @@ const PriceMaster = (props) => {
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
-                Company: 1,
+                Company: loginCompanyID(),
                 CalculationPath: pathNo,
-                CreatedBy: 1,
-                CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: 1,
-                UpdatedOn: "2022-07-18T00:00:00",
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
             });
         }
         return false
@@ -270,9 +263,6 @@ const PriceMaster = (props) => {
         }
     };
 
-    const toggle = () => {
-        setMenu('');
-    }
 
     const NodeInsidemenu = ({ node }) => {
         return (
@@ -281,7 +271,7 @@ const PriceMaster = (props) => {
                     onClick={e => setMenu(node.value)}  >
                     <Dropdown
                         isOpen={menu === node.value}
-                        toggle={toggle}
+                        toggle={() => { setMenu('') }}
                         className="d-inline-block">
                         <DropdownToggle className="btn header-item " tag="button">
 
@@ -328,7 +318,7 @@ const PriceMaster = (props) => {
                         <div>
                             <div className="d-flex ">
                                 <div className=" flex-fill "><span id="span2" >{node.label}</span></div>
-                                <div className=" flex-fill "><span id="span2" >{node.label}</span></div>
+                                <div className=" flex-fill "><span id="span2" >{node.CalculationPath}</span></div>
                                 <div className="d3 mr-auto">  <span id="span2">
                                     <Input type="checkbox"
                                         id={`mkUp${node.value}`}
@@ -357,7 +347,7 @@ const PriceMaster = (props) => {
                     <div>
                         <div className="d-flex ">
                             <div className="flex-grow-1"><span id={"span1"} >{node.label}</span></div>
-                            <div className="flex-grow-1"><span id={"span1"} >{node.label}</span></div>
+                            <div className=" flex-fill "><span id="span1" >{node.CalculationPath}</span></div>
                             <div className="mr-auto">  <span id={"span1"}><Input type="checkbox"></Input></span> </div>
                             <div className="mr-auto">  <NodeInsidemenu node={node} /> </div>
                         </div>
@@ -430,7 +420,10 @@ const PriceMaster = (props) => {
 
     }
 
-
+    function dropOpen1Togle() {
+        setDropOpen(!dropOpen);
+        setcalculationPathstate([]);
+    }
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
@@ -478,7 +471,7 @@ const PriceMaster = (props) => {
                                             <div className={" row mt-4"}>
                                                 <Modal
                                                     isOpen={dropOpen}
-                                                    toggle={() => { setDropOpen(!dropOpen) }}
+                                                    toggle={dropOpen1Togle}
                                                     size="xl"
                                                     centered={true}
                                                 >
@@ -488,9 +481,7 @@ const PriceMaster = (props) => {
                                                             <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Edit Sub-Price"}</h5>}
                                                         <button
                                                             type="button"
-                                                            onClick={() => {
-                                                                setDropOpen(!dropOpen)
-                                                            }}
+                                                            onClick={dropOpen1Togle}
                                                             className="close"
                                                             data-dismiss="modal"
                                                             aria-label="Close"
@@ -571,9 +562,7 @@ const PriceMaster = (props) => {
                                                     </div>
 
                                                     <div className="modal-footer">
-                                                        <button type="button" className="btn btn-light" onClick={() => {
-                                                            setDropOpen(!dropOpen)
-                                                        }}>Close</button>
+                                                        <button type="button" className="btn btn-light" onClick={dropOpen1Togle}>Close</button>
                                                         {currentPrice.mode === "save" ?
 
                                                             <button type="button" className="btn btn-primary"
