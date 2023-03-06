@@ -20,9 +20,9 @@ function pageFooter(doc,data) {
     style.reportFooter(doc,data);
 }
 
- const InvioceReport=(data)=> {
-
-    var doc = new jsPDF('p', 'pt', 'a4');
+ const InvioceReporta5=()=> {
+   const data = Data
+    var doc = new jsPDF('l', 'pt', 'a5');
     pageHeder(doc,data);
     reportBody(doc, data);
     pageFooter(doc,data);
@@ -32,4 +32,4 @@ function pageFooter(doc,data) {
     window.open(doc.output('dataurlnewwindow'));
     return(<></>);
 }
-export default InvioceReport;
+export default InvioceReporta5;
