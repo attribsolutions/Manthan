@@ -32,10 +32,13 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
+import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
 import * as pageId from "../../../routes/allPageID"
 import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
+// import { PriceDrop } from "./PriceDrop";
 
 const PriceMaster = (props) => {
     const dispatch = useDispatch();
@@ -50,12 +53,12 @@ const PriceMaster = (props) => {
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
-    const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [menu, setMenu] = useState(false);
     const [dropOpen, setDropOpen] = useState(false);
     const [currentPrice, setCurrentPrice] = useState({ Name: '' });
     const [hasPartySelect, setHasPartySelect] = useState(false);
-    const [priceList, setPriceList] = useState('');
+    const [calculationPathstate, setcalculationPathstate] = useState([]);
+    const [editPriceList, setPriceList] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
@@ -71,6 +74,7 @@ const PriceMaster = (props) => {
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
         updateMessage: state.PriceListReducer.updateMessage,
         PartyTypes: state.PartyTypeReducer.ListData,
+        PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
@@ -127,6 +131,7 @@ const PriceMaster = (props) => {
         }
     }, [deleteAPIResponse])
 
+
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updatePriceListSuccess({ Status: false }))
@@ -144,13 +149,26 @@ const PriceMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
-
-    function goButtonHandler() {
-        if (!(partyType_dropdown_Select === '')) {
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
-            setHasPartySelect(true)
+    //***************************calculatepathOptionsfunction************************** 
+    const calculatepathOptionsfunction = () => {
+        const optionArr = []
+        function infunc1(node) {
+            optionArr.push({ value: node.value, label: node.label });
+            if (node.children) {
+                infunc2(node.children)
+            }
         }
+        function infunc2(nodeArr = []) {
+            nodeArr.map(i2 => { infunc1(i2) })
+        }
+        priceListByPartyType.map(node => {
+            infunc1(node)
+        })
+        return optionArr
     }
+    const calculatepathOptions = calculatepathOptionsfunction()
+    //*************************** end calculatepathOptionsfunction************************** 
+
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyType_dropdown_Select(e)
@@ -160,10 +178,9 @@ const PriceMaster = (props) => {
         price["mode"] = "save"
         setCurrentPrice(price)
         setDropOpen(true)
-
     }
-    // Edit handler
-    const dropOpen_EditHandler = price => {
+
+    const dropOpen_EditHandler = price => { // Edit handler
 
         price["mode"] = "edit"
 
@@ -171,7 +188,7 @@ const PriceMaster = (props) => {
         setDropOpen(true)
 
     }
-    const delete_PriceList_Handler = price => {
+    const delete_PriceList_Handler = price => {// Delete handler
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this Price : "${price.label}"`,
@@ -180,38 +197,37 @@ const PriceMaster = (props) => {
             ID: price.value
         }));
     }
-
-    function sub_Price_Add_Handler() {
-        var textInp1 = document.getElementById("txtsubprice")
-        if (textInp1.value === "") {
-            alert("please enter value")
-        } else {
-            var mkup = document.getElementById(`mkupMkdown`).checked
-            const jsonBody = JSON.stringify({
-                Name: textInp1.value,
-                BasePriceListID: currentPrice.value,
-                PLPartyType: partyType_dropdown_Select.value,
-                MkUpMkDn: mkup,
-                PriceList: PriceList.value,
-                CalculationPath: "3",
-                Company: 1,
-                CreatedBy: 1,
-                CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: 1,
-                UpdatedOn: "2022-07-18T00:00:00"
-            });
-            dispatch(postPriceListData(jsonBody));
+    function goButtonHandler() { // party Type Go Button API Call
+        if (!(partyType_dropdown_Select === '')) {
+            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            setHasPartySelect(true)
         }
-
     }
-    // edit price handler
-    function sub_Price_edit_Handler() {
+    //***************************SaveHandler************************** 
+
+    function commonSavefunction() {// Common JSON for save handler
+
         var textInp1 = document.getElementById("txtsubprice")
+        const invaildMsg = []
         if (textInp1.value === "") {
-            alert("please enter value")
-        } else {
+            invaildMsg.push({ Alert: "Please Enter SubPrice" })
+        }
+        else if (textInp1.value === "") {
+            invaildMsg.push({ Alert: "Please Enter CalculationPath" })
+        };
+        if (invaildMsg.length > 0) {
+            CustomAlert({ Type: 3, Message: invaildMsg })
+        }
+        else {
             var mkup = document.getElementById(`mkupMkdown`).checked
-            const jsonBody = JSON.stringify({
+
+            var pathNo = ''
+            calculationPathstate.map(ele => {
+                pathNo = pathNo.concat(`${ele.value},`)
+            })
+            pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+
+            return JSON.stringify({
                 id: currentPrice.value,
                 Name: textInp1.value,
                 BasePriceListID: currentPrice.value,
@@ -219,159 +235,203 @@ const PriceMaster = (props) => {
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
                 Company: 1,
-                CalculationPath: "3",
+                CalculationPath: pathNo,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: 1,
                 UpdatedOn: "2022-07-18T00:00:00",
             });
-            dispatch(updatePriceList(jsonBody, currentPrice.value));
+        }
+        return false
+    }
+    function sub_Price_Add_Handler() {// add price save handler
+        const jsonBody = commonSavefunction();
+        if (jsonBody) {
+            dispatch(postPriceListData(jsonBody));
         }
     }
 
-    const onclickselect = function () {
-        const hasNone = document.getElementById("color").style;
+    function sub_Price_edit_Handler() {// edit price save handler
+        const jsonBody = commonSavefunction();
+        if (jsonBody) {
+            dispatch(updatePriceList(jsonBody, currentPrice.value));
+        }
+    }
+    //*************************** end SaveHandler************************** 
+
+    const onclickselect = function (node = {}) {
+        const hasNone = document.getElementById("select-div").style;
 
         if (hasNone.display === "none") {
             hasNone.display = "block";
         } else {
+            setPriceList(node)
             hasNone.display = "none";
         }
     };
-
-    // drop down tree
-    const test1 = () => {
-
-        return (
-            <>
-                <div id="color"  >
-                    <div style={{ width: "6cm", marginBottom: "-60px" }} id="">
-                        <Tree id="tree" data={priceListByPartyType} priceList={PriceList_dropdown_Select}
-                            func1={setPriceList_dropdown_Select} />
-                    </div>
-                </div>
-
-            </>
-        )
-    }
 
     const toggle = () => {
         setMenu('');
     }
 
-    function fun1(data1) {
+
+    const NodeInsidemenu = ({ node }) => {
         return (
-            <div>
-                {
-                    data1.map(tree => fun2(tree))
-                }
+            <samp id={"samp-1"}>
+                <i className="mdi mdi-pencil font-size-12"
+                    onClick={e => setMenu(node.value)}  >
+                    <Dropdown
+                        isOpen={menu === node.value}
+                        toggle={toggle}
+                        className="d-inline-block">
+                        <DropdownToggle className="btn header-item " tag="button">
+
+                        </DropdownToggle>
+
+                        <DropdownMenu className="dropdown_menu dropdown-menu-end" id="drop-downcss" >
+                            <DropdownItem
+                                key={node.value}
+                                onClick={(e) => { dropOpen_ONClickHandler(node) }}
+                                de
+                            >
+                                <span className="align-middle text-black" >{"Add Sub-List"}</span>
+                            </DropdownItem>
+
+                            <DropdownItem
+                                key={node.value}
+                                onClick={(e) => { dropOpen_EditHandler(node) }}
+                            >
+                                <span className="align-middle text-black" >{"Edit"}</span>
+                            </DropdownItem>
+
+                            <DropdownItem
+                                onClick={() => delete_PriceList_Handler(node)}
+                            >
+                                <span className="align-middle text-danger"> {"Delete"} </span>
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                </i>
+            </samp>)
+    }
+
+    function calculatedPathOnChange(e, node) {
+        setcalculationPathstate(e)
+    }
+
+
+    const MainPriceTree = () => {
+
+        function mainTreeFunc_3(node) {
+            return (
+                <ol>
+                    <li >
+                        <div>
+                            <div className="d-flex ">
+                                <div className=" flex-fill "><span id="span2" >{node.label}</span></div>
+                                <div className=" flex-fill "><span id="span2" >{node.label}</span></div>
+                                <div className="d3 mr-auto">  <span id="span2">
+                                    <Input type="checkbox"
+                                        id={`mkUp${node.value}`}
+                                        defaultChecked={node.MkUpMkDn}
+                                        disabled={true}></Input></span> </div>
+                                <div className="d4 mr-auto1">  <NodeInsidemenu node={node} /> </div>
+                            </div>
+                        </div>
+                        {node.children ? mainTreeFunc_2(node.children) : null}
+                    </li>
+                </ol>
+            )
+        }
+
+        function mainTreeFunc_2(arr = []) {
+            return (
+                arr.map(node => {
+                    return mainTreeFunc_3(node)
+                })
+            )
+        }
+
+        function mainTreeFunc_1(node) {
+            return (
+                <li  >
+                    <div>
+                        <div className="d-flex ">
+                            <div className="flex-grow-1"><span id={"span1"} >{node.label}</span></div>
+                            <div className="flex-grow-1"><span id={"span1"} >{node.label}</span></div>
+                            <div className="mr-auto">  <span id={"span1"}><Input type="checkbox"></Input></span> </div>
+                            <div className="mr-auto">  <NodeInsidemenu node={node} /> </div>
+                        </div>
+                    </div>
+
+
+                    {node.children ? mainTreeFunc_2(node.children) : null}
+                </li >
+            )
+        }
+
+        return <ol className="wtree">
+            {priceListByPartyType.map((node, ind) => {
+                return mainTreeFunc_1(node, ind)
+            })}
+        </ol >
+    }
+
+    const PriceDrop = ({ List = [] }) => {
+
+        function nodeOnClick(node) {
+            onclickselect(node);
+        }
+
+        function dropTreeFunc_3(node) {
+            return (
+                <ol>
+                    <li >
+                        <div>
+                            <div className="d-flex ">
+                                <div className=" flex-fill "><span id="span2" onClick={() => nodeOnClick(node)} >{node.label}</span></div>
+                            </div>
+                        </div>
+                        {node.children ? dropTreeFunc_2(node.children) : null}
+                    </li>
+                </ol>
+            )
+        }
+        function dropTreeFunc_2(arr = []) {
+            return (
+                arr.map(node => {
+                    return dropTreeFunc_3(node)
+                })
+            )
+        }
+        function dropTreeFunc_1(node) {
+            return (
+                <li  >
+                    <div>
+                        <div className="d-flex ">
+                            <div className="flex-grow-1"><span id={"span1"} onClick={() => nodeOnClick(node)} >{node.label}</span></div>
+                        </div>
+                    </div>
+
+
+                    {node.children ? dropTreeFunc_2(node.children) : null}
+                </li >
+            )
+        }
+        return (
+            <div id="select-div" style={{ display: "none", backgroundColor: 'whitesmoke' }}>
+                <ol className="wtree">
+                    {List.map((node, ind) => {
+                        return dropTreeFunc_1(node, ind)
+                    })}
+
+                </ol >
             </div>
         )
-    }
 
-    function fun2(node) {
-
-        return (
-            <div style={{ paddingLeft: "50px" }} className={"pricelistclass"} >
-                <div className='row justify-content-center mt-n4'>
-                    <div className=' col-10'>
-                        <Input
-                            type="text"
-                            disabled={true}
-                            defaultValue={node.label} >
-                        </Input>
-                    </div>
-
-                    <div className=' col-1 al-end'>
-
-                        <Input
-                            type="checkbox"
-                            id={`mkUp${node.value}`}
-                            defaultChecked={node.MkUpMkDn}
-                            disabled={true}
-                        />
-                    </div>
-                    <div className=' col-1 '>
-                        <i className="mdi mdi-pencil font-size-12"
-                            onClick={e => setMenu(node.value)}  ></i>
-                        <Dropdown
-                            isOpen={menu === node.value}
-                            toggle={toggle}
-                            className="d-inline-block">
-                            <DropdownToggle className="btn header-item " tag="button">
-
-                            </DropdownToggle>
-
-                            <DropdownMenu className="dropdown_menu dropdown-menu-end" id="drop-downcss" >
-                                <DropdownItem
-                                    key={node.value}
-                                    onClick={(e) => { dropOpen_ONClickHandler(node) }}
-                                    de
-                                >
-                                    <span className="align-middle text-black" >{"Add Sub-List"}</span>
-                                </DropdownItem>
-
-                                <DropdownItem
-                                    key={node.value}
-                                    onClick={(e) => { dropOpen_EditHandler(node) }}
-                                >
-                                    <span className="align-middle text-black" >{"Edit"}</span>
-                                </DropdownItem>
-
-                                <DropdownItem
-                                    onClick={() => delete_PriceList_Handler(node)}
-                                >
-                                    <span className="align-middle text-danger"> {"Delete"} </span>
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
-
-                    {node.children ? fun1(node.children) : null}
-                </div>
-            </div>
-        )
-    }
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-    var tree = document.getElementById("tree12");
-    if (tree) {
-        tree.querySelectorAll("ul").forEach(function (el, key, parent) {
-            var elm = el.parentNode;
-            elm.classList.add("branch");
-            var x = document.createElement("i");
-            x.classList.add("indicator");
-            x.classList.add("bi-folder-plus");
-            elm.insertBefore(x, elm.firstChild);
-            el.classList.add("collapse");
-
-            elm.addEventListener(
-                "click",
-                function (event) {
-                    if (elm === event.target || elm === event.target.parentNode) {
-                        if (el.classList.contains("collapse")) {
-                            el.classList.add("expand");
-                            el.classList.remove("collapse");
-                            x.classList.remove("bi bi-box-arrow-right");
-                            x.classList.add("bi bi-check-square");
-                        } else {
-                            el.classList.add("collapse");
-                            el.classList.remove("expand");
-                            x.classList.remove("bi bi-box-arrow-right");
-                            x.classList.add("bi bi-check-square");
-                        }
-                    }
-                },
-                false
-            );
-        });
     }
 
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
@@ -379,127 +439,6 @@ const PriceMaster = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "5cm" }} >
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <h1>You can add or remove class while drag and drop</h1> */}
-
-                {/* <ul id="tree12" class="tree ">
-                     <li><a href="#">Sektör 1</a>
-                         <ul>
-                             <li><a href="#">Company Maintenance</a></li>
-                             <li><a href="#">Employees</a>
-                                 <ul>
-                                     <li><a href="#">Reports</a>
-                                         <ul>
-                                             <li><a href="#">Report1</a></li>
-                                             <li><a href="#">Report2</a></li>
-                                             <li><a href="#">Report3</a></li>
-                                         </ul>
-                                     </li>
-                                     <li>Employee Maint.</li>
-                                 </ul>
-                             </li>
-                             <li>Human Resources</li>
-                         </ul>
-                     </li>
-                     <li>Sektör 2
-                         <ul>
-                             <li>Alt Sektör</li>
-                             <li>Company Maintenance</li>
-                             <li>Employees
-                                 <ul>
-                                     <li>Reports
-                                         <ul>
-                                             <li>Report1</li>
-                                             <li>Report2</li>
-                                             <li>Report3</li>
-                                         </ul>
-                                     </li>
-                                     <li>Employee Maint.</li>
-                                 </ul>
-                             </li>
-                             <li>Human Resources</li>
-                         </ul>
-                     </li>
-                     <li>Sektör 3
-                         <ul>
-                             <li>Alt Sektör 1
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                             <li>Alt Sektör 2
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                         </ul>
-                     </li>
-                     <li>Sektör 4
-                         <ul>
-                             <li>Alt Sektör 1
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                             <li>Alt Sektör 2
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                         </ul>
-                     </li>
-                     <li>Sektör 5
-                         <ul>
-                             <li>Alt Sektör 1
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                             <li>Alt Sektör 2
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                         </ul>
-                     </li>
-                     <li>Sektör 6
-                         <ul>
-                             <li>Alt Sektör 1
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                             <li>Alt Sektör 2
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                         </ul>
-                     </li>
-                     <li>Sektör 7
-                         <ul>
-                             <li>Alt Sektör 1
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                             <li>Alt Sektör 2
-                                 <ul>
-                                     <li>Alt Sektör 1</li>
-                                     <li>Alt Sektör 2</li>
-                                 </ul>
-                             </li>
-                         </ul>
-                     </li>
-                 </ul> */}
                 <Container fluid>
                     <Card className="text-black">
                         <CardHeader className="card-header   text-black c_card_header" >
@@ -541,13 +480,13 @@ const PriceMaster = (props) => {
                                                 <Modal
                                                     isOpen={dropOpen}
                                                     toggle={() => { setDropOpen(!dropOpen) }}
-                                                    size="sm"
+                                                    size="xl"
                                                     centered={true}
                                                 >
                                                     <div className="modal-header">
                                                         {currentPrice.mode === "save" ?
-                                                            <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Add sub-Price"}</h5> :
-                                                            <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Edit sub-Price"}</h5>}
+                                                            <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Add Sub-Price"}</h5> :
+                                                            <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Edit Sub-Price"}</h5>}
                                                         <button
                                                             type="button"
                                                             onClick={() => {
@@ -567,14 +506,19 @@ const PriceMaster = (props) => {
                                                             <Row className="justify-content-md-left">
                                                                 <Label className="col-3 col-form-label" >Price List</Label>
                                                                 <Col className="col-9">
-                                                                    <Input id="Input"
-                                                                        value={priceList.label}
+                                                                    <Input
+                                                                        id="Input"
+                                                                        value={editPriceList.label}
                                                                         placeholder="Select..."
                                                                         onClick={onclickselect}
+                                                                        autoComplete="off"
                                                                     >
                                                                     </Input>
 
-                                                                    {test1()}
+                                                                    {/* {test1()} */}
+                                                                    <PriceDrop List={priceListByPartyType}
+                                                                    />
+                                                                    {/* <NodeInsidemenu/> */}
                                                                 </Col>
                                                             </Row>
                                                             : null}
@@ -583,7 +527,7 @@ const PriceMaster = (props) => {
                                                             <Row className="mt-2">
                                                                 <span className="form-label text-primary text-center">{currentPrice.Name}</span>
                                                                 <Label htmlFor="horizontal-firstname-input"
-                                                                    className="col-3 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
+                                                                    className="col-3 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "Sub-Price"} </Label>
                                                                 <Col style={{ marginTop: '9px' }} >
                                                                     <Input type="text" id='txtsubprice'
                                                                         defaultValue={currentPrice.label}
@@ -593,15 +537,33 @@ const PriceMaster = (props) => {
                                                             : <Row className="mt-2">
                                                                 <span className="form-label text-primary text-center">{currentPrice.Name}</span>
                                                                 <Label htmlFor="horizontal-firstname-input"
-                                                                    className="col-4 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
+                                                                    className="col-3 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "Sub-Price"} </Label>
                                                                 <Col style={{ marginTop: '9px' }} >
                                                                     <Input type="text" id='txtsubprice'
                                                                     />
                                                                 </Col>
                                                             </Row>}
+                                                        <Row className="mt-2">
+                                                            {/* <span className="form-label text-primary text-center">{currentPrice.Name}</span> */}
+                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                className="col-3 col-form-label" >CalculationPath</Label>
+                                                            <Col className=" col col-9" style={{ marginTop: '9px' }} >
+                                                                <Select
+                                                                    isSearchable={false}
+                                                                    isMulti={true}
+                                                                    value={calculationPathstate}
+                                                                    onChange={(e) => { calculatedPathOnChange(e, "node") }}
+                                                                    components={{
+                                                                        IndicatorSeparator: () => null
+                                                                    }}
+                                                                    options={calculatepathOptions}
+                                                                />
+
+                                                            </Col>
+                                                        </Row>
 
                                                         <Row className="mt-2">
-                                                            <Label className="col-4 col-form-label" >MkUp </Label>
+                                                            <Label className="col-3 col-form-label" >MkUp </Label>
                                                             <Col className="mt-2">
                                                                 <Input type={"checkbox"} id='mkupMkdown'
                                                                     defaultChecked={currentPrice.MkUpMkDn} />
@@ -623,7 +585,7 @@ const PriceMaster = (props) => {
                                                             <button type="button" className="btn btn-success w-md"
                                                                 onClick={() => { sub_Price_edit_Handler() }} >
 
-                                                                <i class="fas fa-edit me-2"></i>
+                                                                <i className="fas fa-edit me-2"></i>
                                                                 update</button>
                                                         }
 
@@ -631,11 +593,12 @@ const PriceMaster = (props) => {
 
                                                 </Modal>
                                                 <Col md={1} ></Col>
-                                                <Col md={5} >
+                                                <Col md={10} >
                                                     <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
                                                     <Card>
                                                         <CardBody className="mt-3">
-                                                            {fun1(priceListByPartyType)}
+                                                            {/* {fun1(priceListByPartyType)} */}
+                                                            <MainPriceTree />
                                                             {((priceListByPartyType.length === 0)) ?
                                                                 <div className='row justify-content-center mt-n4 '>
                                                                     <div className=' col-10'>

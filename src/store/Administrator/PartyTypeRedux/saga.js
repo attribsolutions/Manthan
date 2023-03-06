@@ -15,7 +15,8 @@ function* Post_Party_Type_GneratorFunction({ data }) {
 // get api
 function* Get_PartyType_List_GenratorFunction() {
   try {
-    const response = yield call(get_PartyType_List_Api, 0, loginIsSCMCompany());
+    const id=0 
+    const response = yield call(get_PartyType_List_Api, id, loginIsSCMCompany());
     yield put(getPartyTypelistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
