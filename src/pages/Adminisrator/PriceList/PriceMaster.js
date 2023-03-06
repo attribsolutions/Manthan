@@ -35,7 +35,7 @@ import {
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
 import * as pageId from "../../../routes/allPageID"
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -234,12 +234,10 @@ const PriceMaster = (props) => {
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
-                Company: 1,
+                Company: loginCompanyID(),
                 CalculationPath: pathNo,
-                CreatedBy: 1,
-                CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: 1,
-                UpdatedOn: "2022-07-18T00:00:00",
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
             });
         }
         return false
