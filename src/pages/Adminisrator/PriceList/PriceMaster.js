@@ -274,7 +274,6 @@ const PriceMaster = (props) => {
         setMenu('');
     }
 
-
     const NodeInsidemenu = ({ node }) => {
         return (
             <samp id={"samp-1"}>
