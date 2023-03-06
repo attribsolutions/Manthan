@@ -87,7 +87,7 @@ const InvoiceList = () => {
 
 
         if (subPageMode === url.INVOICE_LIST_1) {
-            page_Id = pageId.IB_INVOICE_LIST
+            page_Id = pageId.INVOICE_LIST_1
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
         }
