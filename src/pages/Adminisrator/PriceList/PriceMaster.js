@@ -55,7 +55,7 @@ const PriceMaster = (props) => {
     const [currentPrice, setCurrentPrice] = useState({ Name: '' });
     const [hasPartySelect, setHasPartySelect] = useState(false);
     const [calculationPathstate, setcalculationPathstate] = useState([]);
-    const [editPriceList, setPriceList] = useState('');
+    const [movePricelist, setMovePricelist] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
@@ -133,6 +133,7 @@ const PriceMaster = (props) => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updatePriceListSuccess({ Status: false }))
             dispatch(getPriceListData(partyType_dropdown_Select.value))
+            setDropOpen(false)
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -174,13 +175,15 @@ const PriceMaster = (props) => {
     const dropOpen_ONClickHandler = price => {
         price["mode"] = "save"
         setCurrentPrice(price)
+        setMovePricelist(price)
         setDropOpen(true)
     }
 
     const dropOpen_EditHandler = price => { // Edit handler
 
         price["mode"] = "edit"
-
+        setcalculationPathstate(price.CalculationPath.map(i => ({ value: i.id, label: i.Name })))
+        setMovePricelist(price)
         setCurrentPrice(price)
         setDropOpen(true)
 
@@ -221,11 +224,11 @@ const PriceMaster = (props) => {
                 pathNo = pathNo.concat(`${ele.value},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-            setcalculationPathstate([])
+
             return JSON.stringify({
                 id: currentPrice.value,
                 Name: textInp1.value,
-                BasePriceListID: currentPrice.value,
+                BasePriceListID: movePricelist.BasePriceListID,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
                 PriceList: PriceList.value,
@@ -258,7 +261,7 @@ const PriceMaster = (props) => {
         if (hasNone.display === "none") {
             hasNone.display = "block";
         } else {
-            setPriceList(node)
+            setMovePricelist(node)
             hasNone.display = "none";
         }
     };
@@ -312,19 +315,24 @@ const PriceMaster = (props) => {
     const MainPriceTree = () => {
 
         function mainTreeFunc_3(node) {
+            var pathNo = ''
+            node.CalculationPath.map(ele => {
+                pathNo = pathNo.concat(`${ele.Name},`)
+            })
+            pathNo = pathNo.replace(/,*$/, '');
             return (
                 <ol>
                     <li >
                         <div>
-                            <div className="d-flex ">
-                                <div className=" flex-fill "><span id="span2" >{node.label}</span></div>
-                                <div className=" flex-fill "><span id="span2" >{node.CalculationPath}</span></div>
-                                <div className="d3 mr-auto">  <span id="span2">
+                            <div className="flexcontainer ">
+                                <div className=" flexitem-1"><span id="" >{node.label}</span></div>
+                                <div className=" flexitem-2 "><span id="" >{pathNo}</span></div>
+                                <div className="flexitem-3">  <span id="">
                                     <Input type="checkbox"
                                         id={`mkUp${node.value}`}
                                         defaultChecked={node.MkUpMkDn}
                                         disabled={true}></Input></span> </div>
-                                <div className="d4 mr-auto1">  <NodeInsidemenu node={node} /> </div>
+                                <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
                             </div>
                         </div>
                         {node.children ? mainTreeFunc_2(node.children) : null}
@@ -342,14 +350,19 @@ const PriceMaster = (props) => {
         }
 
         function mainTreeFunc_1(node) {
+            var pathNo = ''
+            node.CalculationPath.map(ele => {
+                pathNo = pathNo.concat(`${ele.Name},`)
+            })
+            pathNo = pathNo.replace(/,*$/, '');
             return (
                 <li  >
                     <div>
-                        <div className="d-flex ">
-                            <div className="flex-grow-1"><span id={"span1"} >{node.label}</span></div>
-                            <div className=" flex-fill "><span id="span1" >{node.CalculationPath}</span></div>
-                            <div className="mr-auto">  <span id={"span1"}><Input type="checkbox"></Input></span> </div>
-                            <div className="mr-auto">  <NodeInsidemenu node={node} /> </div>
+                        <div className="flexcontainer ">
+                            <div className="flexitem-1"><span id={""} >{node.label}</span></div>
+                            <div className=" flexitem-2 "><span id="" >{pathNo}</span></div>
+                            <div className="flexitem-3">  <span id={""}><Input type="checkbox"></Input></span> </div>
+                            <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
                         </div>
                     </div>
 
@@ -498,7 +511,7 @@ const PriceMaster = (props) => {
                                                                 <Col className="col-9">
                                                                     <Input
                                                                         id="Input"
-                                                                        value={editPriceList.label}
+                                                                        value={movePricelist.label}
                                                                         placeholder="Select..."
                                                                         onClick={onclickselect}
                                                                         autoComplete="off"

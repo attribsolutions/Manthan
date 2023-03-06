@@ -187,11 +187,7 @@ ol {
     }
   }
 }
-.games-dropdown-2 {
- 
-    // background: "#023950",
-   
-}
+
 #span1  {
   background-color:$first ;
   border-radius: 7px;
@@ -254,4 +250,41 @@ li li li li span{background-color:$first}
   border-top:1px solid $border;
   width: 10px;;
   height:100%;
+}
+
+
+
+
+
+
+
+
+.flexcontainer{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.flexitem-1{
+  flex-grow:4;
+  flex: 50%;
+  border-radius:7px;
+}
+.flexitem-2{
+  // flex-grow:3;
+  // max-width:  200px;
+  // flex-basis: 200px;
+  flex: 20%;
+}
+.flexitem-3{
+  flex-grow:1;
+  // flex-basis: 40px;
+  max-width:  40px;
+  flex: 20%;
+}
+.flexitem-4{
+  // flex-basis: 20px;
+  // flex-grow:1;
+  max-width:  30px;
+  flex: 10%;
+
 }
