@@ -45,17 +45,17 @@ const RoutesList = (props) => {
         const page_Id = pageId.ROUTES_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+        dispatch(PostRouteslist());
     }, []);
     const { pageField, userAccess = [] } = reducers;
 
-    useEffect(() => {
-
-        const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Company: loginCompanyID()
-        });
-        dispatch(PostRouteslist(jsonBody));
-    }, []);
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Party: loginPartyID(),
+    //         Company: loginCompanyID()
+    //     });
+    //     dispatch(PostRouteslist(jsonBody));
+    // }, []);
 
     return (
         <React.Fragment>
