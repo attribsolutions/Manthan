@@ -123,7 +123,10 @@ import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
 
 import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
 import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
-
+import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
+import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
+import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
+import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -221,6 +224,9 @@ const userRoutes = [
   { path: path.SALESMAN, component: SalesManMaster },
   { path: path.SALESMAN_LIST, component: SalesManList },
 
+  { path: path.CREDITLIMIT, component: CreditLimitMaster },
+  // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
+
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
@@ -267,6 +273,8 @@ const userRoutes = [
   { path: path.INVOICE_1, component: Invoice },
   { path: path.INVOICE_LIST_1, component: InvoiceList },
 
+  { path: path.LOADING_SHEET, component: LoadingSheet },
+  { path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },

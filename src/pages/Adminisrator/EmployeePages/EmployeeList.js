@@ -39,28 +39,22 @@ const Employee_List = () => {
     updateSucc: updateEmployeeIDSuccess,
     deleteSucc: deleteEmployeeIDSuccess
   }
- 
+
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     const page_Id = pageId.EMPLOYEE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getEmployeelist(getListbodyFunc()));
+    dispatch(getEmployeelist());
   }, []);
 
-  function getListbodyFunc() {
-    return JSON.stringify({
-        UserID: loginUserID(),
-        RoleID: loginRoleID(),
-        CompanyID: loginCompanyID()
-    })
-}
+
   const { pageField, userAccess = [] } = reducers
 
   return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      
+
       {
         (pageField) ?
           <CommonListPage
@@ -70,7 +64,6 @@ const Employee_List = () => {
             masterPath={url.EMPLOYEE}
             ButtonMsgLable={"Employee"}
             deleteName={"Name"}
-            getListbodyFunc={getListbodyFunc}
           />
           : null
       }
