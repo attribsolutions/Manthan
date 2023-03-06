@@ -13,8 +13,8 @@ export const pageHeder = (doc, data) => {
     // doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
-    doc.setFontSize(15)
-    doc.text('TAX INVOICE', 180, 35,)
+    doc.setFontSize(12)
+    doc.text('TAX INVOICE', 180, 30,)
 
     //Tax invoice Header
 }
@@ -22,19 +22,23 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 55)  //bill by 
-    doc.text('Billed to', 280, 55) //billed to
-    doc.text('Details of Transport', 440, 55)
+    doc.text("Billed by", 80, 47)  //bill by 
+    doc.text('Billed to', 280, 47) //billed to
+    doc.text('Details of Transport', 440, 47)
 
 
-    doc.line(570, 44, 30, 44) //horizontal line 1 billby upper
+    doc.line(570, 37, 30, 37) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 60, 30, 60);//horizontal line 3
+    doc.line(570, 51, 30, 51);//horizontal line 3
     doc.line(409, 75, 30, 75)//horizontal line 4
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 160, 408, 16);//vertical right 1
     doc.line(220, 160, 220, 60);//vertical right 2
+    debugger
+    doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
+
+
 
     var options3 = {
         margin: {
@@ -72,7 +76,9 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
+     
         startY: 60,
+        
        
 
 
@@ -91,11 +97,11 @@ export const reportHeder2 = (doc, data) => {
 export const reportHeder3 = (doc, data) => {
 
     doc.setFont('Tahoma')
-    doc.setFontSize(10)
-    doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
+    doc.setFontSize(8)
+    doc.line(570, 26, 408, 26) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 25) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 40) //Invoice date
+    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 23) //Invoice Id
+    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
 
 
 }
@@ -153,7 +159,7 @@ export const reportFooter = (doc, data) => {
 
             }
         },
-        startY: 70,
+        startY: 70
     };
     doc.setFontSize(9)
 }
@@ -165,6 +171,7 @@ export const tableBody = (doc, data) => {
     //    const a= OrderItem.forEach((element) => {
     //         element.Comment
     //     })
+
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[5].raw === "isaddition") {
@@ -246,13 +253,12 @@ export const tableBody = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 150,// 45,
+        startY: doc.previousAutoTable.finalY,// 45,
         // startY:85
 
         
     };
-
-
+   
 
     doc.autoTable(table.columns, table.Rows(data), options,);
 
@@ -262,7 +268,7 @@ export const tableBody = (doc, data) => {
             left: 30, right: 30, bottom: 100
         },
         showHead: 'never',
-        // theme: 'plain',
+        theme: 'plain',
         headerStyles: {
             // columnWidth: 'wrap',
             // cellPadding: 1,
@@ -376,15 +382,15 @@ export const pageFooter = (doc, data) => {
         return str.replace(/\s+/g, ' ');
     }
     let stringNumber = toWords(data.GrandTotal)
-    // doc.addImage(upi_qr_code, 'PNG', 485, 305, 80, 60)
+    doc.addImage(upi_qr_code, 'PNG', 370, 315, 60, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     // doc.line(570, 340, 30, 340);//horizontal line Footer 3
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
     doc.line(435, 295, 435, 370);//vertical right1 Qr Left 1
-    doc.line(430, 680, 430, 745);//vertical right1 Sub Total
+    doc.line(360,308, 360, 370);//vertical right1 Sub Total
     doc.setFont('Tahoma')
-    doc.line(435, 340, 30, 340);//horizontal line (Bottom)
+    doc.line(360, 340, 30, 340);//horizontal line (Bottom)
 
 
     const a = data.InvoiceItems.map((data) => ({
@@ -437,9 +443,9 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(9)
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
-    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
-   quantity whitch it/these purports to be `, 34, 350,)
-    doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 318,)
+    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+     of the nature and quantity whitch it/these purports to be `, 34, 350,)
+    doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
     doc.setFont(undefined, 'bold')
     doc.text(`Ruppe:`, 33, 305,)

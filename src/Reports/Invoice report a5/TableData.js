@@ -125,7 +125,6 @@ export const ReportHederRows = (data) => {
         [`${data.CustomerName}`, `${data.PartyName}`,`vehical No :MH34566` ,],
         [`${data.coustomerAddress}`, `${data.PartyAddress}`,`State:Maharashtra`,],
         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`E-way Bill :24654364633`],
-     
         [,, `INR NO :${data.FullInvoiceNumber}`]
     ]
   
