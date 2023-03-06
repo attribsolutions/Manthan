@@ -173,6 +173,7 @@ const PriceMaster = (props) => {
 
     }
     const dropOpen_ONClickHandler = price => {
+        price.BasePriceListID = price.value
         price["mode"] = "save"
         setCurrentPrice(price)
         setMovePricelist(price)
@@ -224,6 +225,7 @@ const PriceMaster = (props) => {
                 pathNo = pathNo.concat(`${ele.value},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
+            debugger
 
             return JSON.stringify({
                 id: currentPrice.value,
@@ -265,6 +267,7 @@ const PriceMaster = (props) => {
             hasNone.display = "none";
         }
     };
+
 
 
     const NodeInsidemenu = ({ node }) => {
@@ -315,19 +318,20 @@ const PriceMaster = (props) => {
     const MainPriceTree = () => {
 
         function mainTreeFunc_3(node) {
-            var pathNo = ''
-            node.CalculationPath.map(ele => {
+            let pathNo = "Select Path"
+            node.CalculationPath.map((ele, k) => {
+                if (k === 0) { pathNo = '' }
                 pathNo = pathNo.concat(`${ele.Name},`)
             })
-            pathNo = pathNo.replace(/,*$/, '');
+            pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
             return (
                 <ol>
                     <li >
                         <div>
                             <div className="flexcontainer ">
-                                <div className=" flexitem-1"><span id="" >{node.label}</span></div>
-                                <div className=" flexitem-2 "><span id="" >{pathNo}</span></div>
-                                <div className="flexitem-3">  <span id="">
+                                <div className=" flexitem-1"><span id="span2" >{node.label}</span></div>
+                                <div className=" flexitem-2 "><span id="span2" >{pathNo}</span></div>
+                                <div className="flexitem-3">  <span id="span2">
                                     <Input type="checkbox"
                                         id={`mkUp${node.value}`}
                                         defaultChecked={node.MkUpMkDn}
@@ -350,18 +354,19 @@ const PriceMaster = (props) => {
         }
 
         function mainTreeFunc_1(node) {
-            var pathNo = ''
-            node.CalculationPath.map(ele => {
+            let pathNo = "Select Path"
+            node.CalculationPath.map((ele,k) => {
+                if (k === 0) { pathNo = '' }
                 pathNo = pathNo.concat(`${ele.Name},`)
             })
-            pathNo = pathNo.replace(/,*$/, '');
+            pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
             return (
                 <li  >
                     <div>
                         <div className="flexcontainer ">
-                            <div className="flexitem-1"><span id={""} >{node.label}</span></div>
-                            <div className=" flexitem-2 "><span id="" >{pathNo}</span></div>
-                            <div className="flexitem-3">  <span id={""}><Input type="checkbox"></Input></span> </div>
+                            <div className="flexitem-1"><span id={"span1"} >{node.label}</span></div>
+                            <div className=" flexitem-2 "><span id="span1" >{pathNo}</span></div>
+                            <div className="flexitem-3">  <span id={"span1"}><Input type="checkbox"></Input></span> </div>
                             <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
                         </div>
                     </div>
