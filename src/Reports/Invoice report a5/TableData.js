@@ -119,11 +119,12 @@ export const ReportFotterColumns = [
 ];
 
 export const ReportHederRows = (data) => {
+    debugger
    
     var reportArray = [
         [, ,'Driver Name : Sameer'],
         [`${data.CustomerName}`, `${data.PartyName}`,`vehical No :MH34566` ,],
-        [`${data.coustomerAddress}`, `${data.PartyAddress}`,`State:Maharashtra`,],
+        [`Maharashtra`, `Karnatak`,`State:Maharashtra`,],
         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`E-way Bill :24654364633`],
         [,, `INR NO :${data.FullInvoiceNumber}`]
     ]

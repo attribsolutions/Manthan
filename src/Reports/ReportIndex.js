@@ -45,6 +45,7 @@ const generateReport = (resp) => {
             VanLoadingSheet(resp.Data)
             break;
         case invoiceA5:
+            debugger
             InvioceReporta5(resp.Data)
             break;
 

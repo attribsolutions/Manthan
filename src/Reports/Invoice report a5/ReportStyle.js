@@ -10,17 +10,15 @@ export const pageBorder = (doc) => {
     doc.line(570, 370, 30, 370);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    // doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(12)
     doc.text('TAX INVOICE', 180, 30,)
 
-    //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
-    doc.setFontSize(11)
+    doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
     doc.text("Billed by", 80, 47)  //bill by 
     doc.text('Billed to', 280, 47) //billed to
@@ -30,15 +28,13 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 37, 30, 37) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 51, 30, 51);//horizontal line 3
-    doc.line(409, 75, 30, 75)//horizontal line 4
+    doc.line(409, 64, 30, 64)//horizontal line 4
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
-    doc.line(408, 160, 408, 16);//vertical right 1
-    doc.line(220, 160, 220, 60);//vertical right 2
+    doc.line(408, 145, 408, 16);//vertical right 1
+    doc.line(220, 145, 220, 51);//vertical right 2
     debugger
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
-
-
 
     var options3 = {
         margin: {
@@ -77,10 +73,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
      
-        startY: 60,
-        
-       
-
+        startY: 50,
 
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
@@ -88,10 +81,10 @@ export const reportHeder1 = (doc, data) => {
 
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
-    doc.setFontSize(10)
+    doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 70)
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 70)
+    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 60)
+    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 60)
 }
 
 export const reportHeder3 = (doc, data) => {
@@ -269,42 +262,9 @@ export const tableBody = (doc, data) => {
         },
         showHead: 'never',
         theme: 'plain',
-        headerStyles: {
-            // columnWidth: 'wrap',
-            // cellPadding: 1,
-            // lineWidth: 0,
-            // valign: 'top',
-            // fontStyle: 'bold',
-            // halign: 'left',    //'center' or 'right'
-            // fillColor: "white",
-            // textColor: [0, 0, 0], //Black     
-            // // textColor: [255, 255, 255], //White     
-            // // fillColor: "white"
-            // fontSize: 8,
-            // rowHeight: 10,
-            // lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            // columnWidth: 'wrap',
-            // textColor: [30, 30, 30],
-            // cellPadding: 2,
-            // fontSize: 7,
-            // fontStyle: 'bold',
-            // lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                // columnWidth:10,
-                // fontStyle: 'bold',
-            },
-            1: {
-                halign: 'right',    //'center' or 'left'
-                valign: "top",
-                // columnWidth: 140,
-                // fontStyle: 'bold',
-            },
-        },
+    
+       
+        
         didParseCell: function (cell, data) {
             console.log("didParseCell", cell)
             console.log(" didParse data", data)

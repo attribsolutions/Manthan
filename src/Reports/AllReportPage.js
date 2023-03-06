@@ -11,13 +11,11 @@ const Report = () => {
 const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
     const dispatch = useDispatch();
 
-
     function downBtnFunc() {
         var ReportType = report.invoiceA5;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType,1))
     }
    
-
     return (
         <React.Fragment>
             <div className="page-content" >
