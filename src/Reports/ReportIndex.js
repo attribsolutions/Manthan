@@ -17,6 +17,7 @@ export const invoiceA5 = "invoiceA5"
 
 
 const generateReport = (resp) => {
+    debugger
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)
