@@ -136,13 +136,14 @@ const RoleAccessListPage = () => {
 
     //select id for delete row
     const deleteHandeler = async (id, name) => {
+        debugger
         const ispermission = await CustomAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
         })
         if (ispermission) {
             let role = id.Role_id
-            let division = id.Division_id
+            let division = id.Division_id===null?0:id.Division_id
             let company = id.Company_id
             dispatch(DeleteRoleAcess(role, division, company))
         }

@@ -24,9 +24,9 @@ import {
   
   
   ///  list 
-  export const PostRouteslist = (data) => ({
+  export const PostRouteslist = (jsonBody) => ({
     type: POST_ROUTES_LIST,
-    data,
+    jsonBody,
   });
   
   export const PostRouteslistSuccess = (data) => ({

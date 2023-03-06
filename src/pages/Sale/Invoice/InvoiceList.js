@@ -135,7 +135,7 @@ const InvoiceList = () => {
 
 
     function downBtnFunc(row) {
-        var ReportType = report.VanLoadingSheetSKU;
+        var ReportType = report.invoiceA5;
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 

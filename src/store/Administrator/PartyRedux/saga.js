@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { GetPriceList_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API, GetAddressTypes_For_Dropdown, GetParty_For_Dropdown, GetPartyTypes_For_Dropdown, GetCompany_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -35,7 +35,8 @@ function* Get_Party_GenratorFunction() {
   const jsonBody = {
     "UserID": loginUserID(),
     "RoleID": loginRoleID(),
-    "CompanyID": loginCompanyID()
+    "CompanyID": loginCompanyID(),
+    "PartyID": loginPartyID()
   }
   try {
     const response = yield call(Party_Master_Get_API, jsonBody);
