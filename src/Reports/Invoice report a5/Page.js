@@ -21,6 +21,7 @@ function pageFooter(doc,data) {
 }
 
  const InvioceReporta5=(data)=> {
+ 
     var doc = new jsPDF('l', 'pt', 'a5');
     pageHeder(doc,data);
     reportBody(doc, data);

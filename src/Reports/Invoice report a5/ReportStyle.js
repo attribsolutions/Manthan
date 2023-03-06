@@ -12,6 +12,7 @@ export const pageBorder = (doc) => {
 export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
+    doc.setFont(undefined, 'bold')
     doc.setFontSize(12)
     doc.text('TAX INVOICE', 180, 30,)
 
@@ -107,10 +108,10 @@ export const reportFooter = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            top: 410, left: 410, right: 30,
+            top: 100, left: 50, right: 30,
         },
         showHead: 'never',
-        theme: 'plain',
+        theme: '',
         headerStyles: {
             cellPadding: 1,
             lineWidth: 0,
@@ -152,10 +153,13 @@ export const reportFooter = (doc, data) => {
 
             }
         },
-        startY: 70
+        startY: 100
     };
     doc.setFontSize(9)
+doc.autoTable(optionsTable4,);
+
 }
+
 export const tableBody = (doc, data) => {
     const tableRow = table.Rows(data);
     const { OrderItem = [] } = data
@@ -255,10 +259,10 @@ export const tableBody = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom: 100
+            left: 30, right: 30, bottom:100
         },
         showHead: 'never',
-        theme: 'plain',
+        theme: '',
     
        
         
@@ -401,7 +405,7 @@ export const pageFooter = (doc, data) => {
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity whitch it/these purports to be `, 34, 350,)
+     of the nature and quantity which it/these purports to be `, 34, 350,)
     doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
     doc.setFont(undefined, 'bold')
@@ -434,7 +438,7 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
+        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 380, {
             align: 'center'
         })
         console.log("aaa", doc.internal.pageSize.height)
