@@ -96,7 +96,6 @@ const SidebarContent = (props) => {
     }
 
     const initMenu = () => {
-      // 
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
