@@ -184,6 +184,8 @@ export const SALESMAN_FOR_MASTER = '/Salesman'
 export const GO_BUTTON_POST_API_FOR_CREDIT_LIMIT = '/CreditlimitList' // for go button
 export const CREDIT_LIMIT = '/Creditlimit' 
 
+export const ROUTE_UPDATE_LIST = '/RouteUpdateList' 
+export const ROUTE_UPDATE = '/RouteUpdate' 
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"

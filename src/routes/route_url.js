@@ -101,6 +101,8 @@ export const CREDITLIMIT_LIST = "/CreditLimitList"
 
 export const IMPORT_MASTER = "/Import_Master"
 export const IMPORT_MASTER_LIST = "/Import_Type_List"
+
+export const ROUTE_UPDATE ="/RouteUpdate"
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"

@@ -102,6 +102,7 @@ export const CREDITLIMIT_LIST = 154
 export const IMPORT_MASTER = 157
 export const IMPORT_MASTER_LIST = 158
 
+export const ROUTE_UPDATE = 159
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
