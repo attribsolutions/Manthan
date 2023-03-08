@@ -58,6 +58,8 @@ export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"
 export const GET_COMPANY_BY_EMPLOYEETYPES_ID = "/GetCompanyByEmployeeType" //CompanyByEmployeeType
 // Role Master
 export const ROLE_MASTER_API = "/Roles" // role get api
+export const ROLE_FILTER_API = "/RolesFilter" // role get api
+
 
 // M_Items Api
 export const Items_MASTER_API = "/Items"
