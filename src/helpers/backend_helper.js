@@ -130,7 +130,7 @@ export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_
 
 
 // Role Master
-export const Role_Master_Get_API = () => get(url.ROLE_MASTER_API)//get api
+export const Role_Master_Get_API = (data) => post(url.ROLE_FILTER_API,data)//get api
 export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API, data)// post api
 export const Role_Master_Delete_API = (id) => del(`${url.ROLE_MASTER_API}/${id}`)// delete api
 export const Role_Master_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
