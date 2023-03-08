@@ -45,17 +45,9 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+        dispatch(PostSalesManlist())
     }, []);
     const { pageField, userAccess = [] } = reducers;
-
-    useEffect(() => {
-
-        const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Company: loginCompanyID()
-        });
-        dispatch(PostSalesManlist(jsonBody));
-    }, []);
 
     return (
         <React.Fragment>

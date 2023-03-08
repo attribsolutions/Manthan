@@ -182,12 +182,12 @@ export const SALESMAN_FOR_LIST = '/SalesmanList '
 export const SALESMAN_FOR_MASTER = '/Salesman' 
 
 // Credit Limit 
-export const ROUTES_DROPDOWN  = '/RoutesList' 
+export const GO_BUTTON_POST_API_FOR_CREDIT_LIMIT = '/CreditlimitList' // for go button
+export const CREDIT_LIMIT = '/Creditlimit' 
 
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
-
 
 //order 
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
@@ -250,8 +250,6 @@ export const IBORDER_LiST_BY_FILTERS = '/InterBranchesOrderFilter'
 export const POST_API_FOR_INWARD = '/InterBranchInward'// Inward  addpage save Api
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//InwardList filter Api
 export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
-
-
 
 export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api

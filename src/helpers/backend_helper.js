@@ -129,7 +129,6 @@ export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/
 export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
 
 
-
 // Role Master
 export const Role_Master_Get_API = () => get(url.ROLE_MASTER_API)//get api
 export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API, data)// post api
@@ -499,8 +498,8 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
 
 //CREDITLIMIT
-export const Post_CreditLimit_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
-export const CreditLimit_GoButton_Post_API =(data) => post(url.SALESMAN_FOR_MASTER, data)// post api
+export const Post_CreditLimit_Master_API = (data) => post(url.CREDIT_LIMIT, data)// post api
+export const CreditLimit_GoButton_Post_API =(data) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, data)// post api
 
 // export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
 // export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api

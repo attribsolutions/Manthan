@@ -70,8 +70,8 @@ const PageMaster = (props) => {
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
     FieldLabel: '',
-    ControlType: { label: "select", value: 0 },
-    FieldValidation: { label: "select", value: 0 },
+    ControlType: { label: "select...", value: 0 },
+    FieldValidation: { label: "select...", value: 0 },
     InValidMsg: '',
     ListPageSeq: '',
     IsCompulsory: false,

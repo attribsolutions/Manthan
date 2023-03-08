@@ -37,7 +37,7 @@ export const listPageCommonButtonFunction = (props) => {
     // }
 
     function editHandler(rowData, btnmode) {
-
+       
         if (editBodyfunc) { editBodyfunc(rowData, btnmode, subPageMode) }
         else {
             dispatch(editActionFun(rowData.id, btnmode, subPageMode));
@@ -329,7 +329,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID 
 }
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
- let user_EmployeeID = 0
+    let user_EmployeeID = 0
     try {
         user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
     } catch (e) { alert("Common loginEmployeeID Func  Error") }
@@ -337,7 +337,7 @@ export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginParty
 }
 
 export const loginIsSCMCompany = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
-        let IsSCMCompany = 0
+    let IsSCMCompany = 0
     try {
         IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"))
     } catch (e) { alert("Common loginEmployeeID Func  Error") }

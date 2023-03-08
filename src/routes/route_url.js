@@ -96,8 +96,11 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const GENERAL = "/GeneralMaster"
 export const GENERAL_LIST = "/GeneralList"
 
-export const CREDITLIMIT = "/CreditLimitMaster"
+export const CREDITLIMIT = "/CreditLimit"
 export const CREDITLIMIT_LIST = "/CreditLimitList"
+
+export const IMPORT_MASTER = "/Import_Master"
+export const IMPORT_MASTER_LIST = "/Import_Type_List"
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
