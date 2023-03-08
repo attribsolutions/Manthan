@@ -120,14 +120,12 @@ export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_CO
 
 //User Registration  All APIs 
 export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_LIST_FOR_DROPDOWN_API_URL)//get api for Dropdown_list data 
-export const RolesListDropdown_For_UserRegistration_API = () => get(url.ROLE_API_URL)
 export const User_Component_PostMethod_API = (data) => post(url.REGISTRATION_API_URL, data)//post for (save and update) User_Component
 export const User_Component_GetMethod_API = (jsonbody) => post(url.USER_API_URL,jsonbody) //Get User_Component
 export const User_Component_Delete_Method_API = (id) => del(`${url.USER_API_URL}/${id}`) // delete api
 export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id}`) // edit api
 export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/${id}`, data) // update api
 export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
-
 
 // Role Master
 export const Role_Master_Get_API = (data) => post(url.ROLE_FILTER_API,data)//get api
@@ -145,7 +143,7 @@ export const edit_ModuleID = (id) => get(`${url.H_MODULES_API_URL}/${id}`)// Edi
 export const updateModule_ID = (data, id) => put(`${url.H_MODULES_API_URL}/${id}`, data)// Update_Modules- by_ID
 
 //Fetch Company LIst
-export const fetch_CompanyList = () => get(url.COMPANY_API_URL,)
+export const fetch_CompanyList = (data) => post(url.COMPANY_FILTER,data)
 export const edit_CompanyID = (id) => get(`${url.COMPANY_API_URL}/${id}`)// Edit_Company- by_ID
 export const delete_CompanyID = (id) => del(`${url.COMPANY_API_URL}/${id}`)// Delete_Company_By-ID
 export const postSubmit_Company = (data) => post(url.COMPANY_API_URL, data)// Company_Modules submit 

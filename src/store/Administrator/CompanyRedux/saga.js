@@ -1,7 +1,15 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
-import { deleteCompanyIDSuccess, editCompanyIDSuccess, fetchCompanyListSuccess, getCompanyGroupSuccess, PostCompanySubmitSuccess, updateCompanyIDSuccess } from "./actions";
+import { loginJsonBody } from "../../CommonAPI/CommonJsonBody";
+import {
+  deleteCompanyIDSuccess,
+  editCompanyIDSuccess,
+  fetchCompanyListSuccess,
+  getCompanyGroupSuccess,
+  PostCompanySubmitSuccess,
+  updateCompanyIDSuccess
+} from "./actions";
 import {
   DELETE_COMPANY_ID,
   EDIT_COMPANY_ID,
@@ -13,7 +21,7 @@ import {
 
 function* fetch_CompanyList_data() {
   try {
-    const response = yield call(fetch_CompanyList);
+    const response = yield call(fetch_CompanyList, loginJsonBody());
     yield put(fetchCompanyListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
