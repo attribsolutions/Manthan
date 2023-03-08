@@ -115,7 +115,7 @@ const PartySubParty = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -222,7 +222,9 @@ const PartySubParty = (props) => {
             setPartyData(PartySubParty.map(i => ({
                 value: i.SubParty,
                 label: i.SubPartyName,
-                partyType: i.PartyType
+                partyType: i.PartyType,
+                Creditlimit: i.Creditlimit,
+                Route: i.Route
             })));
         }
     }, [PartySubParty]);
@@ -238,9 +240,6 @@ const PartySubParty = (props) => {
         party: i.PartyType
     }));
 
-
-
-
     function handllerDivision(e) {
         dispatch(getPartySubParty_For_party_dropdown(e.value));
         setDivision_dropdown_Select(e)
@@ -252,7 +251,6 @@ const PartySubParty = (props) => {
 
     /// Role Table Validation
     function AddPartyHandler() {
-
 
         const find = PartyData.find((element) => {
             return element.value === Party_dropdown_Select.value
@@ -291,14 +289,14 @@ const PartySubParty = (props) => {
     }
 
     const SaveHandler = (event) => {
-
-
+        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const arr = PartyData.map(i => {
                 const normal = {
                     Party: Division_dropdown_Select.value,
                     SubParty: i.value,
+
                 }
                 const isvendor = {
                     Party: i.value,
@@ -309,6 +307,8 @@ const PartySubParty = (props) => {
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                     PartyID: Division_dropdown_Select.value,
+                    Creditlimit: i.Creditlimit,
+                    Route: i.Route
                 }
 
                 if (i.partyType === 3) {
@@ -321,12 +321,9 @@ const PartySubParty = (props) => {
             const jsonBody = JSON.stringify(arr);
             saveDissable(true);//save Button Is dissable function
             if (pageMode === mode.edit) {
-                
                 dispatch(updatePartySubParty(jsonBody, values.id,));
             }
             else {
-                
-
                 dispatch(postPartySubParty(jsonBody));
             }
         }

@@ -29,9 +29,10 @@ import {
 } from "./actionType"
 
 import { AlertState } from "../../actions";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function* getListGenFunc() {
-  
+
     try {
         const response = yield call(PartySubParty_Get_API);
         // const data = response.Data.map((index) => ({
@@ -61,89 +62,46 @@ function* getListGenFunc() {
         // yield put(getPartySubPartylistSuccess(data));
         // console.log("response in saga", response)
         yield put(getPartySubPartylistSuccess(response.Data));
-       
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* postGenFunc({ data }) {
-  
     try {
         const response = yield call(PartySubParty_Post_API, data);
-       
         yield put(postPartySubPartySuccess(response));
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* deleteGenFunc({ id }) {
     try {
-      
         const response = yield call(PartySubParty_Delete_API, id);
-       
         yield put(deletePartySubPartySuccess(response))
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* editGenFunc({ id, pageMode }) {
+    debugger
     try {
         const response = yield call(PartySubParty_Edit_API, id);
         response.pageMode = pageMode
         yield put(editPartySubPartySuccess(response));
-    } catch (error) {
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 function* updateGenFunc({ updateData, ID }) {
     try {
-      
         const response = yield call(PartySubParty_Update_API, updateData, ID);
-       
         yield put(updatePartySubPartySuccess(response))
-    }
-    catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
-function* getPartySubPartyGenFunc({id}) {
-  
+function* getPartySubPartyGenFunc({ id }) {
     try {
-        const response = yield call(PartySubParty_Dropdown_Get_API,id);
+        const response = yield call(PartySubParty_Dropdown_Get_API, id);
         yield put(getPartySubParty_For_party_dropdownSuccess(response.Data));
-       
-    } catch (error) {
-       
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message PartySubParty list dropdown",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
+
 function* PartySubPartysaga() {
     yield takeEvery(GET_PARTY_SUB_PARTY_LIST, getListGenFunc)
     yield takeEvery(POST_PARTY_SUB_PARTY, postGenFunc)
