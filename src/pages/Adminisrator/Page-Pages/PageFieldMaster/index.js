@@ -44,8 +44,8 @@ function PageFieldMaster_Tab(props) {
         var newarr1 = [...pageFieldTabTable, {
             ControlID: '',
             FieldLabel: '',
-            ControlType: { label: "select", value: 0 },
-            FieldValidation: { label: "select", value: 0 },
+            ControlType: { label: "select...", value: 0 },
+            FieldValidation: { label: "select...", value: 0 },
             InValidMsg: '',
             IsCompulsory: false,
             DefaultSort: 0,

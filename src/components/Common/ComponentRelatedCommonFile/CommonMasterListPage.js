@@ -71,7 +71,7 @@ const CommonListPage = (props) => {
   } = props.action
 
   const {
-    getListbodyFunc =()=> {},
+    getListbodyFunc = () => { },
     MasterModal,
     ButtonMsgLable,
     deleteName,
@@ -119,14 +119,11 @@ const CommonListPage = (props) => {
       saveDissable(false);//+++++++++save Button Is enable function
 
       dispatch(updateSucc({ Status: false }));
-
-      const promise = await CustomAlert({
+      dispatch(getList(getListbodyFunc()));
+      CustomAlert({
         Type: 1,
-        Message: updateMsg.Message,
+        Message: JSON.stringify(updateMsg.Message),
       })
-      if (promise) {
-        getList(getListbodyFunc())
-      }
       tog_center();
     } else if (updateMsg.Status === true) {
 
@@ -141,7 +138,7 @@ const CommonListPage = (props) => {
   }, [updateMsg]);
 
 
-  useEffect( async() => {
+  useEffect(async () => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
 
@@ -149,9 +146,10 @@ const CommonListPage = (props) => {
         Type: 1,
         Message: deleteMsg.Message,
       })
-      if (promise) {
-        getList(getListbodyFunc())
-      }
+      // if (promise) {
+        // getList(getListbodyFunc())
+        dispatch(getList(getListbodyFunc()));
+      // }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
       CustomAlert({
@@ -162,17 +160,18 @@ const CommonListPage = (props) => {
   }, [deleteMsg]);
 
 
-  useEffect(() => {
+  useEffect(async () => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postSucc({ Status: false }))
       saveDissable(false);//+++++++++save Button Is enable function
-      tog_center();
-      dispatch(getList(getListbodyFunc()));
-      CustomAlert({
+      const promise = await CustomAlert({
         Type: 1,
-        Message: JSON.stringify(deleteMsg.Message),
+        Message: postMsg.Message
       })
+      dispatch(getList(getListbodyFunc()));
+      tog_center();
+   
     }
 
     else if ((postMsg.Status === true)) {
@@ -180,7 +179,7 @@ const CommonListPage = (props) => {
       dispatch(postSucc({ Status: false }))
       CustomAlert({
         Type: 4,
-        Message: JSON.stringify(deleteMsg.Message),
+        Message: JSON.stringify(postMsg.Message),
       })
     }
 
@@ -206,6 +205,9 @@ const CommonListPage = (props) => {
   }, [editData]);
 
   function tog_center() {
+    if (modal_edit) {
+      breadcrumbReturn({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+    }
     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
   }
 
