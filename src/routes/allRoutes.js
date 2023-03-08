@@ -129,6 +129,7 @@ import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMast
 import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 import Report from "../Reports/AllReportPage";
 import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
+import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -230,6 +231,8 @@ const userRoutes = [
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
   { path: path.IMPORT_MASTER, component: ImportMaster },
+
+  { path: path.ROUTE_UPDATE, component: RouteUpdate },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

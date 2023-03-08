@@ -108,6 +108,8 @@ export const CreditLimitList = url.CREDITLIMIT
 export const ImportMaster = url.IMPORT_MASTER_LIST
 export const ImportTypeList = url.IMPORT_MASTER
 
+export const RouteUpdate =url.ROUTE_UPDATE
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1

@@ -379,6 +379,14 @@ export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}
 export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
 export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
 
+//Credit Limit
+export const Post_CreditLimit_Master_API = (data) => post(url.CREDIT_LIMIT, data)// post api
+export const CreditLimit_GoButton_Post_API =(data) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, data)// Go Button post api
+
+// Route Update
+export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
+export const Post_Route_Update_API = (data) => post(url.ROUTE_UPDATE, data)// Route Update Post API
+
 // Order Page api  
 
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
@@ -496,10 +504,6 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
 // export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
 // export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
-
-//CREDITLIMIT
-export const Post_CreditLimit_Master_API = (data) => post(url.CREDIT_LIMIT, data)// post api
-export const CreditLimit_GoButton_Post_API =(data) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, data)// post api
 
 // export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
 // export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
