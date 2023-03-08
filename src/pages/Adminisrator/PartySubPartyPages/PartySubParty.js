@@ -90,6 +90,7 @@ const PartySubParty = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
+        
     }, []);
 
     const values = { ...state.values }
