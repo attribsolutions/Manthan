@@ -4,11 +4,11 @@ export const columns =[
     "HSNCode Item Name",
     "Quantity",
     "Rate",
-    "BasicAmount",
+    "BasicAmt",
     "CGST %",
-    "CGSTAmount",
+    "CGSTAmt",
     "SGST %",
-    "SGSTAmount",
+    "SGSTAmt",
     "Total Amt" 
 ];
 
