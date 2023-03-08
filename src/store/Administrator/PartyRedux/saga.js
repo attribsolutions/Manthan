@@ -1,6 +1,17 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { GetPriceList_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API, GetAddressTypes_For_Dropdown, GetParty_For_Dropdown, GetPartyTypes_For_Dropdown, GetCompany_For_Dropdown } from "../../../helpers/backend_helper";
+import {
+  GetPriceList_For_Dropdown,
+  GetCompanyByDivisionTypeID_For_Dropdown,
+  GetDistrictOnState_For_Dropdown,
+  GetPartyTypeByDivisionTypeID_For_Dropdown,
+  Party_Master_Delete_API,
+  Party_Master_Edit_API,
+  Party_Master_Get_API,
+  Party_Master_Post_API,
+  Party_Master_Update_API,
+  GetAddressTypes_For_Dropdown,
+} from "../../../helpers/backend_helper";
 import { loginJsonBody } from "../../CommonAPI/CommonJsonBody";
 import {
   deletePartyIDSuccess,
@@ -13,7 +24,6 @@ import {
   postPartyDataSuccess,
   updatePartyIDSuccess,
   getAddressTypesSuccess,
-  getCompanySuccess
 } from "./action";
 import {
   DELETE_PARTY_ID, EDIT_PARTY_ID,
@@ -25,11 +35,10 @@ import {
   GET_PARTY_LIST_API,
   POST_PARTY_DATA,
   UPDATE_PARTY_ID,
-  GET_COMPANY
 } from "./actionTypes";
 
 function* Get_Party_GenratorFunction() {
-   try {
+  try {
     const response = yield call(Party_Master_Get_API, loginJsonBody());
     function address(arr) {
       let result = ''
@@ -111,14 +120,6 @@ function* GetAddressTypes_saga({ }) {
   } catch (error) { CommonConsole(error) }
 }
 
-//get Company
-function* GetCompany_saga({ }) {
-  try {
-    const response = yield call(GetCompany_For_Dropdown);
-    yield put(getCompanySuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
-}
-
 // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 function* GetPartyTypeByDivisionTypeID_GenratorFunction({ id }) {
   try {
@@ -144,7 +145,6 @@ function* PartyMasterSaga() {
   yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
   yield takeEvery(GET_PRICELIST, GetPriceList_saga);
   yield takeEvery(GET_ADDRESSTYPES, GetAddressTypes_saga);
-  yield takeEvery(GET_COMPANY, GetCompany_saga);
   yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenratorFunction);
   yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenratorFunction);
 }

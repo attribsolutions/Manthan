@@ -572,7 +572,13 @@ const RoleAccessAdd = (props) => {
                                                         <Label className="col-sm-3 p-2">Company</Label>
                                                         <Col md="9">
                                                             <Select
-                                                                value={company_dropdown_Select}
+                                                                // value={company_dropdown_Select}
+                                                                value={CompanyValues.length === 1 ?
+                                                                    {
+                                                                        value: CompanyValues[0].value,
+                                                                        label: CompanyValues[0].label
+                                                                    } : company_dropdown_Select
+                                                                }
                                                                 className="rounded-bottom"
                                                                 placeholder="Select..."
                                                                 options={CompanyValues}

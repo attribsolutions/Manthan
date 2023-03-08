@@ -200,7 +200,6 @@ export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnS
 export const GetPriceList_For_Dropdown = () => get(url.PRICELIST)//  get priceList
 export const GetAddressTypes_For_Dropdown = () => get(url.ADDRESSTYPES)//  get addresstypes
 export const GetPartyTypes_For_Dropdown = () => get(url.PARTYTYPES)//  get partytypes
-export const GetCompany_For_Dropdown = () => get(url.COMPANY)//  get company
 export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_PARTYTYPE_BY_DIVISIONTYPES_ID}/${id}`)//  GetDistrictOnState DropDown API
 export const GetCompanyByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_DIVISIONTYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
 
