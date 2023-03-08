@@ -33,7 +33,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 145, 408, 16);//vertical right 1
-    doc.line(220, 145, 220, 51);//vertical right 2
+    doc.line(220, 145, 220, 37);//vertical right 2
     debugger
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
 
