@@ -555,9 +555,9 @@ export const pageFooter = (doc, data) => {
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
     doc.text(`Ruppe:${stringNumber} `, 33, 693,)
     let finalY = doc.previousAutoTable.finalY;
-    debugger
+    
     if (finalY > 600) {
-        debugger
+        
         pageBorder(doc)
         reportFooter(doc, data)
         // pageHeder(doc, data)

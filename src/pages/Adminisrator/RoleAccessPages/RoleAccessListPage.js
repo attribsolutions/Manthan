@@ -136,7 +136,7 @@ const RoleAccessListPage = () => {
 
     //select id for delete row
     const deleteHandeler = async (id, name) => {
-        debugger
+        
         const ispermission = await CustomAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,

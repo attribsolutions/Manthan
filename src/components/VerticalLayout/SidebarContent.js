@@ -74,12 +74,12 @@ const SidebarContent = (props) => {
           }
         }
       }
-      scrollElement(item);
+      // scrollElement(item);
       return false;
     }
-    scrollElement(item);
+    // scrollElement(item);
     return false;
-  }, []);
+  }, [RoleAccessUpdateData]);
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
@@ -96,7 +96,6 @@ const SidebarContent = (props) => {
     }
 
     const initMenu = () => {
-      // 
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");

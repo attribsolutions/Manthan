@@ -115,9 +115,9 @@ const MaterialIssueMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+        
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
-            debugger
+            
             const { ListData, Data } = GoButton
             const { id, Item, ItemName, Unit,WorkDate, Quantity, NumberOfLot,Bom, MaterialIssueItems = [] } = ListData
             setState((i) => {
@@ -163,7 +163,7 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+                
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
                 // const { BatchesData = [] } = MaterialIssueItems
@@ -547,7 +547,7 @@ const MaterialIssueMaster = (props) => {
     };
 
     const SaveHandler = async (event) => {
-        debugger
+        
         event.preventDefault();
         const validMsg = []
 
@@ -585,7 +585,7 @@ const MaterialIssueMaster = (props) => {
                 })
             }
             index.BatchesData.map((ele) => {
-                // debugger
+                // 
                 if (Number(ele.Qty) > 0) {
                     batch(ele)
                 }
@@ -605,7 +605,7 @@ const MaterialIssueMaster = (props) => {
                 }));
                 return
             }
-debugger
+
             const jsonBody = JSON.stringify({
                 MaterialIssueDate: values.MaterialIssueDate,
                 NumberOfLot: values.NumberOfLot,
@@ -630,7 +630,7 @@ debugger
             else {
                 dispatch(postMaterialIssue(jsonBody));
             }
-            // debugger
+            // 
         };
     }
 

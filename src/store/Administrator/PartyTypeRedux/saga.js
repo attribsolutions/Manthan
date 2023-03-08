@@ -40,7 +40,7 @@ function* Edit_PartyType_ID_GenratorFunction({ id, pageMode }) {
 
 // update api
 function* Update_PartyType_ID_GenratorFunction({ updateData, ID }) {
-  debugger
+  
   try {
     const response = yield call(update_PartyType_List_Api, updateData, ID, loginIsSCMCompany());
     yield put(updatePartyTypeIDSuccess(response))

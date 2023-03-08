@@ -11,7 +11,7 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    debugger
+    
     // doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
