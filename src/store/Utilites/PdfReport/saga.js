@@ -1,5 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { GET_PDF_REPORT_DATA } from "./actionType";
+import { Data } from "./DemoData";
+
 
 import {
   SpinnerState,
@@ -8,9 +10,13 @@ import { getpdfReportdataSuccess } from "./actions";
 
 
 function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
-
+debugger
   try {
-    const response = yield call(urlpath, Id);
+    const data = Data
+    debugger
+    // const response = yield call(urlpath, Id);
+    const response = data;
+
     response["ReportType"] = ReportType
     response.Data["ReportType"] = ReportType
     yield put(getpdfReportdataSuccess(response));
