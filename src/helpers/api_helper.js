@@ -43,7 +43,7 @@ export function get(url, isspinner, config = {}) {
 
 export function post(url, data, isspinner, config = {}) {
   console.log("Post api call")
-  // debugger
+  // 
   // if (isspinner) {
   //   mainSppinerOnOff(true)
   // }

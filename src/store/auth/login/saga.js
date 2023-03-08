@@ -53,7 +53,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-  debugger
+  
   try {
 
     const response = yield call(getUserDetails_afterLogin_ApiCall, {

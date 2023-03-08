@@ -35,7 +35,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 160, 408, 16);//vertical right 1
     doc.line(220, 160, 220, 60);//vertical right 2
-    debugger
+    
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
 
 
@@ -453,9 +453,9 @@ export const pageFooter = (doc, data) => {
 
     doc.text(`${stringNumber} `, 65, 305,)
     let finalY = doc.previousAutoTable.finalY;
-    debugger
+    
     if (finalY >120) {
-       debugger
+       
         pageBorder(doc)
         reportFooter(doc, data)
         // pageHeder(doc, data)
@@ -464,7 +464,7 @@ export const pageFooter = (doc, data) => {
         // reportHeder3(doc, data)
 
     } else {
-        debugger
+        
         pageBorder(doc)
         reportFooter(doc, data)
         pageHeder(doc, data)

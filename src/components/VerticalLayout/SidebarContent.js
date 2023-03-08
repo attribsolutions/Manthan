@@ -74,12 +74,12 @@ const SidebarContent = (props) => {
           }
         }
       }
-      scrollElement(item);
+      // scrollElement(item);
       return false;
     }
-    scrollElement(item);
+    // scrollElement(item);
     return false;
-  }, []);
+  }, [RoleAccessUpdateData]);
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {

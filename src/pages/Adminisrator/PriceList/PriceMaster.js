@@ -225,7 +225,7 @@ const PriceMaster = (props) => {
                 pathNo = pathNo.concat(`${ele.value},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-            debugger
+            
 
             return JSON.stringify({
                 id: currentPrice.value,
