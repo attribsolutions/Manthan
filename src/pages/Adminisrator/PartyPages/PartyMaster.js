@@ -41,6 +41,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
+import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -79,13 +80,12 @@ const PartyMaster = (props) => {
         updateMsg: state.PartyMasterReducer.updateMessage,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
-        Company: state.PartyMasterReducer.Company,
+        Company: state.Company.companyList,
         PartyTypes: state.PartyTypeReducer.ListData,
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
         userAccess: state.Login.RoleAccessUpdateData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType
-
     }));
 
     const location = { ...history.location }
@@ -165,11 +165,10 @@ const PartyMaster = (props) => {
         dispatch(getState());
         dispatch(getPriceList());
         dispatch(getPartyTypelist());
-        dispatch(getCompany());
+        dispatch(fetchCompanyList());
     }, [dispatch]);
 
     useEffect(() => {
-
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             setCompanyList_dropdown_Select('')
@@ -239,7 +238,8 @@ const PartyMaster = (props) => {
 
     const companyListValues = Company.map((index) => ({
         value: index.id,
-        label: index.Name
+        label: index.Name,
+
     }));
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
@@ -370,11 +370,9 @@ const PartyMaster = (props) => {
 
         if (pageMode === mode.edit) {
             dispatch(updatePartyID(jsonBody, EditData.id));
-            console.log("update jsonBody", jsonBody)
         }
         else {
             dispatch(postPartyData(jsonBody));
-            console.log("post jsonBody", jsonBody)
         }
     };
 
@@ -605,7 +603,12 @@ const PartyMaster = (props) => {
                                                                     <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Company Name </Label>
                                                                         <Select
-                                                                            value={companyList_dropdown_Select}
+                                                                            value={companyListValues.length === 1 ?
+                                                                                {
+                                                                                    value: companyListValues[0].value,
+                                                                                    label: companyListValues[0].label
+                                                                                } : companyList_dropdown_Select
+                                                                            }
                                                                             options={companyListValues}
                                                                             onChange={(e) => { handllercompanyList(e) }}
                                                                         />

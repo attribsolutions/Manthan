@@ -14,7 +14,7 @@ function AddressDetails_Tab(props) {
     const [FSSAINo, setFSSAINo] = useState('');
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
-    const [IsDefault, setIsDefault] = useState(false);
+    const [IsDefault, setIsDefault] = useState(true);
     const [imageTable, setImageTable] = useState('');
 
     const FSSAIExipryHandler = (e, date) => {
@@ -38,7 +38,7 @@ function AddressDetails_Tab(props) {
     }
 
     const addRowsHandler = (data) => {
-
+    
         const invalidMsg1 = []
 
         if ((address === "")) {
