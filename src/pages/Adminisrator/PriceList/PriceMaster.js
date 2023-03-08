@@ -272,8 +272,8 @@ const PriceMaster = (props) => {
 
     const NodeInsidemenu = ({ node }) => {
         return (
-            <samp id={"samp-1"}>
-                <i className="mdi mdi-pencil font-size-12"
+            <div >
+                <i className="mdi mdi-pencil font-size-12 "
                     onClick={e => setMenu(node.value)}  >
                     <Dropdown
                         isOpen={menu === node.value}
@@ -307,7 +307,7 @@ const PriceMaster = (props) => {
                         </DropdownMenu>
                     </Dropdown>
                 </i>
-            </samp>)
+            </div>)
     }
 
     function calculatedPathOnChange(e, node) {
@@ -327,17 +327,16 @@ const PriceMaster = (props) => {
             return (
                 <ol>
                     <li >
-                        <div>
-                            <div className="flexcontainer ">
-                                <div className=" flexitem-1"><span id="span2" >{node.label}</span></div>
-                                <div className=" flexitem-2 "><span id="span2" >{pathNo}</span></div>
-                                <div className="flexitem-3">  <span id="span2">
-                                    <Input type="checkbox"
-                                        id={`mkUp${node.value}`}
-                                        defaultChecked={node.MkUpMkDn}
-                                        disabled={true}></Input></span> </div>
-                                <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
-                            </div>
+                        <div className="flexcontainer ">
+                            <div className=" flexitem-1"><span id="span2" >{node.label}</span></div>
+                            <div className=" flexitem-2 "><span id="span2" >{pathNo}</span></div>
+                            <div className="flexitem-3">  <span id="span2">
+                                <Input type="checkbox"
+                                    id={`mkUp${node.value}`}
+                                    key={node.value}
+                                    checked={node.MkUpMkDn}
+                                    disabled={true}></Input></span> </div>
+                            <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
                         </div>
                         {node.children ? mainTreeFunc_2(node.children) : null}
                     </li>
@@ -355,25 +354,28 @@ const PriceMaster = (props) => {
 
         function mainTreeFunc_1(node) {
             let pathNo = "Select Path"
-            node.CalculationPath.map((ele,k) => {
+            node.CalculationPath.map((ele, k) => {
                 if (k === 0) { pathNo = '' }
                 pathNo = pathNo.concat(`${ele.Name},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
             return (
-                <li  >
-                    <div>
-                        <div className="flexcontainer ">
-                            <div className="flexitem-1"><span id={"span1"} >{node.label}</span></div>
-                            <div className=" flexitem-2 "><span id="span1" >{pathNo}</span></div>
-                            <div className="flexitem-3">  <span id={"span1"}><Input type="checkbox"></Input></span> </div>
-                            <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
-                        </div>
+                <li>
+                    <div className="flexcontainer ">
+                        <div className="flexitem-1"><span id={"span1"} >{node.label}</span></div>
+                        <div className=" flexitem-2 "><span id="span1" >{pathNo}</span></div>
+                        <div className="flexitem-3">  <span id={"span1"}>
+                            <Input type="checkbox"
+                                id={`mkUp${node.value}`}
+                                key={node.value}
+                                checked={node.MkUpMkDn}
+                                disabled={true}></Input></span> </div>
+                        <div className="flexitem-4">  <NodeInsidemenu node={node} /> </div>
                     </div>
 
 
                     {node.children ? mainTreeFunc_2(node.children) : null}
-                </li >
+                </li>
             )
         }
 
