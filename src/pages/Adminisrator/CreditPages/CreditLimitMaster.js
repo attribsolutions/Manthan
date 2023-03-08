@@ -112,42 +112,42 @@ const CreditLimitMaster = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
+    //     if ((hasShowloction || hasShowModal)) {
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
 
-            if (hasEditVal) {
-                const { id, Route, RouteName } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                hasValid.RouteName.valid = true;
+    //         if (hasEditVal) {
+    //             const { id, Route, RouteName } = hasEditVal
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //             hasValid.RouteName.valid = true;
 
-                values.id = id
-                values.RouteName = { label: RouteName, value: Route };
+    //             values.id = id
+    //             values.RouteName = { label: RouteName, value: Route };
 
-                const jsonBody = JSON.stringify({
-                    // Item: Item,
-                    // Bom: Bom,
-                    // Quantity: parseFloat(Quantity),
-                    // Party: Party
-                });
-                // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+    //             const jsonBody = JSON.stringify({
+    //                 // Item: Item,
+    //                 // Bom: Bom,
+    //                 // Quantity: parseFloat(Quantity),
+    //                 // Party: Party
+    //             });
+    //             // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
 
-                setState({ values, fieldLabel, hasValid, required, isError })
-                // dispatch(editWorkOrderListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             // dispatch(editWorkOrderListSuccess({ Status: false }))
+    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+    //         }
+    //     }
+    // }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -208,7 +208,7 @@ const CreditLimitMaster = (props) => {
 
     function CreditlimitHandler(event, user) {
         // user["Creditlimit"] = e.target.value
-debugger
+
         let val = event.target.value;
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if ((result) && (parseFloat(event.target.value).toFixed(3))) {
@@ -383,7 +383,7 @@ debugger
                                     }
 
                                 </PaginationProvider>
-                                
+
                                     {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
                                         <Row >
                                             <Col sm={2} className="mt-n4">
