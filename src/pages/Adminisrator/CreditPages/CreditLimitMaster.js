@@ -266,9 +266,14 @@ const CreditLimitMaster = (props) => {
             SubParty: index.SubParty,
             Creditlimit: index.Creditlimit,
         }))
+
+        const Find = data.filter((index) => {
+            return !(index.Creditlimit === '')
+        })
         const jsonBody = JSON.stringify({
-            Data: data
-        });
+            Data:Find
+        })
+
         dispatch(postCreditLimit(jsonBody));
     }
 
@@ -339,50 +344,50 @@ const CreditLimitMaster = (props) => {
                                     </Row>
 
                                     <PaginationProvider
-                                    pagination={paginationFactory(pageOptions)}
-                                >
-                                    {({ paginationProps, paginationTableProps }) => (
-                                        <ToolkitProvider
+                                        pagination={paginationFactory(pageOptions)}
+                                    >
+                                        {({ paginationProps, paginationTableProps }) => (
+                                            <ToolkitProvider
 
-                                            keyField="id"
-                                            data={Data}
-                                            columns={pagesListColumns}
+                                                keyField="id"
+                                                data={Data}
+                                                columns={pagesListColumns}
 
-                                            search
-                                        >
-                                            {toolkitProps => (
-                                                <React.Fragment>
-                                                    <div className="table">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            bordered={true}
-                                                            striped={false}
-                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            classes={"table align-middle table-nowrap table-hover"}
-                                                            headerWrapperClasses={"thead-light"}
+                                                search
+                                            >
+                                                {toolkitProps => (
+                                                    <React.Fragment>
+                                                        <div className="table">
+                                                            <BootstrapTable
+                                                                keyField={"id"}
+                                                                bordered={true}
+                                                                striped={false}
+                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                                classes={"table align-middle table-nowrap table-hover"}
+                                                                headerWrapperClasses={"thead-light"}
 
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                        {mySearchProps(toolkitProps.searchProps)}
-                                                    </div>
-
-                                                    <Row className="align-items-md-center mt-30">
-                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                            <PaginationListStandalone
-                                                                {...paginationProps}
+                                                                {...toolkitProps.baseProps}
+                                                                {...paginationTableProps}
                                                             />
-                                                        </Col>
-                                                    </Row>
-                                                </React.Fragment>
-                                            )
-                                            }
-                                        </ToolkitProvider>
-                                    )
-                                    }
+                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                        </div>
 
-                                </PaginationProvider>
+                                                        <Row className="align-items-md-center mt-30">
+                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                <PaginationListStandalone
+                                                                    {...paginationProps}
+                                                                />
+                                                            </Col>
+                                                        </Row>
+                                                    </React.Fragment>
+                                                )
+                                                }
+                                            </ToolkitProvider>
+                                        )
+                                        }
+
+                                    </PaginationProvider>
 
                                     {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
                                         <Row >
