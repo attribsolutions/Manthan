@@ -13,7 +13,6 @@ import {
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getRoles,
   addUser,
   updateID,
   addUserSuccess,
@@ -29,10 +28,9 @@ import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import * as pageId from "../../../routes/allPageID"
-
 import * as mode from "../../../routes/PageMode"
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const AddUser = (props) => {
 
@@ -75,7 +73,7 @@ const AddUser = (props) => {
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
-    Roles: state.User_Registration_Reducer.Roles,
+    Roles: state.RoleMaster_Reducer.roleList,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
@@ -169,13 +167,11 @@ const AddUser = (props) => {
             arraynew.push({ Party: i.Party, Role: i2.Role })
           })
         })
-        console.log("arraynew", arraynew)
         setPartyRoleData(arraynew)
         dispatch(editSuccess({ Status: false }))
       }
     }
   }, [])
-
 
   useEffect(() => {
 
@@ -214,10 +210,9 @@ const AddUser = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-
   useEffect(() => {
     dispatch(getEmployeeForUseRegistration());
-    dispatch(getRoles());
+    dispatch(getRole());
   }, [dispatch]);
 
   const EmployeeValues = employeelistForDropdown.map((Data) => ({
