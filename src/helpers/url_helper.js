@@ -35,12 +35,12 @@ export const H_MODULES_API_URL = "/Modules"
 
 //Company List URL
 export const COMPANY_API_URL = "/Company"
+export const COMPANY_FILTER = "/CompanyFilter"
 
 // Company Group drop down api
 export const GET_COMPANYGROUP = "/CompanyGroups"
 export const GET_PAGE_ACCESS = "/HPageAccessNames"
 export const H_PAGES_API_URL = "/PageMaster"/// post api
-export const ROLE_API_URL = "/Roles"///get api
 
 // User Registration
 export const USER_API_URL = "/UserList"
@@ -56,6 +56,7 @@ export const GET_STATE = "/States"
 export const EMPLOYEE_API_URL = "/Employees"
 export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"
 export const GET_COMPANY_BY_EMPLOYEETYPES_ID = "/GetCompanyByEmployeeType" //CompanyByEmployeeType
+
 // Role Master
 export const ROLE_MASTER_API = "/Roles" // role get api
 export const ROLE_FILTER_API = "/RolesFilter" // role get api

@@ -114,7 +114,6 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
 function* Delete_Metrialissue_listpage_GenFunc({ id }) {
   try {
     const response = yield call(Material_Issue_Delete_API, id);
-
     yield put(deleteMaterialIssueIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
