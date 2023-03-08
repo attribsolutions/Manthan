@@ -14,7 +14,6 @@ import {
   DELETE_USER, EDIT_USER, UPDATE_USER, GET_USER_PARTIES_FOR_USER_MASTER, GET_EMPLOYEE_FOR_USER_REGISTRATION
 } from './actionType'
 import {
-  getRolesSuccess,
   addUserSuccess,
   getUserSuccess,
   deleteSuccess,
@@ -33,15 +32,6 @@ function* EmployeelistDropdown_GenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-// roles dropdownlist
-function* RolesListDropdoun_GenFunc() {
-  try {
-    const response = yield call(RolesListDropdown_For_UserRegistration_API);
-    yield put(getRolesSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
-
-}
-
 // post api
 function* user_save_GenFunc({ data }) {
   try {
@@ -50,7 +40,6 @@ function* user_save_GenFunc({ data }) {
   } catch (error) { CommonConsole(error) }
 
 }
-
 
 function* userList_GenFunc({ jsonbody }) { //  Get  Users list  for List page  POST_api
   try {
@@ -95,10 +84,8 @@ function* Get_UserPartiesForUserMaster_GenFunc({ id }) {
 
 function* UserRegistrationSaga() {
   yield takeEvery(GET_EMPLOYEE_FOR_USER_REGISTRATION, EmployeelistDropdown_GenFunc);
-  yield takeEvery(GET_ROLE, RolesListDropdoun_GenFunc);
   yield takeEvery(ADD_USER, user_save_GenFunc);
   yield takeEvery(UPDATE_USER, Update_User_GenFunc);
-
   yield takeEvery(GET_USER_LIST_FOR_USER, userList_GenFunc)
   yield takeEvery(DELETE_USER, Delete_UserList_GenFunc)
   yield takeEvery(EDIT_USER, Edit_UserList_GenFunc)

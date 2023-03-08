@@ -27,17 +27,7 @@ import{
     type: GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
     payload:data,
   });
-  
-  /// M_Roles
-  export const getRoles = () => ({
-    type: GET_ROLE,
-   
-  });
-  export const getRolesSuccess = (data) => ({
-    type: GET_ROLE_SUCCESS,
-    payload:data,
-  });
-   
+
   /// Registration Post api
   export const addUser = (data) => ({
     type: ADD_USER,
