@@ -116,6 +116,7 @@ const AddUser = (props) => {
   const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
     return index.Party_id === null
   })
+  console.log("FindPartyID", FindPartyID)
 
   useEffect(() => {
 
@@ -150,6 +151,7 @@ const AddUser = (props) => {
       if (hasEditVal) {
         dispatch(Breadcrumb_inputName(hasEditVal.LoginName))
         dispatch(GetUserPartiesForUserMastePage(hasEditVal.Employee))
+
         setEditData(hasEditVal)
         seteditCreatedBy(hasEditVal.CreatedBy)
 
@@ -232,7 +234,7 @@ const AddUser = (props) => {
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
-
+    debugger
     const nwPtRole = event.map((ind) => ({
       Party: pty.Party,
       Role: ind.value
@@ -249,6 +251,14 @@ const AddUser = (props) => {
   };
 
   const handleValidSubmit = (event, values) => {
+    debugger
+
+    // const Find = []
+    // partyRoleData.map((index) => {
+    //   userPartiesForUserMaster_redux.map((i) => {
+    //     return (index.Party === i.Party_id)
+    //   })
+    // })
 
     const jsonBody = JSON.stringify({
       email: values.email,
@@ -262,7 +272,7 @@ const AddUser = (props) => {
       isLoginUsingEmail: values.isLoginUsingEmail,
       CreatedBy: loginUserID(),
       UpdatedBy: loginUserID(),
-      UserRole: partyRoleData
+      UserRole: []
     })
 
     if (partyRoleData.length <= 0 && !(FindPartyID)) {
@@ -276,12 +286,12 @@ const AddUser = (props) => {
     }
 
     else if (pageMode === mode.edit) {
-      dispatch(updateID(jsonBody, EditData.id));
+      // dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
       console.log("Update jsonBody", jsonBody)
     }
     else {
-      dispatch(addUser(jsonBody));
+      // dispatch(addUser(jsonBody));
       console.log("Post jsonBody", jsonBody)
     }
   };
