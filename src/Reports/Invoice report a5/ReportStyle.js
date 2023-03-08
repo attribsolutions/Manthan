@@ -10,17 +10,16 @@ export const pageBorder = (doc) => {
     doc.line(570, 370, 30, 370);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    // doc.addImage(reportHederPng, 'PNG', 32, 18, 75, 40)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
+    doc.setFont(undefined, 'bold')
     doc.setFontSize(12)
     doc.text('TAX INVOICE', 180, 30,)
 
-    //Tax invoice Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
-    doc.setFontSize(11)
+    doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
     doc.text("Billed by", 80, 47)  //bill by 
     doc.text('Billed to', 280, 47) //billed to
@@ -30,15 +29,13 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 37, 30, 37) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 51, 30, 51);//horizontal line 3
-    doc.line(409, 75, 30, 75)//horizontal line 4
+    doc.line(409, 64, 30, 64)//horizontal line 4
     doc.line(30, 350, 30, 16);//vertical left 1
     doc.line(570, 350, 570, 16);//vertical left 2
-    doc.line(408, 160, 408, 16);//vertical right 1
-    doc.line(220, 160, 220, 60);//vertical right 2
+    doc.line(408, 145, 408, 16);//vertical right 1
+    doc.line(220, 145, 220, 37);//vertical right 2
     debugger
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
-
-
 
     var options3 = {
         margin: {
@@ -77,10 +74,7 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
      
-        startY: 60,
-        
-       
-
+        startY: 50,
 
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
@@ -88,10 +82,10 @@ export const reportHeder1 = (doc, data) => {
 
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
-    doc.setFontSize(10)
+    doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 70)
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 70)
+    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 60)
+    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 60)
 }
 
 export const reportHeder3 = (doc, data) => {
@@ -114,10 +108,10 @@ export const reportFooter = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            top: 410, left: 410, right: 30,
+            top: 100, left: 50, right: 30,
         },
         showHead: 'never',
-        theme: 'plain',
+        theme: '',
         headerStyles: {
             cellPadding: 1,
             lineWidth: 0,
@@ -159,18 +153,18 @@ export const reportFooter = (doc, data) => {
 
             }
         },
-        startY: 70
+        startY: 100
     };
     doc.setFontSize(9)
+doc.autoTable(optionsTable4,);
+
 }
+
 export const tableBody = (doc, data) => {
     const tableRow = table.Rows(data);
     const { OrderItem = [] } = data
 
     console.log(tableRow)
-    //    const a= OrderItem.forEach((element) => {
-    //         element.Comment
-    //     })
 
     var options = {
         didParseCell: (data1) => {
@@ -265,46 +259,13 @@ export const tableBody = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom: 100
+            left: 30, right: 30, bottom:100
         },
         showHead: 'never',
-        theme: 'plain',
-        headerStyles: {
-            // columnWidth: 'wrap',
-            // cellPadding: 1,
-            // lineWidth: 0,
-            // valign: 'top',
-            // fontStyle: 'bold',
-            // halign: 'left',    //'center' or 'right'
-            // fillColor: "white",
-            // textColor: [0, 0, 0], //Black     
-            // // textColor: [255, 255, 255], //White     
-            // // fillColor: "white"
-            // fontSize: 8,
-            // rowHeight: 10,
-            // lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            // columnWidth: 'wrap',
-            // textColor: [30, 30, 30],
-            // cellPadding: 2,
-            // fontSize: 7,
-            // fontStyle: 'bold',
-            // lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                // columnWidth:10,
-                // fontStyle: 'bold',
-            },
-            1: {
-                halign: 'right',    //'center' or 'left'
-                valign: "top",
-                // columnWidth: 140,
-                // fontStyle: 'bold',
-            },
-        },
+        theme: '',
+    
+       
+        
         didParseCell: function (cell, data) {
             console.log("didParseCell", cell)
             console.log(" didParse data", data)
@@ -444,7 +405,7 @@ export const pageFooter = (doc, data) => {
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity whitch it/these purports to be `, 34, 350,)
+     of the nature and quantity which it/these purports to be `, 34, 350,)
     doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
     doc.setFont(undefined, 'bold')
@@ -477,7 +438,7 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
+        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 380, {
             align: 'center'
         })
         console.log("aaa", doc.internal.pageSize.height)

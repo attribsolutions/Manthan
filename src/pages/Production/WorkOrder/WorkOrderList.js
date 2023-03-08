@@ -89,7 +89,7 @@ const WorkOrderList = () => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+        
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -120,7 +120,7 @@ const WorkOrderList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         // history.push({
         //     pathname: url.MATERIAL_ISSUE,
         //     pageMode: mode.modeSTPsave,

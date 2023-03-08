@@ -24,7 +24,6 @@ import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components
 
 // post api
 function* Post_Method_ForRoutesMaster_GenFun({ data }) {
-    debugger
     try {
         const response = yield call(Post_Routes_Master_API, data);
         yield put(PostMethod_ForRoutesMasterAPISuccess(response));
@@ -33,7 +32,6 @@ function* Post_Method_ForRoutesMaster_GenFun({ data }) {
 
 //Routes List Api Using Post Method
 function* Routes_List_GenratorFunction() {
-    debugger
     const jsonBody = {
         "Party": loginPartyID(),
         "Company": loginCompanyID()

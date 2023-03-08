@@ -129,7 +129,6 @@ export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/
 export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
 
 
-
 // Role Master
 export const Role_Master_Get_API = () => get(url.ROLE_MASTER_API)//get api
 export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API, data)// post api
@@ -339,7 +338,7 @@ export const PartySubParty_Post_API = (data) => post(url.PARTY_SUB_PARTY, data)/
 export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id}`)// delete api
 export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api
 export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY}/${id}`, data)// update api
-export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY_DROPDOWN_API}/${id}`)// PartySubParty dropdown Api
+export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
 //PartyItems API
 
@@ -379,6 +378,14 @@ export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data)
 export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
 export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
 export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
+
+//Credit Limit
+export const Post_CreditLimit_Master_API = (data) => post(url.CREDIT_LIMIT, data)// post api
+export const CreditLimit_GoButton_Post_API =(data) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, data)// Go Button post api
+
+// Route Update
+export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
+export const Post_Route_Update_API = (data) => post(url.ROUTE_UPDATE, data)// Route Update Post API
 
 // Order Page api  
 
@@ -497,10 +504,6 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
 // export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
 // export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
-
-//CREDITLIMIT
-export const Post_CreditLimit_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
-export const CreditLimit_GoButton_Post_API =(data) => post(url.SALESMAN_FOR_MASTER, data)// post api
 
 // export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
 // export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
