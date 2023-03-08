@@ -1,4 +1,3 @@
-// import React, { useEffect, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -11,7 +10,6 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
@@ -19,20 +17,11 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
-    onChangeDate,
-    onChangeSelect,
-    onChangeText,
-    resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     breadcrumbReturn,
-    loginUserID,
-    currentDate,
-    GoBtnDissable,
-    saveDissable,
-    loginCompanyID,
     loginPartyID
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -51,7 +40,6 @@ const CreditLimitMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -152,6 +140,8 @@ const CreditLimitMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postCreditLimitSuccess({ Status: false }))
+            dispatch(GoButton_For_CreditLimit_AddSuccess([]))
+            setRouteSelect('')
             //   setState(() => resetFunction(fileds, state))// Clear form values  
             //   saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -271,7 +261,7 @@ const CreditLimitMaster = (props) => {
             return !(index.Creditlimit === '')
         })
         const jsonBody = JSON.stringify({
-            Data:Find
+            Data: Find
         })
 
         dispatch(postCreditLimit(jsonBody));
@@ -339,7 +329,6 @@ const CreditLimitMaster = (props) => {
                                                 </CardBody>
                                             </Card>
 
-
                                         </Col>
                                     </Row>
 
@@ -404,7 +393,6 @@ const CreditLimitMaster = (props) => {
                                 </form>
                             </CardBody>
                         </Card>
-
 
                     </Container>
                 </div>
