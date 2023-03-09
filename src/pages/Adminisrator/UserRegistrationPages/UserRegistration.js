@@ -272,7 +272,7 @@ const AddUser = (props) => {
       isLoginUsingEmail: values.isLoginUsingEmail,
       CreatedBy: loginUserID(),
       UpdatedBy: loginUserID(),
-      UserRole: []
+      UserRole: partyRoleData
     })
 
     if (partyRoleData.length <= 0 && !(FindPartyID)) {
@@ -286,12 +286,12 @@ const AddUser = (props) => {
     }
 
     else if (pageMode === mode.edit) {
-      // dispatch(updateID(jsonBody, EditData.id));
+      dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
       console.log("Update jsonBody", jsonBody)
     }
     else {
-      // dispatch(addUser(jsonBody));
+      dispatch(addUser(jsonBody));
       console.log("Post jsonBody", jsonBody)
     }
   };

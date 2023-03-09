@@ -263,3 +263,9 @@ export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List fi
 export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
 export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOICE addpage GoButton Api 
 
+
+//  Report Api
+export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
+
+
+

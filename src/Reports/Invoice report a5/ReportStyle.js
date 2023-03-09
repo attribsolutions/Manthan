@@ -9,7 +9,7 @@ export const pageBorder = (doc) => {
     doc.line(570, 370, 570, 16);//vertical line (Right)
     doc.line(570, 370, 30, 370);//horizontal line (Bottom)   
 }
-export const pageHeder = (doc, data) => {
+export const pageHeder = (doc, i) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFont(undefined, 'bold')
@@ -17,7 +17,7 @@ export const pageHeder = (doc, data) => {
     doc.text('TAX INVOICE', 180, 30,)
 
 }
-export const reportHeder1 = (doc, data) => {
+export const reportHeder1 = (doc, i) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
@@ -34,7 +34,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 145, 408, 16);//vertical right 1
     doc.line(220, 145, 220, 37);//vertical right 2
-    debugger
+    
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
 
     var options3 = {
@@ -77,31 +77,32 @@ export const reportHeder1 = (doc, data) => {
         startY: 50,
 
     };
-    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
+    debugger
+    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(i), options3);
 }
 
-export const reportHeder2 = (doc, data) => {
+export const reportHeder2 = (doc, i) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 60)
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 60)
+    doc.text(`GSTIN:${i.CustomerGSTIN}`, 38, 60)
+    doc.text(`GSTIN:${i.PartyGSTIN}`, 238, 60)
 }
 
-export const reportHeder3 = (doc, data) => {
+export const reportHeder3 = (doc, i) => {
 
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.line(570, 26, 408, 26) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 23) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
+    doc.text(`Invoice No:   ${i.InvoiceNumber}`, 415, 23) //Invoice Id
+    doc.text(`Invoice Date: ${i.InvoiceDate}`, 415, 35) //Invoice date
 
 
 }
 // original
 
-export const reportFooter = (doc, data) => {
+export const reportFooter = (doc, i) => {
    
   
     // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
@@ -160,11 +161,11 @@ doc.autoTable(optionsTable4,);
 
 }
 
-export const tableBody = (doc, data) => {
-    const tableRow = table.Rows(data);
-    const { OrderItem = [] } = data
+export const tableBody = (doc, i) => {
+    // const tableRow = table.Rows(data);
+    // const { OrderItem = [] } = data
 
-    console.log(tableRow)
+    // console.log(tableRow)
 
     var options = {
         didParseCell: (data1) => {
@@ -254,7 +255,7 @@ export const tableBody = (doc, data) => {
     };
    
 
-    doc.autoTable(table.columns, table.Rows(data), options,);
+    doc.autoTable(table.columns, table.Rows(i), options,);
 
 
     const optionsTable4 = {
@@ -295,54 +296,54 @@ export const tableBody = (doc, data) => {
 
 }
 
-export const pageFooter = (doc, data) => {
+export const pageFooter = (doc, i) => {
     var th = ['', 'thousand', 'million', 'billion', 'trillion'];
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
     var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-    function toWords(s) {
-        s = s.toString();
-        s = s.replace(/[\, ]/g, '');
-        if (s != parseFloat(s)) return 'not a number';
-        var x = s.indexOf('.');
-        if (x == -1)
-            x = s.length;
-        if (x > 15)
-            return 'too big';
-        var n = s.split('');
-        var str = '';
-        var sk = 0;
-        for (var i = 0; i < x; i++) {
-            if ((x - i) % 3 == 2) {
-                if (n[i] == '1') {
-                    str += tn[Number(n[i + 1])] + ' ';
-                    i++;
-                    sk = 1;
-                } else if (n[i] != 0) {
-                    str += tw[n[i] - 2] + ' ';
-                    sk = 1;
-                }
-            } else if (n[i] != 0) { // 0235
-                str += dg[n[i]] + ' ';
-                if ((x - i) % 3 == 0) str += 'hundred ';
-                sk = 1;
-            }
-            if ((x - i) % 3 == 1) {
-                if (sk)
-                    str += th[(x - i - 1) / 3] + ' ';
-                sk = 0;
-            }
-        }
+    // function toWords(s) {
+    //     s = s.toString();
+    //     s = s.replace(/[\, ]/g, '');
+    //     if (s != parseFloat(s)) return 'not a number';
+    //     var x = s.indexOf('.');
+    //     if (x == -1)
+    //         x = s.length;
+    //     if (x > 15)
+    //         return 'too big';
+    //     var n = s.split('');
+    //     var str = '';
+    //     var sk = 0;
+    //     for (var i = 0; i < x; i++) {
+    //         if ((x - i) % 3 == 2) {
+    //             if (n[i] == '1') {
+    //                 str += tn[Number(n[i + 1])] + ' ';
+    //                 i++;
+    //                 sk = 1;
+    //             } else if (n[i] != 0) {
+    //                 str += tw[n[i] - 2] + ' ';
+    //                 sk = 1;
+    //             }
+    //         } else if (n[i] != 0) { // 0235
+    //             str += dg[n[i]] + ' ';
+    //             if ((x - i) % 3 == 0) str += 'hundred ';
+    //             sk = 1;
+    //         }
+    //         if ((x - i) % 3 == 1) {
+    //             if (sk)
+    //                 str += th[(x - i - 1) / 3] + ' ';
+    //             sk = 0;
+    //         }
+    //     }
 
-        if (x != s.length) {
-            var y = s.length;
-            str += 'point ';
-            for (var i = x + 1; i < y; i++)
-                str += dg[n[i]] + ' ';
-        }
-        return str.replace(/\s+/g, ' ');
-    }
-    let stringNumber = toWords(data.GrandTotal)
+    //     if (x != s.length) {
+    //         var y = s.length;
+    //         str += 'point ';
+    //         for (var i = x + 1; i < y; i++)
+    //             str += dg[n[i]] + ' ';
+    //     }
+    //     return str.replace(/\s+/g, ' ');
+    // }
+    // let stringNumber = toWords(data.GrandTotal)
     doc.addImage(upi_qr_code, 'PNG', 370, 315, 60, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
@@ -353,8 +354,7 @@ export const pageFooter = (doc, data) => {
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
 
-
-    const a = data.InvoiceItems.map((data) => ({
+    const a = i.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
         BasicAmount: Number(data.BasicAmount),
@@ -389,7 +389,7 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 440, 365,)
-    doc.text(`${data.GrandTotal}`, 560, 365, 'right')
+    doc.text(`${i.GrandTotal}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -398,9 +398,9 @@ export const pageFooter = (doc, data) => {
     doc.text(`Prepared by `, 35, 785,)
     doc.text(`Received By `, 180, 785,)
     doc.setFontSize(10)
-    doc.text(`${data.PartyName} `, 390, 785,)
+    doc.text(`${i.PartyName} `, 390, 785,)
     doc.setFontSize(10)
-    doc.text(`${data.CustomerName} `, 140, 811,)
+    doc.text(`${i.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
@@ -412,26 +412,23 @@ export const pageFooter = (doc, data) => {
     doc.text(`Ruppe:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
 
-    doc.text(`${stringNumber} `, 65, 305,)
+    // doc.text(`${stringNumber} `, 65, 305,)
     let finalY = doc.previousAutoTable.finalY;
-    debugger
     if (finalY >120) {
-       debugger
         pageBorder(doc)
-        reportFooter(doc, data)
+        reportFooter(doc, i)
         // pageHeder(doc, data)
         // reportHeder1(doc, data)
         // reportHeder2(doc, data)
         // reportHeder3(doc, data)
 
     } else {
-        debugger
         pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-        reportHeder1(doc, data)
-        reportHeder2(doc, data)
-        reportHeder3(doc, data)
+        reportFooter(doc, i)
+        pageHeder(doc, i)
+        reportHeder1(doc, i)
+        reportHeder2(doc, i)
+        reportHeder3(doc, i)
     }
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
