@@ -17,21 +17,18 @@ export const invoiceA5 = "invoiceA5"
 
 
 const generateReport = (resp) => {
-    debugger
+    
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)
             break;
-
         case invoice:
             InvioceReport(resp.Data)
-            // ordeRreport(resp.Data)
+            //ordeRreport(resp.Data)
             break;
-
         case Stock:
             StockReport(resp.Data)
             break;
-
         case Materialreport1:
             MaterialReport(resp.Data)
             break;
@@ -45,10 +42,9 @@ const generateReport = (resp) => {
             VanLoadingSheet(resp.Data)
             break;
         case invoiceA5:
-            debugger
+            
             InvioceReporta5(resp.Data)
             break;
-
 
         default:
             break;

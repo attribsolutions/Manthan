@@ -404,8 +404,8 @@ const AddEmployee = (props) => {
                             autoComplete='off'
                             autoFocus={true}
                             onChange={(event) => {
-                              onChangeText({ event, state, setState })
                               dispatch(Breadcrumb_inputName(event.target.value))
+                              onChangeText({ event, state, setState })
                             }}
                           />
                           {isError.Name.length > 0 && (

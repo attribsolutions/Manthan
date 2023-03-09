@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Button, Input } from "reactstrap";
 import { makeBtnCss } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import PurchaseListPage from "../components/Common/ComponentRelatedCommonFile/purchase";
-import { Invoice_1_Edit_API_Singel_Get } from "../helpers/backend_helper";
+import { Invoice_1_Edit_API_Singel_Get, MultipleInvoice_API } from "../helpers/backend_helper";
 import * as report from '../Reports/ReportIndex'
 import { getpdfReportdata } from "../store/Utilites/PdfReport/actions";
 
@@ -12,10 +12,10 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
     const dispatch = useDispatch();
 
     function downBtnFunc() {
+        debugger
         var ReportType = report.invoiceA5;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType,1))
+        dispatch(getpdfReportdata(MultipleInvoice_API,ReportType))
     }
-   
     return (
         <React.Fragment>
             <div className="page-content" >

@@ -37,6 +37,7 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 
+
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
@@ -136,7 +137,7 @@ const InvoiceList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.invoiceA5;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get ,ReportType, row.id))
     }
 
     function goButtonHandler({IBType}) {

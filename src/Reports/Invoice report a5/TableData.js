@@ -119,7 +119,7 @@ export const ReportFotterColumns = [
 ];
 
 export const ReportHederRows = (data) => {
-    debugger
+    
    
     var reportArray = [
         [, ,'Driver Name : Sameer'],
@@ -131,3 +131,11 @@ export const ReportHederRows = (data) => {
   
     return reportArray;
 }
+
+
+
+
+
+
+
+

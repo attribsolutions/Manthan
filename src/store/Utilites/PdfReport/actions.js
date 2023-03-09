@@ -15,3 +15,14 @@ export const getpdfReportdataSuccess = (data) => ({
 });
 
 
+export const postpdfMultipleReportdata = (jsonBody,ReportType, Id) => ({
+  type: GET_PDF_REPORT_DATA,
+  jsonBody, ReportType, Id
+});
+
+export const postpdfMultipleReportdataSuccess = (data) => ({
+  type: GET_PDF_REPORT_DATA_SUCCESS,
+  payload: data,
+});
+
+

@@ -34,7 +34,7 @@ function* Post_Method_ForSalesManMaster_GenFun({ data }) {
 
 // // POST api
 function* Post_SalesMan_List_GenratorFunction({ data }) {
-    debugger
+    
     const jsonBody = {
         "Party": loginPartyID(),
         "Company": loginCompanyID()
