@@ -506,6 +506,15 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
 // export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
 // export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
+
+
+//Report API
+export const MultipleInvoice_API = (data) => post(url.MULTIPLEINVOICE_API, data)//dropdown api
+
+
+
+
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

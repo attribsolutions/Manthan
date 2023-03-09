@@ -4,33 +4,37 @@ import * as style from './ReportStyle'
 import { Data } from "./DemoData";
 
 
-var pageHeder = function (doc,data) {
-    style.pageBorder(doc,data);
-    style.pageHeder(doc,data);     //Title
-    style.reportHeder1(doc,data);
-    style.reportHeder2(doc,data);
-    style.reportHeder3(doc,data);    //Invoice ID , Date  
-    
+var pageHeder = function (doc, i) {
+    debugger
+    style.pageBorder(doc, i);
+    style.pageHeder(doc, i);     //Title
+    style.reportHeder1(doc, i);
+    style.reportHeder2(doc, i);
+    style.reportHeder3(doc, i);    //Invoice ID , Date  
+
 };
-function reportBody(doc, data) { 
-    style.tableBody(doc, data);
+function reportBody(doc, i) {
+    style.tableBody(doc, i);
 }
-function pageFooter(doc,data) {
-    style.pageFooter(doc,data);
-    style.reportFooter(doc,data);
+function pageFooter(doc, i) {
+    style.pageFooter(doc, i);
+    style.reportFooter(doc, i);
 }
 
- const InvioceReporta5=(data)=> {
-    // const data = Data
- 
+const InvioceReporta5 = (data = []) => {
+    debugger
     var doc = new jsPDF('l', 'pt', 'a5');
-    pageHeder(doc,data);
-    reportBody(doc, data);
-    pageFooter(doc,data);
-     doc.setProperties({
-          title: "Report"
-      });
+    data.forEach(i => {
+        debugger
+        pageHeder(doc, i);
+        reportBody(doc, i);
+        pageFooter(doc, i);
+        console.log(i)
+    })
+    doc.setProperties({
+        title: "Report"
+    });
     window.open(doc.output('dataurlnewwindow'));
-    return(<></>);
+    return (<></>);
 }
 export default InvioceReporta5;
