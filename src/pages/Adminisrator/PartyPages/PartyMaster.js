@@ -169,6 +169,24 @@ const PartyMaster = (props) => {
     }, [dispatch]);
 
     useEffect(() => {
+        if (Company.length === 1) {
+            setCompanyList_dropdown_Select({
+                value: Company[0].id,
+                label: Company[0].Name
+            })
+        }
+    }, [Company])
+
+    useEffect(() => {
+        if (PartyTypes.length === 1) {
+            setPartyType_dropdown_Select({
+                value: PartyTypes[0].id,
+                label: PartyTypes[0].Name
+            })
+        }
+    }, [PartyTypes])
+
+    useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             setCompanyList_dropdown_Select('')
@@ -239,7 +257,6 @@ const PartyMaster = (props) => {
     const companyListValues = Company.map((index) => ({
         value: index.id,
         label: index.Name,
-
     }));
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
@@ -265,7 +282,7 @@ const PartyMaster = (props) => {
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyType_dropdown_Select(e)
         setPriceList_dropdown_Select({ label: '' })
-        setCompanyList_dropdown_Select('')
+        // setCompanyList_dropdown_Select('')
         dispatch(getPriceListData(e.value))
     }
 
@@ -603,12 +620,7 @@ const PartyMaster = (props) => {
                                                                     <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Company Name </Label>
                                                                         <Select
-                                                                            value={companyListValues.length === 1 ?
-                                                                                {
-                                                                                    value: companyListValues[0].value,
-                                                                                    label: companyListValues[0].label
-                                                                                } : companyList_dropdown_Select
-                                                                            }
+                                                                            value={companyList_dropdown_Select}
                                                                             options={companyListValues}
                                                                             onChange={(e) => { handllercompanyList(e) }}
                                                                         />

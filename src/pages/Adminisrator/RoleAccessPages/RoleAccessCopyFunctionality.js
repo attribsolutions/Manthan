@@ -65,6 +65,15 @@ const RoleAccessCopyFunctionality = (props) => {
 
     }, [history]);
 
+    useEffect(() => {
+        if (company.length === 1) {
+            setCompany_dropdown_Select({
+                value: company[0].id,
+                label: company[0].Name
+            })
+        }
+    }, [company])
+
     const newDivisionTypesOption = DivisionTypes_redux.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -182,13 +191,7 @@ const RoleAccessCopyFunctionality = (props) => {
                                         <Label className="col-sm-3 p-2">Company</Label>
                                         <Col md="9">
                                             <Select
-                                                // value={company_dropdown_Select}
-                                                value={CompanyValues.length === 1 ?
-                                                    {
-                                                        value: CompanyValues[0].value,
-                                                        label: CompanyValues[0].label
-                                                    } : company_dropdown_Select
-                                                }
+                                                value={company_dropdown_Select}
                                                 className="rounded-bottom"
                                                 placeholder="Select..."
                                                 options={CompanyValues}
