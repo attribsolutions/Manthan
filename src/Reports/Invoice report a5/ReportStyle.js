@@ -2,6 +2,8 @@
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
+import { toWords } from "../Report_common_function";
+
 
 export const pageBorder = (doc) => {
     doc.line(570, 16, 30, 16);//horizontal line (Top)
@@ -51,7 +53,7 @@ export const reportHeder1 = (doc,data ) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 2,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -75,6 +77,8 @@ export const reportHeder1 = (doc,data ) => {
         tableLineColor: "black",
      
         startY: 50,
+        
+          
 
     };
   
@@ -93,26 +97,34 @@ export const reportHeder3 = (doc, data) => {
 
     doc.setFont('Tahoma')
     doc.setFontSize(8)
+    doc.setDrawColor(0, 0, 0);
     doc.line(570, 26, 408, 26) //horizontal line 1 billby upper
+    doc.line(408, 40, 408, 16);//vertical right 1
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 23) //Invoice Id
     doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
 
 
 }
-// original
+export const reportHeder4 = (doc, data) => {
+
+    doc.setFont('Tahoma')
+    doc.setFontSize(8)
+    // doc.line(570, 26, 408, 26) //horizontal line 1 billby upper
+    doc.setFont(undefined, 'bold')
+    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 30, 23) //Invoice Id
+    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
+
+}
 
 export const reportFooter = (doc, data) => {
-   
-  
     // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
-
     const optionsTable4 = {
         margin: {
             top: 100, left: 50, right: 30,
         },
         showHead: 'never',
-        theme: '',
+        theme: 'grid',
         headerStyles: {
             cellPadding: 1,
             lineWidth: 0,
@@ -260,7 +272,7 @@ export const tableBody = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom:100
+            left: 30, right: 30, bottom:120
         },
         showHead: 'never',
         theme: '',
@@ -280,9 +292,7 @@ export const tableBody = (doc, data) => {
         },
 
     };
-
     doc.autoTable(optionsTable4);
-
     doc.autoTable({
         html: '#table',
         didParseCell(data) {
@@ -292,57 +302,8 @@ export const tableBody = (doc, data) => {
             }
         }
     })
-
-
 }
-
 export const pageFooter = (doc, data) => {
-    var th = ['', 'thousand', 'million', 'billion', 'trillion'];
-    var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-    function toWords(s) {
-        s = s.toString();
-        s = s.replace(/[\, ]/g, '');
-        if (s != parseFloat(s)) return 'not a number';
-        var x = s.indexOf('.');
-        if (x == -1)
-            x = s.length;
-        if (x > 15)
-            return 'too big';
-        var n = s.split('');
-        var str = '';
-        var sk = 0;
-        for (var i = 0; i < x; i++) {
-            if ((x - i) % 3 == 2) {
-                if (n[i] == '1') {
-                    str += tn[Number(n[i + 1])] + ' ';
-                    i++;
-                    sk = 1;
-                } else if (n[i] != 0) {
-                    str += tw[n[i] - 2] + ' ';
-                    sk = 1;
-                }
-            } else if (n[i] != 0) { // 0235
-                str += dg[n[i]] + ' ';
-                if ((x - i) % 3 == 0) str += 'hundred ';
-                sk = 1;
-            }
-            if ((x - i) % 3 == 1) {
-                if (sk)
-                    str += th[(x - i - 1) / 3] + ' ';
-                sk = 0;
-            }
-        }
-
-        if (x != s.length) {
-            var y = s.length;
-            str += 'point ';
-            for (var i = x + 1; i < y; i++)
-                str += dg[n[i]] + ' ';
-        }
-        return str.replace(/\s+/g, ' ');
-    }
     let stringNumber = toWords(data.GrandTotal)
     doc.addImage(upi_qr_code, 'PNG', 370, 315, 60, 50)
     doc.setDrawColor(0, 0, 0);
@@ -411,7 +372,6 @@ export const pageFooter = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Ruppe:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
-
     doc.text(`${stringNumber}`, 65, 305,)
     debugger
     let finalY = doc.previousAutoTable.finalY;
@@ -419,18 +379,25 @@ export const pageFooter = (doc, data) => {
         debugger
         pageBorder(doc)
         reportFooter(doc, i)
+        pageHeder(doc, data)
+        reportHeder3(doc, data)
+        
+
         // pageHeder(doc, data)
         // reportHeder1(doc, data)
         // reportHeder2(doc, data)
         // reportHeder3(doc, data)
 
+
     } else {
         pageBorder(doc)
         reportFooter(doc, data)
         pageHeder(doc, data)
-        reportHeder1(doc, data)
-        reportHeder2(doc, data)
         reportHeder3(doc, data)
+        // pageHeder(doc, data)
+        // reportHeder1(doc, data)
+        // reportHeder2(doc, data)
+        // reportHeder3(doc, data)
     }
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
