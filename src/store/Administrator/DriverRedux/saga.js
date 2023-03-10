@@ -14,12 +14,13 @@ import {
     EDIT_DRIVER_TYPE_ID,
     UPDATE_DRIVER_TYPE_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // Get List Page API
 function* Get_Driver_GenratorFunction() {
+    const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
     try {
-        const response = yield call(get_DriverList_API);
+        const response = yield call(get_DriverList_API, jsonBody);
         yield put(getMethod_ForDriverListSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }

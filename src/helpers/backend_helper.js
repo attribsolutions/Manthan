@@ -253,9 +253,8 @@ export const update_Category_List_Api = (data, id) => put(`${url.CATEGORY_API}/$
 
 //Vehicle API
 export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
-export const get_Vehicle_API = () => get(url.VEHICLE_API)//  get Api 
-export const get_VehicleTypes_API = () => get(url.VEHICLETYPES_DROPDOWN)//dropDown
-export const get_DriverListAPI = () => get(url.DRIVERLIST_DROPDOWN)//dropDown
+export const get_Vehicle_API = (data) => post(url.VEHICLE_FILTER_API,data)//  get Api 
+export const get_VehicleTypes_API = (data) => post(url.VEHICLETYPES_DROPDOWN,data)//dropDown
 export const detelet_VehicleType_List_Api = (id) => del(`${url.VEHICLE_API}/${id}`) // delete api
 export const edit_VehicleType_List_Api = (id) => get(`${url.VEHICLE_API}/${id}`) // edit api
 export const update_VehicleType_List_Api = (data, id) => put(`${url.VEHICLE_API}/${id}`, data)// update
@@ -269,7 +268,7 @@ export const update_CompanyGroupType_List_Api = (data, id) => put(`${url.COMPANY
 
 //Driver api
 export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api
-export const get_DriverList_API = () => get(url.DRIVER_API)//  get Api 
+export const get_DriverList_API = (data) => post(url.DRIVER_FILTER_API,data)//  get Api 
 export const detelet_DriverType_List_Api = (id) => del(`${url.DRIVER_API}/${id}`) // delete api
 export const edit_DriverType_List_Api = (id) => get(`${url.DRIVER_API}/${id}`) // edit api
 export const update_DriverType_List_Api = (data, id) => put(`${url.DRIVER_API}/${id}`, data)// update

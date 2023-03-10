@@ -116,8 +116,8 @@ export const CATEGORY_API = '/Category'
 
 //Vehicle api
 export const VEHICLE_API = '/Vehicle'
+export const VEHICLE_FILTER_API = '/VehicleFilter'
 export const VEHICLETYPES_DROPDOWN = '/VehicleTypes'
-export const DRIVERLIST_DROPDOWN = '/Driver'
 export const BASEUNIT_DROPDOWN_API = '/UnitList'
 
 //CompanyGroup api
@@ -125,6 +125,7 @@ export const COMPANYGROUP_API = '/CompanyGroups'
 
 //Driver api
 export const DRIVER_API = '/Driver'
+export const DRIVER_FILTER_API = '/DriverFilter'
 
 //Category Types API
 export const CATEGORY_DROPDOWN_API = '/GetCategoryByCategoryTypeID'
@@ -175,7 +176,7 @@ export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
 //Routes
-export const ROUTES_FOR_LIST = '/RoutesList ' 
+export const ROUTES_FOR_LIST = '/RoutesFilter ' 
 export const ROUTES_FOR_MASTER = '/Routes' 
 
 //SalesMan
@@ -186,7 +187,7 @@ export const SALESMAN_FOR_MASTER = '/Salesman'
 export const GO_BUTTON_POST_API_FOR_CREDIT_LIMIT = '/CreditlimitList' // for go button
 export const CREDIT_LIMIT = '/Creditlimit' 
 
-export const ROUTE_UPDATE_LIST = '/RouteUpdateList' 
+export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter' 
 export const ROUTE_UPDATE = '/RouteUpdate' 
 //******** purchase modal *********************************************************************************************************************** */
 
