@@ -351,7 +351,7 @@ const CreditLimitMaster = (props) => {
                                                                 keyField={"id"}
                                                                 bordered={true}
                                                                 striped={false}
-                                                                noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
+                                                                noDataIndication={<div className="text-danger text-center ">Creditlimit Not available</div>}
                                                                 classes={"table align-middle table-nowrap table-hover"}
                                                                 headerWrapperClasses={"thead-light"}
 
