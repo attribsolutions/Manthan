@@ -167,9 +167,11 @@
 //         ]
 //     },
 
+import { map } from "leaflet";
+
 // ]
 const isParentLength = 3
-const isRowLength = 15
+const isRowLength = 18
 
 function innerdataFunc(index) {
     return {
@@ -199,7 +201,6 @@ function innerdataFunc(index) {
     }
 }
 
-
 function outerdatfunc(index) {
     const parentData = {
         id: 70,
@@ -222,7 +223,6 @@ function outerdatfunc(index) {
     }
     return parentData
 }
-
 export const dataGenrator = () => {
 
     const dataArr = []
@@ -232,3 +232,5 @@ export const dataGenrator = () => {
     }
     return dataArr
 }
+
+
