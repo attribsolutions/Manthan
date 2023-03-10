@@ -237,19 +237,18 @@ export const edit_DivisionType_List_Api = (id) => get(`${url.DIVISION_TYPES_API}
 export const update_DivisionType_List_Api = (data, id) => put(`${url.DIVISION_TYPES_API}/${id}`, data)// update 
 
 // Cateogory Types API
-export const Post_Category_Type_Master_API = (data) => post(url.CATEGORY_TYPES_API, data)// post api
-export const get_CategoryType_List_Api = () => get(url.CATEGORY_TYPES_API) // get api
-export const detelet_CategoryType_List_Api = (id) => del(`${url.CATEGORY_TYPES_API}/${id}`) // delete api
-export const edit_CategoryType_List_Api = (id) => get(`${url.CATEGORY_TYPES_API}/${id}`) // edit api
-export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TYPES_API}/${id}`, data)// update
+export const Post_Category_Type_Master_API = ({ jsonBody, btnId }) => post(url.CATEGORY_TYPES_API, jsonBody, btnId)// post api
+export const get_CategoryType_List_Api = ({ btnId }) => get(url.CATEGORY_TYPES_API, btnId) // get api
+export const detelet_CategoryType_List_Api = ({ deleteId, btnId }) => del(`${url.CATEGORY_TYPES_API}/${deleteId}`, btnId) // delete api
+export const edit_CategoryType_List_Api = ({ editId, btnId }) => get(`${url.CATEGORY_TYPES_API}/${editId}`, btnId) // edit api
+export const update_CategoryType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.CATEGORY_TYPES_API}/${updateId}`, jsonBody, btnId)// update
 
 //Category API
-export const Post_Category_API = (data) => post(url.CATEGORY_API, data)// post api
-// export const get_Category_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
-export const get_Category_List_Api = () => get(url.CATEGORY_API) // get api
-export const detelet_Category_List_Api = (id) => del(`${url.CATEGORY_API}/${id}`) // delete api
-export const edit_Category_List_Api = (id) => get(`${url.CATEGORY_API}/${id}`) // edit api
-export const update_Category_List_Api = (data, id) => put(`${url.CATEGORY_API}/${id}`, data)// update
+export const Post_Category_API = ({ jsonBody, btnId }) => post(url.CATEGORY_API, jsonBody, btnId)// post api
+export const get_Category_List_Api = ({ btnId }) => get(url.CATEGORY_API, btnId) // get api
+export const detelet_Category_List_Api = ({ deleteId, btnId }) => del(`${url.CATEGORY_API}/${deleteId}`, btnId) // delete api
+export const edit_Category_List_Api = ({ editId, btnId }) => get(`${url.CATEGORY_API}/${editId}`, btnId) // edit api
+export const update_Category_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.CATEGORY_API}/${updateId}`, jsonBody, btnId)// update
 
 //Vehicle API
 export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
@@ -301,10 +300,10 @@ export const Margin_MasterPage_delete_API = (id) => del(`${url.MARGIN_MASTER_LIS
 
 // GroupTypes API
 export const GroupTypes_API = () => get(url.GROUP_TYPE_API)
-export const GroupTypes_Post_API = (data) => post(url.GROUP_TYPE_API, data)// post api
-export const GroupTypes_Delete_API = (id) => del(`${url.GROUP_TYPE_API}/${id}`)// delete api
-export const GroupTypes_Edit_API = (id) => get(`${url.GROUP_TYPE_API}/${id}`)// edit api
-export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${id}`, data)// update api
+export const GroupTypes_Post_API = ({ jsonBody, btnId }) => post(url.GROUP_TYPE_API, jsonBody, btnId)// post api
+export const GroupTypes_Delete_API = ({ deleteId, btnId }) => del(`${url.GROUP_TYPE_API}/${deleteId}`, btnId)// delete api
+export const GroupTypes_Edit_API = ({ editId, btnId }) => get(`${url.GROUP_TYPE_API}/${editId}`, btnId)// edit api
+export const GroupTypes_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GROUP_TYPE_API}/${updateId}`, jsonBody, btnId)// update api
 
 // GroupMaster
 

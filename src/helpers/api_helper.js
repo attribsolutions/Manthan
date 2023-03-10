@@ -37,37 +37,37 @@ export function get(url, btnId) {
 
 }
 
-export function post(url, data, btnId) {
+export function post(url, body, btnId) {
 
   CommonConsole("Post api call");
   AuthonticationFunction();
 
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     }).then(response => {
-      return CheckAPIResponse({ method: "post", url, response, data, btnId });
+      return CheckAPIResponse({ method: "post", url, response, body, btnId });
     }).catch(response => {
-      return CheckAPIResponse({ method: "post", url, response, data, btnId });
+      return CheckAPIResponse({ method: "post", url, response, body, btnId });
     });
 };
 
 
-export function put(url, data, btnId,) {
+export function put(url, body, btnId,) {
 
   CommonConsole("put api call");
   AuthonticationFunction();
 
-  return axiosApi.put(url, data, {
+  return axiosApi.put(url, body, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     }
   }).then(response => {
-    return CheckAPIResponse({ method: "put", url, response, data, btnId });
+    return CheckAPIResponse({ method: "put", url, response, body, btnId });
   }).catch(response => {
     return CheckAPIResponse({ method: "put", url, response, btnId });
   });
@@ -86,16 +86,16 @@ export function del(url, btnId) {
 }
 
 // for forget password
-export function postForget(url, data,) {
+export function postForget(url, body,) {
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     })
     .then(response => {
-      return CheckAPIResponse({ method: "postForget", url, response });
+      return CheckAPIResponse({ method: "postForget",body, url, response });
     })
     .catch(response => {
       return CheckAPIResponse({ method: "postForget", url, response });
