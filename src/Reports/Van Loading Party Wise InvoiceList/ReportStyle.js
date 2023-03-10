@@ -16,6 +16,7 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
+    debugger
     if (data.ReportType===VanLoadingSheetSKU) {
         doc.setFontSize(15)
         doc.text('Van Loading Sheet SKU Wise Summary', 100, 40,) 

@@ -9,7 +9,7 @@ export const pageBorder = (doc) => {
     doc.line(570, 370, 570, 16);//vertical line (Right)
     doc.line(570, 370, 30, 370);//horizontal line (Bottom)   
 }
-export const pageHeder = (doc, i) => {
+export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFont(undefined, 'bold')
@@ -17,7 +17,7 @@ export const pageHeder = (doc, i) => {
     doc.text('TAX INVOICE', 180, 30,)
 
 }
-export const reportHeder1 = (doc, i) => {
+export const reportHeder1 = (doc,data ) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
@@ -25,7 +25,7 @@ export const reportHeder1 = (doc, i) => {
     doc.text('Billed to', 280, 47) //billed to
     doc.text('Details of Transport', 440, 47)
 
-
+    doc.setDrawColor(0, 0, 0);
     doc.line(570, 37, 30, 37) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 51, 30, 51);//horizontal line 3
@@ -78,31 +78,31 @@ export const reportHeder1 = (doc, i) => {
 
     };
   
-    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(i), options3);
+    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
 
-export const reportHeder2 = (doc, i) => {
+export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${i.CustomerGSTIN}`, 38, 60)
-    doc.text(`GSTIN:${i.PartyGSTIN}`, 238, 60)
+    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 60)
+    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 60)
 }
 
-export const reportHeder3 = (doc, i) => {
+export const reportHeder3 = (doc, data) => {
 
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.line(570, 26, 408, 26) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${i.InvoiceNumber}`, 415, 23) //Invoice Id
-    doc.text(`Invoice Date: ${i.InvoiceDate}`, 415, 35) //Invoice date
+    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 23) //Invoice Id
+    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
 
 
 }
 // original
 
-export const reportFooter = (doc, i) => {
+export const reportFooter = (doc, data) => {
    
   
     // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
@@ -161,7 +161,7 @@ doc.autoTable(optionsTable4,);
 
 }
 
-export const tableBody = (doc, i) => {
+export const tableBody = (doc, data) => {
     // const tableRow = table.Rows(data);
     // const { OrderItem = [] } = data
 
@@ -255,7 +255,7 @@ export const tableBody = (doc, i) => {
     };
    
 
-    doc.autoTable(table.columns, table.Rows(i), options,);
+    doc.autoTable(table.columns, table.Rows(data), options,);
 
 
     const optionsTable4 = {
@@ -296,7 +296,7 @@ export const tableBody = (doc, i) => {
 
 }
 
-export const pageFooter = (doc, i) => {
+export const pageFooter = (doc, data) => {
     var th = ['', 'thousand', 'million', 'billion', 'trillion'];
     var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -343,7 +343,7 @@ export const pageFooter = (doc, i) => {
         }
         return str.replace(/\s+/g, ' ');
     }
-    let stringNumber = toWords(i.GrandTotal)
+    let stringNumber = toWords(data.GrandTotal)
     doc.addImage(upi_qr_code, 'PNG', 370, 315, 60, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
@@ -354,7 +354,7 @@ export const pageFooter = (doc, i) => {
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
 
-    const a = i.InvoiceItems.map((data) => ({
+    const a = data.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
         BasicAmount: Number(data.BasicAmount),
@@ -389,7 +389,7 @@ export const pageFooter = (doc, i) => {
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 440, 365,)
-    doc.text(`${i.GrandTotal}`, 560, 365, 'right')
+    doc.text(`${data.GrandTotal}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -398,9 +398,9 @@ export const pageFooter = (doc, i) => {
     doc.text(`Prepared by `, 35, 785,)
     doc.text(`Received By `, 180, 785,)
     doc.setFontSize(10)
-    doc.text(`${i.PartyName} `, 390, 785,)
+    doc.text(`${data.PartyName} `, 390, 785,)
     doc.setFontSize(10)
-    doc.text(`${i.CustomerName} `, 140, 811,)
+    doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
@@ -412,9 +412,11 @@ export const pageFooter = (doc, i) => {
     doc.text(`Ruppe:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
 
-    doc.text(`${stringNumber} `, 65, 305,)
+    doc.text(`${stringNumber}`, 65, 305,)
+    debugger
     let finalY = doc.previousAutoTable.finalY;
-    if (finalY >120) {
+    if (finalY >110) {
+        debugger
         pageBorder(doc)
         reportFooter(doc, i)
         // pageHeder(doc, data)
@@ -424,19 +426,21 @@ export const pageFooter = (doc, i) => {
 
     } else {
         pageBorder(doc)
-        reportFooter(doc, i)
-        pageHeder(doc, i)
-        reportHeder1(doc, i)
-        reportHeder2(doc, i)
-        reportHeder3(doc, i)
+        reportFooter(doc, data)
+        pageHeder(doc, data)
+        reportHeder1(doc, data)
+        reportHeder2(doc, data)
+        reportHeder3(doc, data)
     }
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
-        doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 380, {
+        doc.text('Page ' + String(i) , doc.internal.pageSize.width / 10, 380, {
             align: 'center'
+        
+            
         })
         console.log("aaa", doc.internal.pageSize.height)
     }
