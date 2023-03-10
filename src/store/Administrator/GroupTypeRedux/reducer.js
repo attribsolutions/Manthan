@@ -2,7 +2,7 @@ import {
   DELETE_GROUP_TYPE_ID_SUCCESS,
   EDIT_GROUP_TYPE_ID_SUCCESS,
   GET_GROUP_TYPES_LIST_SUCCESS,
-  POST_GROUP_TYPE_SUBMIT_SUCCESS,
+  SAVE_GROUP_TYPE_MASTER_SUCCESS,
   UPDATE_GROUP_TYPE_ID_SUCCESS
 } from "./actionType"
 
@@ -17,14 +17,13 @@ const INIT_STATE = {
 const GroupTypeReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    // get api
     case GET_GROUP_TYPES_LIST_SUCCESS:
       return {
         ...state,
         GroupType: action.payload,
       }
 
-    case POST_GROUP_TYPE_SUBMIT_SUCCESS:
+    case SAVE_GROUP_TYPE_MASTER_SUCCESS:
       return {
         ...state,
         PostData: action.payload,

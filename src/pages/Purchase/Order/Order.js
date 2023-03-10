@@ -20,9 +20,9 @@ import {
     editOrderIdSuccess,
     GoButton_For_Order_Add,
     GoButton_For_Order_AddSuccess,
-    postOrder,
+    saveOrderAaction,
     postOrderSuccess,
-    updateOrderId,
+    updateOrderIdAction,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -232,7 +232,7 @@ const Order = (props) => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
             setorderItemTable(OrderItems)
-            
+
             setTermsAndConTable(TermsAndConditions)
             dispatch(GoButton_For_Order_AddSuccess(''))
         }
@@ -565,233 +565,221 @@ const Order = (props) => {
         };
     };
 
-    const saveHandeller = async () => {
-        const division = loginPartyID();
-        const supplier = supplierSelect.value;
+    const saveHandeller = async (event) => {
+        event.preventDefault();
 
-        const validMsg = []
-        const itemArr = []
-        const isVDC_POvalidMsg = []
+        const btnId = event.target.id
+        btnIsDissablefunc({ btnId, state: false })
 
-        function isChanged({ i, isedit, isdel }) {
-            const basicAmt = parseFloat(basicAmount(i))
-            const cgstAmt = (GstAmount(i))
-            const arr = {
-                id: i.editrowId,
-                Item: i.Item_id,
-                Quantity: isdel ? 0 : i.Quantity,
-                MRP: i.MRP,
-                Rate: i.Rate,
-                Unit: i.Unit_id,
-                BaseUnitQuantity: i.BaseUnitQuantity,
-                Margin: "",
-                BasicAmount: basicAmt.toFixed(2),
-                GSTAmount: cgstAmt.toFixed(2),
-                GST: i.GST_id,
-                CGST: (cgstAmt / 2).toFixed(2),
-                SGST: (cgstAmt / 2).toFixed(2),
-                IGST: 0,
-                CGSTPercentage: (i.GSTPercentage / 2),
-                SGSTPercentage: (i.GSTPercentage / 2),
-                IGSTPercentage: 0,
-                Amount: i.Amount,
-                IsDeleted: isedit,
-                Comment: i.Comment
-            }
-            itemArr.push(arr)
-        };
+        function returnFunc() {
+            btnIsDissablefunc({ btnId, state: false })
+        }
+        try {
+            const division = loginPartyID();
+            const supplier = supplierSelect.value;
 
-        function orderItem({ i, isedit }) {  //isvdc_po logic
-            
-            if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
-                var isdel = false;
-                isChanged({ i, isedit, isdel })
-            }
-            else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
-                var isdel = true;
-                isChanged({ i, isedit, isdel })
-            }
-            else if ((i.Quantity > 0) && (i.Rate > 0)) {
+            const validMsg = []
+            const itemArr = []
+            const isVDC_POvalidMsg = []
 
-                if (i.Bom) {
-                    if ((itemArr.length === 0)) {
-                        const isdel = false;
-                        isChanged({ i, isedit, isdel })
-
-                    } else {
-                        if (isVDC_POvalidMsg.length === 0)
-                            isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
-                    }
-                } else {
-                    isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+            function isChanged({ i, isedit, isdel }) {
+                const basicAmt = parseFloat(basicAmount(i))
+                const cgstAmt = (GstAmount(i))
+                const arr = {
+                    id: i.editrowId,
+                    Item: i.Item_id,
+                    Quantity: isdel ? 0 : i.Quantity,
+                    MRP: i.MRP,
+                    Rate: i.Rate,
+                    Unit: i.Unit_id,
+                    BaseUnitQuantity: i.BaseUnitQuantity,
+                    Margin: "",
+                    BasicAmount: basicAmt.toFixed(2),
+                    GSTAmount: cgstAmt.toFixed(2),
+                    GST: i.GST_id,
+                    CGST: (cgstAmt / 2).toFixed(2),
+                    SGST: (cgstAmt / 2).toFixed(2),
+                    IGST: 0,
+                    CGSTPercentage: (i.GSTPercentage / 2),
+                    SGSTPercentage: (i.GSTPercentage / 2),
+                    IGSTPercentage: 0,
+                    Amount: i.Amount,
+                    IsDeleted: isedit,
+                    Comment: i.Comment
                 }
-            }
-            else if ((i.Quantity < 1) && (i.editrowId)) {
-                if (i.Bom) {
-                    if ((itemArr.length === 0)) {
-                        const isdel = true;
-                        isChanged({ i, isedit, isdel })
-
-                    } else {
-                        if (isVDC_POvalidMsg.length === 0)
-                            isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
-                    }
-                } else {
-                    isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
-                }
+                itemArr.push(arr)
             };
-        }
 
-        await orderItemTable.forEach(i => {
+            function orderItem({ i, isedit }) {  //isvdc_po logic
 
-            if ((i.Quantity > 0) && !(i.Rate > 0)) {
-                // validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
-                validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
-
-            }
-            //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
-            //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
-            // }
-
-            else if (pageMode === mode.edit) {
-                var ischange = (!(i.poQty === i.Quantity) ||
-                    !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
-                if (ischange && (i.poQty === 0)) {
-                    var isedit = 0;
-                    orderItem({ i, isedit })
+                if ((i.Quantity > 0) && (i.Rate > 0) && !(orderTypeSelect.value === 3)) {
+                    var isdel = false;
+                    isChanged({ i, isedit, isdel })
                 }
-                else if (ischange) {
-                    var isedit = 1;
-                    orderItem({ i, isedit })
-                } else {
-                    var isedit = 0;
-                    orderItem({ i, isedit })
+                else if ((i.Quantity < 1) && (i.editrowId) && !(orderTypeSelect.value === 3)) {
+                    var isdel = true;
+                    isChanged({ i, isedit, isdel })
                 }
+                else if ((i.Quantity > 0) && (i.Rate > 0)) {
+
+                    if (i.Bom) {
+                        if ((itemArr.length === 0)) {
+                            const isdel = false;
+                            isChanged({ i, isedit, isdel })
+
+                        } else {
+                            if (isVDC_POvalidMsg.length === 0)
+                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type Of Order Only One Item Quantity Accept..." });
+                        }
+                    } else {
+                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                }
+                else if ((i.Quantity < 1) && (i.editrowId)) {
+                    if (i.Bom) {
+                        if ((itemArr.length === 0)) {
+                            const isdel = true;
+                            isChanged({ i, isedit, isdel })
+
+                        } else {
+                            if (isVDC_POvalidMsg.length === 0)
+                                isVDC_POvalidMsg.push({ ["VDC-PO Type"]: "This Type of order Only One Item Quantity Accept..." });
+                        }
+                    } else {
+                        isVDC_POvalidMsg.push({ [i.ItemName]: "This Is Not VDC-PO Item..." });
+                    }
+                };
             }
-            else {
-                const isedit = 0;
-                orderItem({ i, isedit })
+
+            await orderItemTable.forEach(i => {
+
+                if ((i.Quantity > 0) && !(i.Rate > 0)) {
+                    // validMsg.push(`${i.ItemName}:  This Item Rate Is Require...`);
+                    validMsg.push({ [i.ItemName]: "This Item Rate Is Require..." });
+
+                }
+                //  else if (!(i.Quantity > 0) && (i.Rate > 0)) {
+                //     validMsg.push(`${i.ItemName}:  This Item Quantity Is Require...`);
+                // }
+
+                else if (pageMode === mode.edit) {
+                    var ischange = (!(i.poQty === i.Quantity) ||
+                        !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
+                    if (ischange && (i.poQty === 0)) {
+                        var isedit = 0;
+                        orderItem({ i, isedit })
+                    }
+                    else if (ischange) {
+                        var isedit = 1;
+                        orderItem({ i, isedit })
+                    } else {
+                        var isedit = 0;
+                        orderItem({ i, isedit })
+                    }
+                }
+                else {
+                    const isedit = 0;
+                    orderItem({ i, isedit })
+                };
+            })
+            const termsAndCondition = await termsAndConTable.map(i => ({
+                TermsAndCondition: i.value,
+                IsDeleted: i.IsDeleted
+            }))
+
+            if (isVDC_POvalidMsg.length > 0) {
+                await CustomAlert({
+                    Type: 4,
+                    Message: isVDC_POvalidMsg,
+                })
+                return returnFunc();
             };
-        })
-        const termsAndCondition = await termsAndConTable.map(i => ({
-            TermsAndCondition: i.value,
-            IsDeleted: i.IsDeleted
-        }))
-      
-        if (isVDC_POvalidMsg.length > 0) {
-            await CustomAlert({
-                Type: 4,
-                Message: isVDC_POvalidMsg,
-            })
-            return
-        };
-        if (validMsg.length > 0) {
-            // dispatch(AlertState({
-            //     Type: 4,
-            //     Status: true,
-            //     Message: validMsg,
-            //     RedirectPath: false,
-            //     AfterResponseAction: false
-            // }));
-            await CustomAlert({
-                Type: 4,
-                Message: validMsg,
-            })
-            return
-        }
-        if (itemArr.length === 0) {
-            // dispatch(AlertState({
-            //     Type: 4,
-            //     Status: true,
-            //     Message: "Please Enter One Item Quantity",
-            //     RedirectPath: false,
-            //     AfterResponseAction: false
-            // }));
-            await CustomAlert({
-                Type: 4,
-                Message: "Please Enter One Item Quantity",
-            })
+            if (validMsg.length > 0) {
+                await CustomAlert({
+                    Type: 4,
+                    Message: validMsg,
+                })
 
-            return
-        }
-        if (orderTypeSelect.length === 0) {
-            await CustomAlert({
-                Type: 4,
-                Message: "Please Select PO Type",
-            })
-            // dispatch(AlertState({
-            //     Type: 4,
-            //     Status: true,
-            //     Message: "Please Select PO Type",
-            //     RedirectPath: false,
-            //     AfterResponseAction: false
-            // }));
-            return
-        }
-        if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
-            await CustomAlert({
-                Type: 4,
-                Message: "Please Enter One Terms And Condition",
-            })
-            // dispatch(AlertState({
-            //     Type: 4,
-            //     Status: true,
-            //     Message: "Please Enter One Terms And Condition",
-            //     RedirectPath: false,
-            //     AfterResponseAction: false
-            // }));
+                return returnFunc();
+            }
+            if (itemArr.length === 0) {
+                await CustomAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                })
 
-            return
-        }
-        const po_JsonBody = {
-            OrderDate: orderdate,
-            OrderAmount: orderAmount,
-            OrderItem: itemArr,
-        }
-        const IB_JsonBody = {
-            DemandDate: orderdate,
-            DemandAmount: orderAmount,
-            DemandItem: itemArr,
-        }
-        const comm_jsonBody = {
-            DeliveryDate: deliverydate,
-            Customer: division,
-            Supplier: supplier,
-            Description: description,
-            BillingAddress: billAddr.value,
-            ShippingAddress: shippAddr.value,
-            OrderNo: 1,
-            FullOrderNumber: "PO0001",
-            OrderType: 1,
-            POType: 1,
-            Division: division,
-            POType: orderTypeSelect.value,
-            POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
-            POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
-            CreatedBy: loginUserID(),
-            UpdatedBy: loginUserID(),
-            OrderTermsAndConditions: termsAndCondition
-        };
+                return returnFunc();
+            }
+            if (orderTypeSelect.length === 0) {
+                await CustomAlert({
+                    Type: 4,
+                    Message: "Please Select PO Type",
+                })
+                // dispatch(AlertState({
+                //     Type: 4,
+                //     Status: true,
+                //     Message: "Please Select PO Type",
+                //     RedirectPath: false,
+                //     AfterResponseAction: false
+                // }));
+                return
+            }
+            if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
+                await CustomAlert({
+                    Type: 4,
+                    Message: "Please Enter One Terms And Condition",
+                })
+
+                return returnFunc();
+            }
+            const po_JsonBody = {
+                OrderDate: orderdate,
+                OrderAmount: orderAmount,
+                OrderItem: itemArr,
+            }
+            const IB_JsonBody = {
+                DemandDate: orderdate,
+                DemandAmount: orderAmount,
+                DemandItem: itemArr,
+            }
+            const comm_jsonBody = {
+                DeliveryDate: deliverydate,
+                Customer: division,
+                Supplier: supplier,
+                Description: description,
+                BillingAddress: billAddr.value,
+                ShippingAddress: shippAddr.value,
+                OrderNo: 1,
+                FullOrderNumber: "PO0001",
+                OrderType: 1,
+                POType: 1,
+                Division: division,
+                POType: orderTypeSelect.value,
+                POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? currentDate : poToDate,
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                OrderTermsAndConditions: termsAndCondition
+            };
 
 
-        let jsonBody;   //json body decleration 
-        if (subPageMode === url.IB_ORDER) {
-            jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
-        } else {
-            jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
-        }
-        // +*********************************
+            let jsonBody;   //json body decleration 
+            if (subPageMode === url.IB_ORDER) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
+            } else {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
+            }
+            // +*********************************
 
-        saveDissable({ id: userAccState.ActualPagePath, state: true });//+++++++++save Button Is dissable function
 
-        if (pageMode === mode.edit) {
-            dispatch(updateOrderId(jsonBody, editVal.id))
+            if (pageMode === mode.edit) {
+                dispatch(updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
 
-        } else {
+            } else {
+                dispatch(saveOrderAaction({ jsonBody, subPageMode, btnId }))
+            }
 
-            dispatch(postOrder(jsonBody, subPageMode))
-        }
-
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     }
 
     if (!(userAccState === "")) {

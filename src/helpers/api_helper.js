@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CkeckAlert } from "../CustomAlert/ConfirmDialog"
+import { CheckAPIResponse, CommonConsole } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 
 const API_URL = "http://192.168.1.114:8000"
 
@@ -22,84 +22,83 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-export function get(url, event) {
-  debugger
-  console.log("get api call")
+export function get(url, btnId) {
+
+  CommonConsole("get api call");
   AuthonticationFunction();
+
   return axiosApi.get(url)
     .then(response => {
-    return CkeckAlert({method:"get", url, response, event});
+      return CheckAPIResponse({ method: "get", url, response, btnId });
     })
-    .catch(error => {
-      return CkeckAlert({method:"get", url, error, event});
+    .catch(response => {
+      return CheckAPIResponse({ method: "get", url, response, btnId });
     });
-
 
 }
 
-export function post(url, data, event) {
-  console.log("Post api call")
+export function post(url, body, btnId) {
+
+  CommonConsole("Post api call");
   AuthonticationFunction();
+
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
-    })
-    .then(response => {
-      return CkeckAlert({method:"post", url, response, data, event});
-    })
-    .catch(response => {
-      return CkeckAlert({method:"post", url, response, data, event});
+    }).then(response => {
+      return CheckAPIResponse({ method: "post", url, response, body, btnId });
+    }).catch(response => {
+      return CheckAPIResponse({ method: "post", url, response, body, btnId });
     });
 };
 
 
-export function put(url, data, event,) {
+export function put(url, body, btnId,) {
 
-  console.log(" put api call")
+  CommonConsole("put api call");
   AuthonticationFunction();
-  return axiosApi.put(url, data, {
+
+  return axiosApi.put(url, body, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     }
   }).then(response => {
-    return CkeckAlert({method:"put", url, response, data, event});
-  })
-    .catch(response => {
-      return CkeckAlert({method:"put", url, response, event});
-    });
+    return CheckAPIResponse({ method: "put", url, response, body, btnId });
+  }).catch(response => {
+    return CheckAPIResponse({ method: "put", url, response, btnId });
+  });
 }
 
-export function del(url,) {
-  console.log(" delete api call")
+export function del(url, btnId) {
+
+  CommonConsole(" delete api call");
   AuthonticationFunction();
+
   return axiosApi.delete(url,).then(response => {
-    return CkeckAlert({method:"delete", url, response});
-  })
-    .catch(response => {
-      return CkeckAlert({method:"delete", url, response});
-    });
+    return CheckAPIResponse({ method: "delete", url, response, btnId });
+  }).catch(response => {
+    return CheckAPIResponse({ method: "delete", url, response, btnId });
+  });
 }
 
 // for forget password
-export function postForget(url, data,) {
-  // 
-  // AuthonticationFunction();
+export function postForget(url, body,) {
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     })
     .then(response => {
-      return CkeckAlert({method:"postForget", url, response});
+      return CheckAPIResponse({ method: "postForget",body, url, response });
     })
     .catch(response => {
-      return CkeckAlert({method:"postForget", url, response});
+      return CheckAPIResponse({ method: "postForget", url, response });
     });
 
 }
@@ -107,9 +106,9 @@ export function postForget(url, data,) {
 export async function getModify(url) {
   AuthonticationFunction();
   return axiosApi.get(url).then(response => {
-    return CkeckAlert({method:"get", url, response});
+    return CheckAPIResponse({ method: "get", url, response });
   })
     .catch(response => {
-      return CkeckAlert({method:"get", url, response});
+      return CheckAPIResponse({ method: "get", url, response });
     });
 }

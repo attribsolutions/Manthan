@@ -18,10 +18,10 @@ import {
     commonPageFieldSuccess,
     editGroupIDSuccess,
     getGroupListSuccess,
-    postGroupList,
-    postGroupSuccess,
+    saveGroupMaster,
+    saveGroupMaster_Success,
     updateGroupID,
-    updategroupIDSuccess
+    updateGroupIDSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
@@ -36,11 +36,10 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
-import { btnIsDissable } from "../../../CustomAlert/ConfirmDialog";
 
 const GroupMaster = (props) => {
 
@@ -105,7 +104,6 @@ const GroupMaster = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
 
@@ -144,7 +142,7 @@ const GroupMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postGroupSuccess({ Status: false }))
+            dispatch(saveGroupMaster_Success({ Status: false }))
             setState(() => resetFunction(fileds, state))//Clear form values
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -188,7 +186,7 @@ const GroupMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
-            dispatch(updategroupIDSuccess({ Status: false }));
+            dispatch(updateGroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -214,23 +212,27 @@ const GroupMaster = (props) => {
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        btnIsDissable(event, true)
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                GroupType: values.GroupTypeName.value,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            if (pageMode === mode.edit) {
-                dispatch(updateGroupID(jsonBody, values.id, event));
-            }
-            else {
-                dispatch(postGroupList(jsonBody, event));
-            }
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    GroupType: values.GroupTypeName.value,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                });
 
-        }
+                if (pageMode === mode.edit) {
+                    dispatch(updateGroupID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveGroupMaster({ jsonBody, btnId }));
+                }
+
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
 
@@ -283,7 +285,6 @@ const GroupMaster = (props) => {
                                                         </FormGroup>
                                                         <Row>
                                                             <FormGroup className="mb-3  " style={{ marginLeft: "8px", paddingLeft: "4px" }}>
-
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
                                                                 <Col md={4} >
                                                                     <Select
@@ -305,7 +306,8 @@ const GroupMaster = (props) => {
                                                         <FormGroup >
                                                             <Row>
                                                                 <Col sm={4}>
-                                                                    <SaveButton pageMode={pageMode}
+                                                                    <SaveButton
+                                                                        pageMode={pageMode}
                                                                         onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}

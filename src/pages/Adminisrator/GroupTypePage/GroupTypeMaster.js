@@ -23,15 +23,15 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
-    editGroupTypeIdSuccess,
+    editGroupTypeIDSuccess,
     getGroupTypeslistSuccess,
-    PostGroupTypeSubmit,
-    PostGroupTypeSubmitSuccess,
+    saveGroupTypeMaster,
+    saveGroupTypeMasterSuccess,
     updateGroupTypeID,
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -96,7 +96,7 @@ const GroupTypeMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -128,7 +128,7 @@ const GroupTypeMaster = (props) => {
                 values.Name = Name;
                 values.IsReserved = IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editGroupTypeIdSuccess({ Status: false }))
+                dispatch(editGroupTypeIDSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
@@ -137,9 +137,8 @@ const GroupTypeMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
+            dispatch(saveGroupTypeMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))//Clear form values
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -159,7 +158,6 @@ const GroupTypeMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(getGroupTypeslistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -174,13 +172,12 @@ const GroupTypeMaster = (props) => {
     useEffect(() => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))//Clear form values
             history.push({
                 pathname: url.GROUPTYPE_lIST,
             })
+
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateGroupTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -199,29 +196,32 @@ const GroupTypeMaster = (props) => {
         }
     }, [pageField])
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                IsReserved: values.IsReserved,
-                CreatedBy: loginUserID(),
-                CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy: loginUserID(),
-                UpdatedOn: "0002-10-03T12:48:14.910491"
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    IsReserved: values.IsReserved,
+                    CreatedBy: loginUserID(),
+                    CreatedOn: "0002-10-03T12:48:14.910491",
+                    UpdatedBy: loginUserID(),
+                    UpdatedOn: "0002-10-03T12:48:14.910491"
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(updateGroupTypeID(jsonBody, EditData.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateGroupTypeID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveGroupTypeMaster({ jsonBody, btnId }));
+                }
+
             }
-            else {
-                dispatch(PostGroupTypeSubmit(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -232,7 +232,7 @@ const GroupTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                     
+
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -241,7 +241,7 @@ const GroupTypeMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black"  >
 
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -297,6 +297,7 @@ const GroupTypeMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"GroupTypeMaster"}

@@ -11,14 +11,14 @@ import {
   delete_GroupList_ID,
   editGroupID,
   getGroupList,
-  postGroupSuccess,
-  updategroupIDSuccess
+  saveGroupMaster_Success,
+  updateGroupIDSuccess
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
-const GroupList = (props) => {
+const GroupList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
@@ -37,8 +37,8 @@ const GroupList = (props) => {
     getList: getGroupList,
     editId: editGroupID,
     deleteId: delete_GroupList_ID,
-    postSucc: postGroupSuccess,
-    updateSucc: updategroupIDSuccess,
+    postSucc: saveGroupMaster_Success,
+    updateSucc: updateGroupIDSuccess,
     deleteSucc: deleteGrouplistSuccess
   }
 
