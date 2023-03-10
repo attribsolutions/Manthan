@@ -244,6 +244,7 @@ const RoleMaster = (props) => {
     const btnId = event.target.id
     try {
       if (formValid(state, setState)) {
+        btnIsDissablefunc({ btnId, state: true })
         const jsonBody = JSON.stringify({
           Name: values.Name,
           Description: values.Description,

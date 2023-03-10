@@ -6,11 +6,11 @@ import {
   commonPageFieldListSuccess
 } from "../../../store/actions";
 import {
-  deleteGroupType_ID,
-  deleteGroupType_IDSuccess,
-  editGroupTypeId,
+  deleteGroupTypeID,
+  deleteGroupTypeIDSuccess,
+  editGroupTypeID,
   getGroupTypeslist,
-  PostGroupTypeSubmitSuccess,
+  saveGroupTypeMasterSuccess,
   updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import GroupTypeMaster from "./GroupTypeMaster";
@@ -35,11 +35,11 @@ const GroupTypeList = (props) => {
 
   const action = {
     getList: getGroupTypeslist,
-    editId: editGroupTypeId,
-    deleteId: deleteGroupType_ID,
-    postSucc: PostGroupTypeSubmitSuccess,
+    editId: editGroupTypeID,
+    deleteId: deleteGroupTypeID,
+    postSucc: saveGroupTypeMasterSuccess,
     updateSucc: updateGroupTypeIDSuccess,
-    deleteSucc: deleteGroupType_IDSuccess
+    deleteSucc: deleteGroupTypeIDSuccess
   }
   useEffect(() => {
     const page_Id = pageId.GROUPTYPE_lIST
