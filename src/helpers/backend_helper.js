@@ -128,7 +128,7 @@ export const User_Component_Update_API = ({ jsonBody, updateId, btnId }) => put(
 export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
 
 // Role Master
-export const Role_Master_Get_API = ({ jsonBody, btnId }) => post(url.ROLE_FILTER_API, jsonBody, btnId)//get api
+export const Role_Master_Get_API = (Filters) => post(url.ROLE_FILTER_API, Filters)//get api
 export const Role_Master_Post_API = ({ jsonBody, btnId }) => post(url.ROLE_MASTER_API, jsonBody, btnId)// post api
 export const Role_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.ROLE_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Role_Master_Edit_API = ({ editId, btnId }) => get(`${url.ROLE_MASTER_API}/${editId}`, btnId)// edit api

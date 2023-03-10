@@ -22,40 +22,41 @@ import {
 } from "./actionTypes";
 import { loginJsonBody } from "../../CommonAPI/CommonJsonBody"
 
-function* Get_Roles_GenratorFunction() {
+function* Get_Roles_GenratorFunction() {                                    //Get Role List
   try {
     const response = yield call(Role_Master_Get_API, loginJsonBody());
     yield put(getRoleSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Submit_Roles_GenratorFunction({ Data }) {
+function* Submit_Roles_GenratorFunction({ config }) {                       //Save Role Master
   try {
-    const response = yield call(Role_Master_Post_API, Data);
+    const response = yield call(Role_Master_Post_API, config);
     yield put(PostSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Delete_Roles_GenratorFunction({ id }) {
+function* Delete_Roles_GenratorFunction({ config }) {                       //Delete Role Master
   try {
-    const response = yield call(Role_Master_Delete_API, id);
+    const response = yield call(Role_Master_Delete_API, config);
     yield put(deleteSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_Roles_GenratorFunction({ id, pageMode }) {
+function* Edit_Roles_GenratorFunction({ config }) {    
+  debugger                     //Edit Role Master
+  const { btnmode } = config;
   try {
-    const response = yield call(Role_Master_Edit_API, id);
-    response.pageMode = pageMode
+    const response = yield call(Role_Master_Edit_API, config);
+    response.pageMode = btnmode;
     yield put(editSuccess(response));
-    console.log("response in saga", response)
   } catch (error) { CommonConsole(error) }
 }
 
 
-function* Update_Roles_GenratorFunction({ data, ID }) {
+function* Update_Roles_GenratorFunction({ config }) {                       //Update Role Master
   try {
-    const response = yield call(Role_Master_Update_API, data, ID);
+    const response = yield call(Role_Master_Update_API, config);
     yield put(updateSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
