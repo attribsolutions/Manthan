@@ -300,10 +300,10 @@ export const Margin_MasterPage_delete_API = (id) => del(`${url.MARGIN_MASTER_LIS
 
 // GroupTypes API
 export const GroupTypes_API = () => get(url.GROUP_TYPE_API)
-export const GroupTypes_Post_API = (data) => post(url.GROUP_TYPE_API, data)// post api
-export const GroupTypes_Delete_API = (id) => del(`${url.GROUP_TYPE_API}/${id}`)// delete api
-export const GroupTypes_Edit_API = (id) => get(`${url.GROUP_TYPE_API}/${id}`)// edit api
-export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${id}`, data)// update api
+export const GroupTypes_Post_API = ({ jsonBody, btnId }) => post(url.GROUP_TYPE_API, jsonBody, btnId)// post api
+export const GroupTypes_Delete_API = ({ deleteId, btnId }) => del(`${url.GROUP_TYPE_API}/${deleteId}`, btnId)// delete api
+export const GroupTypes_Edit_API = ({ editId, btnId }) => get(`${url.GROUP_TYPE_API}/${editId}`, btnId)// edit api
+export const GroupTypes_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GROUP_TYPE_API}/${updateId}`, jsonBody, btnId)// update api
 
 // GroupMaster
 
