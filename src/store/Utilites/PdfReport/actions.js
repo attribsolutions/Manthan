@@ -1,4 +1,6 @@
 import {
+  GET_PDF_MULTIPLEINVOICE_DATA,
+  GET_PDF_MULTIPLEINVOICE_DATA_SUCCESS,
   GET_PDF_REPORT_DATA,
   GET_PDF_REPORT_DATA_SUCCESS
 } from "./actionType";
@@ -15,13 +17,13 @@ export const getpdfReportdataSuccess = (data) => ({
 });
 
 
-export const postpdfMultipleReportdata = (jsonBody,ReportType, Id) => ({
-  type: GET_PDF_REPORT_DATA,
-  jsonBody, ReportType, Id
+export const postpdfMultipleReportdata = (API, jsonBody,ReportType, Id) => ({
+  type:GET_PDF_MULTIPLEINVOICE_DATA,
+  API,jsonBody, ReportType, Id
 });
 
 export const postpdfMultipleReportdataSuccess = (data) => ({
-  type: GET_PDF_REPORT_DATA_SUCCESS,
+  type: GET_PDF_MULTIPLEINVOICE_DATA_SUCCESS,
   payload: data,
 });
 

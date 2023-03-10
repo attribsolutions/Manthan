@@ -25,12 +25,16 @@ const InvioceReporta5 = (data = []) => {
   
     var doc = new jsPDF('l', 'pt', 'a5');
     data.forEach(i => {
-      
+
         pageHeder(doc, i);
         reportBody(doc, i);
         pageFooter(doc, i);
-        console.log(i)
+        if (!(i.length-1)) {
+            doc.addPage();
+        }
+      
     })
+
     doc.setProperties({
         title: "Report"
     });
