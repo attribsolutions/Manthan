@@ -128,11 +128,11 @@ export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/
 export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
 
 // Role Master
-export const Role_Master_Get_API = (data) => post(url.ROLE_FILTER_API, data)//get api
-export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API, data)// post api
-export const Role_Master_Delete_API = (id) => del(`${url.ROLE_MASTER_API}/${id}`)// delete api
-export const Role_Master_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
-export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/${id}`, data)// update api
+export const Role_Master_Get_API = ({ jsonBody, btnId }) => post(url.ROLE_FILTER_API, jsonBody, btnId)//get api
+export const Role_Master_Post_API = ({ jsonBody, btnId }) => post(url.ROLE_MASTER_API, jsonBody, btnId)// post api
+export const Role_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.ROLE_MASTER_API}/${deleteId}`, btnId)// delete api
+export const Role_Master_Edit_API = ({ editId, btnId }) => get(`${url.ROLE_MASTER_API}/${editId}`, btnId)// edit api
+export const Role_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ROLE_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
 
 
 //Administrator   Modules submit  
@@ -253,8 +253,8 @@ export const update_Category_List_Api = (data, id) => put(`${url.CATEGORY_API}/$
 
 //Vehicle API
 export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
-export const get_Vehicle_API = (data) => post(url.VEHICLE_FILTER_API,data)//  get Api 
-export const get_VehicleTypes_API = (data) => post(url.VEHICLETYPES_DROPDOWN,data)//dropDown
+export const get_Vehicle_API = (data) => post(url.VEHICLE_FILTER_API, data)//  get Api 
+export const get_VehicleTypes_API = (data) => post(url.VEHICLETYPES_DROPDOWN, data)//dropDown
 export const detelet_VehicleType_List_Api = (id) => del(`${url.VEHICLE_API}/${id}`) // delete api
 export const edit_VehicleType_List_Api = (id) => get(`${url.VEHICLE_API}/${id}`) // edit api
 export const update_VehicleType_List_Api = (data, id) => put(`${url.VEHICLE_API}/${id}`, data)// update
@@ -268,7 +268,7 @@ export const update_CompanyGroupType_List_Api = (data, id) => put(`${url.COMPANY
 
 //Driver api
 export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api
-export const get_DriverList_API = (data) => post(url.DRIVER_FILTER_API,data)//  get Api 
+export const get_DriverList_API = (data) => post(url.DRIVER_FILTER_API, data)//  get Api 
 export const detelet_DriverType_List_Api = (id) => del(`${url.DRIVER_API}/${id}`) // delete api
 export const edit_DriverType_List_Api = (id) => get(`${url.DRIVER_API}/${id}`) // edit api
 export const update_DriverType_List_Api = (data, id) => put(`${url.DRIVER_API}/${id}`, data)// update

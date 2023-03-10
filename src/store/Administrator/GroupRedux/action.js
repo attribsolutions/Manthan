@@ -21,7 +21,7 @@ export const getGroupListSuccess = (pages) => ({// get List success
   payload: pages,
 });
 
-export const saveGroupMaster = (config) => ({// save Action
+export const saveGroupMaster = (config={}) => ({// save Action
   type: SAVE_GROUP_MASTER,
   config,
 });
@@ -51,7 +51,7 @@ export const updateGroupIDSuccess = (resp) => ({ //Update Success
   payload: resp,
 })
 
-export const delete_GroupList_ID = (config) => ({// Delete  Action
+export const delete_GroupList_ID = (config={}) => ({// Delete  Action
   type: DELETE_GROUP_LIST_ID,
   config,
 });
