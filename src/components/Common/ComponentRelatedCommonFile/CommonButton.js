@@ -4,7 +4,7 @@ import * as mode from "../../../routes/PageMode"
 
 export function SaveButton(props) {
 
-  const { pageMode, userAcc, module, onClick, editCreatedBy = {}, id = '' } = props
+  const { pageMode='', userAcc={}, module = '', onClick, editCreatedBy = {}, } = props;
 
   const isCreated = (loginUserID() === editCreatedBy)
 
@@ -15,8 +15,8 @@ export function SaveButton(props) {
           (userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) && (isCreated)) ?
             <button
               type="submit"
-              id={id}
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Update ${module}`}
+              id={`Update-${module}`}
+              title={`Update ${module}`}
               className="btn btn-success w-md"
               onClick={onClick}
             >
@@ -24,12 +24,12 @@ export function SaveButton(props) {
             </button>
             :
             <></>
-          : (pageMode === mode.defaultsave ||  pageMode === mode.copy || pageMode === mode.modeSTPsave || pageMode === mode.dropdownAdd || pageMode === mode.assingLink) ? (
+          : (pageMode === mode.defaultsave || pageMode === mode.copy || pageMode === mode.modeSTPsave || pageMode === mode.dropdownAdd || pageMode === mode.assingLink) ? (
             userAcc.RoleAccess_IsSave ?
               <button
                 type="submit"
-                id={id}
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Save ${module}`}
+                id={`Save-${module}`}
+                title={`Save ${module}`}
                 className="btn btn-primary w-md"
                 onClick={onClick}
               > <i className="fas fa-save me-2"></i> Save

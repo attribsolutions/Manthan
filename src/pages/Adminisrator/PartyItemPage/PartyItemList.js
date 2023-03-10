@@ -7,8 +7,8 @@ import {
   deleteGrouplistSuccess,
   delete_GroupList_ID,
   editGroupID,
-  postGroupSuccess,
-  updategroupIDSuccess,
+  saveGroupMaster_Success,
+  updateGroupIDSuccess,
 } from "../../../store/actions";
 import PartyItems from "./PartyItems";
 import { editPartyItemID, GetPartyList, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
@@ -35,7 +35,7 @@ const PartyItemsList = (props) => {
     getList: GetPartyList,
     editId: editPartyItemID,
     deleteId: delete_GroupList_ID,
-    postSucc: postGroupSuccess,
+    postSucc: saveGroupMaster_Success,
     updateSucc: PostPartyItemsSuccess,
     deleteSucc: deleteGrouplistSuccess
 
