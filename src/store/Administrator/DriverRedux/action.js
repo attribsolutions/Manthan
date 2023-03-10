@@ -23,9 +23,9 @@ export const PostMethodForDriverMaster= (data) => ({
  });
  
  // get method DriverList
- export const getMethodForDriverList = (data) => ({
+ export const getMethodForDriverList = () => ({
    type: GET_METHOD_FOR_DRIVER_LIST,
-   data,
+   
  });
  
  export const getMethod_ForDriverListSuccess = (data) => ({

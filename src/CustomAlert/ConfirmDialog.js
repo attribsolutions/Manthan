@@ -430,31 +430,31 @@ const MessageFun = ({ msg }) => {
 }
 
 export function btnIsDissable(event, state = false) {
-    // if (event) {
-    //     try {
-    //         document.getElementById("overlay").style.display = state ? "block" : "none";
-    //         // document.getElementById("preloader").style.display = state ? "block" : "none";
-    //         event.target.disabled = state;
+    if (event) {
+        try {
+            document.getElementById("overlay").style.display = state ? "block" : "none";
+            // document.getElementById("preloader").style.display = state ? "block" : "none";
+            event.target.disabled = state;
 
-    //         const loginBtn = document.getElementById(event.target);
+            const loginBtn = document.getElementById(event.target);
 
-    //         // if (state) {
-    //         //     loginBtn.classList.add("loading");
-    //         // }
-    //         // else {
-    //         //     loginBtn.classList.remove("loading")
-    //         // }
-    //         // // Hide loader after success/failure - here it will hide after 2seconds
-    //         // // setTimeout(() => event.classList.remove("loading"), 3000);
+            // if (state) {
+            //     loginBtn.classList.add("loading");
+            // }
+            // else {
+            //     loginBtn.classList.remove("loading")
+            // }
+            // // Hide loader after success/failure - here it will hide after 2seconds
+            // // setTimeout(() => event.classList.remove("loading"), 3000);
 
-    //     } catch (error) { CommonConsole(error) }
-    // }
+        } catch (error) { CommonConsole(error) }
+    }
 }
 export async function CkeckAlert({ method, url, response, body, event }) {
-// debugger
-//     if (event) {
-//         await new Promise(r => setTimeout(r, 10000));
-//     }
+debugger
+    if (event) {
+        await new Promise(r => setTimeout(r, 10000));
+    }
 
     const { data = '' } = response
     const con1 = ((data.StatusCode === 200));

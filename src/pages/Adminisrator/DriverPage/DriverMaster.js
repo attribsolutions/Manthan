@@ -33,7 +33,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -47,6 +47,7 @@ const DriverMaster = (props) => {
         id: "",
         Name: "",
         Address: "",
+        UID: "",
         DOB: ''
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -92,12 +93,14 @@ const DriverMaster = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
+
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
+
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
 
@@ -118,15 +121,17 @@ const DriverMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, DOB, Address } = hasEditVal// new change
+                const { id, Name, DOB, UID, Address } = hasEditVal// new change
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 hasValid.DOB.valid = true;
+                hasValid.UID.valid = true;
                 hasValid.Address.valid = true;
 
                 values.Name = Name;
                 values.DOB = DOB;
+                values.UID = UID;
                 values.Address = Address;
                 values.id = id
 
@@ -193,6 +198,7 @@ const DriverMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+
     useEffect(() => {
 
         if (pageField) {
@@ -208,8 +214,7 @@ const DriverMaster = (props) => {
                 Name: values.Name,
                 Address: values.Address,
                 DOB: values.DOB,
-                Party: loginPartyID(),
-                Company: loginCompanyID(),
+                UID: values.UID,
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID()
             });
@@ -225,6 +230,7 @@ const DriverMaster = (props) => {
             }
         }
     };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -319,6 +325,24 @@ const DriverMaster = (props) => {
                                                             </FormGroup>
                                                         </Row>
 
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-4 ">
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.UID}</Label>
+                                                                <Input
+                                                                    name="UID"
+                                                                    value={values.UID}
+                                                                    type="text"
+                                                                    placeholder="Please Enter UID"
+                                                                    autoComplete='off'
+                                                                    className={isError.UID.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    onChange={(event) => onChangeText({ event, state, setState })}
+                                                                />
+                                                                {isError.UID.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.UID}</span>
+                                                                )}
+                                                            </FormGroup>
+
+                                                        </Row>
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>

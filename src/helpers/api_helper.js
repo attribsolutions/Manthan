@@ -23,7 +23,7 @@ axiosApi.interceptors.response.use(
 )
 
 export function get(url, event) {
-  
+  debugger
   console.log("get api call")
   AuthonticationFunction();
   return axiosApi.get(url)
