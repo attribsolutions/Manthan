@@ -28,8 +28,6 @@ const DriverReducer = (state = INIT_STATE, action) => {
         DriverList: action.payload,
       }
 
-
-
     case DELETE_DRIVER_TYPE_ID_SUCCESS:
       return {
         ...state,
