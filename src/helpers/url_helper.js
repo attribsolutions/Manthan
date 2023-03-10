@@ -116,8 +116,8 @@ export const CATEGORY_API = '/Category'
 
 //Vehicle api
 export const VEHICLE_API = '/Vehicle'
+export const VEHICLE_FILTER_API = '/VehicleFilter'
 export const VEHICLETYPES_DROPDOWN = '/VehicleTypes'
-export const DRIVERLIST_DROPDOWN = '/Driver'
 export const BASEUNIT_DROPDOWN_API = '/UnitList'
 
 //CompanyGroup api
