@@ -1,54 +1,53 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { GroupTypes_API, GroupTypes_Delete_API, GroupTypes_Edit_API, GroupTypes_Post_API, GroupTypes_Update_API } from "../../../helpers/backend_helper";
-import { deleteGroupType_IDSuccess, editGroupTypeIdSuccess, getGroupTypeslistSuccess, PostGroupTypeSubmitSuccess, updateGroupTypeIDSuccess } from "./action";
-import { DELETE_GROUP_TYPE_ID, EDIT_GROUP_TYPE_ID, GET_GROUP_TYPES_LIST, POST_GROUP_TYPE_SUBMIT, UPDATE_GROUP_TYPE_ID } from "./actionType";
+import { deleteGroupTypeIDSuccess, editGroupTypeIDSuccess, getGroupTypeslistSuccess, saveGroupTypeMasterSuccess, updateGroupTypeIDSuccess } from "./action";
+import { DELETE_GROUP_TYPE_ID, EDIT_GROUP_TYPE_ID, GET_GROUP_TYPES_LIST, SAVE_GROUP_TYPE_MASTER, UPDATE_GROUP_TYPE_ID } from "./actionType";
 
-// get api
-function* Get_GropuTypeList_GenratorFunction() {
+function* save_GroupType_GenFun({ config }) {                      // Save API
+    try {
+        const response = yield call(GroupTypes_Post_API, config);
+        yield put(saveGroupTypeMasterSuccess(response));
+    } catch (error) { CommonConsole(error) }
+}
+
+function* Get_GroupType_List_GenrFun() {                            // getList API
     try {
         const response = yield call(GroupTypes_API);
         yield put(getGroupTypeslistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
-//post api
-function* Submit_GroupType_GenratorFunction({ data }) {
+function* Edit_GroupType_ID_GenFun({ config }) {                     // edit API
+    const { btnmode } = config;                   
     try {
-        const response = yield call(GroupTypes_Post_API, data);
-        yield put(PostGroupTypeSubmitSuccess(response));
+        const response = yield call(GroupTypes_Edit_API, config);
+        response.pageMode = btnmode;
+        yield put(editGroupTypeIDSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
-// delete api 
-function* Delete_GroupTypeID_GenratorFunction({ id }) {
+function* Update_GroupType_ID_GenFun({ config }) {  
+    debugger                 // update API
     try {
-        const response = yield call(GroupTypes_Delete_API, id);
-        yield put(deleteGroupType_IDSuccess(response))
-    } catch (error) { CommonConsole(error) }
-}
-
-function* Edit_GroupTypeID_GenratorFunction({ id, pageMode }) {
-    try {
-        const response = yield call(GroupTypes_Edit_API, id);
-        response.pageMode = pageMode
-        yield put(editGroupTypeIdSuccess(response));
-    } catch (error) { CommonConsole(error) }
-}
-
-function* Update_GroupTypeID_GenratorFunction({ updateData, ID }) {
-    try {
-        const response = yield call(GroupTypes_Update_API, updateData, ID);
+        const response = yield call(GroupTypes_Update_API,config);
         yield put(updateGroupTypeIDSuccess(response))
     } catch (error) { CommonConsole(error) }
 }
 
+function* Delete_GroupType_ID_GenFun({ config }) {                     // delete API
+    try {
+        const response = yield call(GroupTypes_Delete_API, config);
+        yield put(deleteGroupTypeIDSuccess(response))
+    } catch (error) { CommonConsole(error) }
+}
+
 function* GroupTypeSaga() {
-    yield takeEvery(GET_GROUP_TYPES_LIST, Get_GropuTypeList_GenratorFunction)
-    yield takeEvery(POST_GROUP_TYPE_SUBMIT, Submit_GroupType_GenratorFunction)
-    yield takeEvery(DELETE_GROUP_TYPE_ID, Delete_GroupTypeID_GenratorFunction)
-    yield takeEvery(EDIT_GROUP_TYPE_ID, Edit_GroupTypeID_GenratorFunction)
-    yield takeEvery(UPDATE_GROUP_TYPE_ID, Update_GroupTypeID_GenratorFunction)
+    yield takeEvery(SAVE_GROUP_TYPE_MASTER, save_GroupType_GenFun)
+    yield takeEvery(GET_GROUP_TYPES_LIST, Get_GroupType_List_GenrFun)
+    yield takeEvery(EDIT_GROUP_TYPE_ID, Edit_GroupType_ID_GenFun)
+    yield takeEvery(UPDATE_GROUP_TYPE_ID, Update_GroupType_ID_GenFun)
+    yield takeEvery(DELETE_GROUP_TYPE_ID, Delete_GroupType_ID_GenFun)
 
 }
 
