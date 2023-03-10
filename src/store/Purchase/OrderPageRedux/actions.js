@@ -50,13 +50,13 @@ export const getOrderListPageSuccess = (data) => ({
 });
 
 
-export const postOrder = (jsonBody, subPageMode) => ({
+export const saveOrderAaction = (config = {}) => ({
   type: POST_ORDER_FROM_ORDER_PAGE,
-  jsonBody, subPageMode,
+  config,
 });
-export const postOrderSuccess = (msg) => ({
+export const postOrderSuccess = (resp) => ({
   type: POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  payload: msg
+  payload: resp
 });
 
 
@@ -69,9 +69,9 @@ export const editOrderIdSuccess = (data) => ({
   payload: data,
 });
 
-export const updateOrderId = (data, id) => ({
+export const updateOrderIdAction = (config = {}) => ({
   type: UPDATE_ORDER_ID_FROM_ORDER_PAGE,
-  data, id,
+  config,
 });
 export const updateOrderIdSuccess = (data) => ({
   type: UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,

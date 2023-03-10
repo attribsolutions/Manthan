@@ -63,12 +63,12 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
   } catch (error) { CommonConsole(error) }
 }
 
-function* saveOrder_GenFunc({ jsonBody, subPageMode }) {
+function* saveOrder_GenFunc({config}) {
 
   let response
   try {
     if (subPageMode === url.IB_ORDER) {                   // Save  Order  Add Page by subPageMode 
-      response = yield call(IBOrderPage_Save_API, jsonBody);
+      response = yield call(IBOrderPage_Save_API, config);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, jsonBody);
     }
@@ -91,20 +91,12 @@ function* DeleteOrder_GenFunc({ id }) {                  // Delete Order by subP
   } catch (error) { CommonConsole(error) }
 }
 
-function* UpdateOrder_ID_GenFunc({ data, id }) {         // Update Order by subPageMode
+function* UpdateOrder_ID_GenFunc({config }) {         // Update Order by subPageMode
   try {
-    yield saveDissable(true)
-    const response = yield call(OrderPage_Update_API, data, id);
+    const response = yield call(OrderPage_Update_API, config);
     yield put(updateOrderIdSuccess(response))
-    yield saveDissable(false)
-  }
-  catch (error) {
-    yield saveDissable(false)
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error UpdateOrder",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
+
 }
 
 function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter by subPageMode
