@@ -104,7 +104,6 @@ const GroupMaster = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
 
@@ -286,7 +285,6 @@ const GroupMaster = (props) => {
                                                         </FormGroup>
                                                         <Row>
                                                             <FormGroup className="mb-3  " style={{ marginLeft: "8px", paddingLeft: "4px" }}>
-
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
                                                                 <Col md={4} >
                                                                     <Select
