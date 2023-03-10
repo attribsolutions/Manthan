@@ -22,7 +22,7 @@ import {
 
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     editBOMListSuccess,
     postBOM,
@@ -30,12 +30,13 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID, loginPartyID } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID, loginPartyID, currentDate } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { getMethodForVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
 import { PostRouteslist } from "../../../../store/Administrator/RoutesRedux/actions";
+import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
 
 const LoadingSheet = (props) => {
 
@@ -47,6 +48,7 @@ const LoadingSheet = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
+    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, });
 
     const fileds = {
         id: "",
@@ -66,22 +68,25 @@ const LoadingSheet = (props) => {
         pageField,
         userAccess,
         VehicleNumber,
-        RoutesList
+        RoutesList,
+        GoButton
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         VehicleNumber: state.VehicleReducer.VehicleList,
-        RoutesList: state.RoutesReducer.RoutesList
+        RoutesList: state.RoutesReducer.RoutesList,
+        GoButton: state.InvoiceReducer.Invoicelist
     }));
-
+    const { fromdate, todate } = orderlistFilter;
     useEffect(() => {
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getMethodForVehicleList())
         dispatch(PostRouteslist());
+        dispatch(invoiceListGoBtnfilter())
 
     }, []);
 
@@ -244,6 +249,19 @@ const LoadingSheet = (props) => {
         SaveHandler({ event, mode: true })
     }
 
+    function goButtonHandler() {
+        debugger
+        const jsonBody = JSON.stringify({
+            FromDate: fromdate,
+            ToDate: todate,
+            Customer: "",
+            Party: loginPartyID(),
+            IBType: ""
+        });
+
+        dispatch(invoiceListGoBtnfilter(url.LOADING_SHEET, jsonBody));
+    }
+
     const SaveHandler = (event) => {
         event.preventDefault();
         const BOMItems = ItemTabDetails.map((index) => ({
@@ -271,7 +289,7 @@ const LoadingSheet = (props) => {
                 // IsVDCItem: values.IsVDCItem,
                 // ReferenceBom: BOMrefID
             });
-           
+
 
             // saveDissable(true);//save Button Is dissable function
 
@@ -328,7 +346,7 @@ const LoadingSheet = (props) => {
                                             <Col sm="7">
                                                 <Flatpickr
                                                     name="FromDate"
-                                                    value={values.FromDate}
+                                                    value={fromdate}
                                                     className="form-control d-block p-2 bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     autoComplete="0,''"
@@ -355,7 +373,7 @@ const LoadingSheet = (props) => {
                                             <Col sm="7">
                                                 <Flatpickr
                                                     name="ToDate"
-                                                    value={values.ToDate}
+                                                    value={todate}
                                                     className="form-control d-block p-2 bg-white text-dark"
                                                     placeholder="YYYY-MM-DD"
                                                     autoComplete="0,''"
@@ -394,9 +412,9 @@ const LoadingSheet = (props) => {
                                                     }
                                                     }
                                                 />
-                                                {isError.RouteName.length > 0 && (
+                                                {/* {isError.RouteName.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.RouteName}</small></span>
-                                                )}
+                                                )} */}
                                             </Col>
                                         </FormGroup>
                                     </Col>
@@ -417,18 +435,22 @@ const LoadingSheet = (props) => {
                                                     }
                                                     }
                                                 />
-                                                {isError.VehicleNumber.length > 0 && (
+                                                {/* {isError.VehicleNumber.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.VehicleNumber}</small></span>
-                                                )}
+                                                )} */}
                                             </Col>
                                         </FormGroup>
+
+                                    </Col>
+                                    <Col sm={1}>
+                                        < Go_Button onClick={(e) => goButtonHandler()} />
                                     </Col>
                                 </div>
 
                             </div>
                         </div>
 
-                        
+
                         {<FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                 <SaveButton pageMode={pageMode}
