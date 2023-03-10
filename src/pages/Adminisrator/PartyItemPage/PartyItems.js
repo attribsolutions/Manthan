@@ -20,7 +20,7 @@ import {
     commonPageFieldSuccess,
     editGroupIDSuccess,
     getGroupList,
-    updategroupIDSuccess
+    updateGroupIDSuccess
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
