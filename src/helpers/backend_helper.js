@@ -269,7 +269,7 @@ export const update_CompanyGroupType_List_Api = (data, id) => put(`${url.COMPANY
 
 //Driver api
 export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api
-export const get_DriverList_API = () => get(url.DRIVER_API)//  get Api 
+export const get_DriverList_API = (data) => post(url.DRIVER_FILTER_API,data)//  get Api 
 export const detelet_DriverType_List_Api = (id) => del(`${url.DRIVER_API}/${id}`) // delete api
 export const edit_DriverType_List_Api = (id) => get(`${url.DRIVER_API}/${id}`) // edit api
 export const update_DriverType_List_Api = (data, id) => put(`${url.DRIVER_API}/${id}`, data)// update
