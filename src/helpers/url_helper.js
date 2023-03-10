@@ -125,6 +125,7 @@ export const COMPANYGROUP_API = '/CompanyGroups'
 
 //Driver api
 export const DRIVER_API = '/Driver'
+export const DRIVER_FILTER_API = '/DriverFilter'
 
 //Category Types API
 export const CATEGORY_DROPDOWN_API = '/GetCategoryByCategoryTypeID'
