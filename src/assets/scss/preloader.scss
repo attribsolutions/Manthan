@@ -8,10 +8,11 @@
 @import "variables";
 
 // pace
+$spinner-zIndex:100002;
 
 #preloader{
   display: none;
-  z-index: 12;
+  z-index: $spinner-zIndex;
   background: #0511ec !important;
 
 }
@@ -33,7 +34,7 @@
     );
 
     position: fixed;
-    z-index: 2000;
+    z-index: $spinner-zIndex;
     top: 0;
     right: 100%;
     width: 100%;
@@ -50,7 +51,7 @@
 .pace .pace-activity {
   display: block;
   position: fixed;
-  z-index: 2000;
+  z-index: $spinner-zIndex;
   top: 0;
   right: 0;
   width: 150px;

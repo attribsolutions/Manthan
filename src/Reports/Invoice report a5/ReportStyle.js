@@ -77,7 +77,7 @@ export const reportHeder1 = (doc, i) => {
         startY: 50,
 
     };
-    debugger
+  
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(i), options3);
 }
 

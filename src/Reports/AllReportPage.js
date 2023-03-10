@@ -12,7 +12,7 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
     const dispatch = useDispatch();
 
     function downBtnFunc() {
-        debugger
+      
         var ReportType = report.invoiceA5;
         dispatch(getpdfReportdata(MultipleInvoice_API,ReportType))
     }

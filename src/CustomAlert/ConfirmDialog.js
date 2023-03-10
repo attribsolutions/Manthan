@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { UncontrolledAlert } from 'reactstrap';
+import { CommonConsole } from '../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 import useConfirm from './useConfirm';
 
 
@@ -34,7 +35,7 @@ const ConfirmDialog = () => {
                 break;
         }
     }
-    
+
     const portalElement = document.getElementById('portal');
     return createPortal(component, portalElement);
 };
@@ -428,7 +429,32 @@ const MessageFun = ({ msg }) => {
     }
 }
 
-export async function CkeckAlert(method, url, response, body) {
+export function btnIsDissable(event, state = false) {
+    if (event) {
+        try {
+            document.getElementById("overlay").style.display = state ? "block" : "none";
+            // document.getElementById("preloader").style.display = state ? "block" : "none";
+            event.target.disabled = state;
+
+            const loginBtn = document.getElementById(event.target);
+
+            // if (state) {
+            //     loginBtn.classList.add("loading");
+            // }
+            // else {
+            //     loginBtn.classList.remove("loading")
+            // }
+            // // Hide loader after success/failure - here it will hide after 2seconds
+            // // setTimeout(() => event.classList.remove("loading"), 3000);
+
+        } catch (error) { CommonConsole(error) }
+    }
+}
+export async function CkeckAlert({ method, url, response, body, event }) {
+debugger
+    if (event) {
+        await new Promise(r => setTimeout(r, 10000));
+    }
 
     const { data = '' } = response
     const con1 = ((data.StatusCode === 200));
@@ -441,17 +467,17 @@ export async function CkeckAlert(method, url, response, body) {
     const con6 = ((method === "post" || method === "put"))
     const con7 = ((data.StatusCode === 100));
 
+
+    btnIsDissable(event, false)
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
     }
     // **********************************************************************************
-    if (con1||con7) {
+    if (con1 || con7) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     } else if (con2) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
-        // await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
-        // return Promise.reject(response)
         return response.data
     }
     else if (con3) {

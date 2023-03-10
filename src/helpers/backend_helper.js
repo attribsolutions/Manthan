@@ -310,10 +310,10 @@ export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${
 // GroupMaster
 
 export const get_Group_List_Api = () => get(url.GROUP_API)// get api
-export const Post_GroupList_API = (data) => post(url.GROUP_API, data)// post api
-export const del_Group_List_API = (id) => del(`${url.GROUP_API}/${id}`)// delete api
-export const edit_Group_List_Api = (id) => get(`${url.GROUP_API}/${id}`)// edit api
-export const update_Group_List_Api = (data, id) => put(`${url.GROUP_API}/${id}`, data)// update api
+export const Post_GroupList_API = (data,event) => post(url.GROUP_API, data,event)// post api
+export const del_Group_List_API = (id,event) => del(`${url.GROUP_API}/${id}`,event)// delete api
+export const edit_Group_List_Api = (id,event) => get(`${url.GROUP_API}/${id}`,event)// edit api
+export const update_Group_List_Api = (data, id,event) => put(`${url.GROUP_API}/${id}`, data,event)// update api
 
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api

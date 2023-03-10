@@ -290,7 +290,7 @@ const PartySubParty = (props) => {
     }
 
     const SaveHandler = (event) => {
-        debugger
+      
         event.preventDefault();
         if (formValid(state, setState)) {
             const arr = PartyData.map(i => {

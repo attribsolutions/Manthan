@@ -147,8 +147,8 @@ const CommonListPage = (props) => {
         Message: deleteMsg.Message,
       })
       // if (promise) {
-        // getList(getListbodyFunc())
-        dispatch(getList(getListbodyFunc()));
+      // getList(getListbodyFunc())
+      dispatch(getList(getListbodyFunc()));
       // }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
@@ -171,7 +171,7 @@ const CommonListPage = (props) => {
       })
       dispatch(getList(getListbodyFunc()));
       tog_center();
-   
+
     }
 
     else if ((postMsg.Status === true)) {
@@ -199,7 +199,7 @@ const CommonListPage = (props) => {
         })
       }
       else {
-        tog_center();
+        setmodal_edit(true)
       }
     }
   }, [editData]);
@@ -208,9 +208,9 @@ const CommonListPage = (props) => {
     if (modal_edit) {
       breadcrumbReturn({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
     }
-    setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
+    setmodal_edit(false)
   }
-
+  
   PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
     return a.ListPageSeq - b.ListPageSeq
   });

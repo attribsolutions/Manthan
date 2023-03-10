@@ -5,7 +5,7 @@ import { Data } from "./DemoData";
 
 
 var pageHeder = function (doc, i) {
-    debugger
+  
     style.pageBorder(doc, i);
     style.pageHeder(doc, i);     //Title
     style.reportHeder1(doc, i);
@@ -22,10 +22,10 @@ function pageFooter(doc, i) {
 }
 
 const InvioceReporta5 = (data = []) => {
-    debugger
+  
     var doc = new jsPDF('l', 'pt', 'a5');
     data.forEach(i => {
-        debugger
+      
         pageHeder(doc, i);
         reportBody(doc, i);
         pageFooter(doc, i);

@@ -80,7 +80,6 @@ function* deleteGenFunc({ id }) {
 }
 
 function* editGenFunc({ id, pageMode }) {
-    debugger
     try {
         const response = yield call(PartySubParty_Edit_API, id);
         response.pageMode = pageMode

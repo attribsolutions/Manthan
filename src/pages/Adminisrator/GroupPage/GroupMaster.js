@@ -40,6 +40,7 @@ import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
+import { btnIsDissable } from "../../../CustomAlert/ConfirmDialog";
 
 const GroupMaster = (props) => {
 
@@ -100,7 +101,7 @@ const GroupMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -178,7 +179,7 @@ const GroupMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values
@@ -211,8 +212,9 @@ const GroupMaster = (props) => {
         label: Data.Name
     }));
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
+        btnIsDissable(event, true)
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
@@ -221,15 +223,13 @@ const GroupMaster = (props) => {
                 UpdatedBy: loginUserID(),
             });
 
-            saveDissable(true);//save Button Is dissable function
-
             if (pageMode === mode.edit) {
-                dispatch(updateGroupID(jsonBody, values.id));
-
+                dispatch(updateGroupID(jsonBody, values.id, event));
             }
             else {
-                dispatch(postGroupList(jsonBody));
+                dispatch(postGroupList(jsonBody, event));
             }
+
         }
     };
 
@@ -252,7 +252,7 @@ const GroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black " >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
@@ -306,6 +306,7 @@ const GroupMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={4}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"GroupMaster"}
