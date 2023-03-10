@@ -6,7 +6,7 @@ import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MAT
 
 // GO Botton Post API
 function* GoButton_MaterialIssue_masterPage_genfun({ data }) {
-  debugger
+  
   try {
     const { jsonBody } = data;
     const response = yield call(Material_Issue_GoButton_Post_API, jsonBody);
@@ -82,7 +82,7 @@ function* edit_Metrialissue_listpage_GenFunc({ id, pageMode }) {
     });
     yield obj.MaterialIssueItems = newArr
     yield response.Data = obj;
-    debugger
+    
     yield put(editMaterialIssueIdSuccess(response));
     // console.log("editmaterial", JSON.stringify(response.Data))
   } catch (error) { CommonConsole(error) }
@@ -114,7 +114,6 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {
 function* Delete_Metrialissue_listpage_GenFunc({ id }) {
   try {
     const response = yield call(Material_Issue_Delete_API, id);
-
     yield put(deleteMaterialIssueIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

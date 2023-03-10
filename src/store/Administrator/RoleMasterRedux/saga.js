@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
   Role_Master_Delete_API,
   Role_Master_Edit_API,
@@ -6,8 +7,6 @@ import {
   Role_Master_Post_API,
   Role_Master_Update_API
 } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
   getRoleSuccess,
   PostSuccess, editSuccess,
@@ -21,51 +20,27 @@ import {
   DELETE_ROLE_LIST_ID,
   UPDATE_ROLE_LIST_ID
 } from "./actionTypes";
+import { loginJsonBody } from "../../CommonAPI/CommonJsonBody"
 
 function* Get_Roles_GenratorFunction() {
-
   try {
-    const response = yield call(Role_Master_Get_API);
+    const response = yield call(Role_Master_Get_API, loginJsonBody());
     yield put(getRoleSuccess(response.Data));
-   
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* Submit_Roles_GenratorFunction({ Data }) {
-
   try {
     const response = yield call(Role_Master_Post_API, Data);
-   
     yield put(PostSuccess(response));
-  
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* Delete_Roles_GenratorFunction({ id }) {
   try {
-  
     const response = yield call(Role_Master_Delete_API, id);
-   
     yield put(deleteSuccess(response))
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* Edit_Roles_GenratorFunction({ id, pageMode }) {
@@ -73,30 +48,16 @@ function* Edit_Roles_GenratorFunction({ id, pageMode }) {
     const response = yield call(Role_Master_Edit_API, id);
     response.pageMode = pageMode
     yield put(editSuccess(response));
-    console.log("response in saga" , response)
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+    console.log("response in saga", response)
+  } catch (error) { CommonConsole(error) }
 }
 
 
-function* Update_Roles_GenratorFunction({ data,ID }) {
+function* Update_Roles_GenratorFunction({ data, ID }) {
   try {
-  
-    const response = yield call(Role_Master_Update_API, data,ID);
-   
+    const response = yield call(Role_Master_Update_API, data, ID);
     yield put(updateSuccess(response))
-  }
-  catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
 function* RoleMaster_Saga() {

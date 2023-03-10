@@ -13,7 +13,6 @@ import {
     Post_SalesMan_Master_API,
     update_SalesMan_List_Api
 } from "../../../helpers/backend_helper";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
     DELETE_SALESMAN_ID,
     EDIT_SALESMAN_ID,
@@ -21,7 +20,7 @@ import {
     POST_METHOD_HANDLER_FOR_SALESMAN_MASTER_API,
     UPDATE_SALESMAN_ID
 } from "./actionTypes";
-import { AlertState } from "../../actions";
+import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // post api
 function* Post_Method_ForSalesManMaster_GenFun({ data }) {
@@ -30,27 +29,20 @@ function* Post_Method_ForSalesManMaster_GenFun({ data }) {
         const response = yield call(Post_SalesMan_Master_API, data);
 
         yield put(PostMethod_ForSalesManMasterAPISuccess(response));
-    } catch (error) {
-
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // // POST api
 function* Post_SalesMan_List_GenratorFunction({ data }) {
-
-    try {
-        const response = yield call(Post_SalesMan_List_Api,data);
-        yield put(PostSalesManlistSuccess(response.Data));
-    } catch (error) {
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
+    
+    const jsonBody = {
+        "Party": loginPartyID(),
+        "Company": loginCompanyID()
     }
+    try {
+        const response = yield call(Post_SalesMan_List_Api, jsonBody);
+        yield put(PostSalesManlistSuccess(response.Data));
+    } catch (error) { CommonConsole(error) }
 }
 
 // delete api 
@@ -60,13 +52,7 @@ function* Delete_SalesMan_ID_GenratorFunction({ id }) {
         const response = yield call(detelet_SalesMan_List_Api, id);
 
         yield put(deleteSalesManIDSuccess(response))
-    } catch (error) {
-
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // edit api
@@ -76,13 +62,7 @@ function* Edit_SalesMan_ID_GenratorFunction({ id, pageMode }) {
         response.pageMode = pageMode
         yield put(editSalesManIDSuccess(response));
         console.log("response in saga", response)
-
-    } catch (error) {
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
 
 // update api
@@ -90,15 +70,8 @@ function* Update_SalesMan_ID_GenratorFunction({ updateData, ID }) {
     try {
         const response = yield call(update_SalesMan_List_Api, updateData, ID);
         yield put(updateSalesManIDSuccess(response))
-    }
-    catch (error) {
-        yield put(AlertState({
-            Type: 4,
-            Status: true, Message: "500 Error Message",
-        }));
-    }
+    } catch (error) { CommonConsole(error) }
 }
-
 
 function* SalesManSaga() {
     yield takeEvery(POST_METHOD_HANDLER_FOR_SALESMAN_MASTER_API, Post_Method_ForSalesManMaster_GenFun)

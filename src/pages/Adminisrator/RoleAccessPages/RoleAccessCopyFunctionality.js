@@ -5,10 +5,11 @@ import { MetaTags } from "react-meta-tags";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useDispatch, useSelector } from "react-redux";
 import {
-       getRoles, PostMethodForCopyRoleAccessForRoleAccess,
-    } from "../../../store/actions";
+    PostMethodForCopyRoleAccessForRoleAccess,
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const RoleAccessCopyFunctionality = (props) => {
 
@@ -29,12 +30,12 @@ const RoleAccessCopyFunctionality = (props) => {
         company
     } = useSelector((state) => ({
         DivisionTypes_redux: state.PartyMasterReducer.partyList,
-        Roles_redux: state.User_Registration_Reducer.Roles,
+        Roles_redux: state.RoleMaster_Reducer.roleList,
         company: state.Company.companyList,
     }));
 
     useEffect(() => {
-        dispatch(getRoles());
+        dispatch(getRole());
         dispatch(getPartyListAPI());
         dispatch(fetchCompanyList());
     }, []);
@@ -43,7 +44,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-       
+
         if (!(editDataGatingFromList === undefined)) {
             var C_props = editDataGatingFromList
 
@@ -64,7 +65,16 @@ const RoleAccessCopyFunctionality = (props) => {
 
     }, [history]);
 
-       const newDivisionTypesOption = DivisionTypes_redux.map((Data) => ({
+    useEffect(() => {
+        if (company.length === 1) {
+            setCompany_dropdown_Select({
+                value: company[0].id,
+                label: company[0].Name
+            })
+        }
+    }, [company])
+
+    const newDivisionTypesOption = DivisionTypes_redux.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -96,7 +106,7 @@ const RoleAccessCopyFunctionality = (props) => {
                 NewDivision: (newDivision_dropdown_Select) ?
                     newDivision_dropdown_Select.value
                     : 0,
-                Company:company_dropdown_Select.value
+                Company: company_dropdown_Select.value
             })
         dispatch(PostMethodForCopyRoleAccessForRoleAccess(jsonBody))
     }

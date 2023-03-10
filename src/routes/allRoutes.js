@@ -127,6 +127,9 @@ import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
 import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
 import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
+import Report from "../Reports/AllReportPage";
+import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
+import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -227,6 +230,10 @@ const userRoutes = [
   { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
+  { path: path.IMPORT_MASTER, component: ImportMaster },
+
+  { path: path.ROUTE_UPDATE, component: RouteUpdate },
+
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
@@ -247,8 +254,12 @@ const userRoutes = [
   { path: path.ORDER_4, component: Order },
   { path: path.ORDER_LIST_4, component: OrderList },
   
+  //******************************* All Report ************************************//
+  { path: path.REPORT, component: Report },
+
   //******************************* PRODUCTION  Module ************************************//
 
+  
 
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },

@@ -335,6 +335,20 @@ const AddEmployee = (props) => {
       if (!(values.EmployeeParties.length === 0)) {
         emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
       }
+
+      // if ((partyDropDownShow_UI === true) && (values.EmployeeParties === [])) {
+      //   dispatch(
+      //     AlertState({
+      //       Type: 4,
+      //       Status: true,
+      //       Message: "Party Is Required",
+      //       RedirectPath: false,
+      //       PermissionAction: false,
+      //     })
+      //   );
+      //   return;
+      // }
+
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Address: values.Address,
@@ -648,9 +662,9 @@ const AddEmployee = (props) => {
                                 }
                                 classNamePrefix="dropdown"
                               />
-                              {isError.EmployeeParties.length > 0 && (
+                              {/* {isError.EmployeeParties.length > 0 && (
                                 <span className="text-danger f-8"><small>{isError.EmployeeParties}</small></span>
-                              )}
+                              )} */}
                             </div>
                           </div>
                           : <></>}

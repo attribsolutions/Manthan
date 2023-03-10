@@ -81,6 +81,7 @@ const LoadingSheet = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getMethodForVehicleList())
+        dispatch(PostRouteslist());
 
     }, []);
 
@@ -105,7 +106,6 @@ const LoadingSheet = (props) => {
         if (userAcc) {
             setUserPageAccessState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
-
         };
     }, [userAccess])
 
@@ -259,39 +259,28 @@ const LoadingSheet = (props) => {
             };
 
             const jsonBody = JSON.stringify({
-                BomDate: values.BomDate,
-                EstimatedOutputQty: values.EstimatedOutputQty,
-                Comment: values.Comment,
-                IsActive: values.IsActive,
-                Item: values.ItemName.value,
-                Unit: values.UnitName.value,
-                CreatedBy: loginUserID(),
-                Company: loginCompanyID(),
-                BOMItems: BOMItems,
-                IsVDCItem: values.IsVDCItem,
-                ReferenceBom: BOMrefID
+                // BomDate: values.BomDate,
+                // EstimatedOutputQty: values.EstimatedOutputQty,
+                // Comment: values.Comment,
+                // IsActive: values.IsActive,
+                // Item: values.ItemName.value,
+                // Unit: values.UnitName.value,
+                // CreatedBy: loginUserID(),
+                // Company: loginCompanyID(),
+                // BOMItems: BOMItems,
+                // IsVDCItem: values.IsVDCItem,
+                // ReferenceBom: BOMrefID
             });
-            if (BOMItems.length === 0) {
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: "At Least One Matrial data Add in the table",
-                        RedirectPath: false,
-                        PermissionAction: false,
-                    })
-                );
-                return;
-            }
+           
 
             // saveDissable(true);//save Button Is dissable function
 
-            if (pageMode === mode.edit) {
-                dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-            }
-            else {
-                dispatch(postBOM(jsonBody));
-            }
+            // if (pageMode === mode.edit) {
+            //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
+            // }
+            // else {
+            //     dispatch(postBOM(jsonBody));
+            // }
         }
     };
 
@@ -435,115 +424,20 @@ const LoadingSheet = (props) => {
                                         </FormGroup>
                                     </Col>
                                 </div>
-                                {/* <Col sm="6">
-                                    <FormGroup className="mb-2 row ">
-                                        <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
-                                        <Col sm="7">
-                                            <Input
-                                                style={{ textAlign: "right" }}
-                                                name="EstimatedOutputQty"
-                                                value={values.EstimatedOutputQty}
-                                                type="text"
-                                                className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter EstimatedOutputQty"
-                                                autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.EstimatedOutputQty.length > 0 && (
-                                                <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col> */}
-
-                                {/* <Col sm="6">
-                                    <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
-                                        <Col sm={7}>
-                                            <Select
-                                                name="UnitName"
-                                                value={values.UnitName}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={pageMode === mode.edit ? ItemUnitOnEditData : ItemUnitOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                            />
-                                            {isError.UnitName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col> */}
-
-                                {/* <Col sm="6">
-                                    <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="Comment"
-                                                value={values.Comment}
-                                                type="text"
-                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
-                                                autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Comment.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Comment}</span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col> */}
-
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row ">
-                                        <Row className="justify-content-md-left">
-                                            <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
-                                            <Col md={7} style={{ marginTop: '10px' }} >
-
-                                                <div className="form-check form-switch form-switch-md mb-3">
-                                                    <Input type="checkbox" className="form-check-input"
-                                                        checked={values.IsActive}
-                                                        name="IsActive"
-                                                        onChange={(e) => {
-                                                            setState((i) => {
-                                                                const a = { ...i }
-                                                                a.values.IsActive = e.target.checked;
-                                                                return a
-                                                            })
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </FormGroup>
-                                </Col> */}
-
 
                             </div>
                         </div>
 
-                        {/* <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
-                            <Row>
-                               
-
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "9px" }}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"BOMMaster"}
-                                        />
-                                    </Col>
-                                </FormGroup >
-                            </Row>
-                        </div> */}
+                        
+                        {<FormGroup>
+                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                <SaveButton pageMode={pageMode}
+                                    //   onClick={onsave}
+                                    userAcc={userPageAccessState}
+                                    module={"LoadingSheet"}
+                                />
+                            </Col>
+                        </FormGroup >}
                     </form>
                 </div>
             </React.Fragment>

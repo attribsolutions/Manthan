@@ -17,9 +17,9 @@ import {
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // post api
-function* Post_Method_ForGroupMaster_GenFun({ data }) {
+function* Post_Method_ForGroupMaster_GenFun({ jsonbody, event }) {
   try {
-    const response = yield call(Post_GroupList_API, data);
+    const response = yield call(Post_GroupList_API, jsonbody, event);
     yield put(postGroupSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -33,26 +33,26 @@ function* Get_Group_List_genFunc() {
 }
 
 // delete api 
-function* Delete_GroupList_ID_GenratorFunction({ id }) {
+function* Delete_GroupList_ID_GenratorFunction({ id, event }) {
   try {
-    const response = yield call(del_Group_List_API, id);
+    const response = yield call(del_Group_List_API, id, event);
     yield put(deleteGrouplistSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 // edit api
-function* Edit_Grouplist_ID_GenratorFunction({ id, pageMode }) {
+function* Edit_Grouplist_ID_GenratorFunction({ id, pageMode, event }) {
   try {
-    const response = yield call(edit_Group_List_Api, id);
+    const response = yield call(edit_Group_List_Api, id, event);
     response.pageMode = pageMode
     yield put(editGroupIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 // update api
-function* Update_Grouplist_ID_GenratorFunction({ updateData, ID }) {
+function* Update_Grouplist_ID_GenratorFunction({ updateData, ID, event }) {
   try {
-    const response = yield call(update_Group_List_Api, updateData, ID);
+    const response = yield call(update_Group_List_Api, updateData, ID, event);
     yield put(updategroupIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }

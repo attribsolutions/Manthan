@@ -18,7 +18,7 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../Common/Spinner";
 import CustomAlert from "../Common/CustomAlert";
-import  BreadcrumbNew from "../../components/Common/BreadcrumbNew"
+import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
 
@@ -65,22 +65,22 @@ const Layout = props => {
   */
   useEffect(() => {
     // document.body.addEventListener("click", hideRightbar, true);
-    
-    try{
-    if (isPreloader === true) {
-      document.getElementById("preloader").style.display = "block";
-      // document.getElementById("status").style.display = "block";
 
-      setTimeout(function () {
+    try {
+      if (isPreloader === true) {
+        document.getElementById("preloader").style.display = "block";
+        // document.getElementById("status").style.display = "block";
+
+        setTimeout(function () {
+          document.getElementById("preloader").style.display = "none";
+          // document.getElementById("status").style.display = "none";
+        }, 1000);
+      } else {
         document.getElementById("preloader").style.display = "none";
+
         // document.getElementById("status").style.display = "none";
-      }, 1000);
-    } else {
-      document.getElementById("preloader").style.display = "none";
-      
-      // document.getElementById("status").style.display = "none";
-    }
-    }catch(e){}
+      }
+    } catch (e) { }
   }, [isPreloader]);
 
   useEffect(() => {
@@ -142,45 +142,43 @@ const Layout = props => {
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.RelatedPageIDPath}` === locationPath)
-      
+
     });
-  
-     
+
+
   }, []);
   // pageId={pageId.GROUP_lIST}
   return (
     <React.Fragment>
-      {/* <div id="preloaderq">
-        <div id="status">
-          <div className="spinner-chase">
-            <div className="chase-dot" />
-            <div className="chase-dot" />
-            <div className="chase-dot" />
-            <div className="chase-dot" />
-            <div className="chase-dot" />
-            <div className="chase-dot" />
+           <div id="overlay" >
+                <div className="cv-spinner">
+                    <span className="spinner"></span>
+                    {/* <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
+                    Loading...
+                </button> */}
+                </div>
+            </div>
+        <div className="pace pace-active" id="preloader">
+          <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+            <div className="pace-progress-inner"></div>
           </div>
+          <div className="pace-activity"></div></div>
+         
+        <div id="layout-wrapper">
+          <CustomAlert />
+          {/* <Spinner /> */}
+          <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
+          <BreadcrumbNew />
+          <Sidebar
+            theme={leftSideBarTheme}
+            type={leftSideBarType}
+            isMobile={isMobile}
+          />
+          <div className="main-content">{props.children}</div>
+          <Footer />
         </div>
-      </div> */}
-      <div className="pace pace-active" id="preloader">
-        <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
-          <div className="pace-progress-inner"></div>
-        </div>
-        <div className="pace-activity"></div></div>
-
-      <div id="layout-wrapper">
-        <CustomAlert/>
-        <Spinner/>
-        <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-      <BreadcrumbNew />
-        <Sidebar
-          theme={leftSideBarTheme}
-          type={leftSideBarType}
-          isMobile={isMobile}
-        />
-        <div className="main-content">{props.children}</div>
-        <Footer />
-      </div>
+     
     </React.Fragment>
   );
 };

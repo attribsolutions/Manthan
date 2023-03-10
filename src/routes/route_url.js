@@ -96,8 +96,13 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const GENERAL = "/GeneralMaster"
 export const GENERAL_LIST = "/GeneralList"
 
-export const CREDITLIMIT = "/CreditLimitMaster"
+export const CREDITLIMIT = "/CreditLimit"
 export const CREDITLIMIT_LIST = "/CreditLimitList"
+
+export const IMPORT_MASTER = "/Import_Master"
+export const IMPORT_MASTER_LIST = "/Import_Type_List"
+
+export const ROUTE_UPDATE ="/RouteUpdate"
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
@@ -117,7 +122,12 @@ export const GRN_ADD = "/GRN"
 export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
+//*******************************All report page ************************************//
+export const REPORT = "/Report"
+
 //******************************* Production Module ************************************//
+
+
 
 export const BIllOf_MATERIALS = "/BOM"
 export const BIllOf_MATERIALS_LIST = "/BOMList"

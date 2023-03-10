@@ -41,6 +41,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
+import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -79,13 +80,12 @@ const PartyMaster = (props) => {
         updateMsg: state.PartyMasterReducer.updateMessage,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
-        Company: state.PartyMasterReducer.Company,
+        Company: state.Company.companyList,
         PartyTypes: state.PartyTypeReducer.ListData,
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
         userAccess: state.Login.RoleAccessUpdateData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType
-
     }));
 
     const location = { ...history.location }
@@ -165,11 +165,28 @@ const PartyMaster = (props) => {
         dispatch(getState());
         dispatch(getPriceList());
         dispatch(getPartyTypelist());
-        dispatch(getCompany());
+        dispatch(fetchCompanyList());
     }, [dispatch]);
 
     useEffect(() => {
+        if (Company.length === 1) {
+            setCompanyList_dropdown_Select({
+                value: Company[0].id,
+                label: Company[0].Name
+            })
+        }
+    }, [Company])
 
+    useEffect(() => {
+        if (PartyTypes.length === 1) {
+            setPartyType_dropdown_Select({
+                value: PartyTypes[0].id,
+                label: PartyTypes[0].Name
+            })
+        }
+    }, [PartyTypes])
+
+    useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             setCompanyList_dropdown_Select('')
@@ -239,7 +256,7 @@ const PartyMaster = (props) => {
 
     const companyListValues = Company.map((index) => ({
         value: index.id,
-        label: index.Name
+        label: index.Name,
     }));
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
@@ -265,7 +282,7 @@ const PartyMaster = (props) => {
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyType_dropdown_Select(e)
         setPriceList_dropdown_Select({ label: '' })
-        setCompanyList_dropdown_Select('')
+        // setCompanyList_dropdown_Select('')
         dispatch(getPriceListData(e.value))
     }
 
@@ -370,11 +387,9 @@ const PartyMaster = (props) => {
 
         if (pageMode === mode.edit) {
             dispatch(updatePartyID(jsonBody, EditData.id));
-            console.log("update jsonBody", jsonBody)
         }
         else {
             dispatch(postPartyData(jsonBody));
-            console.log("post jsonBody", jsonBody)
         }
     };
 

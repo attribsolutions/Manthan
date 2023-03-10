@@ -38,11 +38,12 @@ import {
   resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import * as xlsx from "xlsx";
+import { isLength } from "lodash";
 const RoleMaster = (props) => {
 
   const dispatch = useDispatch();
@@ -253,6 +254,7 @@ const RoleMaster = (props) => {
         isSCMRole: values.isSCMRole,
         IsPartyConnection: values.IsPartyConnection,
         RoleEmployeeTypes: values.RoleEmployeeTypes.map((i) => { return ({ EmployeeType: i.value }) }),
+        Company:loginCompanyID(),
         CreatedBy: loginUserID(),
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: loginUserID(),
@@ -269,7 +271,137 @@ const RoleMaster = (props) => {
       }
     }
   };
- 
+  // const readUploadFile = (e) => {
+  // 
+  //   e.preventDefault();
+  //   if (e.target.files) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //     
+  //       const data = e.target.result;
+  //       const workbook = xlsx.read(data, { type: "array" });
+  //       const sheetName = workbook.SheetNames[0];
+  //       const worksheet = workbook.Sheets[sheetName];
+  //       const exlReturn = xlsx.utils.sheet_to_json(worksheet);
+  //       console.log(JSON.stringify(exlReturn));
+     
+  //       const jsArr = []
+  //       function parentfunc(i5) {
+
+         
+  //         const parArr = {
+  //           CustomerGSTTin:i5.CustomerGSTTin,
+  //           GrandTotal: i5.GrandTotal,
+  //           RoundOffAmount: i5.RoundOffAmount,
+  //           Customer: i5.Customer,
+  //           Party:i5.Party,
+  //           InvoiceDate: i5.InvoiceDate,
+  //           InvoiceNumber: i5.InvoiceNumber,
+  //           InvoiceItems: []
+  //         }
+  //         parArr.InvoiceItems.push(childFunc(i5))
+  //         return parArr
+  //       }
+
+  //       function childFunc(i5) {
+
+  //         return {
+  //           Item: i5.ItemID,
+  //           Unit: i5.Unit,
+  //           BatchCode: i5.BatchCode,
+  //           Quantity: i5.Quantity,
+  //           BatchDate: i5.BatchDate,
+  //           BatchID: i5.BatchID,
+  //           BaseUnitQuantity: i5.BaseUnitQuantity,
+  //           LiveBatch: i5.LiveBatch,
+  //           MRP: i5.MRP,
+  //           Rate: i5.Rate,
+  //           BasicAmount: i5.BasicAmount,
+  //           GSTAmount: i5.GSTAmount,
+  //           GST: i5.GST,
+  //           CGST:i5.CGST,
+  //           SGST: i5.SGST,
+  //           IGST: i5.IGST,
+  //           GSTPercentage: i5.GSTPercentage,
+  //           CGSTPercentage:i5.CGSTPercentage,
+  //           SGSTPercentage: i5.SGSTPercentage,
+  //           IGSTPercentage: i5.IGSTPercentage,
+  //           Amount: i5.Amount,
+  //           TaxType:i5.TaxType,
+  //           DiscountType: i5.DiscountType,
+  //           Discount: i5.Discount,
+  //           DiscountAmount: i5.DiscountAmount,
+  //         }
+
+
+  //       }
+
+  //       exlReturn.map((i1) => {
+
+  //         const islengt = jsArr.find(i5 => {
+  //           return (i1.InvoiceNumber === i5.InvoiceNumber)
+  //         });
+
+  //         if (jsArr.length === 0) {
+  //           jsArr.push(parentfunc(i1))
+  //         }
+  //         else if (islengt) {
+  //           islengt.InvoiceItems.push(childFunc(i1))
+  //         } else {
+  //           jsArr.push(parentfunc(i1))
+  //         }
+  //       })
+  //       console.log("data1", jsArr);
+  //       console.log("data1",JSON.stringify( jsArr));
+
+  //       var a = [
+  //         {
+  //           CustomerGSTTin: "41",
+  //           GrandTotal: 35573,
+  //           RoundOffAmount: "0.00",
+  //           Customer: 24,
+  //           Party: 4,
+  //           CreatedBy: 30,
+  //           UpdatedBy: 30,
+  //           InvoiceDate: "2023-02-27",
+  //           InvoiceItems: [
+  //             {
+  //               Item: 106,
+  //               Unit: 910,
+  //               BatchCode: "A10",
+  //               Quantity: "11.000",
+  //               BatchDate: "2023-02-25",
+  //               BatchID: 772,
+  //               BaseUnitQuantity: "13961.000",
+  //               LiveBatch: 191,
+  //               MRP: null,
+  //               Rate: "3000.00",
+  //               BasicAmount: "33000.00",
+  //               GSTAmount: "1650.00",
+  //               GST: 106,
+  //               CGST: "825.00",
+  //               SGST: "825.00",
+  //               IGST: 0,
+  //               GSTPercentage: "5.00",
+  //               CGSTPercentage: 2.5,
+  //               SGSTPercentage: 2.5,
+  //               IGSTPercentage: 0,
+  //               Amount: "34650.00",
+  //               TaxType: "GST",
+  //               DiscountType: "",
+  //               Discount: "0",
+  //               DiscountAmount: "0"
+  //             }
+
+  //           ]
+
+  //         }]
+  //     }
+  //     reader.readAsArrayBuffer(e.target.files[0]);
+  //   }
+  // }
+
+
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (modalCss || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -434,7 +566,21 @@ const RoleMaster = (props) => {
                                 </Row>
                               </FormGroup>
                             </Row>
-                            
+
+                            {/* <Row className=" col col-sm-12">
+                              <FormGroup className="mb-3 col col-sm-4 " >
+                                <Label >Upload</Label>
+                                <Input
+                                  className="form-control "
+                                  type="file"
+                                  name="upload"
+                                  id="upload"
+                                  accept=".xlsx"
+                                  onChange={readUploadFile}
+                                />
+                              </FormGroup>
+                            </Row > */}
+
                             <FormGroup>
                               <Row>
                                 <Col sm={2}>

@@ -13,7 +13,6 @@ import {
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getRoles,
   addUser,
   updateID,
   addUserSuccess,
@@ -29,10 +28,9 @@ import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import * as pageId from "../../../routes/allPageID"
-
 import * as mode from "../../../routes/PageMode"
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const AddUser = (props) => {
 
@@ -75,7 +73,7 @@ const AddUser = (props) => {
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
-    Roles: state.User_Registration_Reducer.Roles,
+    Roles: state.RoleMaster_Reducer.roleList,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
@@ -118,6 +116,7 @@ const AddUser = (props) => {
   const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
     return index.Party_id === null
   })
+  console.log("FindPartyID", FindPartyID)
 
   useEffect(() => {
 
@@ -152,6 +151,7 @@ const AddUser = (props) => {
       if (hasEditVal) {
         dispatch(Breadcrumb_inputName(hasEditVal.LoginName))
         dispatch(GetUserPartiesForUserMastePage(hasEditVal.Employee))
+
         setEditData(hasEditVal)
         seteditCreatedBy(hasEditVal.CreatedBy)
 
@@ -169,13 +169,11 @@ const AddUser = (props) => {
             arraynew.push({ Party: i.Party, Role: i2.Role })
           })
         })
-        console.log("arraynew", arraynew)
         setPartyRoleData(arraynew)
         dispatch(editSuccess({ Status: false }))
       }
     }
   }, [])
-
 
   useEffect(() => {
 
@@ -214,10 +212,9 @@ const AddUser = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-
   useEffect(() => {
     dispatch(getEmployeeForUseRegistration());
-    dispatch(getRoles());
+    dispatch(getRole());
   }, [dispatch]);
 
   const EmployeeValues = employeelistForDropdown.map((Data) => ({
@@ -237,7 +234,7 @@ const AddUser = (props) => {
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
-
+  
     const nwPtRole = event.map((ind) => ({
       Party: pty.Party,
       Role: ind.value
@@ -254,6 +251,14 @@ const AddUser = (props) => {
   };
 
   const handleValidSubmit = (event, values) => {
+  
+
+    // const Find = []
+    // partyRoleData.map((index) => {
+    //   userPartiesForUserMaster_redux.map((i) => {
+    //     return (index.Party === i.Party_id)
+    //   })
+    // })
 
     const jsonBody = JSON.stringify({
       email: values.email,

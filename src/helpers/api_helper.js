@@ -1,5 +1,4 @@
 import axios from "axios"
-import { mainSppinerOnOff } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import { CkeckAlert } from "../CustomAlert/ConfirmDialog"
 
 const API_URL = "http://192.168.1.114:8000"
@@ -23,30 +22,23 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-export function get(url, isspinner, config = {}) {
+export function get(url, event) {
+  debugger
   console.log("get api call")
-  // 
-  // if (isspinner) {
-  //   mainSppinerOnOff(true)
-  // }
   AuthonticationFunction();
-  return axiosApi.get(url, { ...config })
+  return axiosApi.get(url)
     .then(response => {
-      return CkeckAlert("get", url, response, isspinner);
+    return CkeckAlert({method:"get", url, response, event});
     })
     .catch(error => {
-      return CkeckAlert("get", url, error, isspinner);
+      return CkeckAlert({method:"get", url, error, event});
     });
 
 
 }
 
-export function post(url, data, isspinner, config = {}) {
+export function post(url, data, event) {
   console.log("Post api call")
-  // debugger
-  // if (isspinner) {
-  //   mainSppinerOnOff(true)
-  // }
   AuthonticationFunction();
   return axiosApi
     .post(url, data, {
@@ -56,55 +48,44 @@ export function post(url, data, isspinner, config = {}) {
       }
     })
     .then(response => {
-     
-      // setTimeout(function () {
-      //   mainSppinerOnOff(false)
-      // }, 100000);
-      return CkeckAlert("post", url, response, data, isspinner);
+      return CkeckAlert({method:"post", url, response, data, event});
     })
-    .catch(error => {
-      // setTimeout(function () {
-      //   mainSppinerOnOff(false)
-      // }, 5000);
-      return CkeckAlert("post", url, error, data, isspinner);
+    .catch(response => {
+      return CkeckAlert({method:"post", url, response, data, event});
     });
 };
 
 
-export function put(url, data, config = {}) {
+export function put(url, data, event,) {
 
   console.log(" put api call")
   AuthonticationFunction();
-  return axiosApi
-    .put(url, data, {
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      }
-    })
-    .then(response => {
-      return CkeckAlert("put", url, response, data);
-    })
-    .catch(error => {
-      return CkeckAlert("put", url, error,);
+  return axiosApi.put(url, data, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }
+  }).then(response => {
+    return CkeckAlert({method:"put", url, response, data, event});
+  })
+    .catch(response => {
+      return CkeckAlert({method:"put", url, response, event});
     });
 }
 
-export function del(url, config = {}) {
+export function del(url,) {
   console.log(" delete api call")
   AuthonticationFunction();
-  return axiosApi
-    .delete(url, { ...config })
-    .then(response => {
-      return CkeckAlert("delete", url, response);
-    })
-    .catch(error => {
-      return CkeckAlert("delete", url, error);
+  return axiosApi.delete(url,).then(response => {
+    return CkeckAlert({method:"delete", url, response});
+  })
+    .catch(response => {
+      return CkeckAlert({method:"delete", url, response});
     });
 }
 
 // for forget password
-export function postForget(url, data, config = {}) {
+export function postForget(url, data,) {
   // 
   // AuthonticationFunction();
   return axiosApi
@@ -115,10 +96,10 @@ export function postForget(url, data, config = {}) {
       }
     })
     .then(response => {
-      return CkeckAlert("postForget", url, response);
+      return CkeckAlert({method:"postForget", url, response});
     })
-    .catch(error => {
-      return CkeckAlert("postForget", url, error);
+    .catch(response => {
+      return CkeckAlert({method:"postForget", url, response});
     });
 
 }
@@ -126,9 +107,9 @@ export function postForget(url, data, config = {}) {
 export async function getModify(url) {
   AuthonticationFunction();
   return axiosApi.get(url).then(response => {
-    return CkeckAlert("get", url, response);
+    return CkeckAlert({method:"get", url, response});
   })
-    .catch(error => {
-      return CkeckAlert("get", url, error);
+    .catch(response => {
+      return CkeckAlert({method:"get", url, response});
     });
 }

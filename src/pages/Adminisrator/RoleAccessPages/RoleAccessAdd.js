@@ -23,7 +23,6 @@ import { MetaTags } from "react-meta-tags";
 import {
     AddPageHandlerForRoleAccessListPage,
     getPageAccess_DropDown_API,
-    getRoles,
     GO_Button_HandlerForRoleAccessListPage,
     GO_Button_HandlerForRoleAccessListPage_Success,
     PageDropdownForRoleAccessList,
@@ -36,6 +35,7 @@ import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
 import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const RoleAccessAdd = (props) => {
 
@@ -69,7 +69,7 @@ const RoleAccessAdd = (props) => {
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
         partyList: state.PartyMasterReducer.partyList,
-        Roles: state.User_Registration_Reducer.Roles,
+        Roles: state.RoleMaster_Reducer.roleList,
         ModuleData: state.Modules.modulesList,
         PageAccess: state.H_Pages.PageAccess,
         PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
@@ -81,16 +81,13 @@ const RoleAccessAdd = (props) => {
     }));
 
     useEffect(() => {
-
         const editDataGatingFromList = history.location.state
-
         const locationPath = history.location.pathname
         let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
         if (!(editDataGatingFromList === undefined)) {
-
             var division_id = editDataGatingFromList.Division_id
             var divisionName = editDataGatingFromList.DivisionName
             var role_id = editDataGatingFromList.Role_id
@@ -115,12 +112,14 @@ const RoleAccessAdd = (props) => {
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         dispatch(getPartyListAPI());//for division dropdown API
-        dispatch(getRoles());//for Role  dropdown API
+        dispatch(getRole());//for Role  dropdown API
         dispatch(fetchModelsList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
         dispatch(fetchCompanyList());
     }, []);
+
+
 
     useEffect(() => {
         var Array = []
@@ -128,7 +127,6 @@ const RoleAccessAdd = (props) => {
 
         let count1 = 0
         GO_buttonPageMasterListForRoleAccess_Redux.map((indexdata) => {
-
             count1 = count1 + 1
 
             eleList = indexdata;
@@ -136,11 +134,8 @@ const RoleAccessAdd = (props) => {
 
             Array.push(eleList)
             eleList = {}
-
         })
-
         setTableListData(Array)
-
     }, [GO_buttonPageMasterListForRoleAccess_Redux])
 
     useEffect(() => {
@@ -227,6 +222,15 @@ const RoleAccessAdd = (props) => {
         value: i.id,
         label: i.Name,
     }));
+
+    useEffect(() => {
+        if (company.length === 1) {
+            setCompany_dropdown_Select({
+                value: company[0].id,
+                label: company[0].Name
+            })
+        }
+    }, [company])
 
     // for Page dropdown
     const Page_DropdownOption = PageDropdownForRoleAccess.map((d) => ({

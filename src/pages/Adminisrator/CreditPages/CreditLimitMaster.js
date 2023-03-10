@@ -1,4 +1,3 @@
-// import React, { useEffect, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -11,7 +10,6 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
@@ -19,30 +17,13 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
-    onChangeDate,
-    onChangeSelect,
-    onChangeText,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     breadcrumbReturn,
-    loginUserID,
-    currentDate,
-    GoBtnDissable,
-    saveDissable,
-    loginCompanyID,
     loginPartyID
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import {
-    editWorkOrderListSuccess,
-    getBOMList,
-    postGoButtonForWorkOrder_Master,
-    postGoButtonForWorkOrder_MasterSuccess,
-    postWorkOrderMaster,
-    postWorkOrderMasterSuccess,
-    updateWorkOrderList,
-} from "../../../store/Production/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -52,27 +33,22 @@ import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import React, { useEffect, useState } from "react";
-const goBtnID1 = "workOrdergoBtnID1"
-const changeBtnID1 = "workOrderchangeBtnID1"
-const saveBtnID1 = "workOrdersaveBtnID1"
-const updateBtnID1 = "workOrderupdateBtnID1"
+import { PostRouteslist } from "../../../store/Administrator/RoutesRedux/actions";
+import { GoButton_For_CreditLimit_Add, GoButton_For_CreditLimit_AddSuccess, postCreditLimit, postCreditLimitSuccess } from "../../../store/Administrator/CreditLimitRedux/actions";
 
 const CreditLimitMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [itemselect, setItemselect] = useState("")
+    const [RouteSelect, setRouteSelect] = useState([]);
 
     const fileds = {
         id: "",
-        RoutesName:""
+        RoutesName: ""
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -81,18 +57,16 @@ const CreditLimitMaster = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        Routes,
-        GoButton
+        RoutesList,
+        Data
     } = useSelector((state) => ({
         postMsg: state.CreditLimitReducer.postMsg,
-        // updateMsg: state.WorkOrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
-        GoButton: state.CreditLimitReducer.goBtnCreditLimitAdd
+        Data: state.CreditLimitReducer.goButtonCreditLimit,
+        RoutesList: state.RoutesReducer.RoutesList,
     }));
-
-    const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -103,76 +77,75 @@ const CreditLimitMaster = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
+        dispatch(GoButton_For_CreditLimit_AddSuccess([]))
         const page_Id = pageId.CREDITLIMIT
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-
+        dispatch(PostRouteslist());
     }, []);
 
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
-
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
-
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
+    // useEffect(() => {
+
+    //     if ((hasShowloction || hasShowModal)) {
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
+
+    //         if (hasEditVal) {
+    //             const { id, Route, RouteName } = hasEditVal
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //             hasValid.RouteName.valid = true;
+
+    //             values.id = id
+    //             values.RouteName = { label: RouteName, value: Route };
+
+    //             const jsonBody = JSON.stringify({
+    //                 // Item: Item,
+    //                 // Bom: Bom,
+    //                 // Quantity: parseFloat(Quantity),
+    //                 // Party: Party
+    //             });
+    //             // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             // dispatch(editWorkOrderListSuccess({ Status: false }))
+    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+    //         }
+    //     }
+    // }, [])
+
     useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+            dispatch(postCreditLimitSuccess({ Status: false }))
+            dispatch(GoButton_For_CreditLimit_AddSuccess([]))
+            setRouteSelect('')
+            //   setState(() => resetFunction(fileds, state))// Clear form values  
+            //   saveDissable(false);//save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
 
-        if ((hasShowloction || hasShowModal)) {
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-
-            if (hasEditVal) {
-                setEditData(hasEditVal);
-                const { id,  Route, RouteName } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                hasValid.RouteName.valid = true;
-
-                values.id = id
-                values.RouteName = { label: RouteName, value: Route };
-
-                const jsonBody = JSON.stringify({
-                    // Item: Item,
-                    // Bom: Bom,
-                    // Quantity: parseFloat(Quantity),
-                    // Party: Party
-                });
-                // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-
-                setState({ values, fieldLabel, hasValid, required, isError })
-                // dispatch(editWorkOrderListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
-
-    useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            // dispatch(postWorkOrderMasterSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values  
-            // saveDissable(false);//save Button Is enable function
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -185,43 +158,23 @@ const CreditLimitMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.CREDITLIMIT_LIST,
+                    RedirectPath: url.CREDITLIMIT,
+
                 }))
             }
         }
-        else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
+        else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            //   saveDissable(false);//save Button Is enable function
+            dispatch(postCreditLimitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [postMsg])
-
-    // useEffect(() => {
-
-    //     if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-    //         dispatch(updateWorkOrderList({ Status: false }))
-    //         // saveDissable(false);//Update Button Is enable function
-    //         // setState(() => resetFunction(fileds, state))// Clear form values  
-    //         history.push({
-    //             pathname: url.CREDITLIMIT_LIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         saveDissable(false);//Update Button Is enable function
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
+    }, [postMsg.Status])
 
     useEffect(() => {
         if (pageField) {
@@ -230,124 +183,90 @@ const CreditLimitMaster = (props) => {
         }
     }, [pageField])
 
-    // let filterItems = Items.filter((index) => {
-    //     return index.IsActive === true
-    // })
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            FromDate: "2022-12-01",
-            ToDate: currentDate,
-            Company: loginCompanyID(),
-            Party: loginPartyID()
-        });
-        dispatch(getBOMList(jsonBody));
-    }, [])
-
-    const RoutesDropdown_options = Routes.map((index) => ({
+    const RoutesDropdown_options = RoutesList.map((index) => ({
         value: index.id,
-        label: index.ItemName,
-        ItemID: index.Item,
-        Unit: index.Unit,
-        UnitName: index.UnitName,
-        EstimatedOutputQty: index.EstimatedOutputQty,
-        StockQty: index.StockQty
+        label: index.Name,
     }));
+
+    const goButtonHandler = (event) => {
+        const jsonBody = JSON.stringify({
+            Party: loginPartyID(),
+            Route: RouteSelect.value
+        });
+        dispatch(GoButton_For_CreditLimit_Add(jsonBody));
+    }
+
+    function CreditlimitHandler(event, user) {
+        // user["Creditlimit"] = e.target.value
+
+        let val = event.target.value;
+        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
+        if ((result) && (parseFloat(event.target.value).toFixed(3))) {
+            user.Creditlimit = event.target.value;
+        }
+        else if (val === "") {
+            user.Creditlimit = event.target.value;
+        }
+        else {
+            event.target.value = user.Creditlimit
+        }
+    }
 
     const pagesListColumns = [
         {
-            text: " Name",
-            dataField: "Name",
+            text: "SubPartyName",
+            dataField: "SubPartyName",
         },
         {
-            text: "Credit Limit",
-            dataField: "CreditLimit",
+            text: "Creditlimit",
+            dataField: "Creditlimit",
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                    defaultValue={user.Creditlimit}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => CreditlimitHandler(e, user)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
+                </>
+            ),
         },
-       
     ];
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: GoButton.length,
+        totalSize: Data.length,
         custom: true,
     };
 
-    // const QuantityHandler = (event, user) => {
-
-    //     // user["Quantity"] = event.target.value
-    //     let val = event.target.value;
-    //     const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
-    //     if ((result) && (parseFloat(event.target.value).toFixed(3))) {
-    //         user.Quantity = event.target.value;
-    //     }
-    //     else if (val === "") {
-    //         user.Quantity = event.target.value;
-    //     }
-    //     else {
-    //         event.target.value = user.Quantity
-    //     }
-
-    // }
-
-    function RoutesOnchange(e) {
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        setItemselect(e)
-        setState((i) => {
-            i.values.NumberOfLot = "1";
-            i.values.Quantity = e.EstimatedOutputQty;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.Quantity.valid = true;
-            return i
-        })
-    }
-
-    const goButtonHandler = (event) => {
-        
-        const jsonBody = JSON.stringify({
-            Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
-            Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
-            Quantity: parseFloat(values.Quantity),
-            Party: loginPartyID()
-        });
-        // GoBtnDissable({ id: goBtnID1, state: true })
-        dispatch(postGoButtonForWorkOrder_Master(jsonBody, goBtnID1));
-    }
-
     const SaveHandler = (event) => {
+
         event.preventDefault();
+        const data = Data.map((index) => ({
+            id: index.id,
+            Party: index.Party,
+            SubParty: index.SubParty,
+            Creditlimit: index.Creditlimit,
+        }))
 
-        // const WorkOrderItems = BOMItems.map((index) => ({
-        //     Item: index.Item,
-        //     Unit: index.Unit,
-        //     BomQuantity: index.BomQuantity,
-        //     Quantity: index.Quantity,
-        // }))
-
+        const Find = data.filter((index) => {
+            return !(index.Creditlimit === '')
+        })
         const jsonBody = JSON.stringify({
-            // WorkOrderDate: values.WorkOrderDate,
-            // Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
-            // Bom: (pageMode === mode.edit ? id : values.ItemName.value),
-            // Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
-            // NumberOfLot: values.NumberOfLot,
-            // Quantity: parseFloat(values.Quantity).toFixed(3),
-            // Company: loginCompanyID(),
-            // Party: loginPartyID(),
-            // CreatedBy: loginUserID(),
-            // UpdatedBy: loginUserID(),
-            // WorkOrderItems: WorkOrderItems
-        });
+            Data: Find
+        })
 
-        // saveDissable(true);//save Button Is dissable function
+        dispatch(postCreditLimit(jsonBody));
+    }
 
-        if (pageMode === mode.edit) {
-            GoBtnDissable({ id: updateBtnID1, state: true })
-            dispatch(updateWorkOrderList(jsonBody, EditData.id, updateBtnID1));
-        }
-        else {
-            GoBtnDissable({ id: saveBtnID1, state: true })
-            dispatch(postWorkOrderMaster(jsonBody, saveBtnID1));
-        }
-    };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -376,22 +295,17 @@ const CreditLimitMaster = (props) => {
                                                             <Col md="4" >
                                                                 <FormGroup className=" row  mt-2" >
                                                                     <Label className="mt-1"
-                                                                        style={{ width: "150px" }}>RoutesName </Label>
+                                                                        style={{ width: "150px" }}>Routes </Label>
                                                                     <div className="col col-6 sm-1">
                                                                         <Select
                                                                             name="RoutesName"
-                                                                            value={values.RoutesName}
+                                                                            value={RouteSelect}
                                                                             isSearchable={true}
-                                                                            // isDisabled={(BOMItems.length > 0) ? true : false}
+                                                                            // isDisabled={(Data.length > 0) ? true : false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                             options={RoutesDropdown_options}
-                                                                            onChange={(hasSelect, evn) => {
-                                                                                onChangeSelect({ hasSelect, evn, state, setState });
-                                                                                RoutesOnchange(hasSelect)
-                                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
-                                                                            }
-                                                                            }
+                                                                            options={RoutesDropdown_options}
+                                                                            onChange={(e) => { setRouteSelect(e) }}
                                                                         />
                                                                         {isError.RoutesName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
@@ -399,86 +313,85 @@ const CreditLimitMaster = (props) => {
                                                                     </div>
                                                                 </FormGroup>
                                                             </Col>
+
+
+                                                            <Col sm={1}>
+                                                                <div className="col col-1 mt-2">
+                                                                    < Go_Button onClick={(e) => goButtonHandler()} />
+
+                                                                </div>
+                                                            </Col>
                                                         </Row>
-                                                        
-                                                        <Col sm={1}>
-                                                            <div className="col col-1 mt-2">
-                                                                {pageMode === mode.defaultsave ?
-                                                                      (BOMItems.length === 0) ?
-                                                                        < Go_Button id={goBtnID1} onClick={(e) => goButtonHandler()} />
-                                                                        :
-                                                                        <Change_Button 
-                                                                            // onClick={(e) =>
-                                                                            //     //  dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-                                                                            // } 
-                                                                                 />
-                                                                    : null
-                                                                }
-                                                            </div>
-                                                        </Col>
 
-                                                        {BOMItems.length > 0 ?
-                                                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                                                {({ paginationProps, paginationTableProps }) => (
-                                                                    <ToolkitProvider
-                                                                        keyField={"id"}
-                                                                        data={BOMItems}
-                                                                        columns={pagesListColumns}
-                                                                        search
-                                                                    >
-                                                                        {(toolkitProps) => (
-                                                                            <React.Fragment>
-                                                                                <Row>
-                                                                                    <Col xl="12">
-                                                                                        <div className="table-responsive">
-                                                                                            <BootstrapTable
-                                                                                                keyField={"id"}
-                                                                                                responsive
-                                                                                                bordered={false}
-                                                                                                striped={false}
-                                                                                                classes={"table  table-bordered"}
-                                                                                                {...toolkitProps.baseProps}
-                                                                                                {...paginationTableProps}
-                                                                                            />
-                                                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
-                                                                                        </div>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                                <Row className="align-items-md-center mt-30">
-                                                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                                        <PaginationListStandalone {...paginationProps} />
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </React.Fragment>
-                                                                        )}
-                                                                    </ToolkitProvider>
-                                                                )}
 
-                                                            </PaginationProvider>
-                                                            : <></>}
-
-                                                        {BOMItems.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                                                            <Row >
-                                                                <Col sm={2} className="mt-n4">
-                                                                    <SaveButton pageMode={pageMode}
-                                                                        userAcc={userPageAccessState}
-                                                                        module={"CreditLimitMaster"}
-                                                                    />
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup >
-                                                            : null
-                                                        }
                                                     </Row>
 
                                                 </CardBody>
                                             </Card>
+
                                         </Col>
                                     </Row>
+
+                                    <PaginationProvider
+                                        pagination={paginationFactory(pageOptions)}
+                                    >
+                                        {({ paginationProps, paginationTableProps }) => (
+                                            <ToolkitProvider
+
+                                                keyField="id"
+                                                data={Data}
+                                                columns={pagesListColumns}
+
+                                                search
+                                            >
+                                                {toolkitProps => (
+                                                    <React.Fragment>
+                                                        <div className="table">
+                                                            <BootstrapTable
+                                                                keyField={"id"}
+                                                                bordered={true}
+                                                                striped={false}
+                                                                noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
+                                                                classes={"table align-middle table-nowrap table-hover"}
+                                                                headerWrapperClasses={"thead-light"}
+
+                                                                {...toolkitProps.baseProps}
+                                                                {...paginationTableProps}
+                                                            />
+                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                        </div>
+
+                                                        <Row className="align-items-md-center mt-30">
+                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                <PaginationListStandalone
+                                                                    {...paginationProps}
+                                                                />
+                                                            </Col>
+                                                        </Row>
+                                                    </React.Fragment>
+                                                )
+                                                }
+                                            </ToolkitProvider>
+                                        )
+                                        }
+
+                                    </PaginationProvider>
+
+                                    {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
+                                        <Row >
+                                            <Col sm={2} className="mt-n4">
+                                                <SaveButton pageMode={pageMode}
+                                                    userAcc={userPageAccessState}
+                                                    module={"CreditLimitMaster"}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </FormGroup >
+                                        : null
+                                    }
                                 </form>
                             </CardBody>
-
                         </Card>
 
                     </Container>

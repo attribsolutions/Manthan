@@ -35,12 +35,12 @@ export const H_MODULES_API_URL = "/Modules"
 
 //Company List URL
 export const COMPANY_API_URL = "/Company"
+export const COMPANY_FILTER = "/CompanyFilter"
 
 // Company Group drop down api
 export const GET_COMPANYGROUP = "/CompanyGroups"
 export const GET_PAGE_ACCESS = "/HPageAccessNames"
 export const H_PAGES_API_URL = "/PageMaster"/// post api
-export const ROLE_API_URL = "/Roles"///get api
 
 // User Registration
 export const USER_API_URL = "/UserList"
@@ -56,8 +56,11 @@ export const GET_STATE = "/States"
 export const EMPLOYEE_API_URL = "/Employees"
 export const EMPLOYEE_FILTER_API_URL = "/EmployeesFilter"
 export const GET_COMPANY_BY_EMPLOYEETYPES_ID = "/GetCompanyByEmployeeType" //CompanyByEmployeeType
+
 // Role Master
 export const ROLE_MASTER_API = "/Roles" // role get api
+export const ROLE_FILTER_API = "/RolesFilter" // role get api
+
 
 // M_Items Api
 export const Items_MASTER_API = "/Items"
@@ -78,7 +81,6 @@ export const GetDistrictOnState = "/GetDistrictOnState"
 export const PRICELIST = "/PriceList"
 export const ADDRESSTYPES = "/AddressTypes"
 export const PARTYTYPES = "/PartyTypes"
-export const COMPANY = "/Company"
 export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID = "/GetPartyTypeByDivisionTypeID"
 export const GET_COMPANY_BY_DIVISIONTYPES_ID = "/GetCompanyByDivisionTypeID"
 
@@ -167,7 +169,6 @@ export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for del
 //PartySubParty
 export const PARTY_SUB_PARTY_LIST = '/PartySubPartyList'
 export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
-export const PARTY_SUB_PARTY_DROPDOWN_API = '/PartySubParty' // PartySubParty dropdown Api
 
 //PartyItems
 export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
@@ -182,12 +183,14 @@ export const SALESMAN_FOR_LIST = '/SalesmanList '
 export const SALESMAN_FOR_MASTER = '/Salesman' 
 
 // Credit Limit 
-export const ROUTES_DROPDOWN  = '/RoutesList' 
+export const GO_BUTTON_POST_API_FOR_CREDIT_LIMIT = '/CreditlimitList' // for go button
+export const CREDIT_LIMIT = '/Creditlimit' 
 
+export const ROUTE_UPDATE_LIST = '/RouteUpdateList' 
+export const ROUTE_UPDATE = '/RouteUpdate' 
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
-
 
 //order 
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
@@ -251,8 +254,6 @@ export const POST_API_FOR_INWARD = '/InterBranchInward'// Inward  addpage save A
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//InwardList filter Api
 export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
 
-
-
 export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
 export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 
@@ -261,4 +262,10 @@ export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage 
 export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List filter Api
 export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
 export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOICE addpage GoButton Api 
+
+
+//  Report Api
+export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
+
+
 

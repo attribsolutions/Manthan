@@ -60,7 +60,6 @@ const PurchaseListPage = (props) => {
     const [userAccState, setUserAccState] = useState('');
     const [modal_edit, setmodal_edit] = useState(false);
     // const [tableList, settableList] = useState([]);
-
     const {
         editData,
         updateMsg,

@@ -23,20 +23,21 @@ import {
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // post api
-function* Post_Method_ForRoutesMaster_GenFun() {
+function* Post_Method_ForRoutesMaster_GenFun({ data }) {
     try {
-        const response = yield call(Post_Routes_Master_API, {
-            "Party": loginPartyID(),
-            "Company": loginCompanyID()
-        });
+        const response = yield call(Post_Routes_Master_API, data);
         yield put(PostMethod_ForRoutesMasterAPISuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
 //Routes List Api Using Post Method
-function* Routes_List_GenratorFunction({ data }) {
+function* Routes_List_GenratorFunction() {
+    const jsonBody = {
+        "Party": loginPartyID(),
+        "Company": loginCompanyID()
+    }
     try {
-        const response = yield call(Post_Routes_List_Api, data);
+        const response = yield call(Post_Routes_List_Api, jsonBody);
         yield put(PostRouteslistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }

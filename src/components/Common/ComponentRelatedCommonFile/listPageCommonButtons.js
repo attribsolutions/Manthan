@@ -28,25 +28,20 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName,
         makeBtnShow = false
     } = props;
-    /***
-     * deletemsgLable change to=> ButtonMsgLable line no:11 
-     *    autho by => Rohit  date :22-08-022 */
 
-    //  function editHandler(rowData) {
-    //     dispatch(editActionFun(rowData.id, "edit",));
-    // }
-
-    function editHandler(rowData, btnmode) {
-
-        if (editBodyfunc) { editBodyfunc(rowData, btnmode, subPageMode) }
-        else {
-            dispatch(editActionFun(rowData.id, btnmode, subPageMode));
+    function editHandler(rowData, btnmode, event) {
+        debugger
+        if (editBodyfunc) {
+            editBodyfunc(rowData, btnmode, subPageMode, event)
+        } else {
+            dispatch(editActionFun(rowData.id, btnmode, subPageMode, event));
         }
     };
 
     function copyHandler(rowData, btnmode) {
         dispatch(editActionFun(rowData.id, btnmode, subPageMode));
-    }
+    };
+
     function downHandler(rowData) {
         downBtnFunc(rowData);
     };
@@ -55,21 +50,17 @@ export const listPageCommonButtonFunction = (props) => {
         const rep = await CustomAlert({
             Type: 8,
             Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-            // PermissionAction: deleteActionFun,
-            // ID: rowData.id,
         })
         if (rep) {
             dispatch(deleteActionFun(rowData.id, subPageMode))
         }
-
     }
-    function makeBtnHandler(rowData) {
 
+    function makeBtnHandler(rowData) {
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
         makeBtnFunc(arr)
-
     }
 
     return ({
@@ -94,7 +85,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={makeBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
-                                onClick={() => { makeBtnHandler(rowData) }}
+                                onClick={(event) => { makeBtnHandler(rowData, event) }}
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-invoice" ></span> </Button>
@@ -109,7 +100,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={editBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                                onClick={() => { editHandler(rowData, mode.edit) }}
+                                onClick={(event) => { editHandler(rowData, mode.edit, event) }}
                             >
                                 <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                             </Button>)
@@ -122,7 +113,7 @@ export const listPageCommonButtonFunction = (props) => {
                                     type="button"
                                     className={editSelfBtnCss}
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                                    onClick={() => { editHandler(rowData, mode.edit) }}
+                                    onClick={(event) => { editHandler(rowData, mode.edit, event) }}
                                 >
                                     <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                                 </Button>
@@ -135,7 +126,7 @@ export const listPageCommonButtonFunction = (props) => {
                                         type="button"
                                         className={editSelfBtnCss}
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                        onClick={() => { editHandler(rowData, mode.view) }}
+                                        onClick={(event) => { editHandler(rowData, mode.view, event) }}
                                     >
                                         <i className="bx bxs-show font-size-18 "></i>
                                     </Button>
@@ -152,7 +143,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={deltBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                                onClick={() => { deleteHandler(rowData) }}
+                                onClick={(event) => { deleteHandler(rowData, event) }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>
@@ -166,7 +157,7 @@ export const listPageCommonButtonFunction = (props) => {
                                     type="button"
                                     className={deltBtnCss}
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                                    onClick={() => { deleteHandler(rowData) }}
+                                    onClick={(event) => { deleteHandler(rowData, event) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -178,7 +169,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={editSelfBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                                onClick={() => { copyHandler(rowData, mode.copy) }}
+                                onClick={(event) => { copyHandler(rowData, mode.copy, event) }}
                             >
                                 <i className="bx bxs-copy font-size-18 "></i>
                             </Button>
@@ -190,7 +181,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={downBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
-                                onClick={() => { downHandler(rowData) }}
+                                onClick={(event) => { downHandler(rowData, event) }}
                             >
                                 <i className="bx bx-printer font-size-18"></i>
                             </Button>
@@ -296,6 +287,7 @@ export const loginUserDetails = () => {//+++++++++++++++++++++ Seesion Company I
     } catch (e) { alert("Common user_Details  Error") }
     return user_Details
 }
+
 export const loginRoleID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     try {
         const detail = JSON.parse(localStorage.getItem('roleId'))
@@ -329,7 +321,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID 
 }
 
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
- let user_EmployeeID = 0
+    let user_EmployeeID = 0
     try {
         user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
     } catch (e) { alert("Common loginEmployeeID Func  Error") }
@@ -337,7 +329,7 @@ export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginParty
 }
 
 export const loginIsSCMCompany = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
-        let IsSCMCompany = 0
+    let IsSCMCompany = 0
     try {
         IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"))
     } catch (e) { alert("Common loginEmployeeID Func  Error") }

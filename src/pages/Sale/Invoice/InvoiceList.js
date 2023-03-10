@@ -37,6 +37,7 @@ import {
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 
+
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
@@ -87,7 +88,7 @@ const InvoiceList = () => {
 
 
         if (subPageMode === url.INVOICE_LIST_1) {
-            page_Id = pageId.IB_INVOICE_LIST
+            page_Id = pageId.INVOICE_LIST_1
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
         }
@@ -135,8 +136,8 @@ const InvoiceList = () => {
 
 
     function downBtnFunc(row) {
-        var ReportType = report.VanLoadingSheetSKU;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
+        var ReportType = report.invoice;
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get ,ReportType, row.id))
     }
 
     function goButtonHandler({IBType}) {
