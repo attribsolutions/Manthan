@@ -128,7 +128,7 @@ export const User_Component_Update_API = ({ jsonBody, updateId, btnId }) => put(
 export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
 
 // Role Master
-export const Role_Master_Get_API = ({ jsonBody, btnId }) => post(url.ROLE_FILTER_API, jsonBody, btnId)//get api
+export const Role_Master_Get_API = (Filters) => post(url.ROLE_FILTER_API, Filters)//get api
 export const Role_Master_Post_API = ({ jsonBody, btnId }) => post(url.ROLE_MASTER_API, jsonBody, btnId)// post api
 export const Role_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.ROLE_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Role_Master_Edit_API = ({ editId, btnId }) => get(`${url.ROLE_MASTER_API}/${editId}`, btnId)// edit api
@@ -386,7 +386,7 @@ export const Post_Route_Update_API = (data) => post(url.ROUTE_UPDATE, data)// Ro
 
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
 export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
-export const OrderPage_Save_API_ForPO = (data) => post(url.ORDER_PAGE_API, data)//get api
+export const OrderPage_Save_API_ForPO = ({ jsonBody, btnId }) => post(url.ORDER_PAGE_API, jsonBody, btnId)//get api
 export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
 export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order

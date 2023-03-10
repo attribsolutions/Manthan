@@ -31,8 +31,8 @@ export function get(url, btnId) {
     .then(response => {
       return CheckAPIResponse({ method: "get", url, response, btnId });
     })
-    .catch(error => {
-      return CheckAPIResponse({ method: "get", url, error, btnId });
+    .catch(response => {
+      return CheckAPIResponse({ method: "get", url, response, btnId });
     });
 
 }
