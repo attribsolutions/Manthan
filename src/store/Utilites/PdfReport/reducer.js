@@ -13,11 +13,6 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
         ...state,
         pdfdata: action.payload,
       }
-      case GET_PDF_MULTIPLEINVOICE_DATA_SUCCESS:
-      return {
-        ...state,
-        pdfdata: action.payload,
-      }
 
     default:
       return state

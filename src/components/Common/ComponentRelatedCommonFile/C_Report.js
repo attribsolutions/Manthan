@@ -10,9 +10,11 @@ export default function C_Report() {
     const { pdfdata } = useSelector((state) => ({
         pdfdata: state.PdfReportReducers.pdfdata
     }))
+    debugger
     useEffect(() => {
-         
+         debugger
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 200)) {
+            debugger
             generateReport(pdfdata)
             dispatch(getpdfReportdataSuccess({ Status: false }))
             dispatch(postpdfMultipleReportdataSuccess({ Status: false }))
@@ -20,5 +22,5 @@ export default function C_Report() {
         }
     }, [pdfdata])
 
-    return (<></>)
+    return (null)
 }
