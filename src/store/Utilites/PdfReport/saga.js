@@ -15,7 +15,7 @@ function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
     yield put(getpdfReportdataSuccess(response));
 
   } catch (error) {
-  //  CommonConsole(error)
+   CommonConsole(error)
   }
 }
 
@@ -33,7 +33,7 @@ function* GetMultipleinvoicereport_GenFunc({ API, jsonBody,ReportType, Id}) {
 
 
   } catch (error) {
-    // CommonConsole(error)
+    CommonConsole(error)
   }
 }
 
