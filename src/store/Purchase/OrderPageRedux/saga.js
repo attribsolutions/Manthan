@@ -36,7 +36,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
 
   yield delay(400)
   try {
-    
+
     const { subPageMode, data } = action
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2)) {
@@ -63,14 +63,14 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
   } catch (error) { CommonConsole(error) }
 }
 
-function* saveOrder_GenFunc({config}) {
-
-  let response
+function* saveOrder_GenFunc({ config }) {
+  const { subPageMode } = config;
+  let response = {}
   try {
     if (subPageMode === url.IB_ORDER) {                   // Save  Order  Add Page by subPageMode 
       response = yield call(IBOrderPage_Save_API, config);
     } else {
-      response = yield call(OrderPage_Save_API_ForPO, jsonBody);
+      response = yield call(OrderPage_Save_API_ForPO, config);
     }
     yield put(postOrderSuccess(response));
   } catch (error) { CommonConsole(error) }
@@ -91,7 +91,7 @@ function* DeleteOrder_GenFunc({ id }) {                  // Delete Order by subP
   } catch (error) { CommonConsole(error) }
 }
 
-function* UpdateOrder_ID_GenFunc({config }) {         // Update Order by subPageMode
+function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPageMode
   try {
     const response = yield call(OrderPage_Update_API, config);
     yield put(updateOrderIdSuccess(response))
@@ -101,7 +101,7 @@ function* UpdateOrder_ID_GenFunc({config }) {         // Update Order by subPage
 
 function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter by subPageMode
   try {
-    
+
     const { subPageMode, pageMode, jsonBody } = action
     let response;
     let newList;
@@ -111,7 +111,7 @@ function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter b
     else if (subPageMode === url.GRN_STP) {
       response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
     }
-    else if ((subPageMode === url.IB_ORDER_PO_LIST) ||(subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
+    else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.ORDER_LIST_4)) {
