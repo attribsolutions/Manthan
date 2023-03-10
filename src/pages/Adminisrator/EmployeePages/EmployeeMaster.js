@@ -121,7 +121,7 @@ const AddEmployee = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
-      breadcrumbReturn({ dispatch, userAcc });
+      breadcrumbReturn({dispatch,userAcc});
     };
   }, [userAccess])
 
@@ -253,6 +253,7 @@ const AddEmployee = (props) => {
   }, [updateMsg, modalCss]);
 
   useEffect(() => {
+
     if (pageField) {
       const fieldArr = pageField.PageFieldMaster
       comAddPageFieldFunc({ state, setState, fieldArr })
@@ -307,7 +308,7 @@ const AddEmployee = (props) => {
     setState((i) => {
       const a = { ...i }
       a.values.CompanyName = "";
-      // a.values.EmployeeParties = "";
+      a.values.EmployeeParties = "";
       a.hasValid.CompanyName.valid = false
       a.hasValid.EmployeeParties.valid = false
       return a
@@ -324,9 +325,10 @@ const AddEmployee = (props) => {
     })
   }
 
+  function Company_Dropdown_Handler(e, v) {
+  }
 
   const SaveHandler = (event) => {
-    debugger
     event.preventDefault();
     if (formValid(state, setState)) {
       let emplPartie = [{ Party: "" }]
@@ -334,19 +336,19 @@ const AddEmployee = (props) => {
         emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
       }
 
-      if (partyDropDownShow_UI) {
-        dispatch(
-          AlertState({
-            Type: 4,
-            Status: true,
-            Message: "Party Is Required",
-            RedirectPath: false,
-            PermissionAction: false,
-          })
-        );
-        return;
-      }
-      
+      // if ((partyDropDownShow_UI === true) && (values.EmployeeParties === [])) {
+      //   dispatch(
+      //     AlertState({
+      //       Type: 4,
+      //       Status: true,
+      //       Message: "Party Is Required",
+      //       RedirectPath: false,
+      //       PermissionAction: false,
+      //     })
+      //   );
+      //   return;
+      // }
+
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Address: values.Address,
@@ -364,39 +366,18 @@ const AddEmployee = (props) => {
         Company: values.CompanyName.value,
         CreatedBy: loginUserID(),
         UpdatedBy: loginUserID()
-
-        //   Name: "r5555",
-        // Address: "pune",
-        // Mobile: "4444444444",
-        // email: "555@gmail.com",
-        // DOB: "2023-03-01",
-        // PAN: " AAAAA1234A",
-        // AadharNo: "222222222222",
-        // working_hours: "5",
-        // Designation: 1,
-        // EmployeeType: 8,
-        // State: 22,
-        // District: 2,
-        // EmployeeParties: [
-        //   {
-        //     Party: ""
-        //   }
-        // ],
-        // Company: 1,
-        // CreatedBy: 46,
-        // UpdatedBy: 46
-
       });
 
       saveDissable(true);//save Button Is dissable function
 
       if (pageMode === mode.edit) {
-        // dispatch(updateEmployeeID(jsonBody, values.id,));
-        console.log("update json", jsonBody)
+        dispatch(updateEmployeeID(jsonBody, values.id,));
+        console.log("update jsonBody", jsonBody)
       }
       else {
-        // dispatch(postEmployee(jsonBody));
-        console.log("post json", jsonBody)
+        dispatch(postEmployee(jsonBody));
+        console.log("post jsonBody", jsonBody)
+
       }
     }
   };
@@ -437,8 +418,8 @@ const AddEmployee = (props) => {
                             autoComplete='off'
                             autoFocus={true}
                             onChange={(event) => {
-                              dispatch(Breadcrumb_inputName(event.target.value))
                               onChangeText({ event, state, setState })
+                              dispatch(Breadcrumb_inputName(event.target.value))
                             }}
                           />
                           {isError.Name.length > 0 && (
@@ -652,7 +633,7 @@ const AddEmployee = (props) => {
                               options={Company_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
-                                // Company_Dropdown_Handler(hasSelect)
+                                Company_Dropdown_Handler(hasSelect)
                               }
                               }
                             />
