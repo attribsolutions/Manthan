@@ -24,7 +24,7 @@ import H_Pages from './Administrator/HPagesRedux/reducer'
 
 import SupplierReducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
-import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
+import M_EmployeesReducer from "./Administrator/EmployeeRedux/reducer"
 import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
 import ItemMastersReducer from "./Administrator/ItemsRedux/reducer"
 import PartyMasterReducer from "./Administrator/PartyRedux/reducer"
