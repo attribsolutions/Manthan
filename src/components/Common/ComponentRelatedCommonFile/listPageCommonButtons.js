@@ -379,7 +379,8 @@ export const loginJsonBody = () => ({
     UserID: loginUserID(),
     RoleID: loginRoleID(),
     CompanyID: loginCompanyID(),
-    PartyID: loginPartyID()
+    PartyID: loginPartyID(),
+    IsSCM: loginIsSCMCompany()
 })
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
@@ -486,7 +487,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
             document.getElementById(btnId).disabled = state;
 
             // const loginBtn = document.getElementById(event.target);
-            // document.getElementById("preloader").style.display = state ? "block" : "none";
+            document.getElementById("preloader").style.display = state ? "block" : "none";
 
             // if (state) {
             //     loginBtn.classList.add("loading");
