@@ -26,7 +26,7 @@ import { AlertState } from "../../../store/actions";
 import {
     delete_PriceList,
     delete_PriceListSuccess,
-    getPriceListData,
+    priceListByPartyAction,
     savePriceMasterAction,
     savePriceMasterActionSuccess,
     updatePriceList,
@@ -103,7 +103,7 @@ const PriceMaster = (props) => {
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             dispatch(savePriceMasterActionSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
             dispatch(AlertState({
                 Type: 1,
@@ -118,7 +118,7 @@ const PriceMaster = (props) => {
     useEffect(() => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
             dispatch(delete_PriceListSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -132,7 +132,7 @@ const PriceMaster = (props) => {
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updatePriceListSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
             dispatch(AlertState({
                 Type: 1,
@@ -200,7 +200,7 @@ const PriceMaster = (props) => {
     }
     function goButtonHandler() { // party Type Go Button API Call
         if (!(partyType_dropdown_Select === '')) {
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setHasPartySelect(true)
         }
     }
@@ -243,7 +243,6 @@ const PriceMaster = (props) => {
         return false
     }
     function sub_Price_Add_Handler(event) {// add price save handler
-
         event.preventDefault();
         const btnId = event.target.id;
         btnIsDissablefunc({ btnId, state: true })

@@ -379,7 +379,8 @@ export const loginJsonBody = () => ({
     UserID: loginUserID(),
     RoleID: loginRoleID(),
     CompanyID: loginCompanyID(),
-    PartyID: loginPartyID()
+    PartyID: loginPartyID(),
+    IsSCM: loginIsSCMCompany()
 })
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
