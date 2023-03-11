@@ -108,7 +108,6 @@ export const commonPageFiled_API = (pageId) => get(`${url.PAGE_FIELD}/${pageId}`
 // Employees  Component All Api 
 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
-export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
 export const save_Employee_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_API_URL, jsonBody, btnId) //save And Update
