@@ -20,6 +20,7 @@ export const PostPartyTypeAPISuccess = (data) => ({
   type: POST_PARTY_TYPE_API_SUCCESS,
   payload: data,
 });
+
 /// get Empoyee list 
 export const getPartyTypelist = () => ({
   type: GET_PARTY_TYPE_LIST,
