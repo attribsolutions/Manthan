@@ -346,10 +346,10 @@ export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VE
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
-export const Post_SubGroupList_API = (data) => post(url.SUBGROUP_API, data)// post api
-export const del_SubGroup_List_API = (id) => del(`${url.SUBGROUP_API}/${id}`)// delete api
-export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)// edit api
-export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
+export const Post_SubGroupList_API = ({ jsonBody, btnId }) => post(url.SUBGROUP_API, jsonBody, btnId)// post api
+export const del_SubGroup_List_API = ({ deleteId, btnId }) => del(`${url.SUBGROUP_API}/${deleteId}`, btnId)// delete api
+export const edit_SubGroup_List_Api = ({ editId, btnId }) => get(`${url.SUBGROUP_API}/${editId}`, btnId)// edit api
+export const update_SubGroup_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.SUBGROUP_API}/${updateId}`, jsonBody, btnId)// update api
 
 // General API
 export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST, data)// get api
