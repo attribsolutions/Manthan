@@ -25,7 +25,7 @@ const CompanyGroupList = (props) => {
       updateMsg: state.CompanyGroupReducer.updateMessage,
       deleteMsg: state.CompanyGroupReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.CompanyGroupReducer.PostDataMessage,
+      postMsg: state.CompanyGroupReducer.postMsg,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );

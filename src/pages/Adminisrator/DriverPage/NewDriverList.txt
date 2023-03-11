@@ -12,12 +12,12 @@ import DriverMaster from "./DriverMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  getMethodForDriverList,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
+  deleteDriverID_Success,
+  updateDriverID_Success,
+  getDriverList,
+  editDriverID,
+  deleteDriverID,
+  saveDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
@@ -45,7 +45,7 @@ const DriverList = (props) => {
       updateMessage: state.DriverReducer.updateMessage,
       deleteMessage: state.DriverReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.DriverReducer.PostDataMessage,
+      PostAPIResponse: state.DriverReducer.postMsg,
     })
   );
   console.log("TableListData", TableListData)
@@ -61,25 +61,25 @@ const DriverList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMethodForDriverList());
+    dispatch(getDriverList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateDriverTypeIDSuccess({ Status: false }));
+      dispatch(updateDriverID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getMethodForDriverList,
+          AfterResponseAction: getDriverList,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateDriverTypeIDSuccess({ Status: false }));
+      dispatch(updateDriverID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -92,17 +92,17 @@ const DriverList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteDriverTypeIDSuccess({ Status: false }));
+      dispatch(deleteDriverID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getMethodForDriverList,
+          AfterResponseAction: getDriverList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteDriverTypeIDSuccess({ Status: false }));
+      dispatch(deleteDriverID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -117,9 +117,9 @@ const DriverList = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-      dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+      dispatch(saveDriverMasterSuccess({ Status: false }))
       tog_center();
-      dispatch(getMethodForDriverList());
+      dispatch(getDriverList());
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -128,7 +128,7 @@ const DriverList = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true)) {
-      dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+      dispatch(saveDriverMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -193,8 +193,8 @@ const DriverList = (props) => {
       ButtonMsgLable: "DriverType",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editDriverTypeId,
-      deleteActionFun: delete_DriverType_ID
+      editActionFun: editDriverID,
+      deleteActionFun: deleteDriverID
     })
   ];
 

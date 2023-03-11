@@ -60,7 +60,7 @@ const CompanyGroupMaster = (props) => {
         updateMsg,
         pageField,
         userAccess } = useSelector((state) => ({
-            postMsg: state.CompanyGroupReducer.PostDataMessage,
+            postMsg: state.CompanyGroupReducer.postMsg,
             updateMsg: state.CompanyGroupReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
