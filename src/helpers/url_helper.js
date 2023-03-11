@@ -105,6 +105,7 @@ export const EMPLOYEE_TYPE_API = '/EmployeeTypes'
 
 // PartyType API
 export const PARTYTYPES_API = '/PartyTypes'
+export const PARTYTYPES_FILTER_API = "/PartyTypesFilter"
 
 // Division Type API
 export const DIVISION_TYPES_API = '/DivisionTypes'
@@ -176,19 +177,19 @@ export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
 //Routes
-export const ROUTES_FOR_LIST = '/RoutesFilter ' 
-export const ROUTES_FOR_MASTER = '/Routes' 
+export const ROUTES_FOR_LIST = '/RoutesFilter '
+export const ROUTES_FOR_MASTER = '/Routes'
 
 //SalesMan
-export const SALESMAN_FOR_LIST = '/SalesmanList ' 
-export const SALESMAN_FOR_MASTER = '/Salesman' 
+export const SALESMAN_FOR_LIST = '/SalesmanList '
+export const SALESMAN_FOR_MASTER = '/Salesman'
 
 // Credit Limit 
 export const GO_BUTTON_POST_API_FOR_CREDIT_LIMIT = '/CreditlimitList' // for go button
-export const CREDIT_LIMIT = '/Creditlimit' 
+export const CREDIT_LIMIT = '/Creditlimit'
 
-export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter' 
-export const ROUTE_UPDATE = '/RouteUpdate' 
+export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter'
+export const ROUTE_UPDATE = '/RouteUpdate'
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"

@@ -35,7 +35,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -209,6 +209,7 @@ const PartyType = (props) => {
                 Name: values.Name,
                 IsSCM: values.IsSCM,
                 IsDivision: values.IsDivision,
+                Company:loginCompanyID(),
                 CreatedBy: loginUserID(),
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: loginUserID(),

@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginIsSCMCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginIsSCMCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { detelet_PartyType_List_Api, edit_PartyType_List_Api, get_PartyType_List_Api, Post_Party_Type_API, update_PartyType_List_Api } from "../../../helpers/backend_helper";
 import { deletePartyTypeIDSuccess, editPartyTypeSuccess, getPartyTypelistSuccess, PostPartyTypeAPISuccess, updatePartyTypeIDSuccess } from "./action";
 import { DELETE_PARTY_TYPE_ID, EDIT_PARTY_TYPE_ID, GET_PARTY_TYPE_LIST, POST_PARTY_TYPE_API, UPDATE_PARTY_TYPE_ID } from "./actionTypes";
@@ -15,8 +15,8 @@ function* Post_Party_Type_GneratorFunction({ data }) {
 // get api
 function* Get_PartyType_List_GenratorFunction() {
   try {
-    const id=0 
-    const response = yield call(get_PartyType_List_Api, id, loginIsSCMCompany());
+    const jsonBody = {"Company":loginCompanyID()}
+    const response = yield call(get_PartyType_List_Api, jsonBody);
     yield put(getPartyTypelistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -40,7 +40,7 @@ function* Edit_PartyType_ID_GenratorFunction({ id, pageMode }) {
 
 // update api
 function* Update_PartyType_ID_GenratorFunction({ updateData, ID }) {
-  
+
   try {
     const response = yield call(update_PartyType_List_Api, updateData, ID, loginIsSCMCompany());
     yield put(updatePartyTypeIDSuccess(response))
