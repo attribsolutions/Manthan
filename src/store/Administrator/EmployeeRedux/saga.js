@@ -3,40 +3,32 @@ import {
   detelet_EmployeeID,
   edit_EmployeeAPI,
   getDesignationID_For_Dropdown,
-  getEmployeeType_For_Dropdown,
   getState_For_Dropdown, Get_CompanyBy_EmployeeType_For_Dropdown,
   get_EmployeelistApi,
   save_Employee_API,
   update_EmployeeAPI
 } from "../../../helpers/backend_helper";
 import {
-  GET_DESIGNATIONID, GET_EMPLOYEETYPE,
+  GET_DESIGNATIONID,
   GET_STATE, SAVE_EMPLOYEE_MASTER, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
   DELETE_EMPLOYEE_ID, EDIT_EMPLOYEE_ID, GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
 } from './actionTypes'
 import {
-  getDesignationIDSuccess, getEmployeeTypeESuccess,
+  getDesignationIDSuccess,
   getStateESuccess, PostEmployeeSuccess,
   getEmployeelistSuccess,
   deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, Get_CompanyName_By_EmployeeTypeID_Success,
 } from "./action";
-import { CommonConsole, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginJsonBody, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-///  DesignationID dropdown list
-function* DesignationID_saga() {
+
+function* DesignationID_saga() { ///  DesignationID dropdown list
   try {
     const response = yield call(getDesignationID_For_Dropdown);
     yield put(getDesignationIDSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-//// EmployeeType drop down api
-function* EmployeeType_saga() {
-  try {
-    const response = yield call(getEmployeeType_For_Dropdown);
-    yield put(getEmployeeTypeESuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
-}
 
 ///State  dropdown api
 function* State_saga() {
@@ -46,31 +38,25 @@ function* State_saga() {
   } catch (error) { CommonConsole(error) }
 }
 
-///post api
-function* Submit_Employee_GenFunc({ Data }) {
+
+function* Save_Employee_GenFunc({ config }) { ///Save api
   try {
-    const response = yield call(save_Employee_API, Data);
-    console.log("post response in saga file", response)
+    const response = yield call(save_Employee_API, config);
     yield put(PostEmployeeSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-/// get api
 
-function* Get_EmployeeList_GenFunc() {
+function* Get_EmployeeList_GenFunc() {/// get api  
   try {
-    const jsonBody = {
-      "UserID": loginUserID(),
-      "RoleID": loginRoleID(),
-      "CompanyID": loginCompanyID()
-    }
-    const response = yield call(get_EmployeelistApi, jsonBody);
+    const filters = loginJsonBody();
+    const response = yield call(get_EmployeelistApi, filters);
     yield put(getEmployeelistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-//// delete api 
-function* Delete_EmployeeID_GenFunc({ config }) {
+
+function* Delete_EmployeeID_GenFunc({ config }) {//// delete api 
   try {
     const response = yield call(detelet_EmployeeID, config);
     yield put(deleteEmployeeIDSuccess(response))
@@ -105,10 +91,9 @@ function* Get_CompanyName_By_EmployeeTypesID_GenFunc({ id }) {
 
 function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
-  yield takeEvery(GET_EMPLOYEETYPE, EmployeeType_saga);
   yield takeEvery(GET_STATE, State_saga);
   yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenFunc)
-  yield takeEvery(SAVE_EMPLOYEE_MASTER, Submit_Employee_GenFunc)
+  yield takeEvery(SAVE_EMPLOYEE_MASTER, Save_Employee_GenFunc)
   yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenFunc)
   yield takeEvery(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenFunc)
   yield takeEvery(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenFunc)

@@ -4,7 +4,6 @@ import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Inpu
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDesignationID,
-  getEmployeeType,
   getState,
   saveEmployeeAction,
   updateEmployeeAction,
@@ -33,6 +32,7 @@ import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
 
 const AddEmployee = (props) => {
 
@@ -77,14 +77,14 @@ const AddEmployee = (props) => {
     userAccess,
     pageField,
     updateMsg } = useSelector((state) => ({
-      designation: state.M_EmployeesReducer.designation,
-      employeeType: state.M_EmployeesReducer.employeeType,
-      State: state.M_EmployeesReducer.State,
+      designation: state.EmployeesReducer.designation,
+      employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
+      State: state.EmployeesReducer.State,
       district: state.PartyMasterReducer.DistrictOnState,
       partyList: state.PartyMasterReducer.partyList,
-      company: state.M_EmployeesReducer.CompanyNames,
-      postMsg: state.M_EmployeesReducer.postMessage,
-      updateMsg: state.M_EmployeesReducer.updateMessage,
+      company: state.EmployeesReducer.CompanyNames,
+      postMsg: state.EmployeesReducer.postMessage,
+      updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -93,7 +93,7 @@ const AddEmployee = (props) => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.EMPLOYEE))
     dispatch(getDesignationID());
-    dispatch(getEmployeeType());
+    dispatch(getEmployeeTypelist());
     dispatch(getPartyListAPI())
     dispatch(getState());
   }, [dispatch]);

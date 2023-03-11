@@ -78,7 +78,7 @@ const PartyMaster = (props) => {
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         updateMsg: state.PartyMasterReducer.updateMessage,
-        State: state.M_EmployeesReducer.State,
+        State: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Company: state.Company.companyList,
         PartyTypes: state.PartyTypeReducer.ListData,
