@@ -326,10 +326,10 @@ export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`
 
 // PartySubParty API
 export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY_LIST}`)// get list api
-export const PartySubParty_Post_API = (data) => post(url.PARTY_SUB_PARTY, data)// post api
-export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id}`)// delete api
-export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api
-export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY}/${id}`, data)// update api
+export const PartySubParty_Post_API = ({ jsonBody, btnId }) => post(url.PARTY_SUB_PARTY, jsonBody, btnId)// post api
+export const PartySubParty_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_SUB_PARTY}/${deleteId}`,btnId)// delete api
+export const PartySubParty_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_SUB_PARTY}/${editId}`,btnId)// edit api
+export const PartySubParty_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_SUB_PARTY}/${updateId}`,jsonBody,btnId)// update api
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
 //PartyItems API
