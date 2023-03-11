@@ -215,9 +215,9 @@ export const Delete_RoleAccess_Api = (role, division, company) => del(`${url.DEL
 
 
 // Employee Type API
-export const Employee_Type_API = (jsonBody, btnId) => post(url.EMPLOYEE_TYPE_API, jsonBody,btnId)// post api
+export const Employee_Type_API = ({jsonBody, btnId}) => post(url.EMPLOYEE_TYPE_API, jsonBody,btnId)// post api
 export const get_EmployeeType_List_Api = () => get(url.EMPLOYEE_TYPE_API) // get api
-export const detelet_EmployeeType_List_Api = (deleteId, btnId) => del(`${url.EMPLOYEE_TYPE_API}/${deleteId}`,btnId) // delete api
+export const detelet_EmployeeType_List_Api = ({deleteId, btnId}) => del(`${url.EMPLOYEE_TYPE_API}/${deleteId}`,btnId) // delete api
 export const edit_EmployeeType_List_Api = ({ editId, btnId }) => get(`${url.EMPLOYEE_TYPE_API}/${editId}`,btnId) // edit api
 export const update_EmployeeType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.EMPLOYEE_TYPE_API}/${updateId}`,jsonBody,btnId)// update 
 
