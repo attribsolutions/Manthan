@@ -14,65 +14,63 @@ import {
   UPDATE_COMPANY_ID_SUCCESS
 } from "./actionType";
 
-export const saveCompany = (data) => ({
-  type: POST_COMPANY_SUBMIT,
-  data,
-});
 
-export const saveCompany_Success = (data) => ({
-  type: POST_COMPANY_SUBMIT_SUCCESS,
-  payload: data,
-});
-
-// Fetch Modules get Data Actions 
-export const getcompanyList = (data) => ({
+export const getcompanyList = () => ({ // get List Action
   type: FETCH_COMPANY_LIST,
-  data,
 });
-export const getCompanyListSuccess = (companyList) => ({
+
+export const getCompanyListSuccess = (companyList) => ({  // get List success
   type: FETCH_COMPANY_LIST_SUCCESS,
   payload: companyList,
 });
-export const getCompanyListError = (modulesListError) => ({
+
+export const saveCompany = (config={}) => ({  // save Action
+  type: POST_COMPANY_SUBMIT,
+  config,
+});
+
+export const saveCompany_Success = (resp) => ({ // Save  success
+  type: POST_COMPANY_SUBMIT_SUCCESS,
+  payload: resp,
+});
+
+export const getCompanyListError = (modulesListError) => ({  //get company list error
   type: FETCH_COMPANY_LIST_ERROR,
   payload: modulesListError,
 });
 
-//Edit COMPANY Using Id
-export const editCompanyID = (id,pageMode) => ({
+export const editCompanyID = (config = {}) => ({  // Edit Action 
   type: EDIT_COMPANY_ID,
-  id,pageMode
+  config ,
 });
-export const editCompanyIDSuccess = (editData) => ({
+export const editCompanyIDSuccess = (editData) => ({  // Edit  Success
   type: EDIT_COMPANY_ID_SUCCESS,
   payload: editData,
 });
 
-// Delete Company ID Actions
-export const deleteCompany_ID = (id) => ({
-  type: DELETE_COMPANY_ID,
-  id,
-});
-export const deleteCompanyIDSuccess = (deleteCompanyID) => ({
-  type:DELETE_COMPANY_ID_SUCCESS,
-  payload: deleteCompanyID,
-});
-
-export const updateCompanyID = (updateData, ID) => ({
+export const updateCompanyID = (config = {}) => ({   // update  Action
   type: UPDATE_COMPANY_ID,
-  updateData, ID
+  config, 
 });
-export const updateCompanyIDSuccess = (updateMessage) => ({
+export const updateCompanyIDSuccess = (resp) => ({    //Update Success
   type: UPDATE_COMPANY_ID_SUCCESS,
-  payload: updateMessage,
+  payload: resp,
 });
 
-/// CompanyGroup dropdown
-export const getCompanyGroup = () => ({
+export const getCompanyGroup = () => ({     //get company gropu
   type: GET_COMPANYGROUP,
  
 });
-export const getCompanyGroupSuccess = (CompanyGroup) => ({
+export const getCompanyGroupSuccess = (CompanyGroup) => ({  //get company group Success
   type: GET_COMPANYGROUP_SUCCESS,
   payload:CompanyGroup,
+});
+
+export const deleteCompany_ID = (config={}) => ({  // Delete  Action
+  type: DELETE_COMPANY_ID,
+  config,
+});
+export const deleteCompanyIDSuccess = (resp) => ({  // Delete Success
+  type:DELETE_COMPANY_ID_SUCCESS,
+  payload: resp,
 });

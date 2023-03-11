@@ -133,20 +133,19 @@ export const Role_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.ROLE_M
 export const Role_Master_Edit_API = ({ editId, btnId }) => get(`${url.ROLE_MASTER_API}/${editId}`, btnId)// edit api
 export const Role_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ROLE_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
 
-
-//Administrator   Modules submit  
-export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
-export const Fetch_ModulesList = () => get(url.H_MODULES_API_URL,)//module-list get API method
-export const delete_ModuleID = (id) => del(`${url.H_MODULES_API_URL}/${id}`)// Delete_Modules_By-ID
-export const edit_ModuleID = (id) => get(`${url.H_MODULES_API_URL}/${id}`)// Edit_Modules- by_ID
-export const updateModule_ID = (data, id) => put(`${url.H_MODULES_API_URL}/${id}`, data)// Update_Modules- by_ID
+//  Module Master API 
+export const Module_Get_API = () => get(url.H_MODULES_API_URL,)//module-list get API method
+export const Module_Post_API = ({ jsonBody, btnId }) => post(url.H_MODULES_API_URL, jsonBody, btnId)
+export const Module_Edit_API = ({ editId, btnId }) => get(`${url.H_MODULES_API_URL}/${editId}`,btnId)// Edit_Modules- by_ID
+export const Module_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.H_MODULES_API_URL}/${updateId}`,jsonBody,btnId)// Update_Modules- by_ID
+export const Module_Delete_API = ({ deleteId, btnId }) => del(`${url.H_MODULES_API_URL}/${deleteId}`,btnId)// Delete_Modules_By-ID
 
 //Fetch Company LIst
 export const fetch_CompanyList = (data) => post(url.COMPANY_FILTER, data)
-export const edit_CompanyID = (id) => get(`${url.COMPANY_API_URL}/${id}`)// Edit_Company- by_ID
-export const delete_CompanyID = (id) => del(`${url.COMPANY_API_URL}/${id}`)// Delete_Company_By-ID
-export const postSubmit_Company = (data) => post(url.COMPANY_API_URL, data)// Company_Modules submit 
-export const updateCompany_ID = (data, id) => put(`${url.COMPANY_API_URL}/${id}`, data)// Update_Company- by_ID
+export const edit_CompanyID = ({ editId, btnId }) => get(`${url.COMPANY_API_URL}/${editId}`,btnId)// Edit_Company- by_ID
+export const delete_CompanyID = ({ deleteId, btnId }) => del(`${url.COMPANY_API_URL}/${deleteId}`,btnId)// Delete_Company_By-ID
+export const postSubmit_Company = ({jsonBody, btnId }) => post(url.COMPANY_API_URL, jsonBody,btnId)// Company_Modules submit 
+export const updateCompany_ID = ({ jsonBody, updateId, btnId }) => put(`${url.COMPANY_API_URL}/${updateId}`, jsonBody,btnId)// Update_Company- by_ID
 export const getCompanyGroup = () => get(url.GET_COMPANYGROUP)// CompanyGroup DropDown API
 
 //PageList And PageMaster
@@ -244,7 +243,7 @@ export const update_CategoryType_List_Api = ({ jsonBody, updateId, btnId }) => p
 
 //Category API
 export const Post_Category_API = ({ jsonBody, btnId }) => post(url.CATEGORY_API, jsonBody, btnId)// post api
-export const get_Category_List_Api = ({ btnId }) => get(url.CATEGORY_API, btnId) // get api
+export const get_Category_List_Api = () => get(url.CATEGORY_API) // get api
 export const detelet_Category_List_Api = ({ deleteId, btnId }) => del(`${url.CATEGORY_API}/${deleteId}`, btnId) // delete api
 export const edit_Category_List_Api = ({ editId, btnId }) => get(`${url.CATEGORY_API}/${editId}`, btnId) // edit api
 export const update_Category_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.CATEGORY_API}/${updateId}`, jsonBody, btnId)// update
