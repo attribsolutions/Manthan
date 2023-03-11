@@ -111,11 +111,11 @@ export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
-export const post_EmployeeData = (data) => post(url.EMPLOYEE_API_URL, data) //save And Update
-export const get_EmployeelistApi = (jsonbody) => post(url.EMPLOYEE_FILTER_API_URL, jsonbody) // list api using post method
-export const detelet_EmployeeID = ({deleteId,btnId}) => del(`${url.EMPLOYEE_API_URL}/${deleteId}`,btnId) // delete api
-export const edit_EmployeeAPI = ({editId,btnId}) => get(`${url.EMPLOYEE_API_URL}/${editId}`,btnId) // edit api
-export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${id}`, data)// update 
+export const save_Employee_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_API_URL, jsonBody, btnId) //save And Update
+export const get_EmployeelistApi = (filters) => post(url.EMPLOYEE_FILTER_API_URL, filters) // list api using post method
+export const detelet_EmployeeID = ({ deleteId, btnId }) => del(`${url.EMPLOYEE_API_URL}/${deleteId}`, btnId) // delete api
+export const edit_EmployeeAPI = ({ editId, btnId }) => get(`${url.EMPLOYEE_API_URL}/${editId}`, btnId) // edit api
+export const update_EmployeeAPI = ({ updateId, jsonBody, btnId }) => put(`${url.EMPLOYEE_API_URL}/${updateId}`, jsonBody, btnId)// update 
 export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_EMPLOYEETYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
 
 //User Registration  All APIs 
