@@ -1,52 +1,63 @@
-import { DELETE_EMPLOYEE_TYPE_ID, DELETE_EMPLOYEE_TYPE_ID_SUCCESS, EDIT_EMPLOYEE_TYPE_ID, EDIT_EMPLOYEE_TYPE_ID_SUCCESS, GET_EMPLOYEE_TYPE_LIST, GET_EMPLOYEE_TYPE_LIST_SUCCESS, POST_EMPLOYEETYPE_SUBMIT, POST_EMPLOYEETYPE_SUBMIT_SUCCESS, UPDATE_EMPLOYEE_TYPE_ID, UPDATE_EMPLOYEE_TYPE_ID_SUCCESS } from "./actionTypes";
+import {
+  DELETE_EMPLOYEE_TYPE_ID,
+  DELETE_EMPLOYEE_TYPE_ID_SUCCESS,
+  EDIT_EMPLOYEE_TYPE_ID,
+  EDIT_EMPLOYEE_TYPE_ID_SUCCESS,
+  GET_EMPLOYEE_TYPE_LIST,
+  GET_EMPLOYEE_TYPE_LIST_SUCCESS,
+  POST_EMPLOYEETYPE_SUBMIT,
+  POST_EMPLOYEETYPE_SUBMIT_SUCCESS,
+  UPDATE_EMPLOYEE_TYPE_ID,
+  UPDATE_EMPLOYEE_TYPE_ID_SUCCESS
+} from "./actionTypes";
 
-export const PostEmployeeTypeSubmit= (data) => ({
-    type: POST_EMPLOYEETYPE_SUBMIT,
-    data,
-  });
-  
-  export const PostEmployeeTypeSubmitSuccess = (data) => ({
-    type: POST_EMPLOYEETYPE_SUBMIT_SUCCESS,
-    payload: data,
-  });
 
- /// get Empoyee list 
- export const getEmployeeTypelist = () => ({
+export const getEmployeeTypelist = () => ({  // get List Action
   type: GET_EMPLOYEE_TYPE_LIST,
 });
 
-export const getEmployeeTypelistSuccess = (pages) => ({
+export const getEmployeeTypelistSuccess = (pages) => ({ // get List success
   type: GET_EMPLOYEE_TYPE_LIST_SUCCESS,
-  payload:pages,
+  payload: pages,
 });
 
-////delete api
-export const delete_EmployeeType_ID = (id) => ({
+export const PostEmployeeTypeSubmit = (config={}) => ({  // save Action
+  type: POST_EMPLOYEETYPE_SUBMIT,
+  config,
+});
+
+export const PostEmployeeTypeSubmitSuccess = (resp) => ({  // Save  success
+  type: POST_EMPLOYEETYPE_SUBMIT_SUCCESS,
+  payload: resp,
+});
+
+export const editEmployeeTypeId = (config = {}) => ({   // Edit Action 
+  type: EDIT_EMPLOYEE_TYPE_ID,
+  config, 
+})
+
+export const editEmployeeTypeSuccess = (editData) => ({ // Edit  Success
+  type: EDIT_EMPLOYEE_TYPE_ID_SUCCESS,
+  payload: editData,
+})
+
+export const updateEmployeeTypeID = (config = {}) => ({ // update  Action
+  type: UPDATE_EMPLOYEE_TYPE_ID,
+  config,
+}) 
+
+export const updateEmployeeTypeIDSuccess = (updateMessage) => ({ //Update Success
+  type: UPDATE_EMPLOYEE_TYPE_ID_SUCCESS,
+  payload: updateMessage,
+})
+
+export const delete_EmployeeType_ID = (config={}) => ({  // Delete  Action
   type: DELETE_EMPLOYEE_TYPE_ID,
-  id ,
-  
-} );
-export const deleteEmployeeTypeIDSuccess = (deleteMessage) => ({
-  type: DELETE_EMPLOYEE_TYPE_ID_SUCCESS,
-  payload:deleteMessage
+  config,
+
 });
 
-// edit api
-export const editEmployeeTypeId =(id,pageMode)=>({
-  type:EDIT_EMPLOYEE_TYPE_ID,
-id,pageMode
-})
-export const editEmployeeTypeSuccess =(editData)=>({
-  type:EDIT_EMPLOYEE_TYPE_ID_SUCCESS,
- payload:editData,
-})
-
-// update api
-export const updateEmployeeTypeID=(updateData,ID)=>({
-  type:UPDATE_EMPLOYEE_TYPE_ID,
-  updateData,ID,
-})
-export const updateEmployeeTypeIDSuccess =(updateMessage)=>({
-  type:UPDATE_EMPLOYEE_TYPE_ID_SUCCESS,
- payload:updateMessage,
-})
+export const deleteEmployeeTypeIDSuccess = (resp) => ({   // Delete Success
+  type: DELETE_EMPLOYEE_TYPE_ID_SUCCESS,
+  payload: resp
+});

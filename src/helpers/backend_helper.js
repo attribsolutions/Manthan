@@ -216,11 +216,11 @@ export const Delete_RoleAccess_Api = (role, division, company) => del(`${url.DEL
 
 
 // Employee Type API
-export const Employee_Type_API = (data) => post(url.EMPLOYEE_TYPE_API, data)// post api
+export const Employee_Type_API = (jsonBody, btnId) => post(url.EMPLOYEE_TYPE_API, jsonBody,btnId)// post api
 export const get_EmployeeType_List_Api = () => get(url.EMPLOYEE_TYPE_API) // get api
-export const detelet_EmployeeType_List_Api = (id) => del(`${url.EMPLOYEE_TYPE_API}/${id}`) // delete api
-export const edit_EmployeeType_List_Api = (id) => get(`${url.EMPLOYEE_TYPE_API}/${id}`) // edit api
-export const update_EmployeeType_List_Api = (data, id) => put(`${url.EMPLOYEE_TYPE_API}/${id}`, data)// update 
+export const detelet_EmployeeType_List_Api = (deleteId, btnId) => del(`${url.EMPLOYEE_TYPE_API}/${deleteId}`,btnId) // delete api
+export const edit_EmployeeType_List_Api = ({ editId, btnId }) => get(`${url.EMPLOYEE_TYPE_API}/${editId}`,btnId) // edit api
+export const update_EmployeeType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.EMPLOYEE_TYPE_API}/${updateId}`,jsonBody,btnId)// update 
 
 // Party Type API
 export const Post_Party_Type_API = (data) => post(url.PARTYTYPES_API, data)// post api
@@ -238,7 +238,7 @@ export const update_DivisionType_List_Api = (data, id) => put(`${url.DIVISION_TY
 
 // Cateogory Types API
 export const Post_Category_Type_Master_API = ({ jsonBody, btnId }) => post(url.CATEGORY_TYPES_API, jsonBody, btnId)// post api
-export const get_CategoryType_List_Api = ({ btnId }) => get(url.CATEGORY_TYPES_API, btnId) // get api
+export const get_CategoryType_List_Api = () => get(url.CATEGORY_TYPES_API) // get api
 export const detelet_CategoryType_List_Api = ({ deleteId, btnId }) => del(`${url.CATEGORY_TYPES_API}/${deleteId}`, btnId) // delete api
 export const edit_CategoryType_List_Api = ({ editId, btnId }) => get(`${url.CATEGORY_TYPES_API}/${editId}`, btnId) // edit api
 export const update_CategoryType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.CATEGORY_TYPES_API}/${updateId}`, jsonBody, btnId)// update
