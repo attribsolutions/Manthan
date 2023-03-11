@@ -56,7 +56,7 @@ const PartyMaster = (props) => {
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
-        State: state.M_EmployeesReducer.State,
+        State: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Company: state.PartyMasterReducer.Company,
         PartyTypes: state.PartyMasterReducer.PartyTypes,

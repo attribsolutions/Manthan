@@ -1,6 +1,5 @@
 import {
   GET_DESIGNATIONID, GET_DESIGNATIONID_SUCCESS,
-  GET_EMPLOYEETYPE, GET_EMPLOYEETYPE_SUCCESS,
   GET_STATE, GET_STATE_SUCCESS,
   SAVE_EMPLOYEE_MASTER_SUCCESS, SAVE_EMPLOYEE_MASTER,
   GET_EMPLOYEE_LIST, GET_EMPLOYEE_LIST_SUCCESS,
@@ -13,33 +12,22 @@ import {
 ///DesignationID  dropdown
 export const getDesignationID = () => ({
   type: GET_DESIGNATIONID,
-
 });
+
 export const getDesignationIDSuccess = (DesignationID) => ({
   type: GET_DESIGNATIONID_SUCCESS,
   payload: DesignationID,
 });
 
-///EmployeeType  dropdown
-export const getEmployeeType = () => ({
-  type: GET_EMPLOYEETYPE,
-
-});
-export const getEmployeeTypeESuccess = (EmployeeType) => ({
-  type: GET_EMPLOYEETYPE_SUCCESS,
-  payload: EmployeeType,
-});
-
 ///State  dropdown
 export const getState = () => ({
   type: GET_STATE,
-
 });
+
 export const getStateESuccess = (State) => ({
   type: GET_STATE_SUCCESS,
   payload: State,
 });
-
 
 ///post api
 export const saveEmployeeAction = (config) => ({

@@ -1,6 +1,5 @@
 import {
   GET_DESIGNATIONID_SUCCESS,
-  GET_EMPLOYEETYPE_SUCCESS,
   GET_STATE_SUCCESS,
   SAVE_EMPLOYEE_MASTER_SUCCESS,
   GET_EMPLOYEE_LIST_SUCCESS,
@@ -12,19 +11,17 @@ import {
 
 const INIT_STATE = {
   designation: [],
-  employeeType: [],
   State: [],
   employeeList: [],
   postMessage: { Status: false },
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
-  EmployeeTypes:[],
   CompanyNames:[],
   PartyTypes:[]
 };
 
-const M_EmployeesReducer = (state = INIT_STATE, action) => {
+const EmployeesReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
     // DesignationID Dropdown api
@@ -32,13 +29,6 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         designation: action.payload,
-      };
-
-    // EmployeeType Dropdown api
-    case GET_EMPLOYEETYPE_SUCCESS:
-      return {
-        ...state,
-        employeeType: action.payload,
       };
 
     // State Dropdown api
@@ -92,4 +82,4 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
       return state;
   }
 };
-export default M_EmployeesReducer;
+export default EmployeesReducer;

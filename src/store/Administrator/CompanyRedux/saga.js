@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
-import { loginJsonBody } from "../../CommonAPI/CommonJsonBody";
 import {
   deleteCompanyIDSuccess,
   editCompanyIDSuccess,
