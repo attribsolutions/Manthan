@@ -433,7 +433,7 @@ const RoleMaster = (props) => {
                               <Row>
                                 <Col sm={2}>
                                   <SaveButton pageMode={pageMode}
-                                  onClick={SaveHandler}
+                                    onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
                                     module={"RoleMaster"}
