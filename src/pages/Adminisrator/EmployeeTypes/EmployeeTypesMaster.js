@@ -34,13 +34,12 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable,loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 
 const EmployeeTypesMaster = (props) => {
-
     const dispatch = useDispatch();
     const history = useHistory()
 
@@ -205,26 +204,32 @@ const EmployeeTypesMaster = (props) => {
 
     const SaveHandler = (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                IsPartyConnection: values.IsPartyConnection,
-                IsSCM: values.IsSCM,
-                CreatedBy: loginUserID(),
-                CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: loginUserID(),
-                UpdatedOn: "2022-07-18T00:00:00"
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
-
-            if (pageMode === mode.edit) {
-                dispatch(updateEmployeeTypeID(jsonBody, values.id));
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    IsPartyConnection: values.IsPartyConnection,
+                    Company:loginCompanyID(),
+                    IsSCM: values.IsSCM,
+                    CreatedBy: loginUserID(),
+                    CreatedOn: "2022-07-18T00:00:00",
+                    UpdatedBy: loginUserID(),
+                    UpdatedOn: "2022-07-18T00:00:00"
+                });
+    debugger
+                saveDissable(true);//save Button Is dissable function
+    
+                if (pageMode === mode.edit) {
+                    dispatch(updateEmployeeTypeID(jsonBody, values.id));
+                }
+                else {
+                    dispatch(PostEmployeeTypeSubmit(jsonBody));
+                }
             }
-            else {
-                dispatch(PostEmployeeTypeSubmit(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false })}   
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

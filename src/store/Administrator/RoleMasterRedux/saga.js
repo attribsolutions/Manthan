@@ -43,8 +43,7 @@ function* Delete_Roles_GenratorFunction({ config }) {                       //De
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_Roles_GenratorFunction({ config }) {    
-  debugger                     //Edit Role Master
+function* Edit_Roles_GenratorFunction({ config }) {                         //Edit Role Master
   const { btnmode } = config;
   try {
     const response = yield call(Role_Master_Edit_API, config);
