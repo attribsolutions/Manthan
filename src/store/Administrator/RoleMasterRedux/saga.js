@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
   Role_Master_Delete_API,
   Role_Master_Edit_API,
@@ -20,7 +20,6 @@ import {
   DELETE_ROLE_LIST_ID,
   UPDATE_ROLE_LIST_ID
 } from "./actionTypes";
-import { loginJsonBody } from "../../CommonAPI/CommonJsonBody"
 
 function* Get_Roles_GenratorFunction() {                                    //Get Role List
   try {

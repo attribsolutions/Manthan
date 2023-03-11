@@ -26,7 +26,7 @@ import {
   saveHPagesSuccess,
   updateHPages,
 } from "../../../store/Administrator/HPagesRedux/actions";
-import { fetchModelsList, PostModelsSubmitSuccess } from "../../../store/Administrator/ModulesRedux/actions";
+import { getModuleList, saveModuleMasterSuccess } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
@@ -110,7 +110,7 @@ const PageMaster = (props) => {
   useEffect(() => {
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    dispatch(fetchModelsList());
+    dispatch(getModuleList());
 
     if (!(editDataGatingFromList === undefined)) {
    
@@ -190,7 +190,7 @@ const PageMaster = (props) => {
 
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
-      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(saveModuleMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -198,7 +198,7 @@ const PageMaster = (props) => {
       }))
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
-      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(saveModuleMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,

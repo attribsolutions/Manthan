@@ -20,12 +20,12 @@ const Employee_List = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      tableList: state.M_EmployeesReducer.employeeList,
-      editData: state.M_EmployeesReducer.editData,
-      updateMsg: state.M_EmployeesReducer.updateMessage,
-      deleteMsg: state.M_EmployeesReducer.deleteMessage,
+      tableList: state.EmployeesReducer.employeeList,
+      editData: state.EmployeesReducer.editData,
+      updateMsg: state.EmployeesReducer.updateMessage,
+      deleteMsg: state.EmployeesReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.M_EmployeesReducer.postMessage,
+      postMsg: state.EmployeesReducer.postMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );

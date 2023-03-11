@@ -375,6 +375,13 @@ export const loginIsSCMCompany = () => {//+++++++++++++++++++++ Seesion loginPar
     return IsSCMCompany
 }
 
+export const loginJsonBody = () => ({
+    UserID: loginUserID(),
+    RoleID: loginRoleID(),
+    CompanyID: loginCompanyID(),
+    PartyID: loginPartyID()
+})
+
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
     const date = new Date(inputDate);
     let month = date.getMonth() + 1;

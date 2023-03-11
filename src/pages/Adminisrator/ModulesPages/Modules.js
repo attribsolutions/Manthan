@@ -12,9 +12,9 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostModelsSubmit,
+    saveModuleMaster,
     updateModuleID,
-    PostModelsSubmitSuccess,
+    saveModuleMasterSuccess,
     editModuleIDSuccess,
     updateModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
@@ -148,7 +148,7 @@ const Modules = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(PostModelsSubmitSuccess({ Status: false }))
+            dispatch(saveModuleMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -171,7 +171,7 @@ const Modules = (props) => {
             }
         } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             saveDissable(false);//save Button Is enable function
-            dispatch(PostModelsSubmitSuccess({ Status: false }))
+            dispatch(saveModuleMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -230,7 +230,7 @@ const Modules = (props) => {
                 console.log("update jsonBody", jsonBody)
             }
             else {
-                dispatch(PostModelsSubmit(jsonBody));
+                dispatch(saveModuleMaster(jsonBody));
                 console.log("post jsonBody", jsonBody)
             }
         }

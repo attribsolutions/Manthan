@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
   GetPriceList_For_Dropdown,
   GetCompanyByDivisionTypeID_For_Dropdown,
@@ -12,7 +12,6 @@ import {
   Party_Master_Update_API,
   GetAddressTypes_For_Dropdown,
 } from "../../../helpers/backend_helper";
-import { loginJsonBody } from "../../CommonAPI/CommonJsonBody";
 import {
   deletePartyIDSuccess,
   editPartyIDSuccess,
@@ -49,15 +48,11 @@ function* Get_Party_GenratorFunction() {
       return result
     }
     const data1 = response.Data.map((index) => {
-      // index["StateId"] = index.State.id;
       index["State"] = index.State.Name;
-      // index["DistrictId"] = index.District.id;
       index["District"] = index.District.Name;
-      // index["CompanyId"] = index.Company.id;
       index['Company'] = index.Company.Name;
-      // index["PartyTypeId"] = index.PartyType.id;
       index['PartyTypeName'] = index.PartyType.Name;
-      // index["PriceListId"] = index.PriceList.id;
+
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceListName"] = index.PriceList.Name; }
       index["PartyAddress"] = address(index);
