@@ -102,6 +102,7 @@ export const ROLE_ACCESS = "/RoleAccess"
 
 // EmployeeType API
 export const EMPLOYEE_TYPE_API = '/EmployeeTypes'
+export const EMPLOYEE_TYPE_FILTER_API = '/EmployeeTypesFilter'
 
 // PartyType API
 export const PARTYTYPES_API = '/PartyTypes'

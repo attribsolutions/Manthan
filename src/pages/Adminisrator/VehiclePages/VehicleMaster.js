@@ -23,15 +23,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import {
-    PostMethodForVehicleMaster,
-    getMethodForVehicleList,
+    saveVehicleMaster,
+    getVehicleList,
     getMethod_DriverList_ForDropDown,
-    getMethod_VehicleTypes_ForDropDown,
-    PostMethod_ForVehicleMasterSuccess,
-    getMethod_ForVehicleListSuccess,
-    editVehicleTypeSuccess,
-    updateVehicleTypeID,
-    updateVehicleTypeIDSuccess
+    getVehicleType_for_dropdown,
+    saveVehicleMasterSuccess,
+    getVehicleListSuccess,
+    editVehicleID_Success,
+    updateVehicleID,
+    updateVehicleID_Success
 } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
@@ -44,11 +44,10 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
 
 const VehicleMaster = (props) => {
 
@@ -67,7 +66,6 @@ const VehicleMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -89,8 +87,8 @@ const VehicleMaster = (props) => {
         const page_Id = pageId.VEHICLE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getMethodForVehicleList());
-        dispatch(getMethod_VehicleTypes_ForDropDown());
+        dispatch(getVehicleList());
+        dispatch(getVehicleType_for_dropdown());
     }, []);
 
     const location = { ...history.location }
@@ -138,7 +136,6 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-
                 const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -153,7 +150,7 @@ const VehicleMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
-                dispatch(editVehicleTypeSuccess({ Status: false }))
+                dispatch(editVehicleID_Success({ Status: false }))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
@@ -161,9 +158,8 @@ const VehicleMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+            dispatch(saveVehicleMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -183,8 +179,7 @@ const VehicleMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
+            dispatch(getVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -197,14 +192,12 @@ const VehicleMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: url.VEHICLE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
-            dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+            dispatch(updateVehicleID_Success({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -228,35 +221,33 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-    const SaveHandler = (event) => {
-        debugger
+    const SaveHandler = async (event) => {
         event.preventDefault();
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-        if (formValid(state, setState)) {
-            debugger
-            const jsonBody = JSON.stringify({
+                const jsonBody = JSON.stringify({
 
-                VehicleNumber: values.VehicleNumber,
-                Description: values.Description,
-                VehicleType: values.VehicleTypeName.value,
-                Party: loginPartyID(),
-                Company: loginCompanyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+                    VehicleNumber: values.VehicleNumber,
+                    Description: values.Description,
+                    VehicleType: values.VehicleTypeName.value,
+                    Party: loginPartyID(),
+                    Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
 
-            saveDissable(true);//save Button Is dissable function
-
-            if (pageMode === mode.edit) {
-                dispatch(updateVehicleTypeID(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateVehicleID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveVehicleMaster({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(PostMethodForVehicleMaster(jsonBody));
-                console.log(jsonBody)
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -276,14 +267,12 @@ const VehicleMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
                                                     <Row className="mt-1">
-
-                                                        {/*  */}
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.VehicleTypeName}</Label>
@@ -304,6 +293,7 @@ const VehicleMaster = (props) => {
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
+
                                                         <Col md="1" className="mx-n1">  </Col>
                                                         <Col md="4">
                                                             <FormGroup className="mb-2 col col-sm-9 ">
@@ -326,8 +316,8 @@ const VehicleMaster = (props) => {
                                                                 )}
                                                             </FormGroup>
                                                         </Col>
-                                                        <Row>
 
+                                                        <Row>
                                                             <Col md="3">
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.Description} </Label>
@@ -355,6 +345,7 @@ const VehicleMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2} className="mt-3">
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"VehicleMaster"}

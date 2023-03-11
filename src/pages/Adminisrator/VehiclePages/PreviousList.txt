@@ -13,12 +13,12 @@ import VehicleMaster from "./VehicleMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-    deleteVehicleTypeIDSuccess,
-    updateVehicleTypeIDSuccess,
-    getMethodForVehicleList,
-    editVehicleTypeId,
-    delete_VehicleType_ID,
-    PostMethod_ForVehicleMasterSuccess,
+    deleteVehicleID_Success,
+    updateVehicleID_Success,
+    getVehicleList,
+    editVehicleID,
+    deleteVehicleID,
+    saveVehicleMasterSuccess,
 } from "../../../store/Administrator/VehicleRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
@@ -55,25 +55,25 @@ const VehicleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMethodForVehicleList());
+    dispatch(getVehicleList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+      dispatch(updateVehicleID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getMethodForVehicleList,
+          AfterResponseAction: getVehicleList,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+      dispatch(updateVehicleID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -86,17 +86,17 @@ const VehicleList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteVehicleTypeIDSuccess({ Status: false }));
+      dispatch(deleteVehicleID_Success({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getMethodForVehicleList,
+          AfterResponseAction: getVehicleList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteVehicleTypeIDSuccess({ Status: false}));
+      dispatch(deleteVehicleID_Success({ Status: false}));
       dispatch(
         AlertState({
           Type: 3,
@@ -111,9 +111,9 @@ const VehicleList = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+        dispatch(saveVehicleMasterSuccess({ Status: false }))
         tog_center();
-        dispatch(getMethodForVehicleList());
+        dispatch(getVehicleList());
         dispatch(AlertState({
             Type: 1,
             Status: true,
@@ -122,7 +122,7 @@ const VehicleList = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true)) {
-        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+        dispatch(saveVehicleMasterSuccess({ Status: false }))
         dispatch(AlertState({
             Type: 4,
             Status: true,
@@ -189,8 +189,8 @@ const VehicleList = (props) => {
       ButtonMsgLable: "vehicle Type",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editVehicleTypeId,
-      deleteActionFun: delete_VehicleType_ID
+      editActionFun: editVehicleID,
+      deleteActionFun: deleteVehicleID
     })
   ];
 

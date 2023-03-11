@@ -214,7 +214,7 @@ export const Delete_RoleAccess_Api = (role, division, company) => del(`${url.DEL
 
 // Employee Type API
 export const Employee_Type_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_TYPE_API, jsonBody, btnId)// post api
-export const get_EmployeeType_List_Api = () => get(url.EMPLOYEE_TYPE_API) // get api
+export const get_EmployeeType_List_Api = (filters) => post(url.EMPLOYEE_TYPE_FILTER_API,filters) // get api
 export const detelet_EmployeeType_List_Api = ({ deleteId, btnId }) => del(`${url.EMPLOYEE_TYPE_API}/${deleteId}`, btnId) // delete api
 export const edit_EmployeeType_List_Api = ({ editId, btnId }) => get(`${url.EMPLOYEE_TYPE_API}/${editId}`, btnId) // edit api
 export const update_EmployeeType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.EMPLOYEE_TYPE_API}/${updateId}`, jsonBody, btnId)// update 
@@ -248,26 +248,26 @@ export const edit_Category_List_Api = ({ editId, btnId }) => get(`${url.CATEGORY
 export const update_Category_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.CATEGORY_API}/${updateId}`, jsonBody, btnId)// update
 
 //Vehicle API
-export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
-export const get_Vehicle_API = (data) => post(url.VEHICLE_FILTER_API, data)//  get Api 
-export const get_VehicleTypes_API = (data) => post(url.VEHICLETYPES_DROPDOWN, data)//dropDown
-export const detelet_VehicleType_List_Api = (id) => del(`${url.VEHICLE_API}/${id}`) // delete api
-export const edit_VehicleType_List_Api = (id) => get(`${url.VEHICLE_API}/${id}`) // edit api
-export const update_VehicleType_List_Api = (data, id) => put(`${url.VEHICLE_API}/${id}`, data)// update
+export const Vehicle_Get_API = (filters) => post(url.VEHICLE_FILTER_API, filters)//  get Api Using Post Method
+export const Vehicle_Post_API = ({ jsonBody, btnId }) => post(url.VEHICLE_API, jsonBody, btnId)// post api
+export const Vehicle_Edit_API = ({ editId, btnId }) => get(`${url.VEHICLE_API}/${editId}`,btnId) // edit api
+export const Vehicle_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.VEHICLE_API}/${updateId}`, jsonBody,btnId)// update API
+export const Vehicle_Delete_API = ({ deleteId, btnId }) => del(`${url.VEHICLE_API}/${deleteId}`,btnId) // delete api
+export const VehicleTypes_Get_API_for_Dropdown = (filters) => post(url.VEHICLETYPES_DROPDOWN, filters)// Vehicle Type dropDown API
 
 //CompanyGroup API
 export const CompanyGroup_Post_API = ({ jsonBody, btnId }) => post(url.COMPANYGROUP_API, jsonBody, btnId)// post api
 export const CompanyGroup_Get_API = () => get(url.COMPANYGROUP_API)//  get Api 
-export const CompanyGroup_Delete_API = ({ deleteId, btnId }) => del(`${url.COMPANYGROUP_API}/${deleteId}`, btnId) // delete api
 export const CompanyGroup_edit_API = ({ editId, btnId }) => get(`${url.COMPANYGROUP_API}/${editId}`, btnId) // edit api
 export const CompanyGroup_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.COMPANYGROUP_API}/${updateId}`, jsonBody, btnId)// update
+export const CompanyGroup_Delete_API = ({ deleteId, btnId }) => del(`${url.COMPANYGROUP_API}/${deleteId}`, btnId) // delete api
 
 //Driver api
-export const Post_Driver_API = ({ jsonBody, btnId }) => post(url.DRIVER_API, jsonBody, btnId)// post api
 export const get_DriverList_API = (jsonBody) => post(url.DRIVER_FILTER_API, jsonBody)//  get Api 
-export const detelet_DriverType_List_Api = ({ deleteId, btnId }) => del(`${url.DRIVER_API}/${deleteId}`, btnId) // delete api
+export const Post_Driver_API = ({ jsonBody, btnId }) => post(url.DRIVER_API, jsonBody, btnId)// post api
 export const edit_DriverType_List_Api = ({ editId, btnId }) => get(`${url.DRIVER_API}/${editId}`, btnId) // edit api
 export const update_DriverType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.DRIVER_API}/${updateId}`, jsonBody, btnId)// update
+export const detelet_DriverType_List_Api = ({ deleteId, btnId }) => del(`${url.DRIVER_API}/${deleteId}`, btnId) // delete api
 
 //PriceList api
 export const Save_PriceList_API = ({ jsonBody, btnId }) => post(url.PRICE_LIST, jsonBody, btnId)// post api
