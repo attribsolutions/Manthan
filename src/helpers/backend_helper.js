@@ -259,11 +259,11 @@ export const edit_VehicleType_List_Api = (id) => get(`${url.VEHICLE_API}/${id}`)
 export const update_VehicleType_List_Api = (data, id) => put(`${url.VEHICLE_API}/${id}`, data)// update
 
 //CompanyGroup API
-export const Post_CompanyGroup_API = (data) => post(url.COMPANYGROUP_API, data)// post api
-export const get_CompanyGroupList_API = () => get(url.COMPANYGROUP_API)//  get Api 
-export const detelet_CompanyGroupType_List_Api = (id) => del(`${url.COMPANYGROUP_API}/${id}`) // delete api
-export const edit_CompanyGroupType_List_Api = (id) => get(`${url.COMPANYGROUP_API}/${id}`) // edit api
-export const update_CompanyGroupType_List_Api = (data, id) => put(`${url.COMPANYGROUP_API}/${id}`, data)// update
+export const CompanyGroup_Post_API = ({ jsonBody, btnId }) => post(url.COMPANYGROUP_API, jsonBody, btnId)// post api
+export const CompanyGroup_Get_API = () => get(url.COMPANYGROUP_API)//  get Api 
+export const CompanyGroup_Delete_API = ({ deleteId, btnId }) => del(`${url.COMPANYGROUP_API}/${deleteId}`, btnId) // delete api
+export const CompanyGroup_edit_API = ({ editId, btnId }) => get(`${url.COMPANYGROUP_API}/${editId}`, btnId) // edit api
+export const CompanyGroup_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.COMPANYGROUP_API}/${updateId}`, jsonBody, btnId)// update
 
 //Driver api
 export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api
