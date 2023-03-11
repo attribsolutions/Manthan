@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DriverMaster from "./DriverMaster";
 import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  getMethodForDriverList,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
+  deleteDriverID_Success,
+  updateDriverID_Success,
+  getDriverList,
+  editDriverID,
+  deleteDriverID,
+  saveDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -24,32 +24,31 @@ const DriverList = (props) => {
       editData: state.DriverReducer.editData,
       updateMsg: state.DriverReducer.updateMessage,
       deleteMsg: state.DriverReducer.deleteMessage,
-      postMsg: state.DriverReducer.PostDataMessage,
+      postMsg: state.DriverReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
   const action = {
-    getList: getMethodForDriverList,
-    editId: editDriverTypeId,
-    deleteId: delete_DriverType_ID,
-    postSucc: PostMethod_ForDriverMasterSuccess,
-    updateSucc: updateDriverTypeIDSuccess,
-    deleteSucc: deleteDriverTypeIDSuccess
+    getList: getDriverList,
+    editId: editDriverID,
+    deleteId: deleteDriverID,
+    postSucc: saveDriverMasterSuccess,
+    updateSucc: updateDriverID_Success,
+    deleteSucc: deleteDriverID_Success
   }
 
   useEffect(() => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getMethodForDriverList())
+    dispatch(getDriverList())
   }, []);
 
   const { pageField,userAccess=[] } = reducers
 
-  
-  return (
+    return (
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
       {

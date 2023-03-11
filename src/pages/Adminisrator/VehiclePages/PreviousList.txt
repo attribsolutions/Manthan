@@ -39,7 +39,7 @@ const VehicleList = (props) => {
       updateMessage: state.VehicleReducer.updateMessage,
       deleteMessage: state.VehicleReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.VehicleReducer.PostDataMessage,
+      PostAPIResponse: state.VehicleReducer.postMsg,
     })
   );
 

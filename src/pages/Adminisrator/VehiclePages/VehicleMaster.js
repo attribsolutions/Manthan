@@ -48,7 +48,7 @@ import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissab
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { getMethodForDriverList } from "../../../store/Administrator/DriverRedux/action";
+import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
 
 const VehicleMaster = (props) => {
 

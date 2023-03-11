@@ -28,7 +28,7 @@ const GeneralList = (props) => {
             updateMsg: state.GeneralReducer.updateMessage,
             deleteMsg: state.GeneralReducer.deleteMessage,
             userAccess: state.Login.RoleAccessUpdateData,
-            postMsg: state.GeneralReducer.PostDataMessage,
+            postMsg: state.GeneralReducer.postMsg,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );

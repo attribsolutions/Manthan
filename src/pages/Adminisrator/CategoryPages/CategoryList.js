@@ -25,7 +25,7 @@ const CategoryList = (props) => {
       updateMsg: state.CategoryReducer.updateMessage,
       deleteMsg: state.CategoryReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.CategoryReducer.PostDataMessage,
+      postMsg: state.CategoryReducer.postMsg,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );

@@ -7,7 +7,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
-  PostDataMessage: { Status: false },
+  postMsg: { Status: false },
   CategoryAPI: [],
   CategoryListData: [],
   deleteMessage: { Status: false },
@@ -21,7 +21,7 @@ const CategoryReducer = (state = INIT_STATE, action) => {
     case SAVE_CATEGORY_MASTER_SUCCESS:
       return {
         ...state,
-        PostDataMessage: action.payload,
+        postMsg: action.payload,
       }
 
     // get api
