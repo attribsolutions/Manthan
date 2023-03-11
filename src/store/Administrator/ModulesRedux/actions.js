@@ -14,27 +14,12 @@ import {
   UPDATE_MODULE_ID_SUCCESS
 } from "./actionType";
 
-export const saveModuleMaster = (data) => ({
-  type: SAVE_MODULE_MASTER,
-  data,
-});
-
-export const saveModuleMasterSuccess = (modulesSubmitSuccesss) => ({
-  type: SAVE_MODULE_MASTER_SUCCESS,
-  payload: modulesSubmitSuccesss,
-});
-
-export const saveModuleMasterError = (modulesSubmitError) => ({
-  type: POST_MODULES_SUBMIT_ERROR,
-  payload: modulesSubmitError,
-});
-
-export const getModuleList = () => ({
+export const getModuleList = () => ({// get List Action
   type: FETCH_MODULES_LIST,
 });
-export const getModuleListSuccess = (modulesList) => ({
+export const getModuleListSuccess = (resp) => ({// get List success
   type: FETCH_MODULES_LIST_SUCCESS,
-  payload: modulesList,
+  payload: resp,
 });
 
 export const getModuleListError = (modulesListError) => ({
@@ -42,33 +27,52 @@ export const getModuleListError = (modulesListError) => ({
   payload: modulesListError,
 });
 
-export const deleteModuleID = (id) => ({
+export const saveModuleMaster = (config = {}) => ({// save Action
+  type: SAVE_MODULE_MASTER,
+  config,
+});
+
+export const saveModuleMasterSuccess = (resp) => ({// Save  success
+  type: SAVE_MODULE_MASTER_SUCCESS,
+  payload: resp,
+});
+
+export const saveModuleMasterError = (modulesSubmitError) => ({
+  type: POST_MODULES_SUBMIT_ERROR,
+  payload: modulesSubmitError,
+});
+
+export const editModuleID = (config = {}) => ({// Edit Action
+  type: EDIT_MODULE_ID,
+  config,
+});
+
+export const editModuleIDSuccess = (resp) => ({// Edit  Success
+  type: EDIT_MODULE_ID_SUCCESS,
+  payload: resp,
+});
+
+export const updateModuleID = (config = {}) => ({// update  Action
+  type: UPDATE_MODULE_ID,
+  config,
+});
+
+export const updateModuleIDSuccess = (resp) => ({ //Update Success
+  type: UPDATE_MODULE_ID_SUCCESS,
+  payload: resp,
+});
+
+export const deleteModuleID = (config = {}) => ({// Delete  Action
   type: DELETE_MODULE_ID,
-  id,
+  config,
 });
-export const deleteModuleIDSuccess = (deleteModuleIDSuccess) => ({
+
+export const deleteModuleIDSuccess = (resp) => ({// Delete Success
   type: DELETE_MODULE_ID_SUCCESS,
-  payload: deleteModuleIDSuccess,
+  payload: resp,
 });
+
 export const deleteModuleIDError = (deleteModuleIDError) => ({
   type: DELETE_MODULE_ID_ERROR,
   payload: deleteModuleIDError,
-});
-
-export const editModuleID = (id,pageMode) => ({
-  type: EDIT_MODULE_ID,
-  id,pageMode
-});
-export const editModuleIDSuccess = (editData) => ({
-  type: EDIT_MODULE_ID_SUCCESS,
-  payload: editData,
-});
-
-export const updateModuleID = (data,id) => ({
-  type: UPDATE_MODULE_ID,
-  data,id,
-});
-export const updateModuleIDSuccess = (updateMessage) => ({
-  type: UPDATE_MODULE_ID_SUCCESS,
-  payload: updateMessage,
 });

@@ -34,11 +34,10 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-
 
 const Modules = (props) => {
 
@@ -101,7 +100,7 @@ const Modules = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -150,7 +149,6 @@ const Modules = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(saveModuleMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "dropdownAdd") {
@@ -166,11 +164,9 @@ const Modules = (props) => {
                     Status: true,
                     Message: postMsg.Message,
                     RedirectPath: url.MODULE_lIST,
-
                 }))
             }
         } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            saveDissable(false);//save Button Is enable function
             dispatch(saveModuleMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -184,13 +180,11 @@ const Modules = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.MODULE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateModuleIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -210,30 +204,30 @@ const Modules = (props) => {
         }
     }, [pageField])
 
-    //'Save' And 'Update' Button Handller
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                DisplayIndex: values.DisplayIndex,
-                isActive: values.isActive,
-                Icon: values.Icon,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    DisplayIndex: values.DisplayIndex,
+                    isActive: values.isActive,
+                    Icon: values.Icon,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(updateModuleID(jsonBody, values.id));
-                console.log("update jsonBody", jsonBody)
+                if (pageMode === mode.edit) {
+                    dispatch(updateModuleID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveModuleMaster({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(saveModuleMaster(jsonBody));
-                console.log("post jsonBody", jsonBody)
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -253,7 +247,7 @@ const Modules = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
 
                                     <Row className="">
                                         <Col md={12}  >
@@ -346,6 +340,7 @@ const Modules = (props) => {
                                                         <Row >
                                                             <Col sm={2}>
                                                                 <SaveButton pageMode={pageMode}
+                                                                    onClick={SaveHandler}
                                                                     userAcc={userPageAccessState}
                                                                     editCreatedBy={editCreatedBy}
                                                                     module={"Modules"}
