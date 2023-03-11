@@ -4,8 +4,8 @@ import {
     deleteModuleID,
     deleteModuleIDSuccess,
     editModuleID,
-    fetchModelsList,
-    PostModelsSubmitSuccess,
+    getModuleList,
+    saveModuleMasterSuccess,
     updateModuleIDSuccess
 } from "../../../store/actions";
 import Modules from "./Modules";
@@ -31,12 +31,12 @@ const ModulesList = () => {
     );
 
     const action = {
-        getList: fetchModelsList,
+        getList: getModuleList,
         editId: editModuleID,
         deleteId: deleteModuleID,
         updateSucc: updateModuleIDSuccess,
         deleteSucc: deleteModuleIDSuccess,
-        postSucc: PostModelsSubmitSuccess
+        postSucc: saveModuleMasterSuccess
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
@@ -44,7 +44,7 @@ const ModulesList = () => {
         const page_Id = pageId.MODULE_lIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(fetchModelsList());
+        dispatch(getModuleList());
     }, []);
 
     const { pageField ,userAccess=[]} = reducers

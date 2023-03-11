@@ -12,7 +12,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
+    deleteModuleID, deleteModuleIDSuccess, editModuleID, getModuleList,
     updateModuleIDSuccess
 } from "../../../store/actions";
 import Modules from "./Modules";
@@ -48,7 +48,7 @@ const ModulesList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(fetchModelsList());
+        dispatch(getModuleList());
     }, []);
 
     useEffect(() => {
@@ -79,7 +79,7 @@ const ModulesList = () => {
                     dispatch: dispatch,
                     response: updateAPIResponse,
                     resetAction: updateModuleIDSuccess,
-                    afterResponseAction: fetchModelsList
+                    afterResponseAction: getModuleList
                 }
             )
             tog_center()
@@ -95,7 +95,7 @@ const ModulesList = () => {
                     dispatch: dispatch,
                     response: deleteAPIResponse,
                     resetAction: deleteModuleIDSuccess,
-                    afterResponseAction: fetchModelsList
+                    afterResponseAction: getModuleList
                 }
             )
         }

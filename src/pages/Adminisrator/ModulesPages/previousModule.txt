@@ -15,9 +15,9 @@ import {
 } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostModelsSubmit,
+    saveModuleMaster,
     updateModuleID,
-    PostModelsSubmitSuccess,
+    saveModuleMasterSuccess,
     editModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -94,7 +94,7 @@ const Modules = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
-            dispatch(PostModelsSubmitSuccess({ Status: false }))
+            dispatch(saveModuleMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -113,7 +113,7 @@ const Modules = (props) => {
                 }))
             }
         } else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
-            dispatch(PostModelsSubmitSuccess({ Status: false }))
+            dispatch(saveModuleMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -141,7 +141,7 @@ const Modules = (props) => {
             dispatch(updateModuleID(jsonBody, EditData.id));
         }
         else {
-            dispatch(PostModelsSubmit(jsonBody));
+            dispatch(saveModuleMaster(jsonBody));
         }
     };
 

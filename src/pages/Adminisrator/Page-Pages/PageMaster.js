@@ -25,11 +25,11 @@ import {
   AlertState,
   Breadcrumb_inputName,
   editHPagesIDSuccess,
-  fetchModelsList,
+  getModuleList,
   getPageAccess_DropDown_API,
   getPageList,
   getPageListSuccess,
-  PostModelsSubmitSuccess,
+  saveModuleMasterSuccess,
   saveHPages,
   saveHPagesSuccess,
   updateHPages,
@@ -127,7 +127,7 @@ const PageMaster = (props) => {
   }, [userAccess])
 
   useEffect(() => {
-    dispatch(fetchModelsList());
+    dispatch(getModuleList());
     dispatch(getPageAccess_DropDown_API());
     dispatch(getPageType());
   }, [dispatch]);
@@ -303,7 +303,7 @@ const PageMaster = (props) => {
 
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
-      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(saveModuleMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -311,7 +311,7 @@ const PageMaster = (props) => {
       }))
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
-      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(saveModuleMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
