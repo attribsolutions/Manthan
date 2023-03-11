@@ -14,8 +14,8 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editCompanyIDSuccess,
-  PostCompanySubmit,
-  PostCompanySubmitSuccess,
+  saveCompany,
+  saveCompany_Success,
   updateCompanyID,
   getCompanyGroup,
   updateCompanyIDSuccess
@@ -160,7 +160,7 @@ const CompanyModule = (props) => {
   useEffect(() => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-      dispatch(PostCompanySubmitSuccess({ Status: false }))
+      dispatch(saveCompany_Success({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values 
       saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
@@ -183,7 +183,7 @@ const CompanyModule = (props) => {
     }
     else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
       saveDissable(false);//save Button Is enable function
-      dispatch(PostCompanySubmitSuccess({ Status: false }))
+      dispatch(saveCompany_Success({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -251,7 +251,7 @@ const CompanyModule = (props) => {
         dispatch(updateCompanyID(jsonBody, values.id,));
       }
       else {
-        dispatch(PostCompanySubmit(jsonBody));
+        dispatch(saveCompany(jsonBody));
       }
     }
   };
