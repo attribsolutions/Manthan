@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
 import { AvForm } from "availity-reactstrap-validation"
 import Select from "react-select";
-import { fetchCompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
+import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
 import {
     editItemSuccess,
     getBaseUnit_ForDropDown,
@@ -299,7 +299,7 @@ const ItemsMaster = (props) => {
     }, [])
 
     useEffect(() => {
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
         dispatch(getPartyListAPI());

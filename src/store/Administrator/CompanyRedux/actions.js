@@ -14,26 +14,26 @@ import {
   UPDATE_COMPANY_ID_SUCCESS
 } from "./actionType";
 
-export const PostCompanySubmit = (data) => ({
+export const saveCompany = (data) => ({
   type: POST_COMPANY_SUBMIT,
   data,
 });
 
-export const PostCompanySubmitSuccess = (data) => ({
+export const saveCompany_Success = (data) => ({
   type: POST_COMPANY_SUBMIT_SUCCESS,
   payload: data,
 });
 
 // Fetch Modules get Data Actions 
-export const fetchCompanyList = (data) => ({
+export const getcompanyList = (data) => ({
   type: FETCH_COMPANY_LIST,
   data,
 });
-export const fetchCompanyListSuccess = (companyList) => ({
+export const getCompanyListSuccess = (companyList) => ({
   type: FETCH_COMPANY_LIST_SUCCESS,
   payload: companyList,
 });
-export const fetchCompanyListError = (modulesListError) => ({
+export const getCompanyListError = (modulesListError) => ({
   type: FETCH_COMPANY_LIST_ERROR,
   payload: modulesListError,
 });
