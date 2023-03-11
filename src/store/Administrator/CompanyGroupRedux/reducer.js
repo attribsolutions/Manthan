@@ -8,7 +8,7 @@ import {
 
 const INIT_STATE = {
   CompanyGroupList: [],
-  PostDataMessage: { Status: false },
+  postMsg: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
   deleteMessage: { Status: false },
@@ -19,7 +19,7 @@ const CompanyGroupReducer = (state = INIT_STATE, action) => {
     case SAVE_COMPANY_GROUP_MASTER_SUCCESS:
       return {
         ...state,
-        PostDataMessage: action.payload,
+        postMsg: action.payload,
       }
 
     case GET_COMPANY_GROUP_LIST_SUCCESS:

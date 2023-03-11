@@ -69,7 +69,7 @@ const GeneralMaster = (props) => {
         pageField,
         updateMsg,
         userAccess } = useSelector((state) => ({
-            postMsg: state.GeneralReducer.PostDataMessage,
+            postMsg: state.GeneralReducer.postMsg,
             updateMsg: state.GeneralReducer.updateMessage,
             Type: state.GeneralReducer.Type,
             userAccess: state.Login.RoleAccessUpdateData,

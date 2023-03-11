@@ -9,7 +9,7 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-    PostDataMessage: { Status: false },
+    postMsg: { Status: false },
     GeneralList: [],
     Type: [],
     deleteMessage: { Status: false },
@@ -24,7 +24,7 @@ const GeneralReducer = (state = INIT_STATE, action) => {
         case POST_METHOD_FOR_GENERAL_API_SUCCESS:
             return {
                 ...state,
-                PostDataMessage: action.payload,
+                postMsg: action.payload,
             }
 
         // get api

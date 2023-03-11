@@ -67,7 +67,7 @@ const CategoryMaster = (props) => {
         pageField,
         updateMsg,
         userAccess } = useSelector((state) => ({
-            postMsg: state.CategoryReducer.PostDataMessage,
+            postMsg: state.CategoryReducer.postMsg,
             updateMsg: state.CategoryReducer.updateMessage,
             CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
             userAccess: state.Login.RoleAccessUpdateData,

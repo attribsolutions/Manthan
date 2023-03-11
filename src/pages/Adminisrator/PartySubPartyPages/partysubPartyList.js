@@ -7,7 +7,7 @@ import {
   deletePartySubPartySuccess,
   editPartySubParty,
   getPartySubPartylist,
-  postPartySubPartySuccess,
+  savePartySubPartySuccess,
   updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import PartySubParty from "./PartySubParty";
@@ -33,7 +33,7 @@ const PartySubPartyList = () => {
     getList: getPartySubPartylist,
     editId: editPartySubParty,
     deleteId: deletePartySubParty,
-    postSucc: postPartySubPartySuccess,
+    postSucc: savePartySubPartySuccess,
     updateSucc: updatePartySubPartySuccess,
     deleteSucc: deletePartySubPartySuccess
   }

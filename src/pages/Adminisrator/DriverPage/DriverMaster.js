@@ -15,12 +15,12 @@ import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/act
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import {
-    PostMethodForDriverMaster,
-    PostMethod_ForDriverMasterSuccess,
-    getMethod_ForDriverListSuccess,
-    editDriverTypeSuccess,
-    updateDriverTypeID,
-    updateDriverTypeIDSuccess,
+    saveDriverMaster,
+    saveDriverMasterSuccess,
+    getDriverListSuccess,
+    editDriverID_Success,
+    updateDriverID,
+    updateDriverID_Success,
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -33,7 +33,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -63,7 +63,7 @@ const DriverMaster = (props) => {
         pageField,
         userAccess,
     } = useSelector((state) => ({
-        postMsg: state.DriverReducer.PostDataMessage,
+        postMsg: state.DriverReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         updateMsg: state.DriverReducer.updateMessage,
         pageField: state.CommonPageFieldReducer.pageField
@@ -120,7 +120,7 @@ const DriverMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, DOB, Address } = hasEditVal// new change
+                const { id, Name, DOB, Address } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -136,15 +136,14 @@ const DriverMaster = (props) => {
                 dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
-            dispatch(editDriverTypeSuccess({ Status: false }))
+            dispatch(editDriverID_Success({ Status: false }))
         }
     }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+            dispatch(saveDriverMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
@@ -163,8 +162,7 @@ const DriverMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(getMethod_ForDriverListSuccess({ Status: false }))
+            dispatch(getDriverListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -177,14 +175,12 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
             history.push({
                 pathname: url.DRIVER_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
-            dispatch(updateDriverTypeIDSuccess({ Status: false }));
+            dispatch(updateDriverID_Success({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -195,40 +191,39 @@ const DriverMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                Address: values.Address,
-                DOB: values.DOB,
-                Party:loginPartyID(),
-                Company:loginCompanyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    Address: values.Address,
+                    DOB: values.DOB,
+                    Party: loginPartyID(),
+                    Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(updateDriverTypeID(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateDriverID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveDriverMaster({ jsonBody, btnId }));
+                }
             }
-
-            else {
-                dispatch(PostMethodForDriverMaster(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -242,9 +237,7 @@ const DriverMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
-                        <MetaTags>
-                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
-                        </MetaTags>
+                        <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
@@ -254,7 +247,7 @@ const DriverMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -276,12 +269,12 @@ const DriverMaster = (props) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
+
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
@@ -328,6 +321,7 @@ const DriverMaster = (props) => {
                                                                 <Col sm={2}>
                                                                     <SaveButton
                                                                         pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"DriverMaster"}

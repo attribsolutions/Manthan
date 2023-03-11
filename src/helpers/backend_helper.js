@@ -263,11 +263,11 @@ export const CompanyGroup_edit_API = ({ editId, btnId }) => get(`${url.COMPANYGR
 export const CompanyGroup_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.COMPANYGROUP_API}/${updateId}`, jsonBody, btnId)// update
 
 //Driver api
-export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api
-export const get_DriverList_API = (data) => post(url.DRIVER_FILTER_API, data)//  get Api 
-export const detelet_DriverType_List_Api = (id) => del(`${url.DRIVER_API}/${id}`) // delete api
-export const edit_DriverType_List_Api = (id) => get(`${url.DRIVER_API}/${id}`) // edit api
-export const update_DriverType_List_Api = (data, id) => put(`${url.DRIVER_API}/${id}`, data)// update
+export const Post_Driver_API = ({ jsonBody, btnId }) => post(url.DRIVER_API, jsonBody, btnId)// post api
+export const get_DriverList_API = (jsonBody) => post(url.DRIVER_FILTER_API, jsonBody)//  get Api 
+export const detelet_DriverType_List_Api = ({ deleteId, btnId }) => del(`${url.DRIVER_API}/${deleteId}`, btnId) // delete api
+export const edit_DriverType_List_Api = ({ editId, btnId }) => get(`${url.DRIVER_API}/${editId}`, btnId) // edit api
+export const update_DriverType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.DRIVER_API}/${updateId}`, jsonBody, btnId)// update
 
 //PriceList api
 export const Save_PriceList_API = ({ jsonBody, btnId }) => post(url.PRICE_LIST, jsonBody, btnId)// post api
@@ -326,10 +326,10 @@ export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`
 
 // PartySubParty API
 export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY_LIST}`)// get list api
-export const PartySubParty_Post_API = (data) => post(url.PARTY_SUB_PARTY, data)// post api
-export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id}`)// delete api
-export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api
-export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY}/${id}`, data)// update api
+export const PartySubParty_Post_API = ({ jsonBody, btnId }) => post(url.PARTY_SUB_PARTY, jsonBody, btnId)// post api
+export const PartySubParty_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_SUB_PARTY}/${deleteId}`,btnId)// delete api
+export const PartySubParty_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_SUB_PARTY}/${editId}`,btnId)// edit api
+export const PartySubParty_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_SUB_PARTY}/${updateId}`,jsonBody,btnId)// update api
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
 //PartyItems API

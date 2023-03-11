@@ -7,71 +7,70 @@ import {
   GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS,
   GET_PARTY_SUB_PARTY_LIST,
   GET_PARTY_SUB_PARTY_LIST_SUCCESS,
-  POST_PARTY_SUB_PARTY,
+  SAVE_PARTY_SUB_PARTY,
   POST_PARTY_SUB_PARTY_SUCCESS,
   UPDATE_PARTY_SUB_PARTY,
   UPDATE_PARTY_SUB_PARTY_SUCCESS
 } from "./actionType";
 
-export const postPartySubParty = (data) => ({
-  type: POST_PARTY_SUB_PARTY,
-  data,
-});
 
-export const postPartySubPartySuccess = (data) => ({
-  type: POST_PARTY_SUB_PARTY_SUCCESS,
-  payload: data,
-});
 
-// get Product Category Type list 
-export const getPartySubPartylist = () => ({
+export const getPartySubPartylist = () => ({                                 // get List Api
   type: GET_PARTY_SUB_PARTY_LIST,
 });
 
-export const getPartySubPartylistSuccess = (list) => ({
+export const getPartySubPartylistSuccess = (list) => ({                          // get List success
   type: GET_PARTY_SUB_PARTY_LIST_SUCCESS,
   payload: list,
 });
 
-////delete api
-export const deletePartySubParty = (id) => ({
-  type: DELETE_PARTY_SUB_PARTY,
-  id,
-
-});
-export const deletePartySubPartySuccess = (msg) => ({
-  type: DELETE_PARTY_SUB_PARTY_SUCCESS,
-  payload: msg
+export const savePartySubParty = (config = {}) => ({                            // save Action
+  type: SAVE_PARTY_SUB_PARTY,
+  config,
 });
 
-// edit api
-export const editPartySubParty = (id, pageMode) => ({
+export const savePartySubPartySuccess = (resp) => ({                             // Save  success
+  type: POST_PARTY_SUB_PARTY_SUCCESS,
+  payload: resp,
+});
+
+export const editPartySubParty = (config = {}) => ({                                      // Edit Action 
   type: EDIT_PARTY_SUB_PARTY,
-  id, pageMode
+  config,
 })
 
-export const editPartySubPartySuccess = (editData) => ({
+export const editPartySubPartySuccess = (editData) => ({                              // Edit  Success
   type: EDIT_PARTY_SUB_PARTY_SUCCESS,
   payload: editData,
 })
 
-// update api
-export const updatePartySubParty = (updateData, ID) => ({
+export const updatePartySubParty = (config = {}) => ({                              // update  Action
   type: UPDATE_PARTY_SUB_PARTY,
+  config,
 })
 
-export const updatePartySubPartySuccess = (msg) => ({
+export const updatePartySubPartySuccess = (resp) => ({                              //Update Success
   type: UPDATE_PARTY_SUB_PARTY_SUCCESS,
-  payload: msg,
+  payload: resp,
 })
 
-// get PartySubParty List in party dropdown
-export const getPartySubParty_For_party_dropdown = (id) => ({
+
+export const getPartySubParty_For_party_dropdown = (id) => ({                     // get PartySubParty List in party dropdown
   type: GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
   id,
 });
 
-export const getPartySubParty_For_party_dropdownSuccess = (list) => ({
+export const getPartySubParty_For_party_dropdownSuccess = (list) => ({           // get PartySubParty List in party dropdownSuccess
   type: GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS,
   payload: list,
+});
+
+export const deletePartySubParty = (config = {}) => ({                          //Delete  Action
+  type: DELETE_PARTY_SUB_PARTY,
+  config,
+
+});
+export const deletePartySubPartySuccess = (resp) => ({                       // Delete Success
+  type: DELETE_PARTY_SUB_PARTY_SUCCESS,
+  payload: resp
 });

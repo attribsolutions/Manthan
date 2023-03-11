@@ -56,7 +56,7 @@ const VehicleMaster = (props) => {
         VehicleTypes,
         DriverList_redux,
         RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-            PostAPIResponse: state.VehicleReducer.PostDataMessage,
+            PostAPIResponse: state.VehicleReducer.postMsg,
             VehicleList: state.VehicleReducer.VehicleList,
             Divisions: state.ItemMastersReducer.Division,
             VehicleTypes: state.VehicleReducer.VehicleTypes,

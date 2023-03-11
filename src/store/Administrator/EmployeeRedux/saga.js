@@ -19,42 +19,36 @@ import {
   getEmployeelistSuccess,
   deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, Get_CompanyName_By_EmployeeTypeID_Success,
 } from "./action";
-import { CommonConsole, loginCompanyID, loginJsonBody, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-
-function* DesignationID_saga() { ///  DesignationID dropdown list
+function* DesignationID_saga() { // DesignationID dropdown list
   try {
     const response = yield call(getDesignationID_For_Dropdown);
     yield put(getDesignationIDSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-
-///State  dropdown api
-function* State_saga() {
+function* State_saga() { // State  dropdown api
   try {
     const response = yield call(getState_For_Dropdown);
     yield put(getStateESuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* Save_Employee_GenFunc({ config }) { ///Save api
+function* Save_Employee_GenFunc({ config }) { // post api
   try {
     const response = yield call(save_Employee_API, config);
     yield put(PostEmployeeSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* Get_EmployeeList_GenFunc() {/// get api  
+function* Get_EmployeeList_GenFunc() { // get api  
   try {
     const filters = loginJsonBody();
     const response = yield call(get_EmployeelistApi, filters);
     yield put(getEmployeelistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
-
 
 function* Delete_EmployeeID_GenFunc({ config }) {//// delete api 
   try {
