@@ -170,8 +170,8 @@ export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
 export const Items_Master_Get_API = () => get(url.Items_MASTER_API)//get api
 export const Items_Master_Post_API = (data) => post(url.Items_MASTER_API, data)// post api
-export const Items_Master_Delete_API = (id) => del(`${url.Items_MASTER_API}/${id}`)// delete api
-export const Items_Master_Edit_API = (id) => get(`${url.Items_MASTER_API}/${id}`)// edit api
+export const Items_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.Items_MASTER_API}/${deleteId}`, btnId)// delete api
+export const Items_Master_Edit_API = ({ editId, btnId }) => get(`${url.Items_MASTER_API}/${editId}`, btnId)// edit api
 export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
 
 export const BaseUnit_Get_DropDown_API = () => get(url.BASEUNIT_DROPDOWN_API)// BaseUnit DropDown api
