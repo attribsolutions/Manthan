@@ -486,7 +486,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
             document.getElementById(btnId).disabled = state;
 
             // const loginBtn = document.getElementById(event.target);
-            // document.getElementById("preloader").style.display = state ? "block" : "none";
+            document.getElementById("preloader").style.display = state ? "block" : "none";
 
             // if (state) {
             //     loginBtn.classList.add("loading");

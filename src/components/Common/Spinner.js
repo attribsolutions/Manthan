@@ -43,7 +43,7 @@ const Spinner = () => {
             {/* <div id="overlay" style={{ display: SpinnerState ? "block1" : "none" }}> */}
                 <div id="overlay" >
                 <div className="cv-spinner">
-                    <span className="spinner"></span>
+                    {/* <span className="spinner"></span> */}
                     {/* <button className="btn btn-primary" type="button" disabled>
                     <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
                     Loading...

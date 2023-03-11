@@ -1,14 +1,14 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { delete_PriceList_API, get_PriceListByPartyType_API, Post_PriceList_API,edit_PriceList,update_PriceList, GetPriceList_For_Listpage } from "../../../helpers/backend_helper";
-import { delete_PriceListSuccess, getPriceListDataSuccess, postPriceListDataSuccess,editPriceListSuccess,updatePriceListSuccess, getPriceListPageSuccess } from "./action";
+import { delete_PriceListSuccess, getPriceListDataSuccess, savePriceMasterActionSuccess,editPriceListSuccess,updatePriceListSuccess, getPriceListPageSuccess } from "./action";
 import { DELETE_PRICE_LIST, GET_PRICE_LIST_DATA, POST_PRICE_LIST_DATA,EDIT_PRICE_LIST,UPDATE_PRICE_LIST,  GET_PRICE_LIST_PAGE } from "./actionType";
 
 
 function* Post_PriceList_GenratorFunction({ Data }) {
     try {
       const response = yield call(Post_PriceList_API, Data);
-      yield put(postPriceListDataSuccess(response));
+      yield put(savePriceMasterActionSuccess(response));
     } catch (error) { CommonConsole(error) }
   }
   

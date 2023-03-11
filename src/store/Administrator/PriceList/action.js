@@ -14,14 +14,14 @@ import {
 } from "./actionType";
 
 // post api
-export const postPriceListData = (Data,) => ({
+export const savePriceMasterAction = (config) => ({
     type: POST_PRICE_LIST_DATA,
-    Data, 
+    config,
 });
 
-export const postPriceListDataSuccess = (data,id) => ({
+export const savePriceMasterActionSuccess = (resp) => ({
     type: POST_PRICE_LIST_DATA_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 // get api 
@@ -35,10 +35,10 @@ export const getPriceListDataSuccess = (data) => ({
     payload: data,
 });
 
- //get listpage api
+//get listpage api
 export const getPriceListPage = () => ({
     type: GET_PRICE_LIST_PAGE,
-    
+
 });
 
 export const getPriceListPageSuccess = (data) => ({
@@ -47,34 +47,34 @@ export const getPriceListPageSuccess = (data) => ({
 });
 
 //delete
-export const delete_PriceList = (id) => ({
+export const delete_PriceList = (config) => ({
     type: DELETE_PRICE_LIST,
-    id,
+    config,
 });
 
-export const delete_PriceListSuccess = (data) => ({
+export const delete_PriceListSuccess = (resp) => ({
     type: DELETE_PRICE_LIST_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 //edit api
-export const  editPriceList = (id,pageMode) => ({
- type: EDIT_PRICE_LIST,
- id,pageMode
+export const editPriceList = (config) => ({
+    type: EDIT_PRICE_LIST,
+    config,
 })
-export const editPriceListSuccess = (editData) => ({
- type: EDIT_PRICE_LIST_SUCCESS,
- 
- payload: editData,
+export const editPriceListSuccess = (resp) => ({
+    type: EDIT_PRICE_LIST_SUCCESS,
+
+    payload: resp,
 })
 
 // update api
-export const updatePriceList = (updateData,ID) => ({
- type: UPDATE_PRICE_LIST,
- updateData, ID,
+export const updatePriceList = (config) => ({
+    type: UPDATE_PRICE_LIST,
+    config,
 })
-export const updatePriceListSuccess=(updateMessage) => ({
- type: UPDATE_PRICE_LIST_SUCCESS,
- payload: updateMessage,
+export const updatePriceListSuccess = (resp) => ({
+    type: UPDATE_PRICE_LIST_SUCCESS,
+    payload: resp,
 })
 

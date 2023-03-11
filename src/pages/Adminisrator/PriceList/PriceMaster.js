@@ -27,12 +27,12 @@ import {
     delete_PriceList,
     delete_PriceListSuccess,
     getPriceListData,
-    postPriceListData,
-    postPriceListDataSuccess,
+    savePriceMasterAction,
+    savePriceMasterActionSuccess,
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { breadcrumbReturn, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -102,7 +102,7 @@ const PriceMaster = (props) => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(postPriceListDataSuccess({ Status: false }))
+            dispatch(savePriceMasterActionSuccess({ Status: false }))
             dispatch(getPriceListData(partyType_dropdown_Select.value))
             setDropOpen(false)
             dispatch(AlertState({
@@ -225,7 +225,7 @@ const PriceMaster = (props) => {
                 pathNo = pathNo.concat(`${ele.value},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-            
+
 
             return JSON.stringify({
                 id: currentPrice.value,
@@ -242,17 +242,31 @@ const PriceMaster = (props) => {
         }
         return false
     }
-    function sub_Price_Add_Handler() {// add price save handler
+    function sub_Price_Add_Handler(event) {// add price save handler
+
+        event.preventDefault();
+        const btnId = event.target.id;
+        btnIsDissablefunc({ btnId, state: true })
+
         const jsonBody = commonSavefunction();
         if (jsonBody) {
-            dispatch(postPriceListData(jsonBody));
+            dispatch(savePriceMasterAction({ jsonBody, btnId }));
+        } else {
+            btnIsDissablefunc({ btnId, state: false })
         }
     }
 
-    function sub_Price_edit_Handler() {// edit price save handler
+    function sub_Price_edit_Handler(event) {// edit price save handler
+
+        event.preventDefault();
+        const btnId = event.target.id;
+        btnIsDissablefunc({ btnId, state: true })
+
         const jsonBody = commonSavefunction();
         if (jsonBody) {
-            dispatch(updatePriceList(jsonBody, currentPrice.value));
+            dispatch(updatePriceList({ jsonBody, updateId: currentPrice.value, btnId }));
+        } else {
+            btnIsDissablefunc({ btnId, state: false })
         }
     }
     //*************************** end SaveHandler************************** 
@@ -585,13 +599,14 @@ const PriceMaster = (props) => {
                                                         <button type="button" className="btn btn-light" onClick={dropOpen1Togle}>Close</button>
                                                         {currentPrice.mode === "save" ?
 
-                                                            <button type="button" className="btn btn-primary"
-                                                                onClick={() => { sub_Price_Add_Handler() }}
+                                                            <button type="button" className="btn btn-primary" id={"price_Add-btn"}
+                                                                onClick={(e) => { sub_Price_Add_Handler(e) }}
 
                                                             >Add</button>
                                                             :
                                                             <button type="button" className="btn btn-success w-md"
-                                                                onClick={() => { sub_Price_edit_Handler() }} >
+                                                                id={"price-edit-btn"}
+                                                                onClick={(e) => { sub_Price_edit_Handler(e) }} >
 
                                                                 <i className="fas fa-edit me-2"></i>
                                                                 update</button>
