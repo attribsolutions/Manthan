@@ -6,7 +6,7 @@ import {
   updateEmployeeIDSuccess,
   delete_Employee_ID,
   PostEmployeeSuccess,
-} from "../../../store/Administrator/M_EmployeeRedux/action";
+} from "../../../store/Administrator/EmployeeRedux/action";
 import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
