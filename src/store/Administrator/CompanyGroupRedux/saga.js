@@ -1,74 +1,71 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
-  PostMethod_ForCompanyGroupMasterSuccess,
-  getMethod_ForCompanyGroupListSuccess,
-  deleteCompanyGroupTypeIDSuccess,
-  editCompanyGroupTypeSuccess,
-  updateCompanyGroupTypeIDSuccess
+  saveCompanyGroupMasterSuccess,
+  getCompanyGroupListSuccess,
+  deleteCompanyGroupIDSuccess,
+  editCompanyGroupSuccess,
+  updateCompanyGroupIDSuccess
 } from "./action";
 import {
-  get_CompanyGroupList_API,
-  Post_CompanyGroup_API,
-  detelet_CompanyGroupType_List_Api,
-  edit_CompanyGroupType_List_Api,
-  update_CompanyGroupType_List_Api,
+  CompanyGroup_Get_API,
+  CompanyGroup_Post_API,
+  CompanyGroup_Delete_API,
+  CompanyGroup_edit_API,
+  CompanyGroup_update_API,
 } from "../../../helpers/backend_helper";
 import {
-  POST_METHOD_FOR_COMPANYGROUP_MASTER,
-  GET_METHOD_FOR_COMPANYGROUP_LIST,
-  DELETE_COMPANYGROUP_TYPE_ID,
-  EDIT_COMPANYGROUP_TYPE_ID,
-  UPDATE_COMPANYGROUP_TYPE_ID
+  SAVE_COMPANY_GROUP_MASTER,
+  GET_COMPANY_GROUP_LIST,
+  DELETE_COMPANY_GROUP_ID,
+  EDIT_COMPANY_GROUP_ID,
+  UPDATE_COMPANY_GROUP_ID
 } from "./actionType";
+
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-// Get List Page API
-function* Get_CompanyGroup_GenratorFunction() {
+function* Get_CompanyGroup_GenratorFunction() {//get API
   try {
-    const response = yield call(get_CompanyGroupList_API);
-    yield put(getMethod_ForCompanyGroupListSuccess(response.Data));
+    const response = yield call(CompanyGroup_Get_API);
+    yield put(getCompanyGroupListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-// post api
-function* Post_Method_For_CompanyGroup_GenFun({ data }) {
+function* Post_Method_For_CompanyGroup_GenFun({ config }) { //Post API
   try {
-    const response = yield call(Post_CompanyGroup_API, data);
-    yield put(PostMethod_ForCompanyGroupMasterSuccess(response));
+    const response = yield call(CompanyGroup_Post_API, config);
+    yield put(saveCompanyGroupMasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// delete api 
-function* Delete_CompanyGroupType_ID_GenratorFunction({ id }) {
+function* Edit_CompanyGroupType_ID_GenratorFunction({ config }) { // Edit API
+  const { btnmode } = config;
   try {
-    const response = yield call(detelet_CompanyGroupType_List_Api, id);
-    yield put(deleteCompanyGroupTypeIDSuccess(response))
+    const response = yield call(CompanyGroup_edit_API, config);
+    response.pageMode = btnmode;
+    yield put(editCompanyGroupSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// edit api
-function* Edit_CompanyGroupType_ID_GenratorFunction({ id, pageMode }) {
+function* Update_CompanyGroupType_ID_GenratorFunction({ config }) { // Update API
   try {
-    const response = yield call(edit_CompanyGroupType_List_Api, id);
-    response.pageMode = pageMode
-    yield put(editCompanyGroupTypeSuccess(response));
+    const response = yield call(CompanyGroup_update_API, config);
+    yield put(updateCompanyGroupIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-// update api
-function* Update_CompanyGroupType_ID_GenratorFunction({ updateData, ID }) {
+function* Delete_CompanyGroupType_ID_GenratorFunction({ config }) { //Delete API
   try {
-    const response = yield call(update_CompanyGroupType_List_Api, updateData, ID);
-    yield put(updateCompanyGroupTypeIDSuccess(response))
+    const response = yield call(CompanyGroup_Delete_API, config);
+    yield put(deleteCompanyGroupIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 function* CompanyGroupSaga() {
-  yield takeEvery(POST_METHOD_FOR_COMPANYGROUP_MASTER, Post_Method_For_CompanyGroup_GenFun)
-  yield takeEvery(GET_METHOD_FOR_COMPANYGROUP_LIST, Get_CompanyGroup_GenratorFunction)
-  yield takeEvery(DELETE_COMPANYGROUP_TYPE_ID, Delete_CompanyGroupType_ID_GenratorFunction)
-  yield takeEvery(EDIT_COMPANYGROUP_TYPE_ID, Edit_CompanyGroupType_ID_GenratorFunction)
-  yield takeEvery(UPDATE_COMPANYGROUP_TYPE_ID, Update_CompanyGroupType_ID_GenratorFunction)
+  yield takeEvery(SAVE_COMPANY_GROUP_MASTER, Post_Method_For_CompanyGroup_GenFun)
+  yield takeEvery(GET_COMPANY_GROUP_LIST, Get_CompanyGroup_GenratorFunction)
+  yield takeEvery(EDIT_COMPANY_GROUP_ID, Edit_CompanyGroupType_ID_GenratorFunction)
+  yield takeEvery(UPDATE_COMPANY_GROUP_ID, Update_CompanyGroupType_ID_GenratorFunction)
+  yield takeEvery(DELETE_COMPANY_GROUP_ID, Delete_CompanyGroupType_ID_GenratorFunction)
 }
 
 export default CompanyGroupSaga;
