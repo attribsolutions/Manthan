@@ -135,8 +135,7 @@ const CategoryTypeMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCategoryTypeMaster_Success({ Status: false }))
-             setState(() => resetFunction(fileds, state)) // Clear form values 
-             saveDissable(false);//save Button Is enable function
+            setState(() => resetFunction(fileds, state))//Clear form values
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -155,7 +154,6 @@ const CategoryTypeMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-             saveDissable(false);//save Button Is enable function
             dispatch(getCategoryTypelistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -169,13 +167,11 @@ const CategoryTypeMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-             saveDissable(false);//Update Button Is enable function
-             setState(() => resetFunction(fileds, state)) // Clear form values 
+            setState(() => resetFunction(fileds, state))// Clear form values
             history.push({
                 pathname: url.CATEGORYTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-             saveDissable(false);//Update Button Is enable function
             dispatch(updateCategoryTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -196,7 +192,7 @@ const CategoryTypeMaster = (props) => {
         }
     }, [pageField])
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -208,8 +204,6 @@ const CategoryTypeMaster = (props) => {
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
                 });
-
-                 saveDissable(true);//save Button Is dissable function
 
                 if (pageMode === mode.edit) {
                     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
@@ -240,7 +234,7 @@ const CategoryTypeMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -271,6 +265,7 @@ const CategoryTypeMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"CategoryTypeMaster"}
