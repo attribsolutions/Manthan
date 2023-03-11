@@ -10,7 +10,7 @@ import {
 
     GetPartyTypeByDivisionTypeID, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
-import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
+import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";

@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
 import Select from "react-select";
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
-import { getState } from "../../../store/Administrator/M_EmployeeRedux/action"
+import { getState } from "../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
     getAddressTypes,

@@ -6,13 +6,13 @@ import {
   getDesignationID,
   getEmployeeType,
   getState,
-  postEmployee,
-  updateEmployeeID,
+  saveEmployeeAction,
+  updateEmployeeAction,
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID,
   editEmployeeSuccess,
   updateEmployeeIDSuccess
-} from "../../../store/Administrator/M_EmployeeRedux/action";
+} from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Flatpickr from "react-flatpickr"
@@ -29,7 +29,7 @@ import {
   resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -121,7 +121,7 @@ const AddEmployee = (props) => {
 
     if (userAcc) {
       setUserPageAccessState(userAcc)
-      breadcrumbReturn({dispatch,userAcc});
+      breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])
 
@@ -330,56 +330,45 @@ const AddEmployee = (props) => {
 
   const SaveHandler = (event) => {
     event.preventDefault();
-    if (formValid(state, setState)) {
-      let emplPartie = [{ Party: "" }]
-      if (!(values.EmployeeParties.length === 0)) {
-        emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
+    const btnId = event.target.id;
+
+    try {
+      if (formValid(state, setState)) {
+        btnIsDissablefunc({ btnId, state: true })
+
+        let emplPartie = [{ Party: "" }]
+        if (!(values.EmployeeParties.length === 0)) {
+          emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
+        }
+        const jsonBody = JSON.stringify({
+          Name: values.Name,
+          Address: values.Address,
+          Mobile: values.Mobile,
+          email: values.email,
+          DOB: values.DOB,
+          PAN: values.PAN,
+          AadharNo: values.AadharNo,
+          working_hours: values.working_hours,
+          Designation: values.DesignationName.value,
+          EmployeeType: values.EmployeeTypeName.value,
+          State: values.StateName.value,
+          District: values.DistrictName.value,
+          EmployeeParties: emplPartie,
+          Company: values.CompanyName.value,
+          CreatedBy: loginUserID(),
+          UpdatedBy: loginUserID()
+        });
+
+        if (pageMode === mode.edit) {
+          dispatch(updateEmployeeAction({ jsonBody, updateId: values.id, btnId }));
+        }
+        else {
+          dispatch(saveEmployeeAction({ jsonBody, btnId }));
+
+        }
       }
+    } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
 
-      // if ((partyDropDownShow_UI === true) && (values.EmployeeParties === [])) {
-      //   dispatch(
-      //     AlertState({
-      //       Type: 4,
-      //       Status: true,
-      //       Message: "Party Is Required",
-      //       RedirectPath: false,
-      //       PermissionAction: false,
-      //     })
-      //   );
-      //   return;
-      // }
-
-      const jsonBody = JSON.stringify({
-        Name: values.Name,
-        Address: values.Address,
-        Mobile: values.Mobile,
-        email: values.email,
-        DOB: values.DOB,
-        PAN: values.PAN,
-        AadharNo: values.AadharNo,
-        working_hours: values.working_hours,
-        Designation: values.DesignationName.value,
-        EmployeeType: values.EmployeeTypeName.value,
-        State: values.StateName.value,
-        District: values.DistrictName.value,
-        EmployeeParties: emplPartie,
-        Company: values.CompanyName.value,
-        CreatedBy: loginUserID(),
-        UpdatedBy: loginUserID()
-      });
-
-      saveDissable(true);//save Button Is dissable function
-
-      if (pageMode === mode.edit) {
-        dispatch(updateEmployeeID(jsonBody, values.id,));
-        console.log("update jsonBody", jsonBody)
-      }
-      else {
-        dispatch(postEmployee(jsonBody));
-        console.log("post jsonBody", jsonBody)
-
-      }
-    }
   };
 
 
@@ -402,7 +391,7 @@ const AddEmployee = (props) => {
               </CardHeader>
 
               <CardBody>
-                <form onSubmit={SaveHandler} noValidate>
+                <form noValidate>
                   <Card  >
                     <CardBody className="c_card_body">
                       <Row>
@@ -662,9 +651,7 @@ const AddEmployee = (props) => {
                                 }
                                 classNamePrefix="dropdown"
                               />
-                              {/* {isError.EmployeeParties.length > 0 && (
-                                <span className="text-danger f-8"><small>{isError.EmployeeParties}</small></span>
-                              )} */}
+
                             </div>
                           </div>
                           : <></>}
@@ -715,6 +702,7 @@ const AddEmployee = (props) => {
                           <Col sm={2}>
                             <SaveButton
                               pageMode={pageMode}
+                              onClick={SaveHandler}
                               userAcc={userPageAccessState}
                               editCreatedBy={editCreatedBy}
                               module={"EmployeeMaster"}

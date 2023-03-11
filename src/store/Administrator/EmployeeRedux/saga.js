@@ -1,15 +1,24 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { detelet_EmployeeID, edit_EmployeeAPI, getComapny_For_Dropdown, getDesignationID_For_Dropdown, getEmployeeType_For_Dropdown, getRegion_For_Dropdown, getState_For_Dropdown, Get_CompanyBy_EmployeeType_For_Dropdown, get_EmployeelistApi, post_EmployeeData, update_EmployeeAPI } from "../../../helpers/backend_helper";
+import {
+  detelet_EmployeeID,
+  edit_EmployeeAPI,
+  getDesignationID_For_Dropdown,
+  getEmployeeType_For_Dropdown,
+  getState_For_Dropdown, Get_CompanyBy_EmployeeType_For_Dropdown,
+  get_EmployeelistApi,
+  save_Employee_API,
+  update_EmployeeAPI
+} from "../../../helpers/backend_helper";
 import {
   GET_DESIGNATIONID, GET_EMPLOYEETYPE,
-  GET_STATE, POST_EMPLOYEE, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
-  DELETE_EMPLOYEE_ID, EDIT_EMPLOYEE_ID, GET_EMPLOYEE_TYPES_ID, GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, GET_PARTYNAME_BY_DIVISIONTYPES_ID,
+  GET_STATE, SAVE_EMPLOYEE_MASTER, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
+  DELETE_EMPLOYEE_ID, EDIT_EMPLOYEE_ID, GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
 } from './actionTypes'
 import {
   getDesignationIDSuccess, getEmployeeTypeESuccess,
   getStateESuccess, PostEmployeeSuccess,
   getEmployeelistSuccess,
-  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, get_EmployeeTypesID_Success, Get_CompanyName_By_EmployeeTypeID_Success, Get_PartyName_By_EmployeeTypeID_Success,
+  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, Get_CompanyName_By_EmployeeTypeID_Success,
 } from "./action";
 import { CommonConsole, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
@@ -38,9 +47,9 @@ function* State_saga() {
 }
 
 ///post api
-function* Submit_Employee_GenratorFunction({ Data }) {
+function* Submit_Employee_GenFunc({ Data }) {
   try {
-    const response = yield call(post_EmployeeData, Data);
+    const response = yield call(save_Employee_API, Data);
     console.log("post response in saga file", response)
     yield put(PostEmployeeSuccess(response));
   } catch (error) { CommonConsole(error) }
@@ -48,7 +57,7 @@ function* Submit_Employee_GenratorFunction({ Data }) {
 
 /// get api
 
-function* Get_EmployeeList_GenratorFunction() {
+function* Get_EmployeeList_GenFunc() {
   try {
     const jsonBody = {
       "UserID": loginUserID(),
@@ -61,32 +70,33 @@ function* Get_EmployeeList_GenratorFunction() {
 }
 
 //// delete api 
-function* Delete_EmployeeID_GenratorFunction({ id }) {
+function* Delete_EmployeeID_GenFunc({ config }) {
   try {
-    const response = yield call(detelet_EmployeeID, id);
+    const response = yield call(detelet_EmployeeID, config);
     yield put(deleteEmployeeIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_EmployeeID_GenratorFunction({ id, pageMode }) {
+function* Edit_EmployeeID_GenFunc({ config }) {
+  const { btnmode } = config;
   try {
-    const response = yield call(edit_EmployeeAPI, id);
-    response.pageMode = pageMode
+    const response = yield call(edit_EmployeeAPI, config);
+    response.pageMode = btnmode
     yield put(editEmployeeSuccess(response));
     console.log("response in saga", response)
 
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
+function* Update_EmployeeID_GenFunc({ config }) {
   try {
-    const response = yield call(update_EmployeeAPI, updateData, ID);
+    const response = yield call(update_EmployeeAPI, config);
     yield put(updateEmployeeIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 // Company Name API dependent on Employee Types api
-function* Get_CompanyName_By_EmployeeTypesID_GenratorFunction({ id }) {
+function* Get_CompanyName_By_EmployeeTypesID_GenFunc({ id }) {
   try {
     const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown, id);
     yield put(Get_CompanyName_By_EmployeeTypeID_Success(response.Data));
@@ -97,11 +107,11 @@ function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
   yield takeEvery(GET_EMPLOYEETYPE, EmployeeType_saga);
   yield takeEvery(GET_STATE, State_saga);
-  yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenratorFunction)
-  yield takeEvery(POST_EMPLOYEE, Submit_Employee_GenratorFunction)
-  yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenratorFunction)
-  yield takeEvery(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenratorFunction)
-  yield takeEvery(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenratorFunction)
-  yield takeEvery(GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, Get_CompanyName_By_EmployeeTypesID_GenratorFunction)
+  yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenFunc)
+  yield takeEvery(SAVE_EMPLOYEE_MASTER, Submit_Employee_GenFunc)
+  yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenFunc)
+  yield takeEvery(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenFunc)
+  yield takeEvery(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenFunc)
+  yield takeEvery(GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, Get_CompanyName_By_EmployeeTypesID_GenFunc)
 }
 export default M_EmployeeSaga;
