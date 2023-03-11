@@ -140,7 +140,6 @@ const EmployeeTypesMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -160,7 +159,6 @@ const EmployeeTypesMaster = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            saveDissable(false);//save Button Is enable function
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -175,13 +173,11 @@ const EmployeeTypesMaster = (props) => {
     useEffect(() => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))//Clear form values  
             history.push({
                 pathname: url.EMPLOYEETYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateEmployeeTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -200,9 +196,9 @@ const EmployeeTypesMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+  
 
-
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -219,18 +215,19 @@ const EmployeeTypesMaster = (props) => {
                     UpdatedBy: loginUserID(),
                     UpdatedOn: "2022-07-18T00:00:00"
                 });
-    debugger
-                saveDissable(true);//save Button Is dissable function
-    
+                debugger
                 if (pageMode === mode.edit) {
-                    dispatch(updateEmployeeTypeID(jsonBody, values.id));
+                    dispatch(updateEmployeeTypeID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-                    dispatch(PostEmployeeTypeSubmit(jsonBody));
+                    dispatch(PostEmployeeTypeSubmit({ jsonBody, btnId }));
                 }
+
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false })}   
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
+  
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -250,7 +247,7 @@ const EmployeeTypesMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black">
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form  noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -327,6 +324,7 @@ const EmployeeTypesMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                    onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"EmployeeTypesMaster"}
