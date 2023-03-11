@@ -10,7 +10,7 @@ import {
   delete_SubGroupList_ID,
   editSubGroupID,
   getSubGroupList,
-  postSubGroupSuccess,
+  saveSubGroupSuccess,
   updateSubgroupIDSuccess
 } from "../../../store/Administrator/SubGroupsRedux/action";
 import SubGroupMaster from "./SubGroupMaster";
@@ -18,7 +18,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
-const SubGroupList = (props) => {
+const SubGroupList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
@@ -37,7 +37,7 @@ const SubGroupList = (props) => {
     getList: getSubGroupList,
     editId: editSubGroupID,
     deleteId: delete_SubGroupList_ID,
-    postSucc: postSubGroupSuccess,
+    postSucc: saveSubGroupSuccess,
     updateSucc: updateSubgroupIDSuccess,
     deleteSucc: deleteSubGrouplistSuccess
   }
