@@ -148,7 +148,6 @@ const CategoryMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCategoryMaster_Success({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
@@ -168,7 +167,6 @@ const CategoryMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(saveCategoryMaster_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -182,13 +180,11 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.CATEGORY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateCategoryIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -226,13 +222,9 @@ const CategoryMaster = (props) => {
                     UpdatedBy: loginUserID()
                 });
 
-                saveDissable(true);//save Button Is dissable function
-
                 if (pageMode === mode.edit)
                  {  
-
                     dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
-
                 }
                 
                 else {
