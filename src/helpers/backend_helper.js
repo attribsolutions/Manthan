@@ -134,13 +134,12 @@ export const Role_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.ROLE_M
 export const Role_Master_Edit_API = ({ editId, btnId }) => get(`${url.ROLE_MASTER_API}/${editId}`, btnId)// edit api
 export const Role_Master_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ROLE_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
 
-
-//Administrator   Modules submit  
-export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
-export const Fetch_ModulesList = () => get(url.H_MODULES_API_URL,)//module-list get API method
-export const delete_ModuleID = (id) => del(`${url.H_MODULES_API_URL}/${id}`)// Delete_Modules_By-ID
-export const edit_ModuleID = (id) => get(`${url.H_MODULES_API_URL}/${id}`)// Edit_Modules- by_ID
-export const updateModule_ID = (data, id) => put(`${url.H_MODULES_API_URL}/${id}`, data)// Update_Modules- by_ID
+//  Module Master API 
+export const Module_Get_API = () => get(url.H_MODULES_API_URL,)//module-list get API method
+export const Module_Post_API = ({ jsonBody, btnId }) => post(url.H_MODULES_API_URL, jsonBody, btnId)
+export const Module_Edit_API = ({ editId, btnId }) => get(`${url.H_MODULES_API_URL}/${editId}`,btnId)// Edit_Modules- by_ID
+export const Module_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.H_MODULES_API_URL}/${updateId}`,jsonBody,btnId)// Update_Modules- by_ID
+export const Module_Delete_API = ({ deleteId, btnId }) => del(`${url.H_MODULES_API_URL}/${deleteId}`,btnId)// Delete_Modules_By-ID
 
 //Fetch Company LIst
 export const fetch_CompanyList = (data) => post(url.COMPANY_FILTER, data)
