@@ -22,7 +22,7 @@ import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
 import Select from "react-select";
-import { getPriceListData } from "../../../store/Administrator/PriceList/action";
+import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
@@ -30,7 +30,7 @@ import {
     getCompany,
     getDistrictOnState,
     getPartyTypes,
-    getPriceList,
+    priceListByPartyAction,
     postPartyData,
     postPartyDataSuccess,
     updatePartyID
@@ -267,7 +267,7 @@ const PartyMaster = (props) => {
         dispatch(getState());
         dispatch(getDistrictOnState());
         dispatch(getAddressTypes());
-        dispatch(getPriceList());
+        dispatch(priceListByPartyAction());
         dispatch(getPartyTypes());
         dispatch(getCompany());
     }, [dispatch]);
@@ -421,7 +421,7 @@ const PartyMaster = (props) => {
         setPartyType_dropdown_Select(e)
         setPriceList_dropdown_Select({ label: '' })
         setCompanyList_dropdown_Select('')
-        dispatch(getPriceListData(e.value))
+        dispatch(priceListByPartyAction(e.value))
     }
 
     const test1 = () => {

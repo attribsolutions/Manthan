@@ -1,4 +1,4 @@
-import { DELETE_PRICE_LIST_SUCCESS, GET_PRICE_LIST_DATA_SUCCESS, POST_PRICE_LIST_DATA_SUCCESS,EDIT_PRICE_LIST_SUCCESS,UPDATE_PRICE_LIST_SUCCESS, GET_PRICE_LIST_PAGE_SUCCESS } from "./actionType";
+import { DELETE_PRICE_LIST_SUCCESS, PRICE_LIST_BY_PARTY_ACTION_SUCCESS, POST_PRICE_LIST_DATA_SUCCESS,EDIT_PRICE_LIST_SUCCESS,UPDATE_PRICE_LIST_SUCCESS, GET_PRICE_LIST_PAGE_SUCCESS } from "./actionType";
 
 const INIT_STATE = {
   postMsg: { Status : false },
@@ -19,7 +19,7 @@ const PriceListReducer = (state = INIT_STATE, action) => {
                 postMsg: action.payload,
             };
         // GET api
-        case GET_PRICE_LIST_DATA_SUCCESS:
+        case PRICE_LIST_BY_PARTY_ACTION_SUCCESS:
             return {
                 ...state,
                 priceListByPartyType: action.payload,

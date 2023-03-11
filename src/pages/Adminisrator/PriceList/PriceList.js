@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import PriceMaster from "./PriceMaster";
 import {
   delete_PriceListSuccess,
-  postPriceListDataSuccess,
+  savePriceMasterActionSuccess,
   delete_PriceList,
   editPriceList,
   updatePriceListSuccess,
@@ -33,7 +33,7 @@ const PriceList = () => {
     getList: getPriceListPage,
     editId: editPriceList,
     deleteId: delete_PriceListSuccess,
-    postSucc: postPriceListDataSuccess,
+    postSucc: savePriceMasterActionSuccess,
     updateSucc: updatePriceListSuccess,
     deleteSucc: delete_PriceList
   }

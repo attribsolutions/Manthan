@@ -10,13 +10,13 @@ import {
 
     GetPartyTypeByDivisionTypeID, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
-import { getState } from "../../../store/Administrator/EmployeeRedux/action";
+import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import DropdownTreeSelect from 'react-dropdown-tree-select'
-import { getPriceListData } from "../../../store/Administrator/PriceList/action";
+import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import '../../../assets/tree_select_css/index.css'
 import Tree from "./Tree"
 const PartyMaster = (props) => {
@@ -56,7 +56,7 @@ const PartyMaster = (props) => {
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
-        State: state.EmployeesReducer.State,
+        State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Company: state.PartyMasterReducer.Company,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
@@ -255,7 +255,7 @@ const PartyMaster = (props) => {
         // dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select('')
         setCompanyList_dropdown_Select('')
-        dispatch(getPriceListData(e.value))
+        dispatch(priceListByPartyAction(e.value))
 
     }
 

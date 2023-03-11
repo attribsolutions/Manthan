@@ -1,27 +1,26 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { delete_PriceList_API, get_PriceListByPartyType_API, Post_PriceList_API,edit_PriceList,update_PriceList, GetPriceList_For_Listpage } from "../../../helpers/backend_helper";
-import { delete_PriceListSuccess, getPriceListDataSuccess, postPriceListDataSuccess,editPriceListSuccess,updatePriceListSuccess, getPriceListPageSuccess } from "./action";
-import { DELETE_PRICE_LIST, GET_PRICE_LIST_DATA, POST_PRICE_LIST_DATA,EDIT_PRICE_LIST,UPDATE_PRICE_LIST,  GET_PRICE_LIST_PAGE } from "./actionType";
+import { delete_PriceList_API, get_PriceListByPartyType_API, Save_PriceList_API, edit_PriceList, update_PriceList, GetPriceList_For_Listpage } from "../../../helpers/backend_helper";
+import { delete_PriceListSuccess, priceListByPartyActionSuccess, savePriceMasterActionSuccess, editPriceListSuccess, updatePriceListSuccess, getPriceListPageSuccess } from "./action";
+import { DELETE_PRICE_LIST, PRICE_LIST_BY_PARTY_ACTION, POST_PRICE_LIST_DATA, EDIT_PRICE_LIST, UPDATE_PRICE_LIST, GET_PRICE_LIST_PAGE } from "./actionType";
 
-
-function* Post_PriceList_GenratorFunction({ Data }) {
-    try {
-      const response = yield call(Post_PriceList_API, Data);
-      yield put(postPriceListDataSuccess(response));
-    } catch (error) { CommonConsole(error) }
-  }
-  
-function* get_PriceList_GenratorFunction({ partyType }) {
+function* PriceList_ByParty_GenFunc({ partyType }) {
   try {
     const response = yield call(get_PriceListByPartyType_API, partyType);
-    yield put(getPriceListDataSuccess(response.Data));
+    yield put(priceListByPartyActionSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 
+function* Save_PriceList_GenFunc({ config }) {
+  try {
+    const response = yield call(Save_PriceList_API, config);
+    yield put(savePriceMasterActionSuccess(response));
+  } catch (error) { CommonConsole(error) }
+}
+
 //listpage
-function* get_PriceListPage_GenratorFunction() {
+function* get_PriceListPage_GenFunc() {
   try {
     const response = yield call(GetPriceList_For_Listpage);
     yield put(getPriceListPageSuccess(response.Data));
@@ -29,9 +28,9 @@ function* get_PriceListPage_GenratorFunction() {
 }
 
 //delete
-function* delete_PriceList_GenFun({ id }) {
+function* delete_PriceList_GenFun({ config = {} }) {
   try {
-    const response = yield call(delete_PriceList_API, id);
+    const response = yield call(delete_PriceList_API, config);
     yield put(delete_PriceListSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -39,29 +38,30 @@ function* delete_PriceList_GenFun({ id }) {
 
 
 // edit api
-function* Edit_PriceList__GenratorFunction({ id ,pageMode}) {
+function* Edit_PriceList__GenFunc({ config = {} }) {
+  const { btnmode } = config;
   try {
-    const response = yield call(edit_PriceList, id);
-    response.pageMode=pageMode
+    const response = yield call(edit_PriceList, config);
+    response.pageMode = btnmode
     yield put(editPriceListSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 // update api
-function* Update_PriceList_GenratorFunction({ updateData, ID }) {
+function* Update_PriceList_GenFunc({ config = {} }) {
   try {
-    const response = yield call(update_PriceList, updateData, ID);
+    const response = yield call(update_PriceList, config);
     yield put(updatePriceListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 
-  function* PriceListSaga() {
-    yield takeEvery(POST_PRICE_LIST_DATA, Post_PriceList_GenratorFunction);
-    yield takeEvery(GET_PRICE_LIST_DATA, get_PriceList_GenratorFunction);
-    yield takeEvery(GET_PRICE_LIST_PAGE,    get_PriceListPage_GenratorFunction);                        
-    yield takeEvery(DELETE_PRICE_LIST, delete_PriceList_GenFun);
-    yield takeEvery(EDIT_PRICE_LIST, Edit_PriceList__GenratorFunction);
-    yield takeEvery(UPDATE_PRICE_LIST, Update_PriceList_GenratorFunction);
-  }
-  export default PriceListSaga;
+function* PriceListSaga() {
+  yield takeEvery(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);
+  yield takeEvery(PRICE_LIST_BY_PARTY_ACTION, PriceList_ByParty_GenFunc);
+  yield takeEvery(GET_PRICE_LIST_PAGE, get_PriceListPage_GenFunc);
+  yield takeEvery(DELETE_PRICE_LIST, delete_PriceList_GenFun);
+  yield takeEvery(EDIT_PRICE_LIST, Edit_PriceList__GenFunc);
+  yield takeEvery(UPDATE_PRICE_LIST, Update_PriceList_GenFunc);
+}
+export default PriceListSaga;
