@@ -33,7 +33,7 @@ import {
   resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -126,7 +126,7 @@ const CompanyModule = (props) => {
 
       if (hasEditVal) {
 
-        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName,IsSCM } = hasEditVal
+        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName, IsSCM } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -143,7 +143,7 @@ const CompanyModule = (props) => {
         values.Address = Address;
         values.GSTIN = GSTIN;
         values.PhoneNo = PhoneNo;
-        values.IsSCM=IsSCM;
+        values.IsSCM = IsSCM;
         values.CompanyAbbreviation = CompanyAbbreviation;
         values.EmailID = EmailID;
         values.CompanyGroupName = { label: CompanyGroupName, value: CompanyGroup };
@@ -156,13 +156,11 @@ const CompanyModule = (props) => {
 
   }, []);
 
-
   useEffect(() => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(saveCompany_Success({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values 
-      saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === "other") {
@@ -182,7 +180,6 @@ const CompanyModule = (props) => {
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-      saveDissable(false);//save Button Is enable function
       dispatch(saveCompany_Success({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -196,15 +193,11 @@ const CompanyModule = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-
       setState(() => resetFunction(fileds, state))// Clear form values 
-      saveDissable(false);//save Button Is enable function
-
       history.push({
         pathname: url.COMPANY_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//Update Button Is enable function
       dispatch(updateCompanyIDSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -228,33 +221,34 @@ const CompanyModule = (props) => {
     label: Data.Name
   }));
 
-  const saveHandeller = (event) => {
-
+    const SaveHandler = async (event) => {
     event.preventDefault();
-    if (formValid(state, setState)) {
-      const jsonBody = JSON.stringify({
-        Name: values.Name,
-        Address: values.Address,
-        GSTIN: values.GSTIN,
-        PhoneNo: values.PhoneNo,
-        CompanyAbbreviation: values.CompanyAbbreviation,
-        EmailID: values.EmailID,
-        CompanyGroup: values.CompanyGroupName.value,
-        IsSCM:values.IsSCM,
-        CreatedBy: loginUserID(),
-        UpdatedBy: loginUserID(),
-      });
+    const btnId = event.target.id
+    try {
+        if (formValid(state, setState)) {
+            btnIsDissablefunc({ btnId, state: true })
 
-      saveDissable(true);//save Button Is dissable function
-
-      if (pageMode === mode.edit) {
-        dispatch(updateCompanyID(jsonBody, values.id,));
-      }
-      else {
-        dispatch(saveCompany(jsonBody));
-      }
-    }
-  };
+            const jsonBody = JSON.stringify({
+              Name: values.Name,
+              Address: values.Address,
+              GSTIN: values.GSTIN,
+              PhoneNo: values.PhoneNo,
+              CompanyAbbreviation: values.CompanyAbbreviation,
+              EmailID: values.EmailID,
+              CompanyGroup: values.CompanyGroupName.value,
+              IsSCM: values.IsSCM,
+              CreatedBy: loginUserID(),
+              UpdatedBy: loginUserID(),
+            });
+            if (pageMode === mode.edit) {
+                dispatch(updateCompanyID({ jsonBody, updateId: values.id, btnId }));
+            }
+            else {
+                dispatch(saveCompany({ jsonBody, btnId }));
+            }
+        }
+    } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+};
 
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -275,7 +269,7 @@ const CompanyModule = (props) => {
                   </CardHeader>
 
                   <CardBody>
-                    <form onSubmit={saveHandeller} noValidate>
+                    <form  noValidate>
                       <Card >
                         <CardBody className="c_card_body">
 
@@ -425,7 +419,7 @@ const CompanyModule = (props) => {
                             <FormGroup className="mb-2 col col-sm-3 mt-4">
                               <Row className="justify-content-md-left">
                                 <Label className="col-sm-4 col-form-label" >{fieldLabel.IsSCM}</Label>
-                                <Col md={1} style={{ marginTop: '9px',  }} >
+                                <Col md={1} style={{ marginTop: '9px', }} >
 
                                   <div className="form-check form-switch form-switch-md mb-3" >
                                     <Input type="checkbox" className="form-check-input"
@@ -449,6 +443,8 @@ const CompanyModule = (props) => {
                             <Row >
                               <Col sm={2}>
                                 <SaveButton
+                                onClick={SaveHandler}
+                                saveHandeller
                                   pageMode={pageMode}
                                   userAcc={userPageAccessState}
                                   editCreatedBy={editCreatedBy}
