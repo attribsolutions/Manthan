@@ -2,10 +2,10 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   deleteModuleIDSuccess,
   editModuleIDSuccess,
-  fetchModelsList,
-  fetchModelsListError,
-  fetchModelsListSuccess,
-  PostModelsSubmitSuccess,
+  getModuleList,
+  getModuleListError,
+  getModuleListSuccess,
+  saveModuleMasterSuccess,
   updateModuleIDSuccess
 } from "./actions";
 import {
@@ -19,7 +19,7 @@ import {
   DELETE_MODULE_ID,
   EDIT_MODULE_ID,
   FETCH_MODULES_LIST,
-  POST_MODULES_SUBMIT,
+  SAVE_MODULE_MASTER,
   UPDATE_MODULE_ID
 } from "./actionType";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -28,7 +28,7 @@ import { AlertState } from "../../actions";
 function* SubmitModules_GenratorFunction({ data }) {
   try {
     const response = yield call(postSubmitModules, data);
-    yield put(PostModelsSubmitSuccess(response));
+    yield put(saveModuleMasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -36,7 +36,7 @@ function* fetchModulesList_GenratorFunction() {
   try {
     const response = yield call(Fetch_ModulesList);
     if (response.StatusCode === 200) {
-      yield put(fetchModelsListSuccess(response.Data));
+      yield put(getModuleListSuccess(response.Data));
     }
     else {
       yield put(AlertState({
@@ -69,7 +69,7 @@ function* update_Module_GenratorFunction({ data, id }) {
 }
 
 function* ModulesSaga() {
-  yield takeEvery(POST_MODULES_SUBMIT, SubmitModules_GenratorFunction);
+  yield takeEvery(SAVE_MODULE_MASTER, SubmitModules_GenratorFunction);
   yield takeEvery(FETCH_MODULES_LIST, fetchModulesList_GenratorFunction);
   yield takeEvery(DELETE_MODULE_ID, deleteModule_ID_GenratorFunction);
   yield takeEvery(EDIT_MODULE_ID, editModule_ID_GenratorFunction);

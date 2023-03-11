@@ -60,7 +60,7 @@ export const saveHPagesSuccess = (Data) => ({
   type: SAVE_HPAGES_SUCCESS,
   payload: Data,
 });
-// export const fetchModelsListError = (modulesListError) => ({
+// export const getModuleListError = (modulesListError) => ({
 //   type: FETCH_MODULES_LIST_ERROR,
 //   payload: modulesListError,
 // });

@@ -5,7 +5,7 @@ import {
   FETCH_MODULES_LIST_ERROR,
   FETCH_MODULES_LIST_SUCCESS,
   POST_MODULES_SUBMIT_ERROR,
-  POST_MODULES_SUBMIT_SUCCESS,
+  SAVE_MODULE_MASTER_SUCCESS,
   UPDATE_MODULE_ID_SUCCESS,
 } from "./actionType"
 
@@ -23,7 +23,7 @@ const INIT_STATE = {
 const Modules = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case POST_MODULES_SUBMIT_SUCCESS:
+    case SAVE_MODULE_MASTER_SUCCESS:
       return {
         ...state,
         modulesSubmitSuccesss: action.payload,
