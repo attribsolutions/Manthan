@@ -19,11 +19,11 @@ import {
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethod_ForCompanyGroupMasterSuccess,
-    editCompanyGroupTypeSuccess,
-    updateCompanyGroupTypeID,
-    PostMethodForCompanyGroupMaster,
-    updateCompanyGroupTypeIDSuccess
+    saveCompanyGroupMasterSuccess,
+    editCompanyGroupSuccess,
+    updateCompanyGroupID,
+    saveCompanyGroupMaster,
+    updateCompanyGroupIDSuccess
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -34,7 +34,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -56,8 +56,6 @@ const CompanyGroupMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         updateMsg,
         pageField,
@@ -66,7 +64,6 @@ const CompanyGroupMaster = (props) => {
             updateMsg: state.CompanyGroupReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
-
         }));
 
     useEffect(() => {
@@ -99,7 +96,7 @@ const CompanyGroupMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -127,12 +124,12 @@ const CompanyGroupMaster = (props) => {
                 values.id = id
                 hasValid.Name.valid = true;
                 hasValid.IsSCM.valid = true;
-              
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
-            dispatch(editCompanyGroupTypeSuccess({ Status: false }))
+            dispatch(editCompanyGroupSuccess({ Status: false }))
         }
     }, [])
 
@@ -140,8 +137,7 @@ const CompanyGroupMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
-            dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+            dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -159,8 +155,7 @@ const CompanyGroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+            dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -174,13 +169,11 @@ const CompanyGroupMaster = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.COMPANYGROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
-            dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
+            dispatch(updateCompanyGroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -192,33 +185,33 @@ const CompanyGroupMaster = (props) => {
     }, [updateMsg, modalCss]);
 
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                IsSCM: values.IsSCM,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    IsSCM: values.IsSCM,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
 
-            saveDissable(true);//save Button Is dissable function
-
-            if (pageMode === mode.edit) {
-                dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateCompanyGroupID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveCompanyGroupMaster({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(PostMethodForCompanyGroupMaster(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -229,7 +222,6 @@ const CompanyGroupMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.COMPANYGROUP} /> */}
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
@@ -238,11 +230,9 @@ const CompanyGroupMaster = (props) => {
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
-
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={SaveHandler} noValidate>
-
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -258,7 +248,7 @@ const CompanyGroupMaster = (props) => {
                                                                 value={values.Name}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                 autoFocus={true}
+                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
@@ -296,6 +286,7 @@ const CompanyGroupMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"CompanyGroupMaster"}
@@ -311,9 +302,7 @@ const CompanyGroupMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment >

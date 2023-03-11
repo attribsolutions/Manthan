@@ -111,11 +111,11 @@ export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
-export const post_EmployeeData = (data) => post(url.EMPLOYEE_API_URL, data) //save And Update
-export const get_EmployeelistApi = (jsonbody) => post(url.EMPLOYEE_FILTER_API_URL, jsonbody) // list api using post method
-export const detelet_EmployeeID = (id) => del(`${url.EMPLOYEE_API_URL}/${id}`) // delete api
-export const edit_EmployeeAPI = (id) => get(`${url.EMPLOYEE_API_URL}/${id}`) // edit api
-export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${id}`, data)// update 
+export const save_Employee_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_API_URL, jsonBody, btnId) //save And Update
+export const get_EmployeelistApi = (filters) => post(url.EMPLOYEE_FILTER_API_URL, filters) // list api using post method
+export const detelet_EmployeeID = ({ deleteId, btnId }) => del(`${url.EMPLOYEE_API_URL}/${deleteId}`, btnId) // delete api
+export const edit_EmployeeAPI = ({ editId, btnId }) => get(`${url.EMPLOYEE_API_URL}/${editId}`, btnId) // edit api
+export const update_EmployeeAPI = ({ updateId, jsonBody, btnId }) => put(`${url.EMPLOYEE_API_URL}/${updateId}`, jsonBody, btnId)// update 
 export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_EMPLOYEETYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
 
 //User Registration  All APIs 
@@ -259,11 +259,11 @@ export const edit_VehicleType_List_Api = (id) => get(`${url.VEHICLE_API}/${id}`)
 export const update_VehicleType_List_Api = (data, id) => put(`${url.VEHICLE_API}/${id}`, data)// update
 
 //CompanyGroup API
-export const Post_CompanyGroup_API = (data) => post(url.COMPANYGROUP_API, data)// post api
-export const get_CompanyGroupList_API = () => get(url.COMPANYGROUP_API)//  get Api 
-export const detelet_CompanyGroupType_List_Api = (id) => del(`${url.COMPANYGROUP_API}/${id}`) // delete api
-export const edit_CompanyGroupType_List_Api = (id) => get(`${url.COMPANYGROUP_API}/${id}`) // edit api
-export const update_CompanyGroupType_List_Api = (data, id) => put(`${url.COMPANYGROUP_API}/${id}`, data)// update
+export const CompanyGroup_Post_API = ({ jsonBody, btnId }) => post(url.COMPANYGROUP_API, jsonBody, btnId)// post api
+export const CompanyGroup_Get_API = () => get(url.COMPANYGROUP_API)//  get Api 
+export const CompanyGroup_Delete_API = ({ deleteId, btnId }) => del(`${url.COMPANYGROUP_API}/${deleteId}`, btnId) // delete api
+export const CompanyGroup_edit_API = ({ editId, btnId }) => get(`${url.COMPANYGROUP_API}/${editId}`, btnId) // edit api
+export const CompanyGroup_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.COMPANYGROUP_API}/${updateId}`, jsonBody, btnId)// update
 
 //Driver api
 export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api

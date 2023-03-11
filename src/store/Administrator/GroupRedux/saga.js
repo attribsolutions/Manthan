@@ -30,21 +30,21 @@ function* Save_Method_ForGroupMaster_GenFun({ config }) {              // Save A
   } catch (error) { CommonConsole(error) }
 }
 
-function* Get_Group_List_genFunc() {                                   // getList API
+function* Get_Group_List_GenFunc() {                                   // getList API
   try {
     const response = yield call(get_Group_List_Api);
     yield put(getGroupListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Delete_GroupList_ID_genFunc({ config }) {                    // delete API
+function* Delete_GroupList_ID_GenFunc({ config }) {                    // delete API
   try {
     const response = yield call(del_Group_List_API, config);
     yield put(deleteGrouplistSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_Grouplist_ID_genFunc({ config }) {                      // edit API 
+function* Edit_Grouplist_ID_GenFunc({ config }) {                      // edit API 
   const { btnmode } = config;
   try {
     const response = yield call(edit_Group_List_Api, config);
@@ -53,7 +53,7 @@ function* Edit_Grouplist_ID_genFunc({ config }) {                      // edit A
   } catch (error) { CommonConsole(error) }
 }
 
-function* Update_Grouplist_ID_genFunc({ config }) {                    // update API
+function* Update_Grouplist_ID_GenFunc({ config }) {                    // update API
   try {
     const response = yield call(update_Group_List_Api, config);
     yield put(updateGroupIDSuccess(response))
@@ -62,10 +62,10 @@ function* Update_Grouplist_ID_genFunc({ config }) {                    // update
 
 function* GroupSaga() {
   yield takeEvery(SAVE_GROUP_MASTER, Save_Method_ForGroupMaster_GenFun)
-  yield takeEvery(GET_GROUP_LIST, Get_Group_List_genFunc)
-  yield takeEvery(DELETE_GROUP_LIST_ID, Delete_GroupList_ID_genFunc)
-  yield takeEvery(EDIT_GROUPMASTER_ID, Edit_Grouplist_ID_genFunc)
-  yield takeEvery(UPDATE_GROUPMASTER_ID, Update_Grouplist_ID_genFunc)
+  yield takeEvery(GET_GROUP_LIST, Get_Group_List_GenFunc)
+  yield takeEvery(DELETE_GROUP_LIST_ID, Delete_GroupList_ID_GenFunc)
+  yield takeEvery(EDIT_GROUPMASTER_ID, Edit_Grouplist_ID_GenFunc)
+  yield takeEvery(UPDATE_GROUPMASTER_ID, Update_Grouplist_ID_GenFunc)
 }
 
 export default GroupSaga;
