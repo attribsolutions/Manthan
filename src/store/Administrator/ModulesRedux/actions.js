@@ -7,43 +7,41 @@ import {
   FETCH_MODULES_LIST,
   FETCH_MODULES_LIST_ERROR,
   FETCH_MODULES_LIST_SUCCESS,
-  POST_MODULES_SUBMIT,
+  SAVE_MODULE_MASTER,
   POST_MODULES_SUBMIT_ERROR,
-  POST_MODULES_SUBMIT_SUCCESS,
+  SAVE_MODULE_MASTER_SUCCESS,
   UPDATE_MODULE_ID,
   UPDATE_MODULE_ID_SUCCESS
 } from "./actionType";
 
-
-export const PostModelsSubmit = (data) => ({
-  type: POST_MODULES_SUBMIT,
+export const saveModuleMaster = (data) => ({
+  type: SAVE_MODULE_MASTER,
   data,
 });
 
-export const PostModelsSubmitSuccess = (modulesSubmitSuccesss) => ({
-  type: POST_MODULES_SUBMIT_SUCCESS,
+export const saveModuleMasterSuccess = (modulesSubmitSuccesss) => ({
+  type: SAVE_MODULE_MASTER_SUCCESS,
   payload: modulesSubmitSuccesss,
 });
 
-export const PostModelsSubmitError = (modulesSubmitError) => ({
+export const saveModuleMasterError = (modulesSubmitError) => ({
   type: POST_MODULES_SUBMIT_ERROR,
   payload: modulesSubmitError,
 });
 
-// Fetch Modules get Data Actions 
-export const fetchModelsList = () => ({
+export const getModuleList = () => ({
   type: FETCH_MODULES_LIST,
 });
-export const fetchModelsListSuccess = (modulesList) => ({
+export const getModuleListSuccess = (modulesList) => ({
   type: FETCH_MODULES_LIST_SUCCESS,
   payload: modulesList,
 });
-export const fetchModelsListError = (modulesListError) => ({
+
+export const getModuleListError = (modulesListError) => ({
   type: FETCH_MODULES_LIST_ERROR,
   payload: modulesListError,
 });
 
-// Delete Module ID Actions
 export const deleteModuleID = (id) => ({
   type: DELETE_MODULE_ID,
   id,
@@ -57,8 +55,6 @@ export const deleteModuleIDError = (deleteModuleIDError) => ({
   payload: deleteModuleIDError,
 });
 
-
-//Edit Modules Using Id
 export const editModuleID = (id,pageMode) => ({
   type: EDIT_MODULE_ID,
   id,pageMode

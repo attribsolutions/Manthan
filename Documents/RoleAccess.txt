@@ -25,7 +25,7 @@ import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { AlertState, BreadcrumbShow, editHPagesIDSuccess, fetchModelsList, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, PostModelsSubmitSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
+import { AlertState, BreadcrumbShow, editHPagesIDSuccess, getModuleList, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, saveModuleMasterSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -110,7 +110,7 @@ const PageMaster = (props) => {
   }, [userAccess])
 
   useEffect(() => {
-    dispatch(fetchModelsList());
+    dispatch(getModuleList());
     dispatch(getControlTypes());
     dispatch(getFieldValidations());
     dispatch(getPageAccess_DropDown_API());
@@ -242,7 +242,7 @@ const PageMaster = (props) => {
 
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
-      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(saveModuleMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -250,7 +250,7 @@ const PageMaster = (props) => {
       }))
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
-      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(saveModuleMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,

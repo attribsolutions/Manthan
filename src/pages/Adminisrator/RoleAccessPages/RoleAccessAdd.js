@@ -30,7 +30,7 @@ import {
     PostMethodForRoleAccessListPage,
     PostMethod_ForRoleAccessListPage_Success,
 } from "../../../store/actions";
-import { fetchModelsList } from "../../../store/actions";
+import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
 import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -113,7 +113,7 @@ const RoleAccessAdd = (props) => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         dispatch(getPartyListAPI());//for division dropdown API
         dispatch(getRole());//for Role  dropdown API
-        dispatch(fetchModelsList())//for Modules  dropdown API
+        dispatch(getModuleList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
         dispatch(fetchCompanyList());
