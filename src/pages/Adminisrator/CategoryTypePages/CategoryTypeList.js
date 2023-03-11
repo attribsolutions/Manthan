@@ -6,7 +6,7 @@ import {
   delete_CategoryType_ID,
   editCategoryTypeID,
   getCategoryTypelist,
-  PostMethod_ForCategoryTypeMasterAPISuccess,
+  saveCategoryTypeMaster_Success,
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -14,7 +14,7 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-const CategoryTypeList = (props) => {
+const CategoryTypeList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
@@ -33,7 +33,7 @@ const CategoryTypeList = (props) => {
     getList: getCategoryTypelist,
     editId: editCategoryTypeID,
     deleteId: delete_CategoryType_ID,
-    postSucc: PostMethod_ForCategoryTypeMasterAPISuccess,
+    postSucc: saveCategoryTypeMaster_Success,
     updateSucc: updateCategoryTypeIDSuccess,
     deleteSucc: deleteCategoryTypeIDSuccess,
   }
