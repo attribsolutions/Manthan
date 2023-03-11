@@ -4,9 +4,9 @@ import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, p
 import {
   deleteCompanyIDSuccess,
   editCompanyIDSuccess,
-  fetchCompanyListSuccess,
+  getCompanyListSuccess,
   getCompanyGroupSuccess,
-  PostCompanySubmitSuccess,
+  saveCompany_Success,
   updateCompanyIDSuccess
 } from "./actions";
 import {
@@ -21,14 +21,14 @@ import {
 function* fetch_CompanyList_data() {
   try {
     const response = yield call(fetch_CompanyList, loginJsonBody());
-    yield put(fetchCompanyListSuccess(response.Data));
+    yield put(getCompanyListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* SubmitCompanyModules({ data }) {
   try {
     const response = yield call(postSubmit_Company, data);
-    yield put(PostCompanySubmitSuccess(response));
+    yield put(saveCompany_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 

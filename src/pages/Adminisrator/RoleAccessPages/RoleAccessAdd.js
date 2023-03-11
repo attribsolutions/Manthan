@@ -34,7 +34,7 @@ import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
 import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const RoleAccessAdd = (props) => {
@@ -116,7 +116,7 @@ const RoleAccessAdd = (props) => {
         dispatch(getModuleList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
     }, []);
 
 

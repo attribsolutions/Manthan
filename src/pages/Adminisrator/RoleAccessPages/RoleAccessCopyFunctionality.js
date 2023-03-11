@@ -8,7 +8,7 @@ import {
     PostMethodForCopyRoleAccessForRoleAccess,
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const RoleAccessCopyFunctionality = (props) => {
@@ -37,7 +37,7 @@ const RoleAccessCopyFunctionality = (props) => {
     useEffect(() => {
         dispatch(getRole());
         dispatch(getPartyListAPI());
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
     }, []);
 
     let editDataGatingFromList = props.state;
