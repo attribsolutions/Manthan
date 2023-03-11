@@ -81,28 +81,26 @@ export const postItemData = (data) => ({
   data,
 });
 
-export const PostItemDataSuccess = (data) => ({
+export const PostItemDataSuccess = (resp) => ({
   type: POST_ITEM_DATA_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 // delete api
-export const deleteItemID = (id) => ({
+export const deleteItemID = (config) => ({
   type: DELETE_ITEM_ID,
-  id,
+  config,
 
 });
-export const deleteItemIdSuccess = (data) => ({
+export const deleteItemIdSuccess = (resp) => ({
   type: DELETE_ITEM_ID_SUCCESS,
-  payload: data
+  payload: resp
 });
 
 // edit api
-export const editItemId = (id, pageMode) => ({
+export const editItemId = (config) => ({
   type: EDIT_ITEM_ID,
-  // type:EDIT_ITEM_ID_SUCCESS,
-  // payload:{status:false},
-  id, pageMode
+   config,
 })
 export const editItemSuccess = (editData) => ({
   type: EDIT_ITEM_ID_SUCCESS,
