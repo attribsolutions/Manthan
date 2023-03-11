@@ -20,7 +20,7 @@ import {
     POST_METHOD_HANDLER_FOR_ROUTES_MASTER_API,
     UPDATE_ROUTES_ID
 } from "./actionTypes";
-import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // post api
 function* Post_Method_ForRoutesMaster_GenFun({ data }) {
@@ -32,12 +32,9 @@ function* Post_Method_ForRoutesMaster_GenFun({ data }) {
 
 //Routes List Api Using Post Method
 function* Routes_List_GenratorFunction() {
-    const jsonBody = {
-        "Party": loginPartyID(),
-        "Company": loginCompanyID()
-    }
+    const filters = loginJsonBody()
     try {
-        const response = yield call(Post_Routes_List_Api, jsonBody);
+        const response = yield call(Post_Routes_List_Api, filters);
         yield put(PostRouteslistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }

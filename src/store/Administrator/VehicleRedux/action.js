@@ -1,79 +1,72 @@
 import {
-  POST_METHOD_FOR_VEHICLE_MASTER,
-  POST_METHOD_FOR_VEHICLE_MASTER_SUCCESS,
-  GET_METHOD_FOR_VEHICLE_LIST,
-  GET_METHOD_FOR_VEHICLE_LIST_SUCCESS,
-  GET_METHOD_DRIVERLIST_FOR_DROPDOWN,
-  GET_METHOD_DRIVERLIST_FOR_DROPDOWN_SUCCESS,
-  GET_METHOD_VEHICLETYPES_FOR_DROPDOWN,
-  GET_METHOD_VEHICLETYPES_FOR_DROPDOWN_SUCCESS,
-  DELETE_VEHICLE_TYPE_ID,
-  DELETE_VEHICLE_TYPE_ID_SUCCESS,
-  EDIT_VEHICLE_TYPE_ID,
-  EDIT_VEHICLE_TYPE_ID_SUCCESS,
-  UPDATE_VEHICLE_TYPE_ID,
-  UPDATE_VEHICLE_TYPE_ID_SUCCESS
-
+  SAVE_VEHICLE_MASTER,
+  SAVE_VEHICLE_MASTER_SUCCESS,
+  GET_VEHICLE_LIST,
+  GET_VEHICLE_LIST_SUCCESS,
+  GET_VEHICLE_TYPES_FOR_DROPDOWN,
+  GET_VEHICLE_TYPES_FOR_DROPDOWN_SUCCESS,
+  DELETE_VEHICLE_ID,
+  DELETE_VEHICLE_ID_SUCCESS,
+  EDIT_VEHICLE_ID,
+  EDIT_VEHICLE_ID_SUCCESS,
+  UPDATE_VEHICLE_ID,
+  UPDATE_VEHICLE_ID_SUCCESS
 } from "./actionType";
 
-export const PostMethodForVehicleMaster = (data) => ({
-  type: POST_METHOD_FOR_VEHICLE_MASTER,
-  data,
+export const saveVehicleMaster = (config = {}) => ({  // Post Action
+  type: SAVE_VEHICLE_MASTER,
+  config,
 });
 
-export const PostMethod_ForVehicleMasterSuccess = (data) => ({
-  type: POST_METHOD_FOR_VEHICLE_MASTER_SUCCESS,
-  payload: data,
+export const saveVehicleMasterSuccess = (resp) => ({  // Post Success
+  type: SAVE_VEHICLE_MASTER_SUCCESS,
+  payload: resp,
 });
 
-export const getMethodForVehicleList = (data) => ({
-  type: GET_METHOD_FOR_VEHICLE_LIST,
-  data,
+export const getVehicleList = (jsonBody) => ({  // get action
+  type: GET_VEHICLE_LIST,
+  jsonBody,
 });
 
-export const getMethod_ForVehicleListSuccess = (data) => ({
-  type: GET_METHOD_FOR_VEHICLE_LIST_SUCCESS,
-  payload: data,
+export const getVehicleListSuccess = (resp) => ({   // get Success
+  type: GET_VEHICLE_LIST_SUCCESS,
+  payload: resp,
 });
 
-//get VehicleType API
-export const getMethod_VehicleTypes_ForDropDown = () => ({
-  type: GET_METHOD_VEHICLETYPES_FOR_DROPDOWN,
-});
-
-export const getMethod_VehicleTypes_ForDropDown_Success = (data) => ({
-  type: GET_METHOD_VEHICLETYPES_FOR_DROPDOWN_SUCCESS,
-  payload: data,
-});
-
-//delete api
-export const delete_VehicleType_ID = (id) => ({
-  type: DELETE_VEHICLE_TYPE_ID,
-  id,
-});
-export const deleteVehicleTypeIDSuccess = (deleteMessage) => ({
-  type: DELETE_VEHICLE_TYPE_ID_SUCCESS,
-  payload: deleteMessage
-});
-
-// edit api
-export const editVehicleTypeId = (id, pageMode) => ({
-  type: EDIT_VEHICLE_TYPE_ID,
-  id, pageMode
+export const editVehicleID = (config = {}) => ({  // edit action
+  type: EDIT_VEHICLE_ID,
+  config,
 })
 
-export const editVehicleTypeSuccess = (editData) => ({
-  type: EDIT_VEHICLE_TYPE_ID_SUCCESS,
+export const editVehicleID_Success = (editData) => ({  // edit Success
+  type: EDIT_VEHICLE_ID_SUCCESS,
   payload: editData,
 })
 
-// update api
-export const updateVehicleTypeID = (updateData, ID) => ({
-  type: UPDATE_VEHICLE_TYPE_ID,
-  updateData, ID,
+export const updateVehicleID = (config = {}) => ({  // update action
+  type: UPDATE_VEHICLE_ID,
+  config,
 })
 
-export const updateVehicleTypeIDSuccess = (updateMessage) => ({
-  type: UPDATE_VEHICLE_TYPE_ID_SUCCESS,
+export const updateVehicleID_Success = (updateMessage) => ({  // update success
+  type: UPDATE_VEHICLE_ID_SUCCESS,
   payload: updateMessage,
 })
+
+export const deleteVehicleID = (config = {}) => ({  // delete action
+  type: DELETE_VEHICLE_ID,
+  config,
+});
+export const deleteVehicleID_Success = (resp) => ({  // delete success
+  type: DELETE_VEHICLE_ID_SUCCESS,
+  payload: resp
+});
+
+export const getVehicleType_for_dropdown = () => ({  // get api for Vehicle type
+  type: GET_VEHICLE_TYPES_FOR_DROPDOWN,
+});
+
+export const getVehicleType_for_dropdown_Success = (resp) => ({ // get Success
+  type: GET_VEHICLE_TYPES_FOR_DROPDOWN_SUCCESS,
+  payload: resp,
+});
