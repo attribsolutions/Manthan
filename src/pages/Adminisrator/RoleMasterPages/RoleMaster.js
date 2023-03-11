@@ -262,10 +262,12 @@ const RoleMaster = (props) => {
 
         saveDissable(true);//save Button Is dissable function
         if (pageMode === mode.edit) {
-          dispatch(updateID(jsonBody, values.id));
+          dispatch(updateID({ jsonBody, updateId: values.id, btnId }));
+
         }
         else {
-          dispatch(postRole(jsonBody));
+          dispatch(postRole({ jsonBody, btnId }));
+
         }
       }
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
@@ -287,7 +289,7 @@ const RoleMaster = (props) => {
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                <form onSubmit={SaveHandler} noValidate>
+                <form noValidate>
                   <Row className="">
                     <Col md={12}>
                       <Card>
@@ -431,6 +433,7 @@ const RoleMaster = (props) => {
                               <Row>
                                 <Col sm={2}>
                                   <SaveButton pageMode={pageMode}
+                                    onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
                                     module={"RoleMaster"}
