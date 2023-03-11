@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { PostMethod_ForCategoryAPISuccess } from "./action";
 import {
-  POST_METHOD_HANDLER_FOR_CATEGORY_API,
+  SAVE_CATEGORY_MASTER,
   DELETE_CATEGORY_ID,
   EDIT_CATEGORY_ID,
   GET_CATEGORY_LIST,
@@ -18,53 +17,51 @@ import {
   deleteCategoryIDSuccess,
   editCategoryIDSuccess,
   getCategorylistSuccess,
+  saveCategoryMaster_Success,
   updateCategoryIDSuccess
 } from "./action";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-// post api
-function* Post_Method_ForCategory_GenFun({ data }) {
+
+function* save_Method_ForCategory_GenFun({ config }) {              // Save API
   try {
-    const response = yield call(Post_Category_API, data);
-    yield put(PostMethod_ForCategoryAPISuccess(response));
+    const response = yield call(Post_Category_API, config);
+    yield put(saveCategoryMaster_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// get api
-function* Get_Category_List_GenratorFunction() {
+function* Get_Category_List_GenratorFunction() {                    // getList API
   try {
     const response = yield call(get_Category_List_Api);
     yield put(getCategorylistSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-// delete api 
-function* Delete_Category_ID_GenratorFunction({ id }) {
+function* Delete_Category_ID_GenratorFunction({ config }) {          // delete API
   try {
-    const response = yield call(detelet_Category_List_Api, id);
+    const response = yield call(detelet_Category_List_Api, config);
     yield put(deleteCategoryIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-// edit api
-function* Edit_Category_ID_GenratorFunction({ id, pageMode }) {
+function* Edit_Category_ID_GenratorFunction({ config }) {           // edit API 
+  const { btnmode } = config;
   try {
-    const response = yield call(edit_Category_List_Api, id);
-    response.pageMode = pageMode
+    const response = yield call(edit_Category_List_Api, config);
+    response.pageMode = btnmode;
     yield put(editCategoryIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// update api
-function* Update_Category_ID_GenratorFunction({ updateData, ID }) {
+function* Update_Category_ID_GenratorFunction({ config }) {         // update API
   try {
-    const response = yield call(update_Category_List_Api, updateData, ID);
+    const response = yield call(update_Category_List_Api, config);
     yield put(updateCategoryIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 function* CategorySaga() {
-  yield takeEvery(POST_METHOD_HANDLER_FOR_CATEGORY_API, Post_Method_ForCategory_GenFun)
+  yield takeEvery(SAVE_CATEGORY_MASTER, save_Method_ForCategory_GenFun)
   yield takeEvery(GET_CATEGORY_LIST, Get_Category_List_GenratorFunction)
   yield takeEvery(DELETE_CATEGORY_ID, Delete_Category_ID_GenratorFunction)
   yield takeEvery(EDIT_CATEGORY_ID, Edit_Category_ID_GenratorFunction)

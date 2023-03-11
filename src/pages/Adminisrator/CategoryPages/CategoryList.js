@@ -6,7 +6,7 @@ import {
   delete_Category_ID,
   editCategoryID,
   getCategorylist,
-  PostMethod_ForCategoryAPISuccess,
+  saveCategoryMaster_Success,
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -34,7 +34,7 @@ const CategoryList = (props) => {
     getList: getCategorylist,
     editId: editCategoryID,
     deleteId: delete_Category_ID,
-    postSucc: PostMethod_ForCategoryAPISuccess,
+    postSucc: saveCategoryMaster_Success,
     updateSucc: updateCategoryIDSuccess,
     deleteSucc: deleteCategoryIDSuccess
   }

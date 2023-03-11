@@ -245,7 +245,7 @@ export const update_CategoryType_List_Api = ({ jsonBody, updateId, btnId }) => p
 
 //Category API
 export const Post_Category_API = ({ jsonBody, btnId }) => post(url.CATEGORY_API, jsonBody, btnId)// post api
-export const get_Category_List_Api = ({ btnId }) => get(url.CATEGORY_API, btnId) // get api
+export const get_Category_List_Api = () => get(url.CATEGORY_API) // get api
 export const detelet_Category_List_Api = ({ deleteId, btnId }) => del(`${url.CATEGORY_API}/${deleteId}`, btnId) // delete api
 export const edit_Category_List_Api = ({ editId, btnId }) => get(`${url.CATEGORY_API}/${editId}`, btnId) // edit api
 export const update_Category_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.CATEGORY_API}/${updateId}`, jsonBody, btnId)// update
