@@ -41,7 +41,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
-import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -165,7 +165,7 @@ const PartyMaster = (props) => {
         dispatch(getState());
         dispatch(getPriceList());
         dispatch(getPartyTypelist());
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
     }, [dispatch]);
 
     useEffect(() => {

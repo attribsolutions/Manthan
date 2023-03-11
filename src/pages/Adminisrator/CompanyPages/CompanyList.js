@@ -4,8 +4,8 @@ import {
     editCompanyID,
     updateCompanyIDSuccess,
     deleteCompanyIDSuccess,
-    PostCompanySubmitSuccess,
-    fetchCompanyList,
+    saveCompany_Success,
+    getcompanyList,
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
@@ -30,10 +30,10 @@ const CompanyList = () => {
     );
 
     const action = {
-        getList: fetchCompanyList,
+        getList: getcompanyList,
         editId: editCompanyID,
         deleteId: deleteCompany_ID,
-        postSucc: PostCompanySubmitSuccess,
+        postSucc: saveCompany_Success,
         updateSucc: updateCompanyIDSuccess,
         deleteSucc: deleteCompanyIDSuccess
     }
@@ -43,7 +43,7 @@ const CompanyList = () => {
         const page_Id = pageId.COMPANY_lIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
     }, []);
 
     const { pageField,userAccess=[] } = reducers;

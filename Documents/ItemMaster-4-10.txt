@@ -24,7 +24,7 @@ import classnames from "classnames"
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { AvForm } from "availity-reactstrap-validation"
 import Select from "react-select";
-import { fetchCompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
+import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
 import {
     editItemSuccess,
     getBaseUnit_ForDropDown,
@@ -327,7 +327,7 @@ const ItemsMaster = (props) => {
     }, [PostAPIResponse])
 
     useEffect(() => {
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
         // dispatch(get_Category_By_CategoryType_ForDropDown());
