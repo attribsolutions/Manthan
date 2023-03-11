@@ -64,13 +64,9 @@ const Modules = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
       }
 
-
-
-
     default:
       return state
   }
-
 }
 
 export default Modules
