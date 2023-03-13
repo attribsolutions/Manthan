@@ -354,11 +354,11 @@ export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${i
 export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
 
 //Routes API
-export const Post_Routes_Master_API = (data) => post(url.ROUTES_FOR_MASTER, data)// post api
-export const Post_Routes_List_Api = (data) => post(url.ROUTES_FOR_LIST, data) // post api
-export const detelet_Routes_List_Api = (id) => del(`${url.ROUTES_FOR_MASTER}/${id}`) // delete api
-export const edit_Routes_List_Api = (id) => get(`${url.ROUTES_FOR_MASTER}/${id}`) // edit api
-export const update_Routes_List_Api = (data, id) => put(`${url.ROUTES_FOR_MASTER}/${id}`, data)// update
+export const Routes_Get_API = (filters) => post(url.ROUTES_FILTER, filters)// post api
+export const Routes_Post_API = ({ jsonBody, btnId }) => post(url.ROUTES_FOR_MASTER, jsonBody, btnId) // post api
+export const Routes_Edit_API = ({ editId, btnId }) => get(`${url.ROUTES_FOR_MASTER}/${editId}`, btnId) // edit api
+export const Routes_Update_API = ({ jsonBody, updateId, btnId  }) => put(`${url.ROUTES_FOR_MASTER}/${updateId}`, jsonBody, btnId)// update
+export const Routes_Delete_API = ({ deleteId, btnId }) => del(`${url.ROUTES_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //salesMan API
 export const SalesMan_Get_API = (filters) => post(url.SALESMAN_FOR_LIST, filters) // post api
