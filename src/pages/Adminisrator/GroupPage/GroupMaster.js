@@ -24,7 +24,6 @@ import {
     updateGroupIDSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -36,7 +35,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -73,14 +72,6 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    useEffect(() => {
-        const page_Id = pageId.GROUP
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(getGroupTypeslist())
-
-    }, []);
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -88,6 +79,14 @@ const GroupMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+        const page_Id = pageId.GROUP
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(getGroupTypeslist())
+
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -175,7 +174,6 @@ const GroupMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state))// Clear form values
             history.push({

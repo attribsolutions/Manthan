@@ -105,12 +105,10 @@ const PriceMaster = (props) => {
             dispatch(savePriceMasterActionSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: PostAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            })
         }
 
     }, [PostAPIResponse])
@@ -119,12 +117,10 @@ const PriceMaster = (props) => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
             dispatch(delete_PriceListSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: deleteAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            })
         }
     }, [deleteAPIResponse])
 
@@ -134,12 +130,10 @@ const PriceMaster = (props) => {
             dispatch(updatePriceListSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: updateMessage.Message,
-                RedirectPath: '',
-            }))
+            })
         }
     }, [updateMessage])
 

@@ -89,14 +89,6 @@ const AddEmployee = (props) => {
       pageField: state.CommonPageFieldReducer.pageField
     }));
 
-  useEffect(() => {
-    dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(pageId.EMPLOYEE))
-    dispatch(getDesignationID());
-    dispatch(getEmployeeTypelist());
-    dispatch(getPartyListAPI())
-    dispatch(getState());
-  }, [dispatch]);
 
   const values = { ...state.values }
   const { isError } = state;
@@ -105,6 +97,15 @@ const AddEmployee = (props) => {
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+  useEffect(() => {
+    dispatch(commonPageFieldSuccess(null));
+    dispatch(commonPageField(pageId.EMPLOYEE))
+    dispatch(getDesignationID());
+    dispatch(getEmployeeTypelist());
+    dispatch(getPartyListAPI())
+    dispatch(getState());
+  }, [dispatch]);
 
   // userAccess useEffect
   useEffect(() => {
@@ -124,7 +125,6 @@ const AddEmployee = (props) => {
       breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])
-
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -220,35 +220,26 @@ const AddEmployee = (props) => {
       }
     }
     else if (postMsg.Status === true) {
-      saveDissable(false);//save Button Is enable function
       dispatch(PostEmployeeSuccess({ Status: false }))
-      dispatch(AlertState({
+      CustomAlert({
         Type: 4,
-        Status: true,
         Message: JSON.stringify(postMsg.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
+      })
     }
   }, [postMsg])
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      saveDissable(false);//Update Button Is enable function
       setState(() => resetFunction(fileds, state))// Clear form values 
       history.push({
         pathname: url.EMPLOYEE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//Update Button Is enable function
       dispatch(updateEmployeeIDSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMsg.Message),
-        })
-      );
+      CustomAlert({
+        Type: 3,
+        Message: JSON.stringify(updateMsg.Message),
+      })
     }
   }, [updateMsg, modalCss]);
 
@@ -315,7 +306,7 @@ const AddEmployee = (props) => {
     })
   }
 
-  function State_Dropdown_Handler(e, v) {
+  function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
     setState((i) => {
       const a = { ...i }
@@ -323,9 +314,6 @@ const AddEmployee = (props) => {
       a.hasValid.DistrictName.valid = false
       return a
     })
-  }
-
-  function Company_Dropdown_Handler(e, v) {
   }
 
   const SaveHandler = (event) => {
@@ -364,13 +352,11 @@ const AddEmployee = (props) => {
         }
         else {
           dispatch(saveEmployeeAction({ jsonBody, btnId }));
-
         }
       }
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
 
   };
-
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
@@ -382,7 +368,6 @@ const AddEmployee = (props) => {
         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-
           <Container fluid>
             <Card className="text-black">
               <CardHeader className="card-header   text-dark c_card_header" >
@@ -600,8 +585,7 @@ const AddEmployee = (props) => {
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
                                 EmployeeType_Dropdown_Handler(hasSelect)
-                              }
-                              }
+                              }}
                             />
                             {isError.EmployeeTypeName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.EmployeeTypeName}</small></span>
@@ -622,9 +606,7 @@ const AddEmployee = (props) => {
                               options={Company_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
-                                Company_Dropdown_Handler(hasSelect)
-                              }
-                              }
+                              }}
                             />
                             {isError.CompanyName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.CompanyName}</small></span>
@@ -647,8 +629,7 @@ const AddEmployee = (props) => {
                                 options={Party_DropdownOptions}
                                 onChange={(hasSelect, evn) => {
                                   onChangeSelect({ hasSelect, evn, state, setState });
-                                }
-                                }
+                                }}
                                 classNamePrefix="dropdown"
                               />
 
