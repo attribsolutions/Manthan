@@ -34,9 +34,9 @@ import { breadcrumbReturn, loginUserID, loginCompanyID, loginPartyID, currentDat
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { PostRouteslist } from "../../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
+import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
 
 const LoadingSheet = (props) => {
 
@@ -84,8 +84,8 @@ const LoadingSheet = (props) => {
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(GetRoutesList());
         dispatch(getVehicleList())
-        dispatch(PostRouteslist());
         dispatch(invoiceListGoBtnfilter())
 
     }, []);
