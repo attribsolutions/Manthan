@@ -388,7 +388,7 @@ export const loginJsonBody = () => ({
     RoleID: loginRoleID(),
     CompanyID: loginCompanyID(),
     PartyID: loginPartyID(),
-    IsSCM: loginIsSCMCompany(),
+    IsSCMCompany: loginIsSCMCompany(),
     CompanyGroup: loginCompanyGroup()
 })
 
