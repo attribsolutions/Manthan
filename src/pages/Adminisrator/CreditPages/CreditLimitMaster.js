@@ -33,7 +33,7 @@ import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import React, { useEffect, useState } from "react";
-import { PostRouteslist } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import { GoButton_For_CreditLimit_Add, GoButton_For_CreditLimit_AddSuccess, postCreditLimit, postCreditLimitSuccess } from "../../../store/Administrator/CreditLimitRedux/actions";
 
 const CreditLimitMaster = (props) => {
@@ -81,7 +81,7 @@ const CreditLimitMaster = (props) => {
         const page_Id = pageId.CREDITLIMIT
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(PostRouteslist());
+        dispatch(GetRoutesList());
     }, []);
 
     // userAccess useEffect

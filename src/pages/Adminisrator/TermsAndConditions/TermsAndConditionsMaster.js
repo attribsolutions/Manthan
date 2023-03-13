@@ -215,26 +215,6 @@ const TermsAndConditionsMaster = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    // const SaveHandler = (event) => {
-    //     event.preventDefault();
-    //     if (formValid(state, setState)) {
-    //         const jsonBody = JSON.stringify({
-    //             Name: values.Name,
-    //             IsDefault: values.IsDefault,
-    //             CreatedBy: loginUserID(),
-    //             UpdatedBy: loginUserID()
-    //         });
-
-    //         saveDissable(true);//save Button Is dissable function
-
-    //         if (pageMode === mode.edit) {
-    //             dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
-    //         }
-    //         else {
-    //             dispatch(saveTermAndCondition(jsonBody))
-    //         }
-    //     }
-    // };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -253,7 +233,7 @@ const TermsAndConditionsMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -306,6 +286,7 @@ const TermsAndConditionsMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton
+                                                                    onClick={SaveHandler}
                                                                         pageMode={pageMode}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
