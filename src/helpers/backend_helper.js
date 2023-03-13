@@ -219,7 +219,7 @@ export const update_EmployeeType_List_Api = ({ jsonBody, updateId, btnId }) => p
 export const Save_Party_Type_API = ({ jsonBody, btnId }) => post(url.PARTYTYPES_API, jsonBody, btnId)// post api
 export const get_PartyType_List_Api = (filters) => post(url.PARTYTYPES_FILTER_API, filters) // get api
 export const detelet_PartyType_List_Api = ({ deleteId, btnId }) => del(`${url.PARTYTYPES_API}/${deleteId}`, btnId) // delete api
-export const edit_PartyType_List_Api = ({ editId, IsSCM, btnId }) => get(`${url.PARTYTYPES_API}/${editId}/${IsSCM}`, btnId) // edit api
+export const edit_PartyType_List_Api = ({ jsonBody, btnId }) => post(url.PARTYTYPES_FILTER_API, jsonBody, btnId) // edit api (post method)
 export const update_PartyType_List_Api = ({ updateId, jsonBody, btnId }) => put(`${url.PARTYTYPES_API}/${updateId}`, jsonBody, btnId)// update 
 
 // Division Types API

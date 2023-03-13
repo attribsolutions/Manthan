@@ -200,11 +200,9 @@ const PartyType = (props) => {
     const SaveHandler = (event) => {
         event.preventDefault();
         const btnId = event.target.id;
-        debugger
-        btnIsDissablefunc({ btnId, state: true })
-
         try {
             if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsSCM: values.IsSCM,
@@ -242,7 +240,7 @@ const PartyType = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -319,6 +317,7 @@ const PartyType = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"PartyType"}
