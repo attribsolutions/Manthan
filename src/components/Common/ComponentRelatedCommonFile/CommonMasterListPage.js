@@ -116,8 +116,6 @@ const CommonListPage = (props) => {
   useEffect(async () => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
-      saveDissable(false);//+++++++++save Button Is enable function
-
       dispatch(updateSucc({ Status: false }));
       dispatch(getList(getListbodyFunc()));
       CustomAlert({
@@ -126,8 +124,6 @@ const CommonListPage = (props) => {
       })
       tog_center();
     } else if (updateMsg.Status === true) {
-
-      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
       CustomAlert({
         Type: 3,
@@ -146,10 +142,7 @@ const CommonListPage = (props) => {
         Type: 1,
         Message: deleteMsg.Message,
       })
-      // if (promise) {
-      // getList(getListbodyFunc())
       dispatch(getList(getListbodyFunc()));
-      // }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
       CustomAlert({
@@ -164,7 +157,6 @@ const CommonListPage = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postSucc({ Status: false }))
-      saveDissable(false);//+++++++++save Button Is enable function
       const promise = await CustomAlert({
         Type: 1,
         Message: postMsg.Message
@@ -175,7 +167,6 @@ const CommonListPage = (props) => {
     }
 
     else if ((postMsg.Status === true)) {
-      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(postSucc({ Status: false }))
       CustomAlert({
         Type: 4,

@@ -22,7 +22,7 @@ import {
   GetUserPartiesForUserMastePageSuccess,
   getEmployeeForUseRegistrationSuccess
 } from "./actions";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // employee dropdown list
 function* EmployeelistDropdown_GenFunc() {
@@ -41,9 +41,10 @@ function* user_save_GenFunc({ data }) {
 
 }
 
-function* userList_GenFunc({ jsonbody }) { //  Get  Users list  for List page  POST_api
+function* userList_GenFunc() { //  Get  Users list  for List page  POST_api
+  const filters = JSON.stringify(loginJsonBody())
   try {
-    const response = yield call(User_Component_GetMethod_API, jsonbody);
+    const response = yield call(User_Component_GetMethod_API, filters);
     yield put(getUserSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }

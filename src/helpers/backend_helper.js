@@ -118,7 +118,7 @@ export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_CO
 //User Registration  All APIs 
 export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_LIST_FOR_DROPDOWN_API_URL)//get api for Dropdown_list data 
 export const User_Component_PostMethod_API = ({ jsonBody, btnId }) => post(url.REGISTRATION_API_URL, jsonBody, btnId)//post for (save and update) User_Component
-export const User_Component_GetMethod_API = ({ jsonBody, btnId }) => post(url.USER_API_URL, jsonBody, btnId) //Get User_Component
+export const User_Component_GetMethod_API = (filters) => post(url.USER_API_URL, filters) //Get User_Component
 export const User_Component_Delete_Method_API = ({ deleteId, btnId }) => del(`${url.USER_API_URL}/${deleteId}`, btnId) // delete api
 export const User_Component_EditById_API = ({ editId, btnId }) => get(`${url.USER_API_URL}/${editId}`, btnId) // edit api
 export const User_Component_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.USER_API_URL}/${updateId}`, jsonBody, btnId) // update api

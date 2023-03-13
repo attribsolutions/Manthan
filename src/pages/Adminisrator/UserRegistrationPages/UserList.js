@@ -15,7 +15,6 @@ import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
 import * as pageId from "../../../routes/allPageID"
-import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const UserList = () => {
     const dispatch = useDispatch();
@@ -44,16 +43,10 @@ const UserList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.USER_lIST))
-        dispatch(getUser(getListbodyFunc()));
+        dispatch(getUser());
     }, []);
 
-    function getListbodyFunc() {
-        return JSON.stringify({
-            UserID: loginUserID(),
-            RoleID: loginRoleID(),
-            CompanyID: loginCompanyID()
-        })
-    }
+ 
     const { pageField, userAccess = [] } = reducers
 
     return (
@@ -70,7 +63,6 @@ const UserList = () => {
                         masterPath={USER}
                         ButtonMsgLable={"User"}
                         deleteName={"LoginName"}
-                        getListbodyFunc={getListbodyFunc}
                     />
                     : null
             }
