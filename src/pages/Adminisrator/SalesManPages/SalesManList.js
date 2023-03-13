@@ -8,11 +8,11 @@ import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import { loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
-    deleteSalesManIDSuccess,
-    delete_SalesMan_ID,
+    deleteSalesManID_Success,
+    deleteSalesManID,
     editSalesManID,
-    PostMethod_ForSalesManMasterAPISuccess,
-    PostSalesManlist,
+    saveSalesManMasterSuccess,
+    getSalesManlist,
     updateSalesManIDSuccess
 } from "../../../store/Administrator/SalesManRedux/actions";
 
@@ -32,12 +32,12 @@ const SalesManList = (props) => {
     );
 
     const action = {
-        getList: PostSalesManlist,
+        getList: getSalesManlist,
         editId: editSalesManID,
-        deleteId: delete_SalesMan_ID,
-        postSucc: PostMethod_ForSalesManMasterAPISuccess,
+        deleteId: deleteSalesManID,
+        postSucc: saveSalesManMasterSuccess,
         updateSucc: updateSalesManIDSuccess,
-        deleteSucc: deleteSalesManIDSuccess,
+        deleteSucc: deleteSalesManID_Success,
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
@@ -45,7 +45,7 @@ const SalesManList = (props) => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(PostSalesManlist())
+        dispatch(getSalesManlist())
     }, []);
     const { pageField, userAccess = [] } = reducers;
 
