@@ -347,7 +347,7 @@ export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { CommonConsole("Common loginCompanyID  Error") }
+    } catch (e) { CommonConsole("Common login CompanyID  Error") }
     return user_Company
 }
 
@@ -355,7 +355,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID 
     let user_Party = 0
     try {
         user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
-    } catch (e) { CommonConsole("Common loginPartyID Func  Error") }
+    } catch (e) { CommonConsole("Common login PartyID Func  Error") }
     return user_Party
 }
 
@@ -363,7 +363,7 @@ export const loginEmployeeID = () => {//+++++++++++++++++++++ Seesion loginParty
     let user_EmployeeID = 0
     try {
         user_EmployeeID = JSON.parse(localStorage.getItem("roleId")).Employee_id
-    } catch (e) { alert("Common loginEmployeeID Func  Error") }
+    } catch (e) { alert("Common login EmployeeID Func  Error") }
     return user_EmployeeID
 }
 
@@ -371,8 +371,16 @@ export const loginIsSCMCompany = () => {//+++++++++++++++++++++ Seesion loginPar
     let IsSCMCompany = 0
     try {
         IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"))
-    } catch (e) { CommonConsole("Common loginEmployeeID Func  Error") }
+    } catch (e) { CommonConsole("Common login IsSCMCompany Func  Error") }
     return IsSCMCompany
+}
+
+export const loginCompanyGroup = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
+    let CompanyGroup = 0
+    try {
+        CompanyGroup = JSON.parse(localStorage.getItem("CompanyGroup"))
+    } catch (e) { CommonConsole("Common login CompanyGroup Func  Error") }
+    return CompanyGroup
 }
 
 export const loginJsonBody = () => ({
@@ -380,7 +388,8 @@ export const loginJsonBody = () => ({
     RoleID: loginRoleID(),
     CompanyID: loginCompanyID(),
     PartyID: loginPartyID(),
-    IsSCM: loginIsSCMCompany()
+    IsSCMCompany: loginIsSCMCompany(),
+    CompanyGroup: loginCompanyGroup()
 })
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
@@ -505,7 +514,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
 export async function CheckAPIResponse({ method, url, response, body, btnId }) {
 
     if (btnId) {
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 500));
     }
 
     const { data = '' } = response

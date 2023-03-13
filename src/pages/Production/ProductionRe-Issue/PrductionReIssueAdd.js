@@ -32,7 +32,7 @@ import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
-    postMaterialIssueSuccess
+    SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
 
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -229,7 +229,7 @@ const ProductionReIssueAdd = (props) => {
         }
         else if (postMsg.Status === true) {
 
-            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(SaveMaterialIssueSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
             dispatch(postBOMSuccess({ Status: false }))
             dispatch(AlertState({

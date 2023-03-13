@@ -70,6 +70,7 @@ function* Submit_Party_GenratorFunction({ Data }) {
 }
 
 function* Delete_Party_GenratorFunction({ id }) {
+ 
   try {
     const response = yield call(Party_Master_Delete_API, id);
     yield put(deletePartyIDSuccess(response))
@@ -77,9 +78,10 @@ function* Delete_Party_GenratorFunction({ id }) {
 }
 
 function* Edit_Party_GenratorFunction({ id, pageMode }) {
+ 
   try {
     const response = yield call(Party_Master_Edit_API, id);
-    response.pageMode = pageMode
+    response.pageMode = id.btnmode
     yield put(editPartyIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

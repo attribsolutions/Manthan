@@ -40,9 +40,8 @@ import{
   });
   
   //get Registration api
-  export const getUser = (jsonbody) => ({
+  export const getUser = () => ({
     type: GET_USER_LIST_FOR_USER,
-    jsonbody,
   });
   
   export const getUserSuccess = (data) => ({

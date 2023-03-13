@@ -5,8 +5,8 @@ import {
   deleteItemIdSuccess,
   editItemId,
   getItemList,
-  PostItemDataSuccess,
-  updateItemSuccess,
+  SaveItemMasterActionSuccess,
+  updateItemMasterActionSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
 import ItemsMaster from "./ItemMaster/itemIndex";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
@@ -34,8 +34,8 @@ const ItemsList = (props) => {
     getList: getItemList,
     editId: editItemId,
     deleteId: deleteItemID,
-    postSucc: PostItemDataSuccess,
-    updateSucc: updateItemSuccess,
+    postSucc: SaveItemMasterActionSuccess,
+    updateSucc: updateItemMasterActionSuccess,
     deleteSucc: deleteItemIdSuccess
   }
 

@@ -37,9 +37,9 @@ import {
     get_PriceList_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown_Success,
-    postItemData,
-    PostItemDataSuccess,
-    updateItemID
+    saveItemMasterAction,
+    SaveItemMasterActionSuccess,
+    updateItemMasterAction
 } from "../../../../store/Administrator/ItemsRedux/action";
 import { AlertState, Breadcrumb_inputName } from "../../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -295,7 +295,7 @@ const ItemsMaster = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(PostItemDataSuccess({ Status: false }))
+            dispatch(SaveItemMasterActionSuccess({ Status: false }))
 
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -315,7 +315,7 @@ const ItemsMaster = (props) => {
         }
 
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostItemDataSuccess({ Status: false }))
+            dispatch(SaveItemMasterActionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -1054,12 +1054,12 @@ const ItemsMaster = (props) => {
             }));
         }
         else if (pageMode === 'edit') {
-            dispatch(updateItemID(jsonBody, EditData.id));
+            dispatch(updateItemMasterAction(jsonBody, EditData.id));
             console.log("edit json", jsonBody)
         }
 
         else {
-            dispatch(postItemData(jsonBody));
+            dispatch(saveItemMasterAction(jsonBody));
             console.log("post json", jsonBody)
         }
 

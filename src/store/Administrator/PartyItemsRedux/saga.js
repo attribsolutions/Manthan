@@ -1,70 +1,50 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { Party_Items, get_Party_Item_List, Items_Master_Get_API, GetPartyList_API, edit_PartyItem_List_Api, } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { PostPartyItemsSuccess, getPartyItemListSuccess, getPartyListSuccess, editModuleIDSuccess, editPartyItemIDSuccess, } from "./action";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { Save_Party_Items, get_Party_Item_List, GetPartyList_API, edit_PartyItem_List_Api, } from "../../../helpers/backend_helper";
+import { SavePartyItemsSuccess, getPartyItemListSuccess, getPartyListSuccess, editPartyItemIDSuccess, } from "./action";
 import { POST_PARTYITEMS, GET_PARTY_ITEM_LIST, GET_PARTY_LIST, EDIT_PARTY_ITEM_ID, } from "./actionType";
 
-// post api
-function* Post_PartyItems_GneratorFunction({ data }) {
 
-
+function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
   try {
-    const response = yield call(Party_Items, data);
-
-    yield put(PostPartyItemsSuccess(response));
-  } catch (error) {
-
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+    const response = yield call(Save_Party_Items, config);
+    yield put(SavePartyItemsSuccess(response));
+  } catch (error) { CommonConsole(error) }
 }
 
-function* getPartyItemGenFunc({ supplierId }) {
-  
+
+function* getPartyItemGenFunc({ SupplierID }) {                                   // getList API
   try {
-    // const itemList = yield call(Items_Master_Get_API);
-    const response = yield call(get_Party_Item_List, supplierId);
+    const response = yield call(get_Party_Item_List, SupplierID);
     response.Data.map((item) => {
       item["itemCheck"] = false
       if (item.Party > 0) {
         { item["itemCheck"] = true }
       }
       return item
-
     });
     yield put(getPartyItemListSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message Party Item List",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-// Get Party List
-function* getPartyListGenFunc() {
+
+
+function* getPartyListGenFunc() {                                              // getList API
   try {
     const response = yield call(GetPartyList_API);
     yield put(getPartyListSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for getSupplier ",
-    }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
-function* editPartyItems_ID_GenratorFunction({ id, pageMode }) {
+
+function* editPartyItems_ID_GenratorFunction({ config  }) {               // edit API 
+  const { btnmode } = config;
   
   try {
-    const response = yield call(edit_PartyItem_List_Api, id);
+    const response = yield call(edit_PartyItem_List_Api, config);
+    response.pageMode = btnmode;
 
-    response.pageMode = pageMode
     let Party = {};
-
     const PartyItem = response.Data.map((item) => {
       item["itemCheck"] = false
       if (item.Party > 0) {
@@ -74,18 +54,15 @@ function* editPartyItems_ID_GenratorFunction({ id, pageMode }) {
       return item
     });
     response.Data = { ...Party, PartyItem };
-    
     yield put(editPartyItemIDSuccess(response));
-  } catch (error) {
-    // yield put(AlertState({
-    //   Type: 4,
-    //   Status: true, Message: "500 Error Message Edit Party Items",
-    // }));
-  }
+  } catch (error) { CommonConsole(error) }
 }
 
+
+
+
 function* PartyItemsSaga() {
-  yield takeEvery(POST_PARTYITEMS, Post_PartyItems_GneratorFunction)
+  yield takeEvery(POST_PARTYITEMS, Save_PartyItems_GneratorFunction)
   yield takeEvery(GET_PARTY_ITEM_LIST, getPartyItemGenFunc)
   yield takeEvery(GET_PARTY_LIST, getPartyListGenFunc)
   yield takeEvery(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenratorFunction)

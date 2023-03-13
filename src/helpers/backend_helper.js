@@ -104,7 +104,6 @@ export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save 
 //  common pages get data for page filed and validation
 export const commonPageFiled_API = (pageId) => get(`${url.PAGE_FIELD}/${pageId}`)
 
-
 // Employees  Component All Api 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
@@ -119,7 +118,7 @@ export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_CO
 //User Registration  All APIs 
 export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_LIST_FOR_DROPDOWN_API_URL)//get api for Dropdown_list data 
 export const User_Component_PostMethod_API = ({ jsonBody, btnId }) => post(url.REGISTRATION_API_URL, jsonBody, btnId)//post for (save and update) User_Component
-export const User_Component_GetMethod_API = ({ jsonBody, btnId }) => post(url.USER_API_URL, jsonBody, btnId) //Get User_Component
+export const User_Component_GetMethod_API = (filters) => post(url.USER_API_URL, filters) //Get User_Component
 export const User_Component_Delete_Method_API = ({ deleteId, btnId }) => del(`${url.USER_API_URL}/${deleteId}`, btnId) // delete api
 export const User_Component_EditById_API = ({ editId, btnId }) => get(`${url.USER_API_URL}/${editId}`, btnId) // edit api
 export const User_Component_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.USER_API_URL}/${updateId}`, jsonBody, btnId) // update api
@@ -153,23 +152,22 @@ export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGE
 export const get_PageType_HPages = (id) => get(url.GET_PAGETYPE)
 export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
 
-
 //H_pages
 export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
 export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
-export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)// get edit H_Pages ID Data 
+export const edit_HPageID = ({ editId, btnId }) => get(`${url.H_PAGES_API_URL}/${editId}`, btnId)// get edit H_Pages ID Data 
 export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) // Upadate H_Page api
 export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
-export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`)
+export const deletHPagesUsingID_API = ({ deleteId, btnId }) => del(`${url.H_PAGES_API_URL}/${deleteId}`, btnId)
 
 // M_Items
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
 export const Items_Master_Get_API = () => get(url.Items_MASTER_API)//get api
-export const Items_Master_Post_API = (data) => post(url.Items_MASTER_API, data)// post api
+export const Items_Master_Post_API = ({ jsonBody, btnId }) => post(url.Items_MASTER_API, jsonBody, btnId)// save api
 export const Items_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.Items_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Items_Master_Edit_API = ({ editId, btnId }) => get(`${url.Items_MASTER_API}/${editId}`, btnId)// edit api
-export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
+export const Items_Master_Update_API = ({ updateId, jsonBody, btnId }) => put(`${url.Items_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
 
 export const BaseUnit_Get_DropDown_API = () => get(url.BASEUNIT_DROPDOWN_API)// BaseUnit DropDown api
 export const CategoryType_Get_DropDown_API = () => get(url.CATEGORY_TYPES_API)// CategoryType DropDown api
@@ -185,13 +183,11 @@ export const Get_Item_Tag = () => get(url.GET_ITEM_TAG)// Get Item Tag Api
 export const Get_Brand_Tag = () => get(url.GET_BRAND_TAG)// Get Item Tag Api
 export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_SUB_TYPE, data)// post api
 
-
-
 // Party Master
 export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API, jsonbody)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
-export const Party_Master_Delete_API = (id) => del(`${url.PARTY_MASTER_API}/${id}`)// delete api
-export const Party_Master_Edit_API = (id) => get(`${url.PARTY_MASTER_API}/${id}`)// edit api
+export const Party_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_MASTER_API}/${deleteId}`, btnId)// delete api
+export const Party_Master_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_MASTER_API}/${editId}`, btnId)// edit api
 export const Party_Master_Update_API = (data, id) => put(`${url.PARTY_MASTER_API}/${id}`, data)// update api
 export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)//  GetDistrictOnState DropDown API
 export const GetPriceList_For_Dropdown = () => get(url.PRICELIST)//  get priceList
@@ -214,16 +210,16 @@ export const Delete_RoleAccess_Api = (role, division, company) => del(`${url.DEL
 
 // Employee Type API
 export const Employee_Type_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_TYPE_API, jsonBody, btnId)// post api
-export const get_EmployeeType_List_Api = (filters) => post(url.EMPLOYEE_TYPE_FILTER_API,filters) // get api
+export const get_EmployeeType_List_Api = (filters) => post(url.EMPLOYEE_TYPE_FILTER_API, filters) // get api
 export const detelet_EmployeeType_List_Api = ({ deleteId, btnId }) => del(`${url.EMPLOYEE_TYPE_API}/${deleteId}`, btnId) // delete api
 export const edit_EmployeeType_List_Api = ({ editId, btnId }) => get(`${url.EMPLOYEE_TYPE_API}/${editId}`, btnId) // edit api
 export const update_EmployeeType_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.EMPLOYEE_TYPE_API}/${updateId}`, jsonBody, btnId)// update 
 
 // Party Type API
-export const Save_Party_Type_API = ({jsonBody,btnId}) => post(url.PARTYTYPES_API, jsonBody,btnId)// post api
+export const Save_Party_Type_API = ({ jsonBody, btnId }) => post(url.PARTYTYPES_API, jsonBody, btnId)// post api
 export const get_PartyType_List_Api = (filters) => post(url.PARTYTYPES_FILTER_API, filters) // get api
-export const detelet_PartyType_List_Api = ({deleteId,btnId}) => del(`${url.PARTYTYPES_API}/${deleteId}`,btnId) // delete api
-export const edit_PartyType_List_Api = ({ editId, IsSCM, btnId }) => get(`${url.PARTYTYPES_API}/${editId}/${IsSCM}`) // edit api
+export const detelet_PartyType_List_Api = ({ deleteId, btnId }) => del(`${url.PARTYTYPES_API}/${deleteId}`, btnId) // delete api
+export const edit_PartyType_List_Api = ({ jsonBody, btnId }) => post(url.PARTYTYPES_FILTER_API, jsonBody, btnId) // edit api (post method)
 export const update_PartyType_List_Api = ({ updateId, jsonBody, btnId }) => put(`${url.PARTYTYPES_API}/${updateId}`, jsonBody, btnId)// update 
 
 // Division Types API
@@ -250,9 +246,9 @@ export const update_Category_List_Api = ({ jsonBody, updateId, btnId }) => put(`
 //Vehicle API
 export const Vehicle_Get_API = (filters) => post(url.VEHICLE_FILTER_API, filters)//  get Api Using Post Method
 export const Vehicle_Post_API = ({ jsonBody, btnId }) => post(url.VEHICLE_API, jsonBody, btnId)// post api
-export const Vehicle_Edit_API = ({ editId, btnId }) => get(`${url.VEHICLE_API}/${editId}`,btnId) // edit api
-export const Vehicle_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.VEHICLE_API}/${updateId}`, jsonBody,btnId)// update API
-export const Vehicle_Delete_API = ({ deleteId, btnId }) => del(`${url.VEHICLE_API}/${deleteId}`,btnId) // delete api
+export const Vehicle_Edit_API = ({ editId, btnId }) => get(`${url.VEHICLE_API}/${editId}`, btnId) // edit api
+export const Vehicle_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.VEHICLE_API}/${updateId}`, jsonBody, btnId)// update API
+export const Vehicle_Delete_API = ({ deleteId, btnId }) => del(`${url.VEHICLE_API}/${deleteId}`, btnId) // delete api
 export const VehicleTypes_Get_API_for_Dropdown = (filters) => post(url.VEHICLETYPES_DROPDOWN, filters)// Vehicle Type dropDown API
 
 //CompanyGroup API
@@ -275,7 +271,7 @@ export const get_PriceListByPartyType_API = (partyType) => get(`${url.PRICE_LIST
 export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
 export const delete_PriceList_API = ({ deleteId, btnId }) => del(`${url.PRICE_LIST}/${deleteId}`, btnId)// delete api
 export const edit_PriceList = ({ editId, btnId }) => get(`${url.PRICE_LIST}/${editId}`, btnId) // edit api
-export const update_PriceList = ({updateId, jsonBody, btnId}) => put(`${url.PRICE_LIST}/${updateId}`, jsonBody, btnId)// update
+export const update_PriceList = ({ updateId, jsonBody, btnId }) => put(`${url.PRICE_LIST}/${updateId}`, jsonBody, btnId)// update
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
@@ -311,11 +307,11 @@ export const edit_Group_List_Api = ({ editId, btnId }) => get(`${url.GROUP_API}/
 export const update_Group_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.GROUP_API}/${updateId}`, jsonBody, btnId)// update api
 
 // TermsAndCondtions API
-export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
+export const Post_TermsAndCondtions_Master_API = ({ jsonBody, btnId }) => post(url.TERMSANDCONDITIONS_API, jsonBody, btnId)// post api
 export const get_TermsAndCondtionsList_API = () => get(url.TERMSANDCONDITIONS_API)// get api
-export const del_TermsAndCondtions_Master_API = (id) => del(`${url.TERMSANDCONDITIONS_API}/${id}`)// delete api
-export const edit_TermsAndCondtions_Master_API = (id) => get(`${url.TERMSANDCONDITIONS_API}/${id}`)// edit api
-export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`, data)// update api
+export const del_TermsAndCondtions_Master_API = ({ deleteId, btnId }) => del(`${url.TERMSANDCONDITIONS_API}/${deleteId}`, btnId)// delete api
+export const edit_TermsAndCondtions_Master_API = ({ editId, btnId }) => get(`${url.TERMSANDCONDITIONS_API}/${editId}`, btnId)// edit api
+export const update_TermsAndCondtions_Master_API = ({ jsonBody, updateId, btnId }) => put(`${url.TERMSANDCONDITIONS_API}/${updateId}`, jsonBody, btnId)// update api
 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
@@ -327,18 +323,18 @@ export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`
 // PartySubParty API
 export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY_LIST}`)// get list api
 export const PartySubParty_Post_API = ({ jsonBody, btnId }) => post(url.PARTY_SUB_PARTY, jsonBody, btnId)// post api
-export const PartySubParty_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_SUB_PARTY}/${deleteId}`,btnId)// delete api
-export const PartySubParty_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_SUB_PARTY}/${editId}`,btnId)// edit api
-export const PartySubParty_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_SUB_PARTY}/${updateId}`,jsonBody,btnId)// update api
+export const PartySubParty_Delete_API = ({ deleteId, btnId }) => del(`${url.PARTY_SUB_PARTY}/${deleteId}`, btnId)// delete api
+export const PartySubParty_Edit_API = ({ editId, btnId }) => get(`${url.PARTY_SUB_PARTY}/${editId}`, btnId)// edit api
+export const PartySubParty_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_SUB_PARTY}/${updateId}`, jsonBody, btnId)// update api
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
 //PartyItems API
 
 export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
-export const Party_Items = (data) => post(url.PARTYITEM_FOR_MASTER, data)// post api
-export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEM_FOR_MASTER}/${party_id}`)//get api
+export const Save_Party_Items = ({ jsonBody, btnId }) => post(url.PARTYITEM_FOR_MASTER, jsonBody, btnId)// post api
+export const get_Party_Item_List = (SupplierID) => get(`${url.PARTYITEM_FOR_MASTER}/${SupplierID}`)//get api
 export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
-export const edit_PartyItem_List_Api = (id) => get(`${url.PARTYITEM_FOR_MASTER}/${id}`)// edit api
+export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
 
@@ -358,29 +354,31 @@ export const update_General_List_Api = (data, id) => put(`${url.GENERAL_API}/${i
 export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
 
 //Routes API
-export const Post_Routes_Master_API = (data) => post(url.ROUTES_FOR_MASTER, data)// post api
-export const Post_Routes_List_Api = (data) => post(url.ROUTES_FOR_LIST, data) // post api
-export const detelet_Routes_List_Api = (id) => del(`${url.ROUTES_FOR_MASTER}/${id}`) // delete api
-export const edit_Routes_List_Api = (id) => get(`${url.ROUTES_FOR_MASTER}/${id}`) // edit api
-export const update_Routes_List_Api = (data, id) => put(`${url.ROUTES_FOR_MASTER}/${id}`, data)// update
+export const Routes_Get_API = (filters) => post(url.ROUTES_FILTER, filters)// post api
+export const Routes_Post_API = ({ jsonBody, btnId }) => post(url.ROUTES_FOR_MASTER, jsonBody, btnId) // post api
+export const Routes_Edit_API = ({ editId, btnId }) => get(`${url.ROUTES_FOR_MASTER}/${editId}`, btnId) // edit api
+export const Routes_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ROUTES_FOR_MASTER}/${updateId}`, jsonBody, btnId)// update
+export const Routes_Delete_API = ({ deleteId, btnId }) => del(`${url.ROUTES_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //salesMan API
-export const Post_SalesMan_Master_API = (data) => post(url.SALESMAN_FOR_MASTER, data)// post api
-export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST, data) // post api
-export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
-export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
-export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
+export const SalesMan_Get_API = (filters) => post(url.SALESMAN_FOR_LIST, filters) // post api
+export const SalesMan_Post_API = ({ jsonBody, btnId }) => post(url.SALESMAN_FOR_MASTER, jsonBody, btnId)// post api
+export const SalesMan_Edit_API = ({ editId, btnId }) => get(`${url.SALESMAN_FOR_MASTER}/${editId}`, btnId) // edit api
+export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.SALESMAN_FOR_MASTER}/${updateId}`, jsonBody, btnId)// update
+export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Credit Limit
-export const Post_CreditLimit_Master_API = (data) => post(url.CREDIT_LIMIT, data)// post api
-export const CreditLimit_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, data)// Go Button post api
+export const Post_CreditLimit_Master_API = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId )// post api
+export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api
 
 // Route Update
 export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
-export const Post_Route_Update_API = (data) => post(url.ROUTE_UPDATE, data)// Route Update Post API
+export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPDATE, jsonBody, btnId)// Route Update Post API
+
+// Loading Sheet
+
 
 // Order Page api  
-
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
 export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
 export const OrderPage_Save_API_ForPO = ({ jsonBody, btnId }) => post(url.ORDER_PAGE_API, jsonBody, btnId)//get api
@@ -389,7 +387,6 @@ export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}
 export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
 export const OrderPage_Update_API = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
-
 
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
@@ -403,18 +400,13 @@ export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// upda
 export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
 export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
 
-
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
 export const Challan_delete_API = (id) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${id}`)//Delete challan
 export const Challan_Post_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
 export const Challan_Make_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
-
-
 export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make challan
 export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, data)//Make challan
-
-
 
 // BOM API
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
@@ -435,18 +427,18 @@ export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id
 
 // Material Issue
 export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
-export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_ISSUE, data)//  postapi
+export const Material_Issue_Post_API = ({ jsonBody, btnId }) => post(url.POST_API_FOR_MATERIAL_ISSUE, jsonBody, btnId)//  postapi
 export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
-export const Material_Issue_Edit_API = (id) => get(`${url.POST_API_FOR_MATERIAL_ISSUE}/${id}`)// delete api
-export const Material_Issue_Delete_API = (id) => del(`${url.POST_API_FOR_MATERIAL_ISSUE}/${id}`)// delete api
+export const Material_Issue_Edit_API = ({ editId, btnId }) => get(`${url.POST_API_FOR_MATERIAL_ISSUE}/${editId}`, btnId)// delete api
+export const Material_Issue_Delete_API = ({ deleteId, btnId }) => del(`${url.POST_API_FOR_MATERIAL_ISSUE}/${deleteId}`, btnId)// delete api
 
 // Production 
-export const Production_Post_API = (data) => post(url.PRODUCTION_POST_API, data)// go button postapi
+export const Production_Post_API = ({ jsonBody, btnId }) => post(url.PRODUCTION_POST_API, jsonBody, btnId)// Production save API
 export const production_get_API = (filters) => post(url.PRODUCTION_LIST_FILTER, filters)// go button postapi
-export const production_Edit_API = (id) => get(`${url.PRODUCTION_POST_API}/${id}`)// make production to material Issue postapi
+export const production_Edit_API = ({ editId, btnId }) => get(`${url.PRODUCTION_POST_API}/${editId}`, btnId)// make production to material Issue postapi
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export const production_UnitDropdown_API = (data) => post(url.PRODUCTION_UNIT_DROPDOWN_API, data)
-export const Production_Delete_API = (id) => del(`${url.PRODUCTION_POST_API}/${id}`)// delete api
+export const Production_Delete_API = ({ deleteId, btnId }) => del(`${url.PRODUCTION_POST_API}/${deleteId}`, btnId)// delete api
 
 // Production Re_Issue
 
@@ -497,10 +489,10 @@ export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/$
 // export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
 // export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
 
-// export const Post_SalesMan_List_Api = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
-// export const detelet_SalesMan_List_Api = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
-// export const edit_SalesMan_List_Api = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
-// export const update_SalesMan_List_Api = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
+// export const SalesMan_Get_API = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
+// export const salesMan_Delete_API = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
+// export const salesMan_Edit_API = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
+// export const salesMan_Update_API = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
 
 
 //Report API
