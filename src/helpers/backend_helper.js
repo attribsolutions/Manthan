@@ -156,10 +156,10 @@ export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN
 export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
 export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
-export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)// get edit H_Pages ID Data 
+export const edit_HPageID = ({ editId, btnId }) => get(`${url.H_PAGES_API_URL}/${editId}`,btnId)// get edit H_Pages ID Data 
 export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) // Upadate H_Page api
 export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
-export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`)
+export const deletHPagesUsingID_API = ({ deleteId, btnId }) => del(`${url.H_PAGES_API_URL}/${deleteId}`,btnId)
 
 // M_Items
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api

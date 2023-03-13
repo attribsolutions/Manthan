@@ -46,7 +46,7 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-debugger
+    debugger
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(11);
@@ -183,7 +183,7 @@ debugger
                 value: PartyTypes[0].id,
                 label: PartyTypes[0].Name
             })
-            dispatch(priceListByPartyAction( PartyTypes[0].id))
+            dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
     }, [PartyTypes])
 
@@ -281,7 +281,6 @@ debugger
     }
 
     function PartyType_Dropdown_OnChange_Handller(e) {
-        debugger
         setPartyType_dropdown_Select(e)
         setPriceList_dropdown_Select({ label: '' })
         // setCompanyList_dropdown_Select('')
@@ -315,8 +314,7 @@ debugger
         )
     }
 
-    const FormSubmitButton_Handler = (event, values) => {
-        debugger
+    const SaveHandler = (event, values) => {
 
         if (AddressDetailsMaster.length === 0) {
             dispatch(
@@ -396,95 +394,6 @@ debugger
         }
     };
 
-    // const SaveHandler = async (event, values) => {
-    //     debugger
-    //     event.preventDefault();
-    //     const btnId = "Save-PartyMaster"
-    //     btnIsDissablefunc({ btnId, state: true })
-    //     try {
-
-    //         if (AddressDetailsMaster.length === 0) {
-    //             dispatch(
-    //                 AlertState({
-    //                     Type: 4,
-    //                     Status: true,
-    //                     Message: "Address details is required",
-    //                     RedirectPath: false,
-    //                     PermissionAction: false,
-    //                 })
-    //             );
-    //             return;
-    //         }
-
-    //         const data = AddressDetailsMaster.map((index) => {
-    //             return index.IsDefault === true
-    //         })
-
-    //         const count1 = data.filter(value => value === true).length;
-
-    //         if (count1 === 0) {
-    //             dispatch(
-    //                 AlertState({
-    //                     Type: 4,
-    //                     Status: true,
-    //                     Message: "At least one Address Details IsDefault true",
-    //                     RedirectPath: false,
-    //                     PermissionAction: false,
-    //                 })
-    //             );
-    //             return;
-    //         }
-
-    //         const jsonBody = JSON.stringify({
-    //             Name: values.Name,
-    //             PriceList: PriceList_dropdown_Select.value,
-    //             PartyType: partyType_dropdown_Select.value,
-    //             Company: companyList_dropdown_Select.value,
-    //             PAN: values.PAN,
-    //             Email: values.Email,
-    //             MobileNo: values.MobileNo,
-    //             AlternateContactNo: values.AlternateContactNo,
-    //             State: state_DropDown_select.value,
-    //             District: district_dropdown_Select.value,
-    //             Taluka: 0,
-    //             City: 0,
-    //             GSTIN: values.GSTIN,
-    //             MkUpMkDn: values.MkUpMkDn,
-    //             isActive: values.isActive,
-    //             IsDivision: partyType_dropdown_Select.division,
-    //             CreatedBy: loginUserID(),
-    //             CreatedOn: "2022-06-24T11:16:53.165483Z",
-    //             UpdatedBy: loginUserID(),
-    //             UpdatedOn: "2022-06-24T11:16:53.330888Z",
-    //             PartyAddress: AddressDetailsMaster,
-    //             PartyPrefix: [
-    //                 {
-    //                     Orderprefix: values.Orderprefix,
-    //                     Invoiceprefix: values.Invoiceprefix,
-    //                     Grnprefix: values.Grnprefix,
-    //                     Receiptprefix: values.Receiptprefix,
-    //                     Challanprefix: values.Challanprefix,
-    //                     WorkOrderprefix: values.WorkOrderprefix,
-    //                     MaterialIssueprefix: values.MaterialIssueprefix,
-    //                     Demandprefix: values.Demandprefix,
-    //                     IBChallanprefix: values.IBChallanprefix,
-    //                     IBInwardprefix: values.IBInwardprefix
-    //                 }
-    //             ]
-    //         });
-
-
-    //         if (pageMode === mode.edit) {
-    //             dispatch(updatePartyID({ jsonBody, updateId: values.id, btnId }));
-    //         }
-    //         else {
-    //             dispatch(postPartyData({ jsonBody, btnId }));
-    //         }
-
-
-    //     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-    // };
-
     var IsEditMode_Css = ''
     if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
     if (!(userPageAccessState === '')) {
@@ -493,7 +402,7 @@ debugger
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <Container fluid>
-                        <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+                        <AvForm onValidSubmit={(e, v) => { SaveHandler(e, v); }}>
 
                             <Row>
                                 <Col lg={12}>
