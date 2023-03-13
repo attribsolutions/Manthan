@@ -116,7 +116,6 @@ const AddUser = (props) => {
   const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
     return index.Party_id === null
   })
-  console.log("FindPartyID", FindPartyID)
 
   useEffect(() => {
 
@@ -253,13 +252,6 @@ const AddUser = (props) => {
   const handleValidSubmit = (event, values) => {
   
 
-    // const Find = []
-    // partyRoleData.map((index) => {
-    //   userPartiesForUserMaster_redux.map((i) => {
-    //     return (index.Party === i.Party_id)
-    //   })
-    // })
-
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
@@ -288,11 +280,9 @@ const AddUser = (props) => {
     else if (pageMode === mode.edit) {
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
-      console.log("Update jsonBody", jsonBody)
     }
     else {
       dispatch(addUser(jsonBody));
-      console.log("Post jsonBody", jsonBody)
     }
   };
 
