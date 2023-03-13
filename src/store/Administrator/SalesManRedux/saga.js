@@ -1,85 +1,71 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
-    deleteSalesManIDSuccess,
+    deleteSalesManID_Success,
     editSalesManIDSuccess,
-    PostMethod_ForSalesManMasterAPISuccess,
-    PostSalesManlistSuccess,
+    saveSalesManMasterSuccess,
+    getSalesManlistSuccess,
     updateSalesManIDSuccess
 } from "./actions";
 import {
-    detelet_SalesMan_List_Api,
-    edit_SalesMan_List_Api,
-    Post_SalesMan_List_Api,
-    Post_SalesMan_Master_API,
-    update_SalesMan_List_Api
+    SalesMan_Delete_API,
+    SalesMan_Edit_API,
+    SalesMan_Get_API,
+    SalesMan_Post_API,
+    SalesMan_Update_API
 } from "../../../helpers/backend_helper";
 import {
     DELETE_SALESMAN_ID,
     EDIT_SALESMAN_ID,
-    POST_SALESMAN_LIST,
-    POST_METHOD_HANDLER_FOR_SALESMAN_MASTER_API,
+    GET_SALESMAN_LIST,
+    SAVE_SALES_MAN_MASTER,
     UPDATE_SALESMAN_ID
 } from "./actionTypes";
-import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-// post api
-function* Post_Method_ForSalesManMaster_GenFun({ data }) {
-
+function* save_SalesMan_Master_GenFun({ config = {} }) {
     try {
-        const response = yield call(Post_SalesMan_Master_API, data);
-
-        yield put(PostMethod_ForSalesManMasterAPISuccess(response));
+        const response = yield call(SalesMan_Post_API, config);
+        yield put(saveSalesManMasterSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
-// // POST api
-function* Post_SalesMan_List_GenratorFunction({ data }) {
-    
-    const jsonBody = {
-        "Party": loginPartyID(),
-        "Company": loginCompanyID()
-    }
+function* Post_SalesMan_List_GenratorFunction() {
+    const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
-        const response = yield call(Post_SalesMan_List_Api, jsonBody);
-        yield put(PostSalesManlistSuccess(response.Data));
+        const response = yield call(SalesMan_Get_API, filters);
+        yield put(getSalesManlistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
-// delete api 
-function* Delete_SalesMan_ID_GenratorFunction({ id }) {
+function* Edit_SalesMan_ID_GenratorFunction({ config = {} }) {
+    const { btnmode } = config;
     try {
-
-        const response = yield call(detelet_SalesMan_List_Api, id);
-
-        yield put(deleteSalesManIDSuccess(response))
-    } catch (error) { CommonConsole(error) }
-}
-
-// edit api
-function* Edit_SalesMan_ID_GenratorFunction({ id, pageMode }) {
-    try {
-        const response = yield call(edit_SalesMan_List_Api, id);
-        response.pageMode = pageMode
+        const response = yield call(SalesMan_Edit_API, config);
+        response.pageMode = btnmode
         yield put(editSalesManIDSuccess(response));
-        console.log("response in saga", response)
     } catch (error) { CommonConsole(error) }
 }
 
-// update api
-function* Update_SalesMan_ID_GenratorFunction({ updateData, ID }) {
+function* Update_SalesMan_ID_GenratorFunction({ config = {} }) {
     try {
-        const response = yield call(update_SalesMan_List_Api, updateData, ID);
+        const response = yield call(SalesMan_Update_API, config);
         yield put(updateSalesManIDSuccess(response))
     } catch (error) { CommonConsole(error) }
 }
 
+function* Delete_SalesMan_ID_GenratorFunction({ config = {} }) {
+    try {
+        const response = yield call(SalesMan_Delete_API, config);
+        yield put(deleteSalesManID_Success(response))
+    } catch (error) { CommonConsole(error) }
+}
+
 function* SalesManSaga() {
-    yield takeEvery(POST_METHOD_HANDLER_FOR_SALESMAN_MASTER_API, Post_Method_ForSalesManMaster_GenFun)
-    yield takeEvery(POST_SALESMAN_LIST, Post_SalesMan_List_GenratorFunction)
+    yield takeEvery(SAVE_SALES_MAN_MASTER, save_SalesMan_Master_GenFun)
+    yield takeEvery(GET_SALESMAN_LIST, Post_SalesMan_List_GenratorFunction)
     yield takeEvery(DELETE_SALESMAN_ID, Delete_SalesMan_ID_GenratorFunction)
     yield takeEvery(EDIT_SALESMAN_ID, Edit_SalesMan_ID_GenratorFunction)
     yield takeEvery(UPDATE_SALESMAN_ID, Update_SalesMan_ID_GenratorFunction)
-
 }
 
 export default SalesManSaga;
