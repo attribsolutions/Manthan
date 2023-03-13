@@ -307,11 +307,11 @@ export const edit_Group_List_Api = ({ editId, btnId }) => get(`${url.GROUP_API}/
 export const update_Group_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.GROUP_API}/${updateId}`, jsonBody, btnId)// update api
 
 // TermsAndCondtions API
-export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
+export const Post_TermsAndCondtions_Master_API = ({ jsonBody, btnId }) => post(url.TERMSANDCONDITIONS_API, jsonBody, btnId)// post api
 export const get_TermsAndCondtionsList_API = () => get(url.TERMSANDCONDITIONS_API)// get api
-export const del_TermsAndCondtions_Master_API = (id) => del(`${url.TERMSANDCONDITIONS_API}/${id}`)// delete api
-export const edit_TermsAndCondtions_Master_API = (id) => get(`${url.TERMSANDCONDITIONS_API}/${id}`)// edit api
-export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`, data)// update api
+export const del_TermsAndCondtions_Master_API = ({ deleteId, btnId }) => del(`${url.TERMSANDCONDITIONS_API}/${deleteId}`,btnId)// delete api
+export const edit_TermsAndCondtions_Master_API = ({ editId, btnId }) => get(`${url.TERMSANDCONDITIONS_API}/${editId}`,btnId)// edit api
+export const update_TermsAndCondtions_Master_API = ({ jsonBody, updateId, btnId }) => put(`${url.TERMSANDCONDITIONS_API}/${updateId}`,jsonBody,btnId)// update api
 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
