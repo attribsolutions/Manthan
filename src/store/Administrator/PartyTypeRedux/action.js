@@ -10,7 +10,6 @@ export const SavePartyTypeAPISuccess = (resp) => ({
   payload: resp,
 });
 
-/// get Empoyee list 
 export const getPartyTypelist = () => ({
   type: actionType.GET_PARTY_TYPE_LIST,
 });
@@ -20,31 +19,32 @@ export const getPartyTypelistSuccess = (resp) => ({
   payload: resp,
 });
 
-////delete api
 export const delete_PartyType_ID = (config = {}) => ({
   type: actionType.DELETE_PARTY_TYPE_ID,
   config,
 });
+
 export const deletePartyTypeIDSuccess = (resp) => ({
   type: actionType.DELETE_PARTY_TYPE_ID_SUCCESS,
   payload: resp
 });
 
-// edit api
 export const editPartyTypeId = (config = {}) => ({
   type: actionType.EDIT_PARTY_TYPE_ID,
   config,
 })
+
 export const editPartyTypeSuccess = (editData) => ({
   type: actionType.EDIT_PARTY_TYPE_ID_SUCCESS,
   payload: editData,
 })
 
-// update api
+
 export const updatePartyTypeAction = (config = {}) => ({
   type: actionType.UPDATE_PARTY_TYPE_ID,
   config,
 })
+
 export const updatePartyTypeIDSuccess = (resp) => ({
   type: actionType.UPDATE_PARTY_TYPE_ID_SUCCESS,
   payload: resp,

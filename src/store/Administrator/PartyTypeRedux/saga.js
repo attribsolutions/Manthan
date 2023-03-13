@@ -14,16 +14,14 @@ import {
 import * as action from "./action";
 import * as actionType from "./actionTypes";
 
-// post api
-function* save_Party_Type_GneFunc({ config }) {
+function* save_Party_Type_GneFunc({ config }) {// post api
   try {
     const response = yield call(Save_Party_Type_API, config);
     yield put(action.SavePartyTypeAPISuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// get api
-function* Get_PartyType_List_GneFunc() {
+function* Get_PartyType_List_GneFunc() { // get api
   try {
     const jsonBody = { ...loginJsonBody(), "id": 0 }
     const response = yield call(get_PartyType_List_Api, jsonBody);
@@ -31,16 +29,16 @@ function* Get_PartyType_List_GneFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-// delete api 
-function* Delete_PartyType_ID_GneFunc({ config }) {
+
+function* Delete_PartyType_ID_GneFunc({ config }) { // delete api 
   try {
     const response = yield call(detelet_PartyType_List_Api, config);
     yield put(action.deletePartyTypeIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-// edit api
-function* Edit_PartyType_ID_GneFunc({ config }) {
+
+function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
   const { btnmode, editId } = config;
   const body = { ...loginJsonBody(), "id": editId };
   config.jsonBody = body;
@@ -51,9 +49,8 @@ function* Edit_PartyType_ID_GneFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-// update api
-function* Update_PartyType_ID_GneFunc({config }) {
 
+function* Update_PartyType_ID_GneFunc({ config }) {// update api
   try {
     const response = yield call(update_PartyType_List_Api, config);
     yield put(action.updatePartyTypeIDSuccess(response))

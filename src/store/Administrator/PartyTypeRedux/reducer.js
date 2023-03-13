@@ -17,7 +17,6 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
         PostData: action.payload,
       }
 
-    // get api
     case actionType.GET_PARTY_TYPE_LIST_SUCCESS:
       return {
         ...state,
@@ -36,7 +35,6 @@ const PartyTypeReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       };
 
-    // update api
     case actionType.UPDATE_PARTY_TYPE_ID_SUCCESS:
       return {
         ...state,
