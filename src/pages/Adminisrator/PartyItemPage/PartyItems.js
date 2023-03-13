@@ -27,21 +27,21 @@ import {
     editPartyItemIDSuccess,
     getpartyItemList,
     getPartyItemListSuccess,
-    PostPartyItems,
-    PostPartyItemsSuccess
+    SavePartyItems,
+    SavePartyItemsSuccess
 } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {
@@ -113,7 +113,7 @@ const PartyItems = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc);
-             breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -150,11 +150,11 @@ const PartyItems = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
-            dispatch(PostPartyItemsSuccess({ Status: false }))
+            dispatch(SavePartyItemsSuccess({ Status: false }))
             if (pageMode === mode.assingLink) {
                 props.isOpenModal(false)
             }
-            dispatch(PostPartyItemsSuccess({ Status: false }))
+            dispatch(SavePartyItemsSuccess({ Status: false }))
             dispatch(getPartyItemListSuccess([]))
             dispatch(Breadcrumb_inputName(''))
 
@@ -167,7 +167,7 @@ const PartyItems = (props) => {
 
         } else if
             (postMsg.Status === true) {
-            dispatch(PostPartyItemsSuccess({ Status: false }))
+            dispatch(SavePartyItemsSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -184,7 +184,7 @@ const PartyItems = (props) => {
                 pathname: url.PARTYITEM_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(PostPartyItemsSuccess({ Status: false }));
+            dispatch(SavePartyItemsSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -224,9 +224,9 @@ const PartyItems = (props) => {
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
-                
+
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
-                
+
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}
@@ -259,7 +259,7 @@ const PartyItems = (props) => {
         custom: true,
     };
 
-    const GoButton_Handler = async(e) => {
+    const GoButton_Handler = async (e) => {
         let supplier = e.value
         if (!supplier > 0) {
             alert("Please Select Supplier")
@@ -267,7 +267,7 @@ const PartyItems = (props) => {
         }
 
         if (tableList.length > 0) {
-           const ispermission=  await CustomAlert({Type:7,Message:"Refresh  Item...!"})
+            const ispermission = await CustomAlert({ Type: 7, Message: "Refresh  Item...!" })
             if (ispermission) {
                 dispatch(getPartyItemListSuccess([]))
             } else {
@@ -277,21 +277,41 @@ const PartyItems = (props) => {
         dispatch(getpartyItemList(supplier))
     };
 
-    const SubmitHandler = (e) => {
-
-        e.preventDefault();
+    const SaveHandler = async (event) => {
+        event.preventDefault();
         const Find = itemArr.filter((index) => {
             return (index.itemCheck === true)
         })
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                var PartyData = Find.map((index) => ({
+                    Item: index.Item,
+                    Party: values.Name.value
 
-        var PartyData = Find.map((index) => ({
-            Item: index.Item,
-            Party: values.Name.value
-
-        }))
-        const jsonBody = JSON.stringify(PartyData)
-        dispatch(PostPartyItems(jsonBody));
+                }))
+                const jsonBody = JSON.stringify(PartyData)
+                dispatch(SavePartyItems(jsonBody));
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
+
+    // const SubmitHandler = (e) => {
+    //     e.preventDefault();
+    //     const Find = itemArr.filter((index) => {
+    //         return (index.itemCheck === true)
+    //     })
+
+    //     var PartyData = Find.map((index) => ({
+    //         Item: index.Item,
+    //         Party: values.Name.value
+
+    //     }))
+    //     const jsonBody = JSON.stringify(PartyData)
+    //     dispatch(SavePartyItems(jsonBody));
+    // };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -325,7 +345,7 @@ const PartyItems = (props) => {
                                                                     <Select
                                                                         name="Name"
                                                                         value={values.Name}
-                                                                        isDisabled={pageMode === mode.assingLink? true : false}
+                                                                        isDisabled={pageMode === mode.assingLink ? true : false}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
@@ -405,7 +425,7 @@ const PartyItems = (props) => {
                                     <SaveButton
                                         pageMode={pageMode}
                                         userAcc={userAccState}
-                                        module={"PartyItems"} onClick={SubmitHandler}
+                                        module={"PartyItems"} onClick={SaveHandler}
                                     />
                                 </div>
                                     : <div className="row save1"></div>}
