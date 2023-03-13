@@ -102,50 +102,11 @@ const CreditLimitMaster = (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             const { id, Route, RouteName } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-    //             hasValid.RouteName.valid = true;
-
-    //             values.id = id
-    //             values.RouteName = { label: RouteName, value: Route };
-
-    //             const jsonBody = JSON.stringify({
-    //                 // Item: Item,
-    //                 // Bom: Bom,
-    //                 // Quantity: parseFloat(Quantity),
-    //                 // Party: Party
-    //             });
-    //             // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             // dispatch(editWorkOrderListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
-
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postCreditLimitSuccess({ Status: false }))
             dispatch(GoButton_For_CreditLimit_AddSuccess([]))
             setRouteSelect('')
-            //   setState(() => resetFunction(fileds, state))// Clear form values  
-            //   saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -166,7 +127,6 @@ const CreditLimitMaster = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            //   saveDissable(false);//save Button Is enable function
             dispatch(postCreditLimitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -191,6 +151,19 @@ const CreditLimitMaster = (props) => {
     }));
 
     const goButtonHandler = (event) => {
+        debugger
+        if (RouteSelect.value === undefined) {
+            {
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: "Please Select Route",
+                    })
+                );
+                return;
+            }
+        }
         const jsonBody = JSON.stringify({
             Party: loginPartyID(),
             Route: RouteSelect.value
@@ -199,7 +172,6 @@ const CreditLimitMaster = (props) => {
     }
 
     function CreditlimitHandler(event, user) {
-        // user["Creditlimit"] = e.target.value
 
         let val = event.target.value;
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
@@ -250,6 +222,7 @@ const CreditLimitMaster = (props) => {
     };
 
     const SaveHandler = async (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -292,7 +265,7 @@ const CreditLimitMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -314,9 +287,9 @@ const CreditLimitMaster = (props) => {
                                                                             options={RoutesDropdown_options}
                                                                             onChange={(e) => { setRouteSelect(e) }}
                                                                         />
-                                                                        {isError.RoutesName.length > 0 && (
+                                                                        {/* {isError.RoutesName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
-                                                                        )}
+                                                                        )} */}
                                                                     </div>
                                                                 </FormGroup>
                                                             </Col>
@@ -389,6 +362,7 @@ const CreditLimitMaster = (props) => {
                                         <Row >
                                             <Col sm={2} className="mt-n4">
                                                 <SaveButton pageMode={pageMode}
+                                                    onClick={SaveHandler}
                                                     userAcc={userPageAccessState}
                                                     module={"CreditLimitMaster"}
                                                 />
