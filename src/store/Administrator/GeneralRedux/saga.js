@@ -18,7 +18,7 @@ import {
     GeneralMasterSubType_API,
 } from "../../../helpers/backend_helper";
 import {
-    PostMethodForGeneralSuccess,
+    SaveMethodForGeneralSuccess,
     deleteGeneralIDSuccess,
     editGeneralIDSuccess,
     updateGeneralIDSuccess,
@@ -29,10 +29,10 @@ import {
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 // post api
-function* Post_Method_ForGeneral_GenFun({ data }) {
+function* Post_Method_ForGeneral_GenFun({ config }) {
     try {
-        const response = yield call(Post_General_API, data);
-        yield put(PostMethodForGeneralSuccess(response));
+        const response = yield call(Post_General_API, config);
+        yield put(SaveMethodForGeneralSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
@@ -45,26 +45,29 @@ function* Post_General_List_GenratorFunction({ data }) {
 }
 
 // delete api 
-function* Delete_General_ID_GenratorFunction({ id }) {
+function* Delete_General_ID_GenratorFunction({ config }) {
+  
     try {
-        const response = yield call(delete_General_List_Api, id);
+        
+        const response = yield call(delete_General_List_Api, config);
         yield put(deleteGeneralIDSuccess(response))
     } catch (error) { CommonConsole(error) }
 }
 
 // edit api
-function* Edit_General_ID_GenratorFunction({ id, pageMode }) {
+function* Edit_General_ID_GenratorFunction({ config }) {
+    const { btnmode } = config;
     try {
-        const response = yield call(edit_General_List_Api, id);
-        response.pageMode = pageMode
+        const response = yield call(edit_General_List_Api, config);
+        response.pageMode = btnmode;
         yield put(editGeneralIDSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
 // update api
-function* Update_General_ID_GenratorFunction({ updateData, ID }) {
+function* Update_General_ID_GenratorFunction({ config }) {
     try {
-        const response = yield call(update_General_List_Api, updateData, ID);
+        const response = yield call(update_General_List_Api, config);
         yield put(updateGeneralIDSuccess(response))
     } catch (error) { CommonConsole(error) }
 }
