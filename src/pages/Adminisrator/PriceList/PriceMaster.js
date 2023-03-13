@@ -26,13 +26,13 @@ import { AlertState } from "../../../store/actions";
 import {
     delete_PriceList,
     delete_PriceListSuccess,
-    getPriceListData,
-    postPriceListData,
-    postPriceListDataSuccess,
+    priceListByPartyAction,
+    savePriceMasterAction,
+    savePriceMasterActionSuccess,
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { breadcrumbReturn, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -102,15 +102,13 @@ const PriceMaster = (props) => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(postPriceListDataSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(savePriceMasterActionSuccess({ Status: false }))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: PostAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            })
         }
 
     }, [PostAPIResponse])
@@ -118,13 +116,11 @@ const PriceMaster = (props) => {
     useEffect(() => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
             dispatch(delete_PriceListSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
-            dispatch(AlertState({
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: deleteAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            })
         }
     }, [deleteAPIResponse])
 
@@ -132,14 +128,12 @@ const PriceMaster = (props) => {
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updatePriceListSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: updateMessage.Message,
-                RedirectPath: '',
-            }))
+            })
         }
     }, [updateMessage])
 
@@ -189,18 +183,22 @@ const PriceMaster = (props) => {
         setDropOpen(true)
 
     }
-    const delete_PriceList_Handler = price => {// Delete handler
-        dispatch(AlertState({
-            Type: 5, Status: true,
+    const delete_PriceList_Handler = async (price, event) => {// Delete handler
+        event.preventDefault();
+        const btnId = "cc";
+        const promise = await CustomAlert({
+            Type: 7,
             Message: `Are you sure you want to delete this Price : "${price.label}"`,
-            RedirectPath: false,
-            PermissionAction: delete_PriceList,
-            ID: price.value
-        }));
+        })
+        if (promise) {
+            btnIsDissablefunc({ btnId, state: true })
+            dispatch(delete_PriceList({ btnId, deleteId: price.value }))
+        }
+
     }
     function goButtonHandler() { // party Type Go Button API Call
         if (!(partyType_dropdown_Select === '')) {
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setHasPartySelect(true)
         }
     }
@@ -225,7 +223,7 @@ const PriceMaster = (props) => {
                 pathNo = pathNo.concat(`${ele.value},`)
             })
             pathNo = pathNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-            
+
 
             return JSON.stringify({
                 id: currentPrice.value,
@@ -242,17 +240,30 @@ const PriceMaster = (props) => {
         }
         return false
     }
-    function sub_Price_Add_Handler() {// add price save handler
+    function sub_Price_Add_Handler(event) {// add price save handler
+        event.preventDefault();
+        const btnId = event.target.id;
+        btnIsDissablefunc({ btnId, state: true })
+
         const jsonBody = commonSavefunction();
         if (jsonBody) {
-            dispatch(postPriceListData(jsonBody));
+            dispatch(savePriceMasterAction({ jsonBody, btnId }));
+        } else {
+            btnIsDissablefunc({ btnId, state: false })
         }
     }
 
-    function sub_Price_edit_Handler() {// edit price save handler
+    function sub_Price_edit_Handler(event) {// edit price save handler
+
+        event.preventDefault();
+        const btnId = event.target.id;
+        btnIsDissablefunc({ btnId, state: true })
+
         const jsonBody = commonSavefunction();
         if (jsonBody) {
-            dispatch(updatePriceList(jsonBody, currentPrice.value));
+            dispatch(updatePriceList({ jsonBody, updateId: currentPrice.value, btnId }));
+        } else {
+            btnIsDissablefunc({ btnId, state: false })
         }
     }
     //*************************** end SaveHandler************************** 
@@ -300,7 +311,7 @@ const PriceMaster = (props) => {
                             </DropdownItem>
 
                             <DropdownItem
-                                onClick={() => delete_PriceList_Handler(node)}
+                                onClick={(event) => delete_PriceList_Handler(node, event)}
                             >
                                 <span className="align-middle text-danger"> {"Delete"} </span>
                             </DropdownItem>
@@ -585,13 +596,14 @@ const PriceMaster = (props) => {
                                                         <button type="button" className="btn btn-light" onClick={dropOpen1Togle}>Close</button>
                                                         {currentPrice.mode === "save" ?
 
-                                                            <button type="button" className="btn btn-primary"
-                                                                onClick={() => { sub_Price_Add_Handler() }}
+                                                            <button type="button" className="btn btn-primary" id={"price_Add-btn"}
+                                                                onClick={(e) => { sub_Price_Add_Handler(e) }}
 
                                                             >Add</button>
                                                             :
                                                             <button type="button" className="btn btn-success w-md"
-                                                                onClick={() => { sub_Price_edit_Handler() }} >
+                                                                id={"price-edit-btn"}
+                                                                onClick={(e) => { sub_Price_edit_Handler(e) }} >
 
                                                                 <i className="fas fa-edit me-2"></i>
                                                                 update</button>

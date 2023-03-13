@@ -2,6 +2,8 @@
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { invoice } from "../ReportIndex";
+import { toWords } from "../Report_common_function";
+
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -121,7 +123,7 @@ export const reportFooter = (doc, data) => {
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
+            cellPadding: 2,
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
@@ -175,7 +177,6 @@ export const reportFooter = (doc, data) => {
         startY: doc.autoTableEndPosY(),// 45,
     };
     const optionsTable3 = {
-
         margin: {
             top: 45, left: 35, right: 200
         },
@@ -215,8 +216,6 @@ export const reportFooter = (doc, data) => {
             }
         },
         startY: 745,
-
-
     };
     // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
 
@@ -276,9 +275,6 @@ export const tableBody = (doc, data) => {
     const {OrderItem = [] } = data
 
     console.log(tableRow)
-//    const a= OrderItem.forEach((element) => {
-//         element.Comment
-//     })
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[5].raw === "isaddition")
@@ -304,7 +300,7 @@ export const tableBody = (doc, data) => {
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
+            cellPadding: 2,
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
@@ -317,7 +313,7 @@ export const tableBody = (doc, data) => {
         },
         bodyStyles: {
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 1,
             fontSize: 7,
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],
@@ -364,69 +360,15 @@ export const tableBody = (doc, data) => {
         startY: doc.autoTableEndPosY(45),// 45,
     };
     
-
-
     doc.autoTable(table.columns,table.Rows(data), options,);
-    
-
     const optionsTable4 = {
         margin: {
             left: 30, right: 30, bottom: 140
         },
         showHead: 'never',
-        // theme: 'plain',
-        headerStyles: {
-            // columnWidth: 'wrap',
-            // cellPadding: 1,
-            // lineWidth: 0,
-            // valign: 'top',
-            // fontStyle: 'bold',
-            // halign: 'left',    //'center' or 'right'
-            // fillColor: "white",
-            // textColor: [0, 0, 0], //Black     
-            // // textColor: [255, 255, 255], //White     
-            // // fillColor: "white"
-            // fontSize: 8,
-            // rowHeight: 10,
-            // lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            // columnWidth: 'wrap',
-            // textColor: [30, 30, 30],
-            // cellPadding: 2,
-            // fontSize: 7,
-            // fontStyle: 'bold',
-            // lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                // columnWidth:10,
-                // fontStyle: 'bold',
-            },
-            1: {
-                halign: 'right',    //'center' or 'left'
-                valign: "top",
-                // columnWidth: 140,
-                // fontStyle: 'bold',
-            },
-        },
-        didParseCell: function (cell, data) {
-            console.log("didParseCell", cell)
-            console.log(" didParse data", data)
-
-            if (cell.row.index === 4) {
-                // cell.cell.styles.fontSize = 12;
-                // cell.cell.styles.lineColor = 'gray'
-                // cell.cell.styles.lineWidth = 0.5
-
-            }
-        },
-
     };
 
     doc.autoTable(optionsTable4);
-
     doc.autoTable({
         html: '#table',
         didParseCell(data) {
@@ -436,57 +378,9 @@ export const tableBody = (doc, data) => {
             }
         }
     })
-
-
 }
 
 export const pageFooter = (doc, data) => {
-    var th = ['', 'thousand', 'million', 'billion', 'trillion'];
-    var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-    function toWords(s) {
-        s = s.toString();
-        s = s.replace(/[\, ]/g, '');
-        if (s != parseFloat(s)) return 'not a number';
-        var x = s.indexOf('.');
-        if (x == -1)
-            x = s.length;
-        if (x > 15)
-            return 'too big';
-        var n = s.split('');
-        var str = '';
-        var sk = 0;
-        for (var i = 0; i < x; i++) {
-            if ((x - i) % 3 == 2) {
-                if (n[i] == '1') {
-                    str += tn[Number(n[i + 1])] + ' ';
-                    i++;
-                    sk = 1;
-                } else if (n[i] != 0) {
-                    str += tw[n[i] - 2] + ' ';
-                    sk = 1;
-                }
-            } else if (n[i] != 0) { // 0235
-                str += dg[n[i]] + ' ';
-                if ((x - i) % 3 == 0) str += 'hundred ';
-                sk = 1;
-            }
-            if ((x - i) % 3 == 1) {
-                if (sk)
-                    str += th[(x - i - 1) / 3] + ' ';
-                sk = 0;
-            }
-        }
-
-        if (x != s.length) {
-            var y = s.length;
-            str += 'point ';
-            for (var i = x + 1; i < y; i++)
-                str += dg[n[i]] + ' ';
-        }
-        return str.replace(/\s+/g, ' ');
-    }
     let stringNumber = toWords(data.GrandTotal)
     doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
@@ -497,7 +391,6 @@ export const pageFooter = (doc, data) => {
     doc.line(430, 680, 430, 745);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(460, 775, 30, 775);//horizontal line (Bottom)
-
 
     const a = data.InvoiceItems.map((data) => ({
         CGST: Number(data.CGST),

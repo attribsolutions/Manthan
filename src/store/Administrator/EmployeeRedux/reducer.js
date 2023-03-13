@@ -1,32 +1,27 @@
 import {
   GET_DESIGNATIONID_SUCCESS,
-  GET_EMPLOYEETYPE_SUCCESS,
   GET_STATE_SUCCESS,
-  POST_EMPLOYEE_SUCCESS,
+  SAVE_EMPLOYEE_MASTER_SUCCESS,
   GET_EMPLOYEE_LIST_SUCCESS,
   DELETE_EMPLOYEE_ID_SUCCESS,
   EDIT_EMPLOYEE_ID_SUCCESS,
   UPDATE_EMPLOYEE_ID_SUCCESS,
-  GET_EMPLOYEE_TYPES_ID_SUCCESS,
   GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
-  GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
   designation: [],
-  employeeType: [],
   State: [],
   employeeList: [],
   postMessage: { Status: false },
   deleteMessage: { Status: false },
   editData: { Status: false },
   updateMessage: { Status: false },
-  EmployeeTypes:[],
   CompanyNames:[],
   PartyTypes:[]
 };
 
-const M_EmployeesReducer = (state = INIT_STATE, action) => {
+const EmployeesReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
     // DesignationID Dropdown api
@@ -36,13 +31,6 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
         designation: action.payload,
       };
 
-    // EmployeeType Dropdown api
-    case GET_EMPLOYEETYPE_SUCCESS:
-      return {
-        ...state,
-        employeeType: action.payload,
-      };
-
     // State Dropdown api
     case GET_STATE_SUCCESS:
       return {
@@ -50,7 +38,7 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
         State: action.payload,
       };
 
-    case POST_EMPLOYEE_SUCCESS:
+    case SAVE_EMPLOYEE_MASTER_SUCCESS:
       return {
         ...state,
         postMessage: action.payload,
@@ -94,4 +82,4 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
       return state;
   }
 };
-export default M_EmployeesReducer;
+export default EmployeesReducer;

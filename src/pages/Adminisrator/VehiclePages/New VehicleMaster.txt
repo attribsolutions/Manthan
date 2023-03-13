@@ -21,15 +21,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import {
-    PostMethodForVehicleMaster,
-    getMethodForVehicleList,
+    saveVehicleMaster,
+    getVehicleList,
     getMethod_DriverList_ForDropDown,
-    getMethod_VehicleTypes_ForDropDown,
-    PostMethod_ForVehicleMasterSuccess,
-    getMethod_ForVehicleListSuccess,
-    editVehicleTypeSuccess,
-    updateVehicleTypeID,
-    updateVehicleTypeIDSuccess
+    getVehicleType_for_dropdown,
+    saveVehicleMasterSuccess,
+    getVehicleListSuccess,
+    editVehicleID_Success,
+    updateVehicleID,
+    updateVehicleID_Success
 } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
@@ -44,15 +44,12 @@ import {
     onChangeText
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
-
 const VehicleMaster = (props) => {
-
 
     const dispatch = useDispatch();
     const history = useHistory()
     const formRef = useRef(null);
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
@@ -61,7 +58,7 @@ const VehicleMaster = (props) => {
     const [divisionData, setDivisionData] = useState([]);
 
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-   
+
     const initialFiled = {
         id: "",
         VehicleNumber: "",
@@ -69,10 +66,10 @@ const VehicleMaster = (props) => {
         Driver: "",
         VehicleType: "",
         VehicleDivisions: ""
-      }
-    
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -102,13 +99,11 @@ const VehicleMaster = (props) => {
         dispatch(commonPageField(29))
     }, []);
 
-
-
     useEffect(() => {
-        //  dispatch(PostMethodForVehicleMaster());
-        dispatch(getMethodForVehicleList());
+        //  dispatch(saveVehicleMaster());
+        dispatch(getVehicleList());
         dispatch(getMethod_DriverList_ForDropDown());
-        dispatch(getMethod_VehicleTypes_ForDropDown());
+        dispatch(getVehicleType_for_dropdown());
         dispatch(get_Division_ForDropDown());
     }, [dispatch]);
 
@@ -150,13 +145,13 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                
+
                 const divisionTable = hasEditVal.VehicleDivisions.map((data) => ({
                     value: data.Division,
                     label: data.DivisionName
                 }))
 
-                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName , VehicleDivisions, } = hasEditVal
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
@@ -176,7 +171,7 @@ const VehicleMaster = (props) => {
                 setDivisionData(divisionTable)
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
-                dispatch(editVehicleTypeSuccess({ Status: false }))
+                dispatch(editVehicleID_Success({ Status: false }))
 
 
             }
@@ -189,7 +184,7 @@ const VehicleMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
-            dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+            dispatch(saveVehicleMasterSuccess({ Status: false }))
             formRef.current.reset();
 
             if (pageMode === "dropdownAdd") {
@@ -209,7 +204,7 @@ const VehicleMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
+            dispatch(getVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -226,7 +221,7 @@ const VehicleMaster = (props) => {
                 pathname: VEHICLE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+            dispatch(updateVehicleID_Success({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -294,11 +289,11 @@ const VehicleMaster = (props) => {
 
 
             if (pageMode === 'edit') {
-                dispatch(updateVehicleTypeID(jsonBody, values.id));
+                dispatch(updateVehicleID(jsonBody, values.id));
                 console.log("update jsonBody", jsonBody)
             }
             else {
-                dispatch(PostMethodForVehicleMaster(jsonBody));
+                dispatch(saveVehicleMaster(jsonBody));
                 console.log("post jsonBody", jsonBody)
             }
         }
@@ -378,7 +373,7 @@ const VehicleMaster = (props) => {
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                       
+
                                                                     />
                                                                     {isError.Driver.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Driver}</small></span>

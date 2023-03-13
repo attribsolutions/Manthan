@@ -1,144 +1,83 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { PostMethod_ForVehicleMasterSuccess, getMethod_ForVehicleListSuccess,getMethod_DriverList_ForDropDown_Success, getMethod_VehicleTypes_ForDropDown_Success, deleteVehicleTypeIDSuccess, editVehicleTypeSuccess, updateVehicleTypeIDSuccess} from "./action";
+import { saveVehicleMasterSuccess, getVehicleListSuccess, getMethod_DriverList_ForDropDown_Success, getVehicleType_for_dropdown_Success, deleteVehicleID_Success, editVehicleID_Success, updateVehicleID_Success } from "./action";
 import {
-  get_Vehicle_API,
-  Post_Vehicle_API,
-  get_VehicleTypes_API,
-  get_DriverListAPI,
-  detelet_VehicleType_List_Api,
-  edit_VehicleType_List_Api,
-  update_VehicleType_List_Api,
+  Vehicle_Get_API,
+  Vehicle_Post_API,
+  VehicleTypes_Get_API_for_Dropdown,
+  Vehicle_Delete_API,
+  Vehicle_Edit_API,
+  Vehicle_Update_API,
 } from "../../../helpers/backend_helper";
-
-import { POST_METHOD_FOR_VEHICLE_MASTER,
-  GET_METHOD_FOR_VEHICLE_LIST,
-  GET_METHOD_DRIVERLIST_FOR_DROPDOWN,
-  GET_METHOD_VEHICLETYPES_FOR_DROPDOWN,
-  DELETE_VEHICLE_TYPE_ID,
-  EDIT_VEHICLE_TYPE_ID,
-  UPDATE_VEHICLE_TYPE_ID
-
+import {
+  SAVE_VEHICLE_MASTER,
+  GET_VEHICLE_LIST,
+  GET_VEHICLE_TYPES_FOR_DROPDOWN,
+  DELETE_VEHICLE_ID,
+  EDIT_VEHICLE_ID,
+  UPDATE_VEHICLE_ID
 } from "./actionType";
-import { AlertState } from "../../actions";
-import { PaginationListStandalone } from "react-bootstrap-table2-paginator";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
+// const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
 // Get List Page API
-function* Get_Vehicle_GenratorFunction() {
-
+function* Get_Vehicle_GenFun() {
+  const filters = loginJsonBody();// required only PartyID and CompanyID
   try {
-    const response = yield call(get_Vehicle_API);
-    yield put(getMethod_ForVehicleListSuccess(response.Data));
-   
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+    const response = yield call(Vehicle_Get_API, filters);
+    yield put(getVehicleListSuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
 }
+
 // post api
-function* Post_Method_ForVehicle_GenFun({ data }) {
-
+function* Post_Vehicle_Master_GenFun({ config }) {
   try {
-    const response = yield call(Post_Vehicle_API, data);
-   
-    yield put(PostMethod_ForVehicleMasterSuccess(response));
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
-}
-
-
-// get VehicleTypes Dropdown API
-function* get_VehicleTypes_DropDown_GenFun() {
-
-  try {
-    const response = yield call(get_VehicleTypes_API);
-    yield put(getMethod_VehicleTypes_ForDropDown_Success(response.Data));
-  
-  } catch (error) {
-    console.log(" Vehicle API page error", error);
-  }
-}
-
-// get DriverList Types Dropdown API
-function* get_DriverList_DropDown_GenFun() {
-
-  try {
-    const response = yield call(get_DriverListAPI );
-    yield put(getMethod_DriverList_ForDropDown_Success(response.Data));
-    
-  } catch (error) {
-    console.log(" Vehicle API page error", error);
-  }
-}
-
-// delete api 
-
-function* Delete_VehicleType_ID_GenratorFunction({ id }) {
-  try {
-  
-    const response = yield call(detelet_VehicleType_List_Api, id);
-   
-    yield put(deleteVehicleTypeIDSuccess(response))
-  } catch (error) {
-   
-    // yield put(AlertState({
-    //   Type: 4,
-    //   Status: true, Message: "500 Error Message",
-    // }));
-  }
+    const response = yield call(Vehicle_Post_API, config);
+    yield put(saveVehicleMasterSuccess(response));
+  } catch (error) { CommonConsole(error) }
 }
 
 // edit api
-function* Edit_VehicleType_ID_GenratorFunction({ id ,pageMode}) {
+function* Edit_Vehicle_ID_GenFun({ config }) {
+  const { btnmode } = config;
   try {
-    const response = yield call(edit_VehicleType_List_Api, id);
-    response.pageMode=pageMode
-    yield put(editVehicleTypeSuccess(response));
-   
-
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+    const response = yield call(Vehicle_Edit_API, config);
+    response.pageMode = btnmode
+    yield put(editVehicleID_Success(response));
+  } catch (error) { CommonConsole(error) }
 }
 
 // update api
-function* Update_VehicleType_ID_GenratorFunction({ updateData, ID }) {
+function* Update_Vehicle_ID_GenFun({ config }) {
   try {
-  
-    const response = yield call(update_VehicleType_List_Api, updateData, ID);
-   
-    yield put(updateVehicleTypeIDSuccess(response))
-  }
-  catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+    const response = yield call(Vehicle_Update_API, config);
+    yield put(updateVehicleID_Success(response))
+  } catch (error) { CommonConsole(error) }
 }
 
+// delete api 
+function* Delete_Vehicle_ID_GenFun({ config }) {
+  try {
+    const response = yield call(Vehicle_Delete_API, config);
+    yield put(deleteVehicleID_Success(response))
+  } catch (error) { CommonConsole(error) }
+}
 
+// get VehicleTypes Dropdown API
+function* get_VehicleTypes_DropDown_GenFun() {
+  const filters = loginJsonBody()
+  try {
+    const response = yield call(VehicleTypes_Get_API_for_Dropdown,filters);
+    yield put(getVehicleType_for_dropdown_Success(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
 
 function* VehicleSaga() {
-  yield takeEvery(POST_METHOD_FOR_VEHICLE_MASTER, Post_Method_ForVehicle_GenFun)
-  yield takeEvery(GET_METHOD_FOR_VEHICLE_LIST, Get_Vehicle_GenratorFunction)
-  yield takeEvery(GET_METHOD_DRIVERLIST_FOR_DROPDOWN, get_DriverList_DropDown_GenFun)
-  yield takeEvery(GET_METHOD_VEHICLETYPES_FOR_DROPDOWN, get_VehicleTypes_DropDown_GenFun)
-  yield takeEvery(DELETE_VEHICLE_TYPE_ID, Delete_VehicleType_ID_GenratorFunction)
-  yield takeEvery(EDIT_VEHICLE_TYPE_ID, Edit_VehicleType_ID_GenratorFunction)
-  yield takeEvery(UPDATE_VEHICLE_TYPE_ID, Update_VehicleType_ID_GenratorFunction)
+  yield takeEvery(GET_VEHICLE_LIST, Get_Vehicle_GenFun)
+  yield takeEvery(SAVE_VEHICLE_MASTER, Post_Vehicle_Master_GenFun)
+  yield takeEvery(EDIT_VEHICLE_ID, Edit_Vehicle_ID_GenFun)
+  yield takeEvery(UPDATE_VEHICLE_ID, Update_Vehicle_ID_GenFun)
+  yield takeEvery(DELETE_VEHICLE_ID, Delete_Vehicle_ID_GenFun)
+  yield takeEvery(GET_VEHICLE_TYPES_FOR_DROPDOWN, get_VehicleTypes_DropDown_GenFun)
 }
 
 export default VehicleSaga;

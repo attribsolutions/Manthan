@@ -16,8 +16,8 @@ import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import {
     editPartySubPartySuccess,
-    postPartySubParty,
-    postPartySubPartySuccess,
+    savePartySubParty,
+    savePartySubPartySuccess,
     updatePartySubParty,
     updatePartySubPartySuccess,
     getPartySubParty_For_party_dropdown,
@@ -42,7 +42,7 @@ import {
     onChangeSelect,
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -90,7 +90,7 @@ const PartySubParty = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
-        
+
     }, []);
 
     const values = { ...state.values }
@@ -157,9 +157,8 @@ const PartySubParty = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(postPartySubPartySuccess({ Status: false }))
+            dispatch(savePartySubPartySuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
@@ -178,8 +177,7 @@ const PartySubParty = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(postPartySubPartySuccess({ Status: false }))
+            dispatch(savePartySubPartySuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -192,13 +190,11 @@ const PartySubParty = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: url.PARTY_SUB_PARTY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updatePartySubPartySuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -289,46 +285,50 @@ const PartySubParty = (props) => {
         )
     }
 
-    const SaveHandler = (event) => {
-        debugger
+
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const arr = PartyData.map(i => {
-                const normal = {
-                    Party: Division_dropdown_Select.value,
-                    SubParty: i.value,
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                const arr = PartyData.map(i => {
+                    const normal = {
+                        Party: Division_dropdown_Select.value,
+                        SubParty: i.value,
 
-                }
-                const isvendor = {
-                    Party: i.value,
-                    SubParty: Division_dropdown_Select.value,
-                }
+                    }
+                    const isvendor = {
+                        Party: i.value,
+                        SubParty: Division_dropdown_Select.value,
+                    }
 
-                const ramain = {
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    PartyID: Division_dropdown_Select.value,
-                    Creditlimit: i.Creditlimit,
-                    Route: i.Route
-                }
+                    const ramain = {
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
+                        PartyID: Division_dropdown_Select.value,
+                        Creditlimit: i.Creditlimit,
+                        Route: i.Route
+                    }
 
-                if (i.partyType === 3) {
-                    return { ...isvendor, ...ramain }
-                } else {
-                    return { ...normal, ...ramain }
-                }
-            })
+                    if (i.partyType === 3) {
+                        return { ...isvendor, ...ramain }
+                    } else {
+                        return { ...normal, ...ramain }
+                    }
+                })
 
-            const jsonBody = JSON.stringify(arr);
-            saveDissable(true);//save Button Is dissable function
-            if (pageMode === mode.edit) {
-                dispatch(updatePartySubParty(jsonBody, values.id,));
+                const jsonBody = JSON.stringify(arr);
+                if (pageMode === mode.edit) {
+                    dispatch(updatePartySubParty({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(savePartySubParty({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(postPartySubParty(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -456,6 +456,7 @@ const PartySubParty = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"PartySubParty"}

@@ -1,11 +1,10 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
     deletePartySubPartySuccess,
     editPartySubPartySuccess,
     getPartySubPartylistSuccess,
     getPartySubParty_For_party_dropdownSuccess,
-    postPartySubPartySuccess,
+    savePartySubPartySuccess,
     updatePartySubPartySuccess,
 } from "./action";
 
@@ -23,79 +22,53 @@ import {
     EDIT_PARTY_SUB_PARTY,
     UPDATE_PARTY_SUB_PARTY,
     GET_PARTY_SUB_PARTY_LIST,
-    POST_PARTY_SUB_PARTY,
+    SAVE_PARTY_SUB_PARTY,
     GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
 
 } from "./actionType"
 
-import { AlertState } from "../../actions";
 import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-function* getListGenFunc() {
 
+function* Save_Method_ForPartySubParty_GenFun({ config }) {                     //Save API 
+    try {
+        const response = yield call(PartySubParty_Post_API, config);
+        yield put(savePartySubPartySuccess(response));
+    } catch (error) { CommonConsole(error) }
+}
+
+function* Get_PartySubParty_List_GenFunc() {                                   //get List API                         
     try {
         const response = yield call(PartySubParty_Get_API);
-        // const data = response.Data.map((index) => ({
-        //     StateId: index.State.id,
-        //     State: index.State.Name,
-        //     DistrictId: index.District.id,
-        //     District: index.District.Name,
-        //     CompanyId: index.Company.id,
-        //     Company: index.Company.Name,
-        //     PartyTypeId: index.PartyType.id,
-        //     PartyTypeName: index.PartyType.Name,
-        //     PriceListId: index.PriceList.id,
-        //     PriceListName: index.PriceList.Name,
-        //     SubPartyId: index.SubParty.id,
-        //     SubPartyName: index.SubParty.Name,
-        //     Name: index.Name,
-        //     Email: index.Email,
-        //     MobileNo: index.MobileNo,
-        //     AlternateContactNo: index.AlternateContactNo,
-        //     GSTIN: index.GSTIN,
-        //     PAN: index.PAN,
-        //     IsDivision: index.IsDivision,
-        //     MkUpMkDn: index.MkUpMkDn,
-        //     isActive: index.isActive,
-        //     id: index.id
-        // }));
-        // yield put(getPartySubPartylistSuccess(data));
-        // console.log("response in saga", response)
         yield put(getPartySubPartylistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
-function* postGenFunc({ data }) {
-    try {
-        const response = yield call(PartySubParty_Post_API, data);
-        yield put(postPartySubPartySuccess(response));
-    } catch (error) { CommonConsole(error) }
-}
 
-function* deleteGenFunc({ id }) {
+function* Delete_PartySubParty_ID_GenFunc({ config }) {                             //Delete API
     try {
-        const response = yield call(PartySubParty_Delete_API, id);
+        const response = yield call(PartySubParty_Delete_API, config);
         yield put(deletePartySubPartySuccess(response))
     } catch (error) { CommonConsole(error) }
 }
 
-function* editGenFunc({ id, pageMode }) {
-    debugger
+function* Edit_PartySubParty_ID_GenFunc({ config }) {                       //Edit API
+    const { btnmode } = config;
     try {
-        const response = yield call(PartySubParty_Edit_API, id);
-        response.pageMode = pageMode
+        const response = yield call(PartySubParty_Edit_API, config);
+        response.pageMode = btnmode;
         yield put(editPartySubPartySuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
-function* updateGenFunc({ updateData, ID }) {
+function* Update_PartySubParty_ID_GenFunc({ config }) {                     //Update API
     try {
-        const response = yield call(PartySubParty_Update_API, updateData, ID);
+        const response = yield call(PartySubParty_Update_API, config );
         yield put(updatePartySubPartySuccess(response))
     } catch (error) { CommonConsole(error) }
 }
 
-function* getPartySubPartyGenFunc({ id }) {
+function* getPartySubPartyGenFunc({ id }) {                                        // get API
     try {
         const response = yield call(PartySubParty_Dropdown_Get_API, id);
         yield put(getPartySubParty_For_party_dropdownSuccess(response.Data));
@@ -103,11 +76,11 @@ function* getPartySubPartyGenFunc({ id }) {
 }
 
 function* PartySubPartysaga() {
-    yield takeEvery(GET_PARTY_SUB_PARTY_LIST, getListGenFunc)
-    yield takeEvery(POST_PARTY_SUB_PARTY, postGenFunc)
-    yield takeEvery(EDIT_PARTY_SUB_PARTY, editGenFunc)
-    yield takeEvery(UPDATE_PARTY_SUB_PARTY, updateGenFunc)
-    yield takeEvery(DELETE_PARTY_SUB_PARTY, deleteGenFunc)
+    yield takeEvery(GET_PARTY_SUB_PARTY_LIST, Get_PartySubParty_List_GenFunc)
+    yield takeEvery(SAVE_PARTY_SUB_PARTY, Save_Method_ForPartySubParty_GenFun)
+    yield takeEvery(EDIT_PARTY_SUB_PARTY, Edit_PartySubParty_ID_GenFunc)
+    yield takeEvery(UPDATE_PARTY_SUB_PARTY, Update_PartySubParty_ID_GenFunc)
+    yield takeEvery(DELETE_PARTY_SUB_PARTY, Delete_PartySubParty_ID_GenFunc)
     yield takeEvery(GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, getPartySubPartyGenFunc)
 }
 

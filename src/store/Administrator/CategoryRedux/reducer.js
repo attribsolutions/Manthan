@@ -1,6 +1,5 @@
 import {
-  POST_METHOD_HANDLER_FOR_CATEGORY_API_SUCCESS,
-  GET_METHOD_HANDLER_FOR_CATEGORY_SUCCESS,
+  SAVE_CATEGORY_MASTER_SUCCESS,
   UPDATE_CATEGORY_ID_SUCCESS,
   DELETE_CATEGORY_ID_SUCCESS,
   EDIT_CATEGORY_ID_SUCCESS,
@@ -8,7 +7,7 @@ import {
 } from "./actionTypes";
 
 const INIT_STATE = {
-  PostDataMessage: { Status: false },
+  postMsg: { Status: false },
   CategoryAPI: [],
   CategoryListData: [],
   deleteMessage: { Status: false },
@@ -19,10 +18,10 @@ const INIT_STATE = {
 const CategoryReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case POST_METHOD_HANDLER_FOR_CATEGORY_API_SUCCESS:
+    case SAVE_CATEGORY_MASTER_SUCCESS:
       return {
         ...state,
-        PostDataMessage: action.payload,
+        postMsg: action.payload,
       }
 
     // get api

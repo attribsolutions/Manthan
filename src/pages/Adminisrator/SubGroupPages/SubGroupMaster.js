@@ -1,6 +1,4 @@
-
 import React, { useEffect, useState, } from "react";
-
 import {
     Card,
     CardBody,
@@ -22,8 +20,8 @@ import {
     getGroupList,
     getSubGroupList,
     getSubGroupListSuccess,
-    postSubGroupList,
-    postSubGroupSuccess,
+    saveSubGroupList,
+    saveSubGroupSuccess,
     updateSubGroupID,
     updateSubgroupIDSuccess
 } from "../../../store/actions";
@@ -39,7 +37,7 @@ import {
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -109,7 +107,7 @@ const SubGroupMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -153,12 +151,11 @@ const SubGroupMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
-
+    useEffect(() => { 
+debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postSubGroupSuccess({ Status: false }))
+            dispatch(saveSubGroupSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName())
 
             if (pageMode === "other") {
@@ -178,7 +175,6 @@ const SubGroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(getSubGroupListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -192,13 +188,11 @@ const SubGroupMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.SUBGROUP_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateSubgroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -222,28 +216,31 @@ const SubGroupMaster = (props) => {
         label: Data.Name
     }));
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
+        debugger
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                id: values.id,
-                Name: values.Name,
-                Group: values.GroupName.value,
-                CreatedBy: loginUserID(),
-                CreatedOn: "2022-11-19T00:00:00",
-                UpdatedBy: loginUserID(),
-                UpdatedOn: "2022-11-19T00:00:00"
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    Group: values.GroupName.value,
+                    CreatedBy: loginUserID(),
+                    CreatedOn: "2022-11-19T00:00:00",
+                    UpdatedBy: loginUserID(),
+                    UpdatedOn: "2022-11-19T00:00:00"
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(updateSubGroupID(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateSubGroupID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveSubGroupList({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(postSubGroupList(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -264,7 +261,7 @@ const SubGroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
@@ -317,6 +314,7 @@ const SubGroupMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"GroupMaster"}

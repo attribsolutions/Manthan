@@ -30,11 +30,11 @@ import {
     PostMethodForRoleAccessListPage,
     PostMethod_ForRoleAccessListPage_Success,
 } from "../../../store/actions";
-import { fetchModelsList } from "../../../store/actions";
+import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
 import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const RoleAccessAdd = (props) => {
@@ -81,16 +81,13 @@ const RoleAccessAdd = (props) => {
     }));
 
     useEffect(() => {
-
         const editDataGatingFromList = history.location.state
-
         const locationPath = history.location.pathname
         let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
         if (!(editDataGatingFromList === undefined)) {
-
             var division_id = editDataGatingFromList.Division_id
             var divisionName = editDataGatingFromList.DivisionName
             var role_id = editDataGatingFromList.Role_id
@@ -116,11 +113,13 @@ const RoleAccessAdd = (props) => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         dispatch(getPartyListAPI());//for division dropdown API
         dispatch(getRole());//for Role  dropdown API
-        dispatch(fetchModelsList())//for Modules  dropdown API
+        dispatch(getModuleList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
     }, []);
+
+
 
     useEffect(() => {
         var Array = []
@@ -128,7 +127,6 @@ const RoleAccessAdd = (props) => {
 
         let count1 = 0
         GO_buttonPageMasterListForRoleAccess_Redux.map((indexdata) => {
-
             count1 = count1 + 1
 
             eleList = indexdata;
@@ -136,11 +134,8 @@ const RoleAccessAdd = (props) => {
 
             Array.push(eleList)
             eleList = {}
-
         })
-
         setTableListData(Array)
-
     }, [GO_buttonPageMasterListForRoleAccess_Redux])
 
     useEffect(() => {
@@ -227,6 +222,15 @@ const RoleAccessAdd = (props) => {
         value: i.id,
         label: i.Name,
     }));
+
+    useEffect(() => {
+        if (company.length === 1) {
+            setCompany_dropdown_Select({
+                value: company[0].id,
+                label: company[0].Name
+            })
+        }
+    }, [company])
 
     // for Page dropdown
     const Page_DropdownOption = PageDropdownForRoleAccess.map((d) => ({
@@ -572,13 +576,7 @@ const RoleAccessAdd = (props) => {
                                                         <Label className="col-sm-3 p-2">Company</Label>
                                                         <Col md="9">
                                                             <Select
-                                                                // value={company_dropdown_Select}
-                                                                value={CompanyValues.length === 1 ?
-                                                                    {
-                                                                        value: CompanyValues[0].value,
-                                                                        label: CompanyValues[0].label
-                                                                    } : company_dropdown_Select
-                                                                }
+                                                                value={company_dropdown_Select}
                                                                 className="rounded-bottom"
                                                                 placeholder="Select..."
                                                                 options={CompanyValues}

@@ -1,9 +1,6 @@
-
 import {
-  GET_METHOD_HANDLER_FOR_CATEGORY,
-  GET_METHOD_HANDLER_FOR_CATEGORY_SUCCESS,
-  POST_METHOD_HANDLER_FOR_CATEGORY_API,
-  POST_METHOD_HANDLER_FOR_CATEGORY_API_SUCCESS,
+  SAVE_CATEGORY_MASTER,
+  SAVE_CATEGORY_MASTER_SUCCESS,
   DELETE_CATEGORY_ID,
   DELETE_CATEGORY_ID_SUCCESS,
   EDIT_CATEGORY_ID,
@@ -12,58 +9,55 @@ import {
   GET_CATEGORY_LIST_SUCCESS,
   UPDATE_CATEGORY_ID,
   UPDATE_CATEGORY_ID_SUCCESS,
-  
 } from "./actionTypes";
 
-export const PostMethodForCategory = (data) => ({
-  type: POST_METHOD_HANDLER_FOR_CATEGORY_API,
-  data,
-});
 
-export const PostMethod_ForCategoryAPISuccess = (data) => ({
-  type: POST_METHOD_HANDLER_FOR_CATEGORY_API_SUCCESS,
-  payload: data,
-});
-
-/// get Product Category Type list 
-export const getCategorylist = () => ({
+export const getCategorylist = () => ({// get List Action
   type: GET_CATEGORY_LIST,
 });
 
-export const getCategorylistSuccess = (pages) => ({
+export const getCategorylistSuccess = (pages) => ({// get List success
   type: GET_CATEGORY_LIST_SUCCESS,
   payload: pages,
 });
 
-////delete api
-export const delete_Category_ID = (id) => ({
-  type: DELETE_CATEGORY_ID,
-  id,
-
+export const saveCategoryMaster =  (config={}) => ({// save Action
+  type: SAVE_CATEGORY_MASTER,
+  config,
 });
-export const deleteCategoryIDSuccess = (deleteMessage) => ({
-  type: DELETE_CATEGORY_ID_SUCCESS,
-  payload: deleteMessage
-}); 
 
-// edit api
+export const saveCategoryMaster_Success = (resp) => ({// Save  success
+  type: SAVE_CATEGORY_MASTER_SUCCESS,
+  payload: resp,
+});
 
-export const editCategoryID = (id,pageMode) => ({
+export const editCategoryID =  (config = {}) => ({ // Edit Action 
   type: EDIT_CATEGORY_ID,
-  id,pageMode
-})
+  config,
+});
 
-export const editCategoryIDSuccess = (editData) => ({
+export const editCategoryIDSuccess =  (editData) => ({// Edit  Success
   type: EDIT_CATEGORY_ID_SUCCESS,
   payload: editData,
-})
-// update api
-export const updateCategoryID = (updateData, ID) => ({
+});
+
+export const updateCategoryID =  (config = {}) => ({// update  Action
   type: UPDATE_CATEGORY_ID,
-  updateData, ID,
-})
-export const updateCategoryIDSuccess = (updateMessage) => ({
+  config,
+});
+
+export const updateCategoryIDSuccess = (resp) => ({ //Update Success
   type: UPDATE_CATEGORY_ID_SUCCESS,
-  payload: updateMessage,
+  payload: resp,
 })
+
+export const delete_Category_ID =  (config={}) => ({// Delete  Action
+  type: DELETE_CATEGORY_ID,
+  config,
+});
+
+export const deleteCategoryIDSuccess =  (resp) => ({// Delete Success
+  type: DELETE_CATEGORY_ID_SUCCESS,
+  payload: resp
+});
 

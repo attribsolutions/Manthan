@@ -6,11 +6,11 @@ import { POST_ROUTE_UPDATE, ROUTE_UPDATE_LIST } from "./actionType";
 
 //Routes List Api Using Post Method
 function* RouteUpdate_List_GenratorFunction() {
-    const jsonBody = {
+    const filters = {
         "Party": loginPartyID(),
     }
     try {
-        const response = yield call(Route_Update_List_API, jsonBody);
+        const response = yield call(Route_Update_List_API, filters);
         yield put(RouteUpdateListSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
@@ -25,11 +25,9 @@ function* Post_RouteUpdate_GenratorFunction({data}) {
     } catch (error) { CommonConsole(error) }
 }
 
-
 function* RouteUpdateSaga() {
     yield takeEvery(ROUTE_UPDATE_LIST, RouteUpdate_List_GenratorFunction)
     yield takeEvery(POST_ROUTE_UPDATE, Post_RouteUpdate_GenratorFunction)
-
 }
 
 export default RouteUpdateSaga;

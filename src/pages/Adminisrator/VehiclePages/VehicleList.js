@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import VehicleMaster from "./VehicleMaster";
 import {
-  deleteVehicleTypeIDSuccess,
-  updateVehicleTypeIDSuccess,
-  getMethodForVehicleList,
-  editVehicleTypeId,
-  delete_VehicleType_ID,
-  PostMethod_ForVehicleMasterSuccess
+  deleteVehicleID_Success,
+  updateVehicleID_Success,
+  getVehicleList,
+  editVehicleID,
+  deleteVehicleID,
+  saveVehicleMasterSuccess
 } from "../../../store/Administrator/VehicleRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -32,12 +32,12 @@ const VehicleList = (props) => {
   );
 
   const action = {
-    getList: getMethodForVehicleList,
-    editId: editVehicleTypeId,
-    deleteId: delete_VehicleType_ID,
-    postSucc: PostMethod_ForVehicleMasterSuccess,
-    updateSucc: updateVehicleTypeIDSuccess,
-    deleteSucc: deleteVehicleTypeIDSuccess,
+    getList: getVehicleList,
+    editId: editVehicleID,
+    deleteId: deleteVehicleID,
+    postSucc: saveVehicleMasterSuccess,
+    updateSucc: updateVehicleID_Success,
+    deleteSucc: deleteVehicleID_Success,
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering
@@ -45,7 +45,7 @@ const VehicleList = (props) => {
     const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getMethodForVehicleList());
+    dispatch(getVehicleList());
   }, []);
 
   const { pageField ,userAccess=[]} = reducers

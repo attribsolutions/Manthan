@@ -12,12 +12,12 @@ import CompanyGroupMaster from "./CompanyGroupMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-  deleteCompanyGroupTypeIDSuccess,
-  updateCompanyGroupTypeIDSuccess,
-  getMethodForCompanyGroupList,
-  editCompanyGroupTypeId,
-  delete_CompanyGroupType_ID,
-  PostMethod_ForCompanyGroupMasterSuccess,
+  deleteCompanyGroupIDSuccess,
+  updateCompanyGroupIDSuccess,
+  getCompanyGroupList,
+  editCompanyGroupID,
+  deleteCompanyGroupID,
+  saveCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
@@ -38,7 +38,7 @@ const CompanyGroupList = (props) => {
       updateMessage: state.CompanyGroupReducer.updateMessage,
       deleteMessage: state.CompanyGroupReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
+      PostAPIResponse: state.CompanyGroupReducer.postMsg,
     })
   );
   console.log("TableListData", TableListData)
@@ -54,25 +54,25 @@ const CompanyGroupList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMethodForCompanyGroupList());
+    dispatch(getCompanyGroupList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
+      dispatch(updateCompanyGroupIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getMethodForCompanyGroupList,
+          AfterResponseAction: getCompanyGroupList,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
+      dispatch(updateCompanyGroupIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -85,17 +85,17 @@ const CompanyGroupList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteCompanyGroupTypeIDSuccess({ Status: false }));
+      dispatch(deleteCompanyGroupIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getMethodForCompanyGroupList,
+          AfterResponseAction: getCompanyGroupList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteCompanyGroupTypeIDSuccess({ Status: false }));
+      dispatch(deleteCompanyGroupIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -110,9 +110,9 @@ const CompanyGroupList = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-      dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+      dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
       tog_center();
-      dispatch(getMethodForCompanyGroupList());
+      dispatch(getCompanyGroupList());
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -121,7 +121,7 @@ const CompanyGroupList = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true)) {
-      dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+      dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -176,8 +176,8 @@ const CompanyGroupList = (props) => {
       ButtonMsgLable: "Name",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editCompanyGroupTypeId,
-      deleteActionFun: delete_CompanyGroupType_ID
+      editActionFun: editCompanyGroupID,
+      deleteActionFun: deleteCompanyGroupID
     })
   ];
 

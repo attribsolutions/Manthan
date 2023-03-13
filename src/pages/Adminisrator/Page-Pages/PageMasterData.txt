@@ -16,7 +16,7 @@ import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import DropdownTreeSelect from 'react-dropdown-tree-select'
-import { getPriceListData } from "../../../store/Administrator/PriceList/action";
+import { priceListByPartyAction } from "../../../store/Administrator/PriceList/action";
 import '../../../assets/tree_select_css/index.css'
 import Tree from "./Tree"
 const PartyMaster = (props) => {
@@ -255,7 +255,7 @@ const PartyMaster = (props) => {
         // dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select('')
         setCompanyList_dropdown_Select('')
-        dispatch(getPriceListData(e.value))
+        dispatch(priceListByPartyAction(e.value))
 
     }
 

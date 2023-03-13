@@ -5,60 +5,55 @@ import {
     EDIT_GROUP_TYPE_ID_SUCCESS,
     GET_GROUP_TYPES_LIST,
     GET_GROUP_TYPES_LIST_SUCCESS,
-    POST_GROUP_TYPE_SUBMIT,
-    POST_GROUP_TYPE_SUBMIT_SUCCESS,
+    SAVE_GROUP_TYPE_MASTER,
+    SAVE_GROUP_TYPE_MASTER_SUCCESS,
     UPDATE_GROUP_TYPE_ID,
     UPDATE_GROUP_TYPE_ID_SUCCESS
 } from "./actionType";
 
-// get GroupTypes list 
-export const getGroupTypeslist = () => ({
+export const getGroupTypeslist = () => ({// get List Action
     type: GET_GROUP_TYPES_LIST,
 });
 
-export const getGroupTypeslistSuccess = (pages) => ({
+export const getGroupTypeslistSuccess = (pages) => ({// get List success
     type: GET_GROUP_TYPES_LIST_SUCCESS,
     payload: pages,
 });
 
-// post api
-export const PostGroupTypeSubmit = (data) => ({
-    type: POST_GROUP_TYPE_SUBMIT,
-    data,
+export const saveGroupTypeMaster = (config={}) => ({// save Action
+    type: SAVE_GROUP_TYPE_MASTER,
+    config,
 });
 
-export const PostGroupTypeSubmitSuccess = (data) => ({
-    type: POST_GROUP_TYPE_SUBMIT_SUCCESS,
-    payload: data,
+export const saveGroupTypeMasterSuccess = (resp) => ({// Save  success
+    type: SAVE_GROUP_TYPE_MASTER_SUCCESS,
+    payload: resp,
 });
 
-// edit api
-export const editGroupTypeId = (id, pageMode) => ({
+export const editGroupTypeID = (config = {}) => ({// Edit Action 
     type: EDIT_GROUP_TYPE_ID,
-    id, pageMode
+    config,
 })
-export const editGroupTypeIdSuccess = (editData) => ({
+export const editGroupTypeIDSuccess = (resp) => ({// Edit  Success
     type: EDIT_GROUP_TYPE_ID_SUCCESS,
-    payload: editData,
+    payload: resp,
 })
 
-// update api
-export const updateGroupTypeID = (updateData, ID) => ({
+export const updateGroupTypeID = (config = {}) => ({// update  Action
     type: UPDATE_GROUP_TYPE_ID,
-    updateData, ID,
+    config,
 })
-export const updateGroupTypeIDSuccess = (updateMessage) => ({
+export const updateGroupTypeIDSuccess = (resp) => ({//Update Success
     type: UPDATE_GROUP_TYPE_ID_SUCCESS,
-    payload: updateMessage,
+    payload: resp,
 })
 
-//delete api
-export const deleteGroupType_ID = (id) => ({
+export const deleteGroupTypeID = (config={}) => ({// Delete  Action
     type: DELETE_GROUP_TYPE_ID,
-    id,
-
+    config,
 });
-export const deleteGroupType_IDSuccess = (deleteMessage) => ({
+
+export const deleteGroupTypeIDSuccess = (resp) => ({// Delete Success
     type: DELETE_GROUP_TYPE_ID_SUCCESS,
-    payload: deleteMessage
+    payload: resp
 });

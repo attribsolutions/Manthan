@@ -9,10 +9,10 @@ import {
 import {
     deleteCompany_ID,
     editCompanyID,
-    fetchCompanyList,
+    getcompanyList,
     updateCompanyIDSuccess,
     deleteCompanyIDSuccess,
-    PostCompanySubmitSuccess,
+    saveCompany_Success,
 } from "../../../store/Administrator/CompanyRedux/actions";
 
 import paginationFactory, {
@@ -67,7 +67,7 @@ const CompanyList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(fetchCompanyList());
+        dispatch(getcompanyList());
     }, []);
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
@@ -77,7 +77,7 @@ const CompanyList = () => {
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: updateMessage.Message,
-                AfterResponseAction: fetchCompanyList,
+                AfterResponseAction: getcompanyList,
             }))
             tog_center()
         }
@@ -96,7 +96,7 @@ const CompanyList = () => {
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteCompanyID.Message,
-                AfterResponseAction: fetchCompanyList,
+                AfterResponseAction: getcompanyList,
             }))
         } else if (deleteCompanyID.Status === true) {
             dispatch(deleteCompanyIDSuccess({ Status: false }))
@@ -112,9 +112,9 @@ const CompanyList = () => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(PostCompanySubmitSuccess({ Status: false }))
+            dispatch(saveCompany_Success({ Status: false }))
             tog_center();
-            dispatch(fetchCompanyList());
+            dispatch(getcompanyList());
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -123,7 +123,7 @@ const CompanyList = () => {
         }
 
         else if ((PostAPIResponse.Status === true)) {
-            dispatch(PostCompanySubmitSuccess({ Status: false }))
+            dispatch(saveCompany_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,

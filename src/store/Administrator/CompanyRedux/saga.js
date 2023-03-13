@@ -1,13 +1,12 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
-import { loginJsonBody } from "../../CommonAPI/CommonJsonBody";
 import {
   deleteCompanyIDSuccess,
   editCompanyIDSuccess,
-  fetchCompanyListSuccess,
+  getCompanyListSuccess,
   getCompanyGroupSuccess,
-  PostCompanySubmitSuccess,
+  saveCompany_Success,
   updateCompanyIDSuccess
 } from "./actions";
 import {
@@ -19,38 +18,40 @@ import {
   UPDATE_COMPANY_ID,
 } from "./actionType";
 
-function* fetch_CompanyList_data() {
+
+function* Save_Method_ForCompany_GenFun({ config }) {         // Save API
+  try {
+    const response = yield call(postSubmit_Company, config);
+    yield put(saveCompany_Success(response));
+  } catch (error) { CommonConsole(error) }
+}
+
+function* Get_Company_List_GenFunc() {                          // getList API
   try {
     const response = yield call(fetch_CompanyList, loginJsonBody());
-    yield put(fetchCompanyListSuccess(response.Data));
+    yield put(getCompanyListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-function* SubmitCompanyModules({ data }) {
+function* deleteCompany_ID({ config }) {                      // delete API
   try {
-    const response = yield call(postSubmit_Company, data);
-    yield put(PostCompanySubmitSuccess(response));
-  } catch (error) { CommonConsole(error) }
-}
-
-function* deleteCompany_ID({ id }) {
-  try {
-    const response = yield call(delete_CompanyID, id);
+    const response = yield call(delete_CompanyID, config);
     yield put(deleteCompanyIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* editCompany_ID({ id, pageMode }) {
+function* editCompany_ID({ config}) {               //Edit API
+  const { btnmode } = config;
   try {
-    const response = yield call(edit_CompanyID, id);
-    response.pageMode = pageMode
+    const response = yield call(edit_CompanyID, config);
+    response.pageMode = btnmode
     yield put(editCompanyIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* update_Company({ updateData, ID }) {
+function* update_Company({ config }) {             //Update API
   try {
-    const response = yield call(updateCompany_ID, updateData, ID);
+    const response = yield call(updateCompany_ID, config );
     yield put(updateCompanyIDSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
@@ -64,9 +65,9 @@ function* CompanyGroup() {
 }
 
 function* CompanySaga() {
-  yield takeEvery(FETCH_COMPANY_LIST, fetch_CompanyList_data);
+  yield takeEvery(FETCH_COMPANY_LIST, Get_Company_List_GenFunc);
   yield takeEvery(EDIT_COMPANY_ID, editCompany_ID);
-  yield takeEvery(POST_COMPANY_SUBMIT, SubmitCompanyModules);
+  yield takeEvery(POST_COMPANY_SUBMIT, Save_Method_ForCompany_GenFun);
   yield takeEvery(DELETE_COMPANY_ID, deleteCompany_ID);
   yield takeEvery(UPDATE_COMPANY_ID, update_Company);
   yield takeEvery(GET_COMPANYGROUP, CompanyGroup);

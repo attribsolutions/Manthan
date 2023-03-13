@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, deleteDriverTypeIDSuccess, editDriverTypeSuccess, updateDriverTypeIDSuccess } from "./action";
+import { saveDriverMasterSuccess, getDriverListSuccess, deleteDriverID_Success, editDriverID_Success, updateDriverID_Success } from "./action";
 import {
     get_DriverList_API,
     Post_Driver_API,
@@ -8,61 +8,59 @@ import {
     update_DriverType_List_Api,
 } from "../../../helpers/backend_helper";
 import {
-    POST_METHOD_FOR_DRIVER_MASTER,
-    GET_METHOD_FOR_DRIVER_LIST,
+    SAVE_DRIVER_MASTER,
+    GET_DRIVER_LIST,
     DELETE_DRIVER_TYPE_ID,
     EDIT_DRIVER_TYPE_ID,
     UPDATE_DRIVER_TYPE_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-// Get List Page API
-function* Get_Driver_GenratorFunction() {
+function* Get_Driver_GenFun() { // List API Using Post Method
+    
+    const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
-        const response = yield call(get_DriverList_API);
-        yield put(getMethod_ForDriverListSuccess(response.Data));
+        const response = yield call(get_DriverList_API, filters);
+        yield put(getDriverListSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
-// post api
-function* Post_Method_For_Driver_GenFun({ data }) {
+function* save_DriverMaster_GenFun({ config }) { // post api
     try {
-        const response = yield call(Post_Driver_API, data);
-        yield put(PostMethod_ForDriverMasterSuccess(response));
+        const response = yield call(Post_Driver_API, config);
+        yield put(saveDriverMasterSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
-// delete api 
-function* Delete_DriverType_ID_GenratorFunction({ id }) {
+function* Delete_Driver_ID_GenFun({ config }) { // delete api 
     try {
-        const response = yield call(detelet_DriverType_List_Api, id);
-        yield put(deleteDriverTypeIDSuccess(response))
+        const response = yield call(detelet_DriverType_List_Api, config);
+        yield put(deleteDriverID_Success(response))
     } catch (error) { CommonConsole(error) }
 }
 
-// edit api
-function* Edit_DriverType_ID_GenratorFunction({ id, pageMode }) {
+function* Edit_Driver_ID_GenFun({ config }) { // edit api
+    const { btnmode } = config;
     try {
-        const response = yield call(edit_DriverType_List_Api, id);
-        response.pageMode = pageMode
-        yield put(editDriverTypeSuccess(response));
+        const response = yield call(edit_DriverType_List_Api, config);
+        response.pageMode = btnmode
+        yield put(editDriverID_Success(response));
     } catch (error) { CommonConsole(error) }
 }
 
-// update api
-function* Update_DriverType_ID_GenratorFunction({ updateData, ID }) {
+function* Update_DriverType_ID_GenFun({ config }) { // update api
     try {
-        const response = yield call(update_DriverType_List_Api, updateData, ID);
-        yield put(updateDriverTypeIDSuccess(response))
+        const response = yield call(update_DriverType_List_Api, config);
+        yield put(updateDriverID_Success(response))
     } catch (error) { CommonConsole(error) }
 }
 
 function* DriverSaga() {
-    yield takeEvery(POST_METHOD_FOR_DRIVER_MASTER, Post_Method_For_Driver_GenFun)
-    yield takeEvery(GET_METHOD_FOR_DRIVER_LIST, Get_Driver_GenratorFunction)
-    yield takeEvery(DELETE_DRIVER_TYPE_ID, Delete_DriverType_ID_GenratorFunction)
-    yield takeEvery(EDIT_DRIVER_TYPE_ID, Edit_DriverType_ID_GenratorFunction)
-    yield takeEvery(UPDATE_DRIVER_TYPE_ID, Update_DriverType_ID_GenratorFunction)
+    yield takeEvery(SAVE_DRIVER_MASTER, save_DriverMaster_GenFun)
+    yield takeEvery(GET_DRIVER_LIST, Get_Driver_GenFun)
+    yield takeEvery(EDIT_DRIVER_TYPE_ID, Edit_Driver_ID_GenFun)
+    yield takeEvery(UPDATE_DRIVER_TYPE_ID, Update_DriverType_ID_GenFun)
+    yield takeEvery(DELETE_DRIVER_TYPE_ID, Delete_Driver_ID_GenFun)
 }
 
 export default DriverSaga;

@@ -28,48 +28,44 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName,
         makeBtnShow = false
     } = props;
-    /***
-     * deletemsgLable change to=> ButtonMsgLable line no:11 
-     *    autho by => Rohit  date :22-08-022 */
 
-    //  function editHandler(rowData) {
-    //     dispatch(editActionFun(rowData.id, "edit",));
-    // }
+    function editHandler(rowData, btnmode, btnId) {
 
-    function editHandler(rowData, btnmode) {
-       
-        if (editBodyfunc) { editBodyfunc(rowData, btnmode, subPageMode) }
-        else {
-            dispatch(editActionFun(rowData.id, btnmode, subPageMode));
+        const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+
+        btnIsDissablefunc({ btnId, state: true })
+        if (editBodyfunc) {
+            editBodyfunc(rowData, btnmode, subPageMode, btnId)
+        } else {
+            dispatch(editActionFun({ ...config }));
         }
     };
 
     function copyHandler(rowData, btnmode) {
         dispatch(editActionFun(rowData.id, btnmode, subPageMode));
-    }
+    };
+
     function downHandler(rowData) {
         downBtnFunc(rowData);
     };
 
-    async function deleteHandler(rowData) {
+    async function deleteHandler(rowData, btnId) {
         const rep = await CustomAlert({
             Type: 8,
             Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-            // PermissionAction: deleteActionFun,
-            // ID: rowData.id,
         })
         if (rep) {
-            dispatch(deleteActionFun(rowData.id, subPageMode))
+            btnIsDissablefunc({ btnId, state: true })
+            const config = { deleteId: rowData.id, subPageMode, btnId }
+            dispatch(deleteActionFun({ ...config }))
         }
-
     }
-    function makeBtnHandler(rowData) {
 
+    function makeBtnHandler(rowData) {
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
         makeBtnFunc(arr)
-
     }
 
     return ({
@@ -92,9 +88,13 @@ export const listPageCommonButtonFunction = (props) => {
                         ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?
                             < Button
                                 type="button"
+                                id={`btn-makeBtn-${rowData.id}`}
                                 className={makeBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
-                                onClick={() => { makeBtnHandler(rowData) }}
+                                title={makeBtnName}
+                                onClick={() => {
+                                    const btnid = `btn-makeBtn-${rowData.id}`
+                                    makeBtnHandler(rowData, btnid)
+                                }}
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-invoice" ></span> </Button>
@@ -107,11 +107,15 @@ export const listPageCommonButtonFunction = (props) => {
                             ?
                             (<Button
                                 type="button"
+                                id={`btn-edit-${rowData.id}`}
                                 className={editBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                                onClick={() => { editHandler(rowData, mode.edit) }}
+                                title={`Edit ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnid = `btn-edit-${rowData.id}`
+                                    editHandler(rowData, mode.edit, btnid)
+                                }}
                             >
-                                <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                                <i className="mdi mdi-pencil font-size-18" ></i>
                             </Button>)
 
                             : // **Else-If Condition start 
@@ -120,11 +124,15 @@ export const listPageCommonButtonFunction = (props) => {
                                 ?
                                 <Button
                                     type="button"
+                                    id={`btn-edit-${rowData.id}`}
                                     className={editSelfBtnCss}
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                                    onClick={() => { editHandler(rowData, mode.edit) }}
+                                    title={`EditSelf ${ButtonMsgLable}`}
+                                    onClick={() => {
+                                        const btnid = `btn-edit-${rowData.id}`
+                                        editHandler(rowData, mode.edit, btnid)
+                                    }}
                                 >
-                                    <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                                    <i className="mdi mdi-pencil font-size-18" ></i>
                                 </Button>
 
                                 : // **second else-if condition
@@ -134,8 +142,12 @@ export const listPageCommonButtonFunction = (props) => {
                                     <Button
                                         type="button"
                                         className={editSelfBtnCss}
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                        onClick={() => { editHandler(rowData, mode.view) }}
+                                        id={`btn-edit-${rowData.id}`}
+                                        title={`View ${ButtonMsgLable}`}
+                                        onClick={() => {
+                                            const btnid = `btn-view-${rowData.id}`
+                                            editHandler(rowData, mode.view, btnid)
+                                        }}
                                     >
                                         <i className="bx bxs-show font-size-18 "></i>
                                     </Button>
@@ -151,8 +163,12 @@ export const listPageCommonButtonFunction = (props) => {
                             <Button
                                 type="button"
                                 className={deltBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                                onClick={() => { deleteHandler(rowData) }}
+                                id={`btn-delete-${rowData.id}`}
+                                title={`Delete ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnid = `btn-delete-${rowData.id}`
+                                    deleteHandler(rowData, btnid)
+                                }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>
@@ -165,8 +181,12 @@ export const listPageCommonButtonFunction = (props) => {
                                 <Button
                                     type="button"
                                     className={deltBtnCss}
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                                    onClick={() => { deleteHandler(rowData) }}
+                                    id={`btn-delete-${rowData.id}`}
+                                    title={`Delete ${ButtonMsgLable}`}
+                                    onClick={() => {
+                                        const btnid = `btn-delete-${rowData.id}`
+                                        deleteHandler(rowData, btnid)
+                                    }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -176,9 +196,13 @@ export const listPageCommonButtonFunction = (props) => {
                         ((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
                             <Button
                                 type="button"
+                                id={`btn-delete-${rowData.id}`}
                                 className={editSelfBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                                onClick={() => { copyHandler(rowData, mode.copy) }}
+                                title={`Copy ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnid = `btn-delete-${rowData.id}`
+                                    copyHandler(rowData, mode.copy, btnid)
+                                }}
                             >
                                 <i className="bx bxs-copy font-size-18 "></i>
                             </Button>
@@ -188,9 +212,13 @@ export const listPageCommonButtonFunction = (props) => {
                         ((userAccState.RoleAccess_IsPrint)) ?
                             <Button
                                 type="button"
+                                id={`btn-dounload-${rowData.id}`}
                                 className={downBtnCss}
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Download ${ButtonMsgLable}`}
-                                onClick={() => { downHandler(rowData) }}
+                                title={`Download ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnid = `btn-dounload-${rowData.id}`
+                                    downHandler(rowData, btnid)
+                                }}
                             >
                                 <i className="bx bx-printer font-size-18"></i>
                             </Button>
@@ -211,6 +239,7 @@ export const listPageCommonButtonFunction = (props) => {
     });
 
 }
+
 
 export const commonDefaultSorted = (name) => {
     return (
@@ -272,13 +301,14 @@ export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Da
     return downList
 }
 
-const currentDatefunc = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+const currentDatefunc = () => {  //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
     const current = new Date();
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
     return currentDate
 }
+
 export const currentDate = currentDatefunc();
 
 export const invertDatefunc = (inp) => {//+++++++++++++++ Current Date++++++++++++++++++++++++++++
@@ -293,14 +323,15 @@ export const loginUserDetails = () => {//+++++++++++++++++++++ Seesion Company I
     let user_Details = null
     try {
         user_Details = JSON.parse(localStorage.getItem('roleId'))
-    } catch (e) { alert("Common user_Details  Error") }
+    } catch (e) { CommonConsole("Common user_Details  Error") }
     return user_Details
 }
+
 export const loginRoleID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
     try {
         const detail = JSON.parse(localStorage.getItem('roleId'))
         return detail.Role
-    } catch (e) { alert("Common Role ID  Error") }
+    } catch (e) { CommonConsole("Common Role ID  Error") }
     return null
 }
 
@@ -308,7 +339,7 @@ export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id++++++
     let created_By = 0
     try {
         created_By = JSON.parse(localStorage.getItem('userId'))
-    } catch (e) { alert("Common Created By Error") }
+    } catch (e) { CommonConsole("Common Created By Error") }
     return created_By
 }
 
@@ -316,7 +347,7 @@ export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { alert("Common loginCompanyID  Error") }
+    } catch (e) { CommonConsole("Common loginCompanyID  Error") }
     return user_Company
 }
 
@@ -324,7 +355,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID 
     let user_Party = 0
     try {
         user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
-    } catch (e) { alert("Common loginPartyID Func  Error") }
+    } catch (e) { CommonConsole("Common loginPartyID Func  Error") }
     return user_Party
 }
 
@@ -340,9 +371,17 @@ export const loginIsSCMCompany = () => {//+++++++++++++++++++++ Seesion loginPar
     let IsSCMCompany = 0
     try {
         IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"))
-    } catch (e) { alert("Common loginEmployeeID Func  Error") }
+    } catch (e) { CommonConsole("Common loginEmployeeID Func  Error") }
     return IsSCMCompany
 }
+
+export const loginJsonBody = () => ({
+    UserID: loginUserID(),
+    RoleID: loginRoleID(),
+    CompanyID: loginCompanyID(),
+    PartyID: loginPartyID(),
+    IsSCM: loginIsSCMCompany()
+})
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
     const date = new Date(inputDate);
@@ -421,26 +460,6 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
     }
 }
 
-// export function GoBtnDissable1({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-//     try {
-//         document.getElementById("overlay").style.display = state ? "block" : "none";
-//     } catch (e) {
-//         // alert("Go btn dissable overlay error")
-//     }
-//     try {
-//         const btn = document.getElementById(id);
-//         btn.disabled = state;
-//         
-//         if (state) {
-//             btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-//         } else {
-//             btn.innerHTML = `<span> Go</span>`
-//             btn.text = "Go"
-//         }
-//     } catch (e) {
-//         // alert("Go btn dissable  error")
-//     }
-// }
 
 export function breadcrumbReturn({ dispatch, userAcc, newBtnPath = '' }) {
     const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
@@ -457,4 +476,86 @@ export function breadcrumbReturn({ dispatch, userAcc, newBtnPath = '' }) {
 
 export function CommonConsole(error) {
     console.log(error);
+}
+
+
+export function btnIsDissablefunc({ btnId, state = false }) {
+
+    if (btnId) {
+        try {
+            document.getElementById("overlay").style.display = state ? "block" : "none";
+            document.getElementById(btnId).disabled = state;
+
+            // const loginBtn = document.getElementById(event.target);
+            document.getElementById("preloader").style.display = state ? "block" : "none";
+
+            // if (state) {
+            //     loginBtn.classList.add("loading");
+            // }
+            // else {
+            //     loginBtn.classList.remove("loading")
+            // }
+            // // Hide loader after success/failure - here it will hide after 2seconds
+            // // setTimeout(() => event.classList.remove("loading"), 3000);
+
+        } catch (error) { CommonConsole(error) }
+    }
+}
+
+export async function CheckAPIResponse({ method, url, response, body, btnId }) {
+
+    if (btnId) {
+        await new Promise(r => setTimeout(r, 2000));
+    }
+
+    const { data = '' } = response
+    const con1 = ((data.StatusCode === 200));
+    const con2 = ((data.StatusCode === 204));
+    const con3 = ((data.StatusCode === 226));
+
+    const con4 = ((data.StatusCode === 400));
+
+    const con5 = ((data.StatusCode === 406));
+    const con6 = ((method === "post" || method === "put"))
+    const con7 = ((data.StatusCode === 100));
+
+    btnIsDissablefunc({ btnId, state: false })
+
+    if (con6) {
+        console.log(`${url}***=> ${method} Body =>`, body)
+    }
+    // **********************************************************************************
+    if (con1 || con7) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
+        return response.data
+    }
+
+    else if (con2) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
+        return response.data
+    }
+
+    else if (con3) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
+        await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
+        return Promise.reject(response)
+    }
+
+    else if (con4) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
+        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
+        return Promise.reject(response)
+    }
+
+    else if (con5) {
+        console.log(`${url}***${method} apiCall response:=>`, response.data)
+        await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
+        return Promise.reject(response)
+    }
+
+    else {
+        console.log(`${url}***${method} apiCall response:=>`, response)
+        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
+        return Promise.reject(response)
+    }
 }

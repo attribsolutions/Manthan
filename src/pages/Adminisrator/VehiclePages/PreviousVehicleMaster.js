@@ -18,7 +18,7 @@ import { Breadcrumb_inputName } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
-import { PostMethodForVehicleMaster, getMethodForVehicleList, getMethod_DriverList_ForDropDown, getMethod_VehicleTypes_ForDropDown, PostMethod_ForVehicleMasterSuccess, getMethod_ForVehicleListSuccess, editVehicleTypeSuccess, updateVehicleTypeID } from "../../../store/Administrator/VehicleRedux/action";
+import { saveVehicleMaster, getVehicleList, getMethod_DriverList_ForDropDown, getVehicleType_for_dropdown, saveVehicleMasterSuccess, getVehicleListSuccess, editVehicleID_Success, updateVehicleID } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
@@ -56,7 +56,7 @@ const VehicleMaster = (props) => {
         VehicleTypes,
         DriverList_redux,
         RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-            PostAPIResponse: state.VehicleReducer.PostDataMessage,
+            PostAPIResponse: state.VehicleReducer.postMsg,
             VehicleList: state.VehicleReducer.VehicleList,
             Divisions: state.ItemMastersReducer.Division,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
@@ -66,10 +66,10 @@ const VehicleMaster = (props) => {
         }));
 
     useEffect(() => {
-        //  dispatch(PostMethodForVehicleMaster());
-        dispatch(getMethodForVehicleList());
+        //  dispatch(saveVehicleMaster());
+        dispatch(getVehicleList());
         dispatch(getMethod_DriverList_ForDropDown());
-        dispatch(getMethod_VehicleTypes_ForDropDown());
+        dispatch(getVehicleType_for_dropdown());
         dispatch(get_Division_ForDropDown());
     }, [dispatch]);
 
@@ -119,7 +119,7 @@ const VehicleMaster = (props) => {
                 }
             })
             setDivisionData(division)
-            dispatch(editVehicleTypeSuccess({ Status: false }))
+            dispatch(editVehicleID_Success({ Status: false }))
             dispatch(Breadcrumb_inputName(editDataGatingFromList.VehicleTypeName))
             return
         }
@@ -133,7 +133,7 @@ const VehicleMaster = (props) => {
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             // setSubCategory_dropdown_Select('')
-            dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+            dispatch(saveVehicleMasterSuccess({ Status: false }))
             formRef.current.reset();
 
             if (pageMode === "dropdownAdd") {
@@ -153,7 +153,7 @@ const VehicleMaster = (props) => {
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
+            dispatch(getVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -216,10 +216,10 @@ const VehicleMaster = (props) => {
         console.log("jsonBody", jsonBody)
 
         if (pageMode === 'edit') {
-            dispatch(updateVehicleTypeID(jsonBody, EditData.id));
+            dispatch(updateVehicleID(jsonBody, EditData.id));
         }
         else {
-            dispatch(PostMethodForVehicleMaster(jsonBody));
+            dispatch(saveVehicleMaster(jsonBody));
             console.log("jsonBody", jsonBody)
         }
     };

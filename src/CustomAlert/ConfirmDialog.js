@@ -2,7 +2,6 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { UncontrolledAlert } from 'reactstrap';
 import useConfirm from './useConfirm';
 
 
@@ -34,7 +33,7 @@ const ConfirmDialog = () => {
                 break;
         }
     }
-    
+
     const portalElement = document.getElementById('portal');
     return createPortal(component, portalElement);
 };
@@ -173,10 +172,6 @@ const AlertInfo = () => {
 
     )
 };
-
-
-
-
 
 const AlertDanger = () => {
     const { onCancel, confirmState } = useConfirm();
@@ -428,50 +423,4 @@ const MessageFun = ({ msg }) => {
     }
 }
 
-export async function CkeckAlert(method, url, response, body) {
 
-    const { data = '' } = response
-    const con1 = ((data.StatusCode === 200));
-    const con2 = ((data.StatusCode === 204));
-    const con3 = ((data.StatusCode === 226));
-
-    const con4 = ((data.StatusCode === 400));
-
-    const con5 = ((data.StatusCode === 406));
-    const con6 = ((method === "post" || method === "put"))
-    const con7 = ((data.StatusCode === 100));
-
-    if (con6) {
-        console.log(`${url}***=> ${method} Body =>`, body)
-    }
-    // **********************************************************************************
-    if (con1||con7) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        return response.data
-    } else if (con2) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        // await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
-        // return Promise.reject(response)
-        return response.data
-    }
-    else if (con3) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
-        return Promise.reject(response)
-    }
-    else if (con4) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
-        return Promise.reject(response)
-    }
-    else if (con5) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
-        return Promise.reject(response)
-    }
-    else {
-        console.log(`${url}***${method} apiCall response:=>`, response)
-        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
-        return Promise.reject(response)
-    }
-}

@@ -1,8 +1,8 @@
 import {
     DELETE_PRICE_LIST,
     DELETE_PRICE_LIST_SUCCESS,
-    GET_PRICE_LIST_DATA,
-    GET_PRICE_LIST_DATA_SUCCESS,
+    PRICE_LIST_BY_PARTY_ACTION,
+    PRICE_LIST_BY_PARTY_ACTION_SUCCESS,
     POST_PRICE_LIST_DATA,
     POST_PRICE_LIST_DATA_SUCCESS,
     EDIT_PRICE_LIST,
@@ -13,68 +13,69 @@ import {
     GET_PRICE_LIST_PAGE_SUCCESS
 } from "./actionType";
 
-// post api
-export const postPriceListData = (Data,) => ({
-    type: POST_PRICE_LIST_DATA,
-    Data, 
-});
 
-export const postPriceListDataSuccess = (data,id) => ({
-    type: POST_PRICE_LIST_DATA_SUCCESS,
-    payload: data,
-});
 
-// get api 
-export const getPriceListData = (partyType) => ({
-    type: GET_PRICE_LIST_DATA,
+
+export const priceListByPartyAction = (partyType) => ({// priceMaster Gobtn
+    type: PRICE_LIST_BY_PARTY_ACTION,
     partyType,
 });
 
-export const getPriceListDataSuccess = (data) => ({
-    type: GET_PRICE_LIST_DATA_SUCCESS,
+export const priceListByPartyActionSuccess = (data) => ({// priceMaster Gobtn Success
+    type: PRICE_LIST_BY_PARTY_ACTION_SUCCESS,
     payload: data,
 });
 
- //get listpage api
-export const getPriceListPage = () => ({
+
+export const getPriceListPage = () => ({// listpage api
     type: GET_PRICE_LIST_PAGE,
-    
+
 });
 
-export const getPriceListPageSuccess = (data) => ({
+export const getPriceListPageSuccess = (data) => ({// listpage Success
     type: GET_PRICE_LIST_PAGE_SUCCESS,
     payload: data,
 });
 
-//delete
-export const delete_PriceList = (id) => ({
+
+
+export const savePriceMasterAction = (config) => ({// save api
+    type: POST_PRICE_LIST_DATA,
+    config,
+});
+
+export const savePriceMasterActionSuccess = (resp) => ({// save success
+    type: POST_PRICE_LIST_DATA_SUCCESS,
+    payload: resp,
+});
+
+export const delete_PriceList = (config) => ({//delete Api
     type: DELETE_PRICE_LIST,
-    id,
+    config,
 });
 
-export const delete_PriceListSuccess = (data) => ({
+export const delete_PriceListSuccess = (resp) => ({ //delete Success
     type: DELETE_PRICE_LIST_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
-//edit api
-export const  editPriceList = (id,pageMode) => ({
- type: EDIT_PRICE_LIST,
- id,pageMode
+
+export const editPriceList = (config) => ({//edit api
+    type: EDIT_PRICE_LIST,
+    config,
 })
-export const editPriceListSuccess = (editData) => ({
- type: EDIT_PRICE_LIST_SUCCESS,
- 
- payload: editData,
+export const editPriceListSuccess = (resp) => ({//edit success
+    type: EDIT_PRICE_LIST_SUCCESS,
+    payload: resp,
 })
 
-// update api
-export const updatePriceList = (updateData,ID) => ({
- type: UPDATE_PRICE_LIST,
- updateData, ID,
+
+export const updatePriceList = (config) => ({// update api
+    type: UPDATE_PRICE_LIST,
+    config,
 })
-export const updatePriceListSuccess=(updateMessage) => ({
- type: UPDATE_PRICE_LIST_SUCCESS,
- payload: updateMessage,
+export const updatePriceListSuccess = (resp) => ({// update  Success
+    type: UPDATE_PRICE_LIST_SUCCESS,
+    payload: resp,
 })
 

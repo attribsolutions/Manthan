@@ -1,4 +1,3 @@
-import { UPDATE_H_PAGES_SUCCESS } from "../HPagesRedux/actionType";
 import {
     POST_ROLE_MASTER,
     POST_ROLE_MASTER_SUCCESS,
@@ -12,56 +11,53 @@ import {
     EDIT_ROLE_LIST_ID_SUCCESS,
 } from "./actionTypes"
 
-// get api
-export const getRole = () => ({
+export const getRole = () => ({  // get List Action
     type: GET_ROLE_LIST_API,
 });
 
-export const getRoleSuccess = (data) => ({
+export const getRoleSuccess = (data) => ({// get List success
     type: GET_ROLE_LIST_API_SUCCESS,
     payload:data,
 });
 
-// post api
-export const postRole = (Data,id) => ({
+export const postRole = (config={}) => ({ // save Action   id reqired
     type: POST_ROLE_MASTER,
-    Data,id
+    config
   });
   
-  export const PostSuccess = (AddUserMessage) => ({
+  export const PostSuccess = (resp) => ({// Save  success
     type: POST_ROLE_MASTER_SUCCESS,
-    payload: AddUserMessage,
+    payload: resp,
   });
 
-  // delete api
-  export const deleteRole = (id) => ({
-    type: DELETE_ROLE_LIST_ID,
-    id ,
-    
-  } );
-  export const deleteSuccess = (deleteMessage) => ({
-    type: DELETE_ROLE_LIST_ID_SUCCESS,
-    payload:deleteMessage
-  });
-  
-  // edit api
-  export const editRoleId =(id,pageMode)=>({
+  export const editRoleId =(config = {})=>({// Edit Action  page mode/id required
     type:EDIT_ROLE_LIST_ID,
-    id,pageMode
+    config ,
   })
-  export const editSuccess =(editData)=>({
+
+  export const editSuccess =(editData)=>({// Edit  Success
     type:EDIT_ROLE_LIST_ID_SUCCESS,
    payload:editData,
   })
 
-  // update api
-  export const updateID=(data,ID)=>({
+  export const updateID=(config = {})=>({// update  Action updated data/id
     type:UPDATE_ROLE_LIST_ID,
-    data,ID
+    config,
   })
-  export const updateSuccess =(updateMessage)=>({
+  export const updateSuccess =(resp)=>({//Update Success
     type:UPDATE_ROLE_LIST_ID_SUCCESS,
-   payload:updateMessage,
+   payload:resp,
   })
+
+  export const deleteRole = (config={}) => ({// Delete  Action id required
+    type: DELETE_ROLE_LIST_ID,
+    config ,
+    
+  } );
+
+  export const deleteSuccess = (resp) => ({// Delete Success
+    type: DELETE_ROLE_LIST_ID_SUCCESS,
+    payload:resp
+  });
 
   

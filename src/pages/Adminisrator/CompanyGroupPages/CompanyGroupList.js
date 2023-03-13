@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyGroupMaster from "./CompanyGroupMaster";
 import {
-  deleteCompanyGroupTypeIDSuccess,
-  updateCompanyGroupTypeIDSuccess,
-  getMethodForCompanyGroupList,
-  editCompanyGroupTypeId,
-  delete_CompanyGroupType_ID,
-  PostMethod_ForCompanyGroupMasterSuccess,
+  deleteCompanyGroupIDSuccess,
+  updateCompanyGroupIDSuccess,
+  getCompanyGroupList,
+  editCompanyGroupID,
+  deleteCompanyGroupID,
+  saveCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -25,18 +25,18 @@ const CompanyGroupList = (props) => {
       updateMsg: state.CompanyGroupReducer.updateMessage,
       deleteMsg: state.CompanyGroupReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.CompanyGroupReducer.PostDataMessage,
+      postMsg: state.CompanyGroupReducer.postMsg,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
   const action = {
-    getList: getMethodForCompanyGroupList,
-    editId: editCompanyGroupTypeId,
-    deleteId: delete_CompanyGroupType_ID,
-    postSucc: PostMethod_ForCompanyGroupMasterSuccess,
-    updateSucc: updateCompanyGroupTypeIDSuccess,
-    deleteSucc: deleteCompanyGroupTypeIDSuccess,
+    getList: getCompanyGroupList,
+    editId: editCompanyGroupID,
+    deleteId: deleteCompanyGroupID,
+    postSucc: saveCompanyGroupMasterSuccess,
+    updateSucc: updateCompanyGroupIDSuccess,
+    deleteSucc: deleteCompanyGroupIDSuccess,
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering
@@ -44,7 +44,7 @@ const CompanyGroupList = (props) => {
     const page_Id = pageId.COMPANYGROUP_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getMethodForCompanyGroupList());
+    dispatch(getCompanyGroupList());
   }, []);
 
   const { pageField, userAccess } = reducers

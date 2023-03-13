@@ -1,67 +1,60 @@
 import {
-    POST_METHOD_FOR_COMPANYGROUP_MASTER,
-    POST_METHOD_FOR_COMPANYGROUP_MASTER_SUCCESS,
-    GET_METHOD_FOR_COMPANYGROUP_LIST,
-    GET_METHOD_FOR_COMPANYGROUP_LIST_SUCCESS,
-    DELETE_COMPANYGROUP_TYPE_ID,
-   DELETE_COMPANYGROUP_TYPE_ID_SUCCESS,
-  EDIT_COMPANYGROUP_TYPE_ID,
-  EDIT_COMPANYGROUP_TYPE_ID_SUCCESS,
-  UPDATE_COMPANYGROUP_TYPE_ID,
-  UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS
-
+  SAVE_COMPANY_GROUP_MASTER,
+  SAVE_COMPANY_GROUP_MASTER_SUCCESS,
+  GET_COMPANY_GROUP_LIST ,
+  GET_COMPANY_GROUP_LIST_SUCCESS,
+  DELETE_COMPANY_GROUP_ID,
+  DELETE_COMPANY_GROUP_ID_SUCCESS,
+  EDIT_COMPANY_GROUP_ID,
+  EDIT_COMPANY_GROUP_ID_SUCCESS,
+  UPDATE_COMPANY_GROUP_ID,
+  UPDATE_COMPANY_GROUP_ID_SUCCESS
 } from "./actionType";
 
-export const PostMethodForCompanyGroupMaster= (data) => ({
-   type: POST_METHOD_FOR_COMPANYGROUP_MASTER,
-   data,
- });
-
- export const PostMethod_ForCompanyGroupMasterSuccess = (data) => ({
-   type: POST_METHOD_FOR_COMPANYGROUP_MASTER_SUCCESS,
-   payload: data,
- });
- 
- // get method CompanyGroupList
- export const getMethodForCompanyGroupList = () => ({
-   type: GET_METHOD_FOR_COMPANYGROUP_LIST,
-   
- });
- 
- export const getMethod_ForCompanyGroupListSuccess = (data) => ({
-   type: GET_METHOD_FOR_COMPANYGROUP_LIST_SUCCESS,
-   payload: data,
- });
-   
-
- ////delete api
-export const delete_CompanyGroupType_ID = (id) => ({
- type: DELETE_COMPANYGROUP_TYPE_ID,
- id,
-
-});
-export const deleteCompanyGroupTypeIDSuccess = (deleteMessage) => ({
- type: DELETE_COMPANYGROUP_TYPE_ID_SUCCESS,
- payload: deleteMessage
+export const getCompanyGroupList = () => ({// get List Action
+  type: GET_COMPANY_GROUP_LIST,
 });
 
-// edit api
-export const editCompanyGroupTypeId = (id,pageMode) => ({
- type: EDIT_COMPANYGROUP_TYPE_ID,
- id,pageMode
+export const getCompanyGroupListSuccess = (resp) => ({// get List success
+  type: GET_COMPANY_GROUP_LIST_SUCCESS,
+  payload: resp,
+});
+
+export const saveCompanyGroupMaster = (config={}) => ({// save Action
+  type: SAVE_COMPANY_GROUP_MASTER,
+  config,
+});
+
+export const saveCompanyGroupMasterSuccess = (resp) => ({// Save  success
+  type: SAVE_COMPANY_GROUP_MASTER_SUCCESS,
+  payload: resp,
+});
+
+export const editCompanyGroupID = (config={}) => ({// edit  Action
+  type: EDIT_COMPANY_GROUP_ID,
+  config,
 })
-export const editCompanyGroupTypeSuccess = (editData) => ({
- type: EDIT_COMPANYGROUP_TYPE_ID_SUCCESS,
- 
- payload: editData,
+export const editCompanyGroupSuccess = (resp) => ({//edit Success
+  type: EDIT_COMPANY_GROUP_ID_SUCCESS,
+  payload: resp,
 })
 
-// update api
-export const updateCompanyGroupTypeID = (updateData, ID) => ({
- type: UPDATE_COMPANYGROUP_TYPE_ID,
- updateData, ID,
+export const updateCompanyGroupID = (config={}) => ({// update  Action
+  type: UPDATE_COMPANY_GROUP_ID,
+  config,
 })
-export const updateCompanyGroupTypeIDSuccess = (updateMessage) => ({
- type: UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS,
- payload: updateMessage,
+
+export const updateCompanyGroupIDSuccess = (resp) => ({// update Success
+  type: UPDATE_COMPANY_GROUP_ID_SUCCESS,
+  payload: resp,
 })
+
+export const deleteCompanyGroupID = (config={}) => ({// Delete Action 
+  type: DELETE_COMPANY_GROUP_ID,
+  config,
+});
+
+export const deleteCompanyGroupIDSuccess = (resp) => ({// Delete  Success
+  type: DELETE_COMPANY_GROUP_ID_SUCCESS,
+  payload: resp
+});

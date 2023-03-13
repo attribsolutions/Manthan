@@ -66,10 +66,11 @@ function* Delete_Items_GenratorFunction({ id }) {
       } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_Items_GenratorFunction({ id, pageMode }) {
+function* Edit_Items_GenratorFunction({ config}) {
+  const { btnmode } = config;
   try {
-    const response = yield call(apiCall.Items_Master_Edit_API, id);
-    response.pageMode = pageMode
+    const response = yield call(apiCall.Items_Master_Edit_API, config);
+    response.pageMode = btnmode
     yield put(editItemSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

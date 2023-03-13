@@ -1,6 +1,5 @@
 import axios from "axios"
-import { mainSppinerOnOff } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { CkeckAlert } from "../CustomAlert/ConfirmDialog"
+import { CheckAPIResponse, CommonConsole } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 
 const API_URL = "http://192.168.1.114:8000"
 
@@ -23,102 +22,83 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-export function get(url, isspinner, config = {}) {
-  console.log("get api call")
-  // 
-  // if (isspinner) {
-  //   mainSppinerOnOff(true)
-  // }
-  AuthonticationFunction();
-  return axiosApi.get(url, { ...config })
-    .then(response => {
-      return CkeckAlert("get", url, response, isspinner);
-    })
-    .catch(error => {
-      return CkeckAlert("get", url, error, isspinner);
-    });
+export function get(url, btnId) {
 
+  CommonConsole("get api call");
+  AuthonticationFunction();
+
+  return axiosApi.get(url)
+    .then(response => {
+      return CheckAPIResponse({ method: "get", url, response, btnId });
+    })
+    .catch(response => {
+      return CheckAPIResponse({ method: "get", url, response, btnId });
+    });
 
 }
 
-export function post(url, data, isspinner, config = {}) {
-  console.log("Post api call")
-  // 
-  // if (isspinner) {
-  //   mainSppinerOnOff(true)
-  // }
+export function post(url, body, btnId) {
+
+  CommonConsole("Post api call");
   AuthonticationFunction();
+
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
-    })
-    .then(response => {
-     
-      // setTimeout(function () {
-      //   mainSppinerOnOff(false)
-      // }, 100000);
-      return CkeckAlert("post", url, response, data, isspinner);
-    })
-    .catch(error => {
-      // setTimeout(function () {
-      //   mainSppinerOnOff(false)
-      // }, 5000);
-      return CkeckAlert("post", url, error, data, isspinner);
+    }).then(response => {
+      return CheckAPIResponse({ method: "post", url, response, body, btnId });
+    }).catch(response => {
+      return CheckAPIResponse({ method: "post", url, response, body, btnId });
     });
 };
 
 
-export function put(url, data, config = {}) {
+export function put(url, body, btnId,) {
 
-  console.log(" put api call")
+  CommonConsole("put api call");
   AuthonticationFunction();
-  return axiosApi
-    .put(url, data, {
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      }
-    })
-    .then(response => {
-      return CkeckAlert("put", url, response, data);
-    })
-    .catch(error => {
-      return CkeckAlert("put", url, error,);
-    });
+
+  return axiosApi.put(url, body, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }
+  }).then(response => {
+    return CheckAPIResponse({ method: "put", url, response, body, btnId });
+  }).catch(response => {
+    return CheckAPIResponse({ method: "put", url, response, btnId });
+  });
 }
 
-export function del(url, config = {}) {
-  console.log(" delete api call")
+export function del(url, btnId) {
+
+  CommonConsole(" delete api call");
   AuthonticationFunction();
-  return axiosApi
-    .delete(url, { ...config })
-    .then(response => {
-      return CkeckAlert("delete", url, response);
-    })
-    .catch(error => {
-      return CkeckAlert("delete", url, error);
-    });
+
+  return axiosApi.delete(url,).then(response => {
+    return CheckAPIResponse({ method: "delete", url, response, btnId });
+  }).catch(response => {
+    return CheckAPIResponse({ method: "delete", url, response, btnId });
+  });
 }
 
 // for forget password
-export function postForget(url, data, config = {}) {
-  // 
-  // AuthonticationFunction();
+export function postForget(url, body,) {
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     })
     .then(response => {
-      return CkeckAlert("postForget", url, response);
+      return CheckAPIResponse({ method: "postForget",body, url, response });
     })
-    .catch(error => {
-      return CkeckAlert("postForget", url, error);
+    .catch(response => {
+      return CheckAPIResponse({ method: "postForget", url, response });
     });
 
 }
@@ -126,9 +106,9 @@ export function postForget(url, data, config = {}) {
 export async function getModify(url) {
   AuthonticationFunction();
   return axiosApi.get(url).then(response => {
-    return CkeckAlert("get", url, response);
+    return CheckAPIResponse({ method: "get", url, response });
   })
-    .catch(error => {
-      return CkeckAlert("get", url, error);
+    .catch(response => {
+      return CheckAPIResponse({ method: "get", url, response });
     });
 }

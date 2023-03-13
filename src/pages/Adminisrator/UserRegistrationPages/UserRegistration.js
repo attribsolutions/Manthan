@@ -234,7 +234,7 @@ const AddUser = (props) => {
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
-    debugger
+  
     const nwPtRole = event.map((ind) => ({
       Party: pty.Party,
       Role: ind.value
@@ -251,7 +251,7 @@ const AddUser = (props) => {
   };
 
   const handleValidSubmit = (event, values) => {
-    debugger
+  
 
     // const Find = []
     // partyRoleData.map((index) => {
