@@ -164,7 +164,7 @@ export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`
 // M_Items
 export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
 export const Items_Master_Get_API = () => get(url.Items_MASTER_API)//get api
-export const Items_Master_Post_API = ({jsonBody,btnId}) => post(url.Items_MASTER_API, jsonBody,btnId)// save api
+export const Items_Master_Post_API = ({ jsonBody, btnId }) => post(url.Items_MASTER_API, jsonBody, btnId)// save api
 export const Items_Master_Delete_API = ({ deleteId, btnId }) => del(`${url.Items_MASTER_API}/${deleteId}`, btnId)// delete api
 export const Items_Master_Edit_API = ({ editId, btnId }) => get(`${url.Items_MASTER_API}/${editId}`, btnId)// edit api
 export const Items_Master_Update_API = ({ updateId, jsonBody, btnId }) => put(`${url.Items_MASTER_API}/${updateId}`, jsonBody, btnId)// update api
@@ -219,7 +219,7 @@ export const update_EmployeeType_List_Api = ({ jsonBody, updateId, btnId }) => p
 export const Save_Party_Type_API = ({ jsonBody, btnId }) => post(url.PARTYTYPES_API, jsonBody, btnId)// post api
 export const get_PartyType_List_Api = (filters) => post(url.PARTYTYPES_FILTER_API, filters) // get api
 export const detelet_PartyType_List_Api = ({ deleteId, btnId }) => del(`${url.PARTYTYPES_API}/${deleteId}`, btnId) // delete api
-export const edit_PartyType_List_Api = ({ editId, IsSCM, btnId }) => get(`${url.PARTYTYPES_API}/${editId}/${IsSCM}`) // edit api
+export const edit_PartyType_List_Api = ({ editId, IsSCM, btnId }) => get(`${url.PARTYTYPES_API}/${editId}/${IsSCM}`, btnId) // edit api
 export const update_PartyType_List_Api = ({ updateId, jsonBody, btnId }) => put(`${url.PARTYTYPES_API}/${updateId}`, jsonBody, btnId)// update 
 
 // Division Types API

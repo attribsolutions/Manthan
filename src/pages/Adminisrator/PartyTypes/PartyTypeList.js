@@ -5,7 +5,7 @@ import {
   delete_PartyType_ID,
   editPartyTypeId,
   getPartyTypelist,
-  PostPartyTypeAPISuccess,
+  SavePartyTypeAPISuccess,
   updatePartyTypeIDSuccess
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import PartyType from "./PartyType";
@@ -35,7 +35,7 @@ const PartyTypeList = (props) => {
     getList: getPartyTypelist,
     editId: editPartyTypeId,
     deleteId: delete_PartyType_ID,
-    postSucc: PostPartyTypeAPISuccess,
+    postSucc: SavePartyTypeAPISuccess,
     updateSucc: updatePartyTypeIDSuccess,
     deleteSucc: deletePartyTypeIDSuccess
   }
