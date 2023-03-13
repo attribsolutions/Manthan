@@ -6,7 +6,7 @@ import {
   getProductionistPageSuccess,
   getProduction_Mode2_Success,
   getUnitIDForProdunctionSuccess,
-  post_ProductionSuccess,
+  Save_ProductionSuccess,
   update_ProductionIdSuccess,
 } from "./actions";
 import {
@@ -30,23 +30,23 @@ import {
 
 import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-function* postProductionGenFunc({ data }) {
+function* SaveProductionGenFunc({ config }) {
   try {
-    const response = yield call(Production_Post_API, data);
-    yield put(post_ProductionSuccess(response));
+    const response = yield call(Production_Post_API, config);
+    yield put(Save_ProductionSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* DeleteProductionGenFunc({ id }) {
+function* DeleteProductionGenFunc({ config }) {
   try {
-    const response = yield call(Production_Delete_API, id);
+    const response = yield call(Production_Delete_API, config);
     yield put(delete_ProductionIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* UpdateProductionGenFunc({ data, id }) {
+function* UpdateProductionGenFunc({ config}) {
   try {
-    const response = yield call(id);
+    const response = yield call(config);
     yield put(update_ProductionIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -84,10 +84,11 @@ function* getProduction_Mode2_GenFunc({ data }) {
 }
 
 // Edit Production  Page API
-function* editProduction_GenFunc({ id, pageMode }) {
+function* editProduction_GenFunc({ config }) {
+  const { btnmode } = config;
   try {
-    const response = yield call(production_Edit_API, id);
-    response["pageMode"] = pageMode;
+    const response = yield call(production_Edit_API, config);
+    response.pageMode = btnmode;
     yield put(edit_ProductionIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 };
@@ -107,7 +108,7 @@ function* UnitIDForProduction_saga({ data }) {
 function* ProductionSaga() {
   yield takeEvery(GET_PRODUCTION_ITEM_MODE_2, getProduction_Mode2_GenFunc);
   yield takeEvery(EDIT_PRODUCTION_FOR_PRODUCTION_PAGE, editProduction_GenFunc);
-  yield takeEvery(POST_PRODUCTION_FROM_PRODUCTION_PAGE, postProductionGenFunc);
+  yield takeEvery(POST_PRODUCTION_FROM_PRODUCTION_PAGE, SaveProductionGenFunc);
   yield takeEvery(UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE, UpdateProductionGenFunc);
   yield takeEvery(DELETE_PRODUCTION_ID, DeleteProductionGenFunc);
   yield takeEvery(GET_PRODUCTION_LIST_PAGE, get_PRODUCTION_GerFunc);
