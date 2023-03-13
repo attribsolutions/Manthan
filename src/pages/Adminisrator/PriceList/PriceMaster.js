@@ -105,12 +105,10 @@ const PriceMaster = (props) => {
             dispatch(savePriceMasterActionSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: PostAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            })
         }
 
     }, [PostAPIResponse])
@@ -119,12 +117,10 @@ const PriceMaster = (props) => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
             dispatch(delete_PriceListSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: deleteAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            })
         }
     }, [deleteAPIResponse])
 
@@ -134,12 +130,10 @@ const PriceMaster = (props) => {
             dispatch(updatePriceListSuccess({ Status: false }))
             dispatch(priceListByPartyAction(partyType_dropdown_Select.value))
             setDropOpen(false)
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: updateMessage.Message,
-                RedirectPath: '',
-            }))
+            })
         }
     }, [updateMessage])
 
@@ -189,14 +183,18 @@ const PriceMaster = (props) => {
         setDropOpen(true)
 
     }
-    const delete_PriceList_Handler = price => {// Delete handler
-        dispatch(AlertState({
-            Type: 5, Status: true,
+    const delete_PriceList_Handler = async (price, event) => {// Delete handler
+        event.preventDefault();
+        const btnId = "cc";
+        const promise = await CustomAlert({
+            Type: 7,
             Message: `Are you sure you want to delete this Price : "${price.label}"`,
-            RedirectPath: false,
-            PermissionAction: delete_PriceList,
-            ID: price.value
-        }));
+        })
+        if (promise) {
+            btnIsDissablefunc({ btnId, state: true })
+            dispatch(delete_PriceList({ btnId, deleteId: price.value }))
+        }
+
     }
     function goButtonHandler() { // party Type Go Button API Call
         if (!(partyType_dropdown_Select === '')) {
@@ -313,7 +311,7 @@ const PriceMaster = (props) => {
                             </DropdownItem>
 
                             <DropdownItem
-                                onClick={() => delete_PriceList_Handler(node)}
+                                onClick={(event) => delete_PriceList_Handler(node, event)}
                             >
                                 <span className="align-middle text-danger"> {"Delete"} </span>
                             </DropdownItem>

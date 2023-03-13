@@ -123,7 +123,7 @@ export const reportFooter = (doc, data) => {
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
+            cellPadding: 2,
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
@@ -300,7 +300,7 @@ export const tableBody = (doc, data) => {
         },
         theme: 'grid',
         headerStyles: {
-            cellPadding: 4,
+            cellPadding: 2,
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
@@ -313,7 +313,7 @@ export const tableBody = (doc, data) => {
         },
         bodyStyles: {
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 1,
             fontSize: 7,
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],

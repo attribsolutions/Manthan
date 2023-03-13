@@ -323,7 +323,7 @@ export const loginUserDetails = () => {//+++++++++++++++++++++ Seesion Company I
     let user_Details = null
     try {
         user_Details = JSON.parse(localStorage.getItem('roleId'))
-    } catch (e) { alert("Common user_Details  Error") }
+    } catch (e) { CommonConsole("Common user_Details  Error") }
     return user_Details
 }
 
@@ -331,7 +331,7 @@ export const loginRoleID = () => {//+++++++++++++++++++++ Seesion Company Id++++
     try {
         const detail = JSON.parse(localStorage.getItem('roleId'))
         return detail.Role
-    } catch (e) { alert("Common Role ID  Error") }
+    } catch (e) { CommonConsole("Common Role ID  Error") }
     return null
 }
 
@@ -339,7 +339,7 @@ export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id++++++
     let created_By = 0
     try {
         created_By = JSON.parse(localStorage.getItem('userId'))
-    } catch (e) { alert("Common Created By Error") }
+    } catch (e) { CommonConsole("Common Created By Error") }
     return created_By
 }
 
@@ -347,7 +347,7 @@ export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { alert("Common loginCompanyID  Error") }
+    } catch (e) { CommonConsole("Common loginCompanyID  Error") }
     return user_Company
 }
 
@@ -355,7 +355,7 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID 
     let user_Party = 0
     try {
         user_Party = JSON.parse(localStorage.getItem("roleId")).Party_id
-    } catch (e) { alert("Common loginPartyID Func  Error") }
+    } catch (e) { CommonConsole("Common loginPartyID Func  Error") }
     return user_Party
 }
 
@@ -371,7 +371,7 @@ export const loginIsSCMCompany = () => {//+++++++++++++++++++++ Seesion loginPar
     let IsSCMCompany = 0
     try {
         IsSCMCompany = JSON.parse(localStorage.getItem("IsSCMCompany"))
-    } catch (e) { alert("Common loginEmployeeID Func  Error") }
+    } catch (e) { CommonConsole("Common loginEmployeeID Func  Error") }
     return IsSCMCompany
 }
 

@@ -17,11 +17,11 @@ import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForSalesManMaster,
-    PostMethod_ForSalesManMasterAPISuccess,
+    saveSalesManMaster,
+    saveSalesManMasterSuccess,
     editSalesManIDSuccess,
     updateSalesManID,
-    PostSalesManlistSuccess,
+    getSalesManlistSuccess,
     updateSalesManIDSuccess,
 } from "../../../store/Administrator/SalesManRedux/actions";
 import {
@@ -32,7 +32,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -50,7 +50,6 @@ const SalesManMaster = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [EditData, setEditData] = useState('');
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
@@ -100,7 +99,6 @@ const SalesManMaster = (props) => {
         };
     }, [userAccess])
 
-
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -140,9 +138,8 @@ const SalesManMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostMethod_ForSalesManMasterAPISuccess({ Status: false }))
+            dispatch(saveSalesManMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -161,8 +158,7 @@ const SalesManMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(PostSalesManlistSuccess({ Status: false }))
+            dispatch(getSalesManlistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -175,13 +171,11 @@ const SalesManMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.SALESMAN_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateSalesManIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -193,38 +187,40 @@ const SalesManMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                MobileNo: values.MobileNo,
-                IsActive: values.IsActive,
-                Party: loginPartyID(),
-                Company: loginCompanyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    MobileNo: values.MobileNo,
+                    IsActive: values.IsActive,
+                    Party: loginPartyID(),
+                    Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(updateSalesManID(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateSalesManID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveSalesManMaster({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(PostMethodForSalesManMaster(jsonBody))
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -245,7 +241,7 @@ const SalesManMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -315,11 +311,11 @@ const SalesManMaster = (props) => {
                                                             </FormGroup>
                                                         </Row>
 
-
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"RoutesMaster"}
