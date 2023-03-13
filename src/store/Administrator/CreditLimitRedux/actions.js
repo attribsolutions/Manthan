@@ -15,13 +15,13 @@ export const GoButton_For_CreditLimit_AddSuccess = (data) => ({
   payload: data,
 });
 
-export const postCreditLimit = (jsonBody) => ({
+export const postCreditLimit = (config={}) => ({
   type: POST_CREDITLIMIT_PAGE,
-  jsonBody,
+  config,
 });
 
-export const postCreditLimitSuccess = (data) => ({
+export const postCreditLimitSuccess = (resp) => ({
   type: POST_CREDITLIMIT_PAGE_SUCCESS,
-  payload: data
+  payload: resp
 });
 
