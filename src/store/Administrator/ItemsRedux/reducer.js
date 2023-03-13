@@ -15,7 +15,7 @@ import {
     GET_PARTY_FOR_DROPDOWN_SUCCESS,
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
-    POST_ITEM_DATA_SUCCESS,
+    SAVE_ITEM_MASTER_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
 
@@ -77,7 +77,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 BrandTagList: action.payload,
             }
 
-        case POST_ITEM_DATA_SUCCESS:
+        case SAVE_ITEM_MASTER_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
