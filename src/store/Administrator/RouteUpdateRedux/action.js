@@ -6,22 +6,22 @@ import {
 } from "./actionType";
 
 // RouteUpdateList API Using Post Method
-export const RouteUpdateListAPI = (data) => ({
+export const RouteUpdateListAPI = (config={}) => ({
     type: ROUTE_UPDATE_LIST,
-    data,
+    config,
 });
 
-export const RouteUpdateListSuccess = (data) => ({
+export const RouteUpdateListSuccess = (resp) => ({
     type: ROUTE_UPDATE_LIST_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
-export const Post_RouteUpdate = (data) => ({
+export const Post_RouteUpdate = (config={}) => ({
     type: POST_ROUTE_UPDATE,
-    data,
+    config,
 });
 
-export const Post_RouteUpdateSuccess = (data) => ({
+export const Post_RouteUpdateSuccess = (resp) => ({
     type: POST_ROUTE_UPDATE_SUCCESS,
-    payload: data,
+    payload: resp,
 });

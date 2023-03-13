@@ -373,7 +373,7 @@ export const CreditLimit_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_A
 
 // Route Update
 export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
-export const Post_Route_Update_API = (data) => post(url.ROUTE_UPDATE, data)// Route Update Post API
+export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPDATE, jsonBody,btnId)// Route Update Post API
 
 // Loading Sheet
 
