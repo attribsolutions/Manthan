@@ -35,7 +35,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
-import { PostRouteslist } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 // import { RouteUpdateList } from "../../../../store/Administrator/RouteUpdateReducer/action";
 
 const RouteUpdate = (props) => {
@@ -75,7 +75,7 @@ const RouteUpdate = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(RouteUpdateListAPI())
-        dispatch(PostRouteslist())
+        dispatch(GetRoutesList())
     }, []);
 
     const values = { ...state.values }
