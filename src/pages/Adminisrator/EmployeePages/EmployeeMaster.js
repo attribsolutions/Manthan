@@ -33,6 +33,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const AddEmployee = (props) => {
 
