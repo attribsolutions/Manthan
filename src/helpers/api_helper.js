@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CkeckAlert } from "../CustomAlert/ConfirmDialog"
+import { CheckAPIResponse } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 
 const API_URL = "http://192.168.1.114:8000"
 
@@ -28,10 +28,10 @@ export function get(url, event) {
   AuthonticationFunction();
   return axiosApi.get(url)
     .then(response => {
-    return CkeckAlert({method:"get", url, response, event});
+    return CheckAPIResponse({method:"get", url, response, event});
     })
     .catch(response => {
-      return CkeckAlert({method:"get", url, response, event});
+      return CheckAPIResponse({method:"get", url, response, event});
     });
 
 
@@ -48,10 +48,10 @@ export function post(url, body, event) {
       }
     })
     .then(response => {
-      return CkeckAlert({method:"post", url, response, body, event});
+      return CheckAPIResponse({method:"post", url, response, body, event});
     })
     .catch(response => {
-      return CkeckAlert({method:"post", url, response, body, event});
+      return CheckAPIResponse({method:"post", url, response, body, event});
     });
 };
 
@@ -66,10 +66,10 @@ export function put(url, body, event,) {
       "Content-Type": "application/json",
     }
   }).then(response => {
-    return CkeckAlert({method:"put", url, response, body, event});
+    return CheckAPIResponse({method:"put", url, response, body, event});
   })
     .catch(response => {
-      return CkeckAlert({method:"put", url, response, event});
+      return CheckAPIResponse({method:"put", url, response, event});
     });
 }
 
@@ -77,10 +77,10 @@ export function del(url,) {
   console.log(" delete api call")
   AuthonticationFunction();
   return axiosApi.delete(url,).then(response => {
-    return CkeckAlert({method:"delete", url, response});
+    return CheckAPIResponse({method:"delete", url, response});
   })
     .catch(response => {
-      return CkeckAlert({method:"delete", url, response});
+      return CheckAPIResponse({method:"delete", url, response});
     });
 }
 
@@ -96,10 +96,10 @@ export function postForget(url, body,) {
       }
     })
     .then(response => {
-      return CkeckAlert({method:"postForget", url, response});
+      return CheckAPIResponse({method:"postForget", url, response});
     })
     .catch(response => {
-      return CkeckAlert({method:"postForget", url, response});
+      return CheckAPIResponse({method:"postForget", url, response});
     });
 
 }
@@ -107,9 +107,9 @@ export function postForget(url, body,) {
 export async function getModify(url) {
   AuthonticationFunction();
   return axiosApi.get(url).then(response => {
-    return CkeckAlert({method:"get", url, response});
+    return CheckAPIResponse({method:"get", url, response});
   })
     .catch(response => {
-      return CkeckAlert({method:"get", url, response});
+      return CheckAPIResponse({method:"get", url, response});
     });
 }
