@@ -225,11 +225,12 @@ const RouteUpdate = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css ,marginBottom:"200px"}}>
                     <Container fluid>
 
                         <form noValidate>
                             <PaginationProvider
+                            
                                 pagination={paginationFactory(pageOptions)}
                             >
                                 {({ paginationProps, paginationTableProps }) => (
