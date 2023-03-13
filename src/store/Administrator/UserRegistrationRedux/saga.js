@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   getEmployee_Dropdown_For_UserRegistration_API,
-  RolesListDropdown_For_UserRegistration_API,
   User_Component_PostMethod_API,
   User_Component_GetMethod_API,
   User_Component_Delete_Method_API,
@@ -10,7 +9,7 @@ import {
   UserPartiesForUserMaster_API
 } from "../../../helpers/backend_helper";
 import {
-  GET_EMPLOYEE, GET_ROLE, ADD_USER, GET_USER_LIST_FOR_USER,
+  ADD_USER, GET_USER_LIST_FOR_USER,
   DELETE_USER, EDIT_USER, UPDATE_USER, GET_USER_PARTIES_FOR_USER_MASTER, GET_EMPLOYEE_FOR_USER_REGISTRATION
 } from './actionType'
 import {
@@ -33,9 +32,9 @@ function* EmployeelistDropdown_GenFunc() {
 }
 
 // post api
-function* user_save_GenFunc({ data }) {
+function* user_save_GenFunc({ config }) {
   try {
-    const response = yield call(User_Component_PostMethod_API, data);
+    const response = yield call(User_Component_PostMethod_API, config);
     yield put(addUserSuccess(response));
   } catch (error) { CommonConsole(error) }
 
@@ -50,35 +49,72 @@ function* userList_GenFunc() { //  Get  Users list  for List page  POST_api
 }
 
 // delete api 
-function* Delete_UserList_GenFunc({ id }) {
+function* Delete_UserList_GenFunc({ config }) {
   try {
-    const response = yield call(User_Component_Delete_Method_API, id);
+    const response = yield call(User_Component_Delete_Method_API, config);
     yield put(deleteSuccess(response))
   } catch (error) { CommonConsole(error) }
 
 }
 
 // edit api
-function* Edit_UserList_GenFunc({ id, pageMode }) {
+function* Edit_UserList_GenFunc({ config }) {
+  const { btnmode } = config;
   try {
-    const response = yield call(User_Component_EditById_API, id);
-    response.pageMode = pageMode
+    const response = yield call(User_Component_EditById_API, config);
+    response.pageMode = btnmode
     yield put(editSuccess(response));
   } catch (error) { CommonConsole(error) }
 
 }
 
-function* Update_User_GenFunc({ data, id }) {
+function* Update_User_GenFunc({ config }) {
   try {
-    const response = yield call(User_Component_Update_API, data, id);
+    const response = yield call(User_Component_Update_API, config);
     yield put(updateSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-function* Get_UserPartiesForUserMaster_GenFunc({ id }) {
+function* Get_UserPartiesForUserMaster_GenFunc({ config }) {
+  // {
+  //   "UserRole": [
+  //     {
+  //       "Party": 4,
+  //       "PartyName": "Krupa Traders",
+  //       "PartyRoles": [
+  //         {
+  //           "Role": 3,
+  //           "RoleName": "Superstokist Admin"
+  //         }
+  //       ]
+  //     }}
+  const { id, editRole = [] } = config
+  debugger
   try {
     const response = yield call(UserPartiesForUserMaster_API, id);
-    yield put(GetUserPartiesForUserMastePageSuccess(response.Data))
+    debugger
+    const rewRes = response.Data.map(i1 => {
+      // debugger
+      let newRole = []
+      editRole.map(i2 => {
+        // debugger
+        if (i2.Party == i1.Party_id) {
+          newRole = i2.PartyRoles.map(i3 => ({
+            value: i3.Role,
+            label: i3.RoleName
+          }));
+        }
+      })
+      const arr = {
+        PartyRoles: newRole,
+        Party: i1.Party_id,
+        PartyName: i1.PartyName
+      }
+      debugger
+      return arr
+    })
+    debugger
+    yield put(GetUserPartiesForUserMastePageSuccess(rewRes))
   } catch (error) { CommonConsole(error) }
 
 }
