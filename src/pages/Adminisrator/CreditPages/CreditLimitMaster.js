@@ -16,12 +16,14 @@ import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValid,
     initialFiledFunc,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     breadcrumbReturn,
+    btnIsDissablefunc,
     loginPartyID
 } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -247,25 +249,30 @@ const CreditLimitMaster = (props) => {
         custom: true,
     };
 
-    const SaveHandler = (event) => {
-
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        const data = Data.map((index) => ({
-            id: index.id,
-            Party: index.Party,
-            SubParty: index.SubParty,
-            Creditlimit: index.Creditlimit,
-        }))
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                const data = Data.map((index) => ({
+                    id: index.id,
+                    Party: index.Party,
+                    SubParty: index.SubParty,
+                    Creditlimit: index.Creditlimit,
+                }))
 
-        const Find = data.filter((index) => {
-            return !(index.Creditlimit === '')
-        })
-        const jsonBody = JSON.stringify({
-            Data: Find
-        })
+                const Find = data.filter((index) => {
+                    return !(index.Creditlimit === '')
+                })
+                const jsonBody = JSON.stringify({
+                    Data: Find
+                })
+                dispatch(postCreditLimit({ jsonBody, btnId }));
 
-        dispatch(postCreditLimit(jsonBody));
-    }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
