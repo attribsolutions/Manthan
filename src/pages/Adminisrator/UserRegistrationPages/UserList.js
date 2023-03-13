@@ -52,7 +52,6 @@ const UserList = () => {
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER_lIST} /> */}
             {
                 (pageField) ?
                     <CommonListPage
