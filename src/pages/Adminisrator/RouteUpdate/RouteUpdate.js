@@ -25,7 +25,7 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -110,8 +110,6 @@ const RouteUpdate = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state)) // Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -130,7 +128,6 @@ const RouteUpdate = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -159,20 +156,6 @@ const RouteUpdate = (props) => {
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
     });
-
-    const SaveHandler = (event) => {
-        event.preventDefault();
-        const data = Data.map((index) => ({
-            id: index.id,
-            Party: index.Party,
-            SubParty: index.SubParty,
-            Route: index.Route,
-        }))
-        const jsonBody = JSON.stringify({
-            Data: data
-        })
-        dispatch(Post_RouteUpdate(jsonBody));
-    };
 
     const pagesListColumns = [
         {
@@ -209,7 +192,30 @@ const RouteUpdate = (props) => {
         totalSize: Data.length,
         custom: true,
     };
-    
+
+    const SaveHandler = async (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+
+                const data = Data.map((index) => ({
+                    id: index.id,
+                    Party: index.Party,
+                    SubParty: index.SubParty,
+                    Route: index.Route,
+                }))
+                const jsonBody = JSON.stringify({
+                    Data: data
+                })
+
+                dispatch(Post_RouteUpdate({ jsonBody, btnId }));
+
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -222,7 +228,7 @@ const RouteUpdate = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
-                        <form onSubmit={SaveHandler} noValidate>
+                        <form noValidate>
                             <PaginationProvider
                                 pagination={paginationFactory(pageOptions)}
                             >
@@ -269,16 +275,18 @@ const RouteUpdate = (props) => {
 
                             </PaginationProvider>
 
-                            {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                                <Row >
-                                    <Col sm={2} className="mt-n4">
-                                        <SaveButton pageMode={pageMode}
-                                            userAcc={userPageAccessState}
-                                            module={"RouteUpdate"}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormGroup >
+                            {Data.length > 0 ?
+                                <FormGroup style={{ marginTop: "-25px" }}>
+                                    <Row >
+                                        <Col sm={2} className="mt-n4">
+                                            <SaveButton pageMode={pageMode}
+                                                onClick={SaveHandler}
+                                                userAcc={userPageAccessState}
+                                                module={"RouteUpdate"}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </FormGroup >
                                 : null
                             }
 

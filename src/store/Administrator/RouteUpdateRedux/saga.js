@@ -13,12 +13,9 @@ function* RouteUpdate_List_GenratorFunction() {
     } catch (error) { CommonConsole(error) }
 }
 
-function* Post_RouteUpdate_GenratorFunction({data}) {
-    // const jsonBody = {
-    //     "Party": loginPartyID(),
-    // }
+function* Post_RouteUpdate_GenratorFunction({ config = {} }) {
     try {
-        const response = yield call(Post_Route_Update_API, data);
+        const response = yield call(Post_Route_Update_API, config);
         yield put(Post_RouteUpdateSuccess(response));
     } catch (error) { CommonConsole(error) }
 }
