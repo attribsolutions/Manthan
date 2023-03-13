@@ -135,14 +135,6 @@ const PurchaseListPage = (props) => {
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
-
-        // async function isAlertFunc(type) {
-        //     await CustomAlert({
-        //         Type: type,
-        //         Message: updateMsg.Message,
-        //         isFunc: true,
-        //     })
-        // }
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
             goButnFunc();
@@ -158,24 +150,10 @@ const PurchaseListPage = (props) => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
-            // dispatch(
             isAlertFunc(1, deleteMsg)
-            // CustomAlert({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: deleteMsg.Message,
-            // })
-            // );
         } else if (deleteMsg.Status === true) {
             dispatch(deleteSucc({ Status: false }));
-            // dispatch(
             isAlertFunc(3, deleteMsg)
-            // CustomAlert({
-            //     Type: 3,
-            //     Status: true,
-            //     Message: JSON.stringify(deleteMsg.Message),
-            // })
-            // );
         }
     }, [deleteMsg]);
 
@@ -186,27 +164,11 @@ const PurchaseListPage = (props) => {
             tog_center();
             dispatch(getList());
             isAlertFunc(1, postMsg)
-            // dispatch(
-            // CustomAlert({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: postMsg.Message,
-            // })
-            // )
         }
 
         else if ((postMsg.Status === true)) {
             dispatch(postSucc({ Status: false }))
-            // dispatch(
-
-            CustomAlert({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            })
-            // );
+            isAlertFunc(4, postMsg)
         }
 
 

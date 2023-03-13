@@ -8,9 +8,9 @@ import {
   Row,
   CardHeader,
   Label,
-  FormGroup
+  FormGroup,
+  Input
 } from "reactstrap";
-import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addUser,
@@ -21,13 +21,12 @@ import {
   editSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
-import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as mode from "../../../routes/PageMode"
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
@@ -233,7 +232,7 @@ const AddUser = (props) => {
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
-  
+
     const nwPtRole = event.map((ind) => ({
       Party: pty.Party,
       Role: ind.value
@@ -249,8 +248,8 @@ const AddUser = (props) => {
     }
   };
 
-  const handleValidSubmit = (event, values) => {
-  
+  const saveHandler = (event, values) => {
+
 
     const jsonBody = JSON.stringify({
       email: values.email,
@@ -286,40 +285,64 @@ const AddUser = (props) => {
     }
   };
 
-  const rolaTable = () => {
+  const PartyWiseRoleTable = () => {
+    if (!partyRoleData) {
+      return null
+    }
+    if (!(userPartiesForUserMaster.length === 0)) {
+      if ((userPartiesForUserMaster[0].Party > 0)) {
+        return (
+          <div className="col col-6" style={{ marginTop: '28px' }}>
+            <table className="table table-bordered ">
+              <Thead >
+                <tr>
+                  <th>Party Name</th>
+                  <th>RoleName</th>
 
-    return (
-      <table className="table table-bordered ">
-        <Thead >
-          <tr>
-            <th>Party Name</th>
-            <th>RoleName</th>
+                </tr>
+              </Thead>
+              <Tbody  >
+                {userPartiesForUserMaster.map((index, key) => (
+                  <tr key={index.Role}>
+                    <td className="col-sm-6">
+                      {index.PartyName}
+                    </td>
+                    <td>
+                      <FormGroup className="" >
+                        <Select
+                          defaultValue={pageMode === mode.edit ? index.PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                          options={RolesValues}
+                          isMulti={true}
+                          className="basic-multi-select"
+                          onChange={(event) => { RoleDropDown_select_handler(event, index, key) }}
+                          classNamePrefix="select2-selection"
+                        />
+                      </FormGroup>
+                    </td>
+                  </tr>
+                ))}
+              </Tbody>
+            </table>
+          </div>
+        )
+      }
+    }
+    else {
+      return <div className="col-lg-3 col-md-6">
+        <div className="mb-3">
+          <Label className="form-label font-size-13 ">Role name</Label>
+          <Select
+            defaultValue={pageMode === mode.edit ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+            options={RolesValues}
+            isMulti={true}
+            className="basic-multi-select"
+            onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
+            classNamePrefix="select2-selection"
+          />
+        </div>
+      </div>
+    }
 
-          </tr>
-        </Thead>
-        <Tbody  >
-          {userPartiesForUserMaster.map((index, key) => (
-            <tr key={index.Role}>
-              <td className="col-sm-6">
-                {index.PartyName}
-              </td>
-              <td>
-                <FormGroup className="" >
-                  <Select
-                    defaultValue={pageMode === mode.edit ? index.PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                    options={RolesValues}
-                    isMulti={true}
-                    className="basic-multi-select"
-                    onChange={(event) => { RoleDropDown_select_handler(event, index, key) }}
-                    classNamePrefix="select2-selection"
-                  />
-                </FormGroup>
-              </td>
-            </tr>
-          ))}
-        </Tbody>
-      </table>
-    )
   }
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -343,12 +366,7 @@ const AddUser = (props) => {
                       <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                     </CardHeader>
                     <CardBody className="text-black">
-                      <AvForm
-                        onValidSubmit={(e, v) => {
-                          handleValidSubmit(e, v);
-                        }}
-                        ref={formRef}
-                      >
+                      <form>
                         <Card className=" text-black">
                           <CardBody className="c_card_body">
                             <Row>
@@ -371,8 +389,9 @@ const AddUser = (props) => {
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Login Name</Label>
-                                <AvField
-                                  name="loginName" id="txtName"
+                                <Input
+                                  name="loginName"
+                                  id="txtName"
                                   type="text"
                                   placeholder="Please Enter Login Name"
                                   defaultvalue=''
@@ -390,7 +409,7 @@ const AddUser = (props) => {
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Password</Label>
-                                <AvField name="password" id="password"
+                                <Input name="password" id="password"
                                   type="password"
                                   placeholder="Please Enter Password"
                                   autoComplete="new-password"
@@ -403,7 +422,7 @@ const AddUser = (props) => {
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                <AvField name="password" id="password"
+                                <Input name="password" id="password"
                                   type="password"
                                   placeholder="Please Enter Password"
                                   autoComplete="new-password"
@@ -420,7 +439,7 @@ const AddUser = (props) => {
                                   <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >Enable Mobile Login</Label>
                                   <Col md="1" style={{ marginTop: '9px' }} >
                                     <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={EditData.isLoginUsingMobile}
                                         name="isLoginUsingMobile"
                                         defaultChecked={true}
@@ -433,7 +452,7 @@ const AddUser = (props) => {
                                   <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Active </Label>
                                   <Col md="1" style={{ marginTop: '9px' }} >
                                     <div className="form-check form-switch form-switch-md " dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={EditData.isActive}
                                         defaultChecked={true}
                                         name="isActive"
@@ -451,7 +470,7 @@ const AddUser = (props) => {
                                   <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Enable Email Login</Label>
                                   <Col md={1} style={{ marginTop: '10px' }} >
                                     <div className="form-check form-switch form-switch-md" dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={EditData.isLoginUsingEmail}
                                         name="isLoginUsingEmail"
                                         defaultChecked={true}
@@ -464,7 +483,7 @@ const AddUser = (props) => {
                                   <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Send OTP </Label>
                                   <Col md={1} style={{ marginTop: '10px' }} >
                                     <div className="form-check form-switch form-switch-md" dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         defaultChecked={EditData.isSendOTP}
                                         name="isSendOTP"
                                       />
@@ -475,111 +494,33 @@ const AddUser = (props) => {
                               </FormGroup>
                             </Row>
 
-                            {(EmployeeSelect.length === 0) ?
-                              <Row className="mt-3">
-                                <Col sm={2}>
-                                  <div>
-                                    {
-                                      (pageMode === mode.edit) ?
-                                        (userPageAccessState.RoleAccess_IsEdit) ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                            className="btn btn-success w-md"
-                                          >
-                                            <i class="fas fa-edit me-2"></i>Update
-                                          </button>
-                                          :
-                                          null
-                                        : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
-                                          (userPageAccessState.RoleAccess_IsSave) ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                              className="btn btn-primary w-md"
-                                            > <i className="fas fa-save me-2"></i> Save
-                                            </button>
-                                            :
-                                            null
-                                        )
-                                          : null
-                                    }
-                                  </div>
-                                </Col>
-                              </Row> : <></>}
+
                           </CardBody>
                         </Card>
 
-                        {!(EmployeeSelect.length === 0) ?
-                          < Card className="mt-n2">
-                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                              <Row className="">
-                                {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
-                                  <Col sm={6} style={{ marginTop: '28px' }}>
-                                    {partyRoleData ? (
-                                      <div >
-                                        {rolaTable()}
-                                      </div>
-                                    ) :
-                                      null
-                                    }
-                                  </Col> : <div className="col-lg-3 col-md-6">
-                                    <div className="mb-3">
-                                      <Label className="form-label font-size-13 ">Role name</Label>
-                                      <Select
-                                        defaultValue={pageMode === mode.edit ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                                        options={RolesValues}
-                                        isMulti={true}
-                                        className="basic-multi-select"
-                                        onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
-                                        classNamePrefix="select2-selection"
-                                      />
-                                    </div>
-                                  </div> :
-                                  <></>}
+                        < Card className="mt-n2">
+                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                            <Row >
+                              <PartyWiseRoleTable />
+                              <Row>
+                                <Col sm={2}>
+                                  <div>
+                                    <SaveButton
+                                      pageMode={pageMode}
+                                      onClick={saveHandler}
+                                      userAcc={userPageAccessState}
+                                      editCreatedBy={editCreatedBy}
+                                      module={"User"}
+                                    />
 
-                                <Row>
-                                  <Col sm={2}>
-                                    <div>
-                                      <SaveButton
-                                        pageMode={pageMode}
-                                        userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"User"}
-                                      />
-                                      {/* {
-                                        pageMode === mode.edit ?
-                                          userPageAccessState.RoleAccess_IsEdit ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                              className="btn btn-success w-md"
-                                            >
-                                              <i class="fas fa-edit me-2"></i>Update
-                                            </button>
-                                            :
-                                            <></>
-                                          : (
-                                            userPageAccessState.RoleAccess_IsSave ?
-                                              <button
-                                                type="submit"
-                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                                className="btn btn-primary w-md"
-                                              > <i className="fas fa-save me-2"></i> Save
-                                              </button>
-                                              :
-                                              <></>
-                                          )
-                                      } */}
-                                    </div>
-                                  </Col>
-                                </Row>
+                                  </div>
+                                </Col>
                               </Row>
-                            </CardBody>
-                          </Card>
-                          : <></>}
+                            </Row>
+                          </CardBody>
+                        </Card>
 
-                      </AvForm>
+                      </form>
                     </CardBody>
                     <br></br>
                     <br></br>
