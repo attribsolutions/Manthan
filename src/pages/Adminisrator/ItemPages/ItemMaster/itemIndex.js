@@ -478,237 +478,239 @@ const ItemsMaster = (props) => {
         const btnId = event.target.id;
         btnIsDissablefunc({ btnId, state: true })
 
-        let isvalid = true
-        let inValidMsg = []
+        try {
+            let isvalid = true
+            let inValidMsg = []
 
-        if (formValue.Name === '') {
-            document.getElementById("txtName0").className = "form-control is-invalid"
-            inValidMsg.push("Name: Is Requried")
-            isvalid = false
-        }
-        if (formValue.ShortName === '') {
-            document.getElementById("txtShortName0").className = "form-control is-invalid"
-            isvalid = false
-            inValidMsg.push("ShortName: Is Requried")
-        }
-        if (formValue.Company.length < 1) {
-            setInValidDrop(i => {
-                const a = { ...i }
-                a.Company = true
-                return a
-            })
-            isvalid = false
-            inValidMsg.push("Company: Is Requried")
-        }
-        if (formValue.BaseUnit.length < 1) {
-            setInValidDrop(i => {
-                const a = { ...i }
-                a.BaseUnit = true
-                return a
-            })
-            isvalid = false
-            inValidMsg.push("BaseUnit: Is Requried")
+            if (formValue.Name === '') {
+                document.getElementById("txtName0").className = "form-control is-invalid"
+                inValidMsg.push("Name: Is Requried")
+                isvalid = false
+            }
+            if (formValue.ShortName === '') {
+                document.getElementById("txtShortName0").className = "form-control is-invalid"
+                isvalid = false
+                inValidMsg.push("ShortName: Is Requried")
+            }
+            if (formValue.Company.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Company = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Company: Is Requried")
+            }
+            if (formValue.BaseUnit.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.BaseUnit = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("BaseUnit: Is Requried")
 
-        }
-        if (formValue.CategoryType.length < 1) {
-            setInValidDrop(i => {
-                const a = { ...i }
-                a.CategoryType = true
-                return a
-            })
-            isvalid = false
-            inValidMsg.push("CategoryType: Is Requried")
-        }
-        if (formValue.Category.length < 1) {
-            setInValidDrop(i => {
-                const a = { ...i }
-                a.Category = true
-                return a
-            })
-            isvalid = false
-            inValidMsg.push("Category: Is Requried")
+            }
+            if (formValue.CategoryType.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.CategoryType = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("CategoryType: Is Requried")
+            }
+            if (formValue.Category.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Category = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Category: Is Requried")
 
-        }
+            }
 
-        if (formValue.Division.length < 1) {
-            setInValidDrop(i => {
-                const a = { ...i }
-                a.Division = true
-                return a
-            })
-            isvalid = false
-            inValidMsg.push("Division:Is Requried")
-        }
-        if (formValue.BrandName.length < 1) {
-            setInValidDrop(i => {
-                const a = { ...i }
-                a.BrandName = true
-                return a
-            })
-            isvalid = false
-            inValidMsg.push("Brand Name:Is Requried")
-        }
-        if (!Group_Tab_TableData.length > 0) {
-            isvalid = false
-            inValidMsg.push(" GroupType Primary:Is Requried")
-        }
-        else {
-            const found = Group_Tab_TableData.find(element => {
-                return element.GroupTypeName === "Primary"
-            });
-            if (found === undefined) {
-                isvalid = false;
+            if (formValue.Division.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Division = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Division:Is Requried")
+            }
+            if (formValue.BrandName.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.BrandName = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Brand Name:Is Requried")
+            }
+            if (!Group_Tab_TableData.length > 0) {
+                isvalid = false
                 inValidMsg.push(" GroupType Primary:Is Requried")
             }
-        }
-        if (isvalid) {                                               // ************* is valid if start 
-            //**************** Brand Name **************** */
-            const ItemBrandName = formValue.BrandName.map((index) => {
-                return index.value
-            })
-            // ====================== Unit conversion *****start ======================
-
-            const itemUnitDetails = []
-            // 
-            baseUnitTableData.forEach((index, key) => {
-                let val1 = index.Conversion
-                const unit1 = index.Unit.value;
-
-                if (!(val1 === '')) {
-                    val1 = parseFloat(val1).toFixed(3)
+            else {
+                const found = Group_Tab_TableData.find(element => {
+                    return element.GroupTypeName === "Primary"
+                });
+                if (found === undefined) {
+                    isvalid = false;
+                    inValidMsg.push(" GroupType Primary:Is Requried")
                 }
+            }
+            if (isvalid) {                                               // ************* is valid if start 
+                //**************** Brand Name **************** */
+                const ItemBrandName = formValue.BrandName.map((index) => {
+                    return index.value
+                })
+                // ====================== Unit conversion *****start ======================
 
-                const found = baseUnitTableData.find((i, k) => {
-                    let inner = i.Conversion;
-                    if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
-                    return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
+                const itemUnitDetails = []
+                // 
+                baseUnitTableData.forEach((index, key) => {
+                    let val1 = index.Conversion
+                    const unit1 = index.Unit.value;
+
+                    if (!(val1 === '')) {
+                        val1 = parseFloat(val1).toFixed(3)
+                    }
+
+                    const found = baseUnitTableData.find((i, k) => {
+                        let inner = i.Conversion;
+                        if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
+                        return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
+                    });
+
+                    const found2 = itemUnitDetails.find((i, k) => {
+                        return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
+                    });
+
+                    // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
+
+                    if (((found === undefined) || (found2 === undefined)) && !(val1 === '') && !(unit1 === '')) {
+                        itemUnitDetails.push({
+                            BaseUnitQuantity: index.Conversion,
+                            UnitID: index.Unit.value,
+                            IsBase: index.IsBase,
+                            SODefaultUnit: index.SOUnit,
+                            PODefaultUnit: index.POUnit
+                        })
+                    }
+
                 });
 
-                const found2 = itemUnitDetails.find((i, k) => {
-                    return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
-                });
+                //  ======================   ItemCategoryDetails *****start   ====================== 
 
-                // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
+                const ItemCategoryDetails = formValue.Category.map((index) => ({
+                    CategoryType: formValue.CategoryType.value,
+                    Category: index.value
+                }))
+                //  ======================   MRP_Tab_TableData *****start   ====================== 
 
-                if (((found === undefined) || (found2 === undefined)) && !(val1 === '') && !(unit1 === '')) {
-                    itemUnitDetails.push({
-                        BaseUnitQuantity: index.Conversion,
-                        UnitID: index.Unit.value,
-                        IsBase: index.IsBase,
-                        SODefaultUnit: index.SOUnit,
-                        PODefaultUnit: index.POUnit
+                let hasAdd_MRP = []
+                MRP_Tab_TableData.forEach((index) => {
+                    if (index.IsAdd === true) { hasAdd_MRP.push(index) }
+                })
+
+                // ======================  marginMaster *****start   ====================== 
+
+                let hasAdd_Margin = []
+
+                marginMaster.forEach((index) => {
+                    if (index.IsAdd === true) { hasAdd_Margin.push(index) }
+                })
+
+                // ======================  GStDetailsMaster *****start   ====================== 
+
+                let hasAdd_GST = []
+
+                GStDetailsMaster.forEach((index) => {
+
+                    if (index.IsAdd === true) { hasAdd_GST.push(index) }
+                })
+
+
+                let imagedata = imageTabTable.map(function (index) {
+
+                    if ((index.ImageType === '') || (index.ImageUpload === '')) {
+
+
+                        return imageTabTable.length = []
+                    }
+                    else {
+                        return ({
+                            ImageType: index.ImageType.value,
+                            Item_pic: index.ImageUpload
+                        })
+                    }
+                })
+
+                let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
+
+                if (GStDetailsMaster.length === 0) {
+                    CustomAlert({
+                        Type: 4,
+                        Message: "GST Details Required",
                     })
+                    return btnIsDissablefunc({ btnId, state: false });
                 }
 
-            });
+                const jsonBody = JSON.stringify({
+                    Name: formValue.Name,
+                    ShortName: formValue.ShortName,
+                    Sequence: formValue.Sequence,
+                    BarCode: formValue.BarCode,
+                    isActive: formValue.isActive,
+                    Company: formValue.Company.value,
+                    BaseUnitID: formValue.BaseUnit.value,
+                    BrandName: ItemBrandName.toString(),
+                    Tag: formValue.Tag,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    ItemCategoryDetails: ItemCategoryDetails,
+                    ItemUnitDetails: itemUnitDetails,
 
-            //  ======================   ItemCategoryDetails *****start   ====================== 
+                    ItemDivisionDetails: formValue.Division.map((i) => {
+                        return ({ Party: i.value })
+                    }),
 
-            const ItemCategoryDetails = formValue.Category.map((index) => ({
-                CategoryType: formValue.CategoryType.value,
-                Category: index.value
-            }))
-            //  ======================   MRP_Tab_TableData *****start   ====================== 
+                    ItemImagesDetails: imagedata1,
+                    ItemMRPDetails: hasAdd_MRP,
+                    ItemMarginDetails: hasAdd_Margin,
+                    ItemGSTHSNDetails: hasAdd_GST,
+                    ItemGroupDetails: Group_Tab_TableData,
+                    ItemShelfLife: [
+                        {
+                            Days: formValue.ShelfLife,
+                            CreatedBy: loginUserID(),
+                            UpdatedBy: loginUserID(),
+                            IsAdd: true
+                        }
+                    ]
+                });
 
-            let hasAdd_MRP = []
-            MRP_Tab_TableData.forEach((index) => {
-                if (index.IsAdd === true) { hasAdd_MRP.push(index) }
-            })
-
-            // ======================  marginMaster *****start   ====================== 
-
-            let hasAdd_Margin = []
-
-            marginMaster.forEach((index) => {
-                if (index.IsAdd === true) { hasAdd_Margin.push(index) }
-            })
-
-            // ======================  GStDetailsMaster *****start   ====================== 
-
-            let hasAdd_GST = []
-
-            GStDetailsMaster.forEach((index) => {
-
-                if (index.IsAdd === true) { hasAdd_GST.push(index) }
-            })
-
-
-            let imagedata = imageTabTable.map(function (index) {
-
-                if ((index.ImageType === '') || (index.ImageUpload === '')) {
-
-
-                    return imageTabTable.length = []
+                if (pageMode === mode.edit) {
+                    dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
                 }
                 else {
-                    return ({
-                        ImageType: index.ImageType.value,
-                        Item_pic: index.ImageUpload
-                    })
+                    dispatch(saveItemMasterAction({ jsonBody, btnId }));
                 }
-            })
-
-            let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
-
-            if (GStDetailsMaster.length === 0) {
+            }                                                            // ************* is valid if start 
+            else {                                                       // ************* is valid esle start 
                 CustomAlert({
                     Type: 4,
-                    Message: "GST Details Required",
+                    Message: JSON.stringify(inValidMsg),
                 })
-                return btnIsDissablefunc({ btnId, state: false });
+                return btnIsDissablefunc({ btnId, state: false })
+
             }
 
-            const jsonBody = JSON.stringify({
-                Name: formValue.Name,
-                ShortName: formValue.ShortName,
-                Sequence: formValue.Sequence,
-                BarCode: formValue.BarCode,
-                isActive: formValue.isActive,
-                Company: formValue.Company.value,
-                BaseUnitID: formValue.BaseUnit.value,
-                BrandName: ItemBrandName.toString(),
-                Tag: formValue.Tag,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-                ItemCategoryDetails: ItemCategoryDetails,
-                ItemUnitDetails: itemUnitDetails,
-
-                ItemDivisionDetails: formValue.Division.map((i) => {
-                    return ({ Party: i.value })
-                }),
-
-                ItemImagesDetails: imagedata1,
-                ItemMRPDetails: hasAdd_MRP,
-                ItemMarginDetails: hasAdd_Margin,
-                ItemGSTHSNDetails: hasAdd_GST,
-                ItemGroupDetails: Group_Tab_TableData,
-                ItemShelfLife: [
-                    {
-                        Days: formValue.ShelfLife,
-                        CreatedBy: loginUserID(),
-                        UpdatedBy: loginUserID(),
-                        IsAdd: true
-                    }
-                ]
-            });
-
-            if (pageMode === mode.edit) {
-                dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
-            }
-            else {
-                dispatch(saveItemMasterAction({ jsonBody, btnId }));
-            }
-        }                                                            // ************* is valid if start 
-        else {                                                       // ************* is valid esle start 
-            CustomAlert({
-                Type: 4,
-                Message: JSON.stringify(inValidMsg),
-            })
-            return btnIsDissablefunc({ btnId, state: false })
-
-        }
-
-    };
+        } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
+    }
 
 
     // When the user clicks anywhere outside of the modal, close it

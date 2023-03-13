@@ -21,10 +21,10 @@ import {
 } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
-    PostPartyTypeAPISuccess,
+    SavePartyTypeAPISuccess,
     getPartyTypelist,
-    updatePartyTypeID,
-    PostPartyTypeAPI,
+    updatePartyTypeAction,
+    SavePartyTypeAction,
     updatePartyTypeIDSuccess
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import {
@@ -35,10 +35,11 @@ import {
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PartyType = (props) => {
 
@@ -60,9 +61,9 @@ const PartyType = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, updateMsg, userAccess } =
+    const { postMsg, pageField, updateMsg, userAccess } =
         useSelector((state) => ({
-            PostAPIResponse: state.PartyTypeReducer.PostData,
+            postMsg: state.PartyTypeReducer.PostData,
             pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
             updateMsg: state.PartyTypeReducer.updateMessage
@@ -98,7 +99,7 @@ const PartyType = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -137,60 +138,54 @@ const PartyType = (props) => {
         }
     }, [])
 
-    useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(PostPartyTypeAPISuccess({ Status: false }))
+    useEffect(async () => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+            dispatch(SavePartyTypeAPISuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
+                CustomAlert({
                     Type: 1,
-                    Status: true,
-                    Message: PostAPIResponse.Message,
-                }))
+                    Message: postMsg.Message,
+                })
             }
             else {
-                dispatch(AlertState({
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: url.PARTYTYPE_lIST,
+                    Message: postMsg.Message,
+                })
+                if (promise) {
+                    history.push({
+                        pathname: url.PARTYTYPE_lIST
+                    })
+                }
 
-                }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(PostPartyTypeAPISuccess({ Status: false }))
-            dispatch(AlertState({
+        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+            CustomAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: url.PARTYTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
+
             dispatch(updatePartyTypeIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+
+            CustomAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
@@ -204,26 +199,29 @@ const PartyType = (props) => {
 
     const SaveHandler = (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                IsSCM: values.IsSCM,
-                IsDivision: values.IsDivision,
-                Company:loginCompanyID(),
-                CreatedBy: loginUserID(),
-                CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: loginUserID(),
-                UpdatedOn: "2022-07-18T00:00:00"
-            });
+        const btnId = event.target.id;
+        debugger
+        btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
-
-            if (pageMode === mode.edit) {
-                dispatch(updatePartyTypeID(jsonBody, values.id));
+        try {
+            if (formValid(state, setState)) {
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    IsSCM: values.IsSCM,
+                    IsDivision: values.IsDivision,
+                    Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                });
+                if (pageMode === mode.edit) {
+                    dispatch(updatePartyTypeAction({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(SavePartyTypeAction({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(PostPartyTypeAPI(jsonBody));
-            }
+        } catch (error) {
+            btnIsDissablefunc({ btnId, state: false })
         }
     };
 
