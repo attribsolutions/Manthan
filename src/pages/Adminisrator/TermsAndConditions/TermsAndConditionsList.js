@@ -7,7 +7,7 @@ import {
   commonPageFieldListSuccess
 } from "../../../store/actions";
 import {
-  postTermAndConditionSuccess,
+  saveTermAndConditionSuccess,
   getTermAndCondition,
   EditTermsAndCondtions,
   DeleteTermsAndCondtions,
@@ -37,7 +37,7 @@ const TermsAndConditionsList = (props) => {
     getList: getTermAndCondition,
     editId: EditTermsAndCondtions,
     deleteId: DeleteTermsAndCondtions,
-    postSucc: postTermAndConditionSuccess,
+    postSucc: saveTermAndConditionSuccess,
     updateSucc: UpdateTermsAndCondtions_Success,
     deleteSucc: DeleteTermsAndCondtions_Success
   }

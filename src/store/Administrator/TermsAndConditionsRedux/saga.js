@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
-  postTermAndConditionSuccess,
+  saveTermAndConditionSuccess,
   getTermAndCondition_Success,
   DeleteTermsAndCondtions_Success,
   EditTermsAndCondtions_Success,
@@ -16,8 +16,6 @@ import {
   update_TermsAndCondtions_Master_API
 } from "../../../helpers/backend_helper";
 
-import { SpinnerState } from "../../Utilites/Spinner/actions";
-
 import {
   POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API,
   GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
@@ -26,95 +24,59 @@ import {
   UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API
 } from "./actionTypes";
 
-import { AlertState } from "../../actions";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 // post api
-function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
-
+function* Save_Method_ForTermsAndCondtionsMaster_GenFun({ config }) {
   try {
-    const response = yield call(Post_TermsAndCondtions_Master_API, data);
-   
-    yield put(postTermAndConditionSuccess(response));
+    const response = yield call(Post_TermsAndCondtions_Master_API, config);
+    yield put(saveTermAndConditionSuccess(response));
   } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+    CommonConsole(error)}
 }
 
 // Get List Page API
 function* Get_TermsAndCondtions_GenratorFunction() {
-
-
   try {
     const response = yield call(get_TermsAndCondtionsList_API);
     yield put(getTermAndCondition_Success(response.Data));
    
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) { CommonConsole(error)}
 }
 
 // delete api 
-function* Delete_TermsAndCondtions_GenratorFunction({id }) {
+function* Delete_TermsAndCondtions_GenratorFunction({config }) {
   try {
-  
-    const response = yield call(del_TermsAndCondtions_Master_API, id);
-   
+    const response = yield call(del_TermsAndCondtions_Master_API, config);
     yield put(DeleteTermsAndCondtions_Success(response))
-  } catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) {CommonConsole(error) }
 }
 
 // edit api
-function* Edit_TermsAndCondtions_GenratorFunction({ id,pageMode }) {
-  
+function* Edit_TermsAndCondtions_GenratorFunction({ config }) {
+  const { btnmode } = config;
   try {
-    const response = yield call(edit_TermsAndCondtions_Master_API, id);
-    response.pageMode=pageMode
+    const response = yield call(edit_TermsAndCondtions_Master_API, config);
+    response.pageMode = btnmode;
     yield put(EditTermsAndCondtions_Success(response));
     
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  } catch (error) {CommonConsole(error) }
 }
 
 // update api
-function* update_TermsAndCondtions_GenratorFunction({ updateData, ID }) {
+function* update_TermsAndCondtions_GenratorFunction({ config }) {
   
   try {
-  
-    const response = yield call(update_TermsAndCondtions_Master_API, updateData, ID);
-   
+    const response = yield call(update_TermsAndCondtions_Master_API, config);
     yield put(UpdateTermsAndCondtions_Success(response))
   }
-  catch (error) {
-   
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
+  catch (error) {CommonConsole(error) }
 }
 
 
 function* TermsAndConditionsSaga() {
-  yield takeEvery(POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API, Post_Method_ForTermsAndCondtionsMaster_GenFun)
+  yield takeEvery(POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API, Save_Method_ForTermsAndCondtionsMaster_GenFun)
   yield takeEvery(GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Get_TermsAndCondtions_GenratorFunction)
   yield takeEvery(DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Delete_TermsAndCondtions_GenratorFunction)
   yield takeEvery(EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Edit_TermsAndCondtions_GenratorFunction)

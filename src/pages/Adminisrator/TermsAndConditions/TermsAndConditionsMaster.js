@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from "react";
-
 import {
     Card,
     CardBody,
@@ -30,15 +29,16 @@ import {
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     EditTermsAndCondtions_Success,
-    postTermAndCondition,
-    postTermAndConditionSuccess,
+    saveTermAndCondition,
+    saveTermAndConditionSuccess,
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const TermsAndConditionsMaster = (props) => {
 
@@ -130,39 +130,38 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(EditTermsAndCondtions_Success({ Status: false }))
         }
     }, [])
-    useEffect(() => {
+    useEffect(async() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postTermAndConditionSuccess({ Status: false }))
+            dispatch(saveTermAndConditionSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
-                dispatch(AlertState({
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.TERMS_AND_CONDITION_LIST,
-                }))
+                })
+                if (promise) {
+                    history.push({
+                        pathname: url.TERMS_AND_CONDITION_LIST,
+                    })
+                }
             }
+           
+            
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(postTermAndConditionSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(saveTermAndConditionSuccess({ Status: false }))
+            CustomAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
@@ -170,17 +169,14 @@ const TermsAndConditionsMaster = (props) => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state)) // Clear form values 
-            saveDissable(false); //save Button Is enable function
             history.push({
                 pathname: url.TERMS_AND_CONDITION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false); //Update Button Is enable function
             dispatch(UpdateTermsAndCondtions_Success({ Status: false }));
             dispatch(
-                AlertState({
+                CustomAlert({
                     Type: 3,
-                    Status: true,
                     Message: JSON.stringify(updateMsg.Message),
                 })
             );
@@ -188,33 +184,57 @@ const TermsAndConditionsMaster = (props) => {
     }, [updateMsg, modalCss]);
 
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-    const SaveHandler = (event) => {
+
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                IsDefault: values.IsDefault,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    IsDefault: values.IsDefault,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(UpdateTermsAndCondtions({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveTermAndCondition({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(postTermAndCondition(jsonBody))
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
+    // const SaveHandler = (event) => {
+    //     event.preventDefault();
+    //     if (formValid(state, setState)) {
+    //         const jsonBody = JSON.stringify({
+    //             Name: values.Name,
+    //             IsDefault: values.IsDefault,
+    //             CreatedBy: loginUserID(),
+    //             UpdatedBy: loginUserID()
+    //         });
+
+    //         saveDissable(true);//save Button Is dissable function
+
+    //         if (pageMode === mode.edit) {
+    //             dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
+    //         }
+    //         else {
+    //             dispatch(saveTermAndCondition(jsonBody))
+    //         }
+    //     }
+    // };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };

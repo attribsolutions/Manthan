@@ -9,64 +9,55 @@ import {
     UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS,
     DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
     DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS
-
-
 } from "./actionTypes";
 
-//=============================POST===================================
 
-export const postTermAndCondition = (data) => ({
-    type: POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API,
-    data,
-
-});
-export const postTermAndConditionSuccess = (data) => ({
-    type: POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API_SUCCESS,
-    payload: data,
-});
-
-//=============================ALL GET===================================
-
-export const getTermAndCondition = () => ({
+export const getTermAndCondition = () => ({         // get List Action
     type: GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
 });
 
-export const getTermAndCondition_Success = (data) => ({
+export const getTermAndCondition_Success = (data) => ({   // get List success
     type: GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS,
     payload: data,
 });
 
 
-//=============================SingalGET===================================
+export const saveTermAndCondition = (config={}) => ({    // save Action
+    type: POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API,
+    config,
 
-export const EditTermsAndCondtions = (id,pageMode) => ({
-    type: EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
-    id,pageMode
+});
+export const saveTermAndConditionSuccess = (resp) => ({        // Save  success
+    type: POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API_SUCCESS,
+    payload: resp,
 });
 
-export const EditTermsAndCondtions_Success = (editData) => ({
+export const EditTermsAndCondtions = (config = {}) => ({         // Edit Action 
+    type: EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
+    config
+});
+
+export const EditTermsAndCondtions_Success = (editData) => ({     // Edit  Success
     type: EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS,
     payload: editData,
 });
 
-//=============================Put===================================
-export const UpdateTermsAndCondtions = (updateData, ID) => ({
+export const UpdateTermsAndCondtions = (config = {}) => ({        // update  Action
     type: UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
-    updateData, ID
+    config ,
 });
 
-export const UpdateTermsAndCondtions_Success = (updateMessage) => ({
+export const UpdateTermsAndCondtions_Success = (updateMessage) => ({       //Update Success
     type: UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS,
     payload:updateMessage
 });
 
-//=============================Delete===================================
-export const DeleteTermsAndCondtions = (id) => ({
+export const DeleteTermsAndCondtions = (config = {}) => ({        // Delete  Action
     type: DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
-    id,
+    config,
 });
 
-export const DeleteTermsAndCondtions_Success = (deleteMessage) => ({
+export const DeleteTermsAndCondtions_Success = (resp) => ({        // Delete Success
     type: DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS,
-    payload: deleteMessage,
+    payload: resp,
 });
