@@ -234,10 +234,15 @@ const LoadingSheet = (props) => {
         }
     }, [pageField])
 
-    const RouteName_Options = RoutesList.map((index) => ({
+    const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
+        IsActive: index.IsActive
     }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
 
     const VehicleNumber_Options = VehicleNumber.map((index) => ({
         value: index.id,

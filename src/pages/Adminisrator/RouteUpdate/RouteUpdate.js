@@ -150,10 +150,15 @@ const RouteUpdate = (props) => {
         }
     }, [pageField])
 
-    const RouteName_Options = RoutesList.map((index) => ({
+    const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
+        IsActive: index.IsActive
     }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -168,8 +173,6 @@ const RouteUpdate = (props) => {
         })
         dispatch(Post_RouteUpdate(jsonBody));
     };
-
-   
 
     const pagesListColumns = [
         {
@@ -190,7 +193,6 @@ const RouteUpdate = (props) => {
                         onChange={e => {
                             row["Route"] = e.value;
                             row["RouteName"] = e.label
-                           
                         }}
                     >
                     </Select >
@@ -207,6 +209,7 @@ const RouteUpdate = (props) => {
         totalSize: Data.length,
         custom: true,
     };
+    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -219,65 +222,65 @@ const RouteUpdate = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
-                    <form onSubmit={SaveHandler} noValidate>
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                        <form onSubmit={SaveHandler} noValidate>
+                            <PaginationProvider
+                                pagination={paginationFactory(pageOptions)}
+                            >
+                                {({ paginationProps, paginationTableProps }) => (
+                                    <ToolkitProvider
 
-                                    keyField="id"
-                                    data={Data}
-                                    columns={pagesListColumns}
+                                        keyField="id"
+                                        data={Data}
+                                        columns={pagesListColumns}
 
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                        search
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                <div className="table">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        bordered={true}
+                                                        striped={false}
+                                                        noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
+                                                        classes={"table align-middle table-nowrap table-hover"}
+                                                        headerWrapperClasses={"thead-light"}
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
                                                     />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
-                            )
-                            }
+                                                    {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
+                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                </div>
 
-                        </PaginationProvider>
-                       
-                        {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                            <Row >
-                                <Col sm={2} className="mt-n4">
-                                    <SaveButton pageMode={pageMode}
-                                        userAcc={userPageAccessState}
-                                        module={"RouteUpdate"}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup >
-                            : null
-                        }
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone
+                                                            {...paginationProps}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </React.Fragment>
+                                        )
+                                        }
+                                    </ToolkitProvider>
+                                )
+                                }
+
+                            </PaginationProvider>
+
+                            {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
+                                <Row >
+                                    <Col sm={2} className="mt-n4">
+                                        <SaveButton pageMode={pageMode}
+                                            userAcc={userPageAccessState}
+                                            module={"RouteUpdate"}
+                                        />
+                                    </Col>
+                                </Row>
+                            </FormGroup >
+                                : null
+                            }
 
                         </form>
                     </Container>
