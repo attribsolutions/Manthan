@@ -30,43 +30,43 @@ export function get(url, event) {
     .then(response => {
     return CkeckAlert({method:"get", url, response, event});
     })
-    .catch(error => {
-      return CkeckAlert({method:"get", url, error, event});
+    .catch(response => {
+      return CkeckAlert({method:"get", url, response, event});
     });
 
 
 }
 
-export function post(url, data, event) {
+export function post(url, body, event) {
   console.log("Post api call")
   AuthonticationFunction();
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       }
     })
     .then(response => {
-      return CkeckAlert({method:"post", url, response, data, event});
+      return CkeckAlert({method:"post", url, response, body, event});
     })
     .catch(response => {
-      return CkeckAlert({method:"post", url, response, data, event});
+      return CkeckAlert({method:"post", url, response, body, event});
     });
 };
 
 
-export function put(url, data, event,) {
+export function put(url, body, event,) {
 
   console.log(" put api call")
   AuthonticationFunction();
-  return axiosApi.put(url, data, {
+  return axiosApi.put(url, body, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
     }
   }).then(response => {
-    return CkeckAlert({method:"put", url, response, data, event});
+    return CkeckAlert({method:"put", url, response, body, event});
   })
     .catch(response => {
       return CkeckAlert({method:"put", url, response, event});
@@ -85,11 +85,11 @@ export function del(url,) {
 }
 
 // for forget password
-export function postForget(url, data,) {
+export function postForget(url, body,) {
   // 
   // AuthonticationFunction();
   return axiosApi
-    .post(url, data, {
+    .post(url, body, {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
