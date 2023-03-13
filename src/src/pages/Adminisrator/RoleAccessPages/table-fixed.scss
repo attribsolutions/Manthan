@@ -1,0 +1,65 @@
+
+.head{
+  border-radius: 5px;
+  margin-left:-25px !important;
+  margin-right: -25px !important;
+}
+.headbody{
+margin-left:-25px !important;
+margin-right: -25px !important;
+border-radius: 5px;
+margin-bottom: -14px !important;
+
+}
+.custom_scroll_div{
+  margin-bottom: -7%;
+    overflow-x: scroll;
+    max-height: 500px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+    }
+
+.Scroll_div{
+  position: sticky !important;
+  top: 200 !important;
+  margin-bottom: -2%;
+  overflow-x: scroll;
+  max-height: 550px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.sticky{
+  // position:  fixed!important;
+  z-index: 23;
+
+}
+
+
+.pagescroll{
+    overflow-x: hidden !important ;
+}   
+.thsticky {
+  
+    position: sticky ;
+    left: 0 !important;
+    background-color: white !important;
+   
+  
+}
+.colorhead{
+  z-index: 2 !important;
+  position: sticky ;
+  top: 0 !important;
+  background-color: rgb(245, 245, 245) !important;
+  
+}
+.index{
+  z-index: 2 !important;
+}
+
+
+
+
+    
