@@ -6,7 +6,7 @@ import {
     delete_General_ID,
     editGeneralID,
     PostGenerallist,
-    PostMethodForGeneralSuccess,
+    SaveMethodForGeneralSuccess,
     updateGeneralIDSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -37,7 +37,7 @@ const GeneralList = (props) => {
         postList: PostGenerallist,
         editId: editGeneralID,
         deleteId: delete_General_ID,
-        postSucc: PostMethodForGeneralSuccess,
+        postSucc: SaveMethodForGeneralSuccess,
         updateSucc: updateGeneralIDSuccess,
         deleteSucc: deleteGeneralIDSuccess
     }

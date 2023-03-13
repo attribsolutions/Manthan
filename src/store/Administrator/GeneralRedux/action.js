@@ -16,73 +16,56 @@ import {
   GENERAL_MASTER_SUB_TYPE_SUCCESS,
 } from "./actionType";
 
-export const PostMethodForGeneral = (data) => ({
+export const SaveMethodForGeneral = (config={}) => ({             //Save Action
   type: POST_METHOD_FOR_GENERAL_API,
-  data,
+  config,
 });
 
-export const PostMethodForGeneralSuccess = (data) => ({
+export const SaveMethodForGeneralSuccess = (data) => ({       //Save Action Success
   type: POST_METHOD_FOR_GENERAL_API_SUCCESS,
   payload: data,
 });
 
-/// get General list 
-export const PostGenerallist = (data) => ({
+export const PostGenerallist = (data) => ({                   //Post Action GeneralList
   type: POST_GENERAL_LIST,
   data
 });
 
-export const PostGenerallistSuccess = (data) => ({
+export const PostGenerallistSuccess = (data) => ({             //Post Action GeneralList Success
   type: POST_GENERAL_LIST_SUCCESS,
   payload: data,
 });
 
-//delete api
-export const delete_General_ID = (id) => ({
-  type: DELETE_GENERAL_ID,
-  id,
-
-});
-
-export const deleteGeneralIDSuccess = (deleteMessage) => ({
-  type: DELETE_GENERAL_ID_SUCCESS,
-  payload: deleteMessage
-});
-
-// edit api
-export const editGeneralID = (id, pageMode) => ({
+export const editGeneralID = (config = {}) => ({             //Edit action
   type: EDIT_GENERAL_ID,
-  id, pageMode
+  config ,
 })
 
-export const editGeneralIDSuccess = (editData) => ({
+export const editGeneralIDSuccess = (editData) => ({            //Edit action Success
   type: EDIT_GENERAL_ID_SUCCESS,
   payload: editData,
 })
 
-// update api
-export const updateGeneralID = (updateData, ID) => ({
+export const updateGeneralID = (config = {}) => ({                //Update action
   type: UPDATE_GENERAL_ID,
-  updateData, ID,
+  config,
 })
 
-export const updateGeneralIDSuccess = (updateMessage) => ({
+export const updateGeneralIDSuccess = (updateMessage) => ({          //Update action Successs
   type: UPDATE_GENERAL_ID_SUCCESS,
   payload: updateMessage,
 })
 
-/// Type dropdown
-export const PostType = (data) => ({
+export const PostType = (data) => ({                                    // Post type Action
   type: POST_TYPE,
   data,
 });
-export const PostTypeSuccess = (data) => ({
+export const PostTypeSuccess = (data) => ({                              // Post type Action Success
   type: POST_TYPE_SUCCESS,
   payload: data,
 
 });
 
-// post api for Brand Name dropdown
 export const GeneralMasterSubType = (data) => ({
   type: GENERAL_MASTER_SUB_TYPE,
   data,
@@ -91,4 +74,15 @@ export const GeneralMasterSubType = (data) => ({
 export const GeneralMasterSubType_Success = (data) => ({
   type: GENERAL_MASTER_SUB_TYPE_SUCCESS,
   payload: data,
+});
+
+export const delete_General_ID = (config = {}) => ({                                  //Delete Action
+  type: DELETE_GENERAL_ID,
+  config,
+
+});
+
+export const deleteGeneralIDSuccess = (resp) => ({                    //Delete Action Success
+  type: DELETE_GENERAL_ID_SUCCESS,
+  payload: resp
 });
