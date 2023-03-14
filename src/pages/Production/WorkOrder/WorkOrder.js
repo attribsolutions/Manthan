@@ -189,7 +189,6 @@ const WorkOrder = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
-            // saveDissable(false);//save Button Is enable function
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -207,7 +206,6 @@ const WorkOrder = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -222,13 +220,11 @@ const WorkOrder = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(
                 AlertState({
                     Type: 3,
@@ -406,11 +402,11 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
-
-            if (formValid(state, setState)) {
+             {
                 btnIsDissablefunc({ btnId, state: true })
                 const WorkOrderItems = BOMItems.map((index) => ({
                     Item: index.Item,
@@ -436,6 +432,7 @@ const WorkOrder = (props) => {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
+                    debugger
                     GoBtnDissable({ id: saveBtnID1, state: true })
                     dispatch(SaveWorkOrderMaster({ jsonBody, btnId }));
                 }
@@ -481,10 +478,8 @@ const WorkOrder = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
                 <div className="page-content" style={{ marginBottom: "200px" }}>
-
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form  noValidate>
                         <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
                                 <Col sm={11}>
