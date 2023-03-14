@@ -2,40 +2,6 @@
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CommonBreadcrumbDetails } from "../../../store/actions";
 
-export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
-
-
-
-export const commonPageOptions = (TableList) => {
-    return {
-        sizePerPage: 10,
-        totalSize: TableList.length, // replace later with size(customers),
-        custom: true,
-    }
-}
-
-export const commonListPageDelete_UpdateMsgFunction = (props) => {
-
-    const dispatch = props.dispatch
-    const response = props.response
-    const resetAction = props.resetAction
-    const afterResponseAction = props.afterResponseAction
-
-    if ((response.Status === true) && (response.StatusCode === 200)) {
-        dispatch(resetAction({ Status: false }))
-        CustomAlert({
-            Type: 1,
-            Message: response.Message,
-            AfterResponseAction: afterResponseAction,
-        });
-    } else if (response.Status === true) {
-        dispatch(resetAction({ Status: false }))
-        CustomAlert({
-            Type: 3,
-            Message: response.Message,
-        });
-    }
-}
 
 export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Data Function ++++++++++++++
     const { tableList = [], PageFieldMaster = [] } = props
@@ -181,63 +147,7 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
     return convDate
 }
 
-export function saveDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    try {
-        const btn = document.getElementById(id);
-        btn.disabled = state;
 
-        if (state) {
-            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-        } else {
-            btn.innerHTML = `<span> Save</span>`
-            // btn.text = "save"
-        }
-    } catch (e) {
-        // alert("Go btn dissable  error") 
-    }
-}
-export function mainSppinerOnOff(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    try {
-        // document.getElementById("overlay").style.display = state ? "block" : "none";
-        document.getElementById("preloader").style.display = state ? "block" : "none";
-    } catch (e) { alert("button sppiner error") }
-    // try {
-    //     document.getElementById(`${id}`).disabled = state;
-    // } catch (e) {
-    //     // alert("Go btn dissable  error") 
-    // }
-}
-
-export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-
-    try {
-        const btn = document.getElementById(id);
-        btn.disabled = state;
-
-        if (state) {
-            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-        } else {
-            btn.innerHTML = `<span> Go</span>`
-            btn.text = "Go"
-        }
-    } catch (e) {
-        // alert("Go btn dissable  error") 
-    }
-}
-
-
-export function breadcrumbReturn({ dispatch, userAcc, newBtnPath = '' }) {
-    const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
-    const isCountLabel = (userAcc.CountLabel);
-    const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));
-    dispatch(CommonBreadcrumbDetails({
-        newBtnPath: newBtnPath,
-        newBtnView: isnewBtnView,
-        excelBtnView: isexcelBtnView,
-        pageHeading: userAcc.PageHeading,
-        CountLabel: isCountLabel,
-    }))
-}
 
 export function CommonConsole(error) {
     console.log(error);
