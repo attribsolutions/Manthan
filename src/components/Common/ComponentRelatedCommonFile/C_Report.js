@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getpdfReportdataSuccess, postpdfMultipleReportdataSuccess } from '../../../store/Utilites/PdfReport/actions'
-import generate from "../../../Reports/InvioceReport/Page"
 import generateReport from '../../../Reports/ReportIndex';
 
 export default function C_Report() {
@@ -15,7 +14,7 @@ export default function C_Report() {
             generateReport(pdfdata)
             dispatch(getpdfReportdataSuccess({ Status: false }))
             dispatch(postpdfMultipleReportdataSuccess({ Status: false }))
-            
+
         }
     }, [pdfdata])
 
