@@ -23,7 +23,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
-    postBOMSuccess,
+    saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -205,7 +205,7 @@ const MaterialIssueMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
 
@@ -234,7 +234,7 @@ const MaterialIssueMaster = (props) => {
         else if (postMsg.Status === true) {
 
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,

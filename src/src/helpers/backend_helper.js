@@ -412,7 +412,7 @@ export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, d
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
 export const BOM_Post_API = (data) => post(url.BOM, data)// post api
-export const edit_BOMListID = (id1) => get(`${url.BOM}/${id1}`) //Single get api BOMList 
+export const bOM_Edit_API = (id1) => get(`${url.BOM}/${id1}`) //Single get api BOMList 
 export const BOM_Update_API = (data, id) => put(`${url.BOM}/${id}`, data)// update api
 export const BOM_Delete_API = (id) => del(`${url.BOM}/${id}`)// delete api
 

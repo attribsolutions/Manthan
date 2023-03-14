@@ -26,12 +26,12 @@ import { SaveButton } from "../../../../components/Common/ComponentRelatedCommon
 import ItemTab from "./ItemQuantityTab";
 import {
     editBOMListSuccess,
-    postBOM,
-    postBOMSuccess,
+    saveBOMMaster,
+    saveBOMMasterSuccess,
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -83,7 +83,6 @@ const BOMMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getItemList())
-
     }, []);
 
     const location = { ...history.location }
@@ -163,9 +162,8 @@ const BOMMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
-            // saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -185,8 +183,7 @@ const BOMMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(postBOMSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -200,7 +197,6 @@ const BOMMaster = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.BIllOf_MATERIALS_LIST,
@@ -215,7 +211,6 @@ const BOMMaster = (props) => {
             }));
         }
         else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -264,16 +259,71 @@ const BOMMaster = (props) => {
         })
     }
 
-    const SaveHandler = (event) => {
+    // const SaveHandler = (event) => {
+    //     event.preventDefault();
+    //     const BOMItems = ItemTabDetails.map((index) => ({
+    //         Item: index.Item,
+    //         Quantity: index.Quantity,
+    //         Unit: index.Unit
+    //     }))
+    //     if (formValid(state, setState)) {
+
+    //         let BOMrefID = 0
+    //         if ((pageMode === mode.edit)) {
+    //             BOMrefID = EditData.id
+    //         };
+
+    //         const jsonBody = JSON.stringify({
+    //             BomDate: values.BomDate,
+    //             EstimatedOutputQty: values.EstimatedOutputQty,
+    //             Comment: values.Comment,
+    //             IsActive: values.IsActive,
+    //             Item: values.ItemName.value,
+    //             Unit: values.UnitName.value,
+    //             CreatedBy: loginUserID(),
+    //             Company: loginCompanyID(),
+    //             BOMItems: BOMItems,
+    //             IsVDCItem: values.IsVDCItem,
+    //             ReferenceBom: BOMrefID
+    //         });
+    //         if (BOMItems.length === 0) {
+    //             dispatch(
+    //                 AlertState({
+    //                     Type: 4,
+    //                     Status: true,
+    //                     Message: "At Least One Matrial data Add in the table",
+    //                     RedirectPath: false,
+    //                     PermissionAction: false,
+    //                 })
+    //             );
+    //             return;
+    //         }
+
+    //         // saveDissable(true);//save Button Is dissable function
+
+    //         if (pageMode === mode.edit) {
+    //             dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
+    //         }
+    //         else {
+    //             dispatch(saveBOMMaster(jsonBody));
+    //         }
+    //     }
+    // };
+
+    
+    const SaveHandler = async (event) => {
         event.preventDefault();
+        const btnId = event.target.id
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
             Quantity: index.Quantity,
             Unit: index.Unit
         }))
-        if (formValid(state, setState)) {
-
-            let BOMrefID = 0
+            
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                let BOMrefID = 0
             if ((pageMode === mode.edit)) {
                 BOMrefID = EditData.id
             };
@@ -303,18 +353,16 @@ const BOMMaster = (props) => {
                 );
                 return;
             }
-
-            // saveDissable(true);//save Button Is dissable function
-
-            if (pageMode === mode.edit) {
-                dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
+                if (pageMode === mode.edit) {
+                    dispatch(updateBOMList({ jsonBody, updateId:`${EditData.id}/${EditData.Company}`, btnId }));
+                }
+                else {
+                    dispatch(saveBOMMaster({ jsonBody, btnId }));
+                }
             }
-            else {
-                dispatch(postBOM(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -322,7 +370,7 @@ const BOMMaster = (props) => {
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    <form onSubmit={(event) => SaveHandler(event)} noValidate>
+                    <form noValidate>
                         <div className="px-2 c_card_filter header text-black" >
                             <div className=" row  ">
                                 <Col sm="6">
@@ -504,6 +552,7 @@ const BOMMaster = (props) => {
                                     <Col sm={2} style={{ marginLeft: "9px" }}>
                                         <SaveButton
                                             pageMode={pageMode}
+                                            onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"BOMMaster"}

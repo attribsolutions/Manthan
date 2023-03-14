@@ -35,8 +35,8 @@ import {
     getBOMList,
     postGoButtonForWorkOrder_Master,
     postGoButtonForWorkOrder_MasterSuccess,
-    postWorkOrderMaster,
-    postWorkOrderMasterSuccess,
+    SaveWorkOrderMaster,
+    SaveWorkOrderMasterSuccess,
     updateWorkOrderList,
 } from "../../../store/Production/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -185,7 +185,7 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
+            dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
             // saveDissable(false);//save Button Is enable function
             if (pageMode === mode.dropdownAdd) {
@@ -206,7 +206,7 @@ const WorkOrder = (props) => {
         }
         else if (postMsg.Status === true) {
             saveDissable(false);//save Button Is enable function
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
+            dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -435,7 +435,7 @@ const WorkOrder = (props) => {
         }
         else {
             GoBtnDissable({ id: saveBtnID1, state: true })
-            dispatch(postWorkOrderMaster(jsonBody, saveBtnID1));
+            dispatch(SaveWorkOrderMaster(jsonBody, saveBtnID1));
         }
     };
 

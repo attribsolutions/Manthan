@@ -17,7 +17,7 @@ import {
   getBOMListSuccess,
   getWorkOrderListPageSuccess,
   postGoButtonForWorkOrder_MasterSuccess,
-  postWorkOrderMasterSuccess,
+  SaveWorkOrderMasterSuccess,
   updateWorkOrderListSuccess
 } from "./action";
 import {
@@ -73,7 +73,7 @@ function* Post_WorkOrder_GenratorFunction({ Data }) {
   try {
     const response = yield call(Post_WorkOrder_Master_API, Data);
     yield put(SpinnerState(false))
-    yield put(postWorkOrderMasterSuccess(response));
+    yield put(SaveWorkOrderMasterSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({

@@ -5,7 +5,7 @@ import {
     EDIT_BOM_LIST_ID_SUCCESS,
     GET_BOM_LIST_PAGE_SUCCESS,
     GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-    POST_BOM_SUCCESS,
+    SAVE_BOM_MASTER_SUCCESS,
     UPDATE_BOM_LIST_SUCCESS
 } from "./actionTypes"
 
@@ -29,7 +29,7 @@ const BOMReducer = (state = INIT_STATE, action) => {
                 bomlistFilters: action.payload,
             }
 
-        case POST_BOM_SUCCESS:
+        case SAVE_BOM_MASTER_SUCCESS:
             return {
                 ...state,
                 PostData: action.payload,

@@ -131,7 +131,7 @@ export const WorkOrder = url.WORK_ORDER_LIST
 
 export const MaterialIssueList = url.MATERIAL_ISSUE_STP
 export const MaterialIssue = url.MATERIAL_ISSUE_LIST
-export const MaterialIssue_Add_Mode_2 = url.MATERIAL_ISSUE_LIST
+export const MaterialIssue_STP = url.MATERIAL_ISSUE_LIST
 
 export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
 export const ProductionReIssueList = url.PRODUCTION_REISSUE

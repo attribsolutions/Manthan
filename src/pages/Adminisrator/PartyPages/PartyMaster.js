@@ -36,7 +36,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { breadcrumbReturn, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -365,6 +365,7 @@ const PartyMaster = (props) => {
             MkUpMkDn: values.MkUpMkDn,
             isActive: values.isActive,
             IsDivision: partyType_dropdown_Select.division,
+            // SupplierID:loginPartyID(),
             CreatedBy: loginUserID(),
             CreatedOn: "2022-06-24T11:16:53.165483Z",
             UpdatedBy: loginUserID(),
@@ -382,6 +383,13 @@ const PartyMaster = (props) => {
                     Demandprefix: values.Demandprefix,
                     IBChallanprefix: values.IBChallanprefix,
                     IBInwardprefix: values.IBInwardprefix
+                }
+            ],
+            PartySubParty: [
+                {
+                    Party: loginPartyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
                 }
             ]
         });
