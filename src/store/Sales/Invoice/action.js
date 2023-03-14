@@ -17,9 +17,9 @@ import {
 
 
 //get listpage api
-export const invoiceListGoBtnfilter = (subPageMode, filters) => ({
+export const invoiceListGoBtnfilter = (config) => ({
     type: INVOICE_LIST_GO_BUTTON_FILTER,
-    subPageMode, filters,
+   config,
 });
 
 export const invoiceListGoBtnfilterSucccess = (data) => ({

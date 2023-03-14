@@ -46,16 +46,14 @@ export function SaveButton(props) {
 export function Go_Button(props) {
   const { onClick, id } = props
   return (
-    // <div className="spinner-grow t"   role="status" >
     <Button
       id={id} type="button"
-
       color="btn btn-outline-success border-1 font-size-12 mb-2 "
       onClick={onClick}
     >
 
       Go</Button>
-    // </div>
+    
   )
 }
 
