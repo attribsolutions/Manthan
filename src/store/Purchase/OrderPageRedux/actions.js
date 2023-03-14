@@ -10,8 +10,8 @@ import {
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE,
-  POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  POST_ORDER_FROM_ORDER_PAGE,
+  SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
+  SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
@@ -38,34 +38,34 @@ export const GoButton_For_Order_AddSuccess = list => ({
 })
 
 //get listpage api
-export const getOrderListPage = (subPageMode, pageMode, jsonBody) => ({
+export const getOrderListPage = (config={}) => ({
   type: GET_ORDER_LIST_PAGE,
-  subPageMode, pageMode, jsonBody,
+ config,
 });
 
-export const getOrderListPageSuccess = (data) => ({
+export const getOrderListPageSuccess = (resp) => ({
   type: GET_ORDER_LIST_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 
 export const saveOrderAaction = (config = {}) => ({
-  type: POST_ORDER_FROM_ORDER_PAGE,
+  type: SAVE_ORDER_FROM_ORDER_PAGE,
   config,
 });
 export const postOrderSuccess = (resp) => ({
-  type: POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
+  type: SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
   payload: resp
 });
 
 
-export const editOrderId = (jsonBody, pageMode) => ({
+export const editOrderId = (config = {}) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE,
-  jsonBody, pageMode
+  config,
 });
-export const editOrderIdSuccess = (data) => ({
+export const editOrderIdSuccess = (resp) => ({
   type: EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 export const updateOrderIdAction = (config = {}) => ({
@@ -78,9 +78,9 @@ export const updateOrderIdSuccess = (data) => ({
 });
 
 
-export const deleteOrderId = (id) => ({
+export const deleteOrderId = (config) => ({
   type: DELETE_ORDER_FOR_ORDER_PAGE,
-  id,
+  config,
 });
 export const deleteOrderIdSuccess = (data) => ({
   type: DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,

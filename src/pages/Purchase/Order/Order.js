@@ -257,7 +257,6 @@ const Order = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(GoButton_For_Order_AddSuccess([]))
 
@@ -273,7 +272,6 @@ const Order = (props) => {
             }
 
         } else if (postMsg.Status === true) {
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             CustomAlert({
                 Type: 4,
@@ -284,12 +282,10 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             history.push({
                 pathname: listPath,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             CustomAlert({
                 Type: 3,
@@ -569,7 +565,7 @@ const Order = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: false })
+        btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
             btnIsDissablefunc({ btnId, state: false })

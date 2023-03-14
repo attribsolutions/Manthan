@@ -25,8 +25,8 @@ import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
     editBOMListSuccess,
-    postBOM,
-    postBOMSuccess,
+    saveBOMMaster,
+    saveBOMMasterSuccess,
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
@@ -164,7 +164,7 @@ const LoadingSheet = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
             // saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -186,7 +186,7 @@ const LoadingSheet = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 4,
@@ -302,7 +302,7 @@ const LoadingSheet = (props) => {
             //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
             // }
             // else {
-            //     dispatch(postBOM(jsonBody));
+            //     dispatch(saveBOMMaster(jsonBody));
             // }
         }
     };

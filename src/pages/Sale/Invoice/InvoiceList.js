@@ -16,6 +16,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
+    btnIsDissablefunc,
     currentDate,
     excelDownCommonFunc,
     loginPartyID
@@ -45,9 +46,8 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-
     const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -64,6 +64,7 @@ const InvoiceList = () => {
         })
     );
 
+    const gobtnId = `gobtn-${subPageMode}`
     const { userAccess, pageField, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
 
@@ -116,7 +117,7 @@ const InvoiceList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler({IBType})
+        goButtonHandler("event", IBType)
     }, []);
 
     const supplierOptions = supplier.map((i) => ({
@@ -137,19 +138,23 @@ const InvoiceList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get ,ReportType, row.id))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
-    function goButtonHandler({IBType}) {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-            Party: loginPartyID(),
-            IBType: IBType ? IBType : otherState.IBType
-        });
+    function goButtonHandler(event, IBType) {
+        btnIsDissablefunc({ btnId: gobtnId, state: true })
+        try {
+            const filtersBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
+                Party: loginPartyID(),
+                IBType: IBType ? IBType : otherState.IBType
+            });
 
-        dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
+            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId: gobtnId }));
+
+        } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: true }) }
     }
 
     function fromdateOnchange(e, date) {
@@ -165,14 +170,14 @@ const InvoiceList = () => {
     }
 
     function supplierOnchange(e) {
-        
+
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
         setorderlistFilter(newObj)
     }
 
     const makeBtnFunc = (list = {}) => {
-        
+
         dispatch(makeInward(list[0].id))
         history.push({
             pathname: url.INWARD,
@@ -247,7 +252,7 @@ const InvoiceList = () => {
                         </Col >
 
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} />
+                            <Go_Button id={gobtnId} onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>
