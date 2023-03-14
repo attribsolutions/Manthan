@@ -13,7 +13,7 @@ import {
   Challan_items_API,
   Challan_items_Stock_API,
   Challan_Make_API,
-  Challan_Post_API,
+  Challan_Save_API,
 } from "../../../helpers/backend_helper";
 import {
   CHALLAN_POST_API,
@@ -28,7 +28,7 @@ import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../compon
 
 function* Post_Challan_GerFunc({ data }) {                   // Save Challan  genrator function
   try {
-    const response = yield call(Challan_Post_API, data);
+    const response = yield call(Challan_Save_API, data);
     yield put(saveChallan_ChallanAddSuccess(response))
   } catch (error) { CommonConsole(error) }
 }

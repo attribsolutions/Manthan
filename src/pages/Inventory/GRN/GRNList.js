@@ -16,7 +16,7 @@ import {
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -24,6 +24,7 @@ import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
+import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 const GRNList = () => {
     const history = useHistory();
@@ -48,6 +49,7 @@ const GRNList = () => {
 
         })
     );
+    const gobtnId = `gobtn-${subPageMode}`
     const { userAccess, pageField, vender, makeChallan, grnlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
@@ -85,7 +87,7 @@ const GRNList = () => {
 
     useEffect(() => {
         if (makeChallan.Status === true && makeChallan.StatusCode === 200) {
-            dispatch(makeChallanActionSuccess({Status:false}))
+            dispatch(makeChallanActionSuccess({ Status: false }))
             history.push({
                 pathname: makeChallan.path,
                 page_Mode: makeChallan.page_Mode,
@@ -106,28 +108,27 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-        
+
         const id = list[0].id
-        const customer = list[0].Customer
-        const jsonBody = JSON.stringify({
-            // FromDate: fromdate,
-            // ToDate: todate,
-            // Party: loginPartyID(),
-            // Customer: customer,
+        const makeBody = JSON.stringify({
             GRN: id,
         });
-        dispatch(makeChallanAction({jsonBody, pageMode:mode.modeSTPsave, path:url.CHALLAN_LIST}))
+        dispatch(makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
     };
 
     function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            Supplier: venderSelect === "" ? '' : venderSelect.value,
-            Party: loginPartyID(),
-            OrderType: order_Type.SaleOrder
-        });
-        dispatch(getGRNListPage(jsonBody));
+        const btnId = gobtnId;
+        btnIsDissablefunc({ btnId, state: true })
+        try {
+            const filtersBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                Supplier: venderSelect === "" ? '' : venderSelect.value,
+                Party: loginPartyID(),
+                OrderType: order_Type.SaleOrder
+            });
+            dispatch(getGRNListPage({ filtersBody, btnId }));
+        } catch (error) { }
     }
 
     function fromdateOnchange(e, date) {
@@ -215,9 +216,10 @@ const GRNList = () => {
                             </Col >
 
                             <Col sm="1" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={() => goButtonHandler()}
-                                >Go</Button>
+                                <Go_Button
+                                    id={gobtnId}
+                                    onClick={goButtonHandler}
+                                />
                             </Col>
                         </div>
 
@@ -234,8 +236,7 @@ const GRNList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            // downBtnFunc={downBtnFunc}
-                            // editBodyfunc={editBodyfunc}
+
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"GRN"}
                             makeBtnName={"Make Challan"}

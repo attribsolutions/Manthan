@@ -393,7 +393,7 @@ export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 
 //GRN PAGE grn 
 export const GRN_STP_for_orderList_goBtn = ({ filtersBody, btnId }) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, filtersBody, btnId)// Get subModule For H_pages
-export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
+export const GRN_get_API = ({ filtersBody, btnId }) => post(url.GRN_LiST_BY_FILTERS, filtersBody, btnId)
 export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
 export const GRN_Post_API = (data) => post(url.GRN, data)//get api
 export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
@@ -403,17 +403,17 @@ export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
 export const Challan_delete_API = (id) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${id}`)//Delete challan
-export const Challan_Post_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
-export const Challan_Make_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
+export const Challan_Save_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
+export const Challan_Make_API = ({ makeBody, btnId }) => post(url.CHALLAN_SAVE_GRN_LIST, makeBody, btnId)//Make challan
 export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make challan
 export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, data)//Make challan
 
 // BOM API
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
-export const BOM_Post_API = ({ jsonBody, btnId }) => post(url.BOM, jsonBody, btnId )// post api
-export const BOM_Edit_API = ({ editId, btnId }) => get(`${url.BOM}/${editId}`,btnId) //Single get api BOMList 
-export const BOM_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.BOM}/${updateId}`, jsonBody,btnId)// update api
-export const BOM_Delete_API = ({ deleteId, btnId }) => del(`${url.BOM}/${deleteId}`,btnId)// delete api
+export const BOM_Post_API = ({ jsonBody, btnId }) => post(url.BOM, jsonBody, btnId)// post api
+export const BOM_Edit_API = ({ editId, btnId }) => get(`${url.BOM}/${editId}`, btnId) //Single get api BOMList 
+export const BOM_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.BOM}/${updateId}`, jsonBody, btnId)// update api
+export const BOM_Delete_API = ({ deleteId, btnId }) => del(`${url.BOM}/${deleteId}`, btnId)// delete api
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 
 // Work Order API
@@ -421,9 +421,9 @@ export const BOMList_Get_API = (filters) => post(url.BOM_LiST, filters)// get It
 export const WorkOrder_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_WORKORDER, data)// go button postapi
 export const Post_WorkOrder_Master_API = ({ jsonBody, btnId }) => post(url.POST_WORK_ORDER_API, jsonBody, btnId)// post api
 export const WorkOrder_Get_API = (filters) => post(url.WORK_ORDER_LIST, filters)// get list api
-export const WorkOrder_edit_Api = ({ editId, btnId }) => get(`${url.WORK_ORDER_LIST_API}/${editId}`,btnId) //Single get api BOMList 
-export const WorkOrder_Update_Api = ({ jsonBody, updateId, btnId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`,jsonBody,btnId)// update api
-export const WorkOrder_Delete_Api = ({ deleteId, btnId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`,btnId)// delete api
+export const WorkOrder_edit_Api = ({ editId, btnId }) => get(`${url.WORK_ORDER_LIST_API}/${editId}`, btnId) //Single get api BOMList 
+export const WorkOrder_Update_Api = ({ jsonBody, updateId, btnId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`, jsonBody, btnId)// update api
+export const WorkOrder_Delete_Api = ({ deleteId, btnId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`, btnId)// delete api
 
 // Material Issue
 export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi

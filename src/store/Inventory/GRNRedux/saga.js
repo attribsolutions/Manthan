@@ -24,7 +24,7 @@ import {
 import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
-function* postGRNGenFunc({ data }) {            // Save GRN  genrator function
+function* saveGRNGenFunc({ data }) {            // Save GRN  genrator function
   try {
     const response = yield call(GRN_Post_API, data);
     yield put(postGRNSuccess(response));
@@ -55,9 +55,9 @@ function* UpdateGRNGenFunc({ data, id }) {             // Upadte GRN  genrator f
   } catch (error) { CommonConsole(error) }
 }
 
-function* GRNListfilterGerFunc({ filters }) {          // Grn_List filter  genrator function
+function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrator function
   try {
-    const response = yield call(GRN_get_API, filters);
+    const response = yield call(GRN_get_API, config);
     const newList = yield response.Data.map((i) => {
       var date = convertDatefunc(i.GRNDate)
       var time = convertTimefunc(i.CreatedOn)
@@ -84,7 +84,7 @@ function* getGRNitem_Mode2_GenFunc({ data }) {         // Make_GRN Items  genrat
 function* GRNSaga() {
 
   yield takeEvery(GET_GRN_ITEM_MODE_2, getGRNitem_Mode2_GenFunc);
-  yield takeEvery(POST_GRN_FROM_GRN_PAGE, postGRNGenFunc);
+  yield takeEvery(POST_GRN_FROM_GRN_PAGE, saveGRNGenFunc);
   yield takeEvery(EDIT_GRN_FOR_GRN_PAGE, Edit_GRN_GenratorFunction);
   yield takeEvery(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)
   yield takeEvery(DELETE_GRN_FOR_GRN_PAGE, DeleteGRNGenFunc);

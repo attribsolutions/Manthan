@@ -517,7 +517,8 @@ export function btnIsDissablefunc({ btnId, state = false }) {
 export async function CheckAPIResponse({ method, url, response, body, btnId }) {
 
     if (btnId) {
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 5000));
+        btnIsDissablefunc({ btnId, state: false })
     }
 
     const { data = '' } = response
@@ -531,7 +532,7 @@ export async function CheckAPIResponse({ method, url, response, body, btnId }) {
     const con6 = ((method === "post" || method === "put"))
     const con7 = ((data.StatusCode === 100));
 
-    btnIsDissablefunc({ btnId, state: false })
+    
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
