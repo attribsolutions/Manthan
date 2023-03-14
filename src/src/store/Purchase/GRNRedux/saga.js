@@ -103,7 +103,7 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
   const { jsonBody, pageMode, path, grnRef, challanNo } = data
   yield put(SpinnerState(true))
   try {
-    // debugger
+    // 
     const response = yield call(GRN_Make_API, jsonBody);
     response.Data = response.Data[0];
 

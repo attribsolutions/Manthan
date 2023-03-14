@@ -138,7 +138,7 @@ function* getProduction_Mode2_GenFunc({ data }) {
 
 //  DesignationID dropdown list
 function* UnitIDForProduction_saga({ data }) {
-  debugger
+  
   yield put(SpinnerState(true));
   try {
     const response = yield call(production_UnitDropdown_API, data);

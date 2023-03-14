@@ -100,7 +100,7 @@ const AddUser = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-  debugger
+  
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -270,7 +270,7 @@ const AddUser = (props) => {
   };
 
   const saveHandler = (event) => {
-    debugger
+    
     event.preventDefault();
     const btnId = event.target.id;
     // btnIsDissablefunc({ btnId: btnId, state: true })
@@ -305,7 +305,7 @@ const AddUser = (props) => {
         UpdatedBy: loginUserID(),
         UserRole: userRoleArr
       })
-debugger
+
       if (pageMode === mode.edit) {
         dispatch(userUpdateAction({ jsonBody, updateId: values.id, btnId }));
       }

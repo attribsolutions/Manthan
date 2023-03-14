@@ -85,7 +85,7 @@ const Breadcrumb = props => {
     }, [excelData])
 
     const DownloadInExcelButtonHanler = (event, values) => {
-        debugger
+        
         var list = []
         var object1 = {}
         var selectedValues = Object.keys(values);
@@ -110,7 +110,7 @@ const Breadcrumb = props => {
     }
 
     const handleChange = (e) => {
-        debugger
+        
         var chek = document.getElementById("checkAll")
         if (chek) {
             for (var i = 0; i < downListKey.length; i++) {
@@ -125,13 +125,13 @@ const Breadcrumb = props => {
     };
 
     const excelCheckBoxOnChange = (e) => {
-        debugger
+        
         // e.preventDefault();
         const check = e.target
         // var chek = document.getElementById("checkAll").checked
 
         if (check.id === "checkAll") {
-            debugger
+            
             if (check.checked) {
                 for (var i = 0; i < downListKey.length; i++) {
                     const a = document.getElementById(`chckbox${i}`)

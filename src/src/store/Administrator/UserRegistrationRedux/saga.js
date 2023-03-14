@@ -89,15 +89,15 @@ function* Get_UserPartiesForUserMaster_GenFunc({ config }) {
   //       ]
   //     }}
   const { id, editRole = [] } = config
-  debugger
+  
   try {
     const response = yield call(UserPartiesForUserMaster_API, id);
-    debugger
+    
     const rewRes = response.Data.map(i1 => {
-      // debugger
+      // 
       let newRole = []
       editRole.map(i2 => {
-        // debugger
+        // 
         if (i2.Party == i1.Party_id) {
           newRole = i2.PartyRoles.map(i3 => ({
             value: i3.Role,
@@ -110,10 +110,10 @@ function* Get_UserPartiesForUserMaster_GenFunc({ config }) {
         Party: i1.Party_id,
         PartyName: i1.PartyName
       }
-      debugger
+      
       return arr
     })
-    debugger
+    
     yield put(GetUserPartiesForUserMastePageSuccess(rewRes))
   } catch (error) { CommonConsole(error) }
 

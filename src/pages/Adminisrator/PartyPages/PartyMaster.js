@@ -46,7 +46,7 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-    debugger
+    
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(11);

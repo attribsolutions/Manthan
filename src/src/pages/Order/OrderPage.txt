@@ -190,7 +190,7 @@ const OrderPage = (props) => {
         OrderItem: itemArray,// selectedItemArray,
       }),
     };
-    debugger
+    
     if (IsEdit && itemArray.length > 0) {
       dispatch(updateOrderID_From_OrderPage(requestOptions.body, EditData.id));
     }
@@ -345,7 +345,7 @@ const OrderPage = (props) => {
   function handllerBaseUnit(e, i) {
     //unittables1=<UnitTable baseUnit={baseUnit} />
     // setbaseUN(e);
-    debugger
+    
     const find = itemArray.find((element) => {
       return element.ItemID === i.ID
     });

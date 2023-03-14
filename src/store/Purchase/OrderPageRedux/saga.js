@@ -63,7 +63,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
 }
 
 function* saveOrder_GenFunc({ config }) {
-  debugger
+  
   const { subPageMode } = config;
   let response = {}
   try {
@@ -77,7 +77,7 @@ function* saveOrder_GenFunc({ config }) {
 }
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
-  debugger
+  
   const { btnmode } = config;
   try {
     const response = yield call(OrderPage_Edit_API, config);

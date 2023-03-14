@@ -24,12 +24,12 @@ function pageFooter(doc, data) {
 }
 
 const InvioceReporta5 = () => {
-    debugger
+    
     //    const data = Data
 
     var doc = new jsPDF('l', 'pt', 'a5');
     dataGenrator().forEach(data => {
-        debugger
+        
         pageHeder(doc, data);
         reportBody(doc, data);
         pageFooter(doc, data);

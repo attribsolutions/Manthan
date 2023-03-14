@@ -28,7 +28,7 @@ function* Edit_GroupType_ID_GenFun({ config }) {                     // edit API
 }
 
 function* Update_GroupType_ID_GenFun({ config }) {  
-    debugger                 // update API
+                     // update API
     try {
         const response = yield call(GroupTypes_Update_API,config);
         yield put(updateGroupTypeIDSuccess(response))

@@ -27,7 +27,7 @@ import { listPageCommonButtonFunction }
 from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PriceList = (props) => {
-debugger
+
   const dispatch = useDispatch();
   const history = useHistory()
 

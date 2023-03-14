@@ -130,7 +130,7 @@ const PartyMaster = (props) => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
-            debugger
+            
             setEditData(editDataGatingFromList);
             dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
             setPageMode(pageModeProps);
@@ -290,7 +290,7 @@ const PartyMaster = (props) => {
     }
 
     const FormSubmitButton_Handler = (event, values) => {
-        debugger
+        
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,

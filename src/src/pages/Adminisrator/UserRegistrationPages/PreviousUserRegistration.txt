@@ -251,7 +251,7 @@ const AddUser = (props) => {
   };
 
   const handleValidSubmit = (event, values) => {
-    debugger
+    
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
