@@ -46,12 +46,12 @@ export const postGoButtonForWorkOrder_MasterSuccess = (data) => ({
 
 
 // Go Button Post API
-export const postWorkOrderMaster = (jsonbody,btnId) => ({
+export const SaveWorkOrderMaster = (jsonbody,btnId) => ({
     type: POST_WORK_ORDER_MASTER,
     jsonbody,btnId
 });
 
-export const postWorkOrderMasterSuccess = (data) => ({
+export const SaveWorkOrderMasterSuccess = (data) => ({
     type: POST_WORK_ORDER_MASTER_SUCCESS,
     payload: data,
 });

@@ -419,11 +419,11 @@ export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data
 // Work Order API
 export const BOMList_Get_API = (filters) => post(url.BOM_LiST, filters)// get Items dropdown api
 export const WorkOrder_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_WORKORDER, data)// go button postapi
-export const Post_WorkOrder_Master_API = (data) => post(url.POST_WORK_ORDER_API, data)// post api
+export const Post_WorkOrder_Master_API = ({ jsonBody, btnId }) => post(url.POST_WORK_ORDER_API, jsonBody, btnId)// post api
 export const WorkOrder_Get_API = (filters) => post(url.WORK_ORDER_LIST, filters)// get list api
-export const WorkOrder_edit_Api = (id1) => get(`${url.WORK_ORDER_LIST_API}/${id1}`) //Single get api BOMList 
-export const WorkOrder_Update_Api = (data, id) => put(`${url.WORK_ORDER_LIST_API}/${id}`, data)// update api
-export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id}`)// delete api
+export const WorkOrder_edit_Api = ({ editId, btnId }) => get(`${url.WORK_ORDER_LIST_API}/${editId}`,btnId) //Single get api BOMList 
+export const WorkOrder_Update_Api = ({ jsonBody, updateId, btnId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`,jsonBody,btnId)// update api
+export const WorkOrder_Delete_Api = ({ deleteId, btnId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`,btnId)// delete api
 
 // Material Issue
 export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
