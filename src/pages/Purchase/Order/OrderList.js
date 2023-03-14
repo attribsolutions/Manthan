@@ -107,6 +107,7 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
+            newBtnPath = url.ORDER_4;
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
