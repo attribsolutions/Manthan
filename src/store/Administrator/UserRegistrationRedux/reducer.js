@@ -1,9 +1,9 @@
 import {
   ADD_USER_SUCCESS,
   GET_USER_LIST_FOR_USER_SUCCESS,
-  UPDATE_SUCCESS,
-  EDIT_SUCCESS,
-  DELETE_SUCCESS,
+  UPDATE_USER_ACTION_SUCCESS,
+  EDIT_USER_ACTION_SUCCESS,
+  DELETE_USER_ACTION_SUCCESS,
   GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
   GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
 } from './actionType'
@@ -40,21 +40,21 @@ const User_Registration_Reducer = (state = INIT_STATE, action) => {
       }
 
     //// delete api
-    case DELETE_SUCCESS:
+    case DELETE_USER_ACTION_SUCCESS:
       return {
         ...state,
         deleteSuccessRole: action.payload,
       };
 
     //// edit api
-    case EDIT_SUCCESS:
+    case EDIT_USER_ACTION_SUCCESS:
       return {
         ...state,
         editData: action.payload,
       };
 
     //// update api
-    case UPDATE_SUCCESS:
+    case UPDATE_USER_ACTION_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,

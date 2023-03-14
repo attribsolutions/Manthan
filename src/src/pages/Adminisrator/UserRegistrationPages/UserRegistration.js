@@ -13,12 +13,12 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addUser,
-  updateID,
-  addUserSuccess,
+  saveUserMasterAction,
+  userUpdateAction,
+  saveUserMasterActionSuccess,
   GetUserPartiesForUserMastePage,
   getEmployeeForUseRegistration,
-  editSuccess
+  userEditActionSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
@@ -201,7 +201,7 @@ const AddUser = (props) => {
 
         seteditCreatedBy(CreatedBy)
 
-        dispatch(editSuccess({ Status: false }))
+        dispatch(userEditActionSuccess({ Status: false }))
       }
     }
   }, [])
@@ -209,7 +209,7 @@ const AddUser = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
-      dispatch(addUserSuccess({ Status: false }))
+      dispatch(saveUserMasterActionSuccess({ Status: false }))
       setEmployeeSelect('')
       setPartyRoleData('')
 
@@ -232,7 +232,7 @@ const AddUser = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
-      dispatch(addUserSuccess({ Status: false }))
+      dispatch(saveUserMasterActionSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -307,10 +307,10 @@ const AddUser = (props) => {
       })
 debugger
       if (pageMode === mode.edit) {
-        dispatch(updateID({ jsonBody, updateId: values.id, btnId }));
+        dispatch(userUpdateAction({ jsonBody, updateId: values.id, btnId }));
       }
       else {
-        dispatch(addUser({ jsonBody, btnId }));
+        dispatch(saveUserMasterAction({ jsonBody, btnId }));
       }
     } catch (error) { btnIsDissablefunc({ btnId: btnId, state: false }) }
   }

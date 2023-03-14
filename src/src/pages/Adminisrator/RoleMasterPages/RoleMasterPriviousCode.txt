@@ -4,8 +4,8 @@ import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, } fr
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  editSuccess,
-  postRole, updateID, PostSuccess
+  userEditActionSuccess,
+  postRole, userUpdateAction, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
@@ -81,7 +81,7 @@ const RoleMaster = (props) => {
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
-      dispatch(editSuccess({ Status: false }))
+      dispatch(userEditActionSuccess({ Status: false }))
       dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
       const listItems = editDataGatingFromList.RoleEmployeeTypes.map((data) => ({
         value: data.EmployeeType,
@@ -147,7 +147,7 @@ const RoleMaster = (props) => {
     })
 
     if (pageMode === "edit") {
-      dispatch(updateID(jsonBody, EditData.id));
+      dispatch(userUpdateAction(jsonBody, EditData.id));
     }
     else {
       dispatch(postRole(jsonBody));

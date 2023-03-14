@@ -12,16 +12,16 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  editSuccess,
+  userEditActionSuccess,
   postRole,
-  updateID,
+  userUpdateAction,
   PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import {
   AlertState,
   commonPageField,
   commonPageFieldSuccess,
-  updateSuccess
+  userUpdateActionSuccess
 } from "../../../store/actions";
 import Select from "react-select";
 import { Breadcrumb_inputName, CommonBreadcrumbDetails } from "../../../store/Utilites/Breadcrumb/actions";
@@ -165,7 +165,7 @@ const RoleMaster = (props) => {
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         seteditCreatedBy(hasEditVal.CreatedBy)
       }
-      dispatch(editSuccess({ Status: false }))
+      dispatch(userEditActionSuccess({ Status: false }))
     }
   }, [])
 
@@ -215,7 +215,7 @@ const RoleMaster = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       saveDissable(false);//Update Button Is enable function
-      dispatch(updateSuccess({ Status: false }));
+      dispatch(userUpdateActionSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -262,7 +262,7 @@ const RoleMaster = (props) => {
 
         saveDissable(true);//save Button Is dissable function
         if (pageMode === mode.edit) {
-          dispatch(updateID({ jsonBody, updateId: values.id, btnId }));
+          dispatch(userUpdateAction({ jsonBody, updateId: values.id, btnId }));
 
         }
         else {

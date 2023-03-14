@@ -35,16 +35,16 @@ export const postRole = (config={}) => ({ // save Action   id reqired
     config ,
   })
 
-  export const editSuccess =(editData)=>({// Edit  Success
+  export const userEditActionSuccess =(editData)=>({// Edit  Success
     type:EDIT_ROLE_LIST_ID_SUCCESS,
    payload:editData,
   })
 
-  export const updateID=(config = {})=>({// update  Action updated data/id
+  export const userUpdateAction=(config = {})=>({// update  Action updated data/id
     type:UPDATE_ROLE_LIST_ID,
     config,
   })
-  export const updateSuccess =(resp)=>({//Update Success
+  export const userUpdateActionSuccess =(resp)=>({//Update Success
     type:UPDATE_ROLE_LIST_ID_SUCCESS,
    payload:resp,
   })
@@ -55,7 +55,7 @@ export const postRole = (config={}) => ({ // save Action   id reqired
     
   } );
 
-  export const deleteSuccess = (resp) => ({// Delete Success
+  export const userDeleteActionSuccess = (resp) => ({// Delete Success
     type: DELETE_ROLE_LIST_ID_SUCCESS,
     payload:resp
   });

@@ -10,14 +10,14 @@ import {
 } from "../../../helpers/backend_helper";
 import {
   ADD_USER, GET_USER_LIST_FOR_USER,
-  DELETE_USER, EDIT_USER, UPDATE_USER, GET_USER_PARTIES_FOR_USER_MASTER, GET_EMPLOYEE_FOR_USER_REGISTRATION
+  DELETE_USER_ACTION, EDIT_USER_ACTION, UPDATE_USER_ACTION, GET_USER_PARTIES_FOR_USER_MASTER, GET_EMPLOYEE_FOR_USER_REGISTRATION
 } from './actionType'
 import {
-  addUserSuccess,
-  getUserSuccess,
-  deleteSuccess,
-  editSuccess,
-  updateSuccess,
+  saveUserMasterActionSuccess,
+  getUserListSuccess,
+  userDeleteActionSuccess,
+  userEditActionSuccess,
+  userUpdateActionSuccess,
   GetUserPartiesForUserMastePageSuccess,
   getEmployeeForUseRegistrationSuccess
 } from "./actions";
@@ -35,7 +35,7 @@ function* EmployeelistDropdown_GenFunc() {
 function* user_save_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_PostMethod_API, config);
-    yield put(addUserSuccess(response));
+    yield put(saveUserMasterActionSuccess(response));
   } catch (error) { CommonConsole(error) }
 
 }
@@ -44,7 +44,7 @@ function* userList_GenFunc() { //  Get  Users list  for List page  POST_api
   const filters = JSON.stringify(loginJsonBody())
   try {
     const response = yield call(User_Component_GetMethod_API, filters);
-    yield put(getUserSuccess(response.Data));
+    yield put(getUserListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -52,7 +52,7 @@ function* userList_GenFunc() { //  Get  Users list  for List page  POST_api
 function* Delete_UserList_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_Delete_Method_API, config);
-    yield put(deleteSuccess(response))
+    yield put(userDeleteActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 
 }
@@ -63,7 +63,7 @@ function* Edit_UserList_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_EditById_API, config);
     response.pageMode = btnmode
-    yield put(editSuccess(response));
+    yield put(userEditActionSuccess(response));
   } catch (error) { CommonConsole(error) }
 
 }
@@ -71,7 +71,7 @@ function* Edit_UserList_GenFunc({ config }) {
 function* Update_User_GenFunc({ config }) {
   try {
     const response = yield call(User_Component_Update_API, config);
-    yield put(updateSuccess(response))
+    yield put(userUpdateActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
@@ -122,10 +122,10 @@ function* Get_UserPartiesForUserMaster_GenFunc({ config }) {
 function* UserRegistrationSaga() {
   yield takeEvery(GET_EMPLOYEE_FOR_USER_REGISTRATION, EmployeelistDropdown_GenFunc);
   yield takeEvery(ADD_USER, user_save_GenFunc);
-  yield takeEvery(UPDATE_USER, Update_User_GenFunc);
+  yield takeEvery(UPDATE_USER_ACTION, Update_User_GenFunc);
   yield takeEvery(GET_USER_LIST_FOR_USER, userList_GenFunc)
-  yield takeEvery(DELETE_USER, Delete_UserList_GenFunc)
-  yield takeEvery(EDIT_USER, Edit_UserList_GenFunc)
+  yield takeEvery(DELETE_USER_ACTION, Delete_UserList_GenFunc)
+  yield takeEvery(EDIT_USER_ACTION, Edit_UserList_GenFunc)
   yield takeEvery(GET_USER_PARTIES_FOR_USER_MASTER, Get_UserPartiesForUserMaster_GenFunc)
 
 }

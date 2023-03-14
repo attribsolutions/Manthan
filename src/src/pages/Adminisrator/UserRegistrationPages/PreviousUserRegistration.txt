@@ -5,12 +5,12 @@ import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getRoles,
-  addUser,
-  updateID,
-  addUserSuccess,
+  saveUserMasterAction,
+  userUpdateAction,
+  saveUserMasterActionSuccess,
   GetUserPartiesForUserMastePage,
   getEmployeeForUseRegistration,
-  editSuccess
+  userEditActionSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
@@ -161,7 +161,7 @@ const AddUser = (props) => {
         })
 
         setPartyRoleData(hasEditVal.UserRole)
-        dispatch(editSuccess({ Status: false }))
+        dispatch(userEditActionSuccess({ Status: false }))
       }
     }
 
@@ -170,7 +170,7 @@ const AddUser = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-      dispatch(addUserSuccess({ Status: false }))
+      dispatch(saveUserMasterActionSuccess({ Status: false }))
       formRef.current.reset();
       setEmployeeSelect('')
       setRoleDropDown('')
@@ -193,7 +193,7 @@ const AddUser = (props) => {
       }
     }
     else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
-      dispatch(addUserSuccess({ Status: false }))
+      dispatch(saveUserMasterActionSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -277,12 +277,12 @@ const AddUser = (props) => {
     }
     else if (pageMode === 'edit') {
 
-      dispatch(updateID(jsonBody, EditData.id));
+      dispatch(userUpdateAction(jsonBody, EditData.id));
       setEditData([]);
       console.log("Update jsonBody", jsonBody)
     }
     else {
-      dispatch(addUser(jsonBody));
+      dispatch(saveUserMasterAction(jsonBody));
       console.log("Post jsonBody", jsonBody)
     }
   };
