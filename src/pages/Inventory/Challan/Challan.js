@@ -154,7 +154,7 @@ const Challan = (props) => {
             // dispatch(postInvoiceMasterSuccess({ Status: false }))
             // dispatch(GoButton_post_For_Invoice_Success([]))
             // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-            // dispatch(postBOMSuccess({ Status: false }))
+            // dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
 

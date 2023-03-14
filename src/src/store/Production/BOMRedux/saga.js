@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, edit_BOMListID, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
+import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, bOM_Edit_API, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, postBOMSuccess, updateBOMListSuccess } from "./action";
-import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, POST_BOM, UPDATE_BOM_LIST } from "./actionTypes";
+import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, SAVE_BOM_MASTER, UPDATE_BOM_LIST } from "./actionTypes";
 
 //post api
 function* Post_BOM_GenratorFunction({ data }) {
@@ -45,7 +45,7 @@ function* get_BOMList_GenFunc({ filters }) {
 
 function* editBOMListGenFunc({ id1, pageMode }) {
   try {
-    let response = yield call(edit_BOMListID, id1);
+    let response = yield call(bOM_Edit_API, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
     if (response.StatusCode === 200) yield put(editBOMListSuccess(response))
@@ -75,7 +75,7 @@ function* DeleteBOM_GenFunc({ id }) {
 }
 
 function* BOMSaga() {
-  yield takeEvery(POST_BOM, Post_BOM_GenratorFunction)
+  yield takeEvery(SAVE_BOM_MASTER, Post_BOM_GenratorFunction)
   yield takeEvery(GET_ITEM_UNITS_DROPDOWN_API, GetItemUnits_saga)
   yield takeEvery(GET_BOM_LIST_PAGE, get_BOMList_GenFunc)
   yield takeEvery(EDIT_BOM_LIST_ID, editBOMListGenFunc)

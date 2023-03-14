@@ -7,7 +7,7 @@ import {
   GET_BOM_LIST_PAGE_SUCCESS,
   GET_ITEM_UNITS_DROPDOWN_API,
   GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-  POST_BOM, POST_BOM_SUCCESS,
+  SAVE_BOM_MASTER, SAVE_BOM_MASTER_SUCCESS,
   UPDATE_BOM_LIST,
   UPDATE_BOM_LIST_SUCCESS,
   BOM_LIST_FILTERS
@@ -23,12 +23,12 @@ export const BOMlistfilters = filter => ({
 
 // post api
 export const postBOM = (data) => ({
-  type: POST_BOM,
+  type: SAVE_BOM_MASTER,
   data,
 });
 
 export const postBOMSuccess = (data) => ({
-  type: POST_BOM_SUCCESS,
+  type: SAVE_BOM_MASTER_SUCCESS,
   payload: data,
 });
 

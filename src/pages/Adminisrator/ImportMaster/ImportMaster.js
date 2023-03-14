@@ -143,7 +143,7 @@ const ImportMaster = (props) => {
 
     // useEffect(() => {
     //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         dispatch(postBOMSuccess({ Status: false }))
+    //         dispatch(saveBOMMasterSuccess({ Status: false }))
     //         // setState(() => resetFunction(fileds, state))// Clear form values  
     //         // saveDissable(false);//save Button Is enable function
     //         dispatch(Breadcrumb_inputName(''))
@@ -165,7 +165,7 @@ const ImportMaster = (props) => {
     //         }
     //     }
     //     else if (postMsg.Status === true) {
-    //         dispatch(postBOMSuccess({ Status: false }))
+    //         dispatch(saveBOMMasterSuccess({ Status: false }))
     //         // saveDissable(false);//save Button Is enable function
     //         dispatch(AlertState({
     //             Type: 4,
@@ -337,7 +337,7 @@ const ImportMaster = (props) => {
             //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
             // }
             // else {
-            //     dispatch(postBOM(jsonBody));
+            //     dispatch(saveBOMMaster(jsonBody));
             // }
         }
     };
