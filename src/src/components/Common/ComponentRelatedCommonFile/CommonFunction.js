@@ -6,17 +6,6 @@ export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves
 
 
 
-
-
-export const commonDefaultSorted = (name) => {
-    return (
-        [{
-            dataField: name,
-            order: 'asc'
-        }]
-    )
-}
-
 export const commonPageOptions = (TableList) => {
     return {
         sizePerPage: 10,
