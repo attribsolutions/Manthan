@@ -451,15 +451,15 @@ export const Production_ReIssueItemDropdown_API = (data) => post(url.PRODUCTION_
 export const Production_ReIssue_AddPageGOBtn_API = (data) => post(url.PRODUCTION_REIISUE_ITEM, data)// delete api
 
 // Invoice
-export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi
-export const Invoice_1_Save_API = (data) => post(url.INVOICE_1_SAVE, data)//  postapi
-export const Invoice_1_Get_Filter_API = ([filtersBody, btnId]) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
+export const Invoice_1_GoButton_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi
+export const Invoice_1_Save_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_SAVE, jsonBody, btnId)//  postapi
+export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
 export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
 
 //IB Invoice 2 
-export const IB_Invoice_GoButton_API = (data) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, data)// go button postapi
+export const IB_Invoice_GoButton_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi
 export const IB_Invoice_Save_API = (data) => post(url.IB_INVOICE_SAVE, data)//  postapi
 export const IB_Invoice_Get_Filter_API = ({ filtersBody, btnId }) => post(url.IB_INVOICE_lIST_FILTER, filtersBody, btnId)//  postapi
 export const IB_Invoice_Delete_API = (id) => del(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
@@ -480,7 +480,7 @@ export const IBOrderPage_Update_API = (data, id) => put(`${url.SAVE_API_FOR_IBOR
 export const Inward_Post_API = (data) => post(url.POST_API_FOR_INWARD, data)// Inward post api
 export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)// List Api
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
-export const Make_Inward_Post_API = (id) => get(`${url.MAKE_INWARD_BUTTON_API}/${id}`)// Inward post api
+export const Make_Inward_Post_API = ({ makeInwardId, btnId }) => get(`${url.MAKE_INWARD_BUTTON_API}/${makeInwardId}`, btnId)// Inward post api
 
 // IB Invoice
 // export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api

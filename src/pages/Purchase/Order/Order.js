@@ -171,6 +171,7 @@ const Order = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null

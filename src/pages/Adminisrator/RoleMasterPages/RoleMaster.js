@@ -367,8 +367,8 @@ const RoleMaster = (props) => {
                             <Row>
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-4 col-form-label" >{fieldLabel.isSCMRole}</Label>
-                                  <Col md={2} style={{ marginTop: '9px', marginLeft: "1cm" }} >
+                                  <Label className="col-sm-5 col-form-label" >{fieldLabel.isSCMRole}</Label>
+                                  <Col md={2} style={{ marginTop: '9px', }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"
