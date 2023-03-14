@@ -38,14 +38,14 @@ export const GoButton_For_Order_AddSuccess = list => ({
 })
 
 //get listpage api
-export const getOrderListPage = (subPageMode, pageMode, jsonBody) => ({
+export const getOrderListPage = (config={}) => ({
   type: GET_ORDER_LIST_PAGE,
-  subPageMode, pageMode, jsonBody,
+ config,
 });
 
-export const getOrderListPageSuccess = (data) => ({
+export const getOrderListPageSuccess = (resp) => ({
   type: GET_ORDER_LIST_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 

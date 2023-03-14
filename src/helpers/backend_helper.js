@@ -346,11 +346,11 @@ export const edit_SubGroup_List_Api = ({ editId, btnId }) => get(`${url.SUBGROUP
 export const update_SubGroup_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.SUBGROUP_API}/${updateId}`, jsonBody, btnId)// update api
 
 // General API
-export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST,data)// get api
-export const Post_General_API = ({ jsonBody, btnId }) => post(url.GENERAL_API, jsonBody,btnId)// post api
-export const delete_General_List_Api = ({ deleteId, btnId }) => del(`${url.GENERAL_API}/${deleteId}`,btnId)// delete api
-export const edit_General_List_Api = ({ editId, btnId }) => get(`${url.GENERAL_API}/${editId}`,btnId)// edit api
-export const update_General_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.GENERAL_API}/${updateId}`, jsonBody,btnId)// update api
+export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST, data)// get api
+export const Post_General_API = ({ jsonBody, btnId }) => post(url.GENERAL_API, jsonBody, btnId)// post api
+export const delete_General_List_Api = ({ deleteId, btnId }) => del(`${url.GENERAL_API}/${deleteId}`, btnId)// delete api
+export const edit_General_List_Api = ({ editId, btnId }) => get(`${url.GENERAL_API}/${editId}`, btnId)// edit api
+export const update_General_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.GENERAL_API}/${updateId}`, jsonBody, btnId)// update api
 export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
 
 //Routes API
@@ -368,7 +368,7 @@ export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url
 export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Credit Limit
-export const Post_CreditLimit_Master_API = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId )// post api
+export const Post_CreditLimit_Master_API = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
 export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api
 
 // Route Update
@@ -380,19 +380,19 @@ export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPD
 
 // Order Page api  
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
-export const OrderList_get_Filter_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
+export const OrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.ORDER_LiST_BY_FILTERS, filtersBody, btnId)
 export const OrderPage_Save_API_ForPO = ({ jsonBody, btnId }) => post(url.ORDER_PAGE_API, jsonBody, btnId)//get api
-export const OrderPage_Edit_API = (data) => post(url.ORDER_Edit_API, data)//Edit Order
+export const OrderPage_Edit_API = ({ jsonBody, btnId }) => post(url.ORDER_Edit_API, jsonBody, btnId)//Edit Order
 export const OrderPage_Edit_ForDownload_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
-export const OrderPage_Delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
-export const OrderPage_Update_API = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
+export const OrderPage_Delete_API = ({ deleteId, btnId }) => del(`${url.ORDER_PAGE_API}/${deleteId}`, btnId)//Delete Order
+export const OrderPage_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.ORDER_PAGE_API}/${updateId}`, jsonBody, btnId)// update api
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 
 //GRN PAGE grn 
-export const GRN_STP_for_orderList_goBtn = (data) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, data)// Get subModule For H_pages
+export const GRN_STP_for_orderList_goBtn = ({ filtersBody, btnId }) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, filtersBody, btnId)// Get subModule For H_pages
 export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
 export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
 export const GRN_Post_API = (data) => post(url.GRN, data)//get api
@@ -453,16 +453,15 @@ export const Production_ReIssue_AddPageGOBtn_API = (data) => post(url.PRODUCTION
 // Invoice
 export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi
 export const Invoice_1_Save_API = (data) => post(url.INVOICE_1_SAVE, data)//  postapi
-export const Invoice_1_Get_Filter_API = (data) => post(url.INVOICE_1_lIST_FILTER, data)//  postapi
+export const Invoice_1_Get_Filter_API = ([filtersBody, btnId]) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
 export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
-const sppiner_true = true
 
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = (data) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, data)// go button postapi
 export const IB_Invoice_Save_API = (data) => post(url.IB_INVOICE_SAVE, data)//  postapi
-export const IB_Invoice_Get_Filter_API = (data) => post(url.IB_INVOICE_lIST_FILTER, data, sppiner_true)//  postapi
+export const IB_Invoice_Get_Filter_API = ({ filtersBody, btnId }) => post(url.IB_INVOICE_lIST_FILTER, filtersBody, btnId)//  postapi
 export const IB_Invoice_Delete_API = (id) => del(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
 export const IB_Invoice_Edit_API_Singel_Get = (id) => get(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
 //************************************Inter Branch ************************************/
@@ -470,7 +469,7 @@ export const IB_Invoice_Edit_API_Singel_Get = (id) => get(`${url.IB_INVOICE_SAVE
 // IBOrder
 export const IBOrderPage_GoButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//go button api
 export const IBOrderPage_Save_API = (data) => post(url.SAVE_API_FOR_IBORDER, data)//post api
-export const IBOrderList_get_Filter_API = (filters) => post(url.IBORDER_LiST_BY_FILTERS, filters)//list page
+export const IBOrderList_get_Filter_API = ({ filtersBody, btnId }) => post(url.IBORDER_LiST_BY_FILTERS, filtersBody, btnId)//list page
 
 export const IB_Division_DROP_API = (data) => post(url.IB_DIVISION_DROPDOWN, data)//dropdown api
 export const IBOrderPage_Edit_API = (data) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, data)//edit

@@ -28,9 +28,9 @@ import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {
-
+  const config = { editId: loginPartyID() }
   try {
-    const response = yield call(Party_Master_Edit_API, loginPartyID());
+    const response = yield call(Party_Master_Edit_API, config);
     let first = [], secd = [], newArr = []
     const arr = response.Data.PartyAddress;
     arr.forEach((i, k) => {
@@ -87,7 +87,7 @@ function* getCustomerGenFunc() {
 function* vendorSupplierCustomer_genFunc({ subPageMode }) {
   let response;
   try {
-    
+
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_LIST_1)) {
       response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID() });//vendor mode 1
     }

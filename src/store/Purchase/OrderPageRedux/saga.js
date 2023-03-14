@@ -27,8 +27,7 @@ import {
   POST_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE
 } from "./actionType";
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import *as url from "../../../routes/route_url"
 
 
@@ -76,10 +75,11 @@ function* saveOrder_GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* editOrderGenFunc({ jsonBody, pageMode }) {     //  Edit Order by subPageMode
+function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
+  const { btnmode } = config;
   try {
-    const response = yield call(OrderPage_Edit_API, jsonBody);
-    response.pageMode = pageMode
+    const response = yield call(OrderPage_Edit_API, config);
+    response.pageMode = btnmode
     yield put(editOrderIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -99,23 +99,22 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 
 }
 
-function* orderList_GoBtn_GenFunc(action) {              //  Order List Filter by subPageMode
+function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filter by subPageMode
   try {
-
-    const { subPageMode, pageMode, jsonBody } = action
+    const { subPageMode } = config
     let response;
     let newList;
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)) {
-      response = yield call(OrderList_get_Filter_API, jsonBody); // GO-Botton Purchase Order 1 && 2 Add Page API
+      response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
     else if (subPageMode === url.GRN_STP) {
-      response = yield call(GRN_STP_for_orderList_goBtn, jsonBody); // GO-Botton IB-invoice Add Page API
+      response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
-      response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
+      response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.ORDER_LIST_4)) {
-      response = yield call(IBOrderList_get_Filter_API, jsonBody); // GO-Botton IB-invoice Add Page API
+      response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
     newList = yield response.Data.map((i) => {
 
