@@ -59,7 +59,11 @@ function initialState(history) {
     else if (sub_Mode === url.IB_ORDER) {
         page_Id = pageId.IB_ORDER;
         listPath = url.IB_ORDER_PO_LIST;
-    };
+    }
+    else if (sub_Mode === url.ORDER_4) {
+        page_Id = pageId.ORDER_4;
+        listPath = url.ORDER_LIST_4
+    }
     return { page_Id, listPath }
 };
 
