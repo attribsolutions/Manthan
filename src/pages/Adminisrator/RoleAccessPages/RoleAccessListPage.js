@@ -22,7 +22,7 @@ import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommo
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {

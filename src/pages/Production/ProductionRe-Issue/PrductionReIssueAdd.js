@@ -27,7 +27,7 @@ import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
-    from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+    from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,

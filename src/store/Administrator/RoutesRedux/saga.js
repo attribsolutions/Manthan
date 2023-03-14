@@ -20,7 +20,7 @@ import {
     SAVE_ROUTES_MASTER,
     UPDATE_ROUTES_ID
 } from "./actionTypes";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 function* save_Routes_Master_GenFun({ config = {} }) {
     try {

@@ -8,7 +8,7 @@ import Select from "react-select";
 import Flatpickr from "react-flatpickr";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"

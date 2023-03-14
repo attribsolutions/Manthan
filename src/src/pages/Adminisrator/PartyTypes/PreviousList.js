@@ -279,8 +279,6 @@ const PartyTypeList = (props) => {
                               responsive
                               bordered={true}
                               striped={false}
-                              // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
-                              // defaultSorted={commonDefaultSorted("Name")}
                               classes={"table align-middle table-nowrap table-hover"}
                               headerWrapperClasses={"thead-light"}
                               {...toolkitProps.baseProps}

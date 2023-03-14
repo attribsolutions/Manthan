@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { Button, Col, Input, Modal, Row } from "reactstrap";
+import { Button, Col,  Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -10,14 +10,14 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn, listPageCommonButtonFunction, makeBtnCss }
-    from "./listPageCommonButtons";
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { breadcrumbReturn}
+    from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
-import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc,makeBtnCss } from "../../../src/components/Common/ComponentRelatedCommonFile/ListActionsButton";
 
 let sortType = "asc"
 let searchCount = 0
@@ -330,7 +330,7 @@ const PurchaseListPage = (props) => {
 
         else if ((PageFieldMaster.length - 1 === k)) {
             columns.push(
-                listPageCommonButtonFunction({
+                listPageActionsButtonFunc({
                     dispatchHook: dispatch,
                     subPageMode: history.location.pathname,
                     ButtonMsgLable: ButtonMsgLable,

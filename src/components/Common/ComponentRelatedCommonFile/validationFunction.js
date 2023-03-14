@@ -1,4 +1,4 @@
-import { CommonConsole } from "./listPageCommonButtons";
+import { CommonConsole } from "./CommonFunction";
 
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
     let isValid = true;

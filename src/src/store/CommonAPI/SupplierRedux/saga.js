@@ -24,7 +24,7 @@ import {
 } from "./actionType";
 
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {

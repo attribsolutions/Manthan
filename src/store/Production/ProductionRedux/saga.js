@@ -28,7 +28,7 @@ import {
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
 } from "./actionType";
 
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 function* SaveProductionGenFunc({ config }) {
   try {

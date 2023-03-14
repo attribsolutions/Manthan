@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CheckAPIResponse } from "../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { CheckAPIResponse } from "../components/Common/ComponentRelatedCommonFile/CommonFunction"
 
 const API_URL = "http://192.168.1.114:8000"
 

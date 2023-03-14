@@ -10,11 +10,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn, listPageCommonButtonFunction, saveDissable }
-  from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { breadcrumbReturn, }
+  from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc } from "../../../src/components/Common/ComponentRelatedCommonFile/ListActionsButton";
 
 
 let sortType = "asc"
@@ -201,7 +202,7 @@ const CommonListPage = (props) => {
     }
     setmodal_edit(false)
   }
-  
+
   PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
     return a.ListPageSeq - b.ListPageSeq
   });
@@ -226,7 +227,7 @@ const CommonListPage = (props) => {
       }
     }
     if (PageFieldMaster.length - 1 === k) {
-      columns.push(listPageCommonButtonFunction({
+      columns.push(listPageActionsButtonFunc({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,

@@ -6,7 +6,7 @@ import CommonListPage from "../../../components/Common/ComponentRelatedCommonFil
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import {
     deleteSalesManID_Success,
     deleteSalesManID,

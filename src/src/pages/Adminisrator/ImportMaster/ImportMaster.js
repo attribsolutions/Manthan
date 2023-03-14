@@ -18,7 +18,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";

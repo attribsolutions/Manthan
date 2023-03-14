@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
@@ -10,11 +9,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn, listPageCommonButtonFunction, saveDissable }
-  from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { breadcrumbReturn, }
+  from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc } from "./ListActionsButton";
 
 
 let sortType = "asc"
@@ -226,7 +226,7 @@ const CommonListPage = (props) => {
       }
     }
     if (PageFieldMaster.length - 1 === k) {
-      columns.push(listPageCommonButtonFunction({
+      columns.push(listPageActionsButtonFunc({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,

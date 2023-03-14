@@ -14,7 +14,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,

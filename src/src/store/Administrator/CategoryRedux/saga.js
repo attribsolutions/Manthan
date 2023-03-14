@@ -20,7 +20,7 @@ import {
   saveCategoryMaster_Success,
   updateCategoryIDSuccess
 } from "./action";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 
 function* save_Method_ForCategory_GenFun({ config }) {              // Save API

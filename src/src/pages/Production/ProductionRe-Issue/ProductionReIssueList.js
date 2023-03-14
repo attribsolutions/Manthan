@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom"
 
 import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as report from '../../../Reports/ReportIndex';
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";

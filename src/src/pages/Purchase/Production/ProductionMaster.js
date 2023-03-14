@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,

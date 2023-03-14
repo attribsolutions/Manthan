@@ -25,7 +25,7 @@ import {
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 function* postGRNGenFunc({ data }) {
   yield put(SpinnerState(true))
