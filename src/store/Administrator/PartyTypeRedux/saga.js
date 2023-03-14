@@ -15,6 +15,7 @@ import * as action from "./action";
 import * as actionType from "./actionTypes";
 
 function* save_Party_Type_GneFunc({ config }) {// post api
+
   try {
     const response = yield call(Save_Party_Type_API, config);
     yield put(action.SavePartyTypeAPISuccess(response));
@@ -29,7 +30,6 @@ function* Get_PartyType_List_GneFunc() { // get api
   } catch (error) { CommonConsole(error) }
 }
 
-
 function* Delete_PartyType_ID_GneFunc({ config }) { // delete api 
   try {
     const response = yield call(detelet_PartyType_List_Api, config);
@@ -37,8 +37,8 @@ function* Delete_PartyType_ID_GneFunc({ config }) { // delete api
   } catch (error) { CommonConsole(error) }
 }
 
-
 function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
+
   const { btnmode, editId } = config;
   const body = { ...loginJsonBody(), "id": editId };
   config.jsonBody = body;
@@ -48,7 +48,6 @@ function* Edit_PartyType_ID_GneFunc({ config }) { // edit api
     yield put(action.editPartyTypeSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
-
 
 function* Update_PartyType_ID_GneFunc({ config }) {// update api
   try {
