@@ -46,7 +46,7 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-    debugger
+    
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(11);
@@ -365,7 +365,7 @@ const PartyMaster = (props) => {
             MkUpMkDn: values.MkUpMkDn,
             isActive: values.isActive,
             IsDivision: partyType_dropdown_Select.division,
-            SupplierID:loginPartyID(),
+            // SupplierID:loginPartyID(),
             CreatedBy: loginUserID(),
             CreatedOn: "2022-06-24T11:16:53.165483Z",
             UpdatedBy: loginUserID(),
@@ -383,6 +383,13 @@ const PartyMaster = (props) => {
                     Demandprefix: values.Demandprefix,
                     IBChallanprefix: values.IBChallanprefix,
                     IBInwardprefix: values.IBInwardprefix
+                }
+            ],
+            PartySubParty: [
+                {
+                    Party: loginPartyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
                 }
             ]
         });

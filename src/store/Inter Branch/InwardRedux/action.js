@@ -47,12 +47,12 @@ export const deleteInwardIdSuccess = (data) => ({
 });
 
 // Make Inward api
-export const makeInward = (id) => ({
+export const makeInward = (config = {}) => ({
   type: MAKE_INWARD,
-  id,
+  config,
 });
 
-export const makeInwardSuccess = (data) => ({
+export const makeInwardSuccess = (resp) => ({
   type: MAKE_INWARD_SUCCESS,
-  payload: data,
+  payload: resp,
 });

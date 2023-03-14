@@ -30,7 +30,7 @@ function* get_PriceListPage_GenFunc() {
 //delete
 function* delete_PriceList_GenFun({ config = {} }) {
   try {
-    debugger
+    
     const response = yield call(delete_PriceList_API, config);
     yield put(delete_PriceListSuccess(response));
   } catch (error) { CommonConsole(error) }

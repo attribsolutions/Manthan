@@ -84,7 +84,7 @@ const OrderList = (props) => {
 
     //select id for delete row
     const deleteHandeler = (id, name) => {
-        debugger
+        
         dispatch(
             AlertState({
                 Type: 5,
@@ -99,7 +99,7 @@ const OrderList = (props) => {
 
     const EditPageHandler = (rowData) => {
         // dispatch(editOrder(rowData.id, 'edit'))
-        debugger
+        
         let RelatedPageID = userPageAccessState.RelatedPageID
 
         const found = userAccess.find((element) => {

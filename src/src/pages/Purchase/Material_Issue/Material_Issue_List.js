@@ -41,7 +41,7 @@ const MaterialIssueList = () => {
 
     const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters
-debugger
+
     const action = {
         getList: getMaterialIssueListPage,
         editId: editWorkOrderList,
@@ -89,7 +89,7 @@ debugger
     }, [produtionMake])
 
     const makeBtnFunc = (list = {}) => {
-        debugger
+        
         // var isSelect = ''
         // if (list.length > 0) {
         //     list.forEach(ele => {

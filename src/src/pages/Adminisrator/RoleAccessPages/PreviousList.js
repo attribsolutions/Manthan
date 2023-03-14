@@ -57,7 +57,7 @@ const RoleAccessListPage = () => {
     }, []);
 
     const EditPageHandler = (rowData) => {
-     debugger
+     
        if(rowData.Division_id===null) {
         rowData.Division_id=0
        }

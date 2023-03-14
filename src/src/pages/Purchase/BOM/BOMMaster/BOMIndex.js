@@ -124,7 +124,7 @@ const BOMMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+                
 
                 let ItemUnits = hasEditVal.ParentUnitDetails.map((data) => ({
                     value: data.Unit,
@@ -264,7 +264,7 @@ const BOMMaster = (props) => {
     }
 
     const SaveHandler = ({ event, mode = false }) => {
-        debugger
+        
         event.preventDefault();
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,

@@ -42,8 +42,10 @@ export const listPageCommonButtonFunction = (props) => {
         }
     };
 
-    function copyHandler(rowData, btnmode) {
-        dispatch(editActionFun(rowData.id, btnmode, subPageMode));
+    function copyHandler(rowData, btnmode,btnId) {
+        const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+        btnIsDissablefunc({ btnId, state: true })
+        dispatch(editActionFun({ ...config }));
     };
 
     function downHandler(rowData) {
@@ -62,11 +64,11 @@ export const listPageCommonButtonFunction = (props) => {
         }
     }
 
-    function makeBtnHandler(rowData) {
+    function makeBtnHandler(rowData, btnId) {
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
-        makeBtnFunc(arr)
+        makeBtnFunc(arr, btnId)
     }
 
     return ({
@@ -515,7 +517,8 @@ export function btnIsDissablefunc({ btnId, state = false }) {
 export async function CheckAPIResponse({ method, url, response, body, btnId }) {
 
     if (btnId) {
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 5000));
+        btnIsDissablefunc({ btnId, state: false })
     }
 
     const { data = '' } = response
@@ -529,7 +532,7 @@ export async function CheckAPIResponse({ method, url, response, body, btnId }) {
     const con6 = ((method === "post" || method === "put"))
     const con7 = ((data.StatusCode === 100));
 
-    btnIsDissablefunc({ btnId, state: false })
+    
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)

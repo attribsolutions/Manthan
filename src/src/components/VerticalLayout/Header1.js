@@ -46,7 +46,7 @@ const Header1 = props => {
   //   history.listen(location => {
   //     // dispatch(CommonBreadcrumbDetails(initialstate));
   //     setbreadcrumbDetail(initialstate)
-  //     debugger
+  //     
   //   });
   // }, [history])
 
@@ -83,7 +83,7 @@ const Header1 = props => {
       // let relatedpage = userAccess.find((inx) => {
       //   return (inx.id === userAcc.RelatedPageID)
       // })
-      debugger
+      
       var a= urlRalations[userAcc.ActualPagePath]
       showCountlabel = '';
       bredcrumbItemName = '';
@@ -138,7 +138,7 @@ const Header1 = props => {
     // if (listPagePath === undefined) {
     //     return
     // }
-    debugger
+    
     history.push({
       pathname: masterPage,
     })
@@ -164,7 +164,7 @@ const Header1 = props => {
   }, [excelData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    debugger
+    
     var list = []
     var object1 = {}
     var selectedValues = Object.keys(values);
@@ -189,7 +189,7 @@ const Header1 = props => {
   }
 
   const handleChange = (e) => {
-    debugger
+    
     var chek = document.getElementById("checkAll")
     if (chek) {
       for (var i = 0; i < downListKey.length; i++) {
@@ -204,13 +204,13 @@ const Header1 = props => {
   };
 
   const excelCheckBoxOnChange = (e) => {
-    debugger
+    
     // e.preventDefault();
     const check = e.target
     // var chek = document.getElementById("checkAll").checked
 
     if (check.id === "checkAll") {
-      debugger
+      
       if (check.checked) {
         for (var i = 0; i < downListKey.length; i++) {
           const a = document.getElementById(`chckbox${i}`)

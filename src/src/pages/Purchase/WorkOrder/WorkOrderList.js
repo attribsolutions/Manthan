@@ -23,7 +23,7 @@ import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 
 const WorkOrderList = () => {
-    debugger
+    
     const dispatch = useDispatch();
     const history = useHistory();
 

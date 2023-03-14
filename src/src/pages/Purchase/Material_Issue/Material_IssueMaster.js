@@ -254,7 +254,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        debugger
+        
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -330,7 +330,7 @@ const MaterialIssueMaster = (props) => {
         
         const MaterialIssueItems = []
         GoButton.map((index) => {
-            debugger
+            
             let Stock = index.BatchesData.map((i) => {
                 return i.ObatchwiseQuantity
             })

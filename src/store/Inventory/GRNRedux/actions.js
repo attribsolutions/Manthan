@@ -34,9 +34,9 @@ export const getGRN_itemMode2_Success = list => ({
 
 
 //get listpage api
-export const getGRNListPage = (filters) => ({
+export const getGRNListPage = (config={}) => ({
   type: GET_GRN_LIST_PAGE,
-  filters,
+  config,
 });
 
 export const getGRNListPageSuccess = (data) => ({

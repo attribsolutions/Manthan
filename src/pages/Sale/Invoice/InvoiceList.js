@@ -142,7 +142,9 @@ const InvoiceList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-        btnIsDissablefunc({ btnId: gobtnId, state: true })
+
+        const btnId = gobtnId;
+        btnIsDissablefunc({ btnId, state: true })
         try {
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
@@ -152,9 +154,9 @@ const InvoiceList = () => {
                 IBType: IBType ? IBType : otherState.IBType
             });
 
-            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId: gobtnId }));
+            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId }));
 
-        } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: true }) }
+        } catch (error) { btnIsDissablefunc({ btnId, state: true }) }
     }
 
     function fromdateOnchange(e, date) {
@@ -176,9 +178,9 @@ const InvoiceList = () => {
         setorderlistFilter(newObj)
     }
 
-    const makeBtnFunc = (list = {}) => {
-
-        dispatch(makeInward(list[0].id))
+    const makeBtnFunc = (list = {}, btnId) => {
+        const config = { makeInwardId: list[0].id, btnId }
+        dispatch(makeInward(config))
         history.push({
             pathname: url.INWARD,
         })

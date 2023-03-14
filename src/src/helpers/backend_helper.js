@@ -403,7 +403,7 @@ export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
 export const Challan_delete_API = (id) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${id}`)//Delete challan
-export const Challan_Post_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
+export const Challan_Save_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
 export const Challan_Make_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
 export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make challan
 export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, data)//Make challan

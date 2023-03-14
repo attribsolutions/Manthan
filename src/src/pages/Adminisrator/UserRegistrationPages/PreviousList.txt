@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import {
-    getUser, deleteUser, editUserId, updateSuccess, addUserSuccess
+    getUserList, userDeleteAction, userEditAction, userUpdateActionSuccess, saveUserMasterActionSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -14,7 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import AddUser from "./UserRegistration";
-import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
+import { userDeleteActionSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
@@ -52,22 +52,22 @@ const UserList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(getUser());
+        dispatch(getUserList());
     }, []);
 
     // This UseEffect => UpadateModal Success/Unsucces Show and Hide Control Alert_modal 
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-            dispatch(updateSuccess({ Status: false }))
+            dispatch(userUpdateActionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: updateMessage.Message,
-                AfterResponseAction: getUser,
+                AfterResponseAction: getUserList,
             }))
             tog_center()
         }
         else if (updateMessage.Status === true) {
-            dispatch(updateSuccess({ Status: false }))
+            dispatch(userUpdateActionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: JSON.stringify(updateMessage.Message),
@@ -77,14 +77,14 @@ const UserList = () => {
 
     useEffect(() => {
         if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(userDeleteActionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteMessage.Message,
-                AfterResponseAction: getUser,
+                AfterResponseAction: getUserList,
             }))
         } else if (deleteMessage.Status === true) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(userDeleteActionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
@@ -97,9 +97,9 @@ const UserList = () => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(addUserSuccess({ Status: false }))
+            dispatch(saveUserMasterActionSuccess({ Status: false }))
             tog_center();
-            dispatch(getUser());
+            dispatch(getUserList());
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -108,7 +108,7 @@ const UserList = () => {
         }
     
         else if ((PostAPIResponse.Status === true)) {
-            dispatch(addUserSuccess({ Status: false }))
+            dispatch(saveUserMasterActionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -188,8 +188,8 @@ const UserList = () => {
             ButtonMsgLable: "User",
             deleteName:"LoginName",
             userPageAccessState: userPageAccessState,
-            editActionFun: editUserId,
-            deleteActionFun: deleteUser,
+            editActionFun: userEditAction,
+            deleteActionFun: userDeleteAction,
         })
 
 

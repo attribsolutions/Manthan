@@ -81,7 +81,7 @@ function MRPTab(props) {
     };
 
     const addRowsHandler = (e) => {
-        debugger;
+        ;
         const val = {
             Division: division === "" ? "" : division.value,
             DivisionName: division.label,
@@ -317,7 +317,7 @@ const  MRPTable=(props)=> {
                 // <QualityRanger { ...editorProps } value={ value } />
                 <>
                     {/* <Input type="checkbox" />
-                    <Input type="text" onChange={(e)=>{debugger}}>
+                    <Input type="text" onChange={(e)=>{}}>
 
                     </Input> */}
                   <Flatpickr

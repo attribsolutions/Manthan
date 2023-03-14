@@ -141,7 +141,7 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+                
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty } = hasEditVal
@@ -256,7 +256,7 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
-        debugger
+        
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
@@ -312,7 +312,7 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-        debugger
+        
 
         const jsonBody = JSON.stringify({
             Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),

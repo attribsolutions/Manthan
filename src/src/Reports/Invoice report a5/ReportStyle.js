@@ -373,10 +373,10 @@ export const pageFooter = (doc, data) => {
     doc.text(`Ruppe:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
-    debugger
+    
     let finalY = doc.previousAutoTable.finalY;
     if (finalY >110) {
-        debugger
+        
         pageBorder(doc)
         reportFooter(doc, i)
         pageHeder(doc, data)

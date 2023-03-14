@@ -5,12 +5,12 @@ import {
   ADD_USER_SUCCESS,
   GET_USER_LIST_FOR_USER,
   GET_USER_LIST_FOR_USER_SUCCESS,
-  DELETE_USER,
-  DELETE_SUCCESS,
-  EDIT_USER,
-  EDIT_SUCCESS,
-  UPDATE_USER,
-  UPDATE_SUCCESS,
+  DELETE_USER_ACTION,
+  DELETE_USER_ACTION_SUCCESS,
+  EDIT_USER_ACTION,
+  EDIT_USER_ACTION_SUCCESS,
+  UPDATE_USER_ACTION,
+  UPDATE_USER_ACTION_SUCCESS,
 
   GET_USER_PARTIES_FOR_USER_MASTER,
   GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
@@ -29,55 +29,55 @@ export const getEmployeeForUseRegistrationSuccess = (resp) => ({
 });
 
 /// Registration Post api
-export const addUser = (config) => ({
+export const saveUserMasterAction = (config) => ({
   type: ADD_USER,
   config,
 });
 
-export const addUserSuccess = (resp) => ({
+export const saveUserMasterActionSuccess = (resp) => ({
   type: ADD_USER_SUCCESS,
   payload: resp,
 });
 
 //get Registration api
-export const getUser = () => ({
+export const getUserList = () => ({
   type: GET_USER_LIST_FOR_USER,
 });
 
-export const getUserSuccess = (resp) => ({
+export const getUserListSuccess = (resp) => ({
   type: GET_USER_LIST_FOR_USER_SUCCESS,
   payload: resp,
 });
 
 ////delete api
-export const deleteUser = (config={}) => ({
-  type: DELETE_USER,
+export const userDeleteAction = (config={}) => ({
+  type: DELETE_USER_ACTION,
   config,
 
 });
-export const deleteSuccess = (resp) => ({
-  type: DELETE_SUCCESS,
+export const userDeleteActionSuccess = (resp) => ({
+  type: DELETE_USER_ACTION_SUCCESS,
   payload: resp
 });
 
 ///// edit api
-export const editUserId = (config = {}) => ({
-  type: EDIT_USER,
+export const userEditAction = (config = {}) => ({
+  type: EDIT_USER_ACTION,
   config,
 })
-export const editSuccess = (resp) => ({
-  type: EDIT_SUCCESS,
+export const userEditActionSuccess = (resp) => ({
+  type: EDIT_USER_ACTION_SUCCESS,
   payload: resp,
 });
 
 /// update api
 
-export const updateID = (config = {}) => ({
-  type: UPDATE_USER,
+export const userUpdateAction = (config = {}) => ({
+  type: UPDATE_USER_ACTION,
   config,
 });
-export const updateSuccess = (resp) => ({
-  type: UPDATE_SUCCESS,
+export const userUpdateActionSuccess = (resp) => ({
+  type: UPDATE_USER_ACTION_SUCCESS,
   payload: resp,
 });
 export const GetUserPartiesForUserMastePage = (config) => ({
