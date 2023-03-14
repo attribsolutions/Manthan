@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { GroupTypes_API, GroupTypes_Delete_API, GroupTypes_Edit_API, GroupTypes_Post_API, GroupTypes_Update_API } from "../../../helpers/backend_helper";
 import { deleteGroupTypeIDSuccess, editGroupTypeIDSuccess, getGroupTypeslistSuccess, saveGroupTypeMasterSuccess, updateGroupTypeIDSuccess } from "./action";
 import { DELETE_GROUP_TYPE_ID, EDIT_GROUP_TYPE_ID, GET_GROUP_TYPES_LIST, SAVE_GROUP_TYPE_MASTER, UPDATE_GROUP_TYPE_ID } from "./actionType";

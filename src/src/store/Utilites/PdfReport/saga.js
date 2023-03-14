@@ -4,7 +4,7 @@ import { Data } from "./DemoData";
 
 import { getpdfReportdataSuccess, postpdfMultipleReportdataSuccess } from "./actions";
 import { MultipleInvoice_API } from "../../../helpers/backend_helper";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 
 function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {

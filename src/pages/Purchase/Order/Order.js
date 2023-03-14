@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";

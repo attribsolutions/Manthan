@@ -19,7 +19,7 @@ import {
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 const MRPList = (props) => {
 

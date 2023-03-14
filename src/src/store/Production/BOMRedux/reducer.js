@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction"
 import {
     BOM_LIST_FILTERS,
     DELETE_BOM_LIST_PAGE_SUCCESS,

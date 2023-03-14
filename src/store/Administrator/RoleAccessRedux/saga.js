@@ -28,7 +28,7 @@ import {
   PostMethod_ForCopyRoleAccessFor_Role_Success,
   DeleteRoleAcessSuccess,
 } from "./actions";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 
 

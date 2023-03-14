@@ -32,7 +32,7 @@ import {
     postGSTMasterData,
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 import * as pageId from "../../../routes/allPageID"
 

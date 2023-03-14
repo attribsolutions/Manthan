@@ -25,7 +25,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Or
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";

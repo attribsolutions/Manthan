@@ -26,7 +26,7 @@ import {
     PostGenerallistSuccess,
     GeneralMasterSubType_Success
 } from "./action";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 // post api
 function* Post_Method_ForGeneral_GenFun({ config }) {

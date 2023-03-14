@@ -11,7 +11,7 @@ import {
   GO_BUTTON_FOR_CREDITLIMIT_PAGE,
   POST_CREDITLIMIT_PAGE,
 } from "./actionTypes";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 function* GoButton_CreditLimit_post_genfun({ jsonBody }) {
 

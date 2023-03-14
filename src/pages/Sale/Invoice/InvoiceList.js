@@ -20,7 +20,7 @@ import {
     currentDate,
     excelDownCommonFunc,
     loginPartyID
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import * as report from '../../../Reports/ReportIndex'

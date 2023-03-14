@@ -20,7 +20,7 @@ import {
     SAVE_SALES_MAN_MASTER,
     UPDATE_SALESMAN_ID
 } from "./actionTypes";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 function* save_SalesMan_Master_GenFun({ config = {} }) {
     try {

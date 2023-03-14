@@ -28,7 +28,7 @@ import {
   GET_ORDER_LIST_PAGE
 } from "./actionType";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 

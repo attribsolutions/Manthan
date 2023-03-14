@@ -29,7 +29,7 @@ import {
     saveDissable,
     loginCompanyID,
     loginPartyID
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import {
     editWorkOrderListSuccess,
     getBOMList,

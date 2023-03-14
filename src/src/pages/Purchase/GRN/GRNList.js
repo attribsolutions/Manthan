@@ -18,7 +18,7 @@ import {
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as url from "../../../routes/route_url"
 const GRNList = () => {
 

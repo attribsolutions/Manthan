@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction"
 import { DELETE_INWARD_LIST_PAGE_SUCCESS, GET_INWARD_LIST_PAGE_SUCCESS, INWARD_LIST_FILTERS, MAKE_INWARD_SUCCESS, POST_INWARD_SUCCESS } from "./actionType"
 
 const INIT_STATE = {

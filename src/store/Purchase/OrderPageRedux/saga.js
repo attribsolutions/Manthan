@@ -27,7 +27,7 @@ import {
   SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE
 } from "./actionType";
-import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 

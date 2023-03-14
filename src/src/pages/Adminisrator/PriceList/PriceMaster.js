@@ -32,7 +32,7 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";

@@ -31,7 +31,7 @@ import {
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"

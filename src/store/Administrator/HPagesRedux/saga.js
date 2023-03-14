@@ -38,7 +38,7 @@ import {
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 function* fetchHPagesList_GneratorFunction() {
   try {

@@ -28,7 +28,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import FeatherIcon from "feather-icons-react";
 
 

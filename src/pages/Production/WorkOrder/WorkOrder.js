@@ -31,7 +31,7 @@ import {
     loginCompanyID,
     loginPartyID,
     btnIsDissablefunc
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import {
     editWorkOrderListSuccess,
     getBOMList,

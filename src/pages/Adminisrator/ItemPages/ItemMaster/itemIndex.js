@@ -45,7 +45,7 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as pageId from "../../../../routes/allPageID"
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";

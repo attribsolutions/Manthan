@@ -12,7 +12,7 @@ import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/rout
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { useMemo } from "react";
 import {
     BOMlistfilters,

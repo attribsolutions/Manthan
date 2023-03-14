@@ -7,7 +7,7 @@ import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonF
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import { useMemo } from "react";
 import {
     deleteWorkOrderId,

@@ -41,7 +41,7 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturn, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {

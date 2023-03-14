@@ -15,7 +15,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew"
-import { loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 
 const GeneralList = (props) => {

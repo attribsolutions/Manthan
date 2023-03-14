@@ -27,7 +27,7 @@ import {
 
 } from "./actionType"
 
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 
 
 function* Save_Method_ForPartySubParty_GenFun({ config }) {                     //Save API 

@@ -32,7 +32,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 
