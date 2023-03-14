@@ -453,7 +453,7 @@ export const Production_ReIssue_AddPageGOBtn_API = (data) => post(url.PRODUCTION
 // Invoice
 export const Invoice_1_GoButton_API = (data) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, data)// go button postapi
 export const Invoice_1_Save_API = (data) => post(url.INVOICE_1_SAVE, data)//  postapi
-export const Invoice_1_Get_Filter_API = ([filtersBody, btnId]) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
+export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
 export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
 
