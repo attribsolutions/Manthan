@@ -7,40 +7,25 @@ import {
   GET_BOM_LIST_PAGE_SUCCESS,
   GET_ITEM_UNITS_DROPDOWN_API,
   GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-  POST_BOM, POST_BOM_SUCCESS,
+  SAVE_BOM_MASTER, SAVE_BOM_MASTER_SUCCESS,
   UPDATE_BOM_LIST,
   UPDATE_BOM_LIST_SUCCESS,
   BOM_LIST_FILTERS
 } from "./actionTypes";
-
-
 
 export const BOMlistfilters = filter => ({
   type:BOM_LIST_FILTERS,
   payload: filter,
 })
 
-
-// post api
-export const postBOM = (data) => ({
-  type: POST_BOM,
-  data,
+export const saveBOMMaster = (config={}) => ({ // Post action
+  type: SAVE_BOM_MASTER,
+  config,
 });
 
-export const postBOMSuccess = (data) => ({
-  type: POST_BOM_SUCCESS,
-  payload: data,
-});
-
-// Get Item Units
-export const GetItemUnitsDrodownAPI = (data) => ({
-  type: GET_ITEM_UNITS_DROPDOWN_API,
-  data,
-
-});
-export const GetItemUnitsDrodownAPISuccess = (data) => ({
-  type: GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-  payload: data,
+export const saveBOMMasterSuccess = (resp) => ({ // post Success
+  type: SAVE_BOM_MASTER_SUCCESS,
+  payload: resp,
 });
 
 //get listpage api
@@ -49,36 +34,49 @@ export const getBOMListPage = (filters) => ({
   filters,
 });
 
-export const getBOMListPageSuccess = (data) => ({
+export const getBOMListPageSuccess = (resp) => ({
   type: GET_BOM_LIST_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 // edit api
-export const editBOMList = (id1, pageMode) => ({
+export const editBOMList = (config={}) => ({
   type: EDIT_BOM_LIST_ID,
-  id1, pageMode
+  config,
 })
 
-export const editBOMListSuccess = (editData) => ({
+export const editBOMListSuccess = (resp) => ({
   type: EDIT_BOM_LIST_ID_SUCCESS,
-  payload: editData,
+  payload: resp,
 })
 
-export const updateBOMList = (data, id1) => ({
+export const updateBOMList = (config={}) => ({
   type: UPDATE_BOM_LIST,
-  data, id1,
-});
-export const updateBOMListSuccess = (data) => ({
-  type: UPDATE_BOM_LIST_SUCCESS,
-  payload: data,
+  config,
 });
 
-export const deleteBOMId = (id) => ({
-  type: DELETE_BOM_LIST_PAGE,
-  id,
+export const updateBOMListSuccess = (resp) => ({
+  type: UPDATE_BOM_LIST_SUCCESS,
+  payload: resp,
 });
-export const deleteBOMIdSuccess = (data) => ({
+
+export const deleteBOMId = (config={}) => ({
+  type: DELETE_BOM_LIST_PAGE,
+  config,
+});
+
+export const deleteBOMIdSuccess = (resp) => ({
   type: DELETE_BOM_LIST_PAGE_SUCCESS,
+  payload: resp,
+});
+
+// Get Item Units
+export const GetItemUnitsDrodownAPI = (data) => ({
+  type: GET_ITEM_UNITS_DROPDOWN_API,
+  data,
+});
+
+export const GetItemUnitsDrodownAPISuccess = (data) => ({
+  type: GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
   payload: data,
 });

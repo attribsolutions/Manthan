@@ -23,7 +23,7 @@ import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton }
     from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
-    postBOMSuccess,
+    saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
@@ -231,7 +231,7 @@ const ProductionReIssueAdd = (props) => {
 
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,

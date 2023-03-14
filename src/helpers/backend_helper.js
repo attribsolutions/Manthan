@@ -409,12 +409,12 @@ export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make c
 export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, data)//Make challan
 
 // BOM API
-export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
-export const BOM_Post_API = (data) => post(url.BOM, data)// post api
-export const edit_BOMListID = (id1) => get(`${url.BOM}/${id1}`) //Single get api BOMList 
-export const BOM_Update_API = (data, id) => put(`${url.BOM}/${id}`, data)// update api
-export const BOM_Delete_API = (id) => del(`${url.BOM}/${id}`)// delete api
+export const BOM_Post_API = ({ jsonBody, btnId }) => post(url.BOM, jsonBody, btnId )// post api
+export const BOM_Edit_API = ({ editId, btnId }) => get(`${url.BOM}/${editId}`,btnId) //Single get api BOMList 
+export const BOM_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.BOM}/${updateId}`, jsonBody,btnId)// update api
+export const BOM_Delete_API = ({ deleteId, btnId }) => del(`${url.BOM}/${deleteId}`,btnId)// delete api
+export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 
 // Work Order API
 export const BOMList_Get_API = (filters) => post(url.BOM_LiST, filters)// get Items dropdown api
