@@ -24,7 +24,7 @@ import {
   EDIT_ORDER_FOR_ORDER_PAGE,
   DELETE_ORDER_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE,
-  POST_ORDER_FROM_ORDER_PAGE,
+  SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE
 } from "./actionType";
 import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -63,6 +63,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
 }
 
 function* saveOrder_GenFunc({ config }) {
+  debugger
   const { subPageMode } = config;
   let response = {}
   try {
@@ -76,6 +77,7 @@ function* saveOrder_GenFunc({ config }) {
 }
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
+  debugger
   const { btnmode } = config;
   try {
     const response = yield call(OrderPage_Edit_API, config);
@@ -84,9 +86,9 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
   } catch (error) { CommonConsole(error) }
 }
 
-function* DeleteOrder_GenFunc({ id }) {                  // Delete Order by subPageMode
+function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by subPageMode
   try {
-    const response = yield call(OrderPage_Delete_API, id);
+    const response = yield call(OrderPage_Delete_API, config);
     yield put(deleteOrderIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -139,7 +141,7 @@ function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filt
 
 function* OrderPageSaga() {
   yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
-  yield takeEvery(POST_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
+  yield takeEvery(SAVE_ORDER_FROM_ORDER_PAGE, saveOrder_GenFunc);
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
   yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
   yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);

@@ -117,7 +117,7 @@ const InvoiceList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler({ IBType })
+        goButtonHandler("event", IBType)
     }, []);
 
     const supplierOptions = supplier.map((i) => ({
@@ -141,7 +141,7 @@ const InvoiceList = () => {
         dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
-    function goButtonHandler({ IBType }) {
+    function goButtonHandler(event, IBType) {
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             const filtersBody = JSON.stringify({

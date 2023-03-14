@@ -124,6 +124,7 @@ const OrderList = () => {
             makeBtnShow = true;
             makeBtnName = "Make GRN"
         }
+
         dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType })
         setPageMode(page_Mode)
@@ -131,7 +132,7 @@ const OrderList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler({ IBType })
+        goButtonHandler("event", IBType)
 
     }, []);
 
@@ -228,14 +229,18 @@ const OrderList = () => {
         }
     }
 
-    function editBodyfunc(rowData, btnMode) {
-        const jsonBody = JSON.stringify({
-            Party: rowData.SupplierID,
-            Customer: rowData.CustomerID,
-            EffectiveDate: rowData.preOrderDate,
-            OrderID: rowData.id
-        })
-        dispatch(editOrderId(jsonBody, btnMode));
+    function editBodyfunc({ config }) {
+        const { rowData, btnMode } = config;
+        btnIsDissablefunc({ btnId: gobtnId, state: true })
+        try {
+            const jsonBody = JSON.stringify({
+                Party: rowData.SupplierID,
+                Customer: rowData.CustomerID,
+                EffectiveDate: rowData.preOrderDate,
+                OrderID: rowData.id
+            })
+            dispatch(editOrderId({ jsonBody, btnMode, btnId: gobtnId }));
+        } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 
     function downBtnFunc(row) {
@@ -243,7 +248,8 @@ const OrderList = () => {
         dispatch(getpdfReportdata(OrderPage_Edit_ForDownload_API, ReportType, row.id))
     }
 
-    function goButtonHandler({ IBType }) {
+    function goButtonHandler(event, IBType) {
+
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             const filtersBody = JSON.stringify({

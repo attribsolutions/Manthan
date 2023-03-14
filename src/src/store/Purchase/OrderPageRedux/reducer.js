@@ -5,7 +5,7 @@ import {
   EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
-  POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
+  SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
   // ORDER_ADD_FILTERS,
@@ -46,7 +46,7 @@ const OrderReducer = (state = INIT_STATE, action) => {
         goBtnOrderAdd: action.payload,
       }
 
-    case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:
+    case SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,

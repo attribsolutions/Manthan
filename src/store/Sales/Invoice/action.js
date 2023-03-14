@@ -22,9 +22,9 @@ export const invoiceListGoBtnfilter = (config) => ({
    config,
 });
 
-export const invoiceListGoBtnfilterSucccess = (data) => ({
+export const invoiceListGoBtnfilterSucccess = (resp) => ({
     type: INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 // edit api

@@ -10,8 +10,8 @@ import {
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE,
-  POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  POST_ORDER_FROM_ORDER_PAGE,
+  SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
+  SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
@@ -50,11 +50,11 @@ export const getOrderListPageSuccess = (data) => ({
 
 
 export const saveOrderAaction = (config = {}) => ({
-  type: POST_ORDER_FROM_ORDER_PAGE,
+  type: SAVE_ORDER_FROM_ORDER_PAGE,
   config,
 });
 export const postOrderSuccess = (resp) => ({
-  type: POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
+  type: SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
   payload: resp
 });
 

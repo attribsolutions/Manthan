@@ -55,16 +55,15 @@ function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
 }
 
 // Invoice List
-function* InvoiceListGenFunc(action) {
-  debugger
+function* InvoiceListGenFunc({config}) {
   try {
-    const { subPageMode, filters } = action
+    const { subPageMode} = config
     let response;
 
     if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET)) {
-      response = yield call(Invoice_1_Get_Filter_API, filters);
+      response = yield call(Invoice_1_Get_Filter_API, config);
     } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_GRN_LIST || subPageMode === url.IB_INWARD_STP) {
-      response = yield call(IB_Invoice_Get_Filter_API, filters);
+      response = yield call(IB_Invoice_Get_Filter_API, config);
     }
 
     const newList = yield response.Data.map((i) => {
