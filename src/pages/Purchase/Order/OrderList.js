@@ -229,7 +229,7 @@ const OrderList = () => {
         }
     }
 
-    function editBodyfunc({ config }) {
+    function editBodyfunc( config ) {
         const { rowData, btnMode } = config;
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
@@ -239,7 +239,7 @@ const OrderList = () => {
                 EffectiveDate: rowData.preOrderDate,
                 OrderID: rowData.id
             })
-            dispatch(editOrderId({ jsonBody, btnMode, btnId: gobtnId }));
+            dispatch(editOrderId({ jsonBody, ...config }));
         } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 
