@@ -62,7 +62,7 @@ function* saveHPageSaga_GneratorFunction({ Data }) {
 }
 
 function* editHpages_ID({ id, pageMode }) {
-  debugger
+  
   try {
     let response = yield call(edit_HPageID, id);
     response.pageMode = id.btnmode

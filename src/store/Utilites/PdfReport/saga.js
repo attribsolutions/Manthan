@@ -20,7 +20,7 @@ function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
 }
 
 function* GetMultipleinvoicereport_GenFunc({ API, jsonBody,ReportType, Id}) {
-  debugger
+  
   try {
     const response = yield call(MultipleInvoice_API, jsonBody);
     // const response = Data;

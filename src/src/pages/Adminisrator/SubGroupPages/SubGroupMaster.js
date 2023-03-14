@@ -152,7 +152,7 @@ const SubGroupMaster = (props) => {
     }, [])
 
     useEffect(() => { 
-debugger
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSubGroupSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
@@ -217,7 +217,7 @@ debugger
     }));
 
     const SaveHandler = async (event) => {
-        debugger
+        
         event.preventDefault();
         const btnId = event.target.id
         try {

@@ -255,7 +255,7 @@ const LoadingSheet = (props) => {
     }
 
     function goButtonHandler() {
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,

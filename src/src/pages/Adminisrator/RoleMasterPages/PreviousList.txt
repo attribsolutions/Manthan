@@ -5,8 +5,8 @@ import {
   getRole,
   deleteRole,
   editRoleId,
-  updateSuccess,
-  deleteSuccess,
+  userUpdateActionSuccess,
+  userDeleteActionSuccess,
   PostSuccess,
 } from "../../../store/Administrator/RoleMasterRedux/action";
 
@@ -75,7 +75,7 @@ const RoleList = (props) => {
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateSuccess({ Status: false }));
+      dispatch(userUpdateActionSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
@@ -86,7 +86,7 @@ const RoleList = (props) => {
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateSuccess({ Status: false }));
+      dispatch(userUpdateActionSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -99,7 +99,7 @@ const RoleList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteSuccess({ Status: false }));
+      dispatch(userDeleteActionSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
@@ -109,7 +109,7 @@ const RoleList = (props) => {
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteSuccess({ Status: false }));
+      dispatch(userDeleteActionSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,

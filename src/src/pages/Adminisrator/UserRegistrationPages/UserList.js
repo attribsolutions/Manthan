@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddUser from "./UserRegistration";
 import {
-    getUser,
-    deleteUser,
-    deleteSuccess,
-    editUserId,
-    updateSuccess,
-    addUserSuccess
+    getUserList,
+    userDeleteAction,
+    userDeleteActionSuccess,
+    userEditAction,
+    userUpdateActionSuccess,
+    saveUserMasterActionSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -31,19 +31,19 @@ const UserList = () => {
     );
 
     const action = {
-        getList: getUser,
-        editId: editUserId,
-        deleteId: deleteUser,
-        postSucc: addUserSuccess,
-        updateSucc: updateSuccess,
-        deleteSucc: deleteSuccess
+        getList: getUserList,
+        editId: userEditAction,
+        deleteId: userDeleteAction,
+        postSucc: saveUserMasterActionSuccess,
+        updateSucc: userUpdateActionSuccess,
+        deleteSucc: userDeleteActionSuccess
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.USER_lIST))
-        dispatch(getUser());
+        dispatch(getUserList());
     }, []);
 
  

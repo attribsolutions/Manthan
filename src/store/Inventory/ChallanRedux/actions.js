@@ -33,9 +33,9 @@ export const challanList_ForListPageSuccess = (data) => ({
 });
 
 
-export const makeChallanAction = (data) => ({
+export const makeChallanAction = (config={}) => ({
   type: MAKE_CHALLAN_ACTION,
-  data,
+  config,
 });
 
 export const makeChallanActionSuccess = (data) => ({

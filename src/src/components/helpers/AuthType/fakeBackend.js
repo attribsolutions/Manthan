@@ -380,7 +380,7 @@ const fakeBackend = () => {
     })
   })
 
-  mock.onPut(url.UPDATE_USER).reply(user => {
+  mock.onPut(url.UPDATE_USER_ACTION).reply(user => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (user && user.data) {
@@ -393,7 +393,7 @@ const fakeBackend = () => {
     })
   })
 
-  mock.onDelete(url.DELETE_USER).reply(config => {
+  mock.onDelete(url.DELETE_USER_ACTION).reply(config => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {

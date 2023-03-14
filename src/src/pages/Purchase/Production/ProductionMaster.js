@@ -37,7 +37,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 
 const ProductionMaster = (props) => {
-    debugger
+    
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -124,7 +124,7 @@ const ProductionMaster = (props) => {
                 i.hasValid.NumberOfLot.valid = true
                 return i
             })
-            debugger
+            
             const jsonBody = JSON.stringify({
                 Item:MaterialProductionaData[0].Item
             });

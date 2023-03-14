@@ -56,7 +56,7 @@ function* save_Invoice_Genfun({ subPageMode, data, saveBtnid }) {
 
 // Invoice List
 function* InvoiceListGenFunc(action) {
-  debugger
+  
   try {
     const { subPageMode, filters } = action
     let response;

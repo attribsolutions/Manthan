@@ -215,7 +215,7 @@ const EmployeeTypesMaster = (props) => {
                     UpdatedBy: loginUserID(),
                     UpdatedOn: "2022-07-18T00:00:00"
                 });
-                debugger
+                
                 if (pageMode === mode.edit) {
                     dispatch(updateEmployeeTypeID({ jsonBody, updateId: values.id, btnId }));
                 }
