@@ -318,17 +318,32 @@ const AddEmployee = (props) => {
   }
 
   const SaveHandler = (event) => {
+    debugger
     event.preventDefault();
     const btnId = event.target.id;
+
 
     try {
       if (formValid(state, setState)) {
         btnIsDissablefunc({ btnId, state: true })
 
+        if ((values.EmployeeTypeName.IsPartyConnection === true) && (values.EmployeeParties.length === 0)) {
+          dispatch(
+            AlertState({
+              Type: 4,
+              Status: true,
+              Message: "Party is Required",
+            })
+          );
+          return btnIsDissablefunc({ btnId, state: false })
+        }
+
         let emplPartie = [{ Party: "" }]
         if (!(values.EmployeeParties.length === 0)) {
           emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
         }
+
+
         const jsonBody = JSON.stringify({
           Name: values.Name,
           Address: values.Address,
