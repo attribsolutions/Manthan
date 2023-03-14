@@ -92,8 +92,8 @@ export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 95)
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 95)
+    doc.text(`GSTIN:${data.PartyGSTIN}`, 38, 95)
+    doc.text(`GSTIN:${data.CustomerGSTIN}`, 238, 95)
 }
 
 export const reportHeder3 = (doc, data) => {
