@@ -48,10 +48,9 @@ function* DeleteInward_GenFunc({ id }) {
 // }
 
 // Make Inward Button API
-function* Make_Inward_GenratorFunction({ id }) {
+function* Make_Inward_GenratorFunction({ config }) {
   try {
-   const response = yield call(Make_Inward_Post_API, id);
-  
+   const response = yield call(Make_Inward_Post_API, config);
    yield put(makeInwardSuccess(response.Data))
  } catch (error) { CommonConsole(error) }
 }

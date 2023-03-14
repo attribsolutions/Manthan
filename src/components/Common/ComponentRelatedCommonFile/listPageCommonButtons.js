@@ -42,8 +42,10 @@ export const listPageCommonButtonFunction = (props) => {
         }
     };
 
-    function copyHandler(rowData, btnmode) {
-        dispatch(editActionFun(rowData.id, btnmode, subPageMode));
+    function copyHandler(rowData, btnmode,btnId) {
+        const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+        btnIsDissablefunc({ btnId, state: true })
+        dispatch(editActionFun({ ...config }));
     };
 
     function downHandler(rowData) {
@@ -62,11 +64,11 @@ export const listPageCommonButtonFunction = (props) => {
         }
     }
 
-    function makeBtnHandler(rowData) {
+    function makeBtnHandler(rowData, btnId) {
         rowData["hasSelect"] = true;
         let arr = []
         arr.push(rowData)
-        makeBtnFunc(arr)
+        makeBtnFunc(arr, btnId)
     }
 
     return ({

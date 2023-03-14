@@ -176,9 +176,9 @@ const InvoiceList = () => {
         setorderlistFilter(newObj)
     }
 
-    const makeBtnFunc = (list = {}) => {
-
-        dispatch(makeInward(list[0].id))
+    const makeBtnFunc = (list = {}, btnId) => {
+        const config = { makeInwardId: list[0].id, btnId }
+        dispatch(makeInward(config))
         history.push({
             pathname: url.INWARD,
         })
