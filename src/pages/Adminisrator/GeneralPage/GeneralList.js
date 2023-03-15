@@ -34,7 +34,7 @@ const GeneralList = (props) => {
     );
 
     const action = {
-        postList: PostGenerallist,
+        getList: PostGenerallist,
         editId: editGeneralID,
         deleteId: delete_General_ID,
         postSucc: SaveMethodForGeneralSuccess,
