@@ -402,7 +402,7 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+        
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -432,7 +432,7 @@ const WorkOrder = (props) => {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-                    debugger
+                    
                     GoBtnDissable({ id: saveBtnID1, state: true })
                     dispatch(SaveWorkOrderMaster({ jsonBody, btnId }));
                 }

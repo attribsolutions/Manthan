@@ -978,7 +978,7 @@ const ItemsMaster = (props) => {
         // }
     }
     const handleValidSubmit = (event, values) => {
-        debugger
+        
         const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
             Category: index.Category.value,

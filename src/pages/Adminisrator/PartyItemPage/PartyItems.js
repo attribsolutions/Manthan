@@ -59,7 +59,7 @@ const PartyItems = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    debugger
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;

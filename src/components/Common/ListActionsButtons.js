@@ -1,7 +1,7 @@
 import { Button } from "reactstrap";
-import * as mode from "../../../routes/PageMode"
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import{btnIsDissablefunc} from "./CommonFunction"
+import * as mode from "../../routes/PageMode"
+import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import{btnIsDissablefunc} from "./ComponentRelatedCommonFile/CommonFunction"
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
