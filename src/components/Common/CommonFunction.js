@@ -236,20 +236,12 @@ export function btnIsDissablefunc({ btnId, state = false }) {
 
     if (btnId) {
         try {
-            document.getElementById("overlay").style.display = state ? "block" : "none";
             document.getElementById(btnId).disabled = state;
+            debugger
+            document.getElementById("overlay").style.display = state ? "block" : "none";
 
-            // const loginBtn = document.getElementById(event.target);
             document.getElementById("preloader").style.display = state ? "block" : "none";
 
-            // if (state) {
-            //     loginBtn.classList.add("loading");
-            // }
-            // else {
-            //     loginBtn.classList.remove("loading")
-            // }
-            // // Hide loader after success/failure - here it will hide after 2seconds
-            // // setTimeout(() => event.classList.remove("loading"), 3000);
 
         } catch (error) { CommonConsole(error) }
     }

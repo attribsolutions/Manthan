@@ -158,7 +158,6 @@ const PartySubParty = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
             dispatch(savePartySubPartySuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
@@ -190,7 +189,6 @@ const PartySubParty = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: url.PARTY_SUB_PARTY_lIST,
             })
@@ -219,7 +217,7 @@ const PartySubParty = (props) => {
             setPartyData(PartySubParty.map(i => ({
                 value: i.SubParty,
                 label: i.SubPartyName,
-                partyType: i.PartyType,
+                isPartyType: i.PartyType,
                 Creditlimit: i.Creditlimit,
                 Route: i.Route
             })));
@@ -234,7 +232,7 @@ const PartySubParty = (props) => {
     const PartyValues = Party.map(i => ({
         value: i.id,
         label: i.Name,
-        party: i.PartyType
+        isPartyType: i.PartyType
     }));
 
     function handllerDivision(e) {
@@ -288,30 +286,33 @@ const PartySubParty = (props) => {
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        const btnId = event.target.id
+        const btnId = event.target.id;
+        debugger
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 const arr = PartyData.map(i => {
+
                     const normal = {
                         Party: Division_dropdown_Select.value,
                         SubParty: i.value,
+                        PartyID: Division_dropdown_Select.value,
 
                     }
                     const isvendor = {
                         Party: i.value,
                         SubParty: Division_dropdown_Select.value,
+                        PartyID: Division_dropdown_Select.value,
                     }
 
                     const ramain = {
                         CreatedBy: loginUserID(),
                         UpdatedBy: loginUserID(),
-                        PartyID: Division_dropdown_Select.value,
                         Creditlimit: i.Creditlimit,
                         Route: i.Route
                     }
 
-                    if (i.partyType === 3) {
+                    if (i.isPartyType === 3) {
                         return { ...isvendor, ...ramain }
                     } else {
                         return { ...normal, ...ramain }
