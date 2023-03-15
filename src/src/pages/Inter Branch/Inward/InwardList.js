@@ -11,7 +11,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
 import Inward from "./Inward";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
 import { currentDate, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
@@ -177,7 +177,7 @@ const InwardList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

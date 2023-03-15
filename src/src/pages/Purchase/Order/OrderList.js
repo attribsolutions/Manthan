@@ -11,7 +11,7 @@ import {
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -375,7 +375,7 @@ const OrderList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

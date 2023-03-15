@@ -11,7 +11,7 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -254,7 +254,7 @@ const InvoiceList = () => {
 
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

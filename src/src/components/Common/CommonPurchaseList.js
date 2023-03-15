@@ -51,7 +51,7 @@ export async function isAlertFunc(type, Msg) {
     })
 };
 
-const PurchaseListPage = (props) => {
+const CommonPurchaseList = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -451,4 +451,4 @@ const PurchaseListPage = (props) => {
     }
 }
 
-export default PurchaseListPage;
+export default CommonPurchaseList;

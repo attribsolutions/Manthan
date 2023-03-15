@@ -21,7 +21,7 @@ from "../../../store/Production/ProductionReissueRedux/actions";
 import { commonPageFieldList } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import ProductionReIssueAdd from "./PrductionReIssueAdd";
 
 
@@ -171,7 +171,7 @@ const ProductionReIssueList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

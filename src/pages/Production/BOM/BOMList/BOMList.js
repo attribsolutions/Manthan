@@ -7,7 +7,7 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
-import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 
@@ -172,7 +172,7 @@ const BOMList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

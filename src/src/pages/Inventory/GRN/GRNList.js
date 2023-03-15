@@ -7,7 +7,7 @@ import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import {
     deleteGRNId,
     deleteGRNIdSuccess,
@@ -225,7 +225,7 @@ const GRNList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
