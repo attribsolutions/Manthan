@@ -40,7 +40,7 @@ const RoleAccessCopyFunctionality = (props) => {
         dispatch(getRole());
         dispatch(getPartyListAPI());
         dispatch(getcompanyList());
-        
+
     }, []);
 
     let editDataGatingFromList = props.state;
@@ -63,6 +63,8 @@ const RoleAccessCopyFunctionality = (props) => {
                 setCopyRole_Dropdown_Select({ label: C_props.RoleName, value: roleId })
                 setCopyDivision_dropdown_Select({ label: C_props.DivisionName, value: divisionId })
                 setCompany_dropdown_Select({ label: C_props.CompanyName, value: Company_id })
+                setNewCompany_dropdown_Select({ label: C_props.CompanyName, value: Company_id })
+
             }
         }
 
@@ -100,8 +102,8 @@ const RoleAccessCopyFunctionality = (props) => {
         setNewDivision_dropdown_Select(e)
     }
 
-    function CompanyDropDown_onChangeHandler() {
-        setNewCompany_dropdown_Select(company_dropdown_Select)
+    function CompanyDropDown_onChangeHandler(e) {
+        setNewCompany_dropdown_Select(e)
     }
 
 
@@ -126,9 +128,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     return (
         <React.Fragment>
-
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
                 </MetaTags>
