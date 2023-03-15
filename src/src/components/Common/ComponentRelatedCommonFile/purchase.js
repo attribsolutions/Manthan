@@ -11,12 +11,12 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
-import { breadcrumbReturn, makeBtnCss } from "./ListActionsButton";
+import { breadcrumbReturn, makeBtnCss } from "./ListActionsButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc } from "./ListActionsButton";
+import { listPageActionsButtonFunc } from "./ListActionsButtons";
 
 let sortType = "asc"
 let searchCount = 0

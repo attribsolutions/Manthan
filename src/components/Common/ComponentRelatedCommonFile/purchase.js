@@ -17,7 +17,7 @@ import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc,makeBtnCss } from "../../../src/components/Common/ComponentRelatedCommonFile/ListActionsButton";
+import { listPageActionsButtonFunc,makeBtnCss } from "../../Common/ComponentRelatedCommonFile/ListActionsButtons";
 
 let sortType = "asc"
 let searchCount = 0

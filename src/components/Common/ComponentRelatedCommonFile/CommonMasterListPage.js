@@ -15,7 +15,7 @@ import { breadcrumbReturn, }
   from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc } from "../../../src/components/Common/ComponentRelatedCommonFile/ListActionsButton";
+import { listPageActionsButtonFunc } from "../../Common/ComponentRelatedCommonFile/ListActionsButtons";
 
 
 let sortType = "asc"
