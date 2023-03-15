@@ -4,7 +4,7 @@ import {
   concatDateAndTime,
   GoBtnDissable,
   saveDissable
-} from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+} from "../../../components/Common/CommonFunction";
 import {
   Invoice_1_GoButton_API,
   Invoice_1_Save_API,

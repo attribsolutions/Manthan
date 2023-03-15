@@ -11,7 +11,7 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
-import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -20,9 +20,9 @@ import {
     currentDate,
     excelDownCommonFunc,
     loginPartyID
-} from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+} from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"

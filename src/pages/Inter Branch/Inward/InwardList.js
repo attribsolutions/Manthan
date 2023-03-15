@@ -11,12 +11,12 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
 import Inward from "./Inward";
-import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
-import { currentDate, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
-import { getSupplier, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage } from "../../../store/Inter Branch/InwardRedux/action";
+import { currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const InwardList = () => {
 

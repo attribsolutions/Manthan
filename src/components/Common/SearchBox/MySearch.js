@@ -16,8 +16,10 @@ export const defaultSearch = (defaultid,) => {
     let found = priviousSerach.find((i, k) => {
         return (i.id === defaultid)
     });
+    // document.getElementById("myInput").focus()
 
     if (found) {
+        // document.getElementById("myInput").select()
         document.getElementById("myInput").value = found.text
         retn = { defaultSearch: found.text }
     }

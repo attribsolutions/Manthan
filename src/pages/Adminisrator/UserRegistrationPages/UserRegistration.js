@@ -26,13 +26,13 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const AddUser = (props) => {

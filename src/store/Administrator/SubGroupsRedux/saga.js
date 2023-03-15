@@ -20,7 +20,7 @@ import {
   SAVE_SUBGROUPLIST,
   UPDATE_SUBGROUPMASTER_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* save_Method_ForSubGroupMaster_GenFun({ config }) {          // Save API
   try {

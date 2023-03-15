@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import {
     deleteWorkOrderId,

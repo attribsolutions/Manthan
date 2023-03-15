@@ -19,9 +19,9 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturn,
     loginUserID,
@@ -31,7 +31,7 @@ import {
     loginCompanyID,
     loginPartyID,
     btnIsDissablefunc
-} from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+} from "../../../components/Common/CommonFunction";
 import {
     editWorkOrderListSuccess,
     getBOMList,
@@ -47,8 +47,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 
 

@@ -9,7 +9,7 @@ import {
     userUpdateActionSuccess,
     saveUserMasterActionSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";

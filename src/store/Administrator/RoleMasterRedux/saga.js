@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   Role_Master_Delete_API,
   Role_Master_Edit_API,

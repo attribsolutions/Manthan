@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { currentDate } from "../../../components/Common/CommonFunction";
 import {
   CHALLAN_POST_API_SUCCESS,
   DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,

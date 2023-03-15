@@ -27,7 +27,7 @@ import {
 
 } from "./actionType"
 
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForPartySubParty_GenFun({ config }) {                     //Save API 

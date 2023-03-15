@@ -1,6 +1,6 @@
 import { Button } from "reactstrap"
 import { loginUserID } from "./CommonFunction";
-import * as mode from "../../../routes/PageMode"
+import * as mode from "../../routes/PageMode"
 
 export function SaveButton(props) {
 

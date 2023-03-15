@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../../Purchase/Order/Order";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 
 import Flatpickr from "react-flatpickr";
-import CommonPurchaseList from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import {
     deleteGRNId,
     deleteGRNIdSuccess,
@@ -16,7 +16,7 @@ import {
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -24,7 +24,7 @@ import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const GRNList = () => {
     const history = useHistory();

@@ -38,7 +38,7 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID"
 
 const MRPMaster = (props) => {

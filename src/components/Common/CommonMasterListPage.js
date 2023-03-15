@@ -10,12 +10,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/actions";
 import { breadcrumbReturn, }
   from "./CommonFunction";
-import { defaultSearch, mySearchProps } from "./MySearch";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc } from "../../Common/ComponentRelatedCommonFile/ListActionsButtons";
+import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
+import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc } from "./ListActionsButtons";
 
 
 let sortType = "asc"

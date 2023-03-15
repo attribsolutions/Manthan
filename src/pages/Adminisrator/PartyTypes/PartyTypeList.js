@@ -9,7 +9,7 @@ import {
   updatePartyTypeIDSuccess
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import PartyType from "./PartyType";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";

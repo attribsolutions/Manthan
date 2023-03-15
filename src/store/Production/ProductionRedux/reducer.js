@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { currentDate } from "../../../components/Common/CommonFunction";
 import {
   DELETE_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS,
   DELETE_PRODUCTION_SUCCESS,

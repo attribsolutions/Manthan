@@ -19,13 +19,13 @@ import {
     initialFiledFunc,
     onChangeDate,
 
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, saveDissable, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, saveDissable, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";

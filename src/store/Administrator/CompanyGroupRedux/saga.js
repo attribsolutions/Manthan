@@ -21,7 +21,7 @@ import {
   UPDATE_COMPANY_GROUP_ID
 } from "./actionType";
 
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* Get_CompanyGroup_GenratorFunction() {//get API
   try {

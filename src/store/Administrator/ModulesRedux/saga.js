@@ -20,7 +20,7 @@ import {
   SAVE_MODULE_MASTER,
   UPDATE_MODULE_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { AlertState } from "../../actions";
 
 function* get_ModuleList_GenFun() { // get API

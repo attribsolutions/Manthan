@@ -32,16 +32,16 @@ import {
 } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturn, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {

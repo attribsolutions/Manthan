@@ -1,6 +1,5 @@
-
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CommonBreadcrumbDetails } from "../../../store/actions";
+import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { CommonBreadcrumbDetails } from "../../store/actions";
 
 
 export const commonListPageDelete_UpdateMsgFunction = (props) => {

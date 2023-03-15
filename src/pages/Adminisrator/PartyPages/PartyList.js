@@ -10,12 +10,12 @@ import {
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { MetaTags } from 'react-meta-tags';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { loginCompanyID, loginRoleID, loginUserID } from '../../../components/Common/ComponentRelatedCommonFile/CommonFunction';
+import { loginCompanyID, loginRoleID, loginUserID } from '../../../components/Common/CommonFunction';
 
 const PartyList = () => {
     const dispatch = useDispatch();

@@ -17,20 +17,24 @@ import {
     initialFiledFunc,
     onChangeDate,
 
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
-import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { GetVender, } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { challanItemForDropdown, GoButtonForChallanAdd, GoButtonForChallanAddSuccess, saveChallan_ChallanAdd } from "../../../store/Inventory/ChallanRedux/actions";
+import {
+    challanItemForDropdown,
+    GoButtonForChallanAdd,
+    GoButtonForChallanAddSuccess,
+    saveChallan_ChallanAdd
+} from "../../../store/Inventory/ChallanRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
@@ -83,7 +87,7 @@ const Challan = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-    
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -268,7 +272,7 @@ const Challan = (props) => {
             },
 
         },
-         {//***************Quantity********************************************************************* */
+        {//***************Quantity********************************************************************* */
             text: "Quantity",
             dataField: "",
             headerFormatter: (cell, index1 = [], k) => {
@@ -325,7 +329,7 @@ const Challan = (props) => {
                                             {`Total Stock:${index1.StockTotal}`}</samp>
                                     </samp>
                                 </>
-                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{}</samp>
+                                : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{ }</samp>
                         }
                     </div >
                     <Table className="table table-bordered table-responsive mb-1" >
@@ -428,7 +432,7 @@ const Challan = (props) => {
         dispatch(GoButtonForChallanAddSuccess([]))
     };
     function itemOnChange(hasSelect, evn) {
-        
+
         setState((i) => {
             const v1 = { ...i }
             v1.values.Item = hasSelect
@@ -552,7 +556,7 @@ const Challan = (props) => {
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
-        
+
         index.UnitDrop = event;
         index.ConversionUnit = event.ConversionUnit;
         // var n1 = Number(index.Quantity);
@@ -596,7 +600,7 @@ const Challan = (props) => {
         let grand_total = 0;
 
         console.log(itemArr)
-        
+
 
         const isvalidMsg = [];
         // const array =[]
@@ -605,14 +609,14 @@ const Challan = (props) => {
                 Rate: i.Rate,
                 Quantity: values.Quantity
             }
-            i["Quantity"]= values.Quantity
+            i["Quantity"] = values.Quantity
 
             console.log(i)
             // if ((i.Quantity > 0)) {
             const basicAmt = parseFloat(basicAmount(i))
             const cgstAmt = (GstAmount(i))
-           const amount =Amount(i)
-           
+            const amount = Amount(i)
+
             grand_total = grand_total + Number(amount)
             const arr = {
                 Item: values.Item.value,
@@ -625,8 +629,8 @@ const Challan = (props) => {
                 BasicAmount: basicAmt.toFixed(2),
                 TaxType: "GST",
                 GST: i.GST,
-                GSTPercentage:i.GSTPercentage,
-                HSNCode:i.HSNCode,
+                GSTPercentage: i.GSTPercentage,
+                HSNCode: i.HSNCode,
                 GSTAmount: cgstAmt.toFixed(2),
                 Amount: amount,
                 DiscountType: "0",
@@ -642,7 +646,7 @@ const Challan = (props) => {
                 BatchCode: i.BatchCode,
                 SystemBatchDate: i.SystemBatchDate,
                 SystemBatchCode: i.SystemBatchCode,
-                BatchID:i.id,
+                BatchID: i.id,
             }
             // let isfound = itemArr.filter(ind => {
             //     return ind.Item === i.Item
@@ -654,17 +658,17 @@ const Challan = (props) => {
             //         
             //         return condition
             //     })
-                
-                // if ((i.Quantity > 0)) {
-                //     if (dubli.length === 0) {
-                        // itemArr.push(arr)
 
-                //     } else {
-                //         isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
-                //     }
-                // }
+            // if ((i.Quantity > 0)) {
+            //     if (dubli.length === 0) {
+            // itemArr.push(arr)
+
+            //     } else {
+            //         isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
+            //     }
+            // }
             // } else
-             if ((i.GSTPercentage > 0)) {
+            if ((i.GSTPercentage > 0)) {
                 itemArr.push(arr)
             }
 
@@ -685,7 +689,7 @@ const Challan = (props) => {
             return
         }
         const array = {
-            id:727,
+            id: 727,
             Item: values.Item.value,
             Quantity: "20.000",
             BaseUnitQuantity: "10.000",
@@ -696,14 +700,14 @@ const Challan = (props) => {
 
         const jsonBody = JSON.stringify({
             GRN: "",
-            ChallanDate:values.ChallanDate,
+            ChallanDate: values.ChallanDate,
             Party: loginPartyID(),
             GrandTotal: grand_total,
             Customer: values.Party.value,
             CreatedBy: loginUserID(),
             UpdatedBy: loginUserID(),
             RoundOffAmount: Math.round(grand_total),
-            ChallanItems:itemArr,
+            ChallanItems: itemArr,
             // BatchWiseLiveStockGRNID:array
 
         });

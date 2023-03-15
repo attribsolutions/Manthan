@@ -10,14 +10,14 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../../store/actions";
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
 import { breadcrumbReturn}
     from "./CommonFunction";
-import { defaultSearch, mySearchProps } from "./MySearch";
+import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
-import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc,makeBtnCss } from "../../Common/ComponentRelatedCommonFile/ListActionsButtons";
+import * as mode from "../../routes/PageMode";
+import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc,makeBtnCss } from "./ListActionsButtons";
 
 let sortType = "asc"
 let searchCount = 0

@@ -14,7 +14,7 @@ import {
     EDIT_DRIVER_TYPE_ID,
     UPDATE_DRIVER_TYPE_ID
 } from "./actionType";
-import { CommonConsole, loginJsonBody, } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole, loginJsonBody, } from "../../../components/Common/CommonFunction";
 
 function* Get_Driver_GenFun() { // List API Using Post Method
     

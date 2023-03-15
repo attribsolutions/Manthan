@@ -16,10 +16,10 @@ import {
   delete_MRPListSuccess,
   getMRPListPage,
 } from "../../../store/Administrator/MRPMasterRedux/action";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage"
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonMasterListPage"
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn } from "../../../components/Common/CommonFunction";
 
 const MRPList = (props) => {
 

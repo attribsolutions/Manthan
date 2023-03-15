@@ -20,7 +20,7 @@ import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvForm } from "availity-reactstrap-validation";
 import {
@@ -32,9 +32,8 @@ import {
     postGSTMasterData,
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
 
-import * as pageId from "../../../routes/allPageID"
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();

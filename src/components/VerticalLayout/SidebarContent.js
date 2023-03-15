@@ -17,7 +17,7 @@ import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roleAceessAction,  } from "../../store/actions";
-import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/ComponentRelatedCommonFile/CommonFunction";
+import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/CommonFunction";
 
 const SidebarContent = (props) => {
   const ref = useRef();

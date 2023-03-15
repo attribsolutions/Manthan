@@ -20,9 +20,9 @@ import {
     onChangeSelect,
     onChangeText,
 
-} from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton } from "../../../../components/Common/CommonButton";
 import ItemTab from "./ItemQuantityTab";
 import {
     editBOMListSuccess,
@@ -31,7 +31,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";

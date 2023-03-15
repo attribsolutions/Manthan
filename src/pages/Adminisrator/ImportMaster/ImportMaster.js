@@ -7,19 +7,17 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, getItemList } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess,  } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import Select from "react-select";
 import * as pageId from "../../../routes/allPageID";
-import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn } from "../../../components/Common/CommonFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -30,7 +28,6 @@ const ImportMaster = (props) => {
     const history = useHistory()
 
     const [EditData, setEditData] = useState({});
-    const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])

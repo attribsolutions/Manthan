@@ -21,7 +21,7 @@ import {
   POST_GRN_FROM_GRN_PAGE,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
 function* saveGRNGenFunc({ data }) {            // Save GRN  genrator function

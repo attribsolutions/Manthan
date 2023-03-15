@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
     Col,
     FormGroup,
-    Input,
     Label,
-    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -18,19 +16,15 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-    onChangeText,
-
-} from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
 import {
     editBOMListSuccess,
-    saveBOMMaster,
     saveBOMMasterSuccess,
-    updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID, loginPartyID, currentDate } from "../../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { breadcrumbReturn, loginPartyID, currentDate } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -69,7 +63,6 @@ const LoadingSheet = (props) => {
         userAccess,
         VehicleNumber,
         RoutesList,
-        GoButton
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,

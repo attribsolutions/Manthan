@@ -330,7 +330,7 @@ export default MRPList;
 // } from "../../../store/Administrator/MRPMasterRedux/action";
 // import MRPMaster from "./MRPMaster"
 // import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-// import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+// import CommonListPage from "../../../components/Common/CommonMasterListPage";
 
 // const MRPList = (props) => {
 

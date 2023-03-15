@@ -17,7 +17,7 @@ import {
   get_Division_ForDropDown,
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import { loginUserID, loginCompanyID } from "../../../../../components/Common/ComponentRelatedCommonFile/CommonFunction";
+import { loginUserID, loginCompanyID } from "../../../../../components/Common/CommonFunction";
 
 function MRPTab(props) {
   const dispatch = useDispatch();
