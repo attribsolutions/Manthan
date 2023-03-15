@@ -157,7 +157,7 @@ const Invoice = (props) => {
                     Party: loginPartyID(),
                     OrderIDs: ""
                 });
-                dispatch(GoButtonForinvoiceAdd({ jsonBody }));
+                dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
                 dispatch(editInvoiceListSuccess({ Status: false }))
 
             }
@@ -677,6 +677,7 @@ const Invoice = (props) => {
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
         btnIsDissablefunc({ btnId, state: true })
+        
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
@@ -690,6 +691,7 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = (event) => {
+        
         event.preventDefault();
 
         const btnId = event.target.id
@@ -795,6 +797,7 @@ const Invoice = (props) => {
             // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
             if (pageMode === mode.edit) {
+                returnFunc()
             }
 
             else {
@@ -811,7 +814,7 @@ const Invoice = (props) => {
 
                 <div className="page-content" >
 
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
@@ -922,8 +925,9 @@ const Invoice = (props) => {
 
                         {OrderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton pageMode={pageMode}
-                                    //   onClick={onsave}
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    onClick={SaveHandler}
                                     id={saveBtnid}
                                     userAcc={userPageAccessState}
                                     module={"Material Issue"}

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { Button, Col,  Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -11,13 +11,13 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
-import { breadcrumbReturn}
+import { breadcrumbReturn, CommonConsole }
     from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
-import { listPageActionsButtonFunc,makeBtnCss } from "./ListActionsButtons";
+import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 
 let sortType = "asc"
 let searchCount = 0
@@ -66,7 +66,7 @@ const CommonPurchaseList = (props) => {
         deleteMsg,
         userAccess,
         postMsg,
-        pageField,
+        pageField = { id: '' },
         tableList = []
     } = props.reducers;
 
@@ -92,11 +92,11 @@ const CommonPurchaseList = (props) => {
         makeBtnName,
         downBtnFunc = () => { },
         pageMode,
-        newBtnPath
+        newBtnPath,
+        HeaderContent = () => { return null }
     } = props;
 
     const { PageFieldMaster = [] } = { ...pageField };
-
 
     useEffect(() => {
 
@@ -105,6 +105,7 @@ const CommonPurchaseList = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
+            
             setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc, newBtnPath });
         }
@@ -361,6 +362,7 @@ const CommonPurchaseList = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
+    console.log("hkshchch", userAccState)
 
     if (!(userAccState === '')) {
         return (
@@ -368,7 +370,7 @@ const CommonPurchaseList = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-
+                <HeaderContent />
                 <div >
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (

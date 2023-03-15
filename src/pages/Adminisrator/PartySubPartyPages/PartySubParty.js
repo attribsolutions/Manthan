@@ -40,7 +40,6 @@ import {
     formValid,
     initialFiledFunc,
     onChangeSelect,
-    resetFunction
 } from "../../../components/Common/validationFunction";
 import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
@@ -287,7 +286,7 @@ const PartySubParty = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id;
-        debugger
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })

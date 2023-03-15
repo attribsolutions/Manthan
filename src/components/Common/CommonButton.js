@@ -4,45 +4,12 @@ import * as mode from "../../routes/PageMode"
 
 export function SaveButton(props) {
 
-  const { pageMode = '', userAcc = {}, module = '', onClick, editCreatedBy = {}, } = props;
+  const { pageMode = '', userAcc = {}, editCreatedBy = {}, } = props;
   const isCreated = (loginUserID() === editCreatedBy)
-
-  const SaveBtn = () => {
-    return (
-      <div>
-        <button
-          type="submit"
-          id={`Save-${module}`}
-          title={`Save ${module}`}
-          className="btn btn-primary w-md"
-          onClick={onClick}
-        > <i className="fas fa-save me-2"></i> Save
-        </button>
-      </div>
-    )
-
-  }
-  const UpdateBtn = () => {
-    return (
-      <div>
-        <button
-          type="submit"
-          id={`Update-${module}`
-          }
-          title={`Update ${module}`}
-          className="btn btn-success w-md"
-          onClick={onClick}
-        >
-          <i class="fas fa-edit me-2"></i>Update
-        </button >
-      </div>
-      )
-  }
-
 
   if (pageMode === mode.edit) {
     if ((userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) && (isCreated))) {
-      return <UpdateBtn />
+      return <UpdateBtn {...props} />
     }
 
   }
@@ -51,11 +18,45 @@ export function SaveButton(props) {
     || pageMode === mode.modeSTPsave
     || pageMode === mode.dropdownAdd
     || pageMode === mode.assingLink)) {
-    return <SaveBtn />
+    return <SaveBtn  {...props} />
   }
   return null
 }
+const SaveBtn = (props) => {
+  const { module = '', onClick } = props;
+  const btnId = `Save-${module.replace(/ /g, "")}`;
+  return (
+    <div>
+      <button
+        type="submit"
+        id={btnId}
+        title={`Save ${module}`}
+        className="btn btn-primary w-md"
+        onClick={onClick}
+      > <i className="fas fa-save me-2"></i> Save
+      </button>
+    </div>
+  )
 
+}
+const UpdateBtn = (props) => {
+  const { module = '', onClick } = props;
+  const btnId = `Update-${module.replace(/ /g, "")}`;
+
+  return (
+    <div>
+      <button
+        type="submit"
+        id={btnId}
+        title={`Update ${module}`}
+        className="btn btn-success w-md"
+        onClick={onClick}
+      >
+        <i class="fas fa-edit me-2"></i>Update
+      </button >
+    </div>
+  )
+}
 
 export function Go_Button(props) {
   const { onClick, id } = props

@@ -23,7 +23,7 @@ import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actio
 import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
+import { editGRNIdSuccess, getGRN_itemMode2_Success, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { breadcrumbReturn, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import FeatherIcon from "feather-icons-react";
@@ -163,7 +163,7 @@ const GRNAdd = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postGRNSuccess({ Status: false }))
+            dispatch(saveGRNSuccess({ Status: false }))
             const promise = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -173,7 +173,7 @@ const GRNAdd = (props) => {
             }
 
         } else if (postMsg.Status === true) {
-            dispatch(postGRNSuccess({ Status: false }))
+            dispatch(saveGRNSuccess({ Status: false }))
             CustomAlert({
                 Type: 1,
                 Message: JSON.stringify(postMsg.Message),
@@ -625,8 +625,9 @@ const GRNAdd = (props) => {
             });
 
             if (pageMode === mode.edit) {
+                returnFunc()
             } else {
-                dispatch(postGRN(jsonBody))
+                dispatch(saveGRNAction({jsonBody,btnId}))
             }
         } catch (error) { returnFunc() }
     }

@@ -237,7 +237,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
     if (btnId) {
         try {
             document.getElementById(btnId).disabled = state;
-            debugger
+          
             document.getElementById("overlay").style.display = state ? "block" : "none";
 
             document.getElementById("preloader").style.display = state ? "block" : "none";
@@ -250,7 +250,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
 export async function CheckAPIResponse({ method, url, response, body, btnId }) {
 
     if (btnId) {
-        await new Promise(r => setTimeout(r, 100));
+        await new Promise(r => setTimeout(r, 1000));
         btnIsDissablefunc({ btnId, state: false })
     }
 
