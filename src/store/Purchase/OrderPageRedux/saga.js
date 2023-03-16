@@ -106,7 +106,7 @@ function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filt
     const { subPageMode } = config
     let response;
     let newList;
-    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)) {
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)||(subPageMode === url.ORDER_LIST_4)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
     else if (subPageMode === url.GRN_STP) {
@@ -115,9 +115,9 @@ function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filt
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
-    else if ((subPageMode === url.ORDER_LIST_4)) {
-      response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
-    }
+    // else if ((subPageMode === url.ORDER_LIST_4)) {
+    //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
+    // }
     newList = yield response.Data.map((i) => {
 
       i["preOrderDate"] = i.OrderDate
