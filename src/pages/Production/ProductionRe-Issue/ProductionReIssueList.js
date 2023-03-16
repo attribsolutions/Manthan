@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom"
 
 import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate } from "../../../components/Common/CommonFunction";
 import * as report from '../../../Reports/ReportIndex';
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
@@ -21,7 +21,7 @@ from "../../../store/Production/ProductionReissueRedux/actions";
 import { commonPageFieldList } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { production_Edit_API } from "../../../helpers/backend_helper";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import ProductionReIssueAdd from "./PrductionReIssueAdd";
 
 
@@ -171,7 +171,7 @@ const ProductionReIssueList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

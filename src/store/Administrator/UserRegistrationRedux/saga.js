@@ -21,7 +21,7 @@ import {
   GetUserPartiesForUserMastePageSuccess,
   getEmployeeForUseRegistrationSuccess
 } from "./actions";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
 // employee dropdown list
 function* EmployeelistDropdown_GenFunc() {

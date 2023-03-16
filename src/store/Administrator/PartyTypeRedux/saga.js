@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   CommonConsole,
   loginJsonBody
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/CommonFunction";
 import {
   detelet_PartyType_List_Api,
   edit_PartyType_List_Api,

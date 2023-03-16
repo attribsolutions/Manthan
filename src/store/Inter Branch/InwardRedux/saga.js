@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { Inward_Delete_API, Inward_List_API, Inward_Post_API, Make_Inward_Post_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { deleteInwardIdSuccess, getInwardListPageSuccess, makeInwardSuccess, postInwardSuccess } from "./action";

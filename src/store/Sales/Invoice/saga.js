@@ -4,7 +4,7 @@ import {
   concatDateAndTime,
   GoBtnDissable,
   saveDissable
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/CommonFunction";
 import {
   Invoice_1_GoButton_API,
   Invoice_1_Save_API,
@@ -73,32 +73,32 @@ function* InvoiceListGenFunc({ config }) {
 }
 
 // edit List page
-function* editInvoiceListGenFunc(action) {
+function* editInvoiceListGenFunc({ config }) {
   try {
-    const { subPageMode, pageMode, id } = action;
+    const { subPageMode, btnmode } = config;
     let response;
 
     if (subPageMode === url.INVOICE_LIST_1) {
-      response = yield call(Invoice_1_Edit_API_Singel_Get, id);
+      response = yield call(Invoice_1_Edit_API_Singel_Get, config);
     } else if (subPageMode === url.IB_INVOICE_LIST) {
-      response = yield call(IB_Invoice_Edit_API_Singel_Get, id);
+      response = yield call(IB_Invoice_Edit_API_Singel_Get, config);
     }
 
-    response.pageMode = pageMode
+    response.pageMode = btnmode
     yield put(editInvoiceListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
 // Invoice List delete List page
-function* DeleteInvoiceGenFunc(action) {
+function* DeleteInvoiceGenFunc({ config }) {
   try {
-    const { subPageMode, id } = action;
+    const { subPageMode } = config;
     let response;
 
     if (subPageMode === url.INVOICE_LIST_1) {
-      response = yield call(Invoice_1_Delete_API, id)
+      response = yield call(Invoice_1_Delete_API, config)
     } else if (subPageMode === url.IB_INVOICE_LIST) {
-      response = yield call(IB_Invoice_Delete_API, id)
+      response = yield call(IB_Invoice_Delete_API, config)
     }
 
     yield put(deleteInvoiceIdSuccess(response));
@@ -165,7 +165,7 @@ export function invoice_GoButton_dataConversion_Func(response) {
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   try {
-    const { subPageMode} = config
+    const { subPageMode } = config
     let response;
     if (subPageMode === url.INVOICE_1) {
       response = yield call(Invoice_1_GoButton_API, config); // GO-Botton SO-invoice Add Page API
@@ -173,14 +173,15 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     else if (subPageMode === url.IB_INVOICE) {
       response = yield call(IB_Invoice_GoButton_API, config); // GO-Botton IB-invoice Add Page API
     }
+    
     yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
- 
+
   } catch (error) { CommonConsole(error) }
 }
 
 function* makeIB_InvoiceGenFunc({ body }) {
   try {
-    const {  jsonBody, goBtnId, path, pageMode, customer } = body
+    const { jsonBody, goBtnId, path, pageMode, customer } = body
     const response = yield call(IB_Invoice_GoButton_API, jsonBody); // GO-Botton IB-invoice Add Page API
     response["path"] = path
     response["page_Mode"] = pageMode

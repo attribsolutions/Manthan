@@ -25,8 +25,8 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     EditTermsAndCondtions_Success,
     saveTermAndCondition,
@@ -34,7 +34,7 @@ import {
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -54,7 +54,7 @@ const TermsAndConditionsMaster = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -91,7 +91,7 @@ const TermsAndConditionsMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])

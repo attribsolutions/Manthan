@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import { detelet_EmployeeType_List_Api, edit_EmployeeType_List_Api, Employee_Type_API, get_EmployeeType_List_Api, update_EmployeeType_List_Api } from "../../../helpers/backend_helper";
 import { deleteEmployeeTypeIDSuccess, editEmployeeTypeSuccess, getEmployeeTypelistSuccess, PostEmployeeTypeSubmitSuccess, updateEmployeeTypeIDSuccess } from "./action";
 import { DELETE_EMPLOYEE_TYPE_ID, EDIT_EMPLOYEE_TYPE_ID, GET_EMPLOYEE_TYPE_LIST, POST_EMPLOYEETYPE_SUBMIT, UPDATE_EMPLOYEE_TYPE_ID } from "./actionTypes";

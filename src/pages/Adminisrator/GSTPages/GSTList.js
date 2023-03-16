@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
@@ -17,12 +17,12 @@ import {
     deleteGSTListPageSuccess,
     getGSTListPage
 } from "../../../store/Administrator/GSTRedux/action";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn } from "../../../components/Common/CommonFunction";
 
-const GSTList = (props) => {
+const GSTList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()

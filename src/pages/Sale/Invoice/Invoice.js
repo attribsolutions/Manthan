@@ -19,13 +19,13 @@ import {
     initialFiledFunc,
     onChangeDate,
 
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, saveDissable, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, saveDissable, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -66,7 +66,7 @@ const Invoice = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -83,9 +83,9 @@ const Invoice = (props) => {
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        customer: state.SupplierReducer.customer,
+        customer: state.CommonAPI_Reducer.customer,
         GoButton: state.InvoiceReducer.gobutton_Add,
-        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
+        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
     }));
 
@@ -121,7 +121,7 @@ const Invoice = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -157,7 +157,7 @@ const Invoice = (props) => {
                     Party: loginPartyID(),
                     OrderIDs: ""
                 });
-                dispatch(GoButtonForinvoiceAdd({ jsonBody }));
+                dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
                 dispatch(editInvoiceListSuccess({ Status: false }))
 
             }
@@ -677,6 +677,7 @@ const Invoice = (props) => {
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
         btnIsDissablefunc({ btnId, state: true })
+        
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
@@ -690,6 +691,7 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = (event) => {
+        
         event.preventDefault();
 
         const btnId = event.target.id
@@ -795,6 +797,7 @@ const Invoice = (props) => {
             // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
             if (pageMode === mode.edit) {
+                returnFunc()
             }
 
             else {
@@ -811,7 +814,7 @@ const Invoice = (props) => {
 
                 <div className="page-content" >
 
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
                             <Row>
                                 <Col className=" mt-1 row  " sm={11} >
@@ -922,8 +925,9 @@ const Invoice = (props) => {
 
                         {OrderItemDetails.length > 0 ? <FormGroup>
                             <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton pageMode={pageMode}
-                                    //   onClick={onsave}
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    onClick={SaveHandler}
                                     id={saveBtnid}
                                     userAcc={userPageAccessState}
                                     module={"Material Issue"}

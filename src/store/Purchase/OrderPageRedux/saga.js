@@ -27,18 +27,18 @@ import {
   SAVE_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE
 } from "./actionType";
-import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, concatDateAndTime, convertDatefunc, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 
 function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
-
+  debugger
   yield delay(400)
   try {
 
     const { subPageMode, data } = action
     let response;
-    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2)) {
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
       response = yield call(OrderPage_GoButton_API, data); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
@@ -63,7 +63,7 @@ function* goButtonGenFunc(action) {                      // GO-Botton order Add 
 }
 
 function* saveOrder_GenFunc({ config }) {
-  
+
   const { subPageMode } = config;
   let response = {}
   try {
@@ -77,7 +77,7 @@ function* saveOrder_GenFunc({ config }) {
 }
 
 function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
-  
+
   const { btnmode } = config;
   try {
     const response = yield call(OrderPage_Edit_API, config);

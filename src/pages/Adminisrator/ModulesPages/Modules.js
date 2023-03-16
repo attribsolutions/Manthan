@@ -32,9 +32,9 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -56,7 +56,7 @@ const Modules = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -99,7 +99,7 @@ const Modules = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

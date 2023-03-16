@@ -32,7 +32,7 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -48,7 +48,7 @@ const PriceMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
 
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [menu, setMenu] = useState(false);
     const [dropOpen, setDropOpen] = useState(false);
@@ -91,7 +91,7 @@ const PriceMaster = (props) => {
             });
         }
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc);
+            setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc });
         }
     }, [userAccess]);

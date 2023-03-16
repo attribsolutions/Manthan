@@ -13,8 +13,8 @@ import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, currentDate } from "../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,
@@ -22,7 +22,7 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import {
     edit_ProductionIdSuccess,
     getUnitIDForProdunction,
@@ -43,7 +43,7 @@ const ProductionMaster = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [UnitNamefromPageMod_2, setUnitNamefromPageMod_2] = useState('');
 
     const fileds = {
@@ -68,7 +68,7 @@ const ProductionMaster = (props) => {
         itemsDrop,
         UnitDropdown
     } = useSelector((state) => ({
-        supplierAddress: state.SupplierReducer.supplierAddress,
+        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         postMsg: state.ProductionReducer.postMsg,
         updateMsg: state.ProductionReducer.updateMsg,
         UnitDropdown: state.ProductionReducer.unit,
@@ -183,7 +183,7 @@ const ProductionMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
 
         };

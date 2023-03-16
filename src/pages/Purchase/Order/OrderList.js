@@ -11,15 +11,15 @@ import {
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { btnIsDissablefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -44,7 +44,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.SupplierReducer.vendorSupplierCustomer,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
@@ -107,6 +107,7 @@ const OrderList = () => {
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
+            newBtnPath = url.ORDER_4;
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
@@ -229,7 +230,7 @@ const OrderList = () => {
         }
     }
 
-    function editBodyfunc( config ) {
+    function editBodyfunc(config) {
         const { rowData, btnMode } = config;
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
@@ -290,80 +291,82 @@ const OrderList = () => {
         newObj.inOut = e
         setorderlistFilter(newObj)
     }
+    const HeaderContent = () => {
+        return (
+            <div className="px-2   c_card_filter text-black" >
+                <div className="row" >
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "83px" }}>From Date</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name='fromdate'
+                                    value={fromdate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={fromdateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "65px" }}>To Date</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name="todate"
+                                    value={todate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={todateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
 
+                    <Col sm="5">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+
+                                style={{ width: "115px" }}>Supplier Name</Label>
+                            <Col sm="5">
+                                <Select
+                                    classNamePrefix="select2-Customer"
+                                    value={supplierSelect}
+                                    options={supplierOptions}
+                                    onChange={supplierOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
+
+                    <Col sm="1" className="mt-3 ">
+                        <Go_Button id={gobtnId} onClick={goButtonHandler} />
+                    </Col>
+                </div>
+            </div>
+        )
+    }
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
             <div className="page-content">
-
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
-                        <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        name='fromdate'
-                                        value={fromdate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                        }}
-                                        onChange={fromdateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        name="todate"
-                                        value={todate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                        }}
-                                        onChange={todateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm="5">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-md-4 p-2"
-
-                                    style={{ width: "115px" }}>Supplier Name</Label>
-                                <Col sm="5">
-                                    <Select
-                                        classNamePrefix="select2-Customer"
-                                        value={supplierSelect}
-                                        options={supplierOptions}
-                                        onChange={supplierOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
-
-                        <Col sm="1" className="mt-3 ">
-                            <Go_Button id={gobtnId} onClick={goButtonHandler} />
-                        </Col>
-                    </div>
-                </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
@@ -371,6 +374,8 @@ const OrderList = () => {
                             newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
+                            HeaderContent={HeaderContent}
+
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}

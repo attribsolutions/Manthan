@@ -11,12 +11,12 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { MetaTags } from "react-meta-tags";
 import Inward from "./Inward";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage, Inwardlistfilters } from "../../../store/Inter Branch/InwardRedux/action";
-import { currentDate, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { getSupplier, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { deleteInwardId, deleteInwardIdSuccess, getInwardListPage } from "../../../store/Inter Branch/InwardRedux/action";
+import { currentDate, loginPartyID } from "../../../components/Common/CommonFunction";
+import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const InwardList = () => {
 
@@ -36,7 +36,7 @@ const InwardList = () => {
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
             // InwardlistFilter: state.InwardReducer.InwardlistFilter,
-            supplier: state.SupplierReducer.vendorSupplierCustomer,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -177,7 +177,7 @@ const InwardList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

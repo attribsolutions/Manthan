@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input, Row } from "reactstrap";
-import C_Report from "../components/Common/ComponentRelatedCommonFile/C_Report";
-import { Invoice_1_Edit_API_Singel_Get, MultipleInvoice_API } from "../helpers/backend_helper";
+import C_Report from "../components/Common/C_Report";
+import { get_Group_List_Api, Invoice_1_Edit_API_Singel_Get, LoadingSheet_API, MultipleInvoice_API } from "../helpers/backend_helper";
 import  * as report from '../Reports/ReportIndex'
-import {  getpdfReportdata, postpdfMultipleReportdata } from "../store/Utilites/PdfReport/actions";
+import {  getpdfReportdata,  } from "../store/Utilites/PdfReport/actions";
 
 const Report = () => {
     const { pdfdata } = useSelector((state) => ({
@@ -19,7 +19,9 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
                 InvoiceIDs:[ 70,71]
         });
         var ReportType = report.invoiceA5;
-        dispatch(postpdfMultipleReportdata(MultipleInvoice_API,jsonBody,ReportType))
+        // dispatch(postpdfMultipleReportdata(MultipleInvoice_API,jsonBody,ReportType))
+        dispatch(getpdfReportdata(get_Group_List_Api,ReportType))
+
     }
 
     function downlodeinvoiceReport() {
@@ -28,25 +30,23 @@ const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-
     });
 
         var ReportType = report.invoice;
-        dispatch(postpdfMultipleReportdata(MultipleInvoice_API,jsonBody,ReportType))
+        dispatch(getpdfReportdata(MultipleInvoice_API,jsonBody,ReportType))
         
     }
     function downlodeinvoice() {
-        const jsonBody = JSON.stringify({
-            InvoiceIDs:[ 70,71]
-    });
-
-        var ReportType = report.VanLoadingSheetSKU;
-        dispatch(postpdfMultipleReportdata(MultipleInvoice_API,jsonBody,ReportType))
-        
-    }
-    function downlodeinvoice() {
-        const jsonBody = JSON.stringify({
-            InvoiceIDs:[ 70,71]
-    });
-
+   debugger
         var ReportType = report.VanLoadingPartyWiseInvoice;
-        dispatch(postpdfMultipleReportdata(MultipleInvoice_API,jsonBody,ReportType))
+        // dispatch(getpdfReportdata(LoadingSheet_API, ReportType, 1))
+
+        
+    }
+    function downlodeinvoice() {
+        const jsonBody = JSON.stringify({
+            InvoiceIDs:[ 70,71]
+    });
+
+        var ReportType = report;
+        dispatch(getpdfReportdata(get_Group_List_Api,jsonBody,ReportType))
         
     }
 

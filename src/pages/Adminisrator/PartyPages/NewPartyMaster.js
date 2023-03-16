@@ -40,7 +40,7 @@ import {
     formValid,
     onChangeSelect,
     onChangeText,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
@@ -52,7 +52,7 @@ const PartyMaster = (props) => {
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
     const [activeTab1, setactiveTab1] = useState("1")
     const [state_DropDown_select, setState_DropDown_select] = useState("");
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
@@ -259,7 +259,7 @@ const PartyMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
         };
     }, [userAccess])
 

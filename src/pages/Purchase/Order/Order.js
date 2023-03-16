@@ -28,17 +28,17 @@ import {
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { breadcrumbReturn, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import * as pageId from "../../../routes/allPageID"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 
 let editVal = {}
@@ -59,7 +59,11 @@ function initialState(history) {
     else if (sub_Mode === url.IB_ORDER) {
         page_Id = pageId.IB_ORDER;
         listPath = url.IB_ORDER_PO_LIST;
-    };
+    }
+    else if (sub_Mode === url.ORDER_4) {
+        page_Id = pageId.ORDER_4;
+        listPath = url.ORDER_LIST_4
+    }
     return { page_Id, listPath }
 };
 
@@ -80,7 +84,7 @@ const Order = (props) => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserAccState] = useState("");
     const [description, setDescription] = useState('')
 
     const [deliverydate, setdeliverydate] = useState(currentDate)
@@ -111,9 +115,9 @@ const Order = (props) => {
         assingItemData = ''
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
-        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
-        supplierAddress: state.SupplierReducer.supplierAddress,
-        orderType: state.SupplierReducer.orderType,
+        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        orderType: state.CommonAPI_Reducer.orderType,
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -159,7 +163,7 @@ const Order = (props) => {
         });
 
         if (userAcc) {
-            setUserPageAccessState(userAcc);
+            setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
@@ -171,7 +175,7 @@ const Order = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -550,6 +554,8 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
+        debugger
+        const config = { editId: supplierSelect.value, btnmode:mode.edit, subPageMode, btnId:`btn-edit-${supplierSelect.value}` }
         var msg = "Do you confirm your choice?"
         const isConfirmed = await CustomAlert({
             Type: 7,
@@ -558,7 +564,7 @@ const Order = (props) => {
         });
         if (isConfirmed) {
             dispatch(GoButton_For_Order_AddSuccess([]))
-            dispatch(editPartyItemID(supplierSelect.value, mode.assingLink));
+            dispatch(editPartyItemID(config ));
         };
     };
 

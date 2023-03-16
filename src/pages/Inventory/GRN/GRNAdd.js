@@ -22,10 +22,10 @@ import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { editGRNIdSuccess, getGRN_itemMode2_Success, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { breadcrumbReturn, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -39,7 +39,7 @@ const GRNAdd = (props) => {
     const history = useHistory();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserAccState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const [grnDate, setgrnDate] = useState(currentDate);
@@ -58,7 +58,7 @@ const GRNAdd = (props) => {
         postMsg,
         userAccess,
     } = useSelector((state) => ({
-        supplierAddress: state.SupplierReducer.supplierAddress,
+        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -82,7 +82,7 @@ const GRNAdd = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -163,7 +163,7 @@ const GRNAdd = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postGRNSuccess({ Status: false }))
+            dispatch(saveGRNSuccess({ Status: false }))
             const promise = await CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -173,7 +173,7 @@ const GRNAdd = (props) => {
             }
 
         } else if (postMsg.Status === true) {
-            dispatch(postGRNSuccess({ Status: false }))
+            dispatch(saveGRNSuccess({ Status: false }))
             CustomAlert({
                 Type: 1,
                 Message: JSON.stringify(postMsg.Message),
@@ -625,8 +625,9 @@ const GRNAdd = (props) => {
             });
 
             if (pageMode === mode.edit) {
+                returnFunc()
             } else {
-                dispatch(postGRN(jsonBody))
+                dispatch(saveGRNAction({jsonBody,btnId}))
             }
         } catch (error) { returnFunc() }
     }

@@ -10,7 +10,7 @@ import {
 } from "../../../store/actions";
 import Modules from "./Modules";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";

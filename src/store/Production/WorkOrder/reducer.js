@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { currentDate } from "../../../components/Common/CommonFunction"
 import {
   DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   EDIT_WORK_ORDER_LIST_ID_SUCCESS,

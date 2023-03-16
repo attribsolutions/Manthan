@@ -28,9 +28,9 @@ export const invoiceListGoBtnfilterSucccess = (resp) => ({
 });
 
 // edit api
-export const editInvoiceList = (id, pageMode, subPageMode) => ({
+export const editInvoiceList = (config = {}) => ({
     type: EDIT_INVOICE_LIST,
-    id, pageMode, subPageMode,
+    config,
 })
 
 export const editInvoiceListSuccess = (editData) => ({
@@ -39,9 +39,9 @@ export const editInvoiceListSuccess = (editData) => ({
 })
 
 // listpage api
-export const deleteInvoiceId = (id, subPageMode) => ({
+export const deleteInvoiceId = (config = {}) => ({
     type: DELETE_INVOICE_LIST_PAGE,
-    id, subPageMode,
+    config ,
 });
 
 export const deleteInvoiceIdSuccess = (resp) => ({

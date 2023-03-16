@@ -31,9 +31,9 @@ import {
     onChangeDate,
     initialFiledFunc,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -52,7 +52,7 @@ const DriverMaster = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -98,7 +98,7 @@ const DriverMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

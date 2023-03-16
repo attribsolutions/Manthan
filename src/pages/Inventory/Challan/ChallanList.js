@@ -6,9 +6,9 @@ import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -30,7 +30,7 @@ const ChallanList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            vender: state.SupplierReducer.vender,
+            vender: state.CommonAPI_Reducer.vender,
             tableList: state.ChallanReducer.ChallanList,
             deleteMsg: state.ChallanReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -220,7 +220,7 @@ const ChallanList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

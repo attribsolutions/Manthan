@@ -103,6 +103,7 @@ export const IMPORT_MASTER = 157
 export const IMPORT_MASTER_LIST = 158
 
 export const ROUTE_UPDATE = 159
+export const PARTY_MASTER_BULK_UPDATE = 161
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
@@ -114,7 +115,7 @@ export const IB_ORDER = 126
 export const IB_ORDER_PO_LIST = 127
 export const IB_ORDER_SO_LIST = 147
 
-export const ORDER_4 = 114
+export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
 export const GRN_ADD = 55

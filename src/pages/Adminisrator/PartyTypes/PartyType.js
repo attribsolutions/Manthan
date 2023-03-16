@@ -33,9 +33,9 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -58,7 +58,7 @@ const PartyType = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.modeSTPsave);
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -99,7 +99,7 @@ const PartyType = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

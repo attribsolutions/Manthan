@@ -22,7 +22,7 @@ import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
 import H_Pages from './Administrator/HPagesRedux/reducer'
 
-import SupplierReducer from "./CommonAPI/SupplierRedux/reducer"
+import CommonAPI_Reducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import EmployeesReducer from "./Administrator/EmployeeRedux/reducer"
 import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
@@ -50,6 +50,7 @@ import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 import RoutesReducer from "./Administrator/RoutesRedux/reducer"
 import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
+import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -71,6 +72,7 @@ import InvoiceReducer from "./Sales/Invoice/reducer"
 //  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
+import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -93,7 +95,7 @@ const rootReducer = combineReducers({
   // PageList,
   User_Registration_Reducer,
   // suppiler
-  SupplierReducer,
+  CommonAPI_Reducer,
   EmployeesReducer,
   // order
   OrderReducer,
@@ -129,6 +131,7 @@ const rootReducer = combineReducers({
   TermsAndConditionsReducer,
   RoutesReducer,
   CreditLimitReducer,
+  PartyMasterBulkUpdateReducer,
   SalesManReducer,
   GroupTypeReducer,
   GSTReducer,
@@ -144,5 +147,6 @@ const rootReducer = combineReducers({
   // IBInvoiceReducer,
   ChallanReducer,
   RouteUpdateReducer,
+  LoadingSheetReducer,
 })
 export default rootReducer

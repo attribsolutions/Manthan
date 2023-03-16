@@ -122,7 +122,7 @@ export const ReportHederRows = (data) => {
    
     var reportArray = [
         [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
-        [`${data.CustomerName}`, `${data.PartyName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],
+        [`${data.PartyName}`, `${data.CustomerName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],
         [`maharashtra`, `karnatak`,data.ReportType===invoice?`vehical No :MH34566`:`E-way Bill :24654364633` ],
         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, data.ReportType===invoice?`E-way Bill :24654364633`:`INR NO :${data.FullInvoiceNumber}`, ],
         [,,  data.ReportType===invoice?`INR NO :${data.FullInvoiceNumber}`:null]

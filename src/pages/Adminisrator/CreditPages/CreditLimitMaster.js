@@ -18,22 +18,22 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturn,
     btnIsDissablefunc,
     loginPartyID
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect, useState } from "react";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import { GoButton_For_CreditLimit_Add, GoButton_For_CreditLimit_AddSuccess, postCreditLimit, postCreditLimitSuccess } from "../../../store/Administrator/CreditLimitRedux/actions";
@@ -44,7 +44,7 @@ const CreditLimitMaster = (props) => {
     const history = useHistory()
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [RouteSelect, setRouteSelect] = useState([]);
 
     const fileds = {
@@ -97,7 +97,7 @@ const CreditLimitMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

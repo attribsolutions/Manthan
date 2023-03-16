@@ -19,14 +19,14 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import {
     editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, saveMaterialIssue, SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
@@ -37,7 +37,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 
 const MaterialIssueMaster = (props) => {
 
@@ -55,7 +55,7 @@ const MaterialIssueMaster = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
@@ -108,7 +108,7 @@ const MaterialIssueMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
 
         };

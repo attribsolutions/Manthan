@@ -3,8 +3,9 @@ import { GET_PDF_MULTIPLEINVOICE_DATA, GET_PDF_REPORT_DATA } from "./actionType"
 import { Data } from "./DemoData";
 
 import { getpdfReportdataSuccess, postpdfMultipleReportdataSuccess } from "./actions";
-import { MultipleInvoice_API } from "../../../helpers/backend_helper";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { get_Group_List_Api, MultipleInvoice_API } from "../../../helpers/backend_helper";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 
 
 function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
@@ -22,12 +23,13 @@ function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
 function* GetMultipleinvoicereport_GenFunc({ API, jsonBody,ReportType, Id}) {
   
   try {
-    const response = yield call(MultipleInvoice_API, jsonBody);
+ 
+    // const response = yield call(MultipleInvoice_API, jsonBody);
+    const response = yield call(get_Group_List_Api, jsonBody);
     // const response = Data;
-
     response["ReportType"] = ReportType
     response.Data["ReportType"] = ReportType
-    // response["Data"] = demodata.Data
+    response["Data"] = dataGenrator()
     // yield put((response));
     yield put(getpdfReportdataSuccess(response));
 

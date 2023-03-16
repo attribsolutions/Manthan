@@ -19,9 +19,9 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturn,
     loginUserID,
@@ -31,7 +31,7 @@ import {
     loginCompanyID,
     loginPartyID,
     btnIsDissablefunc
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/CommonFunction";
 import {
     editWorkOrderListSuccess,
     getBOMList,
@@ -47,8 +47,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 
 
@@ -65,7 +65,7 @@ const WorkOrder = (props) => {
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [itemselect, setItemselect] = useState("")
 
     const fileds = {
@@ -130,7 +130,7 @@ const WorkOrder = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
 
         };
@@ -189,7 +189,6 @@ const WorkOrder = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
-            // saveDissable(false);//save Button Is enable function
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -207,7 +206,6 @@ const WorkOrder = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -222,13 +220,11 @@ const WorkOrder = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(
                 AlertState({
                     Type: 3,
@@ -406,11 +402,11 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
+        
         event.preventDefault();
         const btnId = event.target.id
         try {
-
-            if (formValid(state, setState)) {
+             {
                 btnIsDissablefunc({ btnId, state: true })
                 const WorkOrderItems = BOMItems.map((index) => ({
                     Item: index.Item,
@@ -436,6 +432,7 @@ const WorkOrder = (props) => {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
+                    
                     GoBtnDissable({ id: saveBtnID1, state: true })
                     dispatch(SaveWorkOrderMaster({ jsonBody, btnId }));
                 }
@@ -481,10 +478,8 @@ const WorkOrder = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
                 <div className="page-content" style={{ marginBottom: "200px" }}>
-
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form  noValidate>
                         <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
                                 <Col sm={11}>

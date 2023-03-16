@@ -4,7 +4,7 @@ import {
   editGRNIdSuccess,
   getGRNListPageSuccess,
   getGRN_itemMode2_Success,
-  postGRNSuccess,
+  saveGRNSuccess,
   updateGRNIdSuccess,
 } from "./actions";
 import {
@@ -18,39 +18,39 @@ import {
   EDIT_GRN_FOR_GRN_PAGE,
   GET_GRN_ITEM_MODE_2,
   GET_GRN_LIST_PAGE,
-  POST_GRN_FROM_GRN_PAGE,
+  SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
-function* saveGRNGenFunc({ data }) {            // Save GRN  genrator function
+function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
-    const response = yield call(GRN_Post_API, data);
-    yield put(postGRNSuccess(response));
+    const response = yield call(GRN_Post_API, config);
+    yield put(saveGRNSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* DeleteGRNGenFunc({ id }) {            // Delete GRN  genrator function
+function* DeleteGRNGenFunc({ config }) {            // Delete GRN  genrator function
   try {
-    const response = yield call(GRN_delete_API, id);
-
+    const response = yield call(GRN_delete_API, config);
     yield put(deleteGRNIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* Edit_GRN_GenratorFunction({ id, pageMode }) { // Edit  GRN  genrator function
+function* Edit_GRN_GenratorFunction({ config }) { // Edit  GRN  genrator function
   try {
-    const response = yield call(GRN_Edit_API, id);
-    response.pageMode = pageMode
+    const { btnmode } = config;
+    const response = yield call(GRN_Edit_API, config);
+    response.pageMode = btnmode
     response.Data = response.Data[0];
     yield put(editGRNIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-function* UpdateGRNGenFunc({ data, id }) {             // Upadte GRN  genrator function
+function* UpdateGRNGenFunc({ config }) {             // Upadte GRN  genrator function
   try {
-    const response = yield call(GRN_update_API, data, id);
+    const response = yield call(GRN_update_API, config);
     yield put(updateGRNIdSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
@@ -84,7 +84,7 @@ function* getGRNitem_Mode2_GenFunc({ data }) {         // Make_GRN Items  genrat
 function* GRNSaga() {
 
   yield takeEvery(GET_GRN_ITEM_MODE_2, getGRNitem_Mode2_GenFunc);
-  yield takeEvery(POST_GRN_FROM_GRN_PAGE, saveGRNGenFunc);
+  yield takeEvery(SAVE_GRN_FROM_GRN_PAGE_ACTION, saveGRNGenFunc);
   yield takeEvery(EDIT_GRN_FOR_GRN_PAGE, Edit_GRN_GenratorFunction);
   yield takeEvery(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)
   yield takeEvery(DELETE_GRN_FOR_GRN_PAGE, DeleteGRNGenFunc);

@@ -6,11 +6,14 @@ import {
   getSupplierSuccess,
   GetVenderSuccess,
   GetVenderSupplierCustomerSuccess,
+  Retailer_List_Success,
+  SSDD_List_under_Company_Success,
 } from "./actions";
 import {
   get_OrderType_Api,
-  IB_Division_DROP_API,
   Party_Master_Edit_API,
+  Retailer_List_under_Company_PartyAPI,
+  SSDD_List_under_Company_API,
   VendorSupplierCustomer,
 } from "../../../helpers/backend_helper";
 
@@ -21,10 +24,11 @@ import {
   GET_SUPPLIER_ADDRESS,
   GET_VENDER,
   GET_VENDER_SUPPLIER_CUSTOMER,
+  RETAILER_LIST,
+  SSDD_LIST_UNDER_COMPANY,
 } from "./actionType";
 
-import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 function* supplierAddressGenFunc() {
@@ -88,7 +92,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
   let response;
   try {
 
-    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_LIST_1)) {
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.GRN_STP)) {
       response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID() });//vendor mode 1
     }
     else if ((subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_LIST_2)) {
@@ -118,6 +122,21 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
   catch (e) { }
 }
 
+function* SSDD_List_under_Company_GenFunc() {
+  try {
+    const response = yield call(SSDD_List_under_Company_API, { "Type": 3, "PartyID": loginPartyID(), "CompanyID": loginCompanyID() });
+    yield put(SSDD_List_under_Company_Success(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
+
+function* Retailer_List_GenFunc() {
+  try {
+    const response = yield call(Retailer_List_under_Company_PartyAPI, { "Type": 1, "PartyID": loginPartyID(), "CompanyID": loginCompanyID() });
+    yield put(Retailer_List_Success(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
+
+
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
   yield takeEvery(GET_SUPPLIER_ADDRESS, supplierAddressGenFunc);
@@ -125,6 +144,9 @@ function* SupplierSaga() {
   yield takeEvery(GET_VENDER, getVendorGenFunc);
   yield takeEvery(GET_VENDER_SUPPLIER_CUSTOMER, vendorSupplierCustomer_genFunc);
   yield takeEvery(GET_CUSTOMER, getCustomerGenFunc);
+  yield takeEvery(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
+  yield takeEvery(RETAILER_LIST, Retailer_List_GenFunc);
+
 }
 
 export default SupplierSaga;

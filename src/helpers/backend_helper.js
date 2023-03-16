@@ -335,8 +335,11 @@ export const Save_Party_Items = ({ jsonBody, btnId }) => post(url.PARTYITEM_FOR_
 export const get_Party_Item_List = (SupplierID) => get(`${url.PARTYITEM_FOR_MASTER}/${SupplierID}`)//get api
 export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
 export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
+
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
+export const SSDD_List_under_Company_API = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
+export const Retailer_List_under_Company_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
@@ -375,8 +378,17 @@ export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_PO
 export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
 export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPDATE, jsonBody, btnId)// Route Update Post API
 
-// Loading Sheet
 
+// Loading Sheet
+export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_BUTTON_API, data)//Loading Sheet go button API For Master Page
+export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
+export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
+
+// PartyMasterBulkUpdate
+export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
+export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api
+export const post_PartyAPI = ({ jsonBody, btnId }) => post(url.PARTY_DROPDOWN, jsonBody, btnId)// post api
+export const post_SelectFieldAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
 
 // Order Page api  
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
@@ -394,10 +406,10 @@ export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 //GRN PAGE grn 
 export const GRN_STP_for_orderList_goBtn = ({ filtersBody, btnId }) => post(url.GRN_STP_FOR_ORDER_lIST_goBtn, filtersBody, btnId)// Get subModule For H_pages
 export const GRN_get_API = ({ filtersBody, btnId }) => post(url.GRN_LiST_BY_FILTERS, filtersBody, btnId)
-export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
-export const GRN_Post_API = (data) => post(url.GRN, data)//get api
-export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
-export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
+export const GRN_Edit_API = ({ editId, btnId }) => get(`${url.GRN}/${editId}`, btnId)// edit api
+export const GRN_Post_API = ({ jsonBody, btnId }) => post(url.GRN, jsonBody, btnId)//get api
+export const GRN_update_API = ({ jsonBody, updateId, btnId }) => put(`${url.GRN}/${updateId}`, jsonBody, btnId)// update api
+export const GRN_delete_API = ({ deleteId, btnId }) => del(`${url.GRN}/${deleteId}`, btnId)//Delete Order
 export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
 
 //Challan API
@@ -454,16 +466,16 @@ export const Production_ReIssue_AddPageGOBtn_API = (data) => post(url.PRODUCTION
 export const Invoice_1_GoButton_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi
 export const Invoice_1_Save_API = ({ jsonBody, btnId }) => post(url.INVOICE_1_SAVE, jsonBody, btnId)//  postapi
 export const Invoice_1_Get_Filter_API = ({ filtersBody, btnId }) => post(url.INVOICE_1_lIST_FILTER, filtersBody, btnId)//  postapi
-export const Invoice_1_Delete_API = (id) => del(`${url.INVOICE_1_SAVE}/${id}`)// delete api
-export const Invoice_1_Edit_API_Singel_Get = (id) => get(`${url.INVOICE_1_SAVE}/${id}`)// delete api
+export const Invoice_1_Delete_API = ({ deleteId, btnId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`, btnId)// delete api
+export const Invoice_1_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.INVOICE_1_SAVE}/${editId}`, btnId)// delete api
 
 
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody, btnId)// go button postapi
-export const IB_Invoice_Save_API = (data) => post(url.IB_INVOICE_SAVE, data)//  postapi
+export const IB_Invoice_Save_API = ({ jsonBody, btnId }) => post(url.IB_INVOICE_SAVE, jsonBody, btnId)//  postapi
 export const IB_Invoice_Get_Filter_API = ({ filtersBody, btnId }) => post(url.IB_INVOICE_lIST_FILTER, filtersBody, btnId)//  postapi
-export const IB_Invoice_Delete_API = (id) => del(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
-export const IB_Invoice_Edit_API_Singel_Get = (id) => get(`${url.IB_INVOICE_SAVE}/${id}`)// delete api
+export const IB_Invoice_Delete_API = ({ deleteId, btnId }) => del(`${url.IB_INVOICE_SAVE}/${deleteId}`, btnId)// delete api
+export const IB_Invoice_Edit_API_Singel_Get = ({ editId, btnId }) => get(`${url.IB_INVOICE_SAVE}/${editId}`, btnId)// delete api
 //************************************Inter Branch ************************************/
 
 // IBOrder
@@ -496,6 +508,7 @@ export const Make_Inward_Post_API = ({ makeInwardId, btnId }) => get(`${url.MAKE
 
 //Report API
 export const MultipleInvoice_API = (data) => post(url.MULTIPLEINVOICE_API, data)//dropdown api
+export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${id}`)//dropdown api
 
 
 

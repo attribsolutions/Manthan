@@ -20,7 +20,7 @@ import {
   SAVE_GROUP_MASTER,
   UPDATE_GROUPMASTER_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForGroupMaster_GenFun({ config }) {              // Save API

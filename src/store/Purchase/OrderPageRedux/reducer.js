@@ -1,4 +1,4 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { currentDate } from "../../../components/Common/CommonFunction"
 import {
 
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,

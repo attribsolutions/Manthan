@@ -36,7 +36,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturn, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { breadcrumbReturn, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -49,7 +49,7 @@ const PartyMaster = (props) => {
     
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState(11);
+    const [userPageAccessState, setUserAccState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
     const [modalCss, setModalCss] = useState(false);
     const [state_DropDown_select, setState_DropDown_select] = useState([]);
@@ -103,7 +103,7 @@ const PartyMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

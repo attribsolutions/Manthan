@@ -26,13 +26,13 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const AddUser = (props) => {
@@ -58,7 +58,7 @@ const AddUser = (props) => {
   //SetState  Edit data Geting From Modules List component
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
-  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [userPageAccessState, setUserAccState] = useState('');
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -136,7 +136,7 @@ const AddUser = (props) => {
     })
 
     if (userAcc) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
       breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])

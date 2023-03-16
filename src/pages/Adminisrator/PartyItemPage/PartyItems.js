@@ -32,16 +32,16 @@ import {
 } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturn, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {
@@ -50,16 +50,16 @@ const PartyItems = (props) => {
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserAccState] = useState("");
     const [itemArr, setitemArr] = useState([]);
 
     const fileds = {
         id: "",
-        Name: "",
+        Name: loginIsSCMCompany() === 1 ? { value: loginPartyID() } : ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -112,7 +112,7 @@ const PartyItems = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc);
+            setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -203,6 +203,19 @@ const PartyItems = (props) => {
         }
     }, [pageField])
 
+    useEffect(() => {
+        if (loginIsSCMCompany() === 1) {
+
+            setState((i) => {
+                const a = { ...i }
+                a.values.Name = { value: loginPartyID(), label: '' }
+                a.hasValid.Name.valid = true
+                return a
+            })
+            dispatch(getpartyItemList(loginPartyID()))
+        }
+    }, [])
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -224,6 +237,7 @@ const PartyItems = (props) => {
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
+                debugger
 
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 
@@ -292,29 +306,56 @@ const PartyItems = (props) => {
 
                 }))
                 const jsonBody = JSON.stringify(PartyData)
-                dispatch(SavePartyItems(jsonBody));
+                dispatch(SavePartyItems({jsonBody,btnId}));
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    const PartyDropdown = () => {
+        if (loginIsSCMCompany() === 1) {
 
-    // const SubmitHandler = (e) => {
-    //     e.preventDefault();
-    //     const Find = itemArr.filter((index) => {
-    //         return (index.itemCheck === true)
-    //     })
+            return null
+        }
+        return <Card>
+            <CardBody className="c_card_body">
+                <Row>
+                    <Row>
+                        <Col md="3">
+                            <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
+                                <Col md="12">
+                                    <Select
+                                        name="Name"
+                                        value={values.Name}
+                                        isDisabled={pageMode === mode.assingLink ? true : false}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        options={supplierOptions}
+                                        onChange={(hasSelect, evn) => {
+                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                            GoButton_Handler(hasSelect)
+                                            dispatch(Breadcrumb_inputName(hasSelect.label
+                                            ))
+                                        }}
+                                    />
+                                    {isError.Name.length > 0 && (
+                                        <span className="text-danger f-8"><small>{isError.Name}</small></span>
+                                    )}
 
-    //     var PartyData = Find.map((index) => ({
-    //         Item: index.Item,
-    //         Party: values.Name.value
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col md="3" className="mt-4">
+                        </Col>
+                    </Row>
+                </Row>
 
-    //     }))
-    //     const jsonBody = JSON.stringify(PartyData)
-    //     dispatch(SavePartyItems(jsonBody));
-    // };
+            </CardBody>
+        </Card>
+    }
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
+    let IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userAccState === '')) {
@@ -332,58 +373,15 @@ const PartyItems = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <Row className="">
-                                    <Col md={12}>
-                                        <Card>
-                                            <CardBody className="c_card_body">
-                                                <Row>
-                                                    <Row>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
-                                                                <Col md="12">
-                                                                    <Select
-                                                                        name="Name"
-                                                                        value={values.Name}
-                                                                        isDisabled={pageMode === mode.assingLink ? true : false}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={supplierOptions}
-                                                                        onChange={(hasSelect, evn) => {
-                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                            GoButton_Handler(hasSelect)
-                                                                            dispatch(Breadcrumb_inputName(hasSelect.label
-                                                                            ))
-                                                                        }}
-                                                                    />
-                                                                    {isError.Name.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.Name}</small></span>
-                                                                    )}
-
-                                                                </Col>
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="3" className="mt-4">
-                                                        </Col>
-                                                    </Row>
-                                                </Row>
-
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-
+                                <PartyDropdown ></PartyDropdown>
                                 <PaginationProvider
-                                    pagination={paginationFactory(pageOptions)}
-                                >
+                                    pagination={paginationFactory(pageOptions)} >
+
                                     {({ paginationProps, paginationTableProps }) => (
                                         <ToolkitProvider
-
                                             keyField="id"
                                             data={tableList}
                                             columns={tableColumns}
-
                                             search
                                         >
                                             {toolkitProps => (
@@ -429,7 +427,6 @@ const PartyItems = (props) => {
                                     />
                                 </div>
                                     : <div className="row save1"></div>}
-
                             </CardBody>
 
                         </Card>

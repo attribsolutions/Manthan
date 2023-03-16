@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   GetPriceList_For_Dropdown,
   GetCompanyByDivisionTypeID_For_Dropdown,

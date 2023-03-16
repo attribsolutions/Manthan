@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TermsAndConditionsMaster from "./TermsAndConditionsMaster";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import {
   commonPageFieldList,
   commonPageFieldListSuccess

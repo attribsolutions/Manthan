@@ -23,7 +23,7 @@ import {
   ITEM_DROPDOWN_CHALLAN,
   MAKE_CHALLAN_ACTION,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
 function* save_Challan_GerFunc({ data }) {                   // Save Challan  genrator function

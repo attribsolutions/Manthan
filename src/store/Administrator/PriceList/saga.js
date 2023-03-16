@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { delete_PriceList_API, get_PriceListByPartyType_API, Save_PriceList_API, edit_PriceList, update_PriceList, GetPriceList_For_Listpage } from "../../../helpers/backend_helper";
 import { delete_PriceListSuccess, priceListByPartyActionSuccess, savePriceMasterActionSuccess, editPriceListSuccess, updatePriceListSuccess, getPriceListPageSuccess } from "./action";
 import { DELETE_PRICE_LIST, PRICE_LIST_BY_PARTY_ACTION, POST_PRICE_LIST_DATA, EDIT_PRICE_LIST, UPDATE_PRICE_LIST, GET_PRICE_LIST_PAGE } from "./actionType";

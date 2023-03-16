@@ -19,7 +19,7 @@ import {
   getEmployeelistSuccess,
   deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, Get_CompanyName_By_EmployeeTypeID_Success,
 } from "./action";
-import { CommonConsole, loginJsonBody, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody, } from "../../../components/Common/CommonFunction";
 
 function* DesignationID_saga() { // DesignationID dropdown list
   try {

@@ -11,6 +11,10 @@ import {
   GET_CUSTOMER_SUCCESS,
   GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS,
   GET_VENDER_SUPPLIER_CUSTOMER,
+  SSDD_LIST_UNDER_COMPANY,
+  SSDD_LIST_UNDER_COMPANY_SUCCESS,
+  RETAILER_LIST,
+  RETAILER_LIST_SUCCESS,
 } from './actionType'
 
 
@@ -75,4 +79,24 @@ export const GetVenderSupplierCustomer = (subPageMode) => ({
 export const GetVenderSupplierCustomerSuccess = orders => ({
   type: GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS,
   payload: orders,
+})
+
+// All SS/DD under given Company
+export const SSDD_List_under_Company = () => ({
+  type: SSDD_LIST_UNDER_COMPANY,
+});
+
+export const SSDD_List_under_Company_Success = resp => ({
+  type: SSDD_LIST_UNDER_COMPANY_SUCCESS,
+  payload: resp,
+})
+
+// All Retailer under given Party and Company
+export const Retailer_List = () => ({
+  type: RETAILER_LIST,
+});
+
+export const Retailer_List_Success = resp => ({
+  type: RETAILER_LIST_SUCCESS,
+  payload: resp,
 })

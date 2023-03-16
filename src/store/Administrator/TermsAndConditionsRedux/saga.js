@@ -24,7 +24,7 @@ import {
   UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API
 } from "./actionTypes";
 
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 // post api

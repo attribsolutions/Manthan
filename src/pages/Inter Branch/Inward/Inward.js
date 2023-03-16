@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { breadcrumbReturn, loginUserID, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID, currentDate } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -22,7 +22,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import * as url from "../../../routes/route_url";
 import { AlertState } from "../../../store/actions";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 
 const Inward = (props) => {
 

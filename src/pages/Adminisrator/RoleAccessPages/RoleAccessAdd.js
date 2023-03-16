@@ -33,16 +33,19 @@ import {
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import { breadcrumbReturn, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginUserID } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import * as mode from "../../../routes/PageMode";
+// import * as pageId from "../../../routes/allPageID"
 
 const RoleAccessAdd = (props) => {
 
-    const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
-    const [userPageAccessState, setUserPageAccessState] = useState('11');
+    const [userAccState, setUserAccState] = useState('');
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [tableListData, setTableListData] = useState([])
     const [tableHederList, setTableHederList] = useState([])
     const [showTableOnUI, setShowTableOnUI] = useState(false)
@@ -53,6 +56,8 @@ const RoleAccessAdd = (props) => {
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
 
     //Access redux store Data /  'save_ModuleSuccess' action data
+
+    const location = { ...history.location };
 
     const {
         PageAccess,
@@ -80,34 +85,36 @@ const RoleAccessAdd = (props) => {
         company: state.Company.companyList,
     }));
 
+    // userAccess useEffect
     useEffect(() => {
-        const editDataGatingFromList = history.location.state
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
-        })
+        });
 
-        if (!(editDataGatingFromList === undefined)) {
-            var division_id = editDataGatingFromList.Division_id
-            var divisionName = editDataGatingFromList.DivisionName
-            var role_id = editDataGatingFromList.Role_id
-            var roleName = editDataGatingFromList.RoleName
-            var company_id = editDataGatingFromList.Company_id
-            var companyName = editDataGatingFromList.CompanyName
+        if (userAcc) {
+            setUserAccState(userAcc);
+            breadcrumbReturn({ dispatch, userAcc });
+        };
+    }, [userAccess]);
 
-            if (role_id > 0) {
-                dispatch(GO_Button_HandlerForRoleAccessListPage(role_id, division_id, company_id));
+    useEffect(() => {
+        const hasEditVal = history.location.state;
+        if (!(hasEditVal === undefined)) {
+            const { rowData = {}, btnMode } = hasEditVal
+            const { Division_id, DivisionName, Role_id, RoleName, Company_id, CompanyName } = rowData;
+            if (Role_id > 0) {
+                setPageMode(btnMode)
+                dispatch(GO_Button_HandlerForRoleAccessListPage(Role_id, Division_id, Company_id));
                 setShowTableOnUI(true)
-                setRoleDropDown({ label: roleName, value: role_id })
-                setCompany_dropdown_Select({ label: companyName, value: company_id })
-                setDivision_dropdown_Select({ label: divisionName, value: division_id })
+                setRoleDropDown({ label: RoleName, value: Role_id })
+                setCompany_dropdown_Select({ label: CompanyName, value: Company_id })
+                setDivision_dropdown_Select({ label: DivisionName, value: Division_id })
             }
         }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc, });
-        }
-    }, [userAccess])
+    }, [])
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
@@ -527,7 +534,7 @@ const RoleAccessAdd = (props) => {
         }
     }
 
-    if (!(userPageAccessState === '')) {
+    if (!(userAccState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content text-black" style={{ minHeight: "600px" }} >
@@ -694,7 +701,13 @@ const RoleAccessAdd = (props) => {
                                                         {page_DropdownSelect.value === 0 ? 'Add All Page' : "Add Page"}</Button>
                                                 </Col>
                                                 <Col sm={1} >
-                                                    <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button>
+                                                    {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
+                                                    <SaveButton
+                                                        pageMode={pageMode}
+                                                        userAcc={userAccState}
+                                                        module={"RoleAccess"}
+                                                        onClick={saveHandeller}
+                                                    />
                                                 </Col>
                                             </Row>
                                         </CardHeader>
@@ -856,8 +869,7 @@ const RoleAccessAdd = (props) => {
                             }
 
                         </CardBody>
-                        {/* </Card> */}
-                        {/* </Card> */}
+
                     </Container>
                 </div>
             </React.Fragment >
