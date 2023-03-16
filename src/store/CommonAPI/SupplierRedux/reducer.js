@@ -5,6 +5,8 @@ import {
   GET_VENDER_SUCCESS,
   GET_CUSTOMER_SUCCESS,
   GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS,
+  SSDD_LIST_UNDER_COMPANY_SUCCESS,
+  RETAILER_LIST_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -13,10 +15,12 @@ const INIT_STATE = {
   orderType: [],
   vender: [],
   customer: [],
-  vendorSupplierCustomer: []
+  vendorSupplierCustomer: [],
+  SSDD_List: [],
+  RetailerList:[]
 }
 
-const SupplierReducer = (state = INIT_STATE, action) => {
+const CommonAPI_Reducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
     case GET_SUPPLIER_SUCCESS:
@@ -45,17 +49,27 @@ const SupplierReducer = (state = INIT_STATE, action) => {
         customer: action.payload,
       }
 
-    case GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS :
+    case GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS:
       return {
         ...state,
         vendorSupplierCustomer: action.payload,
       }
 
+    case SSDD_LIST_UNDER_COMPANY_SUCCESS:
+      return {
+        ...state,
+        SSDD_List: action.payload,
+      }
 
+    case RETAILER_LIST_SUCCESS:
+      return {
+        ...state,
+        RetailerList: action.payload,
+      }
     default:
       return state
   }
 
 }
 
-export default SupplierReducer
+export default CommonAPI_Reducer

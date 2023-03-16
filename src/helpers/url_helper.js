@@ -202,6 +202,7 @@ export const LOADING_SHEET_LIST = '/LoadingSheetList'
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
+export const RETAILER_SSDD_LIST = "/RetailerandSSDD"
 
 //order 
 export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"

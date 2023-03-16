@@ -22,7 +22,7 @@ import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
 import H_Pages from './Administrator/HPagesRedux/reducer'
 
-import SupplierReducer from "./CommonAPI/SupplierRedux/reducer"
+import CommonAPI_Reducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import EmployeesReducer from "./Administrator/EmployeeRedux/reducer"
 import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
@@ -95,7 +95,7 @@ const rootReducer = combineReducers({
   // PageList,
   User_Registration_Reducer,
   // suppiler
-  SupplierReducer,
+  CommonAPI_Reducer,
   EmployeesReducer,
   // order
   OrderReducer,

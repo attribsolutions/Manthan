@@ -115,9 +115,9 @@ const Order = (props) => {
         assingItemData = ''
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
-        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
-        supplierAddress: state.SupplierReducer.supplierAddress,
-        orderType: state.SupplierReducer.orderType,
+        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
+        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        orderType: state.CommonAPI_Reducer.orderType,
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,

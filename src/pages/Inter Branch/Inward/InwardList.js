@@ -36,7 +36,7 @@ const InwardList = () => {
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
             // InwardlistFilter: state.InwardReducer.InwardlistFilter,
-            supplier: state.SupplierReducer.vendorSupplierCustomer,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
