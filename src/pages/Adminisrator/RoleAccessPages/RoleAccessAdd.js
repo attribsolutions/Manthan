@@ -27,20 +27,22 @@ import {
     GO_Button_HandlerForRoleAccessListPage_Success,
     PageDropdownForRoleAccessList,
     PageDropdownForRoleAccessList_Success,
-    PostMethodForRoleAccessListPage,
-    PostMethod_ForRoleAccessListPage_Success,
+    saveRoleAccessAddAction,
+    saveRoleAccessAddActionSuccess,
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import { breadcrumbReturn, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
-// import * as pageId from "../../../routes/allPageID"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as url from "../../../routes/route_url"
 
-const RoleAccessAdd = (props) => {
+
+const RoleAccessAdd = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -62,10 +64,10 @@ const RoleAccessAdd = (props) => {
     const {
         PageAccess,
         ModuleData,
-        PageDropdownForRoleAccess,
-        AddPage_PageMasterListForRoleAccess_Redux,
-        GO_buttonPageMasterListForRoleAccess_Redux,
-        PostMessage_ForRoleAccessList,
+        PageDropdownRedux,
+        addpageDropdownRedux,
+        GoButtonRedux,
+        postMsg,
         Roles,
         partyList,
         userAccess,
@@ -77,10 +79,10 @@ const RoleAccessAdd = (props) => {
         Roles: state.RoleMaster_Reducer.roleList,
         ModuleData: state.Modules.modulesList,
         PageAccess: state.H_Pages.PageAccess,
-        PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
-        AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
-        GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
-        PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
+        PageDropdownRedux: state.RoleAccessReducer.PageDropdownForRoleAccess,
+        addpageDropdownRedux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
+        GoButtonRedux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
+        postMsg: state.RoleAccessReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         company: state.Company.companyList,
     }));
@@ -133,7 +135,7 @@ const RoleAccessAdd = (props) => {
         var eleList = {}
 
         let count1 = 0
-        GO_buttonPageMasterListForRoleAccess_Redux.map((indexdata) => {
+        GoButtonRedux.map((indexdata) => {
             count1 = count1 + 1
 
             eleList = indexdata;
@@ -143,7 +145,7 @@ const RoleAccessAdd = (props) => {
             eleList = {}
         })
         setTableListData(Array)
-    }, [GO_buttonPageMasterListForRoleAccess_Redux])
+    }, [GoButtonRedux])
 
     useEffect(() => {
 
@@ -152,7 +154,7 @@ const RoleAccessAdd = (props) => {
         let NewID = tableListData.length + 1
         let previousData = tableListData
 
-        let indexdata = AddPage_PageMasterListForRoleAccess_Redux[0]
+        let indexdata = addpageDropdownRedux[0]
 
         if (!(indexdata === undefined)) {
             eleList = indexdata
@@ -162,7 +164,7 @@ const RoleAccessAdd = (props) => {
             setTableListData(previousData)
         }
 
-    }, [AddPage_PageMasterListForRoleAccess_Redux])
+    }, [addpageDropdownRedux])
 
     useEffect(() => {
         var NewColoumList = PageAccess.map((i) => {
@@ -176,27 +178,19 @@ const RoleAccessAdd = (props) => {
         setTableHederList(RoleAccessListColoums)
     }, [PageAccess])
 
-    useEffect(() => {
-        if ((PostMessage_ForRoleAccessList.Status === true) && (PostMessage_ForRoleAccessList.StatusCode === 200)) {
-            dispatch(PostMethod_ForRoleAccessListPage_Success({ Status: false }))
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostMessage_ForRoleAccessList.Message,
-                AfterResponseAction: false
-            }))
+    useEffect(async () => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
+            const promise = await CustomAlert({ Type: 1, Message: postMsg.Message, })
+            if (promise) {
+                history.push({ pathname: url.ROLEACCESS_lIST })
+            }
         }
-        else if (PostMessage_ForRoleAccessList.Status === true) {
-            dispatch(PostMethod_ForRoleAccessListPage_Success({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(PostMessage_ForRoleAccessList.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+        else if (postMsg.Status === true) {
+            dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
+            CustomAlert({ Type: 4, Message: JSON.stringify(postMsg.Message), })
         }
-    }, [PostMessage_ForRoleAccessList])
+    }, [postMsg])
 
     let RoleAccessListColoums = [
 
@@ -240,7 +234,7 @@ const RoleAccessAdd = (props) => {
     }, [company])
 
     // for Page dropdown
-    const Page_DropdownOption = PageDropdownForRoleAccess.map((d) => ({
+    const Page_DropdownOption = PageDropdownRedux.map((d) => ({
         value: d.id,
         label: d.Name,
     }));
@@ -297,7 +291,7 @@ const RoleAccessAdd = (props) => {
 
         if (selectePageID === 0) {
             var pageId = 0
-            PageDropdownForRoleAccess.forEach((i) => {
+            PageDropdownRedux.forEach((i) => {
                 pageId = i.id
                 let found = tableListData.find((inx) => { return inx.PageID === pageId })
                 if ((found === undefined) && !(pageId === 0)) {
@@ -339,100 +333,105 @@ const RoleAccessAdd = (props) => {
         setTableListData([])
     }
 
-    const saveHandeller = () => {
+    const saveHandeller = (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+        btnIsDissablefunc({ btnId, state: true })
+        try {
 
-        let selectedItemArray = [];
-        let pageAccessElement = {}
-        let roleAccessArray = []
-        let roleAccessArray2 = []
+            let selectedItemArray = [];
+            let pageAccessElement = {}
+            let roleAccessArray = []
+            let roleAccessArray2 = []
 
-        for (var i = 0; i < tableListData.length; i++) {
+            for (var i = 0; i < tableListData.length; i++) {
 
-            var moduleName = document.getElementById("ModuleID" + i).value;
-            var pageName = document.getElementById("PageID" + i).value;
-            var relatedPage = document.getElementById("RelatedPageID" + i).value;
-            var pageId = parseInt(pageName)
-            var moduleId = parseInt(moduleName)
-            var relatedPageID = parseInt(relatedPage)
-
-
-            var addIsShowOnMenu = document.getElementById("addIsShowOnMenu" + i).checked;
-            var listIsShowOnMenu = document.getElementById("listIsShowOnMenu" + i).checked;
-            var isSave = document.getElementById("IsSave" + i).checked
-            var isView = document.getElementById("IsView" + i).checked;
-            var isEdit = document.getElementById("IsEdit" + i).checked;
-            var isDelete = document.getElementById("IsDelete" + i).checked;
-            var isEditSelf = document.getElementById("IsEditSelf" + i).checked;
-            var isDeleteSelf = document.getElementById("IsDeleteSelf" + i).checked;
-            var isPrint = document.getElementById("IsPrint" + i).checked;
-            var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
-            var isPdfdownload = document.getElementById("Pdfdownload" + i).checked;
-            var isExceldownload = document.getElementById("Exceldownload" + i).checked;
-            var isCopy = document.getElementById("IsCopy" + i).checked;
+                var moduleName = document.getElementById("ModuleID" + i).value;
+                var pageName = document.getElementById("PageID" + i).value;
+                var relatedPage = document.getElementById("RelatedPageID" + i).value;
+                var pageId = parseInt(pageName)
+                var moduleId = parseInt(moduleName)
+                var relatedPageID = parseInt(relatedPage)
 
 
-            if (listIsShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
-            if (isSave) roleAccessArray.push({ "PageAccess": 2 });
-            if (isView) roleAccessArray.push({ "PageAccess": 3 });
-            if (isEdit) roleAccessArray.push({ "PageAccess": 4 });
-            if (isDelete) roleAccessArray.push({ "PageAccess": 5 });
-            if (isEditSelf) roleAccessArray.push({ "PageAccess": 6 });
-            if (isDeleteSelf) roleAccessArray.push({ "PageAccess": 7 });
-            if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
-            if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
-            if (isPdfdownload) roleAccessArray.push({ "PageAccess": 10 });
-            if (isExceldownload) roleAccessArray.push({ "PageAccess": 11 });
-            if (isCopy) roleAccessArray.push({ "PageAccess": 12 });
+                var addIsShowOnMenu = document.getElementById("addIsShowOnMenu" + i).checked;
+                var listIsShowOnMenu = document.getElementById("listIsShowOnMenu" + i).checked;
+                var isSave = document.getElementById("IsSave" + i).checked
+                var isView = document.getElementById("IsView" + i).checked;
+                var isEdit = document.getElementById("IsEdit" + i).checked;
+                var isDelete = document.getElementById("IsDelete" + i).checked;
+                var isEditSelf = document.getElementById("IsEditSelf" + i).checked;
+                var isDeleteSelf = document.getElementById("IsDeleteSelf" + i).checked;
+                var isPrint = document.getElementById("IsPrint" + i).checked;
+                var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
+                var isPdfdownload = document.getElementById("Pdfdownload" + i).checked;
+                var isExceldownload = document.getElementById("Exceldownload" + i).checked;
+                var isCopy = document.getElementById("IsCopy" + i).checked;
 
-            if (addIsShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
-            if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
-            if (isView) roleAccessArray2.push({ "PageAccess": 3 });
-            if (isEdit) roleAccessArray2.push({ "PageAccess": 4 });
-            if (isDelete) roleAccessArray2.push({ "PageAccess": 5 });
-            if (isEditSelf) roleAccessArray2.push({ "PageAccess": 6 });
-            if (isDeleteSelf) roleAccessArray2.push({ "PageAccess": 7 });
-            if (isPrint) roleAccessArray2.push({ "PageAccess": 8 });
-            if (isTopOfTheDivision) roleAccessArray2.push({ "PageAccess": 9 });
-            if (isPdfdownload) roleAccessArray2.push({ "PageAccess": 10 });
-            if (isExceldownload) roleAccessArray2.push({ "PageAccess": 11 });
-            if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
 
-            let divisionID = division_dropdown_Select.value
+                if (listIsShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
+                if (isSave) roleAccessArray.push({ "PageAccess": 2 });
+                if (isView) roleAccessArray.push({ "PageAccess": 3 });
+                if (isEdit) roleAccessArray.push({ "PageAccess": 4 });
+                if (isDelete) roleAccessArray.push({ "PageAccess": 5 });
+                if (isEditSelf) roleAccessArray.push({ "PageAccess": 6 });
+                if (isDeleteSelf) roleAccessArray.push({ "PageAccess": 7 });
+                if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
+                if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
+                if (isPdfdownload) roleAccessArray.push({ "PageAccess": 10 });
+                if (isExceldownload) roleAccessArray.push({ "PageAccess": 11 });
+                if (isCopy) roleAccessArray.push({ "PageAccess": 12 });
 
-            pageAccessElement["Role"] = role_dropdown_Select.value
-            pageAccessElement["Company"] = company_dropdown_Select.value
-            pageAccessElement["Division"] = (divisionID === 0 ? "" : divisionID)
-            pageAccessElement["Modules"] = moduleId
-            pageAccessElement["Pages"] = pageId
-            pageAccessElement["CreatedBy"] = loginUserID()
-            pageAccessElement["UpdatedBy"] = loginUserID()
-            pageAccessElement["RolePageAccess"] = roleAccessArray
+                if (addIsShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
+                if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
+                if (isView) roleAccessArray2.push({ "PageAccess": 3 });
+                if (isEdit) roleAccessArray2.push({ "PageAccess": 4 });
+                if (isDelete) roleAccessArray2.push({ "PageAccess": 5 });
+                if (isEditSelf) roleAccessArray2.push({ "PageAccess": 6 });
+                if (isDeleteSelf) roleAccessArray2.push({ "PageAccess": 7 });
+                if (isPrint) roleAccessArray2.push({ "PageAccess": 8 });
+                if (isTopOfTheDivision) roleAccessArray2.push({ "PageAccess": 9 });
+                if (isPdfdownload) roleAccessArray2.push({ "PageAccess": 10 });
+                if (isExceldownload) roleAccessArray2.push({ "PageAccess": 11 });
+                if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
 
-            if (roleAccessArray.length > 0) {
-                let pageAccessElement2 = {}
-                selectedItemArray.push(pageAccessElement)
-                if (relatedPageID > 0) {
+                let divisionID = division_dropdown_Select.value
 
-                    pageAccessElement2["Role"] = role_dropdown_Select.value
-                    pageAccessElement2["Company"] = company_dropdown_Select.value
-                    pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
-                    pageAccessElement2["Modules"] = moduleId
-                    pageAccessElement2["Pages"] = relatedPageID
-                    pageAccessElement2["CreatedBy"] = loginUserID()
-                    pageAccessElement2["UpdatedBy"] = loginUserID()
-                    pageAccessElement2["RolePageAccess"] = roleAccessArray2
-                    selectedItemArray.push(pageAccessElement2)
-                    pageAccessElement2 = {}
+                pageAccessElement["Role"] = role_dropdown_Select.value
+                pageAccessElement["Company"] = company_dropdown_Select.value
+                pageAccessElement["Division"] = (divisionID === 0 ? "" : divisionID)
+                pageAccessElement["Modules"] = moduleId
+                pageAccessElement["Pages"] = pageId
+                pageAccessElement["CreatedBy"] = loginUserID()
+                pageAccessElement["UpdatedBy"] = loginUserID()
+                pageAccessElement["RolePageAccess"] = roleAccessArray
+
+                if (roleAccessArray.length > 0) {
+                    let pageAccessElement2 = {}
+                    selectedItemArray.push(pageAccessElement)
+                    if (relatedPageID > 0) {
+
+                        pageAccessElement2["Role"] = role_dropdown_Select.value
+                        pageAccessElement2["Company"] = company_dropdown_Select.value
+                        pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
+                        pageAccessElement2["Modules"] = moduleId
+                        pageAccessElement2["Pages"] = relatedPageID
+                        pageAccessElement2["CreatedBy"] = loginUserID()
+                        pageAccessElement2["UpdatedBy"] = loginUserID()
+                        pageAccessElement2["RolePageAccess"] = roleAccessArray2
+                        selectedItemArray.push(pageAccessElement2)
+                        pageAccessElement2 = {}
+                    }
                 }
+                roleAccessArray2 = []
+                roleAccessArray = []
+                pageAccessElement = {}
             }
-            roleAccessArray2 = []
-            roleAccessArray = []
-            pageAccessElement = {}
-        }
-        const jsonBody = JSON.stringify(selectedItemArray)
-        dispatch(PostMethodForRoleAccessListPage(jsonBody));
+            const jsonBody = JSON.stringify(selectedItemArray)
+            dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
-    };
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    }
 
     function DeleteRolePage_Handler(id) {
         const newList = tableListData.filter((index) => {
