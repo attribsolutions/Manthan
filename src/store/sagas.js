@@ -71,7 +71,7 @@ import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
 
 import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
-
+import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
 
 
 export default function* rootSaga() {
@@ -129,9 +129,8 @@ export default function* rootSaga() {
     fork(ChallanSaga),
     fork(Production_ReIssueSaga),
     fork(RouteUpdateSaga),
-
-    fork(LoadingSheetSaga)
-
+    fork(LoadingSheetSaga),
+    fork(PartyMasterBulkUpdateSaga),
   
   ])
 }
