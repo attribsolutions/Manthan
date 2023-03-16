@@ -130,6 +130,7 @@ import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 import Report from "../Reports/AllReportPage";
 import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
+import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -233,6 +234,7 @@ const userRoutes = [
   { path: path.IMPORT_MASTER, component: ImportMaster },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
+  { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
@@ -253,13 +255,13 @@ const userRoutes = [
 
   { path: path.ORDER_4, component: Order },
   { path: path.ORDER_LIST_4, component: OrderList },
-  
+
   //******************************* All Report ************************************//
   { path: path.REPORT, component: Report },
 
   //******************************* PRODUCTION  Module ************************************//
 
-  
+
 
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
@@ -274,7 +276,7 @@ const userRoutes = [
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
   { path: path.PRODUCTION_LIST, component: ProductionList },
   { path: path.PRODUCTION_STP, component: MaterialIssueList },
-  
+
   { path: path.PRODUCTION_REISSUE, component: ProductionReIssueAdd },
   { path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
   { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
@@ -290,7 +292,7 @@ const userRoutes = [
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },
   { path: path.IB_ORDER_SO_LIST, component: OrderList },
-  
+
   { path: path.INWARD, component: Inward },
   { path: path.INWARD_LIST, component: InwardList },
   { path: path.IB_INWARD_STP, component: InvoiceList },

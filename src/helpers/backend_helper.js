@@ -375,8 +375,11 @@ export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_PO
 export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
 export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPDATE, jsonBody, btnId)// Route Update Post API
 
-// Loading Sheet
-
+// PartyMasterBulkUpdate
+export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
+export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api
+export const post_PartyAPI = ({ jsonBody, btnId }) => post(url.PARTY_DROPDOWN, jsonBody, btnId)// post api
+export const post_SelectFieldAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
 
 // Order Page api  
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api

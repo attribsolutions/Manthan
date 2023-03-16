@@ -50,6 +50,7 @@ import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 import RoutesReducer from "./Administrator/RoutesRedux/reducer"
 import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
+import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -129,6 +130,7 @@ const rootReducer = combineReducers({
   TermsAndConditionsReducer,
   RoutesReducer,
   CreditLimitReducer,
+  PartyMasterBulkUpdateReducer,
   SalesManReducer,
   GroupTypeReducer,
   GSTReducer,

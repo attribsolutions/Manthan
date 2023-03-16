@@ -191,6 +191,12 @@ export const CREDIT_LIMIT = '/Creditlimit'
 
 export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter'
 export const ROUTE_UPDATE = '/RouteUpdate'
+
+//PartyMasterBulkUpdate
+export const PARTY_DROPDOWN = '/RetailerandSSDD'
+export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/CreditlimitList' // for go button
+export const PARTY_MASTER_BULK_UPDATE = '/Creditlimit'
+export const SELECT_FIELD_DROPDOWN = '/RetailerandSSDD'
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
