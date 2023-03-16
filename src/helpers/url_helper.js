@@ -275,6 +275,6 @@ export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOI
 
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
-
+export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
 
 
