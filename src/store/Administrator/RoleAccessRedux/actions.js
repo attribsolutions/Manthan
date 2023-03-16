@@ -66,7 +66,7 @@ export const AddPageHandlerForRoleAccessListPage_Success = (data) => ({
   payload: data,
 });
 
-export const saveRoleAccessAddAction = (config={}) => ({
+export const saveRoleAccessAddAction = (config = {}) => ({
   type: SAVE_ROLE_ACCESS_ADD_ACTION,
   config,
 });
@@ -89,19 +89,19 @@ export const getRoleAccessListPageSuccess = (data) => ({
 });
 
 // Copy RoleAccess For RoleAccess
-export const saveCopyRoleAccessAction = (data) => ({
+export const saveCopyRoleAccessAction = (config={}) => ({
   type: SAVE_COPY_ROLE_ACCESS_ACTION,
-  data,
+  config,
 });
 
-export const saveCopyRoleAccessActionSuccess = (data) => ({
+export const saveCopyRoleAccessActionSuccess = (resp) => ({
   type: SAVE_COPY_ROLE_ACCESS_ACTION_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
-export const DeleteRoleAcess = (role, division, company) => ({
+export const DeleteRoleAcess = (config = {}) => ({
   type: DELETE_ROLE_ACCESS_lIST,
-  role, division, company,
+  config,
 });
 
 

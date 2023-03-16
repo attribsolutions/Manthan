@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
-import { breadcrumbReturn, CommonConsole }
+import { breadcrumbReturn }
     from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
@@ -82,6 +82,8 @@ const CommonPurchaseList = (props) => {
 
     const {
         editBodyfunc,
+        deleteBodyfunc,
+        copyBodyfunc,
         MasterModal,
         masterPath,
         ButtonMsgLable,
@@ -105,7 +107,7 @@ const CommonPurchaseList = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
-            
+
             setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc, newBtnPath });
         }
@@ -148,6 +150,7 @@ const CommonPurchaseList = (props) => {
     }, [updateMsg]);
 
     useEffect(() => {
+        
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
@@ -233,7 +236,7 @@ const CommonPurchaseList = (props) => {
             }
         }
 
-          // ======================== for GRNMode2 Page Action Button ================================
+        // ======================== for GRNMode2 Page Action Button ================================
 
         if ((makeBtnShow) && (pageMode === mode.modeSTPsave) && (PageFieldMaster.length - 1 === k)) {
 
@@ -276,6 +279,8 @@ const CommonPurchaseList = (props) => {
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
                     editBodyfunc: editBodyfunc,
+                    deleteBodyfunc: deleteBodyfunc,
+                    copyBodyfunc: copyBodyfunc,
                     makeBtnFunc: makeBtnFunc,
                     pageMode: pageMode,
                 })
@@ -295,7 +300,7 @@ const CommonPurchaseList = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
-   
+
     if (!(userAccState === '')) {
         return (
             <React.Fragment>

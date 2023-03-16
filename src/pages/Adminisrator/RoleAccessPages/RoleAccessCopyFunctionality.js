@@ -10,6 +10,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
+import { btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 
 const RoleAccessCopyFunctionality = (props) => {
 
@@ -107,8 +108,11 @@ const RoleAccessCopyFunctionality = (props) => {
     }
 
 
-
-    function CopyButton_Handler() {
+    function CopyButton_Handler(event) {
+        event.preventDefault();
+        const btnId = event.target.id
+        btnIsDissablefunc({ btnId, state: true })
+        try {
         const jsonBody = JSON.stringify(
             {
                 Role: copyRole_Dropdown_Select.value,
@@ -119,7 +123,9 @@ const RoleAccessCopyFunctionality = (props) => {
                     : 0,
                 Company: company_dropdown_Select.value
             })
-        dispatch(saveCopyRoleAccessAction(jsonBody))
+        dispatch(saveCopyRoleAccessAction({jsonBody,btnId}))
+
+        } catch(error){ btnIsDissablefunc({ btnId, state: false })}
     }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -211,7 +217,7 @@ const RoleAccessCopyFunctionality = (props) => {
                                 </Col>
 
                                 <Col md="3" className="mt- ">
-                                    <Button type="button" color="primary" onClick={() => { CopyButton_Handler() }}>Copy Role</Button>
+                                    <Button type="button" color="primary" id={"roleAccessCopy"} onClick={ CopyButton_Handler}>Copy Role</Button>
                                 </Col>
 
                             </Row>

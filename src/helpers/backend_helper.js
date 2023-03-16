@@ -204,8 +204,8 @@ export const RoleAccessAdd_GO_Button_Api = (id1, id2, id3) => get(`${url.GO_BUTT
 export const RoleAccessAdd_AddPage_Button_Api = (id1) => get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
 export const RoleAccessAdd_Save_Api = ({ jsonBody, btnId }) => post(url.ROLE_ACCESS, jsonBody, btnId) //save api RoleAccessAdd 
 export const RoleAccessAdd_List_Api = (jsonbody) => post(url.GET_ROLEACCESS_LIST_PAGE_API, jsonbody)// RoleAccess List Page API
-export const RoleAccessCopy_Save_Api = (data) => post(url.POST_COPY_ROLE_ACCESS_API, data)//save api RoleAccessCopy 
-export const RoleAccessAdd_Delete_Api = (role, division, company) => del(`${url.DELETE_ROLE_ACCESS_API}/${role}/${division}/${company}`)//POST COPY  RoleAccess API
+export const RoleAccessCopy_Save_Api = ({ jsonBody, btnId }) => post(url.POST_COPY_ROLE_ACCESS_API, jsonBody, btnId )//save api RoleAccessCopy 
+export const RoleAccessAdd_Delete_Api = ({role, division, company,btnId}) => del(`${url.DELETE_ROLE_ACCESS_API}/${role}/${division}/${company}`,btnId)//POST COPY  RoleAccess API
 
 // Employee Type API
 export const Employee_Type_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_TYPE_API, jsonBody, btnId)// post api

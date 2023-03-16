@@ -1,7 +1,7 @@
 import { Button } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
-import{btnIsDissablefunc} from "./CommonFunction"
+import { btnIsDissablefunc } from "./CommonFunction"
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
@@ -23,6 +23,8 @@ export const listPageActionsButtonFunc = (props) => {
         deleteName,
         downBtnFunc,
         editBodyfunc,
+        deleteBodyfunc,
+        copyBodyfunc,
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
@@ -32,17 +34,24 @@ export const listPageActionsButtonFunc = (props) => {
     function editHandler(rowData, btnmode, btnId) {
 
         const config = { editId: rowData.id, btnmode, subPageMode, btnId }
-
         btnIsDissablefunc({ btnId, state: true })
+
         if (editBodyfunc) {
-            editBodyfunc({rowData, btnmode, subPageMode, btnId})
+            editBodyfunc({ rowData, btnmode, subPageMode, btnId })
         } else {
             dispatch(editActionFun({ ...config }));
         }
     };
 
-    function copyHandler(rowData, btnmode) {
-        dispatch(editActionFun(rowData.id, btnmode, subPageMode));
+    function copyHandler(rowData, btnmode,btnId) {
+        const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+        btnIsDissablefunc({ btnId, state: true })
+
+        if (copyBodyfunc) {
+            copyBodyfunc({ rowData, btnmode, subPageMode, btnId })
+        } else {
+            dispatch(editActionFun({ ...config }));
+        }
     };
 
     function downHandler(rowData) {
@@ -50,14 +59,20 @@ export const listPageActionsButtonFunc = (props) => {
     };
 
     async function deleteHandler(rowData, btnId) {
-        const rep = await CustomAlert({
-            Type: 8,
-            Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-        })
-        if (rep) {
-            btnIsDissablefunc({ btnId, state: true })
-            const config = { deleteId: rowData.id, subPageMode, btnId }
-            dispatch(deleteActionFun({ ...config }))
+        if (deleteBodyfunc) {
+            const config = { rowData, subPageMode, btnId }
+            deleteBodyfunc({ ...config })
+            return
+        } else {
+            const rep = await CustomAlert({
+                Type: 8,
+                Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+            })
+            if (rep) {
+                btnIsDissablefunc({ btnId, state: true })
+                const config = { deleteId: rowData.id, subPageMode, btnId }
+                dispatch(deleteActionFun({ ...config }))
+            }
         }
     }
 
@@ -92,8 +107,8 @@ export const listPageActionsButtonFunc = (props) => {
                                 className={makeBtnCss}
                                 title={makeBtnName}
                                 onClick={() => {
-                                    const btnid = `btn-makeBtn-${rowData.id}`
-                                    makeBtnHandler(rowData, btnid)
+                                    const btnId = `btn-makeBtn-${rowData.id}`
+                                    makeBtnHandler(rowData, btnId)
                                 }}
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
@@ -111,8 +126,8 @@ export const listPageActionsButtonFunc = (props) => {
                                 className={editBtnCss}
                                 title={`Edit ${ButtonMsgLable}`}
                                 onClick={() => {
-                                    const btnid = `btn-edit-${rowData.id}`
-                                    editHandler(rowData, mode.edit, btnid)
+                                    const btnId = `btn-edit-${rowData.id}`
+                                    editHandler(rowData, mode.edit, btnId)
                                 }}
                             >
                                 <i className="mdi mdi-pencil font-size-18" ></i>
@@ -128,8 +143,8 @@ export const listPageActionsButtonFunc = (props) => {
                                     className={editSelfBtnCss}
                                     title={`EditSelf ${ButtonMsgLable}`}
                                     onClick={() => {
-                                        const btnid = `btn-edit-${rowData.id}`
-                                        editHandler(rowData, mode.edit, btnid)
+                                        const btnId = `btn-edit-${rowData.id}`
+                                        editHandler(rowData, mode.edit, btnId)
                                     }}
                                 >
                                     <i className="mdi mdi-pencil font-size-18" ></i>
@@ -145,8 +160,8 @@ export const listPageActionsButtonFunc = (props) => {
                                         id={`btn-edit-${rowData.id}`}
                                         title={`View ${ButtonMsgLable}`}
                                         onClick={() => {
-                                            const btnid = `btn-view-${rowData.id}`
-                                            editHandler(rowData, mode.view, btnid)
+                                            const btnId = `btn-view-${rowData.id}`
+                                            editHandler(rowData, mode.view, btnId)
                                         }}
                                     >
                                         <i className="bx bxs-show font-size-18 "></i>
@@ -166,8 +181,8 @@ export const listPageActionsButtonFunc = (props) => {
                                 id={`btn-delete-${rowData.id}`}
                                 title={`Delete ${ButtonMsgLable}`}
                                 onClick={() => {
-                                    const btnid = `btn-delete-${rowData.id}`
-                                    deleteHandler(rowData, btnid)
+                                    const btnId = `btn-delete-${rowData.id}`
+                                    deleteHandler(rowData, btnId)
                                 }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
@@ -184,8 +199,8 @@ export const listPageActionsButtonFunc = (props) => {
                                     id={`btn-delete-${rowData.id}`}
                                     title={`Delete ${ButtonMsgLable}`}
                                     onClick={() => {
-                                        const btnid = `btn-delete-${rowData.id}`
-                                        deleteHandler(rowData, btnid)
+                                        const btnId = `btn-delete-${rowData.id}`
+                                        deleteHandler(rowData, btnId)
                                     }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
@@ -200,8 +215,8 @@ export const listPageActionsButtonFunc = (props) => {
                                 className={editSelfBtnCss}
                                 title={`Copy ${ButtonMsgLable}`}
                                 onClick={() => {
-                                    const btnid = `btn-delete-${rowData.id}`
-                                    copyHandler(rowData, mode.copy, btnid)
+                                    const btnId = `btn-delete-${rowData.id}`
+                                    copyHandler(rowData, mode.copy, btnId)
                                 }}
                             >
                                 <i className="bx bxs-copy font-size-18 "></i>
@@ -216,8 +231,8 @@ export const listPageActionsButtonFunc = (props) => {
                                 className={downBtnCss}
                                 title={`Download ${ButtonMsgLable}`}
                                 onClick={() => {
-                                    const btnid = `btn-dounload-${rowData.id}`
-                                    downHandler(rowData, btnid)
+                                    const btnId = `btn-dounload-${rowData.id}`
+                                    downHandler(rowData, btnId)
                                 }}
                             >
                                 <i className="bx bx-printer font-size-18"></i>

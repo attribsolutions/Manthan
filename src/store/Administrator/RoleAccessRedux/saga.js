@@ -82,27 +82,22 @@ function* getList_RoleAccessList_GenFunc() { // get api
 }
 
 
-function* Delete_RoleAccessList_GenFunc({ role, division, company }) {// delete Api
+function* Delete_RoleAccessList_GenFunc({ config}) {// delete Api
   try {
-    const response = yield call(RoleAccessAdd_Delete_Api, role, division, company);
+    const response = yield call(RoleAccessAdd_Delete_Api, config);
     yield put(DeleteRoleAcessSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
 
-
-
-
-function* saveRoleAccessCopy_GenFun({ data }) {
+function* saveRoleAccessCopy_GenFun({ config }) {
 
   try {
-    const response = yield call(RoleAccessCopy_Save_Api, data);
+    const response = yield call(RoleAccessCopy_Save_Api, config);
     yield put(saveCopyRoleAccessActionSuccess(response));
 
   } catch (error) { CommonConsole(error) }
 }
-
-
 
 
 function* RoleAccessSaga() {
