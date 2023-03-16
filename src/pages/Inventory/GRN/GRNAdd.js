@@ -58,7 +58,7 @@ const GRNAdd = (props) => {
         postMsg,
         userAccess,
     } = useSelector((state) => ({
-        supplierAddress: state.SupplierReducer.supplierAddress,
+        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,

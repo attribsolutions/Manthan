@@ -201,6 +201,9 @@ const CommonPurchaseList = (props) => {
 
     }
 
+    function onSaveBtnClick() {
+        makeBtnFunc(tableList);
+    }
 
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
@@ -212,6 +215,36 @@ const CommonPurchaseList = (props) => {
     });
     // *******
 
+    //**** GRNMode2_ list multilple make_GRN checkBox selection Onchange ********************/
+
+    function GRNMode2_checkBtnOnchange(e, rowData) {
+
+        let isEvent = e.target.checked
+        rowData.hasSelect = isEvent
+
+        let found = tableList.filter(i => (i.hasSelect))
+
+        tableList.map((ele, k) => {
+            if (found.length === 1 && isEvent) {
+                // validation only show checkbox =supplier and same 
+                if (!(ele.SupplierID === rowData.SupplierID) || !(ele.POType === rowData.POType)) {
+                    try {
+                        document.getElementById(`checkhasSelect${ele.id}`).disabled = true
+                        document.getElementById(`checkhasSelect${ele.id}`).style.border = "white"
+                    }
+                    catch (e) { }
+                };
+            }
+            else if (found.length === 0 && !isEvent) {
+                try {
+                    document.getElementById(`checkhasSelect${ele.id}`).disabled = false
+                    document.getElementById(`checkhasSelect${ele.id}`).style.border = ""
+                }
+                catch (e) { }
+            };
+        })
+
+    }
 
     let sortLabel = ""
     const columns = []
@@ -233,7 +266,41 @@ const CommonPurchaseList = (props) => {
             }
         }
 
-          // ======================== for GRNMode2 Page Action Button ================================
+        // ======================== for GRNMode2 Page Action Button ================================
+
+        // if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
+
+        //     columns.push({
+        //         text: "Select",
+        //         dataField: "hasSelect",
+        //         sort: true,
+        //         formatter: (cellContent, rowData, key) => {
+        //             rowData["hasSelect"] = false
+        //             return (
+        //                 <div>
+        //                     <Input
+        //                         type="checkbox"
+        //                         className="mx-2"
+        //                         id={`checkhasSelect${rowData.id}`}
+        //                         defaultChecked={rowData.hasSelect}
+        //                         // disabled={rowData["isdisabled"]}
+        //                         key={rowData.hasSelect}
+        //                         onChange={(e) => GRNMode2_checkBtnOnchange(e, rowData)}
+        //                     />
+        //                     <Button
+        //                         type="button"
+        //                         className={makeBtnCss}
+        //                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+        //                         onClick={() => { makeBtnHandler(rowData) }}
+        //                     >
+        //                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
+        //                             className=" fas fa-file-invoice" ></span> </Button>
+        //                 </div>)
+        //         }
+        //     })
+        // }
+
+        // ======================== for GRNMode2 Page Action Button ================================
 
         if ((makeBtnShow) && (pageMode === mode.modeSTPsave) && (PageFieldMaster.length - 1 === k)) {
 

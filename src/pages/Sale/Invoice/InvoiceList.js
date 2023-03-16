@@ -51,7 +51,7 @@ const InvoiceList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.SupplierReducer.vendorSupplierCustomer,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.InvoiceReducer.Invoicelist,
             GRNitem: state.GRNReducer.GRNitem,
             deleteMsg: state.InvoiceReducer.deleteMsg,

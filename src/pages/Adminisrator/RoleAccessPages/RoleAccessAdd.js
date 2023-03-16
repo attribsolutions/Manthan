@@ -101,22 +101,17 @@ const RoleAccessAdd = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
-        const editDataGatingFromList = history.location.state
-        if (!(editDataGatingFromList === undefined)) {
-            var division_id = editDataGatingFromList.Division_id
-            var divisionName = editDataGatingFromList.DivisionName
-            var role_id = editDataGatingFromList.Role_id
-            var roleName = editDataGatingFromList.RoleName
-            var company_id = editDataGatingFromList.Company_id
-            var companyName = editDataGatingFromList.CompanyName
-
-            if (role_id > 0) {
-                setPageMode(mode.edit)
-                dispatch(GO_Button_HandlerForRoleAccessListPage(role_id, division_id, company_id));
+        const hasEditVal = history.location.state;
+        if (!(hasEditVal === undefined)) {
+            const { rowData = {}, btnMode } = hasEditVal
+            const { Division_id, DivisionName, Role_id, RoleName, Company_id, CompanyName } = rowData;
+            if (Role_id > 0) {
+                setPageMode(btnMode)
+                dispatch(GO_Button_HandlerForRoleAccessListPage(Role_id, Division_id, Company_id));
                 setShowTableOnUI(true)
-                setRoleDropDown({ label: roleName, value: role_id })
-                setCompany_dropdown_Select({ label: companyName, value: company_id })
-                setDivision_dropdown_Select({ label: divisionName, value: division_id })
+                setRoleDropDown({ label: RoleName, value: Role_id })
+                setCompany_dropdown_Select({ label: CompanyName, value: Company_id })
+                setDivision_dropdown_Select({ label: DivisionName, value: Division_id })
             }
         }
     }, [])
@@ -707,8 +702,11 @@ const RoleAccessAdd = (props) => {
                                                 </Col>
                                                 <Col sm={1} >
                                                     {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
-                                                    <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                                        module={"RoleAccess"} onClick={saveHandeller}
+                                                    <SaveButton
+                                                        pageMode={pageMode}
+                                                        userAcc={userAccState}
+                                                        module={"RoleAccess"}
+                                                        onClick={saveHandeller}
                                                     />
                                                 </Col>
                                             </Row>

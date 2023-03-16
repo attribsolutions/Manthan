@@ -54,7 +54,6 @@ export const updatePartySubPartySuccess = (resp) => ({                          
   payload: resp,
 })
 
-
 export const getPartySubParty_For_party_dropdown = (id) => ({                     // get PartySubParty List in party dropdown
   type: GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
   id,

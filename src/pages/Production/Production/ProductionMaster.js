@@ -68,7 +68,7 @@ const ProductionMaster = (props) => {
         itemsDrop,
         UnitDropdown
     } = useSelector((state) => ({
-        supplierAddress: state.SupplierReducer.supplierAddress,
+        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         postMsg: state.ProductionReducer.postMsg,
         updateMsg: state.ProductionReducer.updateMsg,
         UnitDropdown: state.ProductionReducer.unit,

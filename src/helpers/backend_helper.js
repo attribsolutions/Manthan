@@ -335,8 +335,11 @@ export const Save_Party_Items = ({ jsonBody, btnId }) => post(url.PARTYITEM_FOR_
 export const get_Party_Item_List = (SupplierID) => get(`${url.PARTYITEM_FOR_MASTER}/${SupplierID}`)//get api
 export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
 export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
+
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (post_PartyId) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, post_PartyId)//Post api
+export const SSDD_List_under_Company_API = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
+export const Retailer_List_under_Company_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api

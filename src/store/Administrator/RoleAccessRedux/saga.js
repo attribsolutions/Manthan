@@ -15,7 +15,7 @@ import {
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,
-  POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_ACCESS,
+  SAVE_COPY_ROLE_ACCESS_ACTION,
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
 } from "./actionType";
 import {
@@ -25,10 +25,10 @@ import {
   GO_Button_HandlerForRoleAccessListPage_Success,
   PageDropdownForRoleAccessList_Success,
   PostMethod_ForRoleAccessListPage_Success,
-  PostMethod_ForCopyRoleAccessFor_Role_Success,
+  saveCopyRoleAccessActionSuccess,
   DeleteRoleAcessSuccess,
 } from "./actions";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
 
 
@@ -69,10 +69,15 @@ function* PostMethod_HandlerForRoleAccessList_GenFunc({ data }) {
 }
 
 
-function* getList_RoleAccessList_GenFunc({jsonbody}) { // get api 
+function* getList_RoleAccessList_GenFunc() { // get api 
+  const JsonBody = loginJsonBody();
   try {
-    const response = yield call(Get_RoleAccess_List_Page_Api,jsonbody);
-    yield put(getRoleAccessListPageSuccess(response.Data));
+    const response = yield call(Get_RoleAccess_List_Page_Api, JsonBody);
+    const newResp = response.Data.map((i, k) => {
+      i.id = k;
+      return i
+    })
+    yield put(getRoleAccessListPageSuccess(newResp));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -92,7 +97,7 @@ function* Post_MethodForCopyRoleAccess_GenFun({ data }) {
 
   try {
     const response = yield call(Post_CopyRoleAccess_for_RoleAccess_Api, data);
-    yield put(PostMethod_ForCopyRoleAccessFor_Role_Success(response));
+    yield put(saveCopyRoleAccessActionSuccess(response));
 
   } catch (error) { CommonConsole(error) }
 }
@@ -108,7 +113,7 @@ function* RoleAccessSaga() {
   yield takeEvery(ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, AddPageHandlerForRoleAccessList_GenFunc);
   yield takeEvery(POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, PostMethod_HandlerForRoleAccessList_GenFunc);
   yield takeEvery(GET_ROLEACCESS_LIST_PAGE, getList_RoleAccessList_GenFunc);
-  yield takeEvery(POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_ACCESS, Post_MethodForCopyRoleAccess_GenFun);
+  yield takeEvery(SAVE_COPY_ROLE_ACCESS_ACTION, Post_MethodForCopyRoleAccess_GenFun);
 
 }
 
