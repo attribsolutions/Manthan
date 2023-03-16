@@ -97,7 +97,7 @@ const CommonPurchaseList = (props) => {
         newBtnPath,
         HeaderContent = () => { return null }
     } = props;
-
+    
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
@@ -150,7 +150,7 @@ const CommonPurchaseList = (props) => {
     }, [updateMsg]);
 
     useEffect(() => {
-        
+
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
@@ -218,6 +218,10 @@ const CommonPurchaseList = (props) => {
 
     let sortLabel = ""
     const columns = []
+
+    if (!PageFieldMaster.length > 0) {
+        columns.push({ text: "Page Field Is Blank...", })
+    };
 
     PageFieldMaster.forEach((i, k) => {
         if (i.ShowInListPage) {
