@@ -38,9 +38,11 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
-// import * as pageId from "../../../routes/allPageID"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as url from "../../../routes/route_url"
 
-const RoleAccessAdd = (props) => {
+
+const RoleAccessAdd = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -62,10 +64,10 @@ const RoleAccessAdd = (props) => {
     const {
         PageAccess,
         ModuleData,
-        PageDropdownForRoleAccess,
-        AddPage_PageMasterListForRoleAccess_Redux,
-        GO_buttonPageMasterListForRoleAccess_Redux,
-        PostMessage_ForRoleAccessList,
+        PageDropdownRedux,
+        addpageDropdownRedux,
+        GoButtonRedux,
+        postMsg,
         Roles,
         partyList,
         userAccess,
@@ -77,10 +79,10 @@ const RoleAccessAdd = (props) => {
         Roles: state.RoleMaster_Reducer.roleList,
         ModuleData: state.Modules.modulesList,
         PageAccess: state.H_Pages.PageAccess,
-        PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
-        AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
-        GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
-        PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
+        PageDropdownRedux: state.RoleAccessReducer.PageDropdownForRoleAccess,
+        addpageDropdownRedux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
+        GoButtonRedux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
+        postMsg: state.RoleAccessReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         company: state.Company.companyList,
     }));
@@ -133,7 +135,7 @@ const RoleAccessAdd = (props) => {
         var eleList = {}
 
         let count1 = 0
-        GO_buttonPageMasterListForRoleAccess_Redux.map((indexdata) => {
+        GoButtonRedux.map((indexdata) => {
             count1 = count1 + 1
 
             eleList = indexdata;
@@ -143,7 +145,7 @@ const RoleAccessAdd = (props) => {
             eleList = {}
         })
         setTableListData(Array)
-    }, [GO_buttonPageMasterListForRoleAccess_Redux])
+    }, [GoButtonRedux])
 
     useEffect(() => {
 
@@ -152,7 +154,7 @@ const RoleAccessAdd = (props) => {
         let NewID = tableListData.length + 1
         let previousData = tableListData
 
-        let indexdata = AddPage_PageMasterListForRoleAccess_Redux[0]
+        let indexdata = addpageDropdownRedux[0]
 
         if (!(indexdata === undefined)) {
             eleList = indexdata
@@ -162,7 +164,7 @@ const RoleAccessAdd = (props) => {
             setTableListData(previousData)
         }
 
-    }, [AddPage_PageMasterListForRoleAccess_Redux])
+    }, [addpageDropdownRedux])
 
     useEffect(() => {
         var NewColoumList = PageAccess.map((i) => {
@@ -176,27 +178,19 @@ const RoleAccessAdd = (props) => {
         setTableHederList(RoleAccessListColoums)
     }, [PageAccess])
 
-    useEffect(() => {
-        if ((PostMessage_ForRoleAccessList.Status === true) && (PostMessage_ForRoleAccessList.StatusCode === 200)) {
+    useEffect(async () => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostMessage_ForRoleAccessList.Message,
-                AfterResponseAction: false
-            }))
+            const promise = await CustomAlert({ Type: 1, Message: postMsg.Message, })
+            if (promise) {
+                history.push({ pathname: url.ROLEACCESS_lIST })
+            }
         }
-        else if (PostMessage_ForRoleAccessList.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(saveRoleAccessAddActionSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(PostMessage_ForRoleAccessList.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            CustomAlert({ Type: 4, Message: JSON.stringify(postMsg.Message), })
         }
-    }, [PostMessage_ForRoleAccessList])
+    }, [postMsg])
 
     let RoleAccessListColoums = [
 
@@ -240,7 +234,7 @@ const RoleAccessAdd = (props) => {
     }, [company])
 
     // for Page dropdown
-    const Page_DropdownOption = PageDropdownForRoleAccess.map((d) => ({
+    const Page_DropdownOption = PageDropdownRedux.map((d) => ({
         value: d.id,
         label: d.Name,
     }));
@@ -297,7 +291,7 @@ const RoleAccessAdd = (props) => {
 
         if (selectePageID === 0) {
             var pageId = 0
-            PageDropdownForRoleAccess.forEach((i) => {
+            PageDropdownRedux.forEach((i) => {
                 pageId = i.id
                 let found = tableListData.find((inx) => { return inx.PageID === pageId })
                 if ((found === undefined) && !(pageId === 0)) {

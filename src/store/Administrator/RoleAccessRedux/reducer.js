@@ -18,12 +18,12 @@ const INIT_STATE = {
   RoleListDataForRoleListPage: [],
   AddPage_PageMasterListForRoleAccess: [],
   GO_buttonPageMasterListForRoleAccess: [],
-  PostMessage_ForRoleAccessList: { Status: false },
+  postMsg: { Status: false },
+  postMsgCopy: { Status: false },
   deleteMsg: { Status: false },
   RoleAccessListPage: [],
   editData: { Status: false },
   updateMsg: { Status: false },
-  PostMessage_ForCopyRoleAccess: { Status: false },
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
@@ -56,7 +56,7 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
     case SAVE_ROLE_ACCESS_ADD_ACTION_SUCCESS:
       return {
         ...state,
-        PostMessage_ForRoleAccessList: action.payload,
+        postMsg: action.payload,
       }
 
     // get RoleAccess List Page
@@ -72,7 +72,7 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
     case SAVE_COPY_ROLE_ACCESS_ACTION_SUCCESS:
       return {
         ...state,
-        PostMessage_ForCopyRoleAccess: action.payload,
+        postMsgCopy: action.payload,
       }
     case EDIT_ROLE_ACCESS_lIST_SUCCESS:
       return {
