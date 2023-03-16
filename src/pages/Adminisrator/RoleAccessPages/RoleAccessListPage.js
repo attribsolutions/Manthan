@@ -357,12 +357,12 @@ const RoleAccessListPage = (props) => {
             state: config,
         })
     }
-    
+
     function deleteBodyfunc(config) {
         const { rowData } = config;
 
     }
-    deleteBodyfunc
+
     const { pageField, userAccess = [] } = reducers
 
     return (
