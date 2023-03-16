@@ -3,42 +3,35 @@ import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data, dataGenrator } from "./DemoData";
 
-
 var pageHeder = function (doc, data) {
-
-    style.pageBorder(doc, data);
-    style.pageHeder(doc, data);     //Title
+    style.pageBorder(doc, data);                           // Page Border
+    style.pageHeder(doc, data);                            // Report Title 
     style.reportHeder1(doc, data);
     style.reportHeder2(doc, data);
-    style.reportHeder3(doc, data);    //Invoice ID , Date 
-
-    
-
+    style.reportHeder3(doc, data);                          //Invoice ID , Date 
 };
+
 function reportBody(doc, data) {
-    style.tableBody(doc, data);
+    style.tableBody(doc, data);                              //table Body
+    // style.pageBorder(doc, data);                           // Page Border
+    // style.pageFooter(doc, data, islast, array);              //page Footer
+
 }
-function pageFooter(doc, data) {
-    style.pageFooter(doc, data);
-    style.reportFooter(doc, data);
+function pageFooter(doc, data, islast, array) {
+    style.reportFooter(doc, data);                           //Report Footer
+    style.pageFooter(doc, data, islast, array);              //page Footer
 }
 
 const InvioceReporta5 = () => {
-    
     //    const data = Data
-
-    var doc = new jsPDF('l', 'pt', 'a5');
-    dataGenrator().forEach(data => {
-        
+    var doc = new jsPDF('l','pt', 'a5');
+    const array = dataGenrator()
+    array.forEach((data, islast, array) => {
         pageHeder(doc, data);
         reportBody(doc, data);
-        pageFooter(doc, data);
-
+        pageFooter(doc, data, islast, array);
         doc.addPage();
-
-
     })
-
     doc.setProperties({
         title: "Report"
     });

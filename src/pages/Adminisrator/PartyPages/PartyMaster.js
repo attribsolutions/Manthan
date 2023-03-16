@@ -49,7 +49,7 @@ const PartyMaster = (props) => {
     
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState(11);
+    const [userPageAccessState, setUserAccState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
     const [modalCss, setModalCss] = useState(false);
     const [state_DropDown_select, setState_DropDown_select] = useState([]);
@@ -103,7 +103,7 @@ const PartyMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

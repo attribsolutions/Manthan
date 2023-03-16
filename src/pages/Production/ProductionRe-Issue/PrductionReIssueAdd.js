@@ -58,7 +58,7 @@ const ProductionReIssueAdd = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [goButtonList, setGoButtonList] = useState([]);
     const [itemOption, setItemOption] = useState([]);
 
@@ -109,7 +109,7 @@ const ProductionReIssueAdd = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
 
         };

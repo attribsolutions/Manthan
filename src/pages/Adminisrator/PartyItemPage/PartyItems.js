@@ -50,7 +50,7 @@ const PartyItems = (props) => {
     const dispatch = useDispatch();
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserAccState] = useState("");
     const [itemArr, setitemArr] = useState([]);
 
     const fileds = {
@@ -112,7 +112,7 @@ const PartyItems = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc);
+            setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -237,6 +237,7 @@ const PartyItems = (props) => {
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
+                debugger
 
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 

@@ -57,7 +57,7 @@ const Challan = (props) => {
     const [challanItemList, setchallanItemList] = useState([]);
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -108,7 +108,7 @@ const Challan = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
 
         };

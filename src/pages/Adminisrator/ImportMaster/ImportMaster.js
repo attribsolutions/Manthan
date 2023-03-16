@@ -29,7 +29,7 @@ const ImportMaster = (props) => {
 
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
     const [partySelect, SetPartySelect] = useState([])
 
@@ -85,7 +85,7 @@ const ImportMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

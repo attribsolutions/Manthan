@@ -1,6 +1,4 @@
 
-
-
 // export const demodata = {
 //     StatusCode: 200,
 //     Status: true,

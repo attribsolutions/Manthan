@@ -43,7 +43,7 @@ const GSTMaster = (props) => {
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -77,7 +77,7 @@ const GSTMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
@@ -103,7 +103,7 @@ const GSTMaster = (props) => {
             setEffectiveDate(effectiveDate)
         }
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
         }
     }, [userAccess])
 

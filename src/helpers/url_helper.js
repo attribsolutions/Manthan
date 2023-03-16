@@ -192,11 +192,13 @@ export const CREDIT_LIMIT = '/Creditlimit'
 export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter'
 export const ROUTE_UPDATE = '/RouteUpdate'
 
-//PartyMasterBulkUpdate
-export const PARTY_DROPDOWN = '/RetailerandSSDD'
-export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/CreditlimitList' // for go button
-export const PARTY_MASTER_BULK_UPDATE = '/Creditlimit'
-export const SELECT_FIELD_DROPDOWN = '/RetailerandSSDD'
+
+// Loading Sheet API
+export const LOADING_SHEET_GO_BUTTON_API = '/LoadingSheetInvoices'
+export const LOADING_SHEET = '/LoadingSheet'
+export const LOADING_SHEET_LIST = '/LoadingSheetList'
+
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
@@ -275,6 +277,6 @@ export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOI
 
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
-
+export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
 
 

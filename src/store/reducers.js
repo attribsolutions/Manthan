@@ -72,6 +72,7 @@ import InvoiceReducer from "./Sales/Invoice/reducer"
 //  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
+import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -146,5 +147,6 @@ const rootReducer = combineReducers({
   // IBInvoiceReducer,
   ChallanReducer,
   RouteUpdateReducer,
+  LoadingSheetReducer,
 })
 export default rootReducer
