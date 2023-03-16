@@ -381,6 +381,11 @@ export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_B
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
 
+// PartyMasterBulkUpdate
+export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
+export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api
+export const post_PartyAPI = ({ jsonBody, btnId }) => post(url.PARTY_DROPDOWN, jsonBody, btnId)// post api
+export const post_SelectFieldAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
 
 // Order Page api  
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
