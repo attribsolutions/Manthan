@@ -19,9 +19,7 @@ function reportBody(doc, data) {
 //     style.reportFooter(doc,data);
 // }
 
- const VanLoadingSheet=()=> {
-    
-   const data = Data
+ const VanLoadingSheet=(data)=> {
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc,data);
     reportBody(doc, data);

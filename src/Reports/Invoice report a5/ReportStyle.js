@@ -368,7 +368,7 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
     }
 
     const pageCount = doc.internal.getNumberOfPages()
-    debugger
+      
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
     for (let i = 1; i <= pageCount; i++) {
