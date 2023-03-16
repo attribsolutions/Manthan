@@ -127,6 +127,5 @@ export const ReportHederRows = (data) => {
         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, data.ReportType===invoice?`E-way Bill :24654364633`:`INR NO :${data.FullInvoiceNumber}`, ],
         [,,  data.ReportType===invoice?`INR NO :${data.FullInvoiceNumber}`:null]
     ]
-  
     return reportArray;
 }

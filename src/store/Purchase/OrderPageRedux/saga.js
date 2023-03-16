@@ -32,7 +32,7 @@ import *as url from "../../../routes/route_url"
 
 
 function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
-  debugger
+   
   yield delay(400)
   try {
 
