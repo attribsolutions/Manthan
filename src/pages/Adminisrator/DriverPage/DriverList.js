@@ -9,13 +9,13 @@ import {
   deleteDriverID,
   saveDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
-const DriverList = (props) => {
+const DriverList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(

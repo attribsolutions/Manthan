@@ -38,7 +38,7 @@ import {
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* fetchHPagesList_GneratorFunction() {
   try {
@@ -62,9 +62,10 @@ function* saveHPageSaga_GneratorFunction({ Data }) {
 }
 
 function* editHpages_ID({ id, pageMode }) {
+  
   try {
     let response = yield call(edit_HPageID, id);
-    response.pageMode = pageMode
+    response.pageMode = id.btnmode
     yield put(editHPagesIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

@@ -17,20 +17,20 @@ import {
 
 
 //get listpage api
-export const invoiceListGoBtnfilter = (subPageMode, filters) => ({
+export const invoiceListGoBtnfilter = (config = {}) => ({
     type: INVOICE_LIST_GO_BUTTON_FILTER,
-    subPageMode, filters,
+    config,
 });
 
-export const invoiceListGoBtnfilterSucccess = (data) => ({
+export const invoiceListGoBtnfilterSucccess = (resp) => ({
     type: INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 // edit api
-export const editInvoiceList = (id, pageMode, subPageMode) => ({
+export const editInvoiceList = (config = {}) => ({
     type: EDIT_INVOICE_LIST,
-    id, pageMode, subPageMode,
+    config,
 })
 
 export const editInvoiceListSuccess = (editData) => ({
@@ -39,37 +39,37 @@ export const editInvoiceListSuccess = (editData) => ({
 })
 
 // listpage api
-export const deleteInvoiceId = (id, subPageMode) => ({
+export const deleteInvoiceId = (config = {}) => ({
     type: DELETE_INVOICE_LIST_PAGE,
-    id,subPageMode,
+    config ,
 });
 
-export const deleteInvoiceIdSuccess = (data) => ({
+export const deleteInvoiceIdSuccess = (resp) => ({
     type: DELETE_INVOICE_LIST_PAGE_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 
 // Go Button Post API for Invoice Master
-export const GoButtonForinvoiceAdd = (body) => ({
+export const GoButtonForinvoiceAdd = (config = {}) => ({
     type: GO_BUTTON_FOR_INVOICE_ADD,
-    body,
+    config,
 });
 
-export const GoButtonForinvoiceAddSuccess = (data) => ({
+export const GoButtonForinvoiceAddSuccess = (resp) => ({
     type: GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 // post api
-export const invoiceSaveAction = (subPageMode, data, saveBtnid) => ({
+export const invoiceSaveAction = (config = {}) => ({
     type: INVOICE_SAVE_ADD_PAGE_ACTION,
-    subPageMode, data, saveBtnid
+    config,
 });
 
-export const invoiceSaveActionSuccess = (data) => ({
+export const invoiceSaveActionSuccess = (resp) => ({
     type: INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
-    payload: data,
+    payload: resp,
 });
 
 

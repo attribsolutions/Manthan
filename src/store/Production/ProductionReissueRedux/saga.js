@@ -26,7 +26,7 @@ import {
   MAKE_BTN_FOR_PRODUNCTION_RE_ISSUE_STP_ACTION,
   ITEM_FOR_PRODUNCTION_RE_ISSUE,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { AlertState } from "../../actions";
 
 

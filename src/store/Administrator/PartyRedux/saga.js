@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   GetPriceList_For_Dropdown,
   GetCompanyByDivisionTypeID_For_Dropdown,
@@ -70,6 +70,7 @@ function* Submit_Party_GenratorFunction({ Data }) {
 }
 
 function* Delete_Party_GenratorFunction({ id }) {
+ 
   try {
     const response = yield call(Party_Master_Delete_API, id);
     yield put(deletePartyIDSuccess(response))
@@ -77,9 +78,10 @@ function* Delete_Party_GenratorFunction({ id }) {
 }
 
 function* Edit_Party_GenratorFunction({ id, pageMode }) {
+ 
   try {
     const response = yield call(Party_Master_Edit_API, id);
-    response.pageMode = pageMode
+    response.pageMode = id.btnmode
     yield put(editPartyIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

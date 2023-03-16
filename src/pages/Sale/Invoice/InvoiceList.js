@@ -11,17 +11,18 @@ import {
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
+    btnIsDissablefunc,
     currentDate,
     excelDownCommonFunc,
     loginPartyID
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
-import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button } from "../../../components/Common/CommonButton";
 import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -45,9 +46,8 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-
     const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, supplierSelect: { value: '', label: "All" } });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -64,6 +64,7 @@ const InvoiceList = () => {
         })
     );
 
+    const gobtnId = `gobtn-${subPageMode}`
     const { userAccess, pageField, supplier, tableList, } = reducers;
     const { fromdate, todate, supplierSelect } = orderlistFilter;
 
@@ -116,7 +117,7 @@ const InvoiceList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
-        goButtonHandler({IBType})
+        goButtonHandler("event", IBType)
     }, []);
 
     const supplierOptions = supplier.map((i) => ({
@@ -137,19 +138,25 @@ const InvoiceList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get ,ReportType, row.id))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
     }
 
-    function goButtonHandler({IBType}) {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-            Party: loginPartyID(),
-            IBType: IBType ? IBType : otherState.IBType
-        });
+    function goButtonHandler(event, IBType) {
 
-        dispatch(invoiceListGoBtnfilter(subPageMode, jsonBody));
+        const btnId = gobtnId;
+        btnIsDissablefunc({ btnId, state: true })
+        try {
+            const filtersBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
+                Party: loginPartyID(),
+                IBType: IBType ? IBType : otherState.IBType
+            });
+
+            dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody, btnId }));
+
+        } catch (error) { btnIsDissablefunc({ btnId, state: true }) }
     }
 
     function fromdateOnchange(e, date) {
@@ -165,96 +172,100 @@ const InvoiceList = () => {
     }
 
     function supplierOnchange(e) {
-        
+
         let newObj = { ...orderlistFilter }
         newObj.supplierSelect = e
         setorderlistFilter(newObj)
     }
 
-    const makeBtnFunc = (list = {}) => {
-        
-        dispatch(makeInward(list[0].id))
+    const makeBtnFunc = (list = {}, btnId) => {
+        const config = { makeInwardId: list[0].id, btnId }
+        dispatch(makeInward(config))
         history.push({
             pathname: url.INWARD,
         })
     };
+    const HeaderContent = () => {
+        return (
+            <div className="px-2   c_card_filter text-black" >
+                <div className="row" >
 
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "83px" }}>From Date</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name='fromdate'
+                                    value={fromdate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={fromdateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "65px" }}>To Date</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name="todate"
+                                    value={todate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={todateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+
+                    <Col sm="5">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+
+                                style={{ width: "115px" }}>Customer</Label>
+                            <Col sm="5">
+
+                                <Select
+                                    classNamePrefix="select2-Customer"
+                                    value={supplierSelect}
+                                    options={supplierOptions}
+                                    onChange={supplierOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
+
+                    <Col sm="1" className="mt-3 ">
+                        <Go_Button id={gobtnId} onClick={goButtonHandler} />
+                    </Col>
+                </div>
+            </div>
+        )
+    }
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
             <div className="page-content">
 
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
 
-                        <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        name='fromdate'
-                                        value={fromdate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                        }}
-                                        onChange={fromdateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        name="todate"
-                                        value={todate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                        }}
-                                        onChange={todateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm="5">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-md-4 p-2"
-
-                                    style={{ width: "115px" }}>Customer</Label>
-                                <Col sm="5">
-
-                                    <Select
-                                        classNamePrefix="select2-Customer"
-                                        value={supplierSelect}
-                                        options={supplierOptions}
-                                        onChange={supplierOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
-
-                        <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} />
-                        </Col>
-                    </div>
-                </div>
 
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
@@ -264,8 +275,9 @@ const InvoiceList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-
+                            HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
+
                             ButtonMsgLable={"Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make GRN"}

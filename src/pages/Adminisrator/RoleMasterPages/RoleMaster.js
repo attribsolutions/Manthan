@@ -12,16 +12,16 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  editSuccess,
+  userEditActionSuccess,
   postRole,
-  updateID,
+  userUpdateAction,
   PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import {
   AlertState,
   commonPageField,
   commonPageFieldSuccess,
-  updateSuccess
+  userUpdateActionSuccess
 } from "../../../store/actions";
 import Select from "react-select";
 import { Breadcrumb_inputName, CommonBreadcrumbDetails } from "../../../store/Utilites/Breadcrumb/actions";
@@ -35,9 +35,9 @@ import {
   onChangeSelect,
   onChangeText,
   resetFunction,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -165,7 +165,7 @@ const RoleMaster = (props) => {
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         seteditCreatedBy(hasEditVal.CreatedBy)
       }
-      dispatch(editSuccess({ Status: false }))
+      dispatch(userEditActionSuccess({ Status: false }))
     }
   }, [])
 
@@ -215,7 +215,7 @@ const RoleMaster = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       saveDissable(false);//Update Button Is enable function
-      dispatch(updateSuccess({ Status: false }));
+      dispatch(userUpdateActionSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -262,7 +262,7 @@ const RoleMaster = (props) => {
 
         saveDissable(true);//save Button Is dissable function
         if (pageMode === mode.edit) {
-          dispatch(updateID({ jsonBody, updateId: values.id, btnId }));
+          dispatch(userUpdateAction({ jsonBody, updateId: values.id, btnId }));
 
         }
         else {
@@ -367,8 +367,8 @@ const RoleMaster = (props) => {
                             <Row>
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-4 col-form-label" >{fieldLabel.isSCMRole}</Label>
-                                  <Col md={2} style={{ marginTop: '9px', marginLeft: "1cm" }} >
+                                  <Label className="col-sm-5 col-form-label" >{fieldLabel.isSCMRole}</Label>
+                                  <Col md={2} style={{ marginTop: '9px', }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"

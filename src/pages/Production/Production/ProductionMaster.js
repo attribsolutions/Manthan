@@ -13,8 +13,8 @@ import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, currentDate } from "../../../components/Common/CommonFunction";
 import {
     comAddPageFieldFunc,
     formValid, initialFiledFunc,
@@ -22,13 +22,13 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import {
     edit_ProductionIdSuccess,
     getUnitIDForProdunction,
     getUnitIDForProdunctionSuccess,
-    post_Production,
-    post_ProductionSuccess,
+    Save_Production,
+    Save_ProductionSuccess,
     update_ProductionIdSuccess
 } from "../../../store/Production/ProductionRedux/actions";
 import { getMaterialIssueListPage } from "../../../store/Production/Matrial_Issue/action";
@@ -113,9 +113,6 @@ const ProductionMaster = (props) => {
                 // 
                 // // let mode2Data = props.location
                 // // const MaterialProductionaData = Object.assign({}, mode2Data.MaterialProductionaData)
-
-
-
                 // if (mode2Data.pageMode === mode.modeSTPsave) {
                 const { Item, ItemName, UnitName, Unit, id,
                     EstimatedQuantity = 0,
@@ -187,16 +184,15 @@ const ProductionMaster = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
 
         };
     }, [userAccess]);
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(post_ProductionSuccess({ Status: false }))
+            dispatch(Save_ProductionSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -204,8 +200,7 @@ const ProductionMaster = (props) => {
                 RedirectPath: url.PRODUCTION_LIST,
             }))
         } else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(post_ProductionSuccess({ Status: false }))
+            dispatch(Save_ProductionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -218,13 +213,11 @@ const ProductionMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.PRODUCTION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
             dispatch(update_ProductionIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -248,39 +241,78 @@ const ProductionMaster = (props) => {
         label: index.ItemName,
     }));
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                const jsonBody = JSON.stringify({
+                    ProductionMaterialIssue: [
+                        {
+                            MaterialIssue: values.id,
+                        }
+                    ],
+                    ProductionDate: values.ProductionDate,
+                    EstimatedQuantity: values.EstimatedQuantity,
+                    NumberOfLot: values.NumberOfLot,
+                    ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
+                    BatchDate: "2022-12-17",
+                    BatchCode: "aa",
+                    StoreLocation: "aa",
+                    PrintedBatchCode: values.PrintedBatchCode,
+                    BestBefore: values.BestBefore,
+                    Remark: values.Remark,
+                    CreatedBy: 1,
+                    UpdatedBy: 1,
+                    Company: 1,
+                    Division: 4,
+                    GST: 8,
+                    Unit: values.UnitName.value,
+                    MRP: "",
+                    Rate: 55,
+                    Item: values.ItemName.value,
+                });
 
-            const jsonBody = JSON.stringify({
-                ProductionMaterialIssue: [
-                    {
-                        MaterialIssue: values.id,
-                    }
-                ],
-                ProductionDate: values.ProductionDate,
-                EstimatedQuantity: values.EstimatedQuantity,
-                NumberOfLot: values.NumberOfLot,
-                ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
-                BatchDate: "2022-12-17",
-                BatchCode: "aa",
-                StoreLocation: "aa",
-                PrintedBatchCode: values.PrintedBatchCode,
-                BestBefore: values.BestBefore,
-                Remark: values.Remark,
-                CreatedBy: 1,
-                UpdatedBy: 1,
-                Company: 1,
-                Division: 4,
-                GST: 8,
-                Unit: values.UnitName.value,
-                MRP: "",
-                Rate: 55,
-                Item: values.ItemName.value,
-            });
-            dispatch(post_Production(jsonBody));
-        }
+                dispatch(Save_Production({ jsonBody, btnId }));
+            }
+        } catch (e) {btnIsDissablefunc({ btnId, state: false }) }
     };
+
+
+    // const SaveHandler = (event) => {
+    //     event.preventDefault();
+    //     if (formValid(state, setState)) {
+
+    //         const jsonBody = JSON.stringify({
+    //             ProductionMaterialIssue: [
+    //                 {
+    //                     MaterialIssue: values.id,
+    //                 }
+    //             ],
+    //             ProductionDate: values.ProductionDate,
+    //             EstimatedQuantity: values.EstimatedQuantity,
+    //             NumberOfLot: values.NumberOfLot,
+    //             ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
+    //             BatchDate: "2022-12-17",
+    //             BatchCode: "aa",
+    //             StoreLocation: "aa",
+    //             PrintedBatchCode: values.PrintedBatchCode,
+    //             BestBefore: values.BestBefore,
+    //             Remark: values.Remark,
+    //             CreatedBy: 1,
+    //             UpdatedBy: 1,
+    //             Company: 1,
+    //             Division: 4,
+    //             GST: 8,
+    //             Unit: values.UnitName.value,
+    //             MRP: "",
+    //             Rate: 55,
+    //             Item: values.ItemName.value,
+    //         });
+    //         dispatch(Save_Production(jsonBody));
+    //     }
+    // };
 
     if (!(userPageAccessState === "")) {
         return (
@@ -374,7 +406,7 @@ const ProductionMaster = (props) => {
                                                 value={values.BestBefore}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
-                                                disabled={ pageMode === mode.view ? true : false}
+                                                disabled={pageMode === mode.view ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",

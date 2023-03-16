@@ -10,11 +10,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { AlertState, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn, listPageCommonButtonFunction, saveDissable }
-  from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { defaultSearch, mySearchProps } from "./MySearch";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/actions";
+import { breadcrumbReturn, }
+  from "./CommonFunction";
+import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
+import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc } from "./ListActionsButtons";
 
 
 let sortType = "asc"
@@ -116,8 +117,6 @@ const CommonListPage = (props) => {
   useEffect(async () => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
-      saveDissable(false);//+++++++++save Button Is enable function
-
       dispatch(updateSucc({ Status: false }));
       dispatch(getList(getListbodyFunc()));
       CustomAlert({
@@ -126,8 +125,6 @@ const CommonListPage = (props) => {
       })
       tog_center();
     } else if (updateMsg.Status === true) {
-
-      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
       CustomAlert({
         Type: 3,
@@ -146,10 +143,7 @@ const CommonListPage = (props) => {
         Type: 1,
         Message: deleteMsg.Message,
       })
-      // if (promise) {
-      // getList(getListbodyFunc())
       dispatch(getList(getListbodyFunc()));
-      // }
     } else if (deleteMsg.Status === true) {
       dispatch(deleteSucc({ Status: false }));
       CustomAlert({
@@ -164,7 +158,6 @@ const CommonListPage = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postSucc({ Status: false }))
-      saveDissable(false);//+++++++++save Button Is enable function
       const promise = await CustomAlert({
         Type: 1,
         Message: postMsg.Message
@@ -175,7 +168,6 @@ const CommonListPage = (props) => {
     }
 
     else if ((postMsg.Status === true)) {
-      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(postSucc({ Status: false }))
       CustomAlert({
         Type: 4,
@@ -210,7 +202,7 @@ const CommonListPage = (props) => {
     }
     setmodal_edit(false)
   }
-  
+
   PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
     return a.ListPageSeq - b.ListPageSeq
   });
@@ -235,7 +227,7 @@ const CommonListPage = (props) => {
       }
     }
     if (PageFieldMaster.length - 1 === k) {
-      columns.push(listPageCommonButtonFunction({
+      columns.push(listPageActionsButtonFunc({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,

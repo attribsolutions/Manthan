@@ -8,29 +8,32 @@ import {
   Row,
   CardHeader,
   Label,
-  FormGroup
+  FormGroup,
+  Input
 } from "reactstrap";
-import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addUser,
-  updateID,
-  addUserSuccess,
+  saveUserMasterAction,
+  userUpdateAction,
+  saveUserMasterActionSuccess,
   GetUserPartiesForUserMastePage,
   getEmployeeForUseRegistration,
-  editSuccess
+  userEditActionSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
-import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import * as pageId from "../../../routes/allPageID"
+import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const AddUser = (props) => {
 
@@ -38,14 +41,25 @@ const AddUser = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
+  const fileds = {
+    id: "",
+    Name: "",
+    LoginName: '',
+    Password: '',
+    EmployeeName: '',
+    isActive: false,
+    isLoginUsingEmail: false,
+    isLoginUsingMobile: false,
+    isSendOTP: false,
+  }
+
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
+
   //SetState  Edit data Geting From Modules List component
-  const [EditData, setEditData] = useState([]);
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
-  const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
 
@@ -57,30 +71,44 @@ const AddUser = (props) => {
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
   const [isCPassword, setisCPassword] = useState(false);
 
-  const handleCPassword = (e) => {
-    setCPassword(e.target.value);
+  const handleCPassword = (event) => {
+    onChangeText({ event, state, setState });
+    setCPassword(event.target.value);
     setisCPassword(true);
   }
 
-  //Access redux store Data /  'save_ModuleSuccess' action data
   const {
     PostAPIResponse,
     employeelistForDropdown,
     Roles,
-    userPartiesForUserMaster_redux,
-    userAccess
+    employePartyWiseRoleState,
+    userAccess,
+    pageField
   } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
-    userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
+    employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.RoleMaster_Reducer.roleList,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
+
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
+  
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+  useEffect(() => {
+
+    dispatch(commonPageFieldSuccess(null));
+    dispatch(commonPageField(pageId.USER))
+    dispatch(getEmployeeForUseRegistration());
+    dispatch(getRole());
+  }, []);
 
   useEffect(() => {
     if (isCPassword) {
@@ -113,23 +141,15 @@ const AddUser = (props) => {
     };
   }, [userAccess])
 
-  const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
-    return index.Party_id === null
-  })
-  console.log("FindPartyID", FindPartyID)
 
   useEffect(() => {
 
-    let newArray = userPartiesForUserMaster_redux.map((i) => (
-      {
-        PartyRoles: [],
-        Party: i.Party_id,
-        PartyName: i.PartyName
-      }
-    ))
-    setUserPartiesForUserMaster(newArray)
+    if (pageField) {
+      const fieldArr = pageField.PageFieldMaster
+      comAddPageFieldFunc({ state, setState, fieldArr })
+    }
+  }, [pageField])
 
-  }, [userPartiesForUserMaster_redux])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -149,28 +169,36 @@ const AddUser = (props) => {
       }
 
       if (hasEditVal) {
-        dispatch(Breadcrumb_inputName(hasEditVal.LoginName))
-        dispatch(GetUserPartiesForUserMastePage(hasEditVal.Employee))
+        const { id, LoginName, AdminPassword, CreatedBy, EmployeeName, Employee, UserRole,
+          isLoginUsingMobile, isActive, isSendOTP, isLoginUsingEmail
+        } = hasEditVal
+        const { values, hasValid, } = { ...state }
 
-        setEditData(hasEditVal)
-        seteditCreatedBy(hasEditVal.CreatedBy)
+        values.id = id;
+        values.LoginName = LoginName;
+        values.Password = AdminPassword;
+        values.EmployeeName = { label: EmployeeName, value: Employee };
+        values.isActive = isActive;
+        values.isLoginUsingEmail = isLoginUsingEmail;
+        values.isLoginUsingMobile = isLoginUsingMobile;
+        values.isSendOTP = isSendOTP;
 
 
-        setEmployeeSelect({
-          value: hasEditVal.Employee,
-          label: hasEditVal.EmployeeName,
-        })
+        hasValid.id.valid = true;
+        hasValid.LoginName.valid = true;
+        hasValid.Password.valid = true;
+        hasValid.EmployeeName.valid = true;
+        hasValid.isActive.valid = true;
+        hasValid.isLoginUsingEmail.valid = true;
+        hasValid.isLoginUsingMobile.valid = true;
+        hasValid.isSendOTP.valid = true;
 
-        setUserPartiesForUserMaster(hasEditVal.UserRole)
+        dispatch(Breadcrumb_inputName(LoginName))
+        dispatch(GetUserPartiesForUserMastePage({ id: Employee, editRole: UserRole }))
 
-        let arraynew = []
-        hasEditVal.UserRole.map((i) => {
-          i.PartyRoles.map((i2) => {
-            arraynew.push({ Party: i.Party, Role: i2.Role })
-          })
-        })
-        setPartyRoleData(arraynew)
-        dispatch(editSuccess({ Status: false }))
+        seteditCreatedBy(CreatedBy)
+
+        dispatch(userEditActionSuccess({ Status: false }))
       }
     }
   }, [])
@@ -178,9 +206,8 @@ const AddUser = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
-      dispatch(addUserSuccess({ Status: false }))
+      dispatch(saveUserMasterActionSuccess({ Status: false }))
       setEmployeeSelect('')
-      setPartyRoleData('')
 
       if (pageMode === "other") {
         dispatch(AlertState({
@@ -201,7 +228,7 @@ const AddUser = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
-      dispatch(addUserSuccess({ Status: false }))
+      dispatch(saveUserMasterActionSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -212,12 +239,9 @@ const AddUser = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-  useEffect(() => {
-    dispatch(getEmployeeForUseRegistration());
-    dispatch(getRole());
-  }, [dispatch]);
 
-  const EmployeeValues = employeelistForDropdown.map((Data) => ({
+
+  const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
     label: Data.Name
   }));
@@ -229,107 +253,122 @@ const AddUser = (props) => {
 
   function handllerEmployeeID(e) {
     setEmployeeSelect(e)
-    dispatch(GetUserPartiesForUserMastePage(e.value))
+    dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
   }
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
-  
-    const nwPtRole = event.map((ind) => ({
-      Party: pty.Party,
-      Role: ind.value
-    }))
-
-    const find = partyRoleData.filter((index, key1) => {
-      return !(index.Party === pty.Party)
+    employePartyWiseRoleState.forEach((index, key1) => {
+      if (key === key1) {
+        index.PartyRoles = event
+      }
     })
-    if ((find === undefined)) {
-      setPartyRoleData(nwPtRole)
-    } else {
-      setPartyRoleData(nwPtRole.concat(find))
-    }
   };
 
-  const handleValidSubmit = (event, values) => {
-  
+  const saveHandler = (event) => {
+    
+    event.preventDefault();
+    const btnId = event.target.id;
+    btnIsDissablefunc({ btnId: btnId, state: true })
+    try {
 
-    // const Find = []
-    // partyRoleData.map((index) => {
-    //   userPartiesForUserMaster_redux.map((i) => {
-    //     return (index.Party === i.Party_id)
-    //   })
-    // })
+      const userRoleArr = []
+      employePartyWiseRoleState.map(i1 => {
+        i1.PartyRoles.map(i2 => {
+          userRoleArr.push({
+            Party: i1.Party,
+            Role: i2.value
+          })
+        })
+      })
+      if (userRoleArr.length <= 0) {
+        CustomAlert({
+          Type: 4,
+          Message: "At Least One Role  Add in the Table",
+        })
+        return btnIsDissablefunc({ btnId: btnId, state: false })
+      }
+      const jsonBody = JSON.stringify({
+        LoginName: values.LoginName,
+        password: values.Password,
+        AdminPassword: values.Password,
+        Employee: values.EmployeeName.value,
+        isActive: values.isActive,
+        isSendOTP: values.isSendOTP,
+        isLoginUsingMobile: values.isLoginUsingMobile,
+        isLoginUsingEmail: values.isLoginUsingEmail,
+        CreatedBy: loginUserID(),
+        UpdatedBy: loginUserID(),
+        UserRole: userRoleArr
+      })
 
-    const jsonBody = JSON.stringify({
-      email: values.email,
-      LoginName: values.loginName,
-      password: pageMode === mode.edit ? EditData.AdminPassword : values.password,
-      AdminPassword: pageMode === mode.edit ? EditData.AdminPassword : values.password,
-      Employee: EmployeeSelect.value,
-      isActive: values.isActive,
-      isSendOTP: values.isSendOTP,
-      isLoginUsingMobile: values.isLoginUsingMobile,
-      isLoginUsingEmail: values.isLoginUsingEmail,
-      CreatedBy: loginUserID(),
-      UpdatedBy: loginUserID(),
-      UserRole: partyRoleData
-    })
+      if (pageMode === mode.edit) {
+        dispatch(userUpdateAction({ jsonBody, updateId: values.id, btnId }));
+      }
+      else {
+        dispatch(saveUserMasterAction({ jsonBody, btnId }));
+      }
+    } catch (error) { btnIsDissablefunc({ btnId: btnId, state: false }) }
+  }
 
-    if (partyRoleData.length <= 0 && !(FindPartyID)) {
-      dispatch(AlertState({
-        Type: 4, Status: true,
-        Message: "At Least One Role Data Add in the Table",
-        RedirectPath: false,
-        PermissionAction: false,
-      }));
+  const PartyWiseRoleTable = () => {
 
+    if ( values.EmployeeName === '') {
+      return null
     }
-
-    else if (pageMode === mode.edit) {
-      dispatch(updateID(jsonBody, EditData.id));
-      setEditData([]);
-      console.log("Update jsonBody", jsonBody)
+    if (!(employePartyWiseRoleState.length === 0)) {
+      if ((employePartyWiseRoleState[0].Party > 0)) {
+        return (
+          <div className="col col-6" style={{ marginTop: '28px' }}>
+            <table className="table table-bordered ">
+              <Thead >
+                <tr>
+                  <th>Party Name</th>
+                  <th>RoleName</th>
+                </tr>
+              </Thead>
+              <Tbody  >
+                {employePartyWiseRoleState.map((index, key) => (
+                  <tr key={index.Role}>
+                    <td className="col-sm-6">
+                      {index.PartyName}
+                    </td>
+                    <td>
+                      <FormGroup className="" >
+                        <Select
+                          defaultValue={index.PartyRoles}
+                          options={RolesValues}
+                          isMulti={true}
+                          className="basic-multi-select"
+                          onChange={(event) => { RoleDropDown_select_handler(event, index, key) }}
+                          classNamePrefix="select2-selection"
+                        />
+                      </FormGroup>
+                    </td>
+                  </tr>
+                ))}
+              </Tbody>
+            </table>
+          </div>
+        )
+      }
+      else {
+        return <div className="col-lg-3 col-md-6">
+          <div className="mb-3">
+            <Label className="form-label font-size-13 ">Role name</Label>
+            <Select
+              defaultValue={employePartyWiseRoleState[0].PartyRoles}
+              options={RolesValues}
+              isMulti={true}
+              className="basic-multi-select"
+              onChange={(event) => { RoleDropDown_select_handler(event, employePartyWiseRoleState[0], 0) }}
+              classNamePrefix="select2-selection"
+            />
+          </div>
+        </div>
+      }
     }
-    else {
-      dispatch(addUser(jsonBody));
-      console.log("Post jsonBody", jsonBody)
-    }
-  };
-
-  const rolaTable = () => {
-
-    return (
-      <table className="table table-bordered ">
-        <Thead >
-          <tr>
-            <th>Party Name</th>
-            <th>RoleName</th>
-
-          </tr>
-        </Thead>
-        <Tbody  >
-          {userPartiesForUserMaster.map((index, key) => (
-            <tr key={index.Role}>
-              <td className="col-sm-6">
-                {index.PartyName}
-              </td>
-              <td>
-                <FormGroup className="" >
-                  <Select
-                    defaultValue={pageMode === mode.edit ? index.PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                    options={RolesValues}
-                    isMulti={true}
-                    className="basic-multi-select"
-                    onChange={(event) => { RoleDropDown_select_handler(event, index, key) }}
-                    classNamePrefix="select2-selection"
-                  />
-                </FormGroup>
-              </td>
-            </tr>
-          ))}
-        </Tbody>
-      </table>
-    )
+    return null
   }
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -353,26 +392,28 @@ const AddUser = (props) => {
                       <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                     </CardHeader>
                     <CardBody className="text-black">
-                      <AvForm
-                        onValidSubmit={(e, v) => {
-                          handleValidSubmit(e, v);
-                        }}
-                        ref={formRef}
-                      >
+                      <form>
                         <Card className=" text-black">
                           <CardBody className="c_card_body">
                             <Row>
 
                               <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01"> Employee </Label>
+                                <Label htmlFor="validationCustom01"> {fieldLabel.EmployeeName} </Label>
                                 <Col sm={12}>
                                   <Select
-                                    id="EmployeeDropDown "
+                                    id="EmployeeName "
+                                    name="EmployeeName"
                                     isDisabled={pageMode === mode.edit ? true : false}
-                                    value={EmployeeSelect}
-                                    options={EmployeeValues}
-                                    onChange={(e) => { handllerEmployeeID(e) }}
+                                    value={values.EmployeeName}
+                                    options={EmployeeOptions}
+                                    onChange={(hasSelect, evn) => {
+                                      handllerEmployeeID(hasSelect)
+                                      onChangeSelect({ hasSelect, evn, state, setState, })
+                                    }}
                                   />
+                                  {isError.EmployeeName.length > 0 && (
+                                    <span className="invalid-feedback">{isError.EmployeeName}</span>
+                                  )}
                                 </Col>
                               </FormGroup>
 
@@ -380,27 +421,30 @@ const AddUser = (props) => {
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">Login Name</Label>
-                                <AvField
-                                  name="loginName" id="txtName"
+                                <Label htmlFor="validationCustom01">{fieldLabel.LoginName}</Label>
+                                <Input
+                                  name="LoginName"
+                                  id="txtName"
                                   type="text"
                                   placeholder="Please Enter Login Name"
-                                  defaultvalue=''
-                                  value={EditData.LoginName}
+                                  value={values.LoginName}
                                   disabled={pageMode === mode.edit ? true : false}
                                   autoComplete='off'
-                                  validate={{
-                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                  onChange={(event) => {
+                                    onChangeText({ event, state, setState });
+                                    dispatch(Breadcrumb_inputName(event.target.value))
                                   }}
-                                  onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                 />
+                                {isError.LoginName.length > 0 && (
+                                  <span className="text-danger f-8"><small>{isError.LoginName}</small></span>
+                                )}
                               </FormGroup>
                             </Row>
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Password</Label>
-                                <AvField name="password" id="password"
+                                <Input name="password" id="password"
                                   type="password"
                                   placeholder="Please Enter Password"
                                   autoComplete="new-password"
@@ -413,7 +457,8 @@ const AddUser = (props) => {
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                <AvField name="password" id="password"
+                                <Input
+                                  name="Password" id="password"
                                   type="password"
                                   placeholder="Please Enter Password"
                                   autoComplete="new-password"
@@ -427,26 +472,39 @@ const AddUser = (props) => {
                             <Row className="mt-2">
                               <FormGroup className="mb-1 col col-sm-12 " >
                                 <Row className="justify-content-md-left">
-                                  <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >Enable Mobile Login</Label>
+                                  <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >{fieldLabel.isLoginUsingMobile}</Label>
                                   <Col md="1" style={{ marginTop: '9px' }} >
                                     <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={EditData.isLoginUsingMobile}
+                                      <Input type="checkbox" className="form-check-input"
+                                        checked={values.isLoginUsingMobile}
                                         name="isLoginUsingMobile"
-                                        defaultChecked={true}
+                                        onChange={(event) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.isLoginUsingMobile = event.target.checked
+                                            return a
+                                          })
+                                        }}
                                       />
                                       <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                     </div>
                                   </Col>
 
                                   <Col md="2" >  </Col>
-                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Active </Label>
+                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >{fieldLabel.isActive} </Label>
                                   <Col md="1" style={{ marginTop: '9px' }} >
                                     <div className="form-check form-switch form-switch-md " dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={EditData.isActive}
+                                      <Input type="checkbox" className="form-check-input"
+                                        checked={values.isActive}
                                         defaultChecked={true}
                                         name="isActive"
+                                        onChange={(event) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.isActive = event.target.checked
+                                            return a
+                                          })
+                                        }}
                                       />
                                       <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                     </div>
@@ -458,25 +516,39 @@ const AddUser = (props) => {
                             <Row >
                               <FormGroup className="col col-sm-12  " >
                                 <Row className="justify-content-md-left">
-                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Enable Email Login</Label>
+                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >{fieldLabel.isLoginUsingEmail}</Label>
                                   <Col md={1} style={{ marginTop: '10px' }} >
                                     <div className="form-check form-switch form-switch-md" dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={EditData.isLoginUsingEmail}
+                                      <Input type="checkbox" className="form-check-input"
+                                        checked={values.isLoginUsingEmail}
                                         name="isLoginUsingEmail"
-                                        defaultChecked={true}
+                                        onChange={(event) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.isLoginUsingEmail = event.target.checked
+                                            return a
+                                          })
+                                        }}
                                       />
                                       <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                     </div>
                                   </Col>
 
                                   <Col md="2" >  </Col>
-                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Send OTP </Label>
+                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >{fieldLabel.isSendOTP}</Label>
                                   <Col md={1} style={{ marginTop: '10px' }} >
                                     <div className="form-check form-switch form-switch-md" dir="ltr">
-                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        defaultChecked={EditData.isSendOTP}
+                                      <Input type="checkbox" className="form-check-input"
+                                        checked={values.isSendOTP}
                                         name="isSendOTP"
+                                        onChange={(event) => {
+                                          setState((i) => {
+                                            const a = { ...i }
+                                            a.values.isSendOTP = event.target.checked
+                                            return a
+                                          })
+
+                                        }}
                                       />
                                       <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                     </div>
@@ -485,111 +557,33 @@ const AddUser = (props) => {
                               </FormGroup>
                             </Row>
 
-                            {(EmployeeSelect.length === 0) ?
-                              <Row className="mt-3">
-                                <Col sm={2}>
-                                  <div>
-                                    {
-                                      (pageMode === mode.edit) ?
-                                        (userPageAccessState.RoleAccess_IsEdit) ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                            className="btn btn-success w-md"
-                                          >
-                                            <i class="fas fa-edit me-2"></i>Update
-                                          </button>
-                                          :
-                                          null
-                                        : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
-                                          (userPageAccessState.RoleAccess_IsSave) ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                              className="btn btn-primary w-md"
-                                            > <i className="fas fa-save me-2"></i> Save
-                                            </button>
-                                            :
-                                            null
-                                        )
-                                          : null
-                                    }
-                                  </div>
-                                </Col>
-                              </Row> : <></>}
+
                           </CardBody>
                         </Card>
 
-                        {!(EmployeeSelect.length === 0) ?
-                          < Card className="mt-n2">
-                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                              <Row className="">
-                                {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
-                                  <Col sm={6} style={{ marginTop: '28px' }}>
-                                    {partyRoleData ? (
-                                      <div >
-                                        {rolaTable()}
-                                      </div>
-                                    ) :
-                                      null
-                                    }
-                                  </Col> : <div className="col-lg-3 col-md-6">
-                                    <div className="mb-3">
-                                      <Label className="form-label font-size-13 ">Role name</Label>
-                                      <Select
-                                        defaultValue={pageMode === mode.edit ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                                        options={RolesValues}
-                                        isMulti={true}
-                                        className="basic-multi-select"
-                                        onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
-                                        classNamePrefix="select2-selection"
-                                      />
-                                    </div>
-                                  </div> :
-                                  <></>}
+                        < Card className="mt-n2">
+                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                            <Row >
+                              <PartyWiseRoleTable />
+                              <Row>
+                                <Col sm={2}>
+                                  <div>
+                                    <SaveButton
+                                      pageMode={pageMode}
+                                      onClick={saveHandler}
+                                      userAcc={userPageAccessState}
+                                      editCreatedBy={editCreatedBy}
+                                      module={"User"}
+                                    />
 
-                                <Row>
-                                  <Col sm={2}>
-                                    <div>
-                                      <SaveButton
-                                        pageMode={pageMode}
-                                        userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"User"}
-                                      />
-                                      {/* {
-                                        pageMode === mode.edit ?
-                                          userPageAccessState.RoleAccess_IsEdit ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                              className="btn btn-success w-md"
-                                            >
-                                              <i class="fas fa-edit me-2"></i>Update
-                                            </button>
-                                            :
-                                            <></>
-                                          : (
-                                            userPageAccessState.RoleAccess_IsSave ?
-                                              <button
-                                                type="submit"
-                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                                className="btn btn-primary w-md"
-                                              > <i className="fas fa-save me-2"></i> Save
-                                              </button>
-                                              :
-                                              <></>
-                                          )
-                                      } */}
-                                    </div>
-                                  </Col>
-                                </Row>
+                                  </div>
+                                </Col>
                               </Row>
-                            </CardBody>
-                          </Card>
-                          : <></>}
+                            </Row>
+                          </CardBody>
+                        </Card>
 
-                      </AvForm>
+                      </form>
                     </CardBody>
                     <br></br>
                     <br></br>

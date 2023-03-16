@@ -17,7 +17,9 @@ const RoleAccessCopyFunctionality = (props) => {
     const [copyDivision_dropdown_Select, setCopyDivision_dropdown_Select] = useState("");
     const [newRoleDropdown_Select, setNewRoleDropdown_Select] = useState("");
     const [newDivision_dropdown_Select, setNewDivision_dropdown_Select] = useState(null);
+    const [newcompany_dropdown_Select, setNewCompany_dropdown_Select] = useState("");
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState("");
+
 
     // const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("edit");
@@ -38,6 +40,7 @@ const RoleAccessCopyFunctionality = (props) => {
         dispatch(getRole());
         dispatch(getPartyListAPI());
         dispatch(getcompanyList());
+
     }, []);
 
     let editDataGatingFromList = props.state;
@@ -60,6 +63,8 @@ const RoleAccessCopyFunctionality = (props) => {
                 setCopyRole_Dropdown_Select({ label: C_props.RoleName, value: roleId })
                 setCopyDivision_dropdown_Select({ label: C_props.DivisionName, value: divisionId })
                 setCompany_dropdown_Select({ label: C_props.CompanyName, value: Company_id })
+                setNewCompany_dropdown_Select({ label: C_props.CompanyName, value: Company_id })
+
             }
         }
 
@@ -97,6 +102,12 @@ const RoleAccessCopyFunctionality = (props) => {
         setNewDivision_dropdown_Select(e)
     }
 
+    function CompanyDropDown_onChangeHandler(e) {
+        setNewCompany_dropdown_Select(e)
+    }
+
+
+
     function CopyButton_Handler() {
         const jsonBody = JSON.stringify(
             {
@@ -117,9 +128,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     return (
         <React.Fragment>
-
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -191,11 +200,11 @@ const RoleAccessCopyFunctionality = (props) => {
                                         <Label className="col-sm-3 p-2">Company</Label>
                                         <Col md="9">
                                             <Select
-                                                value={company_dropdown_Select}
+                                                value={newcompany_dropdown_Select}
                                                 className="rounded-bottom"
                                                 placeholder="Select..."
                                                 options={CompanyValues}
-                                                onChange={(e) => { setCompany_dropdown_Select(e) }}
+                                                onChange={(e) => { CompanyDropDown_onChangeHandler(e) }}
                                             />
                                         </Col>
                                     </FormGroup>

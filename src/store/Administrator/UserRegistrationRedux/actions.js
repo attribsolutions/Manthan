@@ -1,92 +1,92 @@
-import{
-    GET_ROLE, 
-    GET_ROLE_SUCCESS,
-    ADD_USER, 
-    ADD_USER_SUCCESS,
-    GET_USER_LIST_FOR_USER,
-    GET_USER_LIST_FOR_USER_SUCCESS,
-    DELETE_USER,
-    DELETE_SUCCESS,
-    EDIT_USER,
-    EDIT_SUCCESS,
-    UPDATE_USER,
-    UPDATE_SUCCESS,
- 
-    GET_USER_PARTIES_FOR_USER_MASTER,
-    GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
-    GET_EMPLOYEE_FOR_USER_REGISTRATION,
-    GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
-  }from './actionType'
+import {
+  GET_ROLE,
+  GET_ROLE_SUCCESS,
+  ADD_USER,
+  ADD_USER_SUCCESS,
+  GET_USER_LIST_FOR_USER,
+  GET_USER_LIST_FOR_USER_SUCCESS,
+  DELETE_USER_ACTION,
+  DELETE_USER_ACTION_SUCCESS,
+  EDIT_USER_ACTION,
+  EDIT_USER_ACTION_SUCCESS,
+  UPDATE_USER_ACTION,
+  UPDATE_USER_ACTION_SUCCESS,
 
-  /// M_Employee
-  export const getEmployeeForUseRegistration = () => ({
-    type: GET_EMPLOYEE_FOR_USER_REGISTRATION,
-   
-  });
-  export const getEmployeeForUseRegistrationSuccess = (data) => ({
-    type: GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
-    payload:data,
-  });
+  GET_USER_PARTIES_FOR_USER_MASTER,
+  GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
+  GET_EMPLOYEE_FOR_USER_REGISTRATION,
+  GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
+} from './actionType'
 
-  /// Registration Post api
-  export const addUser = (data) => ({
-    type: ADD_USER,
-    data,
-  });
-  
-  export const addUserSuccess = (data) => ({
-    type: ADD_USER_SUCCESS,
-    payload: data,
-  });
-  
-  //get Registration api
-  export const getUser = (jsonbody) => ({
-    type: GET_USER_LIST_FOR_USER,
-    jsonbody,
-  });
-  
-  export const getUserSuccess = (data) => ({
-    type: GET_USER_LIST_FOR_USER_SUCCESS,
-    payload:data,
-  });
-  
-   ////delete api
-   export const deleteUser = (id) => ({
-    type: DELETE_USER,
-    id ,
-    
-  });
-  export const deleteSuccess = (data) => ({
-    type: DELETE_SUCCESS,
-    payload:data
-  });
-  
-  ///// edit api
-  export const editUserId =(id,pageMode)=>({
-    type:EDIT_USER,
-  id,pageMode
-  })
-  export const editSuccess =(data)=>({
-    type:EDIT_SUCCESS,
-   payload:data,
-  });
-  
-   /// update api
-  
-  export const updateID = (data,id) => ({
-    type: UPDATE_USER,
-    data,id
-  });
-  export const updateSuccess = (data) => ({
-    type: UPDATE_SUCCESS,
-    payload: data,
-  });
-  export const GetUserPartiesForUserMastePage = (id) => ({
-    type: GET_USER_PARTIES_FOR_USER_MASTER,
-    id
-  });
-  
-  export const GetUserPartiesForUserMastePageSuccess = (data) => ({
-    type: GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
-    payload: data,
-  });
+/// M_Employee
+export const getEmployeeForUseRegistration = () => ({
+  type: GET_EMPLOYEE_FOR_USER_REGISTRATION,
+
+});
+export const getEmployeeForUseRegistrationSuccess = (resp) => ({
+  type: GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
+  payload: resp,
+});
+
+/// Registration save api
+export const saveUserMasterAction = (config) => ({
+  type: ADD_USER,
+  config,
+});
+
+export const saveUserMasterActionSuccess = (resp) => ({
+  type: ADD_USER_SUCCESS,
+  payload: resp,
+});
+
+//get Registration api
+export const getUserList = () => ({
+  type: GET_USER_LIST_FOR_USER,
+});
+
+export const getUserListSuccess = (resp) => ({
+  type: GET_USER_LIST_FOR_USER_SUCCESS,
+  payload: resp,
+});
+
+////delete api
+export const userDeleteAction = (config={}) => ({
+  type: DELETE_USER_ACTION,
+  config,
+
+});
+export const userDeleteActionSuccess = (resp) => ({
+  type: DELETE_USER_ACTION_SUCCESS,
+  payload: resp
+});
+
+
+export const userEditAction = (config = {}) => ({
+  type: EDIT_USER_ACTION,
+  config,
+})
+export const userEditActionSuccess = (resp) => ({
+  type: EDIT_USER_ACTION_SUCCESS,
+  payload: resp,
+});
+
+
+export const userUpdateAction = (config = {}) => ({
+  type: UPDATE_USER_ACTION,
+  config,
+});
+
+export const userUpdateActionSuccess = (resp) => ({
+  type: UPDATE_USER_ACTION_SUCCESS,
+  payload: resp,
+});
+
+export const GetUserPartiesForUserMastePage = (editDetail) => ({
+  type: GET_USER_PARTIES_FOR_USER_MASTER,
+  editDetail
+});
+
+export const GetUserPartiesForUserMastePageSuccess = (resp) => ({
+  type: GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
+  payload: resp,
+});

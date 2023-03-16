@@ -13,7 +13,7 @@ import {
   Challan_items_API,
   Challan_items_Stock_API,
   Challan_Make_API,
-  Challan_Post_API,
+  Challan_Save_API,
 } from "../../../helpers/backend_helper";
 import {
   CHALLAN_POST_API,
@@ -23,12 +23,12 @@ import {
   ITEM_DROPDOWN_CHALLAN,
   MAKE_CHALLAN_ACTION,
 } from "./actionType";
-import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
-function* Post_Challan_GerFunc({ data }) {                   // Save Challan  genrator function
+function* save_Challan_GerFunc({ data }) {                   // Save Challan  genrator function
   try {
-    const response = yield call(Challan_Post_API, data);
+    const response = yield call(Challan_Save_API, data);
     yield put(saveChallan_ChallanAddSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
@@ -55,10 +55,10 @@ function* DeleteChallanGenFunc({ id }) {                     // Delete Challan  
   } catch (error) { CommonConsole(error) }
 };
 
-function* Make_Challan_GerFunc({ data }) {                  // Make Chalan Challan  genrator function
-  const { jsonBody, pageMode = '', path = '' } = data
+function* Make_Challan_GerFunc({ config }) {                  // Make Chalan Challan  genrator function
+  const { pageMode = '', path = '' } = config
   try {
-    const response = yield call(Challan_Make_API, jsonBody);
+    const response = yield call(Challan_Make_API, config);
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
     yield put(makeChallanActionSuccess(response))
@@ -82,7 +82,7 @@ function* itemDropDown_Challan_AddPage_genFunc({ data }) {   //  Challan Addpage
 }
 
 function* ChallanSaga() {
-  yield takeEvery(CHALLAN_POST_API, Post_Challan_GerFunc);
+  yield takeEvery(CHALLAN_POST_API, save_Challan_GerFunc);
   yield takeEvery(CHALLAN_LIST_FOR_LIST_PAGE, Challan_List_filterGerFunc);
   yield takeEvery(GO_BUTTON_CHALLAN_POST_API, gobutton_challan_genFunc);
   yield takeEvery(MAKE_CHALLAN_ACTION, Make_Challan_GerFunc);

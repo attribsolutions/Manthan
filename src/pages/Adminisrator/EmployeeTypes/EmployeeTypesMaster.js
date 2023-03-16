@@ -32,9 +32,9 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable,loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable,loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -215,7 +215,7 @@ const EmployeeTypesMaster = (props) => {
                     UpdatedBy: loginUserID(),
                     UpdatedOn: "2022-07-18T00:00:00"
                 });
-                debugger
+                
                 if (pageMode === mode.edit) {
                     dispatch(updateEmployeeTypeID({ jsonBody, updateId: values.id, btnId }));
                 }

@@ -14,7 +14,7 @@ import logo from "../../assets/images/logo-sm.svg"
 //Import config
 import CarouselPage from "./CarouselPage"
 import Select from "react-select";
-import { loginCompanyID } from "../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { loginCompanyID } from "../../components/Common/CommonFunction"
 
 const SelectDivisionPage = props => {
   const dispatch = useDispatch()

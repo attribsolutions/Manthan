@@ -19,16 +19,16 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
-    postBOMSuccess,
+    saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import {
-    editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, postMaterialIssue, postMaterialIssueSuccess
+    editMaterialIssueIdSuccess, goButtonForMaterialIssue_Master_Action, goButtonForMaterialIssue_Master_ActionSuccess, saveMaterialIssue, SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -37,7 +37,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 
 const MaterialIssueMaster = (props) => {
 
@@ -59,7 +59,7 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
-    console.log("Itemselect",Itemselect)
+    console.log("Itemselect", Itemselect)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -115,11 +115,11 @@ const MaterialIssueMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        
+
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
-            
+
             const { ListData, Data } = GoButton
-            const { id, Item, ItemName, Unit,WorkDate, Quantity, NumberOfLot,Bom, MaterialIssueItems = [] } = ListData
+            const { id, Item, ItemName, Unit, WorkDate, Quantity, NumberOfLot, Bom, MaterialIssueItems = [] } = ListData
             setState((i) => {
                 i.values.MaterialIssueDate = currentDate
                 i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -139,7 +139,7 @@ const MaterialIssueMaster = (props) => {
             //         WorkOrder: Itemselect.id,
             //         Bom: Itemselect.Bom
             //     }
-            setItemselect({Item:Item,Unit:Unit,id:id,Bom:Bom})
+            setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom })
             setGoButtonList(Data)
         }
     }, [GoButton])
@@ -163,7 +163,7 @@ const MaterialIssueMaster = (props) => {
             }
 
             if (hasEditVal) {
-                
+
                 setItemselect(hasEditVal)
                 const { id, Item, ItemName, WorkDate, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
                 // const { BatchesData = [] } = MaterialIssueItems
@@ -203,9 +203,9 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(SaveMaterialIssueSuccess({ Status: false }))
             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
             // saveDissable(false);//save Button Is enable function
 
@@ -233,9 +233,8 @@ const MaterialIssueMaster = (props) => {
         }
         else if (postMsg.Status === true) {
 
-            dispatch(postMaterialIssueSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(SaveMaterialIssueSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -250,12 +249,10 @@ const MaterialIssueMaster = (props) => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -427,7 +424,6 @@ const MaterialIssueMaster = (props) => {
             alert("Quantity Can Not be 0")
         } else
             if (formValid(state, setState)) {
-
                 const jsonBody = JSON.stringify({
                     WorkOrder: values.ItemName.value,
                     Item: values.ItemName.Item,
@@ -496,9 +492,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
-
         let input = event.target.value
-
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
         if (result) {
@@ -547,13 +541,11 @@ const MaterialIssueMaster = (props) => {
     };
 
     const SaveHandler = async (event) => {
-        
         event.preventDefault();
+        const btnId = event.target.id
         const validMsg = []
-
         const materialIssueItems = []
         let ox = await goButtonList.map((index) => {
-
             var TotalStock = 0;
             index.BatchesData.map(i => {
                 TotalStock += Number(i.BaseUnitQuantity);
@@ -591,48 +583,131 @@ const MaterialIssueMaster = (props) => {
                 }
             })
         })
+        try {
+            if (formValid(state, setState)) {
+                if (validMsg.length > 0) {
+                    dispatch(AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: JSON.stringify(validMsg),
+                        RedirectPath: false,
+                        AfterResponseAction: false
+                    }));
+                    return
+                }
+                btnIsDissablefunc({ btnId, state: true })
+
+                const jsonBody = JSON.stringify({
+                    MaterialIssueDate: values.MaterialIssueDate,
+                    NumberOfLot: values.NumberOfLot,
+                    LotQuantity: values.LotQuantity,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
+                    Item: Itemselect.Item,
+                    Unit: Itemselect.Unit,
+                    MaterialIssueItems: materialIssueItems,
+                    MaterialIssueWorkOrder: [
+                        {
+                            WorkOrder: Itemselect.id,
+                            Bom: Itemselect.Bom
+                        }
+                    ]
+                }
+                );
+                if (pageMode === mode.edit) {
+                }
+                else {
+                    dispatch(saveMaterialIssue(jsonBody));
+                }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
 
 
+    // const SaveHandler = async (event) => {
+    //     event.preventDefault();
+    //     const validMsg = []
+    //     const materialIssueItems = []
+    //     let ox = await goButtonList.map((index) => {
 
-        if (formValid(state, setState)) {
-            if (validMsg.length > 0) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: JSON.stringify(validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
-                return
-            }
+    //         var TotalStock = 0;
+    //         index.BatchesData.map(i => {
+    //             TotalStock += Number(i.BaseUnitQuantity);
+    //         });
 
-            const jsonBody = JSON.stringify({
-                MaterialIssueDate: values.MaterialIssueDate,
-                NumberOfLot: values.NumberOfLot,
-                LotQuantity: values.LotQuantity,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-                Company: loginCompanyID(),
-                Party: loginPartyID(),
-                Item: Itemselect.Item,
-                Unit: Itemselect.Unit,
-                MaterialIssueItems: materialIssueItems,
-                MaterialIssueWorkOrder: [
-                    {
-                        WorkOrder: Itemselect.id,
-                        Bom: Itemselect.Bom
-                    }
-                ]
-            }
-            );
-            if (pageMode === mode.edit) {
-            }
-            else {
-                dispatch(postMaterialIssue(jsonBody));
-            }
-            // 
-        };
-    }
+    //         var OrderQty = Number(index.Quantity)
+    //         if (OrderQty > TotalStock) {
+    //             {
+    //                 validMsg.push(`${index.ItemName}:Item is Out Of Stock`);
+    //             };
+    //         }
+    //         let a = index["invalid"]
+    //         if (a) {
+    //             validMsg.push(`${index.ItemName}:${index["invalidMsg"]}`);
+    //         };
+
+    //         function batch(ele) {
+    //             materialIssueItems.push({
+    //                 Item: index.Item,
+    //                 Unit: index.Unit,
+    //                 WorkOrderQuantity: index.Quantity,
+    //                 BatchCode: ele.BatchCode,
+    //                 BatchDate: ele.BatchDate,
+    //                 SystemBatchDate: ele.SystemBatchDate,
+    //                 SystemBatchCode: ele.SystemBatchCode,
+    //                 IssueQuantity: parseInt(ele.Qty),
+    //                 BatchID: ele.id,
+    //                 LiveBatchID: ele.LiveBatchID
+    //             })
+    //         }
+    //         index.BatchesData.map((ele) => {
+    //             // 
+    //             if (Number(ele.Qty) > 0) {
+    //                 batch(ele)
+    //             }
+    //         })
+    //     })
+    //     if (formValid(state, setState)) {
+    //         if (validMsg.length > 0) {
+    //             dispatch(AlertState({
+    //                 Type: 4,
+    //                 Status: true,
+    //                 Message: JSON.stringify(validMsg),
+    //                 RedirectPath: false,
+    //                 AfterResponseAction: false
+    //             }));
+    //             return
+    //         }
+
+    //         const jsonBody = JSON.stringify({
+    //             MaterialIssueDate: values.MaterialIssueDate,
+    //             NumberOfLot: values.NumberOfLot,
+    //             LotQuantity: values.LotQuantity,
+    //             CreatedBy: loginUserID(),
+    //             UpdatedBy: loginUserID(),
+    //             Company: loginCompanyID(),
+    //             Party: loginPartyID(),
+    //             Item: Itemselect.Item,
+    //             Unit: Itemselect.Unit,
+    //             MaterialIssueItems: materialIssueItems,
+    //             MaterialIssueWorkOrder: [
+    //                 {
+    //                     WorkOrder: Itemselect.id,
+    //                     Bom: Itemselect.Bom
+    //                 }
+    //             ]
+    //         }
+    //         );
+    //         if (pageMode === mode.edit) {
+    //         }
+    //         else {
+    //             dispatch(saveMaterialIssue(jsonBody));
+    //         }
+    //         // 
+    //     };
+    // }
 
     if (!(userPageAccessState === '')) {
         return (

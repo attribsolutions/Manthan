@@ -14,13 +14,14 @@ import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValid,
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
     onChangeText,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturn,
     loginUserID,
@@ -28,15 +29,16 @@ import {
     GoBtnDissable,
     saveDissable,
     loginCompanyID,
-    loginPartyID
-} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+    loginPartyID,
+    btnIsDissablefunc
+} from "../../../components/Common/CommonFunction";
 import {
     editWorkOrderListSuccess,
     getBOMList,
     postGoButtonForWorkOrder_Master,
     postGoButtonForWorkOrder_MasterSuccess,
-    postWorkOrderMaster,
-    postWorkOrderMasterSuccess,
+    SaveWorkOrderMaster,
+    SaveWorkOrderMasterSuccess,
     updateWorkOrderList,
 } from "../../../store/Production/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -45,8 +47,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 
 
@@ -129,7 +131,7 @@ const WorkOrder = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
 
         };
     }, [userAccess])
@@ -185,9 +187,8 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
+            dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
-            // saveDissable(false);//save Button Is enable function
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -205,8 +206,7 @@ const WorkOrder = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
+            dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -220,13 +220,11 @@ const WorkOrder = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // saveDissable(false);//Update Button Is enable function
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(
                 AlertState({
                     Type: 3,
@@ -392,7 +390,7 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-        
+
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
@@ -403,51 +401,85 @@ const WorkOrder = (props) => {
         dispatch(postGoButtonForWorkOrder_Master(jsonBody, goBtnID1));
     }
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
+        
         event.preventDefault();
-
-        const WorkOrderItems = BOMItems.map((index) => ({
-            Item: index.Item,
-            Unit: index.Unit,
-            BomQuantity: index.BomQuantity,
-            Quantity: index.Quantity,
-        }))
-
-        const jsonBody = JSON.stringify({
-            WorkOrderDate: values.WorkOrderDate,
-            Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
-            Bom: (pageMode === mode.edit ? id : values.ItemName.value),
-            Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
-            NumberOfLot: values.NumberOfLot,
-            Quantity: parseFloat(values.Quantity).toFixed(3),
-            Company: loginCompanyID(),
-            Party: loginPartyID(),
-            CreatedBy: loginUserID(),
-            UpdatedBy: loginUserID(),
-            WorkOrderItems: WorkOrderItems
-        });
-
-        // saveDissable(true);//save Button Is dissable function
-
-        if (pageMode === mode.edit) {
-            GoBtnDissable({ id: updateBtnID1, state: true })
-            dispatch(updateWorkOrderList(jsonBody, EditData.id, updateBtnID1));
-        }
-        else {
-            GoBtnDissable({ id: saveBtnID1, state: true })
-            dispatch(postWorkOrderMaster(jsonBody, saveBtnID1));
-        }
+        const btnId = event.target.id
+        try {
+             {
+                btnIsDissablefunc({ btnId, state: true })
+                const WorkOrderItems = BOMItems.map((index) => ({
+                    Item: index.Item,
+                    Unit: index.Unit,
+                    BomQuantity: index.BomQuantity,
+                    Quantity: index.Quantity,
+                }))
+                const jsonBody = JSON.stringify({
+                    WorkOrderDate: values.WorkOrderDate,
+                    Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
+                    Bom: (pageMode === mode.edit ? id : values.ItemName.value),
+                    Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
+                    NumberOfLot: values.NumberOfLot,
+                    Quantity: parseFloat(values.Quantity).toFixed(3),
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    WorkOrderItems: WorkOrderItems
+                });
+                if (pageMode === mode.edit) {
+                    GoBtnDissable({ id: updateBtnID1, state: true })
+                    dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    
+                    GoBtnDissable({ id: saveBtnID1, state: true })
+                    dispatch(SaveWorkOrderMaster({ jsonBody, btnId }));
+                }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    // const SaveHandler = (event) => {
+    //     event.preventDefault();
+
+    //     const WorkOrderItems = BOMItems.map((index) => ({
+    //         Item: index.Item,
+    //         Unit: index.Unit,
+    //         BomQuantity: index.BomQuantity,
+    //         Quantity: index.Quantity,
+    //     }))
+    //     const jsonBody = JSON.stringify({
+    //         WorkOrderDate: values.WorkOrderDate,
+    //         Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
+    //         Bom: (pageMode === mode.edit ? id : values.ItemName.value),
+    //         Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
+    //         NumberOfLot: values.NumberOfLot,
+    //         Quantity: parseFloat(values.Quantity).toFixed(3),
+    //         Company: loginCompanyID(),
+    //         Party: loginPartyID(),
+    //         CreatedBy: loginUserID(),
+    //         UpdatedBy: loginUserID(),
+    //         WorkOrderItems: WorkOrderItems
+    //     });
+
+    //     // saveDissable(true);//save Button Is dissable function
+    //     if (pageMode === mode.edit) {
+    //         GoBtnDissable({ id: updateBtnID1, state: true })
+    //         dispatch(updateWorkOrderList(jsonBody, EditData.id, updateBtnID1));
+    //     }
+    //     else {
+    //         GoBtnDissable({ id: saveBtnID1, state: true })
+    //         dispatch(SaveWorkOrderMaster(jsonBody, saveBtnID1));
+    //     }
+    // };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
                 <div className="page-content" style={{ marginBottom: "200px" }}>
-
-                    <form onSubmit={SaveHandler} noValidate>
+                    <form  noValidate>
                         <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
                                 <Col sm={11}>
@@ -693,6 +725,7 @@ const WorkOrder = (props) => {
                             <Row >
                                 <Col sm={2} className="mt-n4">
                                     <SaveButton pageMode={pageMode}
+                                        onClick={SaveHandler}
                                         userAcc={userPageAccessState}
                                         module={"WorkOrder"}
                                     />

@@ -1,6 +1,5 @@
-import { useDispatch } from "react-redux";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, convertDatefunc, convertTimefunc, GoBtnDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, convertDatefunc, convertTimefunc, GoBtnDissable } from "../../../components/Common/CommonFunction";
 import {
   BOMList_Get_API,
   Post_WorkOrder_Master_API,
@@ -11,14 +10,13 @@ import {
   WorkOrder_Update_Api
 } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
   deleteWorkOrderIdSuccess,
   editWorkOrderListSuccess,
   getBOMListSuccess,
   getWorkOrderListPageSuccess,
   postGoButtonForWorkOrder_MasterSuccess,
-  postWorkOrderMasterSuccess,
+  SaveWorkOrderMasterSuccess,
   updateWorkOrderListSuccess
 } from "./action";
 import {
@@ -31,16 +29,16 @@ import {
   UPDATE_WORK_ORDER_LIST
 } from "./actionTypes";
 
-// get Item dropdown API using post method
-function* Get_BOMList_GenratorFunction({ filters }) {
+
+function* Get_BOMList_GenratorFunction({ filters }) {                                           // get Item dropdown API using post method
   try {
     const response = yield call(BOMList_Get_API, filters);
     yield put(getBOMListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
-// GO Botton Post API
-function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {
+
+function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {                                  // GO Botton Post API
   try {
     const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
     // GoBtnDissable({ id: btnId, state: false })
@@ -48,16 +46,16 @@ function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {
   } catch (error) { CommonConsole(error) }
 }
 
-// WOrk Order Post API
-function* Post_WorkOrder_GenratorFunction({ jsonbody, btnId }) {
+ 
+function* Post_WorkOrder_GenratorFunction({ config }) {                               // WOrk Order Post API
   try {
-    const response = yield call(Post_WorkOrder_Master_API, jsonbody);
-    yield put(postWorkOrderMasterSuccess(response));
+    const response = yield call(Post_WorkOrder_Master_API, config);
+    yield put(SaveWorkOrderMasterSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-// get Work Order List API Using post method
-function* GetWorkOrderGenFunc({ filters }) {
+
+function* GetWorkOrderGenFunc({ filters }) {                                                  // get Work Order List API Using post method
   try {
     const response = yield call(WorkOrder_Get_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -71,11 +69,12 @@ function* GetWorkOrderGenFunc({ filters }) {
   } catch (error) { CommonConsole(error) }
 }
 
-// Work Order edit List page
-function* editWorkOrderGenFunc({ id1, pageMode }) {
+
+function* editWorkOrderGenFunc({ config }) {                                          // Work Order edit List page
+  const { btnmode } = config;
   try {
-    let response = yield call(WorkOrder_edit_Api, id1);
-    response.pageMode = pageMode
+    let response = yield call(WorkOrder_edit_Api, config);
+    response.pageMode = btnmode;
     response.Data = response.Data[0];
     if (response.StatusCode === 226) yield put(AlertState({
       Type: 3,
@@ -87,18 +86,18 @@ function* editWorkOrderGenFunc({ id1, pageMode }) {
   } catch (error) { CommonConsole(error) }
 }
 
-// Work Order update List page
-function* UpdateWorkOrderGenFunc({ data, id1 }) {
+
+function* UpdateWorkOrderGenFunc({ config }) {                                           // Work Order update List page
   try {
-    const response = yield call(WorkOrder_Update_Api, data, id1);
+    const response = yield call(WorkOrder_Update_Api, config);
     yield put(updateWorkOrderListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
-// Work Order delete List page
-function* DeleteWorkOrderGenFunc({ id }) {
+
+function* DeleteWorkOrderGenFunc({ config }) {                                                  // Work Order delete List page
   try {
-    const response = yield call(WorkOrder_Delete_Api, id);
+    const response = yield call(WorkOrder_Delete_Api, config);
     yield put(deleteWorkOrderIdSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

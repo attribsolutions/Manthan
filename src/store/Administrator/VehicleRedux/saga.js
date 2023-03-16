@@ -16,7 +16,7 @@ import {
   EDIT_VEHICLE_ID,
   UPDATE_VEHICLE_ID
 } from "./actionType";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
 // const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
 // Get List Page API

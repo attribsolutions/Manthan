@@ -11,7 +11,7 @@ import {
   GO_BUTTON_FOR_CREDITLIMIT_PAGE,
   POST_CREDITLIMIT_PAGE,
 } from "./actionTypes";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* GoButton_CreditLimit_post_genfun({ jsonBody }) {
 
@@ -22,10 +22,10 @@ function* GoButton_CreditLimit_post_genfun({ jsonBody }) {
 }
 
 // Credit Limit Post API
-function* Post_CreditLimit_GenratorFunction({ jsonBody }) {
+function* Post_CreditLimit_GenratorFunction({ config }) {
   
   try {
-    const response = yield call(Post_CreditLimit_Master_API, jsonBody);
+    const response = yield call(Post_CreditLimit_Master_API, config);
     yield put(postCreditLimitSuccess(response));
   } catch (error) { CommonConsole(error) }
 }

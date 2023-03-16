@@ -8,8 +8,8 @@ import {
   GET_GRN_ITEM_MODE_2_SUCCESS,
   GET_GRN_LIST_PAGE,
   GET_GRN_LIST_PAGE_SUCCESS,
-  POST_GRN_FROM_GRN_PAGE,
-  POST_GRN_FROM_GRN_PAGE_SUCCESS,
+  SAVE_GRN_FROM_GRN_PAGE_ACTION,
+  SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
   SET_GRN_LIST_FILTERS,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS
@@ -34,52 +34,52 @@ export const getGRN_itemMode2_Success = list => ({
 
 
 //get listpage api
-export const getGRNListPage = (filters) => ({
+export const getGRNListPage = (config = {}) => ({
   type: GET_GRN_LIST_PAGE,
-  filters,
+  config,
 });
 
-export const getGRNListPageSuccess = (data) => ({
+export const getGRNListPageSuccess = (resp) => ({
   type: GET_GRN_LIST_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 
-export const postGRN = (data) => ({
-  type: POST_GRN_FROM_GRN_PAGE,
-  data
+export const saveGRNAction = (config = {}) => ({
+  type: SAVE_GRN_FROM_GRN_PAGE_ACTION,
+  config,
 });
-export const postGRNSuccess = (msg) => ({
-  type: POST_GRN_FROM_GRN_PAGE_SUCCESS,
+export const saveGRNSuccess = (msg) => ({
+  type: SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
   payload: msg
 });
 
-export const editGRNId = (id, pageMode) => ({
+export const editGRNAction = (config = {}) => ({
   type: EDIT_GRN_FOR_GRN_PAGE,
-  id, pageMode
+  config ,
 });
-export const editGRNIdSuccess = (data) => ({
+export const editGRNIdSuccess = (resp) => ({
   type: EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
-export const updateGRNId = (data, id) => ({
+export const updateGRNId = (config = {}) => ({
   type: UPDATE_GRN_ID_FROM_GRN_PAGE,
-  data, id,
+  config,
 });
-export const updateGRNIdSuccess = (data) => ({
+export const updateGRNIdSuccess = (resp) => ({
   type: UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 
-export const deleteGRNId = (id) => ({
+export const deleteGRNId = (config = {}) => ({
   type: DELETE_GRN_FOR_GRN_PAGE,
-  id,
+  config ,
 });
-export const deleteGRNIdSuccess = (data) => ({
+export const deleteGRNIdSuccess = (resp) => ({
   type: DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 

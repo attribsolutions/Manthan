@@ -40,7 +40,7 @@ import {
   changelayoutMode
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
-import { MainSearchBox, } from '../Common/ComponentRelatedCommonFile/SearchBox/index';
+import { MainSearchBox, } from '../Common/SearchBox/index';
 
 const Header = props => {
   const { onChangeLayoutMode } = props;

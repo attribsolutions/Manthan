@@ -18,11 +18,11 @@ import {
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RoleAccessListPage = () => {

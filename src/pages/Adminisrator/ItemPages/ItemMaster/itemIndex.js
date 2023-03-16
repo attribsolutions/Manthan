@@ -19,7 +19,6 @@ import {
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import { AvForm } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/actions"
 import {
@@ -33,12 +32,12 @@ import {
     get_ImageType_ForDropDown,
     get_Party_ForDropDown,
     get_PriceList_ForDropDown,
-    postItemData,
-    PostItemDataSuccess,
-    updateItemID,
-    updateItemSuccess
+    saveItemMasterAction,
+    SaveItemMasterActionSuccess,
+    updateItemMasterAction,
+    updateItemMasterActionSuccess
 } from "../../../../store/Administrator/ItemsRedux/action";
-import { AlertState, Breadcrumb_inputName, getCategoryTypelist } from "../../../../store/actions";
+import { Breadcrumb_inputName, getCategoryTypelist } from "../../../../store/actions";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import GSTTab from "./GST_Tab";
 import MRPTab from "./MRP_Tab";
@@ -46,10 +45,12 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import * as pageId from "../../../../routes/allPageID"
+import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
 import * as url from "../../../../routes/route_url";
+import * as mode from "../../../../routes/PageMode";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
+import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { SaveButton } from "../../../../components/Common/CommonButton";
 
 export const unitConversionInitial = {
     id: 1,
@@ -65,8 +66,9 @@ const ItemsMaster = (props) => {
     const history = useHistory()
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [activeTab1, setactiveTab1] = useState("1")
 
     const [searchResults, setSearchResults] = React.useState([]);
@@ -292,6 +294,7 @@ const ItemsMaster = (props) => {
                 setMarginMaster(hasEditVal.ItemMarginDetails)
                 setGStDetailsMaster(hasEditVal.ItemGSTHSNDetails)
                 setGroup_Tab_TableData(hasEditVal.ItemGroupDetails)
+                seteditCreatedBy(hasEditVal.CreatedBy)
                 dispatch(editItemSuccess({ Status: false }))
             }
         }
@@ -313,56 +316,50 @@ const ItemsMaster = (props) => {
 
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(PostItemDataSuccess({ Status: false }))
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+            dispatch(SaveItemMasterActionSuccess({ Status: false }))
+            if (pageMode === mode.dropdownAdd) {
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.ITEM_lIST,
-                }))
+                })
+                if (promise) {
+                    history.push({
+                        pathname: url.ITEM_lIST,
+                    })
+                }
             }
         }
 
         else if (postMsg.Status === true) {
-            dispatch(PostItemDataSuccess({ Status: false }))
-            dispatch(AlertState({
+            dispatch(SaveItemMasterActionSuccess({ Status: false }))
+            CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            //   saveDissable(false);//Update Button Is enable function
-            //   setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: url.ITEM_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             //   saveDissable(false);//Update Button Is enable function
-            dispatch(updateItemSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+            dispatch(updateItemMasterActionSuccess({ Status: false }));
+            CustomAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
         }
     }, [updateMsg, modalCss]);
 
@@ -474,238 +471,245 @@ const ItemsMaster = (props) => {
         dropDownValidation(event, "BrandName")
     };
 
-    const handleValidSubmit = (event, values) => {
+    const SaveHandler = (event) => {
 
-        let isvalid = true
-        let inValidMsg = []
+        event.preventDefault();
+        const btnId = event.target.id;
+        btnIsDissablefunc({ btnId, state: true })
 
-        if (formValue.Name === '') {
-            document.getElementById("txtName0").className = "form-control is-invalid"
-            inValidMsg.push("Name: Is Requried")
-            isvalid = false
-        }
-        if (formValue.ShortName === '') {
-            document.getElementById("txtShortName0").className = "form-control is-invalid"
-            isvalid = false
-            inValidMsg.push("ShortName: Is Requried")
-        }
-        if (formValue.Company.length < 1) {
-            inValidDrop.Company = true
-            isvalid = false
-            inValidMsg.push("Company: Is Requried")
-        }
-        if (formValue.BaseUnit.length < 1) {
-            inValidDrop.BaseUnit = true
-            isvalid = false
-            inValidMsg.push("BaseUnit: Is Requried")
+        try {
+            let isvalid = true
+            let inValidMsg = []
 
-        }
-        if (formValue.CategoryType.length < 1) {
-            inValidDrop.CategoryType = true
-            isvalid = false
-            inValidMsg.push("CategoryType: Is Requried")
-        }
-        if (formValue.Category.length < 1) {
-            inValidDrop.Category = true
-            isvalid = false
-            inValidMsg.push("Category: Is Requried")
+            if (formValue.Name === '') {
+                document.getElementById("txtName0").className = "form-control is-invalid"
+                inValidMsg.push("Name: Is Requried")
+                isvalid = false
+            }
+            if (formValue.ShortName === '') {
+                document.getElementById("txtShortName0").className = "form-control is-invalid"
+                isvalid = false
+                inValidMsg.push("ShortName: Is Requried")
+            }
+            if (formValue.Company.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Company = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Company: Is Requried")
+            }
+            if (formValue.BaseUnit.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.BaseUnit = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("BaseUnit: Is Requried")
 
-        }
+            }
+            if (formValue.CategoryType.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.CategoryType = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("CategoryType: Is Requried")
+            }
+            if (formValue.Category.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Category = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Category: Is Requried")
 
-        if (formValue.Division.length < 1) {
-            inValidDrop.Division = true
-            isvalid = false
-            inValidMsg.push("Division:Is Requried")
-        }
-        if (formValue.BrandName.length < 1) {
-            inValidDrop.BrandName = true
-            isvalid = false
-            inValidMsg.push("Brand Name:Is Requried")
-        }
-        if (!Group_Tab_TableData.length > 0) {
-            isvalid = false
-            inValidMsg.push(" GroupType Primary:Is Requried")
-        }
-        else {
-            const found = Group_Tab_TableData.find(element => {
-                return element.GroupTypeName === "Primary"
-            });
-            if (found === undefined) {
-                isvalid = false;
+            }
+
+            if (formValue.Division.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Division = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Division:Is Requried")
+            }
+            if (formValue.BrandName.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.BrandName = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Brand Name:Is Requried")
+            }
+            if (!Group_Tab_TableData.length > 0) {
+                isvalid = false
                 inValidMsg.push(" GroupType Primary:Is Requried")
             }
-        }
-        if (isvalid) {/// ************* is valid if start 
-            //**************** Brand Name **************** */
-            const ItemBrandName = formValue.BrandName.map((index) => {
-                return index.value
-            })
-            // let text = fruits.toString();
-            // console.log(ItemBrandName.toString())
-            // ====================== Unit conversion *****start ======================
-
-            const itemUnitDetails = []
-            // 
-            baseUnitTableData.forEach((index, key) => {
-                let val1 = index.Conversion
-                const unit1 = index.Unit.value;
-
-                if (!(val1 === '')) {
-                    val1 = parseFloat(val1).toFixed(3)
+            else {
+                const found = Group_Tab_TableData.find(element => {
+                    return element.GroupTypeName === "Primary"
+                });
+                if (found === undefined) {
+                    isvalid = false;
+                    inValidMsg.push(" GroupType Primary:Is Requried")
                 }
+            }
+            if (isvalid) {                                               // ************* is valid if start 
+                //**************** Brand Name **************** */
+                const ItemBrandName = formValue.BrandName.map((index) => {
+                    return index.value
+                })
+                // ====================== Unit conversion *****start ======================
 
-                const found = baseUnitTableData.find((i, k) => {
-                    let inner = i.Conversion;
-                    if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
-                    return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
+                const itemUnitDetails = []
+                // 
+                baseUnitTableData.forEach((index, key) => {
+                    let val1 = index.Conversion
+                    const unit1 = index.Unit.value;
+
+                    if (!(val1 === '')) {
+                        val1 = parseFloat(val1).toFixed(3)
+                    }
+
+                    const found = baseUnitTableData.find((i, k) => {
+                        let inner = i.Conversion;
+                        if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
+                        return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
+                    });
+
+                    const found2 = itemUnitDetails.find((i, k) => {
+                        return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
+                    });
+
+                    // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
+
+                    if (((found === undefined) || (found2 === undefined)) && !(val1 === '') && !(unit1 === '')) {
+                        itemUnitDetails.push({
+                            BaseUnitQuantity: index.Conversion,
+                            UnitID: index.Unit.value,
+                            IsBase: index.IsBase,
+                            SODefaultUnit: index.SOUnit,
+                            PODefaultUnit: index.POUnit
+                        })
+                    }
+
                 });
 
-                const found2 = itemUnitDetails.find((i, k) => {
-                    return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
-                });
+                //  ======================   ItemCategoryDetails *****start   ====================== 
 
-                // if (((found === undefined) || (found2 === undefined))  && !(val1 === '') && !(unit1 === ''))
+                const ItemCategoryDetails = formValue.Category.map((index) => ({
+                    CategoryType: formValue.CategoryType.value,
+                    Category: index.value
+                }))
+                //  ======================   MRP_Tab_TableData *****start   ====================== 
 
-                if (((found === undefined) || (found2 === undefined)) && !(val1 === '') && !(unit1 === '')) {
-                    itemUnitDetails.push({
-                        BaseUnitQuantity: index.Conversion,
-                        UnitID: index.Unit.value,
-                        IsBase: index.IsBase,
-                        SODefaultUnit: index.SOUnit,
-                        PODefaultUnit: index.POUnit
+                let hasAdd_MRP = []
+                MRP_Tab_TableData.forEach((index) => {
+                    if (index.IsAdd === true) { hasAdd_MRP.push(index) }
+                })
+
+                // ======================  marginMaster *****start   ====================== 
+
+                let hasAdd_Margin = []
+
+                marginMaster.forEach((index) => {
+                    if (index.IsAdd === true) { hasAdd_Margin.push(index) }
+                })
+
+                // ======================  GStDetailsMaster *****start   ====================== 
+
+                let hasAdd_GST = []
+
+                GStDetailsMaster.forEach((index) => {
+
+                    if (index.IsAdd === true) { hasAdd_GST.push(index) }
+                })
+
+
+                let imagedata = imageTabTable.map(function (index) {
+
+                    if ((index.ImageType === '') || (index.ImageUpload === '')) {
+
+
+                        return imageTabTable.length = []
+                    }
+                    else {
+                        return ({
+                            ImageType: index.ImageType.value,
+                            Item_pic: index.ImageUpload
+                        })
+                    }
+                })
+
+                let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
+
+                if (GStDetailsMaster.length === 0) {
+                    CustomAlert({
+                        Type: 4,
+                        Message: "GST Details Required",
                     })
+                    return btnIsDissablefunc({ btnId, state: false });
                 }
 
-            });
+                const jsonBody = JSON.stringify({
+                    Name: formValue.Name,
+                    ShortName: formValue.ShortName,
+                    Sequence: formValue.Sequence,
+                    BarCode: formValue.BarCode,
+                    isActive: formValue.isActive,
+                    Company: formValue.Company.value,
+                    BaseUnitID: formValue.BaseUnit.value,
+                    BrandName: ItemBrandName.toString(),
+                    Tag: formValue.Tag,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    ItemCategoryDetails: ItemCategoryDetails,
+                    ItemUnitDetails: itemUnitDetails,
 
+                    ItemDivisionDetails: formValue.Division.map((i) => {
+                        return ({ Party: i.value })
+                    }),
 
+                    ItemImagesDetails: imagedata1,
+                    ItemMRPDetails: hasAdd_MRP,
+                    ItemMarginDetails: hasAdd_Margin,
+                    ItemGSTHSNDetails: hasAdd_GST,
+                    ItemGroupDetails: Group_Tab_TableData,
+                    ItemShelfLife: [
+                        {
+                            Days: formValue.ShelfLife,
+                            CreatedBy: loginUserID(),
+                            UpdatedBy: loginUserID(),
+                            IsAdd: true
+                        }
+                    ]
+                });
 
-            // if (pageMode === 'save')
-            //     itemUnitDetails.push({
-            //         BaseUnitQuantity: 1,
-            //         UnitID: formValue.BaseUnit.value,
-            //         IsBase: true,
-            //         SODefaultUnit: true,
-            //         PODefaultUnit: true
-            //     })
-
-            //  ======================   ItemCategoryDetails *****start   ====================== 
-
-            const ItemCategoryDetails = formValue.Category.map((index) => ({
-                CategoryType: formValue.CategoryType.value,
-                Category: index.value
-            }))
-            //  ======================   MRP_Tab_TableData *****start   ====================== 
-
-            let hasAdd_MRP = []
-            MRP_Tab_TableData.forEach((index) => {
-                if (index.IsAdd === true) { hasAdd_MRP.push(index) }
-            })
-
-            // ======================  marginMaster *****start   ====================== 
-
-            let hasAdd_Margin = []
-
-            marginMaster.forEach((index) => {
-                if (index.IsAdd === true) { hasAdd_Margin.push(index) }
-            })
-
-            // ======================  GStDetailsMaster *****start   ====================== 
-
-            let hasAdd_GST = []
-
-            GStDetailsMaster.forEach((index) => {
-
-                if (index.IsAdd === true) { hasAdd_GST.push(index) }
-            })
-
-
-            let imagedata = imageTabTable.map(function (index) {
-
-                if ((index.ImageType === '') || (index.ImageUpload === '')) {
-
-
-                    return imageTabTable.length = []
+                if (pageMode === mode.edit) {
+                    dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
                 }
                 else {
-                    return ({
-                        ImageType: index.ImageType.value,
-                        Item_pic: index.ImageUpload
-                    })
+                    dispatch(saveItemMasterAction({ jsonBody, btnId }));
                 }
-            })
+            }                                                            // ************* is valid if start 
+            else {                                                       // ************* is valid esle start 
+                CustomAlert({
+                    Type: 4,
+                    Message: JSON.stringify(inValidMsg),
+                })
+                return btnIsDissablefunc({ btnId, state: false })
 
-            let imagedata1 = imagedata.reduce(function (r, a) { return r.concat(a); }, []);
-
-            if (GStDetailsMaster.length === 0) {
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: "GST Details Required",
-                        RedirectPath: false,
-                        PermissionAction: false,
-                    })
-                );
-                return;
             }
-            
-            const jsonBody = JSON.stringify({
-                Name: formValue.Name,
-                ShortName: formValue.ShortName,
-                Sequence: formValue.Sequence,
-                BarCode: formValue.BarCode,
-                isActive: formValue.isActive,
-                Company: formValue.Company.value,
-                BaseUnitID: formValue.BaseUnit.value,
-                BrandName: ItemBrandName.toString(),
-                Tag: formValue.Tag,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-                ItemCategoryDetails: ItemCategoryDetails,
-                ItemUnitDetails: itemUnitDetails,
 
-                ItemDivisionDetails: formValue.Division.map((i) => {
-                    return ({ Party: i.value })
-                }),
-
-                // ItemImagesDetails: imageTabTable.map((i) => ({
-                //     ImageType: i.ImageType.value,
-                //     Item_pic: i.ImageUpload
-                // })),
-                ItemImagesDetails: imagedata1,
-                ItemMRPDetails: hasAdd_MRP,
-                ItemMarginDetails: hasAdd_Margin,
-                ItemGSTHSNDetails: hasAdd_GST,
-                ItemGroupDetails: Group_Tab_TableData,
-                ItemShelfLife: [
-                    {
-                        Days: formValue.ShelfLife,
-                        CreatedBy: loginUserID(),
-                        UpdatedBy: loginUserID(),
-                        IsAdd: true
-                    }
-                ]
-            });
-
-            if (pageMode === 'edit') {
-                dispatch(updateItemID(jsonBody, EditData.id));
-            }
-            else {
-                dispatch(postItemData(jsonBody));
-                console.log("items post json", jsonBody)
-            }
-        } /// ************* is valid if start 
-        else { /// ************* is valid esle start 
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: JSON.stringify(inValidMsg),
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-
-    };
+        } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
+    }
 
 
     // When the user clicks anywhere outside of the modal, close it
@@ -768,8 +772,6 @@ const ItemsMaster = (props) => {
         const results = data1.filter(person =>
             person.toLowerCase().includes(searchtext)
         );
-        // var x = document.getElementById("brandtag");
-        // x.style.display = "block";
         setSearchResults1(results);
         var x = document.getElementById("brandtag");
         document.addEventListener('click', function handleClickOutsideBox(event) {
@@ -823,8 +825,7 @@ const ItemsMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <Container fluid>
-                        {/* <Breadcrumb pageHeading={userPageAccessState.PageHeading} /> */}
-                        <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
+                        <form >
                             <Row>
                                 <Col lg={12}>
                                     <Card className="text-black" >
@@ -1081,7 +1082,7 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Category</Label>
                                                                         <Select
-                                                                          value={formValue.Category}
+                                                                            value={formValue.Category}
                                                                             isMulti={true}
                                                                             className="basic-multi-select"
                                                                             options={CategoryList_DropdownOptions}
@@ -1097,25 +1098,7 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
 
-                                                                    {/* <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Brand Name</Label>
-                                                                        <Input
-                                                                            id='txtBrandName0'
-                                                                            defaultValue={EditData.BrandName}
-                                                                            placeholder=" Please Enter Brand Name "
-                                                                            autoComplete="off"
-                                                                            onChange={handlerChange}
-                                                                            onClick={onclickselects}
 
-                                                                        />
-                                                                        <div id="brandtag" >
-                                                                            <ul>
-                                                                                {searchResults1.map(item => (
-                                                                                    <li className="liitem" >{item}</li>
-                                                                                ))}
-                                                                            </ul>
-                                                                        </div>
-                                                                    </FormGroup> */}
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label className="form-label font-size-13 ">Brand Name</Label>
                                                                         <Select
@@ -1283,32 +1266,15 @@ const ItemsMaster = (props) => {
 
                                             <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
                                                 <Col sm={2}>
-                                                    <div style={{ paddingLeft: "14px" }}>
-                                                        {
-                                                            pageMode === "edit" ?
-                                                                userPageAccessState.RoleAccess_IsEdit ?
-                                                                    <button
-                                                                        type="submit"
-                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                                                        className="btn btn-success w-md"
-                                                                    >
-                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                    </button>
-                                                                    :
-                                                                    <></>
-                                                                : (
-                                                                    userPageAccessState.RoleAccess_IsSave ?
-                                                                        <button
-                                                                            type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                                                            className="btn btn-primary w-md"
-                                                                        > <i className="fas fa-save me-2"></i> Save
-                                                                        </button>
-                                                                        :
-                                                                        <></>
-                                                                )
-                                                        }
-                                                    </div>
+
+                                                    <SaveButton
+                                                        pageMode={pageMode}
+                                                        onClick={SaveHandler}
+                                                        userAcc={userPageAccessState}
+                                                        editCreatedBy={editCreatedBy}
+                                                        module={"Item"}
+                                                    />
+
                                                 </Col>
                                             </Row>
                                         </CardBody>
@@ -1316,7 +1282,7 @@ const ItemsMaster = (props) => {
                                 </Col>
                             </Row>
 
-                        </AvForm>
+                        </form>
                     </Container>
                 </div >
             </React.Fragment >

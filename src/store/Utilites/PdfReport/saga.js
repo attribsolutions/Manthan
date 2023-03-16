@@ -4,7 +4,7 @@ import { Data } from "./DemoData";
 
 import { getpdfReportdataSuccess, postpdfMultipleReportdataSuccess } from "./actions";
 import { MultipleInvoice_API } from "../../../helpers/backend_helper";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
@@ -20,7 +20,7 @@ function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
 }
 
 function* GetMultipleinvoicereport_GenFunc({ API, jsonBody,ReportType, Id}) {
-  debugger
+  
   try {
     const response = yield call(MultipleInvoice_API, jsonBody);
     // const response = Data;

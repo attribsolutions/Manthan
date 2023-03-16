@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../../Purchase/Order/Order";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import {
     deleteGRNId,
     deleteGRNIdSuccess,
-    editGRNId, getGRNListPage,
+    editGRNAction, getGRNListPage,
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { btnIsDissablefunc, CommonConsole, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -24,6 +24,7 @@ import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const GRNList = () => {
     const history = useHistory();
@@ -48,17 +49,19 @@ const GRNList = () => {
 
         })
     );
+    const gobtnId = `gobtn-${subPageMode}`
     const { userAccess, pageField, vender, makeChallan, grnlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
     const action = {
         getList: getGRNListPage,
-        editId: editGRNId,
+        editId: editGRNAction,
         deleteId: deleteGRNId,
         postSucc: postMessage,
         updateSucc: updateGRNIdSuccess,
         deleteSucc: deleteGRNIdSuccess
     }
+
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -85,7 +88,7 @@ const GRNList = () => {
 
     useEffect(() => {
         if (makeChallan.Status === true && makeChallan.StatusCode === 200) {
-            dispatch(makeChallanActionSuccess({Status:false}))
+            dispatch(makeChallanActionSuccess({ Status: false }))
             history.push({
                 pathname: makeChallan.path,
                 page_Mode: makeChallan.page_Mode,
@@ -106,28 +109,27 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-        
+
         const id = list[0].id
-        const customer = list[0].Customer
-        const jsonBody = JSON.stringify({
-            // FromDate: fromdate,
-            // ToDate: todate,
-            // Party: loginPartyID(),
-            // Customer: customer,
+        const makeBody = JSON.stringify({
             GRN: id,
         });
-        dispatch(makeChallanAction({jsonBody, pageMode:mode.modeSTPsave, path:url.CHALLAN_LIST}))
+        dispatch(makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
     };
 
     function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            Supplier: venderSelect === "" ? '' : venderSelect.value,
-            Party: loginPartyID(),
-            OrderType: order_Type.SaleOrder
-        });
-        dispatch(getGRNListPage(jsonBody));
+        const btnId = gobtnId;
+        btnIsDissablefunc({ btnId, state: true })
+        try {
+            const filtersBody = JSON.stringify({
+                FromDate: fromdate,
+                ToDate: todate,
+                Supplier: venderSelect === "" ? '' : venderSelect.value,
+                Party: loginPartyID(),
+                OrderType: order_Type.SaleOrder
+            });
+            dispatch(getGRNListPage({ filtersBody, btnId }));
+        } catch (error) { }
     }
 
     function fromdateOnchange(e, date) {
@@ -148,6 +150,78 @@ const GRNList = () => {
         dispatch(grnlistfilters(newObj))
     }
 
+    const HeaderContent =()=>{
+        return  <div className="px-2  c_card_filter text-black " >
+        <div className="row">
+            <div className=" row">
+                <Col sm="3" className="">
+                    <FormGroup className="mb- row mt-3 " >
+                        <Label className="col-sm-5 p-2"
+                            style={{ width: "83px" }}>From Date</Label>
+                        <Col sm="7">
+                            <Flatpickr
+                                name='fromdate'
+                                className="form-control d-block p-2 bg-white text-dark"
+                                placeholder="Select..."
+                                value={fromdate}
+                                options={{
+                                    altInput: true,
+                                    altFormat: "d-m-Y",
+                                    dateFormat: "Y-m-d",
+                                }}
+                                onChange={fromdateOnchange}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col>
+                <Col sm="3" className="">
+                    <FormGroup className="mb- row mt-3 " >
+                        <Label className="col-sm-5 p-2"
+                            style={{ width: "65px" }}>To Date</Label>
+                        <Col sm="7">
+                            <Flatpickr
+                                nane='todate'
+                                className="form-control d-block p-2 bg-white text-dark"
+                                value={todate}
+                                placeholder="Select..."
+                                options={{
+                                    altInput: true,
+                                    altFormat: "d-m-Y",
+                                    dateFormat: "Y-m-d",
+                                }}
+                                onChange={todateOnchange}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col>
+
+                <Col sm="5">
+                    <FormGroup className="mb-2 row mt-3 " >
+                        <Label className="col-md-4 p-2"
+                            style={{ width: "115px" }}>Supplier Name</Label>
+                        <Col md="5">
+                            <Select
+                                value={venderSelect}
+                                classNamePrefix="select2-Customer"
+                                options={venderOptions}
+                                onChange={venderOnchange}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col >
+
+                <Col sm="1" className="mt-3 ">
+                    <Go_Button
+                        id={gobtnId}
+                        onClick={goButtonHandler}
+                    />
+                </Col>
+            </div>
+
+        </div>
+    </div>
+    }
+
     return (
 
         <React.Fragment>
@@ -155,77 +229,9 @@ const GRNList = () => {
 
             <div className="page-content">
 
-                <div className="px-2  c_card_filter text-black " >
-                    <div className="row">
-                        <div className=" row">
-                            <Col sm="3" className="">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-5 p-2"
-                                        style={{ width: "83px" }}>From Date</Label>
-                                    <Col sm="7">
-                                        <Flatpickr
-                                            name='fromdate'
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            value={fromdate}
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
-                                            onChange={fromdateOnchange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                            <Col sm="3" className="">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-5 p-2"
-                                        style={{ width: "65px" }}>To Date</Label>
-                                    <Col sm="7">
-                                        <Flatpickr
-                                            nane='todate'
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            value={todate}
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
-                                            onChange={todateOnchange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-
-                            <Col sm="5">
-                                <FormGroup className="mb-2 row mt-3 " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "115px" }}>Supplier Name</Label>
-                                    <Col md="5">
-                                        <Select
-                                            value={venderSelect}
-                                            classNamePrefix="select2-Customer"
-                                            options={venderOptions}
-                                            onChange={venderOnchange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col >
-
-                            <Col sm="1" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={() => goButtonHandler()}
-                                >Go</Button>
-                            </Col>
-                        </div>
-
-                    </div>
-                </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
@@ -234,8 +240,7 @@ const GRNList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            // downBtnFunc={downBtnFunc}
-                            // editBodyfunc={editBodyfunc}
+                            HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"GRN"}
                             makeBtnName={"Make Challan"}

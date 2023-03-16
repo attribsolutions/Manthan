@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SalesManMaster from "./SalesManMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     deleteSalesManID_Success,
     deleteSalesManID,

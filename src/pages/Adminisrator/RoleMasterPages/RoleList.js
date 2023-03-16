@@ -3,13 +3,13 @@ import {
   getRole,
   deleteRole,
   editRoleId,
-  updateSuccess,
-  deleteSuccess,
+  userUpdateActionSuccess,
+  userDeleteActionSuccess,
   PostSuccess,
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { useSelector, useDispatch } from "react-redux";
 import RoleMaster from "./RoleMaster";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
@@ -35,8 +35,8 @@ const RoleList = (props) => {
     editId: editRoleId,
     deleteId: deleteRole,
     postSucc: PostSuccess,
-    updateSucc: updateSuccess,
-    deleteSucc: deleteSuccess
+    updateSucc: userUpdateActionSuccess,
+    deleteSucc: userDeleteActionSuccess
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering

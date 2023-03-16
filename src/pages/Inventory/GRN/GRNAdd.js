@@ -22,14 +22,13 @@ import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { editGRNIdSuccess, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate} from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { editGRNIdSuccess, getGRN_itemMode2_Success, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { breadcrumbReturn, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import * as pageId from "../../../routes/allPageID";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 let initialTableData = []
@@ -161,28 +160,25 @@ const GRNAdd = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postGRNSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
-            dispatch(AlertState({
+            dispatch(saveGRNSuccess({ Status: false }))
+            const promise = await CustomAlert({
                 Type: 1,
-                Status: true,
                 Message: postMsg.Message,
-                RedirectPath: url.GRN_lIST,
-            }))
+            })
+            if (promise) {
+                history.push({ pathname: url.GRN_lIST })
+            }
 
         } else if (postMsg.Status === true) {
-            // saveDissable(false);//save Button Is enable function
-            dispatch(postGRNSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+            dispatch(saveGRNSuccess({ Status: false }))
+            CustomAlert({
+                Type: 1,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
+
         }
     }, [postMsg])
 
@@ -522,118 +518,118 @@ const GRNAdd = (props) => {
 
     }
 
-    const saveHandeller = (e, values) => {
-        // 
-        const itemArr = []
-        const isvalidMsg = [];
+    const saveHandeller = (event) => {
+        event.preventDefault();
 
-        grnItemList.forEach(i => {
-            // if ((i.Quantity > 0)) {
-            const basicAmt = parseFloat(basicAmount(i))
-            const cgstAmt = (GstAmount(i))
+        const btnId = event.target.id
+        btnIsDissablefunc({ btnId, state: true })
 
-            const arr = {
-                Item: i.Item,
-                Quantity: i.Quantity,
-                MRP: i.MRP,
-                ReferenceRate: i.Rate,
-                Rate: i.Rate,
-                Unit: i.Unit,
-                BaseUnitQuantity: i.BaseUnitQuantity,
-                GST: i.GST,
-                BasicAmount: basicAmt.toFixed(2),
-                GSTAmount: cgstAmt.toFixed(2),
-                Amount: i.Amount,
+        function returnFunc() {
+            btnIsDissablefunc({ btnId, state: false })
+        }
+        try {
+            const itemArr = []
+            const isvalidMsg = [];
 
-                CGST: (cgstAmt / 2).toFixed(2),
-                SGST: (cgstAmt / 2).toFixed(2),
-                IGST: 0,
-                CGSTPercentage: (i.GSTPercentage / 2),
-                SGSTPercentage: (i.GSTPercentage / 2),
-                IGSTPercentage: 0,
+            grnItemList.forEach(i => {
 
-                BatchDate: i.BatchDate,
-                BatchCode: i.BatchCode,
-                DiscountType: "0",
-                Discount: "0.00",
-                DiscountAmount: "0.00",
-                TaxType:"GST",
+                const basicAmt = parseFloat(basicAmount(i))
+                const cgstAmt = (GstAmount(i))
 
-            }
-            let isfound = itemArr.filter(ind => {
-                return ind.Item === i.Item
-            })
+                const arr = {
+                    Item: i.Item,
+                    Quantity: i.Quantity,
+                    MRP: i.MRP,
+                    ReferenceRate: i.Rate,
+                    Rate: i.Rate,
+                    Unit: i.Unit,
+                    BaseUnitQuantity: i.BaseUnitQuantity,
+                    GST: i.GST,
+                    BasicAmount: basicAmt.toFixed(2),
+                    GSTAmount: cgstAmt.toFixed(2),
+                    Amount: i.Amount,
 
-            if (isfound.length > 0) {
-                let dubli = isfound.filter(ele => {
-                    let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
-                    
-                    return condition
-                })
-                
-                if ((i.Quantity > 0)) {
-                    if (dubli.length === 0) {
-                        itemArr.push(arr)
+                    CGST: (cgstAmt / 2).toFixed(2),
+                    SGST: (cgstAmt / 2).toFixed(2),
+                    IGST: 0,
+                    CGSTPercentage: (i.GSTPercentage / 2),
+                    SGSTPercentage: (i.GSTPercentage / 2),
+                    IGSTPercentage: 0,
 
-                    } else {
-                        isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
-                    }
+                    BatchDate: i.BatchDate,
+                    BatchCode: i.BatchCode,
+                    DiscountType: "0",
+                    Discount: "0.00",
+                    DiscountAmount: "0.00",
+                    TaxType: "GST",
+
                 }
-            } else if ((i.Quantity > 0)) {
-                itemArr.push(arr)
+                let isfound = itemArr.filter(ind => {
+                    return ind.Item === i.Item
+                })
+
+                if (isfound.length > 0) {
+                    let dubli = isfound.filter(ele => {
+                        let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
+
+                        return condition
+                    })
+
+                    if ((i.Quantity > 0)) {
+                        if (dubli.length === 0) {
+                            itemArr.push(arr)
+
+                        } else {
+                            isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
+                        }
+                    }
+                } else if ((i.Quantity > 0)) {
+                    itemArr.push(arr)
+                }
+
+            })
+
+            if (invoiceNo.length === 0) {
+                CustomAlert({
+                    Type: 3,
+                    Message: "Please Enter Invoice Number",
+                })
+                return returnFunc()
             }
+            if (itemArr.length === 0) {
+                CustomAlert({
+                    Type: 3,
+                    Message: "Please Enter One Item Quantity",
+                })
+                return returnFunc()
+            }
+            if (isvalidMsg.length > 0) {
+                CustomAlert({
+                    Type: 3,
+                    Message: isvalidMsg,
+                })
+                return returnFunc()
+            }
+            const jsonBody = JSON.stringify({
+                GRNDate: grnDate,
+                Customer: grnDetail.Customer,
+                GRNNumber: 1,
+                GrandTotal: orderAmount,
+                Party: grnDetail.Supplier,
+                InvoiceNumber: invoiceNo,
+                CreatedBy: loginUserID(),
+                UpdatedBy: 1,
+                GRNItems: itemArr,
+                GRNReferences: openPOdata
 
-        })
+            });
 
-        if (invoiceNo.length === 0) {
-            CustomAlert({
-                Type: 3,
-                Message: "Please Enter Invoice Number",
-            })
-            return
-        }
-        if (itemArr.length === 0) {
-            CustomAlert({
-                Type: 3,
-                Message: "Please Enter One Item Quantity",
-            })
-            return
-        }
-        if (isvalidMsg.length > 0) {
-            CustomAlert({
-                Type: 3,
-                Message: isvalidMsg,
-            })
-            // dispatch(AlertState({
-            //     Type: 4,
-            //     Status: true,
-            //     Message: isvalidMsg,
-            //     RedirectPath: false,
-            //     AfterResponseAction: false
-            // }));
-            return
-        }
-        const jsonBody = JSON.stringify({
-            GRNDate: grnDate,
-            Customer: grnDetail.Customer,
-            GRNNumber: 1,
-            GrandTotal: orderAmount,
-            Party: grnDetail.Supplier,
-            InvoiceNumber: invoiceNo,
-            CreatedBy: loginUserID(),
-            UpdatedBy: 1,
-            GRNItems: itemArr,
-            GRNReferences: openPOdata
-
-        });
-
-        // saveDissable(true);//save Button Is dissable function
-
-        if (pageMode === "edit") {
-        } else {
-
-            dispatch(postGRN(jsonBody))
-        }
+            if (pageMode === mode.edit) {
+                returnFunc()
+            } else {
+                dispatch(saveGRNAction({jsonBody,btnId}))
+            }
+        } catch (error) { returnFunc() }
     }
 
     if (!(userAccState === "")) {
@@ -641,11 +637,7 @@ const GRNAdd = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" >
-                    {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.GRN_ADD} /> */}
-                    {/* <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        showCount={true}
-                    /> */}
+
                     <div className="px-2 mb-1  c_card_header " >
                         <Row>
                             <Col sm={5}>
@@ -677,7 +669,6 @@ const GRNAdd = (props) => {
                                         < Input
                                             style={{ backgroundColor: "white" }}
                                             type="text"
-                                            // value={grnDetail.SupplierName}
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
                                             disabled={pageMode === mode.view ? true : false} />
                                     </Col>

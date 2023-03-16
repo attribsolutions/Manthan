@@ -19,8 +19,8 @@ import {
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForGeneral,
-    PostMethodForGeneralSuccess,
+    SaveMethodForGeneral,
+    SaveMethodForGeneralSuccess,
     editGeneralIDSuccess,
     updateGeneralID,
     updateGeneralIDSuccess,
@@ -36,9 +36,9 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -65,7 +65,7 @@ const GeneralMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        Type=[] ,
+        Type = [],
         pageField,
         updateMsg,
         userAccess } = useSelector((state) => ({
@@ -106,7 +106,7 @@ const GeneralMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -128,7 +128,7 @@ const GeneralMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name, TypeName,TypeID, IsActive } = hasEditVal
+                const { id, Name, TypeName, TypeID, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -137,7 +137,7 @@ const GeneralMaster = (props) => {
 
                 values.id = id
                 values.Name = Name;
-                values.TypeName = { label:TypeName, value:TypeID };
+                values.TypeName = { label: TypeName, value: TypeID };
                 values.IsActive = IsActive;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
@@ -158,7 +158,7 @@ const GeneralMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostMethodForGeneralSuccess({ Status: false }))
+            dispatch(SaveMethodForGeneralSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -181,7 +181,7 @@ const GeneralMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             saveDissable(false);//save Button Is enable function
-            dispatch(PostMethodForGeneralSuccess({ Status: false }))
+            dispatch(SaveMethodForGeneralSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -219,31 +219,34 @@ const GeneralMaster = (props) => {
         }
     }, [pageField])
 
-    const TypeDropdownOptions = Type.map((i) =>  ({ label: i.Name, value: i.id }))
+    const TypeDropdownOptions = Type.map((i) => ({ label: i.Name, value: i.id }))
 
-    const saveHandeller = (event) => {
-     
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                TypeID: values.TypeName.value,
-                Company: loginCompanyID(),
-                IsActive: values.IsActive,
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    TypeID: values.TypeName.value,
+                    Company: loginCompanyID(),
+                    IsActive: values.IsActive,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
+                if (pageMode === mode.edit) {
+                    dispatch(updateGeneralID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(SaveMethodForGeneral({ jsonBody, btnId }));
+                }
 
-            if (pageMode === mode.edit) {
-                dispatch(updateGeneralID(jsonBody, values.id,));
             }
-            else {
-                dispatch(PostMethodForGeneral(jsonBody));
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -253,7 +256,7 @@ const GeneralMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-               
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
                     <Container fluid>
                         <Card className="text-black">
@@ -263,7 +266,7 @@ const GeneralMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={saveHandeller} noValidate>
+                                <form  noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -340,6 +343,7 @@ const GeneralMaster = (props) => {
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"GeneralMaster"}

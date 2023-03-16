@@ -18,21 +18,20 @@ import {
     formValid,
     initialFiledFunc,
     onChangeDate,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton }
-    from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
-    postBOMSuccess,
+    saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
-    from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+    from "../../../components/Common/CommonFunction";
 import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
-    postMaterialIssueSuccess
+    SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
 
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -42,7 +41,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { Save_Production_ReIssue, Save_Production_ReIssueSuccess, makeBtnProduction_ReIssue_STP_actionSuccess, ItemForProdunction_ReIssueSuccess } from "../../../store/Production/ProductionReissueRedux/actions";
 
 
@@ -118,9 +117,9 @@ const ProductionReIssueAdd = (props) => {
     //****************************************************************** */
 
     useEffect(() => {
-        
+
         if ((makeProductionReIssue.Status === true) && (makeProductionReIssue.StatusCode === 200)) {
-            
+
             const arr = makeProductionReIssue.Data.map((index) => ({
                 value: index.Item,
                 label: index.ItemName,
@@ -229,9 +228,9 @@ const ProductionReIssueAdd = (props) => {
         }
         else if (postMsg.Status === true) {
 
-            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(SaveMaterialIssueSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -423,7 +422,7 @@ const ProductionReIssueAdd = (props) => {
     }
     //****************************************************************** */
     function stockDistributeFunc(index) {
-        
+
         const v1 = index.Quantity;
         let orderqty = Number(v1);
 

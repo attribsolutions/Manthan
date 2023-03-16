@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { Button, Col, Input, Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -10,14 +10,14 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../../store/actions";
-import { breadcrumbReturn, listPageCommonButtonFunction, makeBtnCss }
-    from "./listPageCommonButtons";
-import { defaultSearch, mySearchProps } from "./MySearch";
+import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
+import { breadcrumbReturn, CommonConsole }
+    from "./CommonFunction";
+import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
-import * as url from "../../../routes/route_url";
-import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as mode from "../../routes/PageMode";
+import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
+import { listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
 
 let sortType = "asc"
 let searchCount = 0
@@ -52,7 +52,7 @@ export async function isAlertFunc(type, Msg) {
     })
 };
 
-const PurchaseListPage = (props) => {
+const CommonPurchaseList = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -66,7 +66,7 @@ const PurchaseListPage = (props) => {
         deleteMsg,
         userAccess,
         postMsg,
-        pageField,
+        pageField = { id: '' },
         tableList = []
     } = props.reducers;
 
@@ -92,11 +92,11 @@ const PurchaseListPage = (props) => {
         makeBtnName,
         downBtnFunc = () => { },
         pageMode,
-        newBtnPath
+        newBtnPath,
+        HeaderContent = () => { return null }
     } = props;
 
     const { PageFieldMaster = [] } = { ...pageField };
-
 
     useEffect(() => {
 
@@ -105,6 +105,7 @@ const PurchaseListPage = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
+            
             setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc, newBtnPath });
         }
@@ -135,14 +136,6 @@ const PurchaseListPage = (props) => {
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
-
-        // async function isAlertFunc(type) {
-        //     await CustomAlert({
-        //         Type: type,
-        //         Message: updateMsg.Message,
-        //         isFunc: true,
-        //     })
-        // }
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
             goButnFunc();
@@ -158,24 +151,10 @@ const PurchaseListPage = (props) => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
-            // dispatch(
             isAlertFunc(1, deleteMsg)
-            // CustomAlert({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: deleteMsg.Message,
-            // })
-            // );
         } else if (deleteMsg.Status === true) {
             dispatch(deleteSucc({ Status: false }));
-            // dispatch(
             isAlertFunc(3, deleteMsg)
-            // CustomAlert({
-            //     Type: 3,
-            //     Status: true,
-            //     Message: JSON.stringify(deleteMsg.Message),
-            // })
-            // );
         }
     }, [deleteMsg]);
 
@@ -186,27 +165,11 @@ const PurchaseListPage = (props) => {
             tog_center();
             dispatch(getList());
             isAlertFunc(1, postMsg)
-            // dispatch(
-            // CustomAlert({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: postMsg.Message,
-            // })
-            // )
         }
 
         else if ((postMsg.Status === true)) {
             dispatch(postSucc({ Status: false }))
-            // dispatch(
-
-            CustomAlert({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            })
-            // );
+            isAlertFunc(4, postMsg)
         }
 
 
@@ -368,7 +331,7 @@ const PurchaseListPage = (props) => {
 
         else if ((PageFieldMaster.length - 1 === k)) {
             columns.push(
-                listPageCommonButtonFunction({
+                listPageActionsButtonFunc({
                     dispatchHook: dispatch,
                     subPageMode: history.location.pathname,
                     ButtonMsgLable: ButtonMsgLable,
@@ -399,6 +362,7 @@ const PurchaseListPage = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
+    console.log("hkshchch", userAccState)
 
     if (!(userAccState === '')) {
         return (
@@ -406,7 +370,7 @@ const PurchaseListPage = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-
+                <HeaderContent />
                 <div >
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
@@ -490,4 +454,4 @@ const PurchaseListPage = (props) => {
     }
 }
 
-export default PurchaseListPage;
+export default CommonPurchaseList;

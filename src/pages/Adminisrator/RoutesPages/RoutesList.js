@@ -2,17 +2,17 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { loginCompanyID, loginPartyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
-    deleteRoutesIDSuccess,
-    delete_Routes_ID,
+    deleteRoutesID_Success,
+    deleteRoutesID,
     editRoutesID,
-    PostMethod_ForRoutesMasterAPISuccess,
-    PostRouteslist,
+    SaveRoutesMasterSuccess,
+    GetRoutesList,
     updateRoutesIDSuccess
 } from "../../../store/Administrator/RoutesRedux/actions";
 
@@ -32,12 +32,12 @@ const RoutesList = (props) => {
     );
 
     const action = {
-        getList: PostRouteslist,
+        getList: GetRoutesList,
         editId: editRoutesID,
-        deleteId: delete_Routes_ID,
-        postSucc: PostMethod_ForRoutesMasterAPISuccess,
+        deleteId: deleteRoutesID,
+        postSucc: SaveRoutesMasterSuccess,
         updateSucc: updateRoutesIDSuccess,
-        deleteSucc: deleteRoutesIDSuccess,
+        deleteSucc: deleteRoutesID_Success,
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
@@ -45,7 +45,7 @@ const RoutesList = (props) => {
         const page_Id = pageId.ROUTES_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(PostRouteslist());
+        dispatch(GetRoutesList());
     }, []);
     const { pageField, userAccess = [] } = reducers;
 
@@ -54,7 +54,7 @@ const RoutesList = (props) => {
     //         Party: loginPartyID(),
     //         Company: loginCompanyID()
     //     });
-    //     dispatch(PostRouteslist(jsonBody));
+    //     dispatch(GetRoutesList(jsonBody));
     // }, []);
 
     return (

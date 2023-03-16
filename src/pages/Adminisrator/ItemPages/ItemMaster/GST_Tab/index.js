@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import GSTTable from './Table';
-import { loginUserID, loginCompanyID } from '../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
+import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 
 function GSTTab(props) {
 

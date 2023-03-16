@@ -178,11 +178,11 @@ export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 
 //Routes
-export const ROUTES_FOR_LIST = '/RoutesFilter '
+export const ROUTES_FILTER = '/RoutesFilter '
 export const ROUTES_FOR_MASTER = '/Routes'
 
 //SalesMan
-export const SALESMAN_FOR_LIST = '/SalesmanList '
+export const SALESMAN_FOR_LIST = '/SalesmanFilter '
 export const SALESMAN_FOR_MASTER = '/Salesman'
 
 // Credit Limit 

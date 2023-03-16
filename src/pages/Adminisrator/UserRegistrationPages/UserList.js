@@ -2,20 +2,19 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddUser from "./UserRegistration";
 import {
-    getUser,
-    deleteUser,
-    deleteSuccess,
-    editUserId,
-    updateSuccess,
-    addUserSuccess
+    getUserList,
+    userDeleteAction,
+    userDeleteActionSuccess,
+    userEditAction,
+    userUpdateActionSuccess,
+    saveUserMasterActionSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 
 import * as pageId from "../../../routes/allPageID"
-import { loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const UserList = () => {
     const dispatch = useDispatch();
@@ -32,34 +31,27 @@ const UserList = () => {
     );
 
     const action = {
-        getList: getUser,
-        editId: editUserId,
-        deleteId: deleteUser,
-        postSucc: addUserSuccess,
-        updateSucc: updateSuccess,
-        deleteSucc: deleteSuccess
+        getList: getUserList,
+        editId: userEditAction,
+        deleteId: userDeleteAction,
+        postSucc: saveUserMasterActionSuccess,
+        updateSucc: userUpdateActionSuccess,
+        deleteSucc: userDeleteActionSuccess
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.USER_lIST))
-        dispatch(getUser(getListbodyFunc()));
+        dispatch(getUserList());
     }, []);
 
-    function getListbodyFunc() {
-        return JSON.stringify({
-            UserID: loginUserID(),
-            RoleID: loginRoleID(),
-            CompanyID: loginCompanyID()
-        })
-    }
+ 
     const { pageField, userAccess = [] } = reducers
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER_lIST} /> */}
             {
                 (pageField) ?
                     <CommonListPage
@@ -70,7 +62,6 @@ const UserList = () => {
                         masterPath={USER}
                         ButtonMsgLable={"User"}
                         deleteName={"LoginName"}
-                        getListbodyFunc={getListbodyFunc}
                     />
                     : null
             }

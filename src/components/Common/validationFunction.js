@@ -1,4 +1,4 @@
-import { CommonConsole } from "./listPageCommonButtons";
+import { CommonConsole } from "./CommonFunction";
 
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
     let isValid = true;
@@ -17,7 +17,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 
 export const formValChange = ({ event, state, setState }) => {
 
-
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -28,7 +27,7 @@ export const formValChange = ({ event, state, setState }) => {
         event.preventDefault();
         const { name, value, type, checked } = event.target;
         switch (type) {
-            case "text":
+            case "text": {
                 const regExp = RegExp(hasValid[name].regExp)
                 if (regExp.test(value)) {
                     isError[name] = "";
@@ -39,8 +38,10 @@ export const formValChange = ({ event, state, setState }) => {
                     hasValid[name].valid = false
                 }
                 values[name] = value;
+            }
                 break;
             case "checkbox":
+
                 if (!(required[name] === undefined)) {
                     if (checked) {
                         isError[name] = "";
@@ -58,6 +59,20 @@ export const formValChange = ({ event, state, setState }) => {
                     hasValid[name].valid = true
                     values[name] = checked
                 }
+                break;
+
+            case "password": {
+                const regExp = RegExp(hasValid[name].regExp)
+                if (regExp.test(value)) {
+                    isError[name] = "";
+                    hasValid[name].valid = true
+                }
+                else {
+                    isError[name] = hasValid[name].inValidMsg;
+                    hasValid[name].valid = false
+                }
+                values[name] = value;
+            }
                 break;
 
             default:

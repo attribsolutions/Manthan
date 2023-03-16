@@ -6,16 +6,16 @@ import {
     delete_General_ID,
     editGeneralID,
     PostGenerallist,
-    PostMethodForGeneralSuccess,
+    SaveMethodForGeneralSuccess,
     updateGeneralIDSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import BreadcrumbNew from "../../../components/Common/BreadcrumbNew"
-import { loginCompanyID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { loginCompanyID } from "../../../components/Common/CommonFunction";
 
 
 const GeneralList = (props) => {
@@ -34,10 +34,10 @@ const GeneralList = (props) => {
     );
 
     const action = {
-        postList: PostGenerallist,
+        getList: PostGenerallist,
         editId: editGeneralID,
         deleteId: delete_General_ID,
-        postSucc: PostMethodForGeneralSuccess,
+        postSucc: SaveMethodForGeneralSuccess,
         updateSucc: updateGeneralIDSuccess,
         deleteSucc: deleteGeneralIDSuccess
     }

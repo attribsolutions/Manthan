@@ -36,7 +36,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturn, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { breadcrumbReturn, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -46,17 +46,17 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-
+    
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
     const [modalCss, setModalCss] = useState(false);
-    const [state_DropDown_select, setState_DropDown_select] = useState("");
-    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
-    const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
-    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
-    const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
+    const [state_DropDown_select, setState_DropDown_select] = useState([]);
+    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState([]);
+    const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState([]);
+    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState([]);
+    const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState([]);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
     const [PartyPrefix, setPartyPrefix] = useState([]);
 
@@ -183,6 +183,7 @@ const PartyMaster = (props) => {
                 value: PartyTypes[0].id,
                 label: PartyTypes[0].Name
             })
+            dispatch(priceListByPartyAction(PartyTypes[0].id))
         }
     }, [PartyTypes])
 
@@ -313,7 +314,7 @@ const PartyMaster = (props) => {
         )
     }
 
-    const FormSubmitButton_Handler = (event, values) => {
+    const SaveHandler = (event, values) => {
 
         if (AddressDetailsMaster.length === 0) {
             dispatch(
@@ -364,6 +365,7 @@ const PartyMaster = (props) => {
             MkUpMkDn: values.MkUpMkDn,
             isActive: values.isActive,
             IsDivision: partyType_dropdown_Select.division,
+            // SupplierID:loginPartyID(),
             CreatedBy: loginUserID(),
             CreatedOn: "2022-06-24T11:16:53.165483Z",
             UpdatedBy: loginUserID(),
@@ -381,6 +383,13 @@ const PartyMaster = (props) => {
                     Demandprefix: values.Demandprefix,
                     IBChallanprefix: values.IBChallanprefix,
                     IBInwardprefix: values.IBInwardprefix
+                }
+            ],
+            PartySubParty: [
+                {
+                    Party: loginPartyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
                 }
             ]
         });
@@ -401,7 +410,7 @@ const PartyMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                     <Container fluid>
-                        <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+                        <AvForm onValidSubmit={(e, v) => { SaveHandler(e, v); }}>
 
                             <Row>
                                 <Col lg={12}>
@@ -548,8 +557,8 @@ const PartyMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
                                                                 </Col>
-                                                                <Col md="1">  </Col>
 
+                                                                <Col md="1">  </Col>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
@@ -607,6 +616,7 @@ const PartyMaster = (props) => {
                                                                         <Label htmlFor="validationCustom01">Price List </Label>
                                                                         <Input id="Input"
                                                                             value={PriceList_dropdown_Select.label}
+                                                                            autoComplete={"off"}
                                                                             placeholder="Select..."
                                                                             onClick={onclickselect}
                                                                         >

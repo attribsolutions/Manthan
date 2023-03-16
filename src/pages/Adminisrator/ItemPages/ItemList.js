@@ -5,17 +5,17 @@ import {
   deleteItemIdSuccess,
   editItemId,
   getItemList,
-  PostItemDataSuccess,
-  updateItemSuccess,
+  SaveItemMasterActionSuccess,
+  updateItemMasterActionSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
 import ItemsMaster from "./ItemMaster/itemIndex";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import * as pageId from "../../../routes/allPageID"
 
-const ItemsList = (props) => {
+const ItemsList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
@@ -34,8 +34,8 @@ const ItemsList = (props) => {
     getList: getItemList,
     editId: editItemId,
     deleteId: deleteItemID,
-    postSucc: PostItemDataSuccess,
-    updateSucc: updateItemSuccess,
+    postSucc: SaveItemMasterActionSuccess,
+    updateSucc: updateItemMasterActionSuccess,
     deleteSucc: deleteItemIdSuccess
   }
 

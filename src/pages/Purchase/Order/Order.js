@@ -28,12 +28,12 @@ import {
 import { getOrderType, getSupplierAddress, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, saveDissable, loginPartyID, btnIsDissablefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { breadcrumbReturn, loginUserID, currentDate,  loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -59,7 +59,11 @@ function initialState(history) {
     else if (sub_Mode === url.IB_ORDER) {
         page_Id = pageId.IB_ORDER;
         listPath = url.IB_ORDER_PO_LIST;
-    };
+    }
+    else if (sub_Mode === url.ORDER_4) {
+        page_Id = pageId.ORDER_4;
+        listPath = url.ORDER_LIST_4
+    }
     return { page_Id, listPath }
 };
 
@@ -171,6 +175,7 @@ const Order = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -257,7 +262,6 @@ const Order = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(GoButton_For_Order_AddSuccess([]))
 
@@ -273,7 +277,6 @@ const Order = (props) => {
             }
 
         } else if (postMsg.Status === true) {
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             CustomAlert({
                 Type: 4,
@@ -284,12 +287,10 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             history.push({
                 pathname: listPath,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable({ id: userAccState.ActualPagePath, dissable: false });//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             CustomAlert({
                 Type: 3,
@@ -569,7 +570,7 @@ const Order = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-        btnIsDissablefunc({ btnId, state: false })
+        btnIsDissablefunc({ btnId, state: true })
 
         function returnFunc() {
             btnIsDissablefunc({ btnId, state: false })

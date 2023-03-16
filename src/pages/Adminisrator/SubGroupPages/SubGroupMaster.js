@@ -35,9 +35,9 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction,
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -152,7 +152,7 @@ const SubGroupMaster = (props) => {
     }, [])
 
     useEffect(() => { 
-debugger
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSubGroupSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
@@ -217,7 +217,7 @@ debugger
     }));
 
     const SaveHandler = async (event) => {
-        debugger
+        
         event.preventDefault();
         const btnId = event.target.id
         try {

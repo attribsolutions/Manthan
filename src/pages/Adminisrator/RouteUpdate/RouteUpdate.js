@@ -23,19 +23,19 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/purchase";
-import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
-import { PostRouteslist } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 // import { RouteUpdateList } from "../../../../store/Administrator/RouteUpdateReducer/action";
 
 const RouteUpdate = (props) => {
@@ -75,7 +75,7 @@ const RouteUpdate = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(RouteUpdateListAPI())
-        dispatch(PostRouteslist())
+        dispatch(GetRoutesList())
     }, []);
 
     const values = { ...state.values }
@@ -110,8 +110,6 @@ const RouteUpdate = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state)) // Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -130,7 +128,6 @@ const RouteUpdate = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(Post_RouteUpdateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -150,26 +147,15 @@ const RouteUpdate = (props) => {
         }
     }, [pageField])
 
-    const RouteName_Options = RoutesList.map((index) => ({
+    const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
+        IsActive: index.IsActive
     }));
 
-    const SaveHandler = (event) => {
-        event.preventDefault();
-        const data = Data.map((index) => ({
-            id: index.id,
-            Party: index.Party,
-            SubParty: index.SubParty,
-            Route: index.Route,
-        }))
-        const jsonBody = JSON.stringify({
-            Data: data
-        })
-        dispatch(Post_RouteUpdate(jsonBody));
-    };
-
-   
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
 
     const pagesListColumns = [
         {
@@ -190,7 +176,6 @@ const RouteUpdate = (props) => {
                         onChange={e => {
                             row["Route"] = e.value;
                             row["RouteName"] = e.label
-                           
                         }}
                     >
                     </Select >
@@ -207,6 +192,30 @@ const RouteUpdate = (props) => {
         totalSize: Data.length,
         custom: true,
     };
+
+    const SaveHandler = async (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+
+                const data = Data.map((index) => ({
+                    id: index.id,
+                    Party: index.Party,
+                    SubParty: index.SubParty,
+                    Route: index.Route,
+                }))
+                const jsonBody = JSON.stringify({
+                    Data: data
+                })
+
+                dispatch(Post_RouteUpdate({ jsonBody, btnId }));
+
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -216,68 +225,71 @@ const RouteUpdate = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css ,marginBottom:"200px"}}>
                     <Container fluid>
 
-                    <form onSubmit={SaveHandler} noValidate>
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                        <form noValidate>
+                            <PaginationProvider
+                            
+                                pagination={paginationFactory(pageOptions)}
+                            >
+                                {({ paginationProps, paginationTableProps }) => (
+                                    <ToolkitProvider
 
-                                    keyField="id"
-                                    data={Data}
-                                    columns={pagesListColumns}
+                                        keyField="id"
+                                        data={Data}
+                                        columns={pagesListColumns}
 
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                                        search
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                <div className="table">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        bordered={true}
+                                                        striped={false}
+                                                        noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
+                                                        classes={"table align-middle table-nowrap table-hover"}
+                                                        headerWrapperClasses={"thead-light"}
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
                                                     />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
-                            )
-                            }
+                                                    {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
+                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                </div>
 
-                        </PaginationProvider>
-                       
-                        {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                            <Row >
-                                <Col sm={2} className="mt-n4">
-                                    <SaveButton pageMode={pageMode}
-                                        userAcc={userPageAccessState}
-                                        module={"RouteUpdate"}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup >
-                            : null
-                        }
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone
+                                                            {...paginationProps}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </React.Fragment>
+                                        )
+                                        }
+                                    </ToolkitProvider>
+                                )
+                                }
+
+                            </PaginationProvider>
+
+                            {Data.length > 0 ?
+                                <FormGroup style={{ marginTop: "-25px" }}>
+                                    <Row >
+                                        <Col sm={2} className="mt-n4">
+                                            <SaveButton pageMode={pageMode}
+                                                onClick={SaveHandler}
+                                                userAcc={userPageAccessState}
+                                                module={"RouteUpdate"}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </FormGroup >
+                                : null
+                            }
 
                         </form>
                     </Container>

@@ -62,6 +62,7 @@ function* afterLoginUserDetails_genFun({ id }) {
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
+    localStorage.setItem("CompanyGroup", response.Data.CompanyGroup)
     if(response.Data.IsSCMCompany){
       localStorage.setItem("IsSCMCompany", 1)
     }

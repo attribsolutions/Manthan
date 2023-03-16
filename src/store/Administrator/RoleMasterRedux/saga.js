@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 import {
   Role_Master_Delete_API,
   Role_Master_Edit_API,
@@ -9,9 +9,9 @@ import {
 } from "../../../helpers/backend_helper";
 import {
   getRoleSuccess,
-  PostSuccess, editSuccess,
-  updateSuccess,
-  deleteSuccess
+  PostSuccess, userEditActionSuccess,
+  userUpdateActionSuccess,
+  userDeleteActionSuccess
 } from "./action";
 import {
   GET_ROLE_LIST_API,
@@ -38,7 +38,7 @@ function* Submit_Roles_GenratorFunction({ config }) {                       //Sa
 function* Delete_Roles_GenratorFunction({ config }) {                       //Delete Role Master
   try {
     const response = yield call(Role_Master_Delete_API, config);
-    yield put(deleteSuccess(response))
+    yield put(userDeleteActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
@@ -47,7 +47,7 @@ function* Edit_Roles_GenratorFunction({ config }) {                         //Ed
   try {
     const response = yield call(Role_Master_Edit_API, config);
     response.pageMode = btnmode;
-    yield put(editSuccess(response));
+    yield put(userEditActionSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -55,7 +55,7 @@ function* Edit_Roles_GenratorFunction({ config }) {                         //Ed
 function* Update_Roles_GenratorFunction({ config }) {                       //Update Role Master
   try {
     const response = yield call(Role_Master_Update_API, config);
-    yield put(updateSuccess(response))
+    yield put(userUpdateActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 

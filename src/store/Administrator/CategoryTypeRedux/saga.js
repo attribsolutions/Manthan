@@ -20,7 +20,7 @@ import {
   SAVE_CATEGORYTYPE_MASTER,
   UPDATE_CATEGORY_TYPE_ID
 } from "./actionTypes";
-import { CommonConsole } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForCategoryTypeMaster_GenFun({ config }) {             // Save API

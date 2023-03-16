@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import {
   commonPageFieldList,
   commonPageFieldListSuccess,
@@ -11,7 +11,7 @@ import {
   updateGroupIDSuccess,
 } from "../../../store/actions";
 import PartyItems from "./PartyItems";
-import { editPartyItemID, GetPartyList, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { editPartyItemID, GetPartyList, SavePartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
@@ -36,7 +36,7 @@ const PartyItemsList = (props) => {
     editId: editPartyItemID,
     deleteId: delete_GroupList_ID,
     postSucc: saveGroupMaster_Success,
-    updateSucc: PostPartyItemsSuccess,
+    updateSucc: SavePartyItemsSuccess,
     deleteSucc: deleteGrouplistSuccess
 
   }

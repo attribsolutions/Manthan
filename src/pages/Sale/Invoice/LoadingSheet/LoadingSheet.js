@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
     Col,
     FormGroup,
-    Input,
     Label,
-    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -18,25 +16,21 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
-    onChangeText,
-
-} from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+} from "../../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
 import {
     editBOMListSuccess,
-    postBOM,
-    postBOMSuccess,
-    updateBOMList,
+    saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID, loginPartyID, currentDate } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { breadcrumbReturn, loginPartyID, currentDate } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { PostRouteslist } from "../../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
+import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
 
 const LoadingSheet = (props) => {
 
@@ -69,7 +63,6 @@ const LoadingSheet = (props) => {
         userAccess,
         VehicleNumber,
         RoutesList,
-        GoButton
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
@@ -84,8 +77,8 @@ const LoadingSheet = (props) => {
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(GetRoutesList());
         dispatch(getVehicleList())
-        dispatch(PostRouteslist());
         dispatch(invoiceListGoBtnfilter())
 
     }, []);
@@ -164,7 +157,7 @@ const LoadingSheet = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values  
             // saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
@@ -186,7 +179,7 @@ const LoadingSheet = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }))
             // saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 4,
@@ -234,10 +227,15 @@ const LoadingSheet = (props) => {
         }
     }, [pageField])
 
-    const RouteName_Options = RoutesList.map((index) => ({
+    const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
         label: index.Name,
+        IsActive: index.IsActive
     }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
 
     const VehicleNumber_Options = VehicleNumber.map((index) => ({
         value: index.id,
@@ -250,7 +248,7 @@ const LoadingSheet = (props) => {
     }
 
     function goButtonHandler() {
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -297,7 +295,7 @@ const LoadingSheet = (props) => {
             //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
             // }
             // else {
-            //     dispatch(postBOM(jsonBody));
+            //     dispatch(saveBOMMaster(jsonBody));
             // }
         }
     };

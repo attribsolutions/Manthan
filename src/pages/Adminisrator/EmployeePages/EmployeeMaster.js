@@ -26,9 +26,9 @@ import {
   onChangeSelect,
   onChangeText,
   resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -318,17 +318,32 @@ const AddEmployee = (props) => {
   }
 
   const SaveHandler = (event) => {
+    
     event.preventDefault();
     const btnId = event.target.id;
+
 
     try {
       if (formValid(state, setState)) {
         btnIsDissablefunc({ btnId, state: true })
 
+        if ((values.EmployeeTypeName.IsPartyConnection === true) && (values.EmployeeParties.length === 0)) {
+          dispatch(
+            AlertState({
+              Type: 4,
+              Status: true,
+              Message: "Party is Required",
+            })
+          );
+          return btnIsDissablefunc({ btnId, state: false })
+        }
+
         let emplPartie = [{ Party: "" }]
         if (!(values.EmployeeParties.length === 0)) {
           emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
         }
+
+
         const jsonBody = JSON.stringify({
           Name: values.Name,
           Address: values.Address,

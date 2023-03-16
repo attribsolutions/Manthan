@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input, Row } from "reactstrap";
-import C_Report from "../components/Common/ComponentRelatedCommonFile/C_Report";
+import C_Report from "../components/Common/C_Report";
 import { Invoice_1_Edit_API_Singel_Get, MultipleInvoice_API } from "../helpers/backend_helper";
 import  * as report from '../Reports/ReportIndex'
 import {  getpdfReportdata, postpdfMultipleReportdata } from "../store/Utilites/PdfReport/actions";

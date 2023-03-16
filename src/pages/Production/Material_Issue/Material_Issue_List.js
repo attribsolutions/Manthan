@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import MaterialIssueMaster from "./Material_IssueMaster";
 import {
@@ -186,7 +186,7 @@ const MaterialIssueList = () => {
                 </div>
                 {
                     (pageField) ?
-                        <PurchaseListPage
+                        <CommonPurchaseList
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}

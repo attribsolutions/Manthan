@@ -1,10 +1,10 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate } from "../../../components/Common/CommonFunction";
 import {
   DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
   EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
   GET_GRN_ITEM_MODE_2_SUCCESS,
   GET_GRN_LIST_PAGE_SUCCESS,
-  POST_GRN_FROM_GRN_PAGE_SUCCESS,
+  SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
   SET_GRN_LIST_FILTERS,
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
 } from "./actionType"
@@ -50,7 +50,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
         GRNList: action.payload,
       }
 
-    case POST_GRN_FROM_GRN_PAGE_SUCCESS:
+    case SAVE_GRN_FROM_GRN_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,

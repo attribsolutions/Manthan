@@ -17,11 +17,11 @@ import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForRoutesMaster,
-    PostMethod_ForRoutesMasterAPISuccess,
+    SaveRoutesMaster,
+    SaveRoutesMasterSuccess,
     editRoutesIDSuccess,
     updateRoutesID,
-    PostRouteslistSuccess,
+    GetRoutesListSuccess,
     updateRoutesIDSuccess,
 } from "../../../store/Administrator/RoutesRedux/actions";
 import {
@@ -30,9 +30,9 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction
-} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturn, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -45,13 +45,13 @@ const RoutesMaster = (props) => {
     const fileds = {
         id: "",
         Name: "",
-        IsActive:false
+        IsActive: false
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState( mode.defaultsave);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -95,7 +95,7 @@ const RoutesMaster = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -118,11 +118,11 @@ const RoutesMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name,IsActive } = hasEditVal
+                const { id, Name, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.id = id;
-                values.IsActive= IsActive
+                values.IsActive = IsActive
 
                 hasValid.Name.valid = true;
                 hasValid.IsActive.valid = true;
@@ -137,9 +137,8 @@ const RoutesMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostMethod_ForRoutesMasterAPISuccess({ Status: false }))
+            dispatch(SaveRoutesMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -158,8 +157,7 @@ const RoutesMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
-            dispatch(PostRouteslistSuccess({ Status: false }))
+            dispatch(GetRoutesListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -172,13 +170,11 @@ const RoutesMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.ROUTES_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateRoutesIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -199,27 +195,31 @@ const RoutesMaster = (props) => {
         }
     }, [pageField])
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                IsActive:values.IsActive,
-                Party:loginPartyID(),
-                Company:loginCompanyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID()
-            });
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            saveDissable(true);//save Button Is dissable function
+                const jsonBody = JSON.stringify({
+                    Name: values.Name,
+                    IsActive: values.IsActive,
+                    Party: loginPartyID(),
+                    Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID()
+                });
 
-            if (pageMode === mode.edit) {
-                dispatch(updateRoutesID(jsonBody, values.id));
+                if (pageMode === mode.edit) {
+                    dispatch(updateRoutesID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(SaveRoutesMaster({ jsonBody, btnId }));
+                }
+
             }
-            else {
-                dispatch(PostMethodForRoutesMaster(jsonBody))
-            }
-        }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -230,7 +230,7 @@ const RoutesMaster = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-               
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
 
@@ -241,7 +241,7 @@ const RoutesMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -268,7 +268,6 @@ const RoutesMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
-
                                                         <Row>
                                                             <FormGroup className="mt-3 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
@@ -292,11 +291,11 @@ const RoutesMaster = (props) => {
                                                             </FormGroup>
                                                         </Row>
 
-
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"RoutesMaster"}

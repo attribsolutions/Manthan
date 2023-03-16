@@ -1,11 +1,11 @@
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
+import { currentDate } from "../../../components/Common/CommonFunction"
 import {
     BOM_LIST_FILTERS,
     DELETE_BOM_LIST_PAGE_SUCCESS,
     EDIT_BOM_LIST_ID_SUCCESS,
     GET_BOM_LIST_PAGE_SUCCESS,
     GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-    POST_BOM_SUCCESS,
+    SAVE_BOM_MASTER_SUCCESS,
     UPDATE_BOM_LIST_SUCCESS
 } from "./actionTypes"
 
@@ -22,25 +22,17 @@ const INIT_STATE = {
 const BOMReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
-
         case BOM_LIST_FILTERS:
             return {
                 ...state,
                 bomlistFilters: action.payload,
             }
 
-        case POST_BOM_SUCCESS:
+        case SAVE_BOM_MASTER_SUCCESS:
             return {
                 ...state,
                 PostData: action.payload,
             }
-
-        // GetItemUnits API
-        case GET_ITEM_UNITS_DROPDOWN_API_SUCCESS:
-            return {
-                ...state,
-                GetItemUnits: action.payload,
-            };
 
         // BOM List Page 
         case GET_BOM_LIST_PAGE_SUCCESS:
@@ -48,6 +40,7 @@ const BOMReducer = (state = INIT_STATE, action) => {
                 ...state,
                 BOMList: action.payload,
             }
+
         //edit list page
         case EDIT_BOM_LIST_ID_SUCCESS:
             return {
@@ -66,6 +59,13 @@ const BOMReducer = (state = INIT_STATE, action) => {
                 ...state,
                 deleteMsg: action.payload,
             }
+
+        // GetItemUnits API
+        case GET_ITEM_UNITS_DROPDOWN_API_SUCCESS:
+            return {
+                ...state,
+                GetItemUnits: action.payload,
+            };
         default:
             return state
     }
