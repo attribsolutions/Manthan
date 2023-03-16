@@ -357,6 +357,12 @@ const RoleAccessListPage = (props) => {
             state: config,
         })
     }
+    
+    function deleteBodyfunc(config) {
+        const { rowData } = config;
+
+    }
+    deleteBodyfunc
     const { pageField, userAccess = [] } = reducers
 
     return (
@@ -371,6 +377,7 @@ const RoleAccessListPage = (props) => {
                         newBtnPath={url.ROLEACCESS}
                         MasterModal={RoleAccessAdd}
                         editBodyfunc={editBodyfunc}
+                        deleteBodyfunc={deleteBodyfunc}
                         masterPath={url.ROLEACCESS}
                         ButtonMsgLable={"RoleAccess"}
                         deleteName={"Name"}
