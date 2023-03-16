@@ -1,7 +1,7 @@
 import { currentDate } from "../../../components/Common/CommonFunction";
 
 import {
-    GET_LOADING_SHEET_LIST_SUCCESS,
+    LOADING_SHEET_LIST_ACTION_SUCCESS,
     LOADING_SHEET_GO_BUTTON_API_SUCCESS,
     SAVE_LOADING_SHEET_MASTER_SUCCESS
 } from "./actionType"
@@ -9,8 +9,8 @@ import {
 const INIT_STATE = {
     goBtnLoadingSheet: [],
     postMsg: { Status: false },
-    LoadingSheetList: { fromdate: currentDate, todate: currentDate, },
-  
+    LoadingSheetlist: [],
+
 }
 
 const LoadingSheetReducer = (state = INIT_STATE, action) => {
@@ -26,11 +26,14 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 postMsg: action.payload,
             }
-        case GET_LOADING_SHEET_LIST_SUCCESS:
+        case LOADING_SHEET_LIST_ACTION_SUCCESS:
             return {
                 ...state,
-                LoadingSheetList: action.payload,
+                LoadingSheetlist: action.payload,
             }
+     
+
+
         default:
             return state
     }

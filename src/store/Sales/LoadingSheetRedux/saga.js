@@ -1,8 +1,8 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole, convertDatefunc, convertTimefunc, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
 import { Loading_Sheet_get_API, Loading_Sheet_Go_Button_API, Loading_Sheet_Post_API } from "../../../helpers/backend_helper";
-import { getLoadingSheetListSucccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess } from "./action";
-import { GET_LOADING_SHEET_LIST, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SHEET_MASTER } from "./actionType";
+import { LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess } from "./action";
+import { LOADING_SHEET_LIST_ACTION, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SHEET_MASTER } from "./actionType";
 
 // GoButton Post API for Loading Sheet
 function* goBtn_Post_API_GenFun({ filters }) {
@@ -26,18 +26,18 @@ function* save_LoadingSheet_GenFun({ config }) {
 }
 
 // Post API For Master Page
-function* get_LoadingSheet_List_GenFun(filters) {
+function* get_LoadingSheet_List_GenFun({filters}) {
     debugger
     // const filters = loginJsonBody() 
     try {
-        const response = yield call(Loading_Sheet_get_API, filters.data);
+        const response = yield call(Loading_Sheet_get_API, filters);
         const newList = yield response.Data.map((i) => {
             var date = convertDatefunc(i.ChallanDate)
             var time = convertTimefunc(i.CreatedOn)
             i.ChallanDate = (`${date} ${time}`)
             return i
     })
-        yield put(getLoadingSheetListSucccess(newList));
+        yield put(LoadingSheetListActionSuccess(newList));
     } catch (error) { CommonConsole(error) }
 }
 
@@ -45,7 +45,7 @@ function* get_LoadingSheet_List_GenFun(filters) {
 function* LoadingSheetSaga() {
     yield takeEvery(LOADING_SHEET_GO_BUTTON_API, goBtn_Post_API_GenFun)
     yield takeEvery(SAVE_LOADING_SHEET_MASTER, save_LoadingSheet_GenFun)
-    yield takeEvery(GET_LOADING_SHEET_LIST, get_LoadingSheet_List_GenFun)
+    yield takeEvery(LOADING_SHEET_LIST_ACTION, get_LoadingSheet_List_GenFun)
 }
 
 export default LoadingSheetSaga;
