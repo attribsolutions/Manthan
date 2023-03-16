@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
+    onChangeSelect,
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
@@ -37,11 +38,12 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect, useState } from "react";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import {
-    GoButton_For_CreditLimit_Add,
-    GoButton_For_CreditLimit_AddSuccess,
-    postCreditLimit,
-    postCreditLimitSuccess
-} from "../../../store/Administrator/CreditLimitRedux/actions";
+    GoButton_For_Party_Master_Bulk_Update_Add,
+    GoButton_For_Party_Master_Bulk_Update_AddSuccess,
+    postParty_Master_Bulk_Update,
+    postParty_Master_Bulk_Update_Success,
+} from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const PartyMasterBulkUpdate = (props) => {
 
@@ -51,7 +53,7 @@ const PartyMasterBulkUpdate = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [RouteSelect, setRouteSelect] = useState([]);
-    const [SelectField, setSelectField] = useState([]);
+    const [SelectFieldName, setSelectFieldName] = useState([]);
     const [PartyName, setPartyName] = useState([]);
 
     const fileds = {
@@ -68,18 +70,18 @@ const PartyMasterBulkUpdate = (props) => {
         pageField,
         userAccess,
         RoutesList,
-        GeneralMaster,
-        Party,
+        SelectField,
+        SSDD_List,
         Data
     } = useSelector((state) => ({
-        postMsg: state.CreditLimitReducer.postMsg,
+        postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
         Data: state.CreditLimitReducer.goButtonCreditLimit,
         RoutesList: state.RoutesReducer.RoutesList,
-        GeneralMaster: state.GeneralReducer.GeneralMaster,
-        // Party: state.PartyMasterBulkUpdateReducer.Party
+        SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
+        SSDD_List: state.CommonAPI_Reducer.SSDD_List,
     }));
 
     const location = { ...history.location }
@@ -91,12 +93,13 @@ const PartyMasterBulkUpdate = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        dispatch(GoButton_For_CreditLimit_AddSuccess([]))
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(SSDD_List_under_Company());
         dispatch(GetRoutesList());
-    }, []);       
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -153,10 +156,10 @@ const PartyMasterBulkUpdate = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(postCreditLimitSuccess({ Status: false }))
-            dispatch(GoButton_For_CreditLimit_AddSuccess([]))
+            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             setRouteSelect('')
-               setState(() => resetFunction(fileds, state))// Clear form values  
+            setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -177,7 +180,7 @@ const PartyMasterBulkUpdate = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            dispatch(postCreditLimitSuccess({ Status: false }))
+            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -195,44 +198,34 @@ const PartyMasterBulkUpdate = (props) => {
         }
     }, [pageField])
 
-    const RoutesDropdown_options = RoutesList.map((index) => ({
+    const RoutesListOptions = RoutesList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsActive: index.IsActive
+    }));
+
+    const RouteName_Options = RoutesListOptions.filter((index) => {
+        return index.IsActive === true
+    });
+
+    const SelectFieldDropdown_options = SelectField.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
-    // const SelectFieldDropdown_options = GeneralMaster.map((index) => ({
-    //     value: index.id,
-    //     label: index.Name,
-    // }));
-
-    // const PartyNameDropdown_options = Party.map((index) => ({
-    //     value: index.id,
-    //     label: index.Name,
-    // }));
+    const PartyDropdown_Options = SSDD_List.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
 
     const goButtonHandler = (event) => {
         const jsonBody = JSON.stringify({
             Party: loginPartyID(),
             Route: RouteSelect.value
         });
-        dispatch(GoButton_For_CreditLimit_Add(jsonBody));
+        dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
 
-    function CreditlimitHandler(event, user) {
-        // user["Creditlimit"] = e.target.value
-
-        let val = event.target.value;
-        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
-        if ((result) && (parseFloat(event.target.value).toFixed(3))) {
-            user.Creditlimit = event.target.value;
-        }
-        else if (val === "") {
-            user.Creditlimit = event.target.value;
-        }
-        else {
-            event.target.value = user.Creditlimit
-        }
-    }
 
     const pagesListColumns = [
         {
@@ -252,7 +245,7 @@ const PartyMasterBulkUpdate = (props) => {
                                     type="text"
                                     defaultValue={user.Creditlimit}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CreditlimitHandler(e, user)}
+                                // onChange={(e) => CreditlimitHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -274,8 +267,9 @@ const PartyMasterBulkUpdate = (props) => {
         const data = Data.map((index) => ({
             id: index.id,
             Party: index.Party,
-            SubParty: index.SubParty,
-            Creditlimit: index.Creditlimit,
+            Route: RouteSelect.value,
+            SelectField:SelectField.value
+         
         }))
 
         const Find = data.filter((index) => {
@@ -285,7 +279,7 @@ const PartyMasterBulkUpdate = (props) => {
             Data: Find
         })
 
-        dispatch(postCreditLimit(jsonBody));
+        dispatch(postParty_Master_Bulk_Update(jsonBody));
     }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -307,11 +301,11 @@ const PartyMasterBulkUpdate = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form onSubmit={SaveHandler} noValidate>
-                                    <Row className="">
+                                    <Row >
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
-                                                    <Row>
+                                                    
                                                         <Row>
                                                             <Col md="4" >
                                                                 <FormGroup className=" row  mt-2" >
@@ -325,8 +319,8 @@ const PartyMasterBulkUpdate = (props) => {
                                                                             // isDisabled={(Data.length > 0) ? true : false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                            // options={SelectFieldDropdown_options}
-                                                                            onChange={(e) => { setSelectField(e) }}
+                                                                            options={SelectFieldDropdown_options}
+                                                                            onChange={(e) => { setSelectFieldName(e) }}
                                                                         />
                                                                         {isError.SelectField.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
@@ -347,7 +341,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                                             // isDisabled={(Data.length > 0) ? true : false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                            options={RoutesDropdown_options}
+                                                                            options={RouteName_Options}
                                                                             onChange={(e) => { setRouteSelect(e) }}
                                                                         />
                                                                         {isError.RoutesName.length > 0 && (
@@ -359,23 +353,24 @@ const PartyMasterBulkUpdate = (props) => {
 
                                                             <Col md="3" >
                                                                 <FormGroup className=" row  mt-2" >
-                                                                    <Label className="mt-1"
-                                                                        style={{ width: "100px" }}>PartyName </Label>
+                                                                <Label htmlFor="validationCustom01" className="mt-1"
+                                                                        style={{ width: "100px" }}>{fieldLabel.PartyName} </Label>
                                                                     <div className="col col-6 sm-1">
-                                                                        <Select
-                                                                            name="PartyName"
-                                                                            value={PartyName}
-                                                                            isSearchable={true}
-                                                                            // isDisabled={(Data.length > 0) ? true : false}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            // options={PartyNameDropdown_options}
-                                                                            onChange={(e) => { setPartyName(e) }}
-                                                                        />
-                                                                        {isError.PartyName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                                        )}
+                                                                    <Select
+                                                                        name="PartyName"
+                                                                        value={values.PartyName}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
+                                                                        options={PartyDropdown_Options}
+                                                                        onChange={(hasSelect, evn) => {
+                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                        }}
+                                                                    />
                                                                     </div>
+                                                                    {/* {isError.PartyName.length > 0 && (
+                                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                                        )} */}
                                                                 </FormGroup>
                                                             </Col>
 
@@ -385,7 +380,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 </div>
                                                             </Col>
                                                         </Row>
-                                                    </Row>
+                                                    
                                                 </CardBody>
                                             </Card>
                                         </Col>
