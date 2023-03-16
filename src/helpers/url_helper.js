@@ -191,6 +191,12 @@ export const CREDIT_LIMIT = '/Creditlimit'
 
 export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter'
 export const ROUTE_UPDATE = '/RouteUpdate'
+
+// Loading Sheet API
+export const LOADING_SHEET_GO_BUTTON_API = '/LoadingSheetInvoices'
+export const LOADING_SHEET = '/LoadingSheet'
+export const LOADING_SHEET_LIST = '/LoadingSheetList'
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"

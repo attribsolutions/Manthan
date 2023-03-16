@@ -362,8 +362,7 @@ const CommonPurchaseList = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
-    console.log("hkshchch", userAccState)
-
+   
     if (!(userAccState === '')) {
         return (
             <React.Fragment>
