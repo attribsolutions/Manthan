@@ -108,7 +108,6 @@ const RoleAccessCopyFunctionality = (props) => {
     }
 
 
-
     function CopyButton_Handler(event) {
         event.preventDefault();
         const btnId = event.target.id

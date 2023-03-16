@@ -94,9 +94,9 @@ export const saveCopyRoleAccessAction = (config={}) => ({
   config,
 });
 
-export const saveCopyRoleAccessActionSuccess = (data) => ({
+export const saveCopyRoleAccessActionSuccess = (resp) => ({
   type: SAVE_COPY_ROLE_ACCESS_ACTION_SUCCESS,
-  payload: data,
+  payload: resp,
 });
 
 export const DeleteRoleAcess = (config = {}) => ({
