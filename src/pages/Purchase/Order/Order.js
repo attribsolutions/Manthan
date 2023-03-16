@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate,  loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturn, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -175,7 +175,7 @@ const Order = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -554,6 +554,8 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
+        debugger
+        const config = { editId: supplierSelect.value, btnmode:mode.edit, subPageMode, btnId:`btn-edit-${supplierSelect.value}` }
         var msg = "Do you confirm your choice?"
         const isConfirmed = await CustomAlert({
             Type: 7,
@@ -562,7 +564,7 @@ const Order = (props) => {
         });
         if (isConfirmed) {
             dispatch(GoButton_For_Order_AddSuccess([]))
-            dispatch(editPartyItemID(supplierSelect.value, mode.assingLink));
+            dispatch(editPartyItemID(config ));
         };
     };
 
