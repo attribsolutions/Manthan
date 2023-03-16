@@ -1,4 +1,4 @@
-import React, { useEffect, } from "react";
+import React, { useEffect, useState, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     BreadcrumbShowCountlabel,
@@ -6,32 +6,38 @@ import {
     commonPageFieldListSuccess
 } from "../../../../store/actions";
 import {
-
     deleteBOMId,
     deleteBOMIdSuccess,
     editBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../../routes//allPageID";
-import * as url from "../../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { getLoadingSheetList, LoadingSheetlistfilter, LoadingSheetlistfilters } from "../../../../store/Sales/LoadingSheetRedux/action";
-import CommonListPage from "../../../../components/Common/CommonMasterListPage";
+import { LoadingSheetListAction, LoadingSheetlistfilter, LoadingSheetlistfilters } from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
 import Flatpickr from "react-flatpickr";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import { loginPartyID } from "../../../../components/Common/CommonFunction";
-import Select from "react-select";
+import { currentDate, loginPartyID } from "../../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList";
+import * as url from "../../../../routes/route_url"
+import * as mode from "../../../../routes/PageMode"
+
+import { useHistory } from "react-router-dom";
 
 const LoadingSheetList = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
+    const [headerFilters, setHeaderFilters] = useState('');
+ 
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [pageMode, setPageMode] = useState(mode.defaultList);
     const reducers = useSelector(
         (state) => ({
-            LoadingSheetlistfilters: state.LoadingSheetReducer.LoadingSheetList,
+            tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.BOMReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -41,13 +47,17 @@ const LoadingSheetList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, pageField, LoadingSheetlistfilters } = reducers;
-    const { fromdate, todate } = LoadingSheetlistfilters;
 
-    const page_Id = pageId.LOADING_SHEET_LIST
+    const { fromdate = currentDate, todate = currentDate } = headerFilters;
+
+    const { userAccess, pageField, LoadingSheetlistfilters } = reducers;
+    // const { fromdate, todate } = LoadingSheetlistfilters;
+
+
+    // const page_Id = pageId.LOADING_SHEET_LIST
 
     const action = {
-        // getList: getLoadingSheetList,
+        // getList: LoadingSheetListAction,
         editId: editBOMList,
         deleteId: deleteBOMId,
         postSucc: postMessage,
@@ -57,10 +67,26 @@ const LoadingSheetList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let makeBtnShow = false
+        let newBtnPath = ''
+
+        if (subPageMode === url.LOADING_SHEET_LIST) {
+            page_Id = pageId.LOADING_SHEET;
+            masterPath = url.LOADING_SHEET;
+            newBtnPath = url.LOADING_SHEET;
+            page_Mode = mode.modeSTPList
+            makeBtnShow = true;
+        }
+        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
-        // dispatch(getLoadingSheetList())
+        // dispatch(LoadingSheetListAction())
     }, []);
 
     function goButtonHandler() {
@@ -70,19 +96,19 @@ const LoadingSheetList = () => {
             ToDate: todate,
             PartyID: loginPartyID(),
         });
-        dispatch(getLoadingSheetList(jsonBody));
+        dispatch(LoadingSheetListAction(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
         let newObj = { ...LoadingSheetlistfilters }
         newObj.fromdate = date
-        dispatch(LoadingSheetlistfilter(newObj))
+        setHeaderFilters(newObj)
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...LoadingSheetlistfilters }
         newObj.todate = date
-        dispatch(LoadingSheetlistfilter(newObj))
+        setHeaderFilters(newObj)
     }
 
 
@@ -153,9 +179,10 @@ const LoadingSheetList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            // masterPath={otherState.masterPath}
-                            // newBtnPath={otherState.newBtnPath}
-                            // makeBtnShow={otherState.makeBtnShow}
+                            pageMode={pageMode}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             ButtonMsgLable={"LoadingSheet"}

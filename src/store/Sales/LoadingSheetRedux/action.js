@@ -1,6 +1,6 @@
 import {
-    GET_LOADING_SHEET_LIST,
-    GET_LOADING_SHEET_LIST_SUCCESS,
+    LOADING_SHEET_LIST_ACTION,
+    LOADING_SHEET_LIST_ACTION_SUCCESS,
     LOADING_LIST_PAGE_FILTERS_PARAMETER,
     LOADING_SHEET_GO_BUTTON_API,
     LOADING_SHEET_GO_BUTTON_API_SUCCESS,
@@ -39,12 +39,12 @@ export const SaveLoadingSheetMasterSucccess = (resp) => ({
 });
 
 // Post API For Loading Sheet List
-export const getLoadingSheetList = (data) => ({
-    type: GET_LOADING_SHEET_LIST,
-    data,
+export const LoadingSheetListAction = (filters) => ({
+    type: LOADING_SHEET_LIST_ACTION,
+    filters,
 });
 
-export const getLoadingSheetListSucccess = (resp) => ({
-    type: GET_LOADING_SHEET_LIST_SUCCESS,
+export const LoadingSheetListActionSuccess = (resp) => ({
+    type: LOADING_SHEET_LIST_ACTION_SUCCESS,
     payload: resp,
 });
