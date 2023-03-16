@@ -237,7 +237,7 @@ const PartyItems = (props) => {
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
-                debugger
+                 
 
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 

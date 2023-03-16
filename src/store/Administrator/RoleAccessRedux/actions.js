@@ -12,8 +12,8 @@ import {
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS,
-  POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
-  POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
+  SAVE_ROLE_ACCESS_ADD_ACTION,
+  SAVE_ROLE_ACCESS_ADD_ACTION_SUCCESS,
   SAVE_COPY_ROLE_ACCESS_ACTION,
   SAVE_COPY_ROLE_ACCESS_ACTION_SUCCESS,
   DELETE_ROLE_ACCESS_lIST_SUCCESS,
@@ -66,14 +66,14 @@ export const AddPageHandlerForRoleAccessListPage_Success = (data) => ({
   payload: data,
 });
 
-export const PostMethodForRoleAccessListPage = (data) => ({
-  type: POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
-  data,
+export const saveRoleAccessAddAction = (config={}) => ({
+  type: SAVE_ROLE_ACCESS_ADD_ACTION,
+  config,
 });
 
-export const PostMethod_ForRoleAccessListPage_Success = (data) => ({
-  type: POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload: data,
+export const saveRoleAccessAddActionSuccess = (resp) => ({
+  type: SAVE_ROLE_ACCESS_ADD_ACTION_SUCCESS,
+  payload: resp,
 });
 
 

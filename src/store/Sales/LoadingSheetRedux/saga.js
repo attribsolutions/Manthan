@@ -6,7 +6,7 @@ import { GET_LOADING_SHEET_LIST, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SHEET
 
 // GoButton Post API for Loading Sheet
 function* goBtn_Post_API_GenFun({ filters }) {
-    debugger
+     
     try {
         const response = yield call(Loading_Sheet_Go_Button_API, filters);
         response.Data.map((index) => {

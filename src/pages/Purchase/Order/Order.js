@@ -554,7 +554,7 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
-        debugger
+         
         const config = { editId: supplierSelect.value, btnmode:mode.edit, subPageMode, btnId:`btn-edit-${supplierSelect.value}` }
         var msg = "Do you confirm your choice?"
         const isConfirmed = await CustomAlert({
