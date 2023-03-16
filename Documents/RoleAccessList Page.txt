@@ -14,16 +14,14 @@ import {
     commonPageFieldListSuccess,
     DeleteRoleAcess,
     DeleteRoleAcessSuccess,
-    EditRoleAcessAction,
     getRoleAccessListPage,
     getRoleAccessListPageSuccess,
-    saveCopyRoleAccessActionSuccess,
-    updateRoleAcessAction,
+    PostMethod_ForCopyRoleAccessFor_Role_Success,
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
-import CommonPurchaseList, { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import CommonListPage, { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
@@ -31,7 +29,7 @@ import { breadcrumbReturn, loginCompanyID, loginRoleID, loginUserID } from "../.
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import RoleAccessAdd from "./RoleAccessAdd"
 
-const RoleAccessListPage1 = () => {
+const RoleAccessListPage = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -80,11 +78,19 @@ const RoleAccessListPage1 = () => {
         if (rowData.Division_id === null) {
             rowData.Division_id = 0
         }
-        history.push({
-            // pathname: `/${found.ActualPagePath}`,
-            state: rowData,
+
+        let RelatedPageID = userAccState.RelatedPageID
+
+        const found = userAccess.find((element) => {
+            return element.id === RelatedPageID
         })
 
+        if (!(found === undefined)) {
+            history.push({
+                pathname: `/${found.ActualPagePath}`,
+                state: rowData,
+            })
+        }
     }
 
 
@@ -93,7 +99,7 @@ const RoleAccessListPage1 = () => {
 
     useEffect(() => {
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
-            dispatch(saveCopyRoleAccessActionSuccess({ Status: false }))
+            dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
             dispatch(getRoleAccessListPage(getListbodyFunc()));
             tog_center()
             dispatch(AlertState({
@@ -103,7 +109,7 @@ const RoleAccessListPage1 = () => {
             }))
         }
         else if (PostMessage_ForCopyRoleAccess.Status === true) {
-            dispatch(saveCopyRoleAccessActionSuccess({ Status: false }))
+            dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -307,78 +313,3 @@ const RoleAccessListPage1 = () => {
         )
     }
 }
-
-
-
-
-const RoleAccessListPage = (props) => {
-
-    const dispatch = useDispatch();
-    const history = useHistory();
-
-    const reducers = useSelector(
-        (state) => ({
-            tableList: state.RoleAccessReducer.RoleAccessListPage,
-            userAccess: state.Login.RoleAccessUpdateData,
-            postMsg: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
-            deleteMsg: state.RoleAccessReducer.deleteMsg,
-            editData: state.RoleAccessReducer.editData,
-            updateMsg: state.RoleAccessReducer.updateMsg,
-            pageField: state.CommonPageFieldReducer.pageFieldList
-        })
-    );
-
-    const action = {
-        getList: getRoleAccessListPage,
-        editId: EditRoleAcessAction,
-        deleteId: DeleteRoleAcess,
-        postSucc: getRoleAccessListPageSuccess,
-        updateSucc: updateRoleAcessAction,
-        deleteSucc: DeleteRoleAcessSuccess
-    }
-
-    //  This UseEffect => Featch Modules List data  First Rendering
-    useEffect(() => {
-        const page_Id = pageId.ROLEACCESS_lIST
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        dispatch(getRoleAccessListPage());
-    }, []);
-
-    function editBodyfunc(config) {
-        const { rowData } = config;
-        debugger
-
-        if (rowData.Division_id === null) {
-            rowData.Division_id = 0
-        }
-        history.push({
-            pathname: url.ROLEACCESS,
-            state: config,
-        })
-    }
-    const { pageField, userAccess = [] } = reducers
-
-    return (
-        <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-            {
-                (pageField) ?
-                    <CommonPurchaseList
-                        action={action}
-                        reducers={reducers}
-                        showBreadcrumb={false}
-                        newBtnPath={url.ROLEACCESS}
-                        MasterModal={RoleAccessAdd}
-                        editBodyfunc={editBodyfunc}
-                        masterPath={url.ROLEACCESS}
-                        ButtonMsgLable={"RoleAccess"}
-                        deleteName={"Name"}
-                    />
-                    : null
-            }
-        </React.Fragment>
-    )
-}
-
-export default RoleAccessListPage

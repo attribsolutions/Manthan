@@ -14,42 +14,46 @@ import {
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS,
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_ACCESS,
-  POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS,
+  SAVE_COPY_ROLE_ACCESS_ACTION,
+  SAVE_COPY_ROLE_ACCESS_ACTION_SUCCESS,
   DELETE_ROLE_ACCESS_lIST_SUCCESS,
   DELETE_ROLE_ACCESS_lIST,
+  UPDATE_ROLE_ACCESS_lIST,
+  UPDATE_ROLE_ACCESS_lIST_SUCCESS,
+  EDIT_ROLE_ACCESS_lIST,
+  EDIT_ROLE_ACCESS_lIST_SUCCESS,
 } from "./actionType";
 
 
-export const GetRoleListForRoleAccessListPage = (id1,id2) => ({
+export const GetRoleListForRoleAccessListPage = (id1, id2) => ({
   type: GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
-  id1,id2,
+  id1, id2,
 });
 
 export const GetRoleListForRoleAccessListPage_Success = (data) => ({
   type: GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload:data,
+  payload: data,
 });
 
 
-export const PageDropdownForRoleAccessList = (id1,id2) => ({
+export const PageDropdownForRoleAccessList = (id1, id2) => ({
   type: PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,
-  id1,id2
+  id1, id2
 });
 
 export const PageDropdownForRoleAccessList_Success = (data) => ({
   type: PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS,
-  payload:data,
+  payload: data,
 });
 
-export const GO_Button_HandlerForRoleAccessListPage = (id1,id2,id3) => ({
+export const GO_Button_HandlerForRoleAccessListPage = (id1, id2, id3) => ({
   type: GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
-  id1,id2,id3,
+  id1, id2, id3,
 });
 
 export const GO_Button_HandlerForRoleAccessListPage_Success = (data) => ({
   type: GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload:data,
+  payload: data,
 });
 
 export const AddPageHandlerForRoleAccessListPage = (id) => ({
@@ -59,7 +63,7 @@ export const AddPageHandlerForRoleAccessListPage = (id) => ({
 
 export const AddPageHandlerForRoleAccessListPage_Success = (data) => ({
   type: ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload:data,
+  payload: data,
 });
 
 export const PostMethodForRoleAccessListPage = (data) => ({
@@ -69,7 +73,7 @@ export const PostMethodForRoleAccessListPage = (data) => ({
 
 export const PostMethod_ForRoleAccessListPage_Success = (data) => ({
   type: POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload:data,
+  payload: data,
 });
 
 
@@ -81,29 +85,51 @@ export const getRoleAccessListPage = (jsonbody) => ({
 
 export const getRoleAccessListPageSuccess = (data) => ({
   type: GET_ROLEACCESS_LIST_PAGE_SUCCESS,
-  payload:data,
+  payload: data,
 });
 
 // Copy RoleAccess For RoleAccess
-export const PostMethodForCopyRoleAccessForRoleAccess = (data) => ({
-  type: POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_ACCESS,
+export const saveCopyRoleAccessAction = (data) => ({
+  type: SAVE_COPY_ROLE_ACCESS_ACTION,
   data,
 });
 
-export const PostMethod_ForCopyRoleAccessFor_Role_Success = (data) => ({
-  type: POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS,
-  payload:data,
+export const saveCopyRoleAccessActionSuccess = (data) => ({
+  type: SAVE_COPY_ROLE_ACCESS_ACTION_SUCCESS,
+  payload: data,
 });
 
-export const DeleteRoleAcess = (role,division,company) => ({
+export const DeleteRoleAcess = (role, division, company) => ({
   type: DELETE_ROLE_ACCESS_lIST,
-  role,division,company,
+  role, division, company,
 });
 
 
 export const DeleteRoleAcessSuccess = (data) => ({
   type: DELETE_ROLE_ACCESS_lIST_SUCCESS,
-  payload:data,
+  payload: data,
+});
+
+export const EditRoleAcessAction = (config = {}) => ({
+  type: EDIT_ROLE_ACCESS_lIST,
+  config,
+});
+
+
+export const EditRoleAcessActionSuccess = (resp) => ({
+  type: EDIT_ROLE_ACCESS_lIST_SUCCESS,
+  payload: resp,
+});
+
+export const updateRoleAcessAction = (config = {}) => ({
+  type: UPDATE_ROLE_ACCESS_lIST,
+  config,
+});
+
+
+export const updateRoleAcessActionSuccess = (resp) => ({
+  type: UPDATE_ROLE_ACCESS_lIST_SUCCESS,
+  payload: resp,
 });
 
 

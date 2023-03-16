@@ -35,7 +35,7 @@ export const listPageActionsButtonFunc = (props) => {
 
         btnIsDissablefunc({ btnId, state: true })
         if (editBodyfunc) {
-            editBodyfunc(rowData, btnmode, subPageMode, btnId)
+            editBodyfunc({rowData, btnmode, subPageMode, btnId})
         } else {
             dispatch(editActionFun({ ...config }));
         }

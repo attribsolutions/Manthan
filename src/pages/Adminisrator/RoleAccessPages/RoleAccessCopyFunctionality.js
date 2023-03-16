@@ -5,7 +5,7 @@ import { MetaTags } from "react-meta-tags";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForCopyRoleAccessForRoleAccess,
+    saveCopyRoleAccessAction,
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
@@ -119,7 +119,7 @@ const RoleAccessCopyFunctionality = (props) => {
                     : 0,
                 Company: company_dropdown_Select.value
             })
-        dispatch(PostMethodForCopyRoleAccessForRoleAccess(jsonBody))
+        dispatch(saveCopyRoleAccessAction(jsonBody))
     }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
