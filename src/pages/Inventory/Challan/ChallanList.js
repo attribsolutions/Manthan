@@ -30,7 +30,7 @@ const ChallanList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            vender: state.SupplierReducer.vender,
+            vender: state.CommonAPI_Reducer.vender,
             tableList: state.ChallanReducer.ChallanList,
             deleteMsg: state.ChallanReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,

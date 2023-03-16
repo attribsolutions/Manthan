@@ -44,7 +44,7 @@ const OrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            supplier: state.SupplierReducer.vendorSupplierCustomer,
+            supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             makeIBInvoice: state.InvoiceReducer.makeIBInvoice,

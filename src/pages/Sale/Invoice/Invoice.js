@@ -83,9 +83,9 @@ const Invoice = (props) => {
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        customer: state.SupplierReducer.customer,
+        customer: state.CommonAPI_Reducer.customer,
         GoButton: state.InvoiceReducer.gobutton_Add,
-        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
+        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
     }));
 

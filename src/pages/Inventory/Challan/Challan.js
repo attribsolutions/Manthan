@@ -73,13 +73,13 @@ const Challan = (props) => {
     } = useSelector((state) => ({
         challanitems: state.ChallanReducer.challanitems,
         GoButton: state.ChallanReducer.GoButton,
-        vender: state.SupplierReducer.vender,
+        vender: state.CommonAPI_Reducer.vender,
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        customer: state.SupplierReducer.customer,
-        vendorSupplierCustomer: state.SupplierReducer.vendorSupplierCustomer,
+        customer: state.CommonAPI_Reducer.customer,
+        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
     }));
 
 
