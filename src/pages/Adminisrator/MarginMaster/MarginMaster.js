@@ -45,7 +45,7 @@ const MarginMaster = (props) => {
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
     const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
@@ -83,7 +83,7 @@ const MarginMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({dispatch,userAcc});
         };
     }, [userAccess])
@@ -116,7 +116,7 @@ const MarginMaster = (props) => {
 
         }
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
         }
     }, [userAccess])
 

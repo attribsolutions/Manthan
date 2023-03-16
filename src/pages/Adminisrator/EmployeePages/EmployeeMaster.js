@@ -61,7 +61,7 @@ const AddEmployee = (props) => {
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
   const [pageMode, setPageMode] = useState(mode.defaultsave);
-  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -122,7 +122,7 @@ const AddEmployee = (props) => {
     })
 
     if (userAcc) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
       breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])

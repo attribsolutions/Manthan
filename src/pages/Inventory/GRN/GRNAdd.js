@@ -39,7 +39,7 @@ const GRNAdd = (props) => {
     const history = useHistory();
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserAccState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const [grnDate, setgrnDate] = useState(currentDate);
@@ -82,7 +82,7 @@ const GRNAdd = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

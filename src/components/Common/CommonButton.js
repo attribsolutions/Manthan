@@ -13,7 +13,7 @@ export function SaveButton(props) {
     }
 
   }
-  else if ((pageMode === mode.defaultsave
+  else if ((userAcc.RoleAccess_IsSave)&&(pageMode === mode.defaultsave
     || pageMode === mode.copy
     || pageMode === mode.modeSTPsave
     || pageMode === mode.dropdownAdd

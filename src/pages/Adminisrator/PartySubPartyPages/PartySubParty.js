@@ -62,7 +62,7 @@ const PartySubParty = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [PartyData, setPartyData] = useState([]);
     const [Division_dropdown_Select, setDivision_dropdown_Select] = useState([]);
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [userPageAccessState, setUserAccState] = useState(123);
     const [Party_dropdown_Select, setParty_dropdown_Select] = useState([]);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -114,7 +114,7 @@ const PartySubParty = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

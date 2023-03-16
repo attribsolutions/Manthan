@@ -37,8 +37,8 @@ import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Commo
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import * as pageId from "../../../routes/allPageID"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 
 let editVal = {}
@@ -84,7 +84,7 @@ const Order = (props) => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname)
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserAccState] = useState("");
     const [description, setDescription] = useState('')
 
     const [deliverydate, setdeliverydate] = useState(currentDate)
@@ -163,7 +163,7 @@ const Order = (props) => {
         });
 
         if (userAcc) {
-            setUserPageAccessState(userAcc);
+            setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)

@@ -43,7 +43,7 @@ const LoadingSheet = (props) => {
     const history = useHistory()
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, Date: currentDate });
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [array, setArray] = useState([]);
@@ -148,7 +148,7 @@ const LoadingSheet = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

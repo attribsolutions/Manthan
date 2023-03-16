@@ -44,7 +44,7 @@ const CreditLimitMaster = (props) => {
     const history = useHistory()
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserAccState] = useState('');
     const [RouteSelect, setRouteSelect] = useState([]);
 
     const fileds = {
@@ -97,7 +97,7 @@ const CreditLimitMaster = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])

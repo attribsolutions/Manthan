@@ -49,7 +49,7 @@ const MRPMaster = (props) => {
     let editMode = history.location.pageMode;
 
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userPageAccessState, setUserAccState] = useState("");
 
     const [party_dropdown_Select, setParty_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
@@ -90,7 +90,7 @@ const MRPMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserPageAccessState(userAcc);
+            setUserAccState(userAcc);
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -129,7 +129,7 @@ const MRPMaster = (props) => {
 
         }
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
         }
     }, [userAccess])
 

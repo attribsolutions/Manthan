@@ -27,7 +27,7 @@ const MRPList = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [userPageAccessState, setUserAccState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
@@ -48,7 +48,7 @@ const MRPList = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
     }
   }, [RoleAccessModifiedinSingleArray])
 

@@ -10,22 +10,26 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    commonPageFieldList,
+    commonPageFieldListSuccess,
     DeleteRoleAcess,
     DeleteRoleAcessSuccess,
     getRoleAccessListPage,
+    getRoleAccessListPageSuccess,
     PostMethod_ForCopyRoleAccessFor_Role_Success,
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
-import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
+import CommonListPage, { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn, loginCompanyID, loginEmployeeID, loginPartyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturn, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import RoleAccessAdd from "./RoleAccessAdd"
 
-const RoleAccessListPage = () => {
+const RoleAccessListPage1 = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -74,7 +78,7 @@ const RoleAccessListPage = () => {
         if (rowData.Division_id === null) {
             rowData.Division_id = 0
         }
-       
+
         let RelatedPageID = userAccState.RelatedPageID
 
         const found = userAccess.find((element) => {
@@ -136,14 +140,14 @@ const RoleAccessListPage = () => {
 
     //select id for delete row
     const deleteHandeler = async (id, name) => {
-        
+
         const ispermission = await CustomAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Role : "${id.RoleName}"`,
         })
         if (ispermission) {
             let role = id.Role_id
-            let division = id.Division_id===null?0:id.Division_id
+            let division = id.Division_id === null ? 0 : id.Division_id
             let company = id.Company_id
             dispatch(DeleteRoleAcess(role, division, company))
         }
@@ -309,4 +313,61 @@ const RoleAccessListPage = () => {
         )
     }
 }
+
+
+
+
+const RoleAccessListPage = (props) => {
+
+    const dispatch = useDispatch();
+    const reducers = useSelector(
+        (state) => ({
+            tableList: state.RoleAccessReducer.RoleAccessListPage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            postMsg: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
+            deleteMsg: state.RoleAccessReducer.deleteMsg,
+            editData: state.RoleAccessReducer.editData,
+            updateMsg: state.RoleAccessReducer.updateMessage,
+            pageField: state.CommonPageFieldReducer.pageFieldList
+        })
+    );
+
+    const action = {
+        getList: getRoleAccessListPage,
+        // editId: editEmployeeTypeId,
+        deleteId: DeleteRoleAcess,
+        postSucc: getRoleAccessListPageSuccess,
+        // updateSucc: updateEmployeeTypeIDSuccess,
+        deleteSucc: DeleteRoleAcessSuccess
+    }
+
+    //  This UseEffect => Featch Modules List data  First Rendering
+    useEffect(() => {
+        const page_Id = pageId.ROLEACCESS_lIST
+        dispatch(commonPageFieldListSuccess(null))
+        dispatch(commonPageFieldList(page_Id))
+       
+    }, []);
+
+    const { pageField, userAccess = [] } = reducers
+
+    return (
+        <React.Fragment>
+            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+            {
+                (pageField) ?
+                    <CommonListPage
+                        action={action}
+                        reducers={reducers}
+                        MasterModal={RoleAccessAdd}
+                        masterPath={url.ROLEACCESS_lIST}
+                        ButtonMsgLable={"RoleAccess"}
+                        deleteName={"Name"}
+                    />
+                    : null
+            }
+        </React.Fragment>
+    )
+}
+
 export default RoleAccessListPage

@@ -58,7 +58,7 @@ const AddUser = (props) => {
   //SetState  Edit data Geting From Modules List component
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
-  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [userPageAccessState, setUserAccState] = useState('');
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -136,7 +136,7 @@ const AddUser = (props) => {
     })
 
     if (userAcc) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
       breadcrumbReturn({ dispatch, userAcc });
     };
   }, [userAccess])
