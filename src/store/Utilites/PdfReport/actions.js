@@ -22,9 +22,6 @@ export const postpdfMultipleReportdata = (API, jsonBody,ReportType, Id) => ({
   API,jsonBody, ReportType, Id
 });
 
-export const postpdfMultipleReportdataSuccess = (data) => ({
-  type: GET_PDF_MULTIPLEINVOICE_DATA_SUCCESS,
-  payload: data,
-});
+
 
 

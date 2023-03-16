@@ -6,6 +6,7 @@ import { toWords } from "../Report_common_function";
 
 
 export const pageBorder = (doc) => {
+    doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 370, 30, 16);//vertical line (left)
     doc.line(570, 370, 570, 16);//vertical line (Right)
@@ -17,9 +18,12 @@ export const pageHeder = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.setFontSize(12)
     doc.text('TAX INVOICE', 180, 30,)
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 37, 30, 37) //horizontal line 1 billby upper
+
 
 }
-export const reportHeder1 = (doc,data ) => {
+export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
@@ -36,7 +40,7 @@ export const reportHeder1 = (doc,data ) => {
     doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 145, 408, 16);//vertical right 1
     doc.line(220, 145, 220, 37);//vertical right 2
-    
+
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
 
     var options3 = {
@@ -75,13 +79,11 @@ export const reportHeder1 = (doc,data ) => {
 
         },
         tableLineColor: "black",
-     
+
         startY: 50,
-        
-          
 
     };
-  
+
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
 
@@ -94,7 +96,6 @@ export const reportHeder2 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.setDrawColor(0, 0, 0);
@@ -118,7 +119,77 @@ export const reportHeder4 = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
+    let stringNumber = toWords(data.GrandTotal)
+    doc.addImage(upi_qr_code, 'PNG', 370, 315, 60, 50)
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 295, 30, 295);//horizontal line Footer 2
+    // doc.line(570, 340, 30, 340);//horizontal line Footer 3
+    doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
+    doc.line(435, 295, 435, 370);//vertical right1 Qr Left 1
+    doc.line(360, 308, 360, 370);//vertical right1 Sub Total
+    doc.setFont('Tahoma')
+    doc.line(360, 340, 30, 340);//horizontal line (Bottom)
+
+    const a = data.InvoiceItems.map((data) => ({
+        CGST: Number(data.CGST),
+        SGST: Number(data.SGST),
+        BasicAmount: Number(data.BasicAmount),
+    }));
+    var totalCGST = 0;
+    var totalSGST = 0;
+    var TotalBasicAmount = 0;
+    a.forEach(arg => {
+        totalCGST += arg.CGST;
+        totalSGST += arg.SGST;
+        TotalBasicAmount += arg.BasicAmount
+
+    });
+
+    const TotalGST = totalCGST + totalSGST;
+
+    doc.setFontSize(8)
+
+    doc.text(`CGST:`, 440, 310,)
+    doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
+
+    doc.text(`SGST:`, 440, 324,)
+    doc.text(`${totalSGST.toFixed(2)}`, 560, 324, 'right')
+
+    doc.text(`TotalGST:`, 440, 336,)
+    doc.text(` ${TotalGST.toFixed(2)}`, 560, 336, 'right')
+
+    doc.text(`BasicAmount:`, 440, 348,)
+    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 348, 'right')
+
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(12)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Amount :`, 440, 365,)
+    doc.text(`${data.GrandTotal}`, 560, 365, 'right')
+    doc.setFont(undefined, 'Normal')
+    doc.setFont('Tahoma')
+    doc.setFontSize(9)
+    doc.setFont('Tahoma')
+    doc.setFontSize(8)
+    doc.text(`Prepared by `, 35, 785,)
+    doc.text(`Received By `, 180, 785,)
+    doc.setFontSize(10)
+    doc.text(`${data.PartyName} `, 390, 785,)
+    doc.setFontSize(10)
+    doc.text(`${data.CustomerName} `, 140, 811,)
+    doc.setFontSize(9)
+    doc.text(`Signature `, 400, 811,)
+    doc.setFont("Arimo");
+    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+     of the nature and quantity which it/these purports to be `, 34, 350,)
+    doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
+    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Ruppe:`, 33, 305,)
+    doc.addFont("Arial", 'Normal')
+    doc.text(`${stringNumber}`, 65, 305,)
+
+
     const optionsTable4 = {
         margin: {
             top: 100, left: 50, right: 30,
@@ -169,16 +240,11 @@ export const reportFooter = (doc, data) => {
         startY: 100
     };
     doc.setFontSize(9)
-doc.autoTable(optionsTable4,);
+    doc.autoTable(optionsTable4,);
 
 }
 
 export const tableBody = (doc, data) => {
-    // const tableRow = table.Rows(data);
-    // const { OrderItem = [] } = data
-
-    // console.log(tableRow)
-
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[5].raw === "isaddition") {
@@ -263,34 +329,16 @@ export const tableBody = (doc, data) => {
         startY: doc.previousAutoTable.finalY,// 45,
         // startY:85
 
-        
+
     };
-   
 
     doc.autoTable(table.columns, table.Rows(data), options,);
-
-
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom:120
+            left: 30, right: 30, bottom: 110
         },
         showHead: 'never',
         theme: '',
-    
-       
-        
-        didParseCell: function (cell, data) {
-            console.log("didParseCell", cell)
-            console.log(" didParse data", data)
-
-            if (cell.row.index === 4) {
-                // cell.cell.styles.fontSize = 12;
-                // cell.cell.styles.lineColor = 'gray'
-                // cell.cell.styles.lineWidth = 0.5
-
-            }
-        },
-
     };
     doc.autoTable(optionsTable4);
     doc.autoTable({
@@ -303,113 +351,37 @@ export const tableBody = (doc, data) => {
         }
     })
 }
-export const pageFooter = (doc, data) => {
-    let stringNumber = toWords(data.GrandTotal)
-    doc.addImage(upi_qr_code, 'PNG', 370, 315, 60, 50)
-    doc.setDrawColor(0, 0, 0);
-    doc.line(570, 295, 30, 295);//horizontal line Footer 2
-    // doc.line(570, 340, 30, 340);//horizontal line Footer 3
-    doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
-    doc.line(435, 295, 435, 370);//vertical right1 Qr Left 1
-    doc.line(360,308, 360, 370);//vertical right1 Sub Total
-    doc.setFont('Tahoma')
-    doc.line(360, 340, 30, 340);//horizontal line (Bottom)
 
-    const a = data.InvoiceItems.map((data) => ({
-        CGST: Number(data.CGST),
-        SGST: Number(data.SGST),
-        BasicAmount: Number(data.BasicAmount),
-    }));
-    var totalCGST = 0;
-    var totalSGST = 0;
-    var TotalBasicAmount = 0;
-    a.forEach(arg => {
-        totalCGST += arg.CGST;
-        totalSGST += arg.SGST;
-        TotalBasicAmount += arg.BasicAmount
+export const pageFooter = (doc, data, islast = 0, array = []) => {
 
-    });
-
-    const TotalGST = totalCGST + totalSGST;
-
-    doc.setFontSize(8)
-
-    doc.text(`CGST:`, 440, 310,)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
-
-    doc.text(`SGST:`, 440, 324,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 324, 'right')
-
-    doc.text(`TotalGST:`, 440, 336,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 336, 'right')
-
-    doc.text(`BasicAmount:`, 440, 348,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 348, 'right')
-
-    doc.setFont(undefined, 'Normal')
-    doc.setFontSize(12)
-    doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 440, 365,)
-    doc.text(`${data.GrandTotal}`, 560, 365, 'right')
-    doc.setFont(undefined, 'Normal')
-    doc.setFont('Tahoma')
-    doc.setFontSize(9)
-    doc.setFont('Tahoma')
-    doc.setFontSize(8)
-    doc.text(`Prepared by `, 35, 785,)
-    doc.text(`Received By `, 180, 785,)
-    doc.setFontSize(10)
-    doc.text(`${data.PartyName} `, 390, 785,)
-    doc.setFontSize(10)
-    doc.text(`${data.CustomerName} `, 140, 811,)
-    doc.setFontSize(9)
-    doc.text(`Signature `, 400, 811,)
-    doc.setFont("Arimo");
-    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity which it/these purports to be `, 34, 350,)
-    doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
-    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
-    doc.setFont(undefined, 'bold')
-    doc.text(`Ruppe:`, 33, 305,)
-    doc.addFont("Arial", 'Normal')
-    doc.text(`${stringNumber}`, 65, 305,)
-    
     let finalY = doc.previousAutoTable.finalY;
-    if (finalY >110) {
-        
+    if (finalY > 110) {
         pageBorder(doc)
-        reportFooter(doc, i)
+        reportFooter(doc, data)
         pageHeder(doc, data)
         reportHeder3(doc, data)
-        
-
-        // pageHeder(doc, data)
-        // reportHeder1(doc, data)
-        // reportHeder2(doc, data)
-        // reportHeder3(doc, data)
-
-
     } else {
         pageBorder(doc)
         reportFooter(doc, data)
         pageHeder(doc, data)
         reportHeder3(doc, data)
-        // pageHeder(doc, data)
-        // reportHeder1(doc, data)
-        // reportHeder2(doc, data)
-        // reportHeder3(doc, data)
     }
+
     const pageCount = doc.internal.getNumberOfPages()
+    debugger
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
-    for (var i = 1; i <= pageCount; i++) {
-        doc.setPage(i)
-        doc.text('Page ' + String(i) , doc.internal.pageSize.width / 10, 380, {
-            align: 'center'
-        
-            
-        })
-        console.log("aaa", doc.internal.pageSize.height)
+    for (let i = 1; i <= pageCount; i++) {
+        // doc.setPage(i)
+        doc.text('Page' + String(i) + ' of ' + String(pageCount), 40, 390,)
+    }
+
+    let condition1 = (array.length - 1 === islast)
+    if (condition1) {
+        for (let j = 1; j <= pageCount; j++) {
+            doc.setPage(j)
+            doc.text('PageAll ' + String(j) + ' of ' + String(pageCount), 500, 390,)
+        }
     }
 }
 
