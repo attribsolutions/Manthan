@@ -253,14 +253,28 @@ const OrderList = () => {
 
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
-            const filtersBody = JSON.stringify({
+            let filtersBody = {}
+            const PO_filters = {
                 FromDate: fromdate,
                 ToDate: todate,
                 Supplier: supplierSelect.value,
                 Customer: loginPartyID(),
                 OrderType: order_Type.PurchaseOrder,
                 IBType: IBType ? IBType : otherState.IBType
-            });
+            }
+            const SO_filters = {
+                FromDate: fromdate,
+                ToDate: todate,
+                Supplier: loginPartyID(),//Suppiler swipe
+                Customer: supplierSelect.value,//customer swipe
+                OrderType: order_Type.PurchaseOrder,
+                IBType: IBType ? IBType : otherState.IBType
+            }
+            if (subPageMode === url.ORDER_LIST_4) {
+                filtersBody = JSON.stringify(SO_filters);
+            } else {
+                filtersBody = JSON.stringify(PO_filters);
+            }
             dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
 
         } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: false }) }
