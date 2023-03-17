@@ -332,6 +332,7 @@ export const tableBody = (doc, data) => {
 
     };
 
+
     doc.autoTable(table.columns, table.Rows(data), options,);
     const optionsTable4 = {
         margin: {
@@ -368,11 +369,12 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
     }
 
     const pageCount = doc.internal.getNumberOfPages()
-      
+    console.log(pageCount)
+
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)
     for (let i = 1; i <= pageCount; i++) {
-        // doc.setPage(i)
+        doc.setPage(i)
         doc.text('Page' + String(i) + ' of ' + String(pageCount), 40, 390,)
     }
 
@@ -381,6 +383,7 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
         for (let j = 1; j <= pageCount; j++) {
             doc.setPage(j)
             doc.text('PageAll ' + String(j) + ' of ' + String(pageCount), 500, 390,)
+
         }
     }
 }

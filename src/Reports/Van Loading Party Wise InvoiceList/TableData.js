@@ -39,7 +39,7 @@ export const Rows = (data) => {
     let TotalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
-        debugger
+         
         const tableitemRow = [
             element.Item,
             element.ItemName,
