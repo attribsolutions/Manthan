@@ -221,7 +221,7 @@ const PartyMasterBulkUpdate = (props) => {
     const goButtonHandler = (event) => {
         const jsonBody = JSON.stringify({
             Party: loginPartyID(),
-            Route: RouteSelect.value
+            Route: RouteSelect.value,
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
@@ -316,7 +316,6 @@ const PartyMasterBulkUpdate = (props) => {
                                                                             name="SelectField"
                                                                             value={SelectField}
                                                                             isSearchable={true}
-                                                                            // isDisabled={(Data.length > 0) ? true : false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
                                                                             options={SelectFieldDropdown_options}
@@ -338,7 +337,6 @@ const PartyMasterBulkUpdate = (props) => {
                                                                             name="RoutesName"
                                                                             value={RouteSelect}
                                                                             isSearchable={true}
-                                                                            // isDisabled={(Data.length > 0) ? true : false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
                                                                             options={RouteName_Options}
