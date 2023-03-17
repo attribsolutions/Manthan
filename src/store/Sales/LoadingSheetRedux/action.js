@@ -1,11 +1,20 @@
 import {
-    GET_LOADING_SHEET_LIST,
-    GET_LOADING_SHEET_LIST_SUCCESS,
+    LOADING_SHEET_LIST_ACTION,
+    LOADING_SHEET_LIST_ACTION_SUCCESS,
+    LOADING_LIST_PAGE_FILTERS_PARAMETER,
     LOADING_SHEET_GO_BUTTON_API,
     LOADING_SHEET_GO_BUTTON_API_SUCCESS,
     SAVE_LOADING_SHEET_MASTER,
     SAVE_LOADING_SHEET_MASTER_SUCCESS
 } from "./actionType";
+
+
+
+export const LoadingSheetlistfilter = filter => ({
+    type: LOADING_LIST_PAGE_FILTERS_PARAMETER,
+    payload: filter,
+  })
+
 
 // Go Button API For Loading Sheet Master
 export const LoadingSheet_GoBtn_API = (filters) => ({  
@@ -30,12 +39,12 @@ export const SaveLoadingSheetMasterSucccess = (resp) => ({
 });
 
 // Post API For Loading Sheet List
-export const getLoadingSheetList = (config={}) => ({
-    type: GET_LOADING_SHEET_LIST,
-    config,
+export const LoadingSheetListAction = (filters) => ({
+    type: LOADING_SHEET_LIST_ACTION,
+    filters,
 });
 
-export const getLoadingSheetListSucccess = (resp) => ({
-    type: GET_LOADING_SHEET_LIST_SUCCESS,
+export const LoadingSheetListActionSuccess = (resp) => ({
+    type: LOADING_SHEET_LIST_ACTION_SUCCESS,
     payload: resp,
 });
