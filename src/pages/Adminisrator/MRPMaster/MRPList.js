@@ -19,7 +19,7 @@ import {
 import { countlabelFunc } from "../../../components/Common/CommonMasterListPage"
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
 
 const MRPList = (props) => {
 
@@ -49,7 +49,7 @@ const MRPList = (props) => {
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.MRP });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: url.MRP });
     }
   }, [userAccess])
 

@@ -33,7 +33,7 @@ import {
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -98,7 +98,7 @@ const RoleAccessAdd = () => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess]);
 

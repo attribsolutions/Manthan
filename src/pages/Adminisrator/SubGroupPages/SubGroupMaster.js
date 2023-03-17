@@ -37,7 +37,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -107,7 +107,7 @@ const SubGroupMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

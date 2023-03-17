@@ -41,7 +41,7 @@ import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { breadcrumbReturn, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 
 const PartyItems = (props) => {
@@ -113,7 +113,7 @@ const PartyItems = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

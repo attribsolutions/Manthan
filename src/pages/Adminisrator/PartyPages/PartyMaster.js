@@ -36,7 +36,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturn, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -104,7 +104,7 @@ const PartyMaster = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

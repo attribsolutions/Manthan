@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { breadcrumbReturn, loginUserID, currentDate } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -55,7 +55,7 @@ const Inward = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

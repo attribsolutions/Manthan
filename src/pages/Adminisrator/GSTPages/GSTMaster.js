@@ -32,7 +32,7 @@ import {
     postGSTMasterData,
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
 
 
 const GSTMaster = (props) => {
@@ -78,7 +78,7 @@ const GSTMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturnFunc({dispatch,userAcc});
         };
     }, [userAccess])
 
