@@ -129,9 +129,10 @@ function* SSDD_List_under_Company_GenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Retailer_List_GenFunc() {
+function* Retailer_List_GenFunc({ data }) {
+  debugger
   try {
-    const response = yield call(Retailer_List_under_Company_PartyAPI, { "Type": 1, "PartyID": loginPartyID(), "CompanyID": loginCompanyID() });
+    const response = yield call(Retailer_List_under_Company_PartyAPI, data);
     yield put(Retailer_List_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }

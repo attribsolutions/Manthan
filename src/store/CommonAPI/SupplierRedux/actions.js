@@ -92,8 +92,9 @@ export const SSDD_List_under_Company_Success = resp => ({
 })
 
 // All Retailer under given Party and Company
-export const Retailer_List = () => ({
+export const Retailer_List = (data) => ({
   type: RETAILER_LIST,
+  data
 });
 
 export const Retailer_List_Success = resp => ({

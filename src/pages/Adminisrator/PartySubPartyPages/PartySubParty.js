@@ -16,7 +16,11 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    editPartySubPartySuccess,
+    savePartySubParty,
     savePartySubPartySuccess,
+    updatePartySubParty,
+    updatePartySubPartySuccess,
     getPartySubParty_For_party_dropdown,
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
@@ -27,8 +31,10 @@ import {
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
+    get_Division_ForDropDown,
     get_Party_ForDropDown,
 } from "../../../store/Administrator/ItemsRedux/action";
+import { Tbody, Thead } from "react-super-responsive-table";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     comAddPageFieldFunc,
@@ -36,7 +42,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -87,7 +93,7 @@ const PartySubParty = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(SSDD_List_under_Company());
-        dispatch(Retailer_List());
+        // dispatch(Retailer_List());
 
     }, []);
 
@@ -117,6 +123,41 @@ const PartySubParty = (props) => {
             breadcrumbReturn({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                const { id, Party, Division } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Party.valid = true;
+                hasValid.Division.valid = true;
+
+                values.id = id
+                values.Party = { label: Party, value: Party };
+                values.Division = { label: Division, value: Division };
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.Party))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+            dispatch(editPartySubPartySuccess({ Status: false }))
+        }
+    }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
@@ -151,12 +192,41 @@ const PartySubParty = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: url.PARTY_SUB_PARTY_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updatePartySubPartySuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+    useEffect(() => {
 
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    useEffect(() => {
+        if (Division_dropdown_Select.value > 0) {
+            setPartyData(PartySubParty.map(i => ({
+                value: i.SubParty,
+                label: i.SubPartyName,
+                isPartyType: i.PartyType,
+                Creditlimit: i.Creditlimit,
+                Route: i.Route
+            })));
+        }
+    }, [PartySubParty]);
 
     const PartyDropdown_Options = SSDD_List.map(i => ({
         value: i.id,
@@ -170,9 +240,117 @@ const PartySubParty = (props) => {
 
     function handllerDivision(e) {
         dispatch(getPartySubParty_For_party_dropdown(e.value));
+
         setDivision_dropdown_Select(e)
     }
 
+    function handllerParty(e) {
+        setParty_dropdown_Select(e)
+    }
+
+    function handller_SSDD(e) {
+
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: e.value,
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }
+
+    /// Role Table Validation
+    function AddPartyHandler() {
+
+        const find = PartyData.find((element) => {
+            return element.value === Party_dropdown_Select.value
+        });
+        if (Division_dropdown_Select.value === undefined) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Division",
+            }));
+        }
+        else if (Party_dropdown_Select.value === undefined) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Party",
+            }));
+        }
+
+        else if (find === undefined) {
+            setPartyData([...PartyData, Party_dropdown_Select]);
+        }
+
+        else {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Party already Exists ",
+            }));
+        }
+    }
+
+    // For Delete Button in table
+    function UserRoles_DeleteButton_Handller(tableValue) {
+        setPartyData(PartyData.filter(
+            (item) => !(item.value === tableValue)
+        )
+        )
+    }
+
+    const SaveHandler = async (event) => {
+        debugger
+        event.preventDefault();
+        const btnId = event.target.id;
+        const isRetailerTrue = {
+            SubParty: values.Retailer.value,
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
+            Creditlimit: null,
+            Route: null
+        }
+
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                const arr = PartyData.map(i => {
+
+                    const normal = {
+                        Party: Division_dropdown_Select.value,
+                        SubParty: i.value,
+                        PartyID: Division_dropdown_Select.value,
+
+                    }
+                    const isvendor = {
+                        Party: i.value,
+                        SubParty: Division_dropdown_Select.value,
+                        PartyID: Division_dropdown_Select.value,
+                    }
+
+                    const ramain = {
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
+                        Creditlimit: i.Creditlimit,
+                        Route: i.Route
+                    }
+
+                    if ((i.isPartyType === 3)) {
+                        return { ...isvendor, ...ramain }
+                    }
+                    else {
+                        return { ...normal, ...ramain }
+                    }
+                })
+
+                const jsonBody = JSON.stringify(arr);
+                if (pageMode === mode.edit) {
+                    dispatch(updatePartySubParty({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(savePartySubParty({ jsonBody, btnId }));
+                }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -192,144 +370,196 @@ const PartySubParty = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
-
-                                                    <Row className="mb-3">
-                                                        <Col sm="4">
-                                                            <FormGroup>
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.PartyName}</Label>
-                                                                <Select
-                                                                    name="PartyName"
-                                                                    value={values.PartyName}
-                                                                    isSearchable={true}
-                                                                    className="react-dropdown"
-                                                                    classNamePrefix="dropdown"
-                                                                    options={PartyDropdown_Options}
-                                                                    onChange={(hasSelect, evn) => {
-                                                                        onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                    }}
-                                                                />
-                                                                {/* {isError.PartyName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                                    )} */}
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-
                                                     <Row>
-                                                        <Col sm="4">
-                                                            <FormGroup>
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.SubParty}</Label>
-                                                                <Select
-                                                                    name="SubParty"
-                                                                    value={values.SubParty}
-                                                                    isSearchable={true}
-                                                                    className="react-dropdown"
-                                                                    classNamePrefix="dropdown"
-                                                                    options={PartyDropdown_Options}
-                                                                    onChange={(hasSelect, evn) => {
-                                                                        onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                    }}
-                                                                />
-                                                                {/* {isError.SubParty.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.SubParty}</small></span>
-                                                                    )} */}
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-
-                                                    <Row>
-                                                        <FormGroup className="mt-3 col col-sm-5">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label">{fieldLabel.IsRetailerTransfer}</Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3">
-                                                                        <Input type="checkbox" className="form-check-input"
-                                                                            checked={values.IsRetailerTransfer}
-                                                                            name="IsRetailerTransfer"
-                                                                            onChange={(e) => {
-                                                                                setState((i) => {
-                                                                                    const a = { ...i }
-                                                                                    a.values.IsRetailerTransfer = e.target.checked;
-                                                                                    return a
-                                                                                })
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-                                                    </Row>
-
-                                                    {
-                                                        values.IsRetailerTransfer ?
-                                                            <div>
-                                                                <Row className="mb-3">
-                                                                    <Col sm="4">
-                                                                        <FormGroup>
-                                                                            <Label htmlFor="validationCustom01"> {fieldLabel.SSDD}</Label>
+                                                        <FormGroup className="mb-3">
+                                                            <Row>
+                                                                <Col sm="4">
+                                                                    <FormGroup className="mb-1">
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.PartyName} </Label>
+                                                                        <Col sm={12}>
                                                                             <Select
-                                                                                name="SSDD"
-                                                                                value={values.SSDD}
+                                                                                name="PartyName"
+                                                                                value={Division_dropdown_Select}
                                                                                 isSearchable={true}
                                                                                 className="react-dropdown"
                                                                                 classNamePrefix="dropdown"
                                                                                 options={PartyDropdown_Options}
                                                                                 onChange={(hasSelect, evn) => {
                                                                                     onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                                    handllerDivision(hasSelect)
                                                                                 }}
                                                                             />
-                                                                            {/* {isError.SSDD.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.SSDD}</small></span>
-                                                                    )} */}
-                                                                        </FormGroup>
-                                                                    </Col>
-                                                                </Row>
+                                                                            {/* {isError.PartyName.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                                            )} */}
+                                                                        </Col>
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
 
-                                                                <Row className="mb-3">
-                                                                    <Col sm="4">
-                                                                        <FormGroup>
-                                                                            <Label htmlFor="validationCustom01"> {fieldLabel.Retailer}</Label>
-                                                                            <Select
-                                                                                name="Retailer"
-                                                                                value={values.Retailer}
-                                                                                isSearchable={true}
-                                                                                className="react-dropdown"
-                                                                                classNamePrefix="dropdown"
-                                                                                options={RetailerDropdown_Options}
-                                                                                onChange={(hasSelect, evn) => {
-                                                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                                }}
-                                                                            />
-                                                                            {/* {isError.Retailer.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.Retailer}</small></span>
-                                                                    )} */}
-                                                                        </FormGroup>
-                                                                    </Col>
-                                                                </Row>
-                                                            </div>
-                                                            : null
-                                                    }
-
-
-
-                                                    <FormGroup className="mt-3">
                                                         <Row>
-                                                            <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode}
-                                                                    // onClick={SaveHandler}
-                                                                    userAcc={userPageAccessState}
-                                                                    editCreatedBy={editCreatedBy}
-                                                                    module={"PartySubParty"}
-                                                                />
+                                                            <Col sm="4">
+                                                                <FormGroup>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.SubParty}</Label>
+                                                                    <Select
+                                                                        name="SubParty"
+                                                                        value={values.SubParty}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
+                                                                        options={PartyDropdown_Options}
+                                                                        onChange={(hasSelect, evn) => {
+                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                            handllerParty(hasSelect)
+                                                                        }}
+                                                                    />
+                                                                    {/* {isError.PartyName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                                    )} */}
+                                                                </FormGroup>
+                                                            </Col>
+
+                                                            <Col sm={2} style={{ marginTop: '16px' }} >
+                                                                <Button
+                                                                    type="button"
+                                                                    className=" button_add"
+                                                                    color="btn btn-outline-primary border-2 font-size-12"
+                                                                    onClick={() =>
+                                                                        AddPartyHandler()
+                                                                    }
+                                                                >
+                                                                    <i className="dripicons-plus"></i>
+                                                                </Button>
                                                             </Col>
                                                         </Row>
-                                                    </FormGroup >
 
+                                                        <Row>
+                                                            <Col sm={3} style={{ marginTop: '28px', marginRight: "30px" }}>
+                                                                {PartyData.length > 0 ? (
+                                                                    <div className="table">
+                                                                        <Table className="table table-bordered  text-center" >
+                                                                            <Thead>
+                                                                                <tr>
+                                                                                    <th>Party</th>
+                                                                                    <th>Action</th>
+                                                                                </tr>
+                                                                            </Thead>
+                                                                            <Tbody>
+                                                                                {PartyData.map((TableValue) => (
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            {TableValue.label}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                UserRoles_DeleteButton_Handller(TableValue.value)
+                                                                                            }} >
+                                                                                            </i>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))}
+                                                                            </Tbody>
+                                                                        </Table>
+                                                                    </div>
+                                                                ) : (
+                                                                    <>
+                                                                    </>
+                                                                )}
+                                                            </Col>
+                                                        </Row>
+
+                                                        <Row>
+                                                            <FormGroup className="mt-3 col col-sm-5">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label">{fieldLabel.IsRetailerTransfer}</Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsRetailerTransfer}
+                                                                                name="IsRetailerTransfer"
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsRetailerTransfer = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
+
+                                                        {
+                                                            values.IsRetailerTransfer ?
+                                                                <div>
+                                                                    <Row className="mb-3">
+                                                                        <Col sm="4">
+                                                                            <FormGroup>
+                                                                                <Label htmlFor="validationCustom01"> {fieldLabel.SSDD}</Label>
+                                                                                <Select
+                                                                                    name="SSDD"
+                                                                                    value={values.SSDD}
+                                                                                    isSearchable={true}
+                                                                                    className="react-dropdown"
+                                                                                    classNamePrefix="dropdown"
+                                                                                    options={PartyDropdown_Options}
+                                                                                    onChange={(hasSelect, evn) => {
+                                                                                        onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                                        handller_SSDD(hasSelect)
+                                                                                    }}
+                                                                                />
+                                                                                {/* {isError.SSDD.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.SSDD}</small></span>
+                                                                    )} */}
+                                                                            </FormGroup>
+                                                                        </Col>
+                                                                    </Row>
+
+                                                                    <Row className="mb-3">
+                                                                        <Col sm="4">
+                                                                            <FormGroup>
+                                                                                <Label htmlFor="validationCustom01"> {fieldLabel.Retailer}</Label>
+                                                                                <Select
+                                                                                    name="Retailer"
+                                                                                    value={values.Retailer}
+                                                                                    isSearchable={true}
+                                                                                    className="react-dropdown"
+                                                                                    classNamePrefix="dropdown"
+                                                                                    options={RetailerDropdown_Options}
+                                                                                    onChange={(hasSelect, evn) => {
+                                                                                        onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                                    }}
+                                                                                />
+                                                                                {/* {isError.Retailer.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Retailer}</small></span>
+                                                                    )} */}
+                                                                            </FormGroup>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                                : null
+                                                        }
+                                                        <FormGroup>
+                                                            <Row>
+                                                                <Col sm={2}>
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        onClick={SaveHandler}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
+                                                                        module={"PartySubParty"}
+                                                                    />
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup >
+                                                    </Row>
 
                                                 </CardBody>
                                             </Card>

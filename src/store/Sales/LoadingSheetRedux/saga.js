@@ -26,11 +26,11 @@ function* save_LoadingSheet_GenFun({ config }) {
 }
 
 // Post API For Master Page
-function* get_LoadingSheet_List_GenFun(filters) {
+function* get_LoadingSheet_List_GenFun({data}) {
     debugger
     // const filters = loginJsonBody() 
     try {
-        const response = yield call(Loading_Sheet_get_API, filters.data);
+        const response = yield call(Loading_Sheet_get_API, data);
         const newList = yield response.Data.map((i) => {
             var date = convertDatefunc(i.ChallanDate)
             var time = convertTimefunc(i.CreatedOn)
