@@ -506,7 +506,7 @@ export const Make_Inward_Post_API = ({ makeInwardId, btnId }) => get(`${url.MAKE
 
 
 //Report API
-export const MultipleInvoice_API = (data) => post(url.MULTIPLEINVOICE_API, data)//dropdown api
+export const MultipleInvoice_API = (id) => get(`${url.MULTIPLEINVOICE_API}/${id}`)//dropdown api
 export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${id}`)//dropdown api
 
 

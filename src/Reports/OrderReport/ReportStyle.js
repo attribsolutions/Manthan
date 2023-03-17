@@ -1,9 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { toWords } from "../Report_common_function";
-
 
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
@@ -38,6 +36,10 @@ export const reportHeder1 = (doc, data) => {
     doc.line(220, 160, 220, 63);//vertical right 2
     // doc.line(570, 815, 30, 815);//horizontal line buttom 1
     // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
+
+
+//Header Table Style 
+
     var options3 = {
         margin: {
             top: 45, left: 35, right: 35,// bottom:100 
@@ -45,7 +47,6 @@ export const reportHeder1 = (doc, data) => {
         showHead: 'always',
         theme: 'plain',
         styles: {
-            // overflowColumns: false ,
             overflow: 'linebreak',
             fontSize: 8,
             height: 0,
@@ -61,37 +62,32 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 200,
+                columnWidth: 185,
                 halign: 'left',
             },
             1: {
-                columnWidth: 200,
+                columnWidth: 190,
                 halign: 'left',
             },
             2: {
-                columnWidth: 200,
+                columnWidth: 160,
                 halign: 'left',
             },
 
         },
-        // tableLineColor: "black",
-        // startY: doc.autoTableEndPosY() + 85,// 45,
         startY:85
-
 
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
 
 
-
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    // doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 95)
-    // doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 95)
 }
+
 
 export const reportHeder3 = (doc, data) => {
     doc.setFont('Tahoma')
@@ -108,183 +104,15 @@ export const reportHeder3 = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
-    var optionsTable2 = {
-        margin: {
-            top: 45, left: 35, right: 35,
-        },
-        theme: 'grid',
-        headerStyles: {
-            //columnWidth: 'wrap',
-            cellPadding: 4,
-            lineWidth: 1,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            // textColor: [255, 255, 255], //White     
-            // fillColor: "white"
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 3,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 80,
-                // fontStyle: 'bold',
-            },
-            1: {
-                columnWidth: 50,
-                // fontStyle: 'bold',
-                halign: 'right',
-                // fontStyle: 'bold',
-                //  height:50,
-            },
-            2: {
-                columnWidth: 40,
-                // fontStyle: 'bold',
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            3: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            4: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            5: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            6: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            7: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            8: {
-                // columnWidth: 40,
-                fontStyle: 'bold',
-                halign: 'center',
-            },
-        },
-
-
-        startY: doc.autoTableEndPosY(),// 45,
-    };
-
-    // const optionsTable3 = {
-    //     margin: {
-    //         // top: 70, left: 35, right: 200
-    //     },
-    //     showHead: 'never',
-    //     theme: 'plain',
-    //     headerStyles: {
-    //         cellPadding: 1,
-    //     },
-    //     bodyStyles: {
-    //         cellPadding: 1,
-    //     },
-    //     columnStyles: {
-    //         0: {
-
-    //         },
-    //         1: {
-
-    //         },
-    //     },
-    //     didParseCell: function (cell, data) {
-    //         if (cell.row.index === 0) {
-    //             cell.cell.styles.fontSize = 7;
-    //             // cell.cell.styles.lineColor = ''
-    //             cell.cell.styles.lineWidth = 0.5
-    //         }
-    //     },
-    //     startY: 790,
-    // };
-
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRows(data),optionsTable3);
-
-    const optionsTable4 = {
-        margin: {
-            top: 410, left: 410, right: 30,
-        },
-        showHead: 'never',
-        theme: 'plain',
-        headerStyles: {
-            cellPadding: 1,
-            lineWidth: 0,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-
-            },
-            1: {
-                halign: 'right',    //'center' or 'left'
-                valign: "top",
-
-            },
-        },
-        didParseCell: function (cell, data) {
-            console.log("didParseCell", cell)
-            console.log(" didParse data", data)
-
-            if (cell.row.index === 4) {
-                cell.cell.styles.fontSize = 12;
-                cell.cell.styles.lineWidth = 1
-
-            }
-        },
-        startY: 745,
-    };
-    // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data), optionsTable3);
-    // doc.autoTable(table.ReportFotterColumns4, table.ReportFooterRow4(data), optionsTable4);
-    // let finalY = doc.previousAutoTable.finalY;
-
-    // if (finalY < 745) {
-    //     doc.line(35, finalY, 35, 815);//horizontal line 3
-    //     doc.line(561, finalY, 561, 815);//horizontal line 3
-    // }
     doc.setFontSize(9)
 }
+
 export const tableBody = (doc, data) => {
 
     const tableRow = table.Rows(data);
     console.log(tableRow)
+
+    //Body table  Css
     var options = {
 
         didParseCell: (data1) => {
@@ -308,15 +136,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
-
-
-                // if (data1.row.cells[9].raw ===  "row") {
-                // data1.row.cells[0].styles.fontSize = 10
-
-                // }
-                // data1.row.cells[3].colSpan=4
-                // .colSpan = 3;
-                //description above refer to the column of the table on the lastrow
             }
         },
         margin: {
@@ -328,9 +147,9 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'left',   
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],  
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -340,7 +159,6 @@ export const tableBody = (doc, data) => {
             cellPadding: 3,
             fontSize: 7,
             columnWidth: 'wrap',
-            // fontStyle: 'bold',
             lineColor: [0, 0, 0],
         },
         columnStyles: {
@@ -393,22 +211,8 @@ export const tableBody = (doc, data) => {
             },
         },
 
-
-
-        // drawHeaderCell: function (cell, data) {
-        //     if (cell.raw === 'Total GST') {//paint.Name header red
-        //         cell.styles.fontSize = 20;
-        //         cell.styles.textColor = [255, 0, 0];
-        //     } else {
-        //         cell.styles.textColor = 255;
-        //         cell.styles.fontSize = 10;
-        //     }
-        // },
-
-
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
-
 
     };
 

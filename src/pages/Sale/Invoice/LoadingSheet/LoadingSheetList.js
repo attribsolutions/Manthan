@@ -15,7 +15,7 @@ import * as pageId from "../../../../routes//allPageID";
 import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
 import { LoadingSheetListAction, LoadingSheetlistfilter, LoadingSheetlistfilters } from "../../../../store/Sales/LoadingSheetRedux/action";
-import { LoadingSheet_API } from "../../../../helpers/backend_helper";
+import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
 import Flatpickr from "react-flatpickr";
@@ -90,7 +90,7 @@ const LoadingSheetList = () => {
     }, []);
 
     function goButtonHandler() {
-        debugger
+         
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -113,8 +113,8 @@ const LoadingSheetList = () => {
 
 
     function downBtnFunc(row) {
-        var ReportType = report.VanLoadingPartyWiseInvoice;
-        dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
+        var ReportType = report.invoiceA5;
+        dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
     }
 
     return (
