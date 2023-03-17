@@ -23,7 +23,7 @@ import {
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
-    breadcrumbReturn,
+    breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginPartyID
 } from "../../../components/Common/CommonFunction";
@@ -113,7 +113,7 @@ const PartyMasterBulkUpdate = (props) => {
         })
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

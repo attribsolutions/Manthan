@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails } from "../../store/actions";
-import { breadcrumbReturn, }
+import { breadcrumbReturnFunc, }
   from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
@@ -89,7 +89,7 @@ const CommonListPage = (props) => {
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturn({ dispatch, userAcc, newBtnPath: masterPath });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: masterPath });
     }
   }, [userAccess]);
 
@@ -198,7 +198,7 @@ const CommonListPage = (props) => {
 
   function tog_center() {
     if (modal_edit) {
-      breadcrumbReturn({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+      breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
     }
     setmodal_edit(false)
   }

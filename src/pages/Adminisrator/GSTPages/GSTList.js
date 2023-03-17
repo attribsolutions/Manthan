@@ -20,7 +20,7 @@ import {
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/CommonMasterListPage";
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
 
 const GSTList = () => {
 
@@ -49,7 +49,7 @@ const GSTList = () => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.GST });
+            breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: url.GST });
         }
     }, [userAccess])
 

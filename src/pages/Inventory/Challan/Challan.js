@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -109,7 +109,7 @@ const Challan = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess])

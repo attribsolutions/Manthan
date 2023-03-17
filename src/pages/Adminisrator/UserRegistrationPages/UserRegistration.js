@@ -26,7 +26,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturn, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -137,7 +137,7 @@ const AddUser = (props) => {
 
     if (userAcc) {
       setUserAccState(userAcc)
-      breadcrumbReturn({ dispatch, userAcc });
+      breadcrumbReturnFunc({ dispatch, userAcc });
     };
   }, [userAccess])
 
