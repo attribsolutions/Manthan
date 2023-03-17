@@ -752,7 +752,7 @@ const Order = (props) => {
                 OrderItem: itemArr,
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
-                OrderType: 1,
+                OrderType: 2,
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
