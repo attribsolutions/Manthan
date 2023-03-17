@@ -61,15 +61,15 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 200,
+                columnWidth: 185,
                 halign: 'left',
             },
             1: {
-                columnWidth: 200,
+                columnWidth: 190,
                 halign: 'left',
             },
             2: {
-                columnWidth: 200,
+                columnWidth: 160,
                 halign: 'left',
             },
 
