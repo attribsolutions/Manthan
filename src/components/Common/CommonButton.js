@@ -6,7 +6,7 @@ export function SaveButton(props) {
 
   const { pageMode = '', userAcc = {}, editCreatedBy , } = props;
   const isCreated = (loginUserID() === editCreatedBy)
-debugger
+
   if (pageMode === mode.edit) {
     if ((userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) && (isCreated))) {
       return <UpdateBtn {...props} />
