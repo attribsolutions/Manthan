@@ -6,7 +6,7 @@ import { BreadcrumbReset} from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 
-const BreadcrumbNew = (props) => {
+const BreadcrumbNew = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   // for Excel Download
@@ -32,7 +32,7 @@ const BreadcrumbNew = (props) => {
     pageMode= "",
     downBtnData= [],
   } = breadcrumbDetail;
-  debugger
+  
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
     removeBodyCss();

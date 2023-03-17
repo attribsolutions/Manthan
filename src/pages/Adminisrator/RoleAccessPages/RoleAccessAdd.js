@@ -48,6 +48,7 @@ const RoleAccessAdd = () => {
     const history = useHistory()
     const [userAccState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [editCreatedBy, setEditCreatedBy] = useState('');
     const [tableListData, setTableListData] = useState([])
     const [tableHederList, setTableHederList] = useState([])
     const [showTableOnUI, setShowTableOnUI] = useState(false)
@@ -56,7 +57,7 @@ const RoleAccessAdd = () => {
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState({ value: 0, label: "All Pages" });
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
-
+    
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const location = { ...history.location };
@@ -105,10 +106,11 @@ const RoleAccessAdd = () => {
     useEffect(() => {
         const hasEditVal = history.location.state;
         if (!(hasEditVal === undefined)) {
-            const { rowData = {}, btnMode } = hasEditVal
-            const { Division_id, DivisionName, Role_id, RoleName, Company_id, CompanyName } = rowData;
+            const { rowData = {}, btnmode } = hasEditVal
+            const { Division_id, DivisionName, Role_id, RoleName, Company_id, CompanyName,CreatedBy } = rowData;
             if (Role_id > 0) {
-                setPageMode(btnMode)
+                setPageMode(btnmode)
+                setEditCreatedBy(CreatedBy)
                 dispatch(GO_Button_HandlerForRoleAccessListPage(Role_id, Division_id, Company_id));
                 setShowTableOnUI(true)
                 setRoleDropDown({ label: RoleName, value: Role_id })
@@ -706,6 +708,7 @@ const RoleAccessAdd = () => {
                                                         userAcc={userAccState}
                                                         module={"RoleAccess"}
                                                         onClick={saveHandeller}
+                                                        editCreatedBy={editCreatedBy}
                                                     />
                                                 </Col>
                                             </Row>

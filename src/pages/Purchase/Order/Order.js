@@ -1,5 +1,6 @@
 import {
     Col,
+    CustomInput,
     FormGroup,
     Input,
     Label,
@@ -736,27 +737,38 @@ const Order = (props) => {
 
                 return returnFunc();
             }
+
             const po_JsonBody = {
                 OrderDate: orderdate,
                 OrderAmount: orderAmount,
                 OrderItem: itemArr,
+                Customer: division,
+                Supplier: supplier,
+                OrderType: 1,
+            }
+            const SO_JsonBody = {
+                OrderDate: orderdate,
+                OrderAmount: orderAmount,
+                OrderItem: itemArr,
+                Customer: supplier,// swipe supllier 
+                Supplier: division,// swipe Customer
+                OrderType: 2,
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
                 DemandAmount: orderAmount,
                 DemandItem: itemArr,
+                Customer: division,
+                Supplier: supplier,
+                OrderType: 1,
             }
             const comm_jsonBody = {
                 DeliveryDate: deliverydate,
-                Customer: division,
-                Supplier: supplier,
                 Description: description,
                 BillingAddress: billAddr.value,
                 ShippingAddress: shippAddr.value,
                 OrderNo: 1,
                 FullOrderNumber: "PO0001",
-                OrderType: 1,
-                POType: 1,
                 Division: division,
                 POType: orderTypeSelect.value,
                 POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
@@ -770,11 +782,14 @@ const Order = (props) => {
             let jsonBody;   //json body decleration 
             if (subPageMode === url.IB_ORDER) {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
-            } else {
+            }
+            else if (subPageMode === url.ORDER_4) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...SO_JsonBody });
+            }
+            else {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
             }
             // +*********************************
-
 
             if (pageMode === mode.edit) {
                 dispatch(updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
