@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -164,7 +164,7 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
@@ -522,6 +522,8 @@ const Order = (props) => {
     function Open_Assign_func() {
         setisOpen_assignLink(false)
         dispatch(editPartyItemIDSuccess({ Status: false }));
+        breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
+
         goButtonHandler()
     }
 
@@ -554,17 +556,16 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
-         
-        const config = { editId: supplierSelect.value, btnmode:mode.edit, subPageMode, btnId:`btn-edit-${supplierSelect.value}` }
-        var msg = "Do you confirm your choice?"
+
+        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
+
         const isConfirmed = await CustomAlert({
             Type: 7,
-            Message: msg,
-            RedirectPath: url.ORDER_LIST_1,
+            Message: "Do you confirm your choice?",
         });
         if (isConfirmed) {
             dispatch(GoButton_For_Order_AddSuccess([]))
-            dispatch(editPartyItemID(config ));
+            dispatch(editPartyItemID(config));
         };
     };
 
@@ -1081,7 +1082,7 @@ const Order = (props) => {
                     <PartyItems
                         editValue={assingItemData.Data}
                         masterPath={url.PARTYITEM}
-                        redirectPath={(subPageMode === url.ORDER_1) ? url.ORDER_1 : url.ORDER_2}
+                        redirectPath={subPageMode}
                         isOpenModal={Open_Assign_func}
                         pageMode={mode.assingLink}
                     />

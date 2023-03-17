@@ -32,7 +32,7 @@ const BreadcrumbNew = (props) => {
     pageMode= "",
     downBtnData= [],
   } = breadcrumbDetail;
-
+  debugger
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
     removeBodyCss();

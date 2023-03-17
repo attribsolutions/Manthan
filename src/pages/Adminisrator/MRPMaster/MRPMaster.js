@@ -38,7 +38,7 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturn, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID"
 
 const MRPMaster = (props) => {
@@ -91,7 +91,7 @@ const MRPMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

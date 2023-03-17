@@ -31,7 +31,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
@@ -105,7 +105,7 @@ const BOMMaster = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess])

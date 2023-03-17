@@ -25,7 +25,7 @@ import {
     saveBOMMasterSuccess,
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturn, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID }
     from "../../../components/Common/CommonFunction";
 import {
     editMaterialIssueIdSuccess,
@@ -110,7 +110,7 @@ const ProductionReIssueAdd = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
 
         };
     }, [userAccess]);

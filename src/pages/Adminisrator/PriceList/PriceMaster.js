@@ -32,7 +32,7 @@ import {
     updatePriceList,
     updatePriceListSuccess
 } from "../../../store/Administrator/PriceList/action";
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
@@ -92,7 +92,7 @@ const PriceMaster = (props) => {
         }
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         }
     }, [userAccess]);
 

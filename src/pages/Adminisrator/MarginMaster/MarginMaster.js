@@ -34,7 +34,7 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
-import { breadcrumbReturn, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 const MarginMaster = (props) => {
@@ -84,7 +84,7 @@ const MarginMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({dispatch,userAcc});
+            breadcrumbReturnFunc({dispatch,userAcc});
         };
     }, [userAccess])
 
