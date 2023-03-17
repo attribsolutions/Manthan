@@ -30,10 +30,6 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import {
-    get_Division_ForDropDown,
-    get_Party_ForDropDown,
-} from "../../../store/Administrator/ItemsRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
@@ -42,7 +38,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -120,7 +116,7 @@ const PartySubParty = (props) => {
 
         if (userAcc) {
             setUserPageAccessState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -333,7 +329,7 @@ const PartySubParty = (props) => {
                         Route: i.Route
                     }
 
-                    if ((i.isPartyType === 3) ) {
+                    if ((i.isPartyType === 3)) {
                         return { ...isvendor, ...ramain }
                     }
                     else {
