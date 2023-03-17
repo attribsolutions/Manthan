@@ -171,7 +171,7 @@ import { map } from "leaflet";
 
 // ]
 const isParentLength = 3
-const isRowLength = 40
+const isRowLength = 20
 
 function innerdataFunc(index) {
     return {
