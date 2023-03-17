@@ -27,7 +27,7 @@ import CommonPurchaseList, { countlabelFunc } from "../../../components/Common/C
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import { breadcrumbReturn, btnIsDissablefunc, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import RoleAccessAdd from "./RoleAccessAdd"
 
@@ -57,7 +57,7 @@ const RoleAccessListPage1 = () => {
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc, newBtnPath: url.ROLEACCESS });
+            breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: url.ROLEACCESS });
         }
     }, [userAccess])
 

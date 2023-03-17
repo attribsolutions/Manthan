@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
-import { breadcrumbReturn }
+import { breadcrumbReturnFunc }
     from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
@@ -109,7 +109,7 @@ const CommonPurchaseList = (props) => {
         if (!(userAcc === undefined)) {
 
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc, newBtnPath });
+            breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath });
         }
 
 
