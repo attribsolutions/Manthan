@@ -16,7 +16,7 @@ import Select from "react-select";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturn } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -86,7 +86,7 @@ const ImportMaster = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

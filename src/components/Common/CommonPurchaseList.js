@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbDownBtndata, BreadcrumbShowCountlabel } from "../../store/actions";
-import { breadcrumbReturn }
+import { breadcrumbReturnFunc }
     from "./CommonFunction";
 import { defaultSearch, mySearchProps } from "./SearchBox/MySearch";
 import C_Report from "./C_Report";
@@ -97,7 +97,7 @@ const CommonPurchaseList = (props) => {
         newBtnPath,
         HeaderContent = () => { return null }
     } = props;
-
+    
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const CommonPurchaseList = (props) => {
         if (!(userAcc === undefined)) {
 
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc, newBtnPath });
+            breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath });
         }
 
 
@@ -150,7 +150,7 @@ const CommonPurchaseList = (props) => {
     }, [updateMsg]);
 
     useEffect(() => {
-        
+
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
             goButnFunc();
@@ -218,6 +218,10 @@ const CommonPurchaseList = (props) => {
 
     let sortLabel = ""
     const columns = []
+
+    if (!PageFieldMaster.length > 0) {
+        columns.push({ text: "Page Field Is Blank...", })
+    };
 
     PageFieldMaster.forEach((i, k) => {
         if (i.ShowInListPage) {

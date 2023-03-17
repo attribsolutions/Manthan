@@ -333,7 +333,7 @@ const PartySubParty = (props) => {
                         Route: i.Route
                     }
 
-                    if ((i.isPartyType === 3)) {
+                    if ((i.isPartyType === 3) ) {
                         return { ...isvendor, ...ramain }
                     }
                     else {

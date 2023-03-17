@@ -39,7 +39,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
-import { breadcrumbReturn, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID } from "../../../components/Common/CommonFunction";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -122,7 +122,7 @@ const PageMaster = (props) => {
 
     if (userAcc) {
       setUserAccState(userAcc)
-      breadcrumbReturn({dispatch,userAcc});
+      breadcrumbReturnFunc({dispatch,userAcc});
     };
   }, [userAccess])
 
