@@ -416,28 +416,44 @@ const PartySubParty = (props) => {
 
 
                                                         <Row>
-                                                            <Col sm="4">
-                                                                <FormGroup>
-                                                                    <Label htmlFor="validationCustom01"> {(values.IsRetailerTransfer) ? fieldLabel.SSDD : fieldLabel.SubParty}</Label>
-                                                                    <Select
-                                                                        name="SubParty"
-                                                                        value={values.SubParty}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={PartyDropdown_Options}
-                                                                        onChange={(hasSelect, evn) => {
-                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                            handllerParty(hasSelect)
-                                                                            handller_SSDD(hasSelect)
-                                                                        }}
-                                                                    />
-                                                                    {/* {isError.PartyName.length > 0 && (
+                                                            <Row>
+
+                                                                <Col sm="4">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="validationCustom01"> {(values.IsRetailerTransfer) ? fieldLabel.SSDD : fieldLabel.SubParty}</Label>
+                                                                        <Select
+                                                                            name="SubParty"
+                                                                            value={values.SubParty}
+                                                                            isSearchable={true}
+                                                                            className="react-dropdown"
+                                                                            classNamePrefix="dropdown"
+                                                                            options={PartyDropdown_Options}
+                                                                            onChange={(hasSelect, evn) => {
+                                                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                                handllerParty(hasSelect)
+                                                                                handller_SSDD(hasSelect)
+                                                                            }}
+                                                                        />
+                                                                        {/* {isError.PartyName.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
                                                                     )} */}
-                                                                </FormGroup>
-                                                            </Col>
-                                                            
+                                                                    </FormGroup>
+                                                                </Col>
+                                                                { (values.IsRetailerTransfer)? null:<Col sm={2} style={{ marginTop: '16px' }} >
+                                                                    <Button
+                                                                        type="button"
+                                                                        className=" button_add"
+                                                                        color="btn btn-outline-primary border-2 font-size-12"
+                                                                        onClick={() =>
+                                                                            AddPartyHandler()
+                                                                        }
+                                                                    >
+                                                                        <i className="dripicons-plus"></i>
+                                                                    </Button>
+                                                                </Col>}
+                                                               
+                                                            </Row>
+
                                                             <Row className="mb-3 mt-3">
                                                                 {(values.IsRetailerTransfer) ?
                                                                     <Col sm="4" >
@@ -460,10 +476,11 @@ const PartySubParty = (props) => {
                                                                 )} */}
                                                                         </FormGroup>
                                                                     </Col>
+                                                                    
                                                                     : null
                                                                 }
 
-                                                                <Col sm={2} style={{ marginTop: '16px' }} >
+                                                                {(values.IsRetailerTransfer) ?<Col sm={2} style={{ marginTop: '16px' }} >
                                                                     <Button
                                                                         type="button"
                                                                         className=" button_add"
@@ -474,10 +491,8 @@ const PartySubParty = (props) => {
                                                                     >
                                                                         <i className="dripicons-plus"></i>
                                                                     </Button>
-                                                                </Col>
+                                                                </Col>:null}
                                                             </Row>
-
-
                                                         </Row>
 
                                                         <Row>
