@@ -267,7 +267,7 @@ const OrderList = () => {
                 ToDate: todate,
                 Supplier: loginPartyID(),//Suppiler swipe
                 Customer: supplierSelect.value,//customer swipe
-                OrderType: order_Type.PurchaseOrder,
+                OrderType: order_Type.SaleOrder,
                 IBType: IBType ? IBType : otherState.IBType
             }
             if (subPageMode === url.ORDER_LIST_4) {
@@ -284,14 +284,12 @@ const OrderList = () => {
         let newObj = { ...orderlistFilter }
         newObj.fromdate = date
         setorderlistFilter(newObj)
-        // dispatch(orderlistfilters(newObj))
     }
 
     function todateOnchange(e, date) {
         let newObj = { ...orderlistFilter }
         newObj.todate = date
         setorderlistFilter(newObj)
-        // dispatch(orderlistfilters(newObj))
     }
 
     function supplierOnchange(e) {
@@ -300,11 +298,7 @@ const OrderList = () => {
         setorderlistFilter(newObj)
     }
 
-    function InOutOnchange(e) {
-        let newObj = { ...orderlistFilter }
-        newObj.inOut = e
-        setorderlistFilter(newObj)
-    }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -354,7 +348,7 @@ const OrderList = () => {
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
 
-                                style={{ width: "115px" }}>Supplier Name</Label>
+                                style={{ width: "115px" }}>{subPageMode === url.ORDER_LIST_4 ? "Customer" : "Supplier Name"}</Label>
                             <Col sm="5">
                                 <Select
                                     classNamePrefix="select2-Customer"

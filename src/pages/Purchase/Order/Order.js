@@ -41,6 +41,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { order_Type } from "../../../components/Common/C-Varialbes";
 
 let editVal = {}
 
@@ -744,7 +745,7 @@ const Order = (props) => {
                 OrderItem: itemArr,
                 Customer: division,
                 Supplier: supplier,
-                OrderType: 1,
+                OrderType: order_Type.PurchaseOrder,
             }
             const SO_JsonBody = {
                 OrderDate: orderdate,
@@ -752,7 +753,7 @@ const Order = (props) => {
                 OrderItem: itemArr,
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
-                OrderType: 2,
+                OrderType: order_Type.SaleOrder,
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
@@ -760,7 +761,7 @@ const Order = (props) => {
                 DemandItem: itemArr,
                 Customer: division,
                 Supplier: supplier,
-                OrderType: 1,
+                OrderType:order_Type.PurchaseOrder,
             }
             const comm_jsonBody = {
                 DeliveryDate: deliverydate,
