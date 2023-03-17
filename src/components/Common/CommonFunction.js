@@ -214,7 +214,7 @@ export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++
 }
 
 
-export function breadcrumbReturn({ dispatch, userAcc, newBtnPath = '' }) {
+export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = '' }) {
     const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
     const isCountLabel = (userAcc.CountLabel);
     const isexcelBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_Exceldownload));

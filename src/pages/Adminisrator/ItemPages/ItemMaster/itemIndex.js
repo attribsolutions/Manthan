@@ -45,7 +45,7 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { breadcrumbReturn, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../../components/Common/CommonFunction";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { GeneralMasterSubType, } from "../../../../store/Administrator/GeneralRedux/action";
@@ -166,7 +166,7 @@ const ItemsMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 

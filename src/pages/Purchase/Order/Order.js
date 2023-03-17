@@ -1,5 +1,6 @@
 import {
     Col,
+    CustomInput,
     FormGroup,
     Input,
     Label,
@@ -31,7 +32,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturn, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -164,7 +165,7 @@ const Order = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturn({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc });
             let FindPartyItemAccess = userAccess.find((index) => {
                 return (index.id === pageId.PARTYITEM)
             });
@@ -522,6 +523,8 @@ const Order = (props) => {
     function Open_Assign_func() {
         setisOpen_assignLink(false)
         dispatch(editPartyItemIDSuccess({ Status: false }));
+        breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
+
         goButtonHandler()
     }
 
@@ -554,17 +557,16 @@ const Order = (props) => {
     };
 
     async function assignItem_onClick() {
-         
-        const config = { editId: supplierSelect.value, btnmode:mode.edit, subPageMode, btnId:`btn-edit-${supplierSelect.value}` }
-        var msg = "Do you confirm your choice?"
+
+        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
+
         const isConfirmed = await CustomAlert({
             Type: 7,
-            Message: msg,
-            RedirectPath: url.ORDER_LIST_1,
+            Message: "Do you confirm your choice?",
         });
         if (isConfirmed) {
             dispatch(GoButton_For_Order_AddSuccess([]))
-            dispatch(editPartyItemID(config ));
+            dispatch(editPartyItemID(config));
         };
     };
 
@@ -735,27 +737,38 @@ const Order = (props) => {
 
                 return returnFunc();
             }
+
             const po_JsonBody = {
                 OrderDate: orderdate,
                 OrderAmount: orderAmount,
                 OrderItem: itemArr,
+                Customer: division,
+                Supplier: supplier,
+                OrderType: 1,
+            }
+            const SO_JsonBody = {
+                OrderDate: orderdate,
+                OrderAmount: orderAmount,
+                OrderItem: itemArr,
+                Customer: supplier,// swipe supllier 
+                Supplier: division,// swipe Customer
+                OrderType: 2,
             }
             const IB_JsonBody = {
                 DemandDate: orderdate,
                 DemandAmount: orderAmount,
                 DemandItem: itemArr,
+                Customer: division,
+                Supplier: supplier,
+                OrderType: 1,
             }
             const comm_jsonBody = {
                 DeliveryDate: deliverydate,
-                Customer: division,
-                Supplier: supplier,
                 Description: description,
                 BillingAddress: billAddr.value,
                 ShippingAddress: shippAddr.value,
                 OrderNo: 1,
                 FullOrderNumber: "PO0001",
-                OrderType: 1,
-                POType: 1,
                 Division: division,
                 POType: orderTypeSelect.value,
                 POFromDate: orderTypeSelect.value === 1 ? currentDate : poFromDate,
@@ -769,11 +782,14 @@ const Order = (props) => {
             let jsonBody;   //json body decleration 
             if (subPageMode === url.IB_ORDER) {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
-            } else {
+            }
+            else if (subPageMode === url.ORDER_4) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...SO_JsonBody });
+            }
+            else {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...po_JsonBody });
             }
             // +*********************************
-
 
             if (pageMode === mode.edit) {
                 dispatch(updateOrderIdAction({ jsonBody, updateId: editVal.id, btnId }))
@@ -1081,7 +1097,7 @@ const Order = (props) => {
                     <PartyItems
                         editValue={assingItemData.Data}
                         masterPath={url.PARTYITEM}
-                        redirectPath={(subPageMode === url.ORDER_1) ? url.ORDER_1 : url.ORDER_2}
+                        redirectPath={subPageMode}
                         isOpenModal={Open_Assign_func}
                         pageMode={mode.assingLink}
                     />
