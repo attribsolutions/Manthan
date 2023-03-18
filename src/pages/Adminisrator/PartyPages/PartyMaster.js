@@ -46,7 +46,7 @@ import { getcompanyList } from "../../../store/Administrator/CompanyRedux/action
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-    
+
     const [EditData, setEditData] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(11);
@@ -483,33 +483,7 @@ const PartyMaster = (props) => {
                                                         </span>
                                                         <Row >
                                                             <Col sm={2}>
-                                                                <div>
-                                                                    {
-                                                                        (pageMode === mode.edit) ?
-                                                                            (userPageAccessState.RoleAccess_IsEdit) ?
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
-                                                                                    className="btn btn-success w-md"
-                                                                                >
-                                                                                    <i class="fas fa-edit me-2"></i>Update
-                                                                                </button>
-                                                                                :
-                                                                                null
-                                                                            : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
-                                                                                (userPageAccessState.RoleAccess_IsSave) ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
-                                                                                        className="btn btn-primary w-md"
-                                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                                    </button>
-                                                                                    :
-                                                                                    null
-                                                                            )
-                                                                                : null
-                                                                    }
-                                                                </div>
+
                                                             </Col>
                                                         </Row>
                                                     </NavLink>
@@ -947,6 +921,34 @@ const PartyMaster = (props) => {
                                                 </TabPane>
                                             </TabContent>
                                         </CardBody>
+
+                                        <div style={{marginLeft:"35px",marginBottom:"60px"}}>
+                                            {
+                                                (pageMode === mode.edit) ?
+                                                    (userPageAccessState.RoleAccess_IsEdit) ?
+                                                        <button
+                                                            type="submit"
+                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
+                                                            className="btn btn-success w-md"
+                                                        >
+                                                            <i class="fas fa-edit me-2"></i>Update
+                                                        </button>
+                                                        :
+                                                        null
+                                                    : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
+                                                        (userPageAccessState.RoleAccess_IsSave) ?
+                                                            <button
+                                                                type="submit"
+                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
+                                                                className="btn btn-primary w-md"
+                                                            > <i className="fas fa-save me-2"></i> Save
+                                                            </button>
+                                                            :
+                                                            null
+                                                    )
+                                                        : null
+                                            }
+                                        </div>
                                     </Card>
                                 </Col>
                             </Row>
