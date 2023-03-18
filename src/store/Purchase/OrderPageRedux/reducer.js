@@ -8,6 +8,7 @@ import {
   SAVE_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
+  GET_ORDER_LIST_PAGE,
   // ORDER_ADD_FILTERS,
 } from "./actionType"
 
@@ -20,7 +21,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: {value:'', label:"All"} },
+  orderlistFilter: { fromdate: currentDate, todate: currentDate, venderSelect: { value: '', label: "All" } },
   // orderAddFilter: { orderdate: currentDate, supplierSelect: '' }
 
 }
@@ -76,6 +77,13 @@ const OrderReducer = (state = INIT_STATE, action) => {
         ...state,
         orderList: action.payload,
       }
+    // Order List Clear Previous list 
+    case GET_ORDER_LIST_PAGE:
+      return {
+        ...state,
+        orderList: [],
+      }
+
     default:
       return state
   }
