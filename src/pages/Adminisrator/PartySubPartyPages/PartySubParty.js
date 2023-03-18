@@ -10,7 +10,6 @@ import {
     Input,
     Label,
     Row,
-    Table
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -30,7 +29,11 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { Tbody, Thead } from "react-super-responsive-table";
+import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     comAddPageFieldFunc,
@@ -42,7 +45,7 @@ import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } 
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { Retailer_List, Retailer_List_Success, SSDD_List_under_Company, SSDD_List_under_Company_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PartySubParty = (props) => {
@@ -212,15 +215,18 @@ const PartySubParty = (props) => {
     }, [pageField])
 
     useEffect(() => {
+
         if (values.PartyName.value > 0) {
-            setPartyTableArr(PartySubParty.map(i => ({
+            const newArr = (PartySubParty.map(i => ({
                 value: i.SubParty,
                 label: i.SubPartyName,
                 isPartyType: i.PartyType,
                 Creditlimit: i.Creditlimit,
                 Route: i.Route
-            })));
+            })))
+            setPartyTableArr(newArr)
         }
+
     }, [PartySubParty]);
 
     const PartyDropdown_Options = SSDD_List.map(i => ({
@@ -237,7 +243,6 @@ const PartySubParty = (props) => {
 
     function handllerParty(e) {
         dispatch(getPartySubParty_For_party_dropdown(e.value));
-        // setParty_dropdown_Select(e)
         setState((i) => {
             const a = { ...i }
             a.PartyName = e
@@ -250,7 +255,6 @@ const PartySubParty = (props) => {
     }
 
     function IsRetailerTransfer(e) {
-
         setState((i) => {
             const a = { ...i }
             a.values.IsRetailerTransfer = e.target.checked;
@@ -272,7 +276,6 @@ const PartySubParty = (props) => {
     }
 
     function handllerSub_Party(e) {
-        // setSubParty_dropdown_Select(e)
         setState((i) => {
             const a = { ...i }
             a.values.SubParty = e;
@@ -282,7 +285,6 @@ const PartySubParty = (props) => {
     }
 
     function handller_SSDD(e) {
-
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: e.value,
@@ -291,12 +293,13 @@ const PartySubParty = (props) => {
         dispatch(Retailer_List(jsonBody));
     }
 
-    /// Role Table Validation
+    // Role Table Validation
     function AddPartyHandler() {
-          
+
         const find = partyTableArr.find((element) => {
             return element.value === values.SubParty.value
         });
+        
         if (values.PartyName === '') {
             CustomAlert({
                 Type: 3,
@@ -310,11 +313,9 @@ const PartySubParty = (props) => {
                 Message: msg,
             })
         }
-
         else if (find === undefined) {
             setPartyTableArr([...partyTableArr, values.SubParty]);
         }
-
         else {
             CustomAlert({
                 Type: 3,
@@ -324,12 +325,46 @@ const PartySubParty = (props) => {
     }
 
     // For Delete Button in table
-    function UserRoles_DeleteButton_Handller(tableValue) {
-        setPartyTableArr(partyTableArr.filter(
-            (item) => !(item.value === tableValue)
-        )
-        )
+    function deleteTableSubPartyHandler(tableValue,ss,a) {
+        const newArr = partyTableArr.filter((item) => !(item.value === tableValue))
+        setPartyTableArr(newArr)
     }
+
+    const pagesListColumns = [
+        {
+            text: "SubPartyName",
+            dataField: "label",
+        },
+        {
+            text: "Action ",
+            dataField: "",
+            formatter: (cellContent, Party,k) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Button
+                                    id={"deleteid"}
+                                    type="button"
+                                    className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                    onClick={() => { deleteTableSubPartyHandler(Party.value,Party,k); }}
+                                >
+                                    <i className="mdi mdi-delete font-size-18"></i>
+                                </Button>
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+    ];
+
+    const pageOptions = {
+        sizePerPage: 2,
+        totalSize: partyTableArr.length,
+        custom: true,
+    };
 
     const SaveHandler = async (event) => {
           
@@ -378,8 +413,6 @@ const PartySubParty = (props) => {
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -451,8 +484,6 @@ const PartySubParty = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
-
-
                                                     {(values.IsRetailerTransfer) ?
                                                         <Row className="mb-3">
                                                             <Col sm="4" >
@@ -475,8 +506,6 @@ const PartySubParty = (props) => {
                                                             </Col>
                                                         </Row>
                                                         : null}
-
-
 
                                                     <Row className="">
                                                         <Col sm="4">
@@ -510,7 +539,7 @@ const PartySubParty = (props) => {
                                                             </Button>
                                                         </Col>
                                                     </Row>
-
+                                                    {/* 
                                                     <Row>
                                                         <Col sm={3} style={{ marginTop: '28px', marginRight: "30px" }}>
                                                             {partyTableArr.length > 0 ? (
@@ -530,7 +559,7 @@ const PartySubParty = (props) => {
                                                                                     </td>
                                                                                     <td>
                                                                                         <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                            UserRoles_DeleteButton_Handller(TableValue.value)
+                                                                                            deleteTableSubPartyHandler(TableValue.value)
                                                                                         }} >
                                                                                         </i>
                                                                                     </td>
@@ -544,27 +573,68 @@ const PartySubParty = (props) => {
                                                                 </>
                                                             )}
                                                         </Col>
-                                                    </Row>
-
-
-
-
-                                                    <FormGroup>
-                                                        <Row>
-                                                            <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode}
-                                                                    onClick={SaveHandler}
-                                                                    userAcc={userPageAccessState}
-                                                                    editCreatedBy={editCreatedBy}
-                                                                    module={"PartySubParty"}
-                                                                />
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup >
-
+                                                    </Row> */}
 
                                                 </CardBody>
                                             </Card>
+
+                                            <PaginationProvider
+                                                pagination={paginationFactory(pageOptions)}
+                                            >
+                                                {({ paginationProps, paginationTableProps }) => (
+                                                    <ToolkitProvider
+                                                        keyField="id"
+                                                        data={[...partyTableArr]}
+                                                        columns={pagesListColumns}
+
+                                                        search
+                                                    >
+                                                        {toolkitProps => (
+                                                            <React.Fragment>
+                                                                <div className="table">
+                                                                    <BootstrapTable
+                                                                        keyField={"id"}
+                                                                        bordered={true}
+                                                                        striped={false}
+                                                                        noDataIndication={<div className="text-danger text-center ">SubParty Not available</div>}
+                                                                        classes={"table align-middle table-nowrap table-hover"}
+                                                                        headerWrapperClasses={"thead-light"}
+
+                                                                        {...toolkitProps.baseProps}
+                                                                        {...paginationTableProps}
+                                                                    />
+                                                                    {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                                </div>
+
+                                                                <Row className="align-items-md-center mt-30">
+                                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                        <PaginationListStandalone
+                                                                            {...paginationProps}
+                                                                        />
+                                                                    </Col>
+                                                                </Row>
+                                                            </React.Fragment>
+                                                        )
+                                                        }
+                                                    </ToolkitProvider>
+                                                )
+                                                }
+
+                                            </PaginationProvider>
+
+                                            <FormGroup>
+                                                <Row>
+                                                    <Col sm={2}>
+                                                        <SaveButton pageMode={pageMode}
+                                                            onClick={SaveHandler}
+                                                            userAcc={userPageAccessState}
+                                                            editCreatedBy={editCreatedBy}
+                                                            module={"PartySubParty"}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup >
                                         </Col>
                                     </Row>
                                 </form>
