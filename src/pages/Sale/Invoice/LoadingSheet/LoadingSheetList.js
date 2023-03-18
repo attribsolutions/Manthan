@@ -30,11 +30,12 @@ import { useHistory } from "react-router-dom";
 const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const [headerFilters, setHeaderFilters] = useState('');
+    const subPageMode = history.location.pathname;
 
+    const [headerFilters, setHeaderFilters] = useState('');
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
@@ -49,12 +50,7 @@ const LoadingSheetList = () => {
     );
 
     const { fromdate = currentDate, todate = currentDate } = headerFilters;
-
     const { userAccess, pageField, LoadingSheetlistfilters } = reducers;
-    // const { fromdate, todate } = LoadingSheetlistfilters;
-
-
-    // const page_Id = pageId.LOADING_SHEET_LIST
 
     const action = {
         getList: LoadingSheetListAction,
@@ -67,7 +63,6 @@ const LoadingSheetList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -111,26 +106,15 @@ const LoadingSheetList = () => {
     }
 
     function downBtnFunc(row, downbtnType) {
-      
         console.log(downbtnType)
-        if (downbtnType==="IsMultipleInvoicePrint") {
-            var ReportType =report.invoiceA5 
+        if (downbtnType === "IsMultipleInvoicePrint") {
+            var ReportType = report.invoiceA5
             dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
         } else {
-            var ReportType =report.VanLoadingPartyWiseInvoice 
+            var ReportType = report.VanLoadingPartyWiseInvoice
             dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
         }
-
     }
-
-
-    // function downBtnFunc(row, downbtnType) {
-    //     debugger
-    //     console.log(downbtnType)
-
-    //     var ReportType = report.invoiceA5;
-    //     dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
-    // }
 
     return (
         <React.Fragment>
