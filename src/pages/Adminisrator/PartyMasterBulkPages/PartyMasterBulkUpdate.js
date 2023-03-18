@@ -16,6 +16,7 @@ import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValid,
     initialFiledFunc,
     onChangeSelect,
     resetFunction,
@@ -25,6 +26,7 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
+    loginCompanyID,
     loginPartyID
 } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -42,8 +44,11 @@ import {
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
+    postSelect_Field_for_dropdown,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+
 
 const PartyMasterBulkUpdate = (props) => {
 
@@ -54,7 +59,6 @@ const PartyMasterBulkUpdate = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [RouteSelect, setRouteSelect] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
-    const [PartyName, setPartyName] = useState([]);
 
     const fileds = {
         id: "",
@@ -63,6 +67,9 @@ const PartyMasterBulkUpdate = (props) => {
         SelectField: ""
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [val, setvalue] = useState()
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -78,7 +85,7 @@ const PartyMasterBulkUpdate = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
-        Data: state.CreditLimitReducer.goButtonCreditLimit,
+        Data: state.PartyMasterBulkUpdateReducer.goButton,
         RoutesList: state.RoutesReducer.RoutesList,
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
         SSDD_List: state.CommonAPI_Reducer.SSDD_List,
@@ -154,6 +161,16 @@ const PartyMasterBulkUpdate = (props) => {
     //     }
     // }, [])
 
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 5
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
+    }, []);
+
+
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
@@ -213,28 +230,70 @@ const PartyMasterBulkUpdate = (props) => {
         label: index.Name,
     }));
 
+
     const PartyDropdown_Options = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
-    const goButtonHandler = (event) => {
+    const goButtonHandler = () => {
+        debugger
         const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
+            PartyID: loginPartyID(),
             Route: RouteSelect.value,
+             Type: SelectFieldName.label
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
+    }
+
+    useEffect(async () => {
+        debugger
+        if ((Data.Status === true) && (Data.StatusCode === 200)) {
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
+            if (pageMode === "other") {
+                CustomAlert({
+                    Type: 1,
+                    Message: Data.Message,
+                })
+            }
+        }
+    }, [Data])
+
+    function SelectFieldHandler(event, user) {
+
+        let val = event.label;
+        setvalue(val)
+        setSelectFieldName(val)
+
+    }
+
+    function tableSelectHandler(event, user) {
+
+        //     let val = event.target.value;
+        //     setvalue(val)
+
+        //    if (val === "") {
+        //         user.SelectFieldName = event.target.value;
+        //     }
+        //     else {
+        //         event.target.value = user.SelectFieldName
+        //     }
     }
 
 
     const pagesListColumns = [
         {
-            text: "SubPartyName",
-            dataField: "SubPartyName",
+            text: "SubParty",
+            dataField: "SubParty",
         },
         {
-            text: "Creditlimit",
-            dataField: "Creditlimit",
+            text: val,
+            dataField: val,
+
+        },
+        {
+            text: "New value",
+            dataField: "Newvalue",
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -243,9 +302,9 @@ const PartyMasterBulkUpdate = (props) => {
                                 <Input
                                     id=""
                                     type="text"
-                                    defaultValue={user.Creditlimit}
+                                    defaultValue={user.SelectFieldName}
                                     className="col col-sm text-center"
-                                // onChange={(e) => CreditlimitHandler(e, user)}
+                                    onChange={(e) => tableSelectHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -264,23 +323,27 @@ const PartyMasterBulkUpdate = (props) => {
     const SaveHandler = (event) => {
 
         event.preventDefault();
-        const data = Data.map((index) => ({
-            id: index.id,
-            Party: index.Party,
-            Route: RouteSelect.value,
-            SelectField:SelectField.value
-         
-        }))
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                const jsonBody = JSON.stringify({
 
-        const Find = data.filter((index) => {
-            return !(index.Creditlimit === '')
-        })
-        const jsonBody = JSON.stringify({
-            Data: Find
-        })
+                    Party: loginPartyID(),
+                    Route: RouteSelect.value,
+                    SelectField: SelectFieldName.value
+                });
+                if (pageMode === mode.edit) {
+                    // dispatch(updateGeneralID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
+                }
 
-        dispatch(postParty_Master_Bulk_Update(jsonBody));
-    }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -305,55 +368,59 @@ const PartyMasterBulkUpdate = (props) => {
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
-                                                    
-                                                        <Row>
-                                                            <Col md="4" >
-                                                                <FormGroup className=" row  mt-2" >
-                                                                    <Label className="mt-1"
-                                                                        style={{ width: "110px" }}>SelectField </Label>
-                                                                    <div className="col col-6 sm-1">
-                                                                        <Select
-                                                                            name="SelectField"
-                                                                            value={SelectField}
-                                                                            isSearchable={true}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            options={SelectFieldDropdown_options}
-                                                                            onChange={(e) => { setSelectFieldName(e) }}
-                                                                        />
-                                                                        {isError.SelectField.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
-                                                                        )}
-                                                                    </div>
-                                                                </FormGroup>
-                                                            </Col>
 
-                                                            <Col md="4" >
-                                                                <FormGroup className=" row  mt-2" >
-                                                                    <Label className="mt-1"
-                                                                        style={{ width: "110px" }}>RoutesName </Label>
-                                                                    <div className="col col-6 sm-1">
-                                                                        <Select
-                                                                            name="RoutesName"
-                                                                            value={RouteSelect}
-                                                                            isSearchable={true}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            options={RouteName_Options}
-                                                                            onChange={(e) => { setRouteSelect(e) }}
-                                                                        />
-                                                                        {isError.RoutesName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
-                                                                        )}
-                                                                    </div>
-                                                                </FormGroup>
-                                                            </Col>
+                                                    <Row>
+                                                        <Col md="4" >
+                                                            <FormGroup className=" row  mt-2" >
+                                                                <Label className="mt-1"
+                                                                    style={{ width: "110px" }}>SelectField </Label>
+                                                                <div className="col col-6 sm-1">
+                                                                    <Select
+                                                                        name="SelectField"
+                                                                        value={SelectFieldName}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
+                                                                        options={SelectFieldDropdown_options}
+                                                                        onChange={(e, v) => {
+                                                                            SelectFieldHandler(e, v)
+                                                                            setSelectFieldName(e, v)
+                                                                        }
+                                                                        }
+                                                                    />
+                                                                    {isError.SelectField.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
+                                                                    )}
+                                                                </div>
+                                                            </FormGroup>
+                                                        </Col>
 
-                                                            <Col md="3" >
-                                                                <FormGroup className=" row  mt-2" >
+                                                        <Col md="4" >
+                                                            <FormGroup className=" row  mt-2" >
+                                                                <Label className="mt-1"
+                                                                    style={{ width: "110px" }}>RoutesName </Label>
+                                                                <div className="col col-6 sm-1">
+                                                                    <Select
+                                                                        name="RoutesName"
+                                                                        value={RouteSelect}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
+                                                                        options={RouteName_Options}
+                                                                        onChange={(e) => { setRouteSelect(e) }}
+                                                                    />
+                                                                    {isError.RoutesName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
+                                                                    )}
+                                                                </div>
+                                                            </FormGroup>
+                                                        </Col>
+
+                                                        <Col md="3" >
+                                                            <FormGroup className=" row  mt-2" >
                                                                 <Label htmlFor="validationCustom01" className="mt-1"
-                                                                        style={{ width: "100px" }}>{fieldLabel.PartyName} </Label>
-                                                                    <div className="col col-6 sm-1">
+                                                                    style={{ width: "100px" }}>{fieldLabel.PartyName} </Label>
+                                                                <div className="col col-6 sm-1">
                                                                     <Select
                                                                         name="PartyName"
                                                                         value={values.PartyName}
@@ -365,20 +432,20 @@ const PartyMasterBulkUpdate = (props) => {
                                                                             onChangeSelect({ hasSelect, evn, state, setState, })
                                                                         }}
                                                                     />
-                                                                    </div>
-                                                                    {/* {isError.PartyName.length > 0 && (
+                                                                </div>
+                                                                {/* {isError.PartyName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
                                                                         )} */}
-                                                                </FormGroup>
-                                                            </Col>
+                                                            </FormGroup>
+                                                        </Col>
 
-                                                            <Col sm={1}>
-                                                                <div className="col col-1 mt-2">
-                                                                    < Go_Button onClick={(e) => goButtonHandler()} />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    
+                                                        <Col sm={1}>
+                                                            <div className="col col-1 mt-2">
+                                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -431,6 +498,7 @@ const PartyMasterBulkUpdate = (props) => {
                                         <Row >
                                             <Col sm={2} className="mt-n4">
                                                 <SaveButton pageMode={pageMode}
+                                                    onClick={SaveHandler}
                                                     userAcc={userPageAccessState}
                                                     module={"PartyMasterBulkUpdate"}
                                                 />

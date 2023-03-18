@@ -43,11 +43,11 @@ function* Post_Party_GenratorFunction({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
-function* Post_SelectField_GenratorFunction({ config }) {
+function* Post_SelectField_GenratorFunction({jsonBody}) {
 
     try {
-        const response = yield call(post_SelectFieldAPI, config);
-        yield put(postSelect_Field_for_dropdown_Success(response));
+        const response = yield call(post_SelectFieldAPI, jsonBody);
+        yield put(postSelect_Field_for_dropdown_Success(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
