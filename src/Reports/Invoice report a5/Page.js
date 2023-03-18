@@ -28,7 +28,7 @@ const InvioceReporta5 = (data) => {
     // const array = dataGenrator()
    
     data.forEach((data, islast, array) => {
-        debugger
+          
         pageHeder(doc, data);
         reportBody(doc, data);
         pageFooter(doc, data, islast, array);

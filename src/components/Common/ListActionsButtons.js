@@ -54,8 +54,8 @@ export const listPageActionsButtonFunc = (props) => {
         }
     };
 
-    function downHandler(rowData,btnId) {
-        downBtnFunc(rowData,btnId);
+    function downHandler(rowData,downbtnType) {
+        downBtnFunc(rowData,downbtnType);
     };
 
     
@@ -122,10 +122,12 @@ export const listPageActionsButtonFunc = (props) => {
                                 type="button"
                                 id={`btn-MultiInvoice-${rowData.id}`}
                                 className={makeBtnCss}
-                                title={`MultiInvoice`}
+                                title={`Downlode MultipleInvoices`}
                                 onClick={() => {
                                     const btnId = `btn-MultiInvoice-${rowData.id}`
-                                    downHandler(rowData, btnId)
+                                    const downbtnType = "IsMultipleInvoicePrint"
+                                    downHandler(rowData,downbtnType )
+
                                 
                                 }}
                             >

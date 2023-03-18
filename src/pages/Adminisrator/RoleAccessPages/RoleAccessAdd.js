@@ -336,7 +336,7 @@ const RoleAccessAdd = () => {
     }
 
     const saveHandeller = (event) => {
-        debugger
+          
         event.preventDefault();
         const btnId = event.target.id
         btnIsDissablefunc({ btnId, state: true })
