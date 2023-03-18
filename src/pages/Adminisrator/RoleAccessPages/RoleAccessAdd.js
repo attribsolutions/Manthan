@@ -401,7 +401,7 @@ const RoleAccessAdd = () => {
                 if (isPdfdownload) roleAccessArray2.push({ "PageAccess": 10 });
                 if (isExceldownload) roleAccessArray2.push({ "PageAccess": 11 });
                 if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
-                if (isMultipleInvoicePrint) roleAccessArray.push({ "PageAccess": 13 });
+                if (isMultipleInvoicePrint) roleAccessArray2.push({ "PageAccess": 13 });
 
 
                 let divisionID = division_dropdown_Select.value
