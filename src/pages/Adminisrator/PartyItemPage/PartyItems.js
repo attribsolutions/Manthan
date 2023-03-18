@@ -241,7 +241,7 @@ const PartyItems = (props) => {
             sort: true,
             formatter: (cellContent, row, col, k) => {
 
-                debugger
+                  
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 
                 return (<span >

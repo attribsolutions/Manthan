@@ -31,7 +31,7 @@ const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [headerFilters, setHeaderFilters] = useState('');
- 
+
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
@@ -90,7 +90,7 @@ const LoadingSheetList = () => {
     }, []);
 
     function goButtonHandler() {
-         
+
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -110,17 +110,27 @@ const LoadingSheetList = () => {
         newObj.todate = date
         setHeaderFilters(newObj)
     }
+    function downBtnFunc(row, downbtnType) {
+        debugger
+        console.log(downbtnType)
+        if (downbtnType==="IsMultipleInvoicePrint") {
+            var ReportType =report.invoiceA5 
+            dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
+        } else {
+            var ReportType =report.VanLoadingPartyWiseInvoice 
+            dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
+        }
 
-    function downBtnFunc(row) {
-        var ReportType = report.VanLoadingPartyWiseInvoice;
-        dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
     }
 
 
-    function downBtnFunc(row) {
-        var ReportType = report.invoiceA5;
-        dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
-    }
+    // function downBtnFunc(row, downbtnType) {
+    //     debugger
+    //     console.log(downbtnType)
+
+    //     var ReportType = report.invoiceA5;
+    //     dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
+    // }
 
     return (
         <React.Fragment>

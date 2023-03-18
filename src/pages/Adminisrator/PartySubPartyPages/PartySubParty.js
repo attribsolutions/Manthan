@@ -293,7 +293,7 @@ const PartySubParty = (props) => {
 
     /// Role Table Validation
     function AddPartyHandler() {
-        debugger
+          
         const find = partyTableArr.find((element) => {
             return element.value === values.SubParty.value
         });
@@ -332,7 +332,7 @@ const PartySubParty = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+          
         event.preventDefault();
         const btnId = event.target.id;
 
