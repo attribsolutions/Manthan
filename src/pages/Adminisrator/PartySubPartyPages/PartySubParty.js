@@ -67,7 +67,6 @@ const PartySubParty = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [partyTableArr, setPartyTableArr] = useState([]);
-    const [prePartyTableArr, setPrePartyTableArr] = useState([]);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -225,8 +224,7 @@ const PartySubParty = (props) => {
                 Creditlimit: i.Creditlimit,
                 Route: i.Route
             })))
-            setPartyTableArr(newArr);
-            setPrePartyTableArr(newArr)
+            setPartyTableArr(newArr)
         }
 
     }, [PartySubParty]);
@@ -298,10 +296,10 @@ const PartySubParty = (props) => {
     // Role Table Validation
     function AddPartyHandler() {
 
-        const find = prePartyTableArr.find((element) => {
-
+        const find = partyTableArr.find((element) => {
             return element.value === values.SubParty.value
         });
+        
         if (values.PartyName === '') {
             CustomAlert({
                 Type: 3,
@@ -316,8 +314,7 @@ const PartySubParty = (props) => {
             })
         }
         else if (find === undefined) {
-            setPartyTableArr([...prePartyTableArr, values.SubParty]);
-            setPrePartyTableArr([...prePartyTableArr, values.SubParty]);
+            setPartyTableArr([...partyTableArr, values.SubParty]);
         }
         else {
             CustomAlert({
@@ -328,11 +325,9 @@ const PartySubParty = (props) => {
     }
 
     // For Delete Button in table
-    function deleteTableSubPartyHandler(tableValue) {
-        debugger
-        const newArr = prePartyTableArr.filter((item) => !(item.value === tableValue))
+    function deleteTableSubPartyHandler(tableValue,ss,a) {
+        const newArr = partyTableArr.filter((item) => !(item.value === tableValue))
         setPartyTableArr(newArr)
-        setPrePartyTableArr(newArr)
     }
 
     const pagesListColumns = [
@@ -343,7 +338,7 @@ const PartySubParty = (props) => {
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, Party) => (
+            formatter: (cellContent, Party,k) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -353,7 +348,7 @@ const PartySubParty = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={() => { deleteTableSubPartyHandler(Party.value); }}
+                                    onClick={() => { deleteTableSubPartyHandler(Party.value,Party,k); }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -366,7 +361,7 @@ const PartySubParty = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: 10,
+        sizePerPage: 2,
         totalSize: partyTableArr.length,
         custom: true,
     };
@@ -588,9 +583,8 @@ const PartySubParty = (props) => {
                                             >
                                                 {({ paginationProps, paginationTableProps }) => (
                                                     <ToolkitProvider
-
                                                         keyField="id"
-                                                        data={partyTableArr}
+                                                        data={[...partyTableArr]}
                                                         columns={pagesListColumns}
 
                                                         search
