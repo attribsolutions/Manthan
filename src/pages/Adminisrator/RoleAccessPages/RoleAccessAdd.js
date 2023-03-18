@@ -336,6 +336,7 @@ const RoleAccessAdd = () => {
     }
 
     const saveHandeller = (event) => {
+          
         event.preventDefault();
         const btnId = event.target.id
         btnIsDissablefunc({ btnId, state: true })
@@ -369,6 +370,8 @@ const RoleAccessAdd = () => {
                 var isPdfdownload = document.getElementById("Pdfdownload" + i).checked;
                 var isExceldownload = document.getElementById("Exceldownload" + i).checked;
                 var isCopy = document.getElementById("IsCopy" + i).checked;
+                var isMultipleInvoicePrint = document.getElementById("IsMultipleInvoicePrint" + i).checked;
+
 
 
                 if (listIsShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
@@ -383,6 +386,8 @@ const RoleAccessAdd = () => {
                 if (isPdfdownload) roleAccessArray.push({ "PageAccess": 10 });
                 if (isExceldownload) roleAccessArray.push({ "PageAccess": 11 });
                 if (isCopy) roleAccessArray.push({ "PageAccess": 12 });
+                if (isMultipleInvoicePrint) roleAccessArray.push({ "PageAccess": 13 });
+
 
                 if (addIsShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
                 if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
@@ -396,6 +401,8 @@ const RoleAccessAdd = () => {
                 if (isPdfdownload) roleAccessArray2.push({ "PageAccess": 10 });
                 if (isExceldownload) roleAccessArray2.push({ "PageAccess": 11 });
                 if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
+                if (isMultipleInvoicePrint) roleAccessArray2.push({ "PageAccess": 13 });
+
 
                 let divisionID = division_dropdown_Select.value
 

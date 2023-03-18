@@ -28,7 +28,7 @@ function* save_LoadingSheet_GenFun({ config }) {
 // Post API For Master Page
 
 function* get_LoadingSheet_List_GenFun({filters}) {
-    debugger
+      
   
     try {
         const response = yield call(Loading_Sheet_get_API, filters);

@@ -130,7 +130,7 @@ function* SSDD_List_under_Company_GenFunc() {
 }
 
 function* Retailer_List_GenFunc({ data }) {
-  debugger
+    
   try {
     const response = yield call(Retailer_List_under_Company_PartyAPI, data);
     yield put(Retailer_List_Success(response.Data));
