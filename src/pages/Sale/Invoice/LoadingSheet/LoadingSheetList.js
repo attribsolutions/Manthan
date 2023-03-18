@@ -111,6 +111,11 @@ const LoadingSheetList = () => {
         setHeaderFilters(newObj)
     }
 
+    function downBtnFunc(row) {
+        var ReportType = report.VanLoadingPartyWiseInvoice;
+        dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
+    }
+
 
     function downBtnFunc(row) {
         var ReportType = report.invoiceA5;

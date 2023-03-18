@@ -54,10 +54,11 @@ export const listPageActionsButtonFunc = (props) => {
         }
     };
 
-    function downHandler(rowData) {
-        downBtnFunc(rowData);
+    function downHandler(rowData,btnId) {
+        downBtnFunc(rowData,btnId);
     };
 
+    
     async function deleteHandler(rowData, btnId) {
         if (deleteBodyfunc) {
             const config = { rowData, subPageMode, btnId }
