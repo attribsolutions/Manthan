@@ -336,6 +336,7 @@ const RoleAccessAdd = () => {
     }
 
     const saveHandeller = (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         btnIsDissablefunc({ btnId, state: true })
@@ -369,7 +370,7 @@ const RoleAccessAdd = () => {
                 var isPdfdownload = document.getElementById("Pdfdownload" + i).checked;
                 var isExceldownload = document.getElementById("Exceldownload" + i).checked;
                 var isCopy = document.getElementById("IsCopy" + i).checked;
-                var isMultipleInvoicePrint = document.getElementById("isMultipleInvoicePrint" + i).checked;
+                var isMultipleInvoicePrint = document.getElementById("IsMultipleInvoicePrint" + i).checked;
 
 
 
