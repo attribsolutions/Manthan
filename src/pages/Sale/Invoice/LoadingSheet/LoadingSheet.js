@@ -337,11 +337,9 @@ const LoadingSheet = (props) => {
                 if (pageMode === mode.edit) {
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
-
                 else {
                     dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
                 }
-
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };

@@ -63,7 +63,7 @@ function* Edit_PartySubParty_ID_GenFunc({ config }) {                       //Ed
 
 function* Update_PartySubParty_ID_GenFunc({ config }) {                     //Update API
     try {
-        const response = yield call(PartySubParty_Update_API, config );
+        const response = yield call(PartySubParty_Update_API, config);
         yield put(updatePartySubPartySuccess(response))
     } catch (error) { CommonConsole(error) }
 }
@@ -71,7 +71,11 @@ function* Update_PartySubParty_ID_GenFunc({ config }) {                     //Up
 function* getPartySubPartyGenFunc({ id }) {                                        // get API
     try {
         const response = yield call(PartySubParty_Dropdown_Get_API, id);
-        yield put(getPartySubParty_For_party_dropdownSuccess(response.Data));
+        const newArr = response.Data.map((i, k) => {
+            i.id = k
+            return i
+        })
+        yield put(getPartySubParty_For_party_dropdownSuccess(newArr));
     } catch (error) { CommonConsole(error) }
 }
 
