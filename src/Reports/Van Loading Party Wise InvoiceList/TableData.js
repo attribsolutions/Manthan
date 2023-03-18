@@ -145,12 +145,17 @@ export const Rows1 = (data) => {
 }
 
 
-export const ReportHederRows = (data) => {
+export const ReportHederRows = (data,doc) => {
+    debugger
     const Address = data.PartyDetails.PartyAddress
     const Routes = data.PartyDetails.RouteName
+    const DriverName = data.PartyDetails.DriverName
+    const VehicleNo = data.PartyDetails.VehicleNo
+
     var reportArray = [
         ["Address:", `${Address}`,],
-        ["Routes:", `${Routes}`],
+
+        ["Routes:", `${Routes}                   DriverName:${DriverName}                      Vehicle No:${VehicleNo}     `],
         // [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]
