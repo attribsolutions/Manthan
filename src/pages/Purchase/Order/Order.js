@@ -521,13 +521,7 @@ const Order = (props) => {
         custom: true,
     };
 
-    function Open_Assign_func() {
-        setisOpen_assignLink(false)
-        dispatch(editPartyItemIDSuccess({ Status: false }));
-        breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
 
-        goButtonHandler()
-    }
 
     const goButtonHandler = async () => {
 
@@ -555,6 +549,14 @@ const Order = (props) => {
 
     function supplierOnchange(e) {
         setsupplierSelect(e)
+    };
+
+    function Open_Assign_func() {
+        setisOpen_assignLink(false)
+        dispatch(editPartyItemIDSuccess({ Status: false }));
+        breadcrumbReturnFunc({ dispatch, userAcc: userAccState })
+
+        goButtonHandler()
     };
 
     async function assignItem_onClick() {
@@ -721,13 +723,6 @@ const Order = (props) => {
                     Type: 4,
                     Message: "Please Select PO Type",
                 })
-                // dispatch(AlertState({
-                //     Type: 4,
-                //     Status: true,
-                //     Message: "Please Select PO Type",
-                //     RedirectPath: false,
-                //     AfterResponseAction: false
-                // }));
                 return
             }
             if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
@@ -735,7 +730,6 @@ const Order = (props) => {
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })
-
                 return returnFunc();
             }
 
@@ -761,7 +755,7 @@ const Order = (props) => {
                 DemandItem: itemArr,
                 Customer: division,
                 Supplier: supplier,
-                OrderType:order_Type.PurchaseOrder,
+                OrderType: order_Type.PurchaseOrder,
             }
             const comm_jsonBody = {
                 DeliveryDate: deliverydate,
@@ -810,7 +804,7 @@ const Order = (props) => {
 
                     <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
                         <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
-                            <Col sm="6">{/* Order Date*/}
+                            <Col sm="6">                                              {/* Order Date*/}
                                 <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "115px" }}>Order Date</Label>
@@ -835,29 +829,28 @@ const Order = (props) => {
                             </Col>
 
 
-                            <Col sm="6">{/*Supplier Name */}
-                                <FormGroup className="mb-1 row mt-3 " >
-                                    <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
-                                    <Col sm="6">
-                                        <Select
-                                            value={supplierSelect}
-                                            classNamePrefix="select2-Customer"
-                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                            options={supplierOptions}
-                                            onChange={supplierOnchange}
-                                        />
-                                    </Col>
-                                    <Col sm="1" className="mx-4 ">{/*Go_Button  */}
-                                        {pageMode === mode.defaultsave ?
-                                            (orderItemTable.length === 0) ?
-                                                < Go_Button onClick={(e) => goButtonHandler()} />
-                                                :
-                                                <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
-                                            : null
-                                        }
-                                    </Col>
-                                </FormGroup>
+                            <Col sm="6">                                              {/*Supplier Name And Go_Button*/}                                <FormGroup className="mb-1 row mt-3 " >
+                                <Label className="col-sm-1 p-2"
+                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
+                                <Col sm="6">
+                                    <Select
+                                        value={supplierSelect}
+                                        classNamePrefix="select2-Customer"
+                                        isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                        options={supplierOptions}
+                                        onChange={supplierOnchange}
+                                    />
+                                </Col>
+                                <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
+                                    {pageMode === mode.defaultsave ?
+                                        (orderItemTable.length === 0) ?
+                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            :
+                                            <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
+                                        : null
+                                    }
+                                </Col>
+                            </FormGroup>
                             </Col >
 
                         </div>
@@ -882,7 +875,7 @@ const Order = (props) => {
                             </div >
 
                             {!(subPageMode === url.IB_ORDER) ?
-                                <div className="col col-6" >{/*  Delivery Date field */}
+                                <div className="col col-6" >                            {/*  Delivery Date field */}
                                     <FormGroup className=" row mt-3 " >
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>Delivery Date</Label>
@@ -897,8 +890,6 @@ const Order = (props) => {
                                                 options={{
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    // minDate: pageMode === "edit" ? orderdate : "today",
-
                                                 }}
                                                 onChange={(e, date) => { setdeliverydate(date) }}
                                             />
@@ -909,10 +900,10 @@ const Order = (props) => {
 
                         </div>
 
-                        {subPageMode === url.ORDER_1 ? <div>
-                            <div className="row  ">                                       {/*  Billing Address   and Shipping Address*/}
+                        {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
+                            <div className="row  ">
 
-                                <div className="col col-6">{/* Billing Address */}
+                                <div className="col col-6">                             {/* Billing Address */}
                                     <FormGroup className="row  " >
                                         <Label className=" p-2"
                                             style={{ width: "115px" }}>Billing Address</Label>
@@ -926,7 +917,6 @@ const Order = (props) => {
                                                     control: base => ({
                                                         ...base,
                                                         border: 'non',
-                                                        // backgroundColor: ""
                                                     })
                                                 }}
                                                 onChange={(e) => { setbillAddr(e) }}
@@ -935,7 +925,7 @@ const Order = (props) => {
                                     </FormGroup>
                                 </div >
 
-                                <div className="col col-6">{/*  Billing Shipping Address */}
+                                <div className="col col-6">                               {/*  Billing Shipping Address */}
                                     <FormGroup className=" row " >
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>Shipping Address</Label>
@@ -943,12 +933,10 @@ const Order = (props) => {
                                             <Select
                                                 value={shippAddr}
                                                 classNamePrefix="select2-Customer"
-                                                // isDisabled={pageMode === "edit" ? true : false}
                                                 styles={{
                                                     control: base => ({
                                                         ...base,
                                                         border: 'non',
-                                                        // backgroundColor: ""
                                                     })
                                                 }}
                                                 options={supplierAddress}
