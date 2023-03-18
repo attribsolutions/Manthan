@@ -20,7 +20,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, getGRN_itemMode2_Success, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
@@ -30,11 +30,29 @@ import FeatherIcon from "feather-icons-react";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import * as pageId from "../../../routes/allPageID"
 
 let initialTableData = []
 
-const GRNAdd = (props) => {
+function initialState(history) {
+    debugger
+    let page_Id = '';
+    let listPath = ''
+    let sub_Mode = history.location.pathname;
 
+    if (sub_Mode === url.GRN_ADD) {
+        page_Id = pageId.GRN_ADD;
+        listPath = url.GRN_lIST
+    }
+    else if (sub_Mode === url.GRN_ADD_3) {
+        page_Id = pageId.GRN_ADD_3;
+        listPath = url.GRN_lIST_3
+    }
+    return { page_Id, listPath }
+};
+
+const GRNAdd = (props) => {
+    debugger
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -42,6 +60,8 @@ const GRNAdd = (props) => {
     const [userAccState, setUserAccState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
+    const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
+    const [listPath, setListPath] = useState(() => initialState(history).listPath)
     const [grnDate, setgrnDate] = useState(currentDate);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
@@ -63,10 +83,12 @@ const GRNAdd = (props) => {
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageFieldList,
+        pageField: state.CommonPageFieldReducer.pageField,
     }));
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_id))
         dispatch(getSupplierAddress())
     }, [])
 
@@ -169,7 +191,7 @@ const GRNAdd = (props) => {
                 Message: postMsg.Message,
             })
             if (promise) {
-                history.push({ pathname: url.GRN_lIST })
+                history.push({ pathname: listPath })
             }
 
         } else if (postMsg.Status === true) {
@@ -627,7 +649,7 @@ const GRNAdd = (props) => {
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {
-                dispatch(saveGRNAction({jsonBody,btnId}))
+                dispatch(saveGRNAction({ jsonBody, btnId }))
             }
         } catch (error) { returnFunc() }
     }
