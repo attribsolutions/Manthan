@@ -8,6 +8,8 @@ const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary wa
 const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
 const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
+export const printBtnCss = "badge badge-soft-primary font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
+
 
 
 export const listPageActionsButtonFunc = (props) => {
@@ -116,12 +118,28 @@ export const listPageActionsButtonFunc = (props) => {
                                     className=" fas fa-file-invoice" ></span> </Button>
                             : <div></div>
                     }
+                     {
+                        ((userAccState.RoleAccess_IsPrint)) ?
+                            <Button
+                                type="button"
+                                id={`btn-dounload-${rowData.id}`}
+                                className={downBtnCss}
+                                title={`Download ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnId = `btn-dounload-${rowData.id}`
+                                    downHandler(rowData, btnId)
+                                }}
+                            >
+                                <i className="bx bx-printer font-size-18"></i>
+                            </Button>
+                            : null
+                    }
                     {
                         ( userAccState.RoleAccess_IsMultipleInvoicePrint ) ?
                             < Button
                                 type="button"
                                 id={`btn-MultiInvoice-${rowData.id}`}
-                                className={makeBtnCss}
+                                className={printBtnCss}
                                 title={`Downlode MultipleInvoices`}
                                 onClick={() => {
                                     const btnId = `btn-MultiInvoice-${rowData.id}`
@@ -132,7 +150,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 }}
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span> </Button>
+                                    className=" fas fa-file-download" ></span> </Button>
                             : <div></div>
                     }
                     {
@@ -243,22 +261,7 @@ export const listPageActionsButtonFunc = (props) => {
                             </Button>
                             : null
                     }
-                    {
-                        ((userAccState.RoleAccess_IsPrint)) ?
-                            <Button
-                                type="button"
-                                id={`btn-dounload-${rowData.id}`}
-                                className={downBtnCss}
-                                title={`Download ${ButtonMsgLable}`}
-                                onClick={() => {
-                                    const btnId = `btn-dounload-${rowData.id}`
-                                    downHandler(rowData, btnId)
-                                }}
-                            >
-                                <i className="bx bx-printer font-size-18"></i>
-                            </Button>
-                            : null
-                    }
+                   
 
                 </div >
             )
