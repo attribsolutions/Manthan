@@ -1,1 +1,1 @@
-export const order_Type = { PurchaseOrder: 1, SaleOrder: 2, }
+export const order_Type = { PurchaseOrder: 1, SaleOrder: 2, InvoiceToGRN: 3 }

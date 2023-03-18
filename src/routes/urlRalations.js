@@ -108,7 +108,7 @@ export const CreditLimitList = url.CREDITLIMIT
 export const ImportMaster = url.IMPORT_MASTER_LIST
 export const ImportTypeList = url.IMPORT_MASTER
 
-export const RouteUpdate =url.ROUTE_UPDATE
+export const RouteUpdate = url.ROUTE_UPDATE
 export const PartyMasterBulkUpdate = url.PARTY_MASTER_BULK_UPDATE
 
 //******************************* Purchase Module ************************************//
@@ -148,6 +148,10 @@ export const GRNList = url.GRN_STP
 export const GRN = url.GRN_lIST
 export const GRN_STP = url.GRN_lIST
 
+export const GRNList_3 = url.GRN_STP_3
+export const GRN_3 = url.GRN_lIST_3
+export const GRN_STP_3 = url.GRN_lIST_3
+
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST
 
@@ -168,5 +172,5 @@ export const IB_Invoice_STP = url.IB_ORDER_PO_LIST
 export const InvoiceList = url.INVOICE_1
 export const Invoice = url.INVOICE_LIST_1
 
-export const Loading_Sheet_List =url.LOADING_SHEET
-export const Loading_Sheet =url.LOADING_SHEET_LIST
+export const Loading_Sheet_List = url.LOADING_SHEET
+export const Loading_Sheet = url.LOADING_SHEET_LIST
