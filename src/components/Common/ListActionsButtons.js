@@ -43,7 +43,7 @@ export const listPageActionsButtonFunc = (props) => {
         }
     };
 
-    function copyHandler(rowData, btnmode,btnId) {
+    function copyHandler(rowData, btnmode, btnId) {
         const config = { editId: rowData.id, btnmode, subPageMode, btnId }
         btnIsDissablefunc({ btnId, state: true })
 
@@ -109,6 +109,23 @@ export const listPageActionsButtonFunc = (props) => {
                                 onClick={() => {
                                     const btnId = `btn-makeBtn-${rowData.id}`
                                     makeBtnHandler(rowData, btnId)
+                                }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span> </Button>
+                            : <div></div>
+                    }
+                    {
+                        ( userAccState.RoleAccess_IsMultipleInvoicePrint ) ?
+                            < Button
+                                type="button"
+                                id={`btn-MultiInvoice-${rowData.id}`}
+                                className={makeBtnCss}
+                                title={`MultiInvoice`}
+                                onClick={() => {
+                                    const btnId = `btn-MultiInvoice-${rowData.id}`
+                                    downHandler(rowData, btnId)
+                                
                                 }}
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
