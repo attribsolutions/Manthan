@@ -46,7 +46,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 
-const RoleAccessAdd1 = () => {
+const RoleAccessAdd = () => {
     const dispatch = useDispatch();
     const history = useHistory()
     const [userAccState, setUserAccState] = useState('');
@@ -904,7 +904,7 @@ const InitialCol = [
         dataField: "PageName",
     }
 ]
-const RoleAccessAdd = () => {
+const RoleAccessAdd1 = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()
