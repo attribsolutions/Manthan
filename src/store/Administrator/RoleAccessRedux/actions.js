@@ -22,6 +22,10 @@ import {
   UPDATE_ROLE_ACCESS_lIST_SUCCESS,
   EDIT_ROLE_ACCESS_lIST,
   EDIT_ROLE_ACCESS_lIST_SUCCESS,
+  DELETE_ROLE_ACCESS_MASTER,
+  DELETE_ROLE_ACCESS_MASTER_SUCCESS,
+  SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
+  SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE,
 } from "./actionType";
 
 
@@ -133,3 +137,26 @@ export const updateRoleAcessActionSuccess = (resp) => ({
 });
 
 
+
+export const setTableData_roleAccss_AddPage= (array=[]) => ({
+  type: SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE,
+  array,
+});
+
+
+export const setTableData_roleAccss_AddPageSuccess = (array=[]) => ({
+  type: SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
+  payload: array,
+});
+
+
+export const deleteRoleAcessMasterAction = (id ) => ({
+  type: DELETE_ROLE_ACCESS_MASTER,
+  id,
+});
+
+
+export const deleteRoleAcessMasterActionSuccess = (data) => ({
+  type: DELETE_ROLE_ACCESS_MASTER_SUCCESS,
+  payload: data,
+});

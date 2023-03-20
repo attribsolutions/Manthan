@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
   RoleAccessAdd_AddPage_Button_Api,
   RoleAccessAdd_Delete_Api,
@@ -11,6 +11,7 @@ import {
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   DELETE_ROLE_ACCESS_lIST,
+  DELETE_ROLE_ACCESS_MASTER,
   GET_ROLEACCESS_LIST_PAGE,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
@@ -27,6 +28,8 @@ import {
   saveRoleAccessAddActionSuccess,
   saveCopyRoleAccessActionSuccess,
   DeleteRoleAcessSuccess,
+  deleteRoleAcessMasterActionSuccess,
+  setTableData_roleAccss_AddPageSuccess,
 } from "./actions";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
@@ -50,7 +53,11 @@ function* PageDropdownForRoleAccessList_GenFunc({ id1, id2 }) {
 function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
   try {
     const response = yield call(RoleAccessAdd_GO_Button_Api, id1, id2, id3);
-    yield put(GO_Button_HandlerForRoleAccessListPage_Success(response.Data));
+    const newArray = response.Data.map((i, k) => {
+      i.id = k;
+      return i
+    })
+    yield put(setTableData_roleAccss_AddPageSuccess(newArray));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -82,7 +89,7 @@ function* getList_RoleAccessList_GenFunc() { // get api
 }
 
 
-function* Delete_RoleAccessList_GenFunc({ config}) {// delete Api
+function* Delete_RoleAccessList_GenFunc({ config }) {// delete Api
   try {
     const response = yield call(RoleAccessAdd_Delete_Api, config);
     yield put(DeleteRoleAcessSuccess(response));
@@ -99,6 +106,20 @@ function* saveRoleAccessCopy_GenFun({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
+function* deleteRoleAccessMaster_GenFun({ id, }) {
+  const getState = (state) => state.RoleAccessReducer.deleteState;
+  const tableList = yield select(getState);
+  const newList = tableList.filter((index) => {
+    return (!(index.ID === id))
+  })
+  try {
+    // const response = yield call(RoleAccessCopy_Save_Api, config);
+    yield put(deleteRoleAcessMasterActionSuccess(newList));
+
+  } catch (error) { CommonConsole(error) }
+}
+
+
 
 function* RoleAccessSaga() {
   yield takeEvery(DELETE_ROLE_ACCESS_lIST, Delete_RoleAccessList_GenFunc);
@@ -109,6 +130,7 @@ function* RoleAccessSaga() {
   yield takeEvery(SAVE_ROLE_ACCESS_ADD_ACTION, saveRoleAccessAdd_GenFunc);
   yield takeEvery(SAVE_COPY_ROLE_ACCESS_ACTION, saveRoleAccessCopy_GenFun);
   yield takeEvery(GET_ROLEACCESS_LIST_PAGE, getList_RoleAccessList_GenFunc);
+  yield takeEvery(DELETE_ROLE_ACCESS_MASTER, deleteRoleAccessMaster_GenFun);
 
 }
 

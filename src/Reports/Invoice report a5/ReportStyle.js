@@ -3,6 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { toWords } from "../Report_common_function";
+import { convertDatefunc } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -103,7 +104,8 @@ export const reportHeder3 = (doc, data) => {
     doc.line(408, 40, 408, 16);//vertical right 1
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 23) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
+    var date = convertDatefunc(data.InvoiceDate)
+    doc.text(`Invoice Date: ${date}`, 415, 35) //Invoice date
 
 
 }
