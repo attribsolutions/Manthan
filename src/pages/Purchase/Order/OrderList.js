@@ -235,12 +235,20 @@ const OrderList = () => {
 
                     isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
                     challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
+                     
+                    let isMode = 1                               // define isMode for MakeBtn API
+                    
+                    if (list[0].POType === "Challan") {
+                        isMode = 2
+                    }
+                    else if (subPageMode === url.GRN_STP_3) {
+                        isMode=3
+                    }
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
-                        Mode: list[0].POType === "Challan" ? 2 : 1
+                        Mode: isMode
                     })
-
+                 
                     dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
                 } else {
