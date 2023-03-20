@@ -1,4 +1,5 @@
 import {
+  DELETE_ID_FOR_MASTER_PAGE_SUCCESS,
   DELETE_PARTY_SUB_PARTY_SUCCESS,
   EDIT_PARTY_SUB_PARTY_SUCCESS,
   GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS,
@@ -14,7 +15,8 @@ const INIT_STATE = {
   editData: [],
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
-  PartySubParty: []
+  PartySubParty: [],
+  deleteState:[]
 }
 
 const PartySubPartyReducer = (state = INIT_STATE, action) => {
@@ -50,6 +52,11 @@ const PartySubPartyReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         PartySubParty: action.payload,
+      }
+      case DELETE_ID_FOR_MASTER_PAGE_SUCCESS:
+      return {
+        ...state,
+        deleteState: action.payload,
       }
     default:
       return state
