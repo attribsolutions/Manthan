@@ -15,7 +15,7 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
-import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetCustomer, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { btnIsDissablefunc, CommonConsole, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
@@ -39,7 +39,7 @@ const GRNList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            vender: state.CommonAPI_Reducer.vender,
+            customer: state.CommonAPI_Reducer.customer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -53,7 +53,7 @@ const GRNList = () => {
         })
     );
     const gobtnId = `gobtn-${subPageMode}`
-    const { userAccess, pageField, vender, makeChallan, grnlistFilter } = reducers;
+    const { userAccess, pageField, customer, makeChallan, grnlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
     const action = {
@@ -92,7 +92,7 @@ const GRNList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(GetVender())
+        dispatch(GetCustomer())
         goButtonHandler()
     }, []);
 
@@ -107,7 +107,7 @@ const GRNList = () => {
 
     }, [makeChallan])
 
-    const venderOptions = vender.map((i) => ({
+    const venderOptions = customer.map((i) => ({
         value: i.id,
         label: i.Name,
     }));

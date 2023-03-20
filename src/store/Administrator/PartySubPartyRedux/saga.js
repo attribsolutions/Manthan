@@ -1,5 +1,6 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
+    deleteIDForMasterPageSuccess,
     deletePartySubPartySuccess,
     editPartySubPartySuccess,
     getPartySubPartylistSuccess,
@@ -24,6 +25,7 @@ import {
     GET_PARTY_SUB_PARTY_LIST,
     SAVE_PARTY_SUB_PARTY,
     GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN,
+    DELETE_ID_FOR_MASTER_PAGE,
 
 } from "./actionType"
 
@@ -79,6 +81,32 @@ function* getPartySubPartyGenFunc({ id }) {                                     
     } catch (error) { CommonConsole(error) }
 }
 
+
+
+// function* deletePartySubPartyGenFunc({ id }) {                                        // get API
+//     try {
+//         const response = yield call(PartySubParty_Dropdown_Get_API, id);
+//         const newArr = response.Data.map((i, k) => {
+//             i.id = k
+//             return i
+//         })
+//         yield put(deleteIDForMasterPageSuccess(newArr));
+//     } catch (error) { CommonConsole(error) }
+// }
+
+function* deletePartySubPartyGenFunc({ id }) {
+    debugger
+    const getState = (state) => state.PartySubPartyReducer.PartySubParty;
+    const tableList = yield select(getState);
+    const newList = tableList.filter((index) => {
+        return (!(index.SubParty === id))
+    })
+    try {
+        yield put(getPartySubParty_For_party_dropdownSuccess(newList));
+
+    } catch (error) { CommonConsole(error) }
+}
+
 function* PartySubPartysaga() {
     yield takeEvery(GET_PARTY_SUB_PARTY_LIST, Get_PartySubParty_List_GenFunc)
     yield takeEvery(SAVE_PARTY_SUB_PARTY, Save_Method_ForPartySubParty_GenFun)
@@ -86,6 +114,7 @@ function* PartySubPartysaga() {
     yield takeEvery(UPDATE_PARTY_SUB_PARTY, Update_PartySubParty_ID_GenFunc)
     yield takeEvery(DELETE_PARTY_SUB_PARTY, Delete_PartySubParty_ID_GenFunc)
     yield takeEvery(GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, getPartySubPartyGenFunc)
+    yield takeEvery(DELETE_ID_FOR_MASTER_PAGE, deletePartySubPartyGenFunc)
 }
 
 export default PartySubPartysaga;
