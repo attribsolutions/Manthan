@@ -42,7 +42,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
-import { SaveButton } from "../../../components/Common/CommonButton";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -60,7 +59,6 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState([]);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
     const [PartyPrefix, setPartyPrefix] = useState([]);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -111,7 +109,7 @@ const PartyMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -159,7 +157,6 @@ const PartyMaster = (props) => {
                 setPartyPrefix(hasEditVal.PartyPrefix)
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
                 dispatch(editPartyIDSuccess({ Status: false }));
-                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, []);
@@ -925,22 +922,33 @@ const PartyMaster = (props) => {
                                             </TabContent>
                                         </CardBody>
 
-                                        <div style={{ marginLeft: "35px", marginBottom: "60px" }}>
-                                            <SaveButton
-                                                pageMode={pageMode}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
-                                                editCreatedBy={editCreatedBy}
-                                                module={"PartyMaster"}
-                                            />
+                                        <div style={{marginLeft:"35px",marginBottom:"60px"}}>
+                                            {
+                                                (pageMode === mode.edit) ?
+                                                    (userPageAccessState.RoleAccess_IsEdit) ?
+                                                        <button
+                                                            type="submit"
+                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
+                                                            className="btn btn-success w-md"
+                                                        >
+                                                            <i class="fas fa-edit me-2"></i>Update
+                                                        </button>
+                                                        :
+                                                        null
+                                                    : ((pageMode === mode.defaultsave) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) ? (
+                                                        (userPageAccessState.RoleAccess_IsSave) ?
+                                                            <button
+                                                                type="submit"
+                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
+                                                                className="btn btn-primary w-md"
+                                                            > <i className="fas fa-save me-2"></i> Save
+                                                            </button>
+                                                            :
+                                                            null
+                                                    )
+                                                        : null
+                                            }
                                         </div>
-                                        {/* <Row >
-                                            <Col sm={2}>
-
-
-
-                                            </Col>
-                                        </Row> */}
                                     </Card>
                                 </Col>
                             </Row>
