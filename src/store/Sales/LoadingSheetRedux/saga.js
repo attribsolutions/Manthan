@@ -31,11 +31,12 @@ function* get_LoadingSheet_List_GenFun({filters}) {
       
   
     try {
+        debugger
         const response = yield call(Loading_Sheet_get_API, filters);
         const newList = yield response.Data.map((i) => {
-            var date = convertDatefunc(i.ChallanDate)
-            var time = convertTimefunc(i.CreatedOn)
-            i.ChallanDate = (`${date} ${time}`)
+            var date = convertDatefunc(i.Date)
+            var time = convertTimefunc(i.Date)
+            i.Date = (`${date} ${time}`)
             return i
     })
         yield put(LoadingSheetListActionSuccess(newList));
