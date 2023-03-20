@@ -21,6 +21,7 @@ import {
     updatePartySubParty,
     updatePartySubPartySuccess,
     getPartySubParty_For_party_dropdown,
+    deleteIDForMasterPage,
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
     AlertState,
@@ -325,9 +326,10 @@ const PartySubParty = (props) => {
     }
 
     // For Delete Button in table
-    function deleteTableSubPartyHandler(tableValue,ss,a) {
-        const newArr = partyTableArr.filter((item) => !(item.value === tableValue))
-        setPartyTableArr(newArr)
+    function deleteTableSubPartyHandler(id) {
+        // const newArr = partyTableArr.filter((item) => !(item.value === tableValue))
+        // setPartyTableArr(newArr)
+        dispatch(deleteIDForMasterPage(id))
     }
 
     const pagesListColumns = [
@@ -348,7 +350,7 @@ const PartySubParty = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={() => { deleteTableSubPartyHandler(Party.value,Party,k); }}
+                                    onClick={() => { dispatch(deleteIDForMasterPage(Party.value)) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -361,7 +363,7 @@ const PartySubParty = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: 2,
+        sizePerPage: 8,
         totalSize: partyTableArr.length,
         custom: true,
     };
