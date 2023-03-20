@@ -10,6 +10,8 @@ import {
   SAVE_ROLE_ACCESS_ADD_ACTION_SUCCESS,
   UPDATE_ROLE_ACCESS_lIST_SUCCESS,
   EDIT_ROLE_ACCESS_lIST_SUCCESS,
+  DELETE_ROLE_ACCESS_MASTER_SUCCESS,
+  SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
 } from "./actionType"
 
 
@@ -24,6 +26,8 @@ const INIT_STATE = {
   RoleAccessListPage: [],
   editData: { Status: false },
   updateMsg: { Status: false },
+  AddPageTableDataRedux:[],
+  deleteState:[],
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
@@ -90,6 +94,19 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         ...state,
         updateMsg: action.payload,
       }
+      
+      
+      case SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS:
+        return {
+          ...state,
+          AddPageTableDataRedux: action.payload,
+        }
+
+      case DELETE_ROLE_ACCESS_MASTER_SUCCESS:
+        return {
+          ...state,
+          deleteState: action.payload,
+        }
 
     default:
       return state
