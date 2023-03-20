@@ -31,6 +31,7 @@ import {
     PageDropdownForRoleAccessList_Success,
     saveRoleAccessAddAction,
     saveRoleAccessAddActionSuccess,
+    setTableData_roleAccss_AddPageSuccess,
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
@@ -49,7 +50,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 
 
-const RoleAccessAdd1 = () => {
+const RoleAccessAdd = () => {
     const dispatch = useDispatch();
     const history = useHistory()
     const [userAccState, setUserAccState] = useState('');
@@ -897,7 +898,7 @@ const RoleAccessAdd1 = () => {
     }
 };
 
-const RoleAccessAdd = () => {
+const RoleAccessAdd1 = () => {
     const dispatch = useDispatch();
     const history = useHistory()
 
@@ -949,7 +950,7 @@ const RoleAccessAdd = () => {
         userAccess = [],
         company,
         deleteState,
-        tableDataRedux=[]
+        tableDataRedux = []
     } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
@@ -961,8 +962,8 @@ const RoleAccessAdd = () => {
         addpageDropdownRedux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
         GoButtonRedux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
         postMsg: state.RoleAccessReducer.postMsg,
-        tableDataRedux:state. RoleAccessReducer.AddPageTableDataRedux,
-        
+        tableDataRedux: state.RoleAccessReducer.AddPageTableDataRedux,
+
         userAccess: state.Login.RoleAccessUpdateData,
         company: state.Company.companyList,
         deleteState: state.RoleAccessReducer.deleteState
@@ -1202,21 +1203,16 @@ const RoleAccessAdd = () => {
                 dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
             }
             else if (found) {
-                dispatch(AlertState({
-                    Type: 4, Status: true,
+                CustomAlert({
+                    Type: 4,
                     Message: "Page Alredy Exist",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                }));
-
+                })
             }
             else {
-                dispatch(AlertState({
-                    Type: 4, Status: true,
-                    Message: "Page is Not Select",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                }));
+                CustomAlert({
+                    Type: 4,
+                    Message: "Please Select Page",
+                })
             }
         }
     }
@@ -1228,15 +1224,14 @@ const RoleAccessAdd = () => {
         setShowTableOnUI(false);
         setModule_DropdownSelect('')
         setPage_DropdownSelect('')
-        setTableListData1([])
-        // dispatch(roleAccssTabledataReduxSuccess([]))
+        dispatch(setTableData_roleAccss_AddPageSuccess([]))
     }
     function saveHandeller() { }
 
 
     const TableData = [{ id: 1, Name: 12 }]
     const pageOptions = {
-        sizePerPage: deleteState.length + 1,
+        sizePerPage: tableDataRedux.length + 1,
         // totalSize: TableData.length,
         custom: true,
     };
@@ -1265,7 +1260,7 @@ const RoleAccessAdd = () => {
             {({ paginationProps, paginationTableProps }) => (
                 <ToolkitProvider
                     keyField="id"
-                    data={[...deleteState]}
+                    data={[...tableDataRedux]}
                     columns={[...tableHederList]}
                     search
                 >

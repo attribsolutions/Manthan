@@ -110,11 +110,10 @@ function* deleteRoleAccessMaster_GenFun({ id, }) {
   const getState = (state) => state.RoleAccessReducer.deleteState;
   const tableList = yield select(getState);
   const newList = tableList.filter((index) => {
-    return (!(index.ID === id))
+    return (!(index.id === id))
   })
   try {
-    // const response = yield call(RoleAccessCopy_Save_Api, config);
-    yield put(deleteRoleAcessMasterActionSuccess(newList));
+    yield put(setTableData_roleAccss_AddPageSuccess(newList));
 
   } catch (error) { CommonConsole(error) }
 }
