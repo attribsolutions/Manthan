@@ -218,7 +218,7 @@ const LoadingSheet = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Party: 5,
+            Party:loginPartyID(),
             Route: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
@@ -255,7 +255,7 @@ const LoadingSheet = (props) => {
             dataField: "GrandTotal",
         },
         {
-            text: "Select AlL",
+            text: "Select All",
             dataField: "Check",
             formatter: (cellContent, row, key) => {
 
@@ -304,7 +304,7 @@ const LoadingSheet = (props) => {
         const GrandTotal = CheckArray.reduce((a, v) => a = a + parseFloat(v.GrandTotal), 0)
 
         const LoadingSheetDetails = CheckArray.map((index) => ({
-            Invoice: index.FullInvoiceNumber
+            Invoice: index.id
         }))
 
         try {
@@ -337,11 +337,9 @@ const LoadingSheet = (props) => {
                 if (pageMode === mode.edit) {
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
-
                 else {
                     dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
                 }
-
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };

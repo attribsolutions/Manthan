@@ -15,7 +15,7 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
-import { GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetCustomer, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { btnIsDissablefunc, CommonConsole, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
@@ -25,18 +25,21 @@ import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
+import { GRN } from "../../../helpers/url_helper";
+import GRNAdd from "./GRNAdd";
 
 const GRNList = () => {
+    debugger
     const history = useHistory();
     const dispatch = useDispatch();
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
 
     const reducers = useSelector(
         (state) => ({
-            vender: state.CommonAPI_Reducer.vender,
+            customer: state.CommonAPI_Reducer.customer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -50,7 +53,7 @@ const GRNList = () => {
         })
     );
     const gobtnId = `gobtn-${subPageMode}`
-    const { userAccess, pageField, vender, makeChallan, grnlistFilter } = reducers;
+    const { userAccess, pageField, customer, makeChallan, grnlistFilter } = reducers;
     const { fromdate, todate, venderSelect } = grnlistFilter;
 
     const action = {
@@ -78,11 +81,18 @@ const GRNList = () => {
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
+        else if (subPageMode === url.GRN_lIST_3) {
+            page_Id = pageId.GRN_lIST_3;
+            masterPath = url.GRN_ADD_3;
+            newBtnPath = url.GRN_STP_3;
+            page_Mode = mode.modeSTPList
+            makeBtnShow = true;
+        }
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(GetVender())
+        dispatch(GetCustomer())
         goButtonHandler()
     }, []);
 
@@ -97,7 +107,7 @@ const GRNList = () => {
 
     }, [makeChallan])
 
-    const venderOptions = vender.map((i) => ({
+    const venderOptions = customer.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
@@ -150,76 +160,76 @@ const GRNList = () => {
         dispatch(grnlistfilters(newObj))
     }
 
-    const HeaderContent =()=>{
-        return  <div className="px-2  c_card_filter text-black " >
-        <div className="row">
-            <div className=" row">
-                <Col sm="3" className="">
-                    <FormGroup className="mb- row mt-3 " >
-                        <Label className="col-sm-5 p-2"
-                            style={{ width: "83px" }}>From Date</Label>
-                        <Col sm="7">
-                            <Flatpickr
-                                name='fromdate'
-                                className="form-control d-block p-2 bg-white text-dark"
-                                placeholder="Select..."
-                                value={fromdate}
-                                options={{
-                                    altInput: true,
-                                    altFormat: "d-m-Y",
-                                    dateFormat: "Y-m-d",
-                                }}
-                                onChange={fromdateOnchange}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col>
-                <Col sm="3" className="">
-                    <FormGroup className="mb- row mt-3 " >
-                        <Label className="col-sm-5 p-2"
-                            style={{ width: "65px" }}>To Date</Label>
-                        <Col sm="7">
-                            <Flatpickr
-                                nane='todate'
-                                className="form-control d-block p-2 bg-white text-dark"
-                                value={todate}
-                                placeholder="Select..."
-                                options={{
-                                    altInput: true,
-                                    altFormat: "d-m-Y",
-                                    dateFormat: "Y-m-d",
-                                }}
-                                onChange={todateOnchange}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col>
+    const HeaderContent = () => {
+        return <div className="px-2  c_card_filter text-black " >
+            <div className="row">
+                <div className=" row">
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "83px" }}>From Date</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name='fromdate'
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    value={fromdate}
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={fromdateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "65px" }}>To Date</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    nane='todate'
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    value={todate}
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={todateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
 
-                <Col sm="5">
-                    <FormGroup className="mb-2 row mt-3 " >
-                        <Label className="col-md-4 p-2"
-                            style={{ width: "115px" }}>Supplier Name</Label>
-                        <Col md="5">
-                            <Select
-                                value={venderSelect}
-                                classNamePrefix="select2-Customer"
-                                options={venderOptions}
-                                onChange={venderOnchange}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col >
+                    <Col sm="5">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                style={{ width: "115px" }}>Supplier Name</Label>
+                            <Col md="5">
+                                <Select
+                                    value={venderSelect}
+                                    classNamePrefix="select2-Customer"
+                                    options={venderOptions}
+                                    onChange={venderOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
 
-                <Col sm="1" className="mt-3 ">
-                    <Go_Button
-                        id={gobtnId}
-                        onClick={goButtonHandler}
-                    />
-                </Col>
+                    <Col sm="1" className="mt-3 ">
+                        <Go_Button
+                            id={gobtnId}
+                            onClick={goButtonHandler}
+                        />
+                    </Col>
+                </div>
+
             </div>
-
         </div>
-    </div>
     }
 
     return (
@@ -243,9 +253,10 @@ const GRNList = () => {
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"GRN"}
-                            makeBtnName={"Make Challan"}
+                            // makeBtnName={"Make Challan"}
                             deleteName={"FullGRNNumber"}
-                            MasterModal={Order}
+                            makeBtnName={otherState.makeBtnName}
+                            MasterModal={GRNAdd}
                         />
                         : null
                 }

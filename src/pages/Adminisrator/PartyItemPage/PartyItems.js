@@ -18,9 +18,7 @@ import {
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
-    editGroupIDSuccess,
     getGroupList,
-    updateGroupIDSuccess
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
@@ -59,7 +57,7 @@ const PartyItems = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -147,39 +145,44 @@ const PartyItems = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
             dispatch(SavePartyItemsSuccess({ Status: false }))
             if (pageMode === mode.assingLink) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
                 props.isOpenModal(false)
             }
-            dispatch(SavePartyItemsSuccess({ Status: false }))
-            dispatch(getPartyItemListSuccess([]))
-            dispatch(Breadcrumb_inputName(''))
-
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: postMsg.Message,
-                RedirectPath: url.PARTYITEM_LIST,
-            }))
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.PARTYITEM_LIST })
+            }
+            else {
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                if (promise) { history.push({ pathname: url.PARTYITEM_LIST }) }
+            }
 
         } else if
             (postMsg.Status === true) {
-            dispatch(SavePartyItemsSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: postMsg.Message,
-                RedirectPath: url.PARTYITEM_LIST,
-                AfterResponseAction: false
-            }));
+            CustomAlert({
+                Type: 3,
+                Message: JSON.stringify(postMsg.Message),
+            })
         }
     }, [postMsg])
 
     useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        
+        if (updateMsg.Status === true && updateMsg.StatusCode === 206550 && !modalCss) {
             history.push({
                 pathname: url.PARTYITEM_LIST,
             })
@@ -237,8 +240,8 @@ const PartyItems = (props) => {
             dataField: "itemCheck",
             sort: true,
             formatter: (cellContent, row, col, k) => {
-                 
 
+                  
                 if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 
                 return (<span >
@@ -303,10 +306,9 @@ const PartyItems = (props) => {
                 var PartyData = Find.map((index) => ({
                     Item: index.Item,
                     Party: values.Name.value
-
                 }))
                 const jsonBody = JSON.stringify(PartyData)
-                dispatch(SavePartyItems({jsonBody,btnId}));
+                dispatch(SavePartyItems({ jsonBody, btnId }));
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -419,14 +421,14 @@ const PartyItems = (props) => {
                                 </PaginationProvider>
 
 
-                                {(tableList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                    <SaveButton
-                                        pageMode={pageMode}
-                                        userAcc={userAccState}
-                                        module={"PartyItems"} onClick={SaveHandler}
-                                    />
-                                </div>
-                                    : <div className="row save1"></div>}
+                                {/* {(tableList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}> */}
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    userAcc={userAccState}
+                                    module={"PartyItems"} onClick={SaveHandler}
+                                />
+                                {/* </div> */}
+                                {/* : <div className="row save1"></div>} */}
                             </CardBody>
 
                         </Card>

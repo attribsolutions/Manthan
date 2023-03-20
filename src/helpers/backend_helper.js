@@ -385,9 +385,9 @@ export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, f
 
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
-export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api
+export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE, jsonBody)// Go Button post api
 export const post_PartyAPI = ({ jsonBody, btnId }) => post(url.PARTY_DROPDOWN, jsonBody, btnId)// post api
-export const post_SelectFieldAPI = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
+export const post_SelectFieldAPI = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)// post api
 
 // Order Page api  
 export const OrderPage_GoButton_API = (data) => post(url.ORDER_Edit_API, data)//get api
@@ -506,7 +506,7 @@ export const Make_Inward_Post_API = ({ makeInwardId, btnId }) => get(`${url.MAKE
 
 
 //Report API
-export const MultipleInvoice_API = (data) => post(url.MULTIPLEINVOICE_API, data)//dropdown api
+export const MultipleInvoice_API = (id) => get(`${url.MULTIPLEINVOICE_API}/${id}`)//dropdown api
 export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${id}`)//dropdown api
 
 

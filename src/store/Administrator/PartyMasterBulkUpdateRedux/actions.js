@@ -38,8 +38,9 @@ import {
     payload: resp,
   });
   
-  export const postSelect_Field_for_dropdown = () => ({  // post api for SelectField Dropdown
+  export const postSelect_Field_for_dropdown = (jsonBody) => ({  // post api for SelectField Dropdown
     type: POST_SELECT_FIELD_DROPDOWN,
+    jsonBody,
   });
   
   export const postSelect_Field_for_dropdown_Success = (resp) => ({ // post Success

@@ -200,9 +200,9 @@ export const LOADING_SHEET_LIST = '/LoadingSheetList'
 
 //PartyMasterBulkUpdate
 export const PARTY_DROPDOWN = '/RetailerandSSDD'
-export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/CreditlimitList' // for go button
+export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/PartyWiseUpdate' // for go button
 export const PARTY_MASTER_BULK_UPDATE = '/Creditlimit'
-export const SELECT_FIELD_DROPDOWN = '/RetailerandSSDD'
+export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
 
 
 //******** purchase modal *********************************************************************************************************************** */

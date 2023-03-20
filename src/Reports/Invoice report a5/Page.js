@@ -22,16 +22,22 @@ function pageFooter(doc, data, islast, array) {
     style.pageFooter(doc, data, islast, array);              //page Footer
 }
 
-const InvioceReporta5 = () => {
+const InvioceReporta5 = (data) => {
     //    const data = Data
-    var doc = new jsPDF('l','pt', 'a5');
-    const array = dataGenrator()
-    array.forEach((data, islast, array) => {
+    var doc = new jsPDF('l', 'pt', 'a5');
+    // const array = dataGenrator()
+   
+    data.forEach((data, islast, array) => {
+          
         pageHeder(doc, data);
         reportBody(doc, data);
         pageFooter(doc, data, islast, array);
-        doc.addPage();
+        if (!(array.length - 1 === islast)) {
+            doc.addPage();
+        }
+        
     })
+    // doc.deletePage(1)
     doc.setProperties({
         title: "Report"
     });

@@ -101,7 +101,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     else if ((subPageMode === url.IB_ORDER) || (subPageMode === url.IB_ORDER_PO_LIST)) {
       response = yield call(VendorSupplierCustomer, { "Type": 4, "PartyID": loginPartyID(), "Company": loginCompanyID() });//divisions mode 4
     }
-    else if ((subPageMode === url.ORDER_4) || (subPageMode === url.ORDER_LIST_4)) {
+    else if ((subPageMode === url.ORDER_4) || (subPageMode === url.ORDER_LIST_4) || (url.GRN_STP_3) || (url.GRN_lIST_3)) {
       response = yield call(VendorSupplierCustomer, { "Type": 3, "PartyID": loginPartyID(), "Company": loginCompanyID() });//Customer mode 3
     }
     else if ((subPageMode === url.INVOICE_1) || (subPageMode === url.INVOICE_LIST_1)) {
@@ -129,9 +129,10 @@ function* SSDD_List_under_Company_GenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Retailer_List_GenFunc() {
+function* Retailer_List_GenFunc({ data }) {
+
   try {
-    const response = yield call(Retailer_List_under_Company_PartyAPI, { "Type": 1, "PartyID": loginPartyID(), "CompanyID": loginCompanyID() });
+    const response = yield call(Retailer_List_under_Company_PartyAPI, data);
     yield put(Retailer_List_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }

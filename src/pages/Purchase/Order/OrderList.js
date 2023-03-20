@@ -30,6 +30,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { MetaTags } from "react-meta-tags";
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { makeIB_InvoiceAction } from "../../../store/Sales/Invoice/action";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 
 
 const OrderList = () => {
@@ -37,6 +38,13 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const fileds = {
+        FromDate: currentDate,
+        ToDate: currentDate,
+        Supplier: { value: "", label: "All" }
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
@@ -61,6 +69,9 @@ const OrderList = () => {
     const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, } = orderlistFilter;
     const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     const action = {
         getList: getOrderListPage,
@@ -108,9 +119,6 @@ const OrderList = () => {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
             newBtnPath = url.ORDER_4;
-            // page_Mode = mode.modeSTPsave
-            // makeBtnShow = true;
-            // makeBtnName = "Make Invoice"
         }
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
@@ -125,7 +133,13 @@ const OrderList = () => {
             makeBtnShow = true;
             makeBtnName = "Make GRN"
         }
+        else if (subPageMode === url.GRN_STP_3) {
+            page_Id = pageId.GRN_STP_3
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make GRN"
 
+        }
         dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType })
         setPageMode(page_Mode)
@@ -136,6 +150,13 @@ const OrderList = () => {
         goButtonHandler("event", IBType)
 
     }, []);
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldList
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -152,7 +173,6 @@ const OrderList = () => {
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
-
 
 
     useEffect(() => {
@@ -231,8 +251,8 @@ const OrderList = () => {
     }
 
     function editBodyfunc(config) {
-        const { rowData, btnMode } = config;
-        btnIsDissablefunc({ btnId: gobtnId, state: true })
+        const { rowData, btnId } = config;
+        btnIsDissablefunc({ btnId, state: true })
         try {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
@@ -241,7 +261,7 @@ const OrderList = () => {
                 OrderID: rowData.id
             })
             dispatch(editOrderId({ jsonBody, ...config }));
-        } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: false }) }
+        } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
     }
 
     function downBtnFunc(row) {
@@ -253,44 +273,83 @@ const OrderList = () => {
 
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
-            const filtersBody = JSON.stringify({
-                FromDate: fromdate,
-                ToDate: todate,
-                Supplier: supplierSelect.value,
+            let filtersBody = {}
+            const PO_filters = {
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                Supplier: values.Supplier.value,
                 Customer: loginPartyID(),
                 OrderType: order_Type.PurchaseOrder,
                 IBType: IBType ? IBType : otherState.IBType
-            });
+            }
+            const SO_filters = {
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                Supplier: loginPartyID(),//Suppiler swipe
+                Customer: values.Supplier.value,//customer swipe
+                OrderType: order_Type.SaleOrder,
+                IBType: IBType ? IBType : otherState.IBType
+            }
+            const GRN_STP_3_filters = {
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                Supplier: values.Supplier.value,
+                Customer: loginPartyID(),
+                OrderType: order_Type.InvoiceToGRN,
+                IBType: IBType ? IBType : otherState.IBType
+            }
+            if (subPageMode === url.ORDER_LIST_4) {
+                filtersBody = JSON.stringify(SO_filters);
+            }
+            else if (subPageMode === url.GRN_STP_3) {
+                filtersBody = JSON.stringify(GRN_STP_3_filters);
+            }
+            else {
+                filtersBody = JSON.stringify(PO_filters);
+            }
             dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
 
         } catch (error) { btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...orderlistFilter }
-        newObj.fromdate = date
-        setorderlistFilter(newObj)
-        // dispatch(orderlistfilters(newObj))
+        setState((i) => {
+            const a = { ...i }
+            a.values.FromDate = date;
+            a.hasValid.FromDate.valid = true
+            return a
+        })
+        // let newObj = { ...orderlistFilter }
+        // newObj.fromdate = date
+        // setorderlistFilter(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...orderlistFilter }
-        newObj.todate = date
-        setorderlistFilter(newObj)
-        // dispatch(orderlistfilters(newObj))
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = date;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
+        // let newObj = { ...orderlistFilter }
+        // newObj.todate = date
+        // setorderlistFilter(newObj)
     }
 
     function supplierOnchange(e) {
-        let newObj = { ...orderlistFilter }
-        newObj.supplierSelect = e
-        setorderlistFilter(newObj)
+
+        setState((i) => {
+            const a = { ...i }
+            a.values.Supplier = e;
+            a.hasValid.Supplier.valid = true
+            return a
+        })
+        // let newObj = { ...orderlistFilter }
+        // newObj.supplierSelect = e
+        // setorderlistFilter(newObj)
     }
 
-    function InOutOnchange(e) {
-        let newObj = { ...orderlistFilter }
-        newObj.inOut = e
-        setorderlistFilter(newObj)
-    }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -298,11 +357,11 @@ const OrderList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>From Date</Label>
+                                style={{ width: "83px" }}>{fieldLabel.FromDate}</Label>
                             <Col sm="7">
                                 <Flatpickr
-                                    name='fromdate'
-                                    value={fromdate}
+                                    name='FromDate'
+                                    value={values.FromDate}
                                     className="form-control d-block p-2 bg-white text-dark"
                                     placeholder="Select..."
                                     options={{
@@ -318,11 +377,11 @@ const OrderList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>To Date</Label>
+                                style={{ width: "65px" }}>{fieldLabel.ToDate}</Label>
                             <Col sm="7">
                                 <Flatpickr
-                                    name="todate"
-                                    value={todate}
+                                    name="ToDate"
+                                    value={values.ToDate}
                                     className="form-control d-block p-2 bg-white text-dark"
                                     placeholder="Select..."
                                     options={{
@@ -340,11 +399,12 @@ const OrderList = () => {
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
 
-                                style={{ width: "115px" }}>Supplier Name</Label>
+                                style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
                             <Col sm="5">
                                 <Select
+                                    name="Supplier"
                                     classNamePrefix="select2-Customer"
-                                    value={supplierSelect}
+                                    value={values.Supplier}
                                     options={supplierOptions}
                                     onChange={supplierOnchange}
                                 />

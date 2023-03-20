@@ -8,7 +8,7 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, divisionDropdownSelectSuccess,  getUserDetailsActionSuccess, loginSuccess,
+  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess, loginSuccess,
   logoutUserSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
@@ -19,7 +19,7 @@ import {
   divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall,
   getUserDetails_afterLogin_ApiCall,
   post_SuperAdmin,
-  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List, 
+  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
 import { AlertState } from "../../actions"
 
@@ -53,7 +53,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-  
+
   try {
 
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
@@ -63,10 +63,10 @@ function* afterLoginUserDetails_genFun({ id }) {
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
     localStorage.setItem("CompanyGroup", response.Data.CompanyGroup)
-    if(response.Data.IsSCMCompany){
+    if (response.Data.IsSCMCompany) {
       localStorage.setItem("IsSCMCompany", 1)
     }
-    else{
+    else {
       localStorage.setItem("IsSCMCompany", 0)
     }
     var employee = response.Data.EmployeeID;
@@ -92,12 +92,12 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction({party, employee,company }) {
+function* RoleAccessGenratorFunction({ party, employee, company }) {
 
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url,party, employee,company);
+    const RoleResponse = yield call(RoleAccessApi_url, party, employee, company);
 
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
@@ -135,6 +135,7 @@ function* RoleAccessGenratorFunction({party, employee,company }) {
 
       arrayMain.forEach((i) => {
         i.ModuleData.forEach((index) => {
+          index.ModuleName = i.ModuleName;
           all_DataInSinlgeArray.push(index)
         })
       })
