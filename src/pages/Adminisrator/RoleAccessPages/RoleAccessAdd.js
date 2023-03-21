@@ -897,6 +897,7 @@ const RoleAccessAdd1 = () => {
     }
 };
 
+
 const RoleAccessAdd = () => {
     const dispatch = useDispatch();
     const history = useHistory()
@@ -1034,6 +1035,7 @@ const RoleAccessAdd = () => {
         dispatch(getRole());//for Role  dropdown API
         dispatch(getModuleList())//for Modules  dropdown API
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
+        dispatch(setTableData_roleAccss_AddPageSuccess([]))
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
         dispatch(getcompanyList());
     }, []);
@@ -1279,7 +1281,8 @@ const RoleAccessAdd = () => {
                 let divisionID = division_dropdown_Select.value
 
                 const listRowOBJFunc = () => {
-                    let showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    let showArray = [];
+                    if (showList) showArray = [{ "PageAccess": isShowOnMenu_Id }]
                     return {
                         Role: role_dropdown_Select.value,
                         Company: company_dropdown_Select.value,
@@ -1293,13 +1296,14 @@ const RoleAccessAdd = () => {
                 };
 
                 const addRowOBJFunc = () => {
-                    let showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    let showArray = [];
+                    if (showAdd) showArray = [{ "PageAccess": isShowOnMenu_Id }]
                     return {
                         Role: role_dropdown_Select.value,
                         Company: company_dropdown_Select.value,
                         Division: divisionID === 0 ? '' : divisionID,
                         Modules: i1.ModuleID,
-                        Pages: i1.PageID,
+                        Pages: i1.RelatedPageID,
                         CreatedBy: loginUserID(),
                         UpdatedBy: loginUserID(),
                         RolePageAccess: [...showArray, ...accArray],
@@ -1307,8 +1311,8 @@ const RoleAccessAdd = () => {
                 };
 
                 if (isAccess || showList || showAdd) {
-                    if (showList) jsonArray.push(listRowOBJFunc());
-                    if (showAdd && isrelated) jsonArray.push(addRowOBJFunc());
+                    jsonArray.push(listRowOBJFunc());
+                    if (isrelated) jsonArray.push(addRowOBJFunc());
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
@@ -1321,44 +1325,49 @@ const RoleAccessAdd = () => {
 
     const RoleAccTable = () => {
 
-        return <PaginationProvider pagination={paginationFactory(pageOptions)}>
-            {({ paginationProps, paginationTableProps }) => (
-                <ToolkitProvider
-                    keyField="id"
-                    data={tableDataRedux}
-                    columns={[...tableHederList]}
-                    search
-                >
-                    {(toolkitProps) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            responsive
-                                            bordered={false}
-                                            striped={false}
-                                            classes={"table  table-bordered"}
-                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                            {...toolkitProps.baseProps}
-                                            {...paginationTableProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps,)}
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row className="align-items-md-center mt-30">
-                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                    <PaginationListStandalone {...paginationProps} />
-                                </Col>
-                            </Row>
-                        </React.Fragment>
+        return (
+            <div className='sticky-div1'>
+                <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                    {({ paginationProps, paginationTableProps }) => (
+                        <ToolkitProvider
+                            keyField="id"
+                            data={tableDataRedux}
+                            columns={[...tableHederList]}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    headerClasses="header-class"
+                                                    classes={"table  table-bordered"}
+                                                    noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                    {...toolkitProps.baseProps}
+                                                    {...paginationTableProps}
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps,)}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row className="align-items-md-center mt-30">
+                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                            <PaginationListStandalone {...paginationProps} />
+                                        </Col>
+                                    </Row>
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
                     )}
-                </ToolkitProvider>
-            )}
 
-        </PaginationProvider>
+                </PaginationProvider>
+            </div>
+        )
     }
     let IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
