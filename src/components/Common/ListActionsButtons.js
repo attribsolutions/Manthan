@@ -91,6 +91,8 @@ export const listPageActionsButtonFunc = (props) => {
         hidden:
             (
                 !(userAccState.RoleAccess_IsEdit)
+                && !(userAccState.RoleAccess_IsPrint)
+                && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
                 && !(userAccState.RoleAccess_IsView)
                 && !(userAccState.RoleAccess_IsDelete)
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
