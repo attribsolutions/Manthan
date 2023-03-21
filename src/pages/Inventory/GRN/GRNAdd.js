@@ -35,7 +35,7 @@ import * as pageId from "../../../routes/allPageID"
 let initialTableData = []
 
 function initialState(history) {
-    debugger
+      
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -52,7 +52,7 @@ function initialState(history) {
 };
 
 const GRNAdd = (props) => {
-    debugger
+      
     const dispatch = useDispatch();
     const history = useHistory();
 

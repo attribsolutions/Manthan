@@ -29,7 +29,7 @@ import { GRN } from "../../../helpers/url_helper";
 import GRNAdd from "./GRNAdd";
 
 const GRNList = () => {
-    debugger
+      
     const history = useHistory();
     const dispatch = useDispatch();
 
