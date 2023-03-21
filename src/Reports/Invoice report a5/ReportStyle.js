@@ -203,9 +203,9 @@ export const reportFooter = (doc, data) => {
             lineWidth: 0,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'left',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -221,12 +221,10 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-
             },
             1: {
-                halign: 'right',    //'center' or 'left'
+                halign: 'right',
                 valign: "top",
-
             },
         },
         didParseCell: function (cell, data) {
@@ -236,14 +234,12 @@ export const reportFooter = (doc, data) => {
             if (cell.row.index === 4) {
                 cell.cell.styles.fontSize = 12;
                 cell.cell.styles.lineWidth = 1
-
             }
         },
         startY: 100
     };
     doc.setFontSize(9)
     doc.autoTable(optionsTable4,);
-
 }
 
 export const tableBody = (doc, data) => {
@@ -275,16 +271,16 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'left',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
         },
         bodyStyles: {
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 4,
             fontSize: 7,
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],
@@ -330,8 +326,6 @@ export const tableBody = (doc, data) => {
         tableLineColor: "black",
         startY: doc.previousAutoTable.finalY,// 45,
         // startY:85
-
-
     };
 
 
