@@ -320,12 +320,7 @@ const SidebarContent = (props) => {
               return (
                 <li >
                   <Link to="/#" className="has-arrow">
-                    {item.ModuleName === "Administration" ?  <i className="  fas fa-user-tie"></i>: null}
-                    {item.ModuleName === "Master" ? <FeatherIcon icon="users" /> : null}
-                    {item.ModuleName === "Purchase" ?  <FeatherIcon icon="briefcase" /> : null}
-                    {item.ModuleName === "Inventory" ? <FeatherIcon icon="box" />  : null}
-                    {item.ModuleName === "Sales"?<i className=" fas fa-sort-amount-up-alt"></i>:null }
-
+                    <FeatherIcon icon={item.ModuleIcon} />
                     <span>{props.t(item.ModuleName)}</span>
                   </Link>
                   <ul className="sub-menu">
