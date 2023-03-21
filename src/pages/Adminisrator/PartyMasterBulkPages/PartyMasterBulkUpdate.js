@@ -237,7 +237,7 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const goButtonHandler = () => {
-        debugger
+          
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             Route: RouteSelect.value,
@@ -247,7 +247,7 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     useEffect(async () => {
-        debugger
+          
         if ((Data.Status === true) && (Data.StatusCode === 200)) {
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             if (pageMode === "other") {

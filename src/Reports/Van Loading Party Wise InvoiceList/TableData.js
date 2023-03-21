@@ -154,7 +154,7 @@ export const Rows1 = (data) => {
 
 
 export const ReportHederRows = (doc, data) => {
-    debugger
+      
     const Address = data.PartyDetails.PartyAddress
     const Routes = data.PartyDetails.RouteName
     const DriverName = data.PartyDetails.DriverName
