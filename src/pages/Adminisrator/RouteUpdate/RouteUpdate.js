@@ -21,11 +21,9 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText,
-    resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc,  } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -36,7 +34,6 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
-// import { RouteUpdateList } from "../../../../store/Administrator/RouteUpdateReducer/action";
 
 const RouteUpdate = (props) => {
 

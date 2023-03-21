@@ -25,7 +25,7 @@ import { Change_Button, Go_Button, SaveButton } from "../../../components/Common
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, GoBtnDissable, saveDissable, loginCompanyID, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -203,13 +203,10 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({

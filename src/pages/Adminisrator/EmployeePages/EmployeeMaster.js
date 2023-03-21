@@ -28,7 +28,7 @@ import {
   resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -201,7 +201,6 @@ const AddEmployee = (props) => {
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
-      saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === "other") {

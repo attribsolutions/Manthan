@@ -90,7 +90,8 @@ const ItemsMaster = (props) => {
         isActive: true,
         Tag: '',
         BrandName: [],
-        ShelfLife: ''
+        ShelfLife: '',
+        IsSCM: false
     }
     const initialInValid = ["txtName0", "txtShortName0",]
 
@@ -231,6 +232,7 @@ const ItemsMaster = (props) => {
                     Division: editDivision,
                     BaseUnit: { label: hasEditVal.BaseUnitName, value: hasEditVal.BaseUnitID },
                     isActive: hasEditVal.isActive,
+                    IsSCM:hasEditVal.IsSCM,
                     BrandName: editBrandName
                 }
                 // ====================== Images tab ======================
@@ -354,7 +356,6 @@ const ItemsMaster = (props) => {
                 pathname: url.ITEM_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            //   saveDissable(false);//Update Button Is enable function
             dispatch(updateItemMasterActionSuccess({ Status: false }));
             CustomAlert({
                 Type: 3,
@@ -664,6 +665,7 @@ const ItemsMaster = (props) => {
                     Sequence: formValue.Sequence,
                     BarCode: formValue.BarCode,
                     isActive: formValue.isActive,
+                    IsSCM:formValue.IsSCM,
                     Company: formValue.Company.value,
                     BaseUnitID: formValue.BaseUnit.value,
                     BrandName: ItemBrandName.toString(),
@@ -1185,6 +1187,23 @@ const ItemsMaster = (props) => {
                                                                         </Row>
                                                                     </FormGroup>
 
+
+                                                                    <FormGroup className=" col col-md-4">
+                                                                        <Row className="justify-content-ml-left ">
+                                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                                className="col-md-3 col-form-label" >IsSCM </Label>
+                                                                            <Col md={6} style={{ marginTop: '9px' }} >
+
+                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                        defaultChecked={formValue.IsSCM}
+                                                                                        onChange={(e) => { formValue.IsSCM = e.target.checked }}
+
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </FormGroup>
                                                                 </Row>
 
 

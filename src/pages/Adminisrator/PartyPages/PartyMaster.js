@@ -25,7 +25,6 @@ import { priceListByPartyAction } from "../../../store/Administrator/PriceList/a
 import { getState } from "../../../store/Administrator/EmployeeRedux/action"
 import {
     editPartyIDSuccess,
-    getCompany,
     getDistrictOnState,
     getPriceList,
     postPartyData,
@@ -36,7 +35,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginPartyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc,  loginPartyID, loginUserID } from "../../../components/Common/CommonFunction"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -214,7 +213,6 @@ const PartyMaster = (props) => {
             }
         }
         else if ((PostAPIResponse.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            saveDissable(false);
             dispatch(postPartyDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -228,12 +226,10 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);
             history.push({
                 pathname: url.PARTY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);
             dispatch(updatePartyIDSuccess({ Status: false }));
             dispatch(
                 AlertState({

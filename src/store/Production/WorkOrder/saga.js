@@ -41,7 +41,6 @@ function* Get_BOMList_GenratorFunction({ filters }) {                           
 function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {                                  // GO Botton Post API
   try {
     const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
-    // GoBtnDissable({ id: btnId, state: false })
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
