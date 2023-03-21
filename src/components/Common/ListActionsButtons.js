@@ -96,6 +96,8 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
+            debugger
+
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false
             return (
@@ -118,13 +120,15 @@ export const listPageActionsButtonFunc = (props) => {
                                     className=" fas fa-file-invoice" ></span> </Button>
                             : <div></div>
                     }
+                       
+
                     {
                         ((userAccState.RoleAccess_IsPrint)) ?
                             <Button
                                 type="button"
                                 id={`btn-dounload-${rowData.id}`}
                                 className={downBtnCss}
-                                title={`Download ${ButtonMsgLable}`}
+                                title={` ${ButtonMsgLable}`}
                                 onClick={() => {
                                     const btnId = `btn-dounload-${rowData.id}`
                                     downHandler(rowData, btnId)
@@ -140,7 +144,7 @@ export const listPageActionsButtonFunc = (props) => {
                                 type="button"
                                 id={`btn-MultiInvoice-${rowData.id}`}
                                 className={printBtnCss}
-                                title={`Downlode MultipleInvoices`}
+                                title={`s MultipleInvoices`}
                                 onClick={() => {
                                     const btnId = `btn-MultiInvoice-${rowData.id}`
                                     const downbtnType = "IsMultipleInvoicePrint"

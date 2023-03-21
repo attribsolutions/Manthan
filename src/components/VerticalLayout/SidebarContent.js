@@ -110,7 +110,7 @@ const SidebarContent = (props) => {
       }
     };
     initMenu();
-  }, [props.location.pathname, activateParentDropdown,RoleAccessUpdateData]);
+  }, []);
 
   useEffect(() => {
     ref.current.recalculate();

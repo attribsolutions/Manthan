@@ -3,6 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { toWords } from "../Report_common_function";
+import { convertDatefunc } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -103,7 +104,8 @@ export const reportHeder3 = (doc, data) => {
     doc.line(408, 40, 408, 16);//vertical right 1
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 23) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
+    var date = convertDatefunc(data.InvoiceDate)
+    doc.text(`Invoice Date: ${date}`, 415, 35) //Invoice date
 
 
 }
@@ -201,9 +203,9 @@ export const reportFooter = (doc, data) => {
             lineWidth: 0,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'left',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -219,12 +221,10 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-
             },
             1: {
-                halign: 'right',    //'center' or 'left'
+                halign: 'right',
                 valign: "top",
-
             },
         },
         didParseCell: function (cell, data) {
@@ -234,14 +234,12 @@ export const reportFooter = (doc, data) => {
             if (cell.row.index === 4) {
                 cell.cell.styles.fontSize = 12;
                 cell.cell.styles.lineWidth = 1
-
             }
         },
         startY: 100
     };
     doc.setFontSize(9)
     doc.autoTable(optionsTable4,);
-
 }
 
 export const tableBody = (doc, data) => {
@@ -273,16 +271,16 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'left',
             fillColor: "white",
-            textColor: [0, 0, 0], //Black     
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
         },
         bodyStyles: {
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 4,
             fontSize: 7,
             columnWidth: 'wrap',
             lineColor: [0, 0, 0],
@@ -328,8 +326,6 @@ export const tableBody = (doc, data) => {
         tableLineColor: "black",
         startY: doc.previousAutoTable.finalY,// 45,
         // startY:85
-
-
     };
 
 
