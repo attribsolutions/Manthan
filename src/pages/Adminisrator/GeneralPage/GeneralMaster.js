@@ -38,7 +38,7 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginUserID, saveDissable, loginCompanyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -160,7 +160,6 @@ const GeneralMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveMethodForGeneralSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
-            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
@@ -180,7 +179,6 @@ const GeneralMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//save Button Is enable function
             dispatch(SaveMethodForGeneralSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -194,13 +192,11 @@ const GeneralMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.GENERAL_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//Update Button Is enable function
             dispatch(updateGeneralIDSuccess({ Status: false }));
             dispatch(
                 AlertState({

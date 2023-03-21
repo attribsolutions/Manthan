@@ -142,7 +142,6 @@ const ImportMaster = (props) => {
     //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
     //         dispatch(saveBOMMasterSuccess({ Status: false }))
     //         // setState(() => resetFunction(fileds, state))// Clear form values  
-    //         // saveDissable(false);//save Button Is enable function
     //         dispatch(Breadcrumb_inputName(''))
 
     //         if (pageMode === mode.dropdownAdd) {
@@ -163,7 +162,6 @@ const ImportMaster = (props) => {
     //     }
     //     else if (postMsg.Status === true) {
     //         dispatch(saveBOMMasterSuccess({ Status: false }))
-    //         // saveDissable(false);//save Button Is enable function
     //         dispatch(AlertState({
     //             Type: 4,
     //             Status: true,
@@ -176,7 +174,6 @@ const ImportMaster = (props) => {
 
     // useEffect(() => {
     //     if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-    //         // saveDissable(false);//Update Button Is enable function
     //         // setState(() => resetFunction(fileds, state))// Clear form values  
     //         history.push({
     //             pathname: url.BIllOf_MATERIALS_LIST,
@@ -191,7 +188,6 @@ const ImportMaster = (props) => {
     //         }));
     //     }
     //     else if (updateMsg.Status === true && !modalCss) {
-    //         // saveDissable(false);//Update Button Is enable function
     //         dispatch(updateBOMListSuccess({ Status: false }));
     //         dispatch(
     //             AlertState({
@@ -328,7 +324,6 @@ const ImportMaster = (props) => {
             });
 
 
-            // saveDissable(true);//save Button Is dissable function
 
             // if (pageMode === mode.edit) {
             //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));

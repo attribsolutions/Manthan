@@ -160,7 +160,6 @@ const Challan = (props) => {
             // dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             // dispatch(saveBOMMasterSuccess({ Status: false }))
             // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
 
             // dispatch(AlertState({
             //     Type: 1,
@@ -202,14 +201,10 @@ const Challan = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
-            // dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -590,7 +585,6 @@ const Challan = (props) => {
                 Party: loginPartyID(),
                 Item: values.Item.value
             });
-            GoBtnDissable({ id: goBtnId, state: true })
             dispatch(GoButtonForChallanAdd(jsonBody));
         }
     };

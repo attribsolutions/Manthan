@@ -169,51 +169,6 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
     return convDate
 }
 
-export function saveDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    try {
-        const btn = document.getElementById(id);
-        btn.disabled = state;
-
-        if (state) {
-            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-        } else {
-            btn.innerHTML = `<span> Save</span>`
-            // btn.text = "save"
-        }
-    } catch (e) {
-        // alert("Go btn dissable  error") 
-    }
-}
-export function mainSppinerOnOff(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    try {
-        // document.getElementById("overlay").style.display = state ? "block" : "none";
-        document.getElementById("preloader").style.display = state ? "block" : "none";
-    } catch (e) { alert("button sppiner error") }
-    // try {
-    //     document.getElementById(`${id}`).disabled = state;
-    // } catch (e) {
-    //     // alert("Go btn dissable  error") 
-    // }
-}
-
-export function GoBtnDissable({ id = '', state = false }) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-
-    try {
-        const btn = document.getElementById(id);
-        btn.disabled = state;
-
-        if (state) {
-            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`
-        } else {
-            btn.innerHTML = `<span> Go</span>`
-            btn.text = "Go"
-        }
-    } catch (e) {
-        // alert("Go btn dissable  error") 
-    }
-}
-
-
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = '' }) {
     const isnewBtnView = ((userAcc.PageType === 2) && (userAcc.RoleAccess_IsSave));
     const isCountLabel = (userAcc.CountLabel);
@@ -230,7 +185,6 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = '' }) {
 export function CommonConsole(error) {
     console.log(error);
 }
-
 
 export function btnIsDissablefunc({ btnId, state = false }) {
 
@@ -250,7 +204,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
 export async function CheckAPIResponse({ method, url, response, body, btnId }) {
 
     if (btnId) {
-        await new Promise(r => setTimeout(r, 1000));
+        // await new Promise(r => setTimeout(r, 0));
         btnIsDissablefunc({ btnId, state: false })
     }
 

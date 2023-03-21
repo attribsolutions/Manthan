@@ -354,7 +354,6 @@ const ItemsMaster = (props) => {
                 pathname: url.ITEM_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            //   saveDissable(false);//Update Button Is enable function
             dispatch(updateItemMasterActionSuccess({ Status: false }));
             CustomAlert({
                 Type: 3,

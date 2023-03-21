@@ -26,8 +26,6 @@ import {
     breadcrumbReturnFunc,
     loginUserID,
     currentDate,
-    GoBtnDissable,
-    saveDissable,
     loginCompanyID,
     loginPartyID,
     btnIsDissablefunc
@@ -397,7 +395,6 @@ const WorkOrder = (props) => {
             Quantity: parseFloat(values.Quantity),
             Party: loginPartyID()
         });
-        // GoBtnDissable({ id: goBtnID1, state: true })
         dispatch(postGoButtonForWorkOrder_Master(jsonBody, goBtnID1));
     }
 
@@ -428,52 +425,17 @@ const WorkOrder = (props) => {
                     WorkOrderItems: WorkOrderItems
                 });
                 if (pageMode === mode.edit) {
-                    GoBtnDissable({ id: updateBtnID1, state: true })
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
                     
-                    GoBtnDissable({ id: saveBtnID1, state: true })
                     dispatch(SaveWorkOrderMaster({ jsonBody, btnId }));
                 }
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    // const SaveHandler = (event) => {
-    //     event.preventDefault();
-
-    //     const WorkOrderItems = BOMItems.map((index) => ({
-    //         Item: index.Item,
-    //         Unit: index.Unit,
-    //         BomQuantity: index.BomQuantity,
-    //         Quantity: index.Quantity,
-    //     }))
-    //     const jsonBody = JSON.stringify({
-    //         WorkOrderDate: values.WorkOrderDate,
-    //         Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
-    //         Bom: (pageMode === mode.edit ? id : values.ItemName.value),
-    //         Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
-    //         NumberOfLot: values.NumberOfLot,
-    //         Quantity: parseFloat(values.Quantity).toFixed(3),
-    //         Company: loginCompanyID(),
-    //         Party: loginPartyID(),
-    //         CreatedBy: loginUserID(),
-    //         UpdatedBy: loginUserID(),
-    //         WorkOrderItems: WorkOrderItems
-    //     });
-
-    //     // saveDissable(true);//save Button Is dissable function
-    //     if (pageMode === mode.edit) {
-    //         GoBtnDissable({ id: updateBtnID1, state: true })
-    //         dispatch(updateWorkOrderList(jsonBody, EditData.id, updateBtnID1));
-    //     }
-    //     else {
-    //         GoBtnDissable({ id: saveBtnID1, state: true })
-    //         dispatch(SaveWorkOrderMaster(jsonBody, saveBtnID1));
-    //     }
-    // };
-
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>

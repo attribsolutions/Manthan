@@ -201,15 +201,6 @@ const ProductionReIssueAdd = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Save_Production_ReIssueSuccess({ Status: false }))
             setGoButtonList([])
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
-
-            // dispatch(AlertState({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: "Item is out of stock",
-            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
-            // }))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
@@ -229,7 +220,6 @@ const ProductionReIssueAdd = (props) => {
         else if (postMsg.Status === true) {
 
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
             dispatch(saveBOMMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -245,13 +235,10 @@ const ProductionReIssueAdd = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: url.MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            // saveDissable(false);//Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
