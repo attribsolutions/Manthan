@@ -1276,13 +1276,14 @@ const RoleAccessAdd = () => {
                 let showAdd = i1.RoleAccess_IsShowOnMenuForMaster > 0
                 let isAccess = accArray.length > 0;
                 let isrelated = i1.RelatedPageID > 0;
+                let divisionID = division_dropdown_Select.value
 
                 const listRowOBJFunc = () => {
                     let showArray = [{ "PageAccess": isShowOnMenu_Id }]
                     return {
                         Role: role_dropdown_Select.value,
                         Company: company_dropdown_Select.value,
-                        Division: division_dropdown_Select.value,
+                        Division: divisionID === 0 ? '' : divisionID,
                         Modules: i1.ModuleID,
                         Pages: i1.PageID,
                         CreatedBy: loginUserID(),
@@ -1296,7 +1297,7 @@ const RoleAccessAdd = () => {
                     return {
                         Role: role_dropdown_Select.value,
                         Company: company_dropdown_Select.value,
-                        Division: division_dropdown_Select.value,
+                        Division: divisionID === 0 ? '' : divisionID,
                         Modules: i1.ModuleID,
                         Pages: i1.PageID,
                         CreatedBy: loginUserID(),
@@ -1365,7 +1366,7 @@ const RoleAccessAdd = () => {
 
 
     return <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content" >
             <MetaTags> <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <Container fluid>
                 <CardBody >
