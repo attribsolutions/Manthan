@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap"
 import { loginUserDetails } from "../Common/CommonFunction"
 
 const Footer = () => {
-  debugger
+
   let FooterDetails = loginUserDetails()
 
   return (
