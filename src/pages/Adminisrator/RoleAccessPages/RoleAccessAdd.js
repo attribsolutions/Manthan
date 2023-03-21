@@ -23,14 +23,14 @@ import { MetaTags } from "react-meta-tags";
 import {
     AddPageHandlerForRoleAccessListPage,
     deleteRoleAcessMasterAction,
-    deleteRoleAcessMasterActionSuccess,
     getPageAccess_DropDown_API,
-    GO_Button_HandlerForRoleAccessListPage,
-    GO_Button_HandlerForRoleAccessListPage_Success,
+    GO_Button_RoleAccess_AddPage_Action,
+    IscheckRoleAcessMasterAction,
     PageDropdownForRoleAccessList,
     PageDropdownForRoleAccessList_Success,
     saveRoleAccessAddAction,
     saveRoleAccessAddActionSuccess,
+    setTableData_roleAccss_AddPageSuccess,
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
@@ -117,7 +117,7 @@ const RoleAccessAdd1 = () => {
             if (Role_id > 0) {
                 setPageMode(btnmode)
                 setEditCreatedBy(CreatedBy)
-                dispatch(GO_Button_HandlerForRoleAccessListPage(Role_id, Division_id, Company_id));
+                dispatch(GO_Button_RoleAccess_AddPage_Action(Role_id, Division_id, Company_id));
                 setShowTableOnUI(true)
                 setRoleDropDown({ label: RoleName, value: Role_id })
                 setCompany_dropdown_Select({ label: CompanyName, value: Company_id })
@@ -127,7 +127,7 @@ const RoleAccessAdd1 = () => {
     }, [])
 
     useEffect(() => {
-        dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
+        // dispatch(GO_Button_RoleAccess_AddPage_Action_Success([]))
         dispatch(getPartyListAPI());//for division dropdown API
         dispatch(getRole());//for Role  dropdown API
         dispatch(getModuleList())//for Modules  dropdown API
@@ -278,7 +278,7 @@ const RoleAccessAdd1 = () => {
             division = 0
         }
         if (role > 0) {
-            dispatch(GO_Button_HandlerForRoleAccessListPage(role, division, company));
+            dispatch(GO_Button_RoleAccess_AddPage_Action(role, division, company));
             setShowTableOnUI(true)
         }
         else if (role === undefined) {
@@ -905,12 +905,33 @@ const RoleAccessAdd = () => {
         {
             text: "Action",
             dataField: "",
-            formatter: (cellContent, user) => (
-                <div style={{ justifyContent: 'center' }} >
-                    <Button className={deltBtnCss}> <i className="mdi mdi-delete font-size-18 text-danger text-right"
-                        onClick={() => { DeleteRolePage_Handler(user.ID) }}></i></Button>
-                </div>
-            )
+            formatter: (cellContent, user) => {
+                const btnId = `roleAccDelete-${user.id}`
+                const config = { btnId, deleteId: user.id }
+                return (
+                    <div style={{ justifyContent: 'center' }} >
+                        <Button className={deltBtnCss} id={btnId}> <i className="mdi mdi-delete font-size-18 text-danger text-right"
+                            onClick={() => { DeleteRolePage_Handler({ ...config }) }}></i></Button>
+                    </div>
+                )
+            },
+            style: (cell, row) => {
+                if (row) {
+                    return {
+                        position: "sticky",
+                        left: "0",
+                        backgroundColor: "white"
+                    };
+                }
+
+            },
+            headerStyle: {
+                position: "sticky",
+                left: "0",
+                backgroundColor: "white"
+
+            },
+
         },
         {
             text: "Module Name",
@@ -919,13 +940,26 @@ const RoleAccessAdd = () => {
         {
             text: "PageName",
             dataField: "PageName",
+            style: (cell, row, rowIndex, colIndex) => {
+                if (colIndex) {
+                    return {
+                        position: "sticky",
+                        left: "1.7cm",
+                        backgroundColor: "white"
+                    };
+                }
+            },
+            headerStyle: {
+                position: "sticky",
+                left: "1.7cm",
+                backgroundColor: "white"
+            },
         }
     ]
 
     const [userAccState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [editCreatedBy, setEditCreatedBy] = useState('');
-    const [tableDataRedux1, setTableListData1] = useState([])
     const [tableHederList, setTableHederList] = useState(InitialCol)
     const [showTableOnUI, setShowTableOnUI] = useState(false)
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "Select...", value: 0 });
@@ -941,15 +975,12 @@ const RoleAccessAdd = () => {
         PageAccess = [],
         ModuleData,
         PageDropdownRedux,
-        addpageDropdownRedux,
-        GoButtonRedux,
         postMsg,
         Roles,
         partyList,
         userAccess = [],
         company,
-        deleteState,
-        tableDataRedux=[]
+        tableDataRedux = []
     } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
@@ -958,14 +989,10 @@ const RoleAccessAdd = () => {
         ModuleData: state.Modules.modulesList,
         PageAccess: state.H_Pages.PageAccess,
         PageDropdownRedux: state.RoleAccessReducer.PageDropdownForRoleAccess,
-        addpageDropdownRedux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
-        GoButtonRedux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
         postMsg: state.RoleAccessReducer.postMsg,
-        tableDataRedux:state. RoleAccessReducer.AddPageTableDataRedux,
-        
+        tableDataRedux: state.RoleAccessReducer.AddPageTableDataRedux,
         userAccess: state.Login.RoleAccessUpdateData,
         company: state.Company.companyList,
-        deleteState: state.RoleAccessReducer.deleteState
 
     }));
 
@@ -993,7 +1020,7 @@ const RoleAccessAdd = () => {
             if (Role_id > 0) {
                 setPageMode(btnmode)
                 setEditCreatedBy(CreatedBy)
-                dispatch(GO_Button_HandlerForRoleAccessListPage(Role_id, Division_id, Company_id));
+                dispatch(GO_Button_RoleAccess_AddPage_Action(Role_id, Division_id, Company_id));
                 setShowTableOnUI(true)
                 setRoleDropDown({ label: RoleName, value: Role_id })
                 setCompany_dropdown_Select({ label: CompanyName, value: Company_id })
@@ -1003,7 +1030,6 @@ const RoleAccessAdd = () => {
     }, [])
 
     useEffect(() => {
-        dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         dispatch(getPartyListAPI());//for division dropdown API
         dispatch(getRole());//for Role  dropdown API
         dispatch(getModuleList())//for Modules  dropdown API
@@ -1013,70 +1039,57 @@ const RoleAccessAdd = () => {
     }, []);
 
 
-
-
-    useEffect(() => {
-        var Array = []
-        var eleList = {}
-        let NewID = deleteState.length + 1
-        let previousData = [...deleteState]
-
-        let indexdata = addpageDropdownRedux[0]
-
-        if (!(indexdata === undefined)) {
-            eleList = indexdata
-            eleList["id"] = NewID;
-            Array.push(eleList)
-            previousData = previousData.concat(Array)
-            dispatch(deleteRoleAcessMasterActionSuccess([...previousData]))
-
-        }
-
-    }, [addpageDropdownRedux])
-
-
     useEffect(() => {
 
         const NewColoumList = []
         PageAccess.map((i) => {
-            const coln = {
-                text: i.Name,
-                dataField: `RoleAccess_${i.Name}`,
-                formatter: (cellContent, user) => (
-                    <>
-                        <div style={{ justifyContent: 'center' }} >
 
-                            <Col>
-                                <FormGroup className=" col col-sm-4 ">
-                                    <Input
-                                        id=""
-                                        type="checkbox"
-                                        defaultChecked={cellContent}
-                                        className="col col-sm text-end"
-                                    // onChange={(e) => CurrentGSTPercentageHandler(e, user)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </div>
-                    </>
-                )
+            function columnFunc(text, checkShow, ischeck) {
+                return {
+                    text: text,
+                    dataField: ischeck,
+
+                    formatter: (cellContent, user) => {
+                        if (!(user[checkShow] > 0)) return null
+                        return (
+                            <div style={{ justifyContent: 'center' }} >
+                                <Col>
+                                    <FormGroup className=" col col-sm-4 ">
+                                        <Input
+                                            id=""
+                                            key={user.PageID}
+                                            type="checkbox"
+                                            defaultChecked={user[ischeck]}
+                                            className="col col-sm text-end"
+                                            onChange={(e) => {
+                                                dispatch(IscheckRoleAcessMasterAction(user.id, ischeck, e.target.checked))
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </div>
+                        )
+                    }
+                }
             }
 
+            let checkShow = `PageAccess_${i.Name}`;
             if (i.Name === "IsShowOnMenu") {
-                let add = { ...coln }
-                add.text = "ShowAdd";
-                add.dataField = "RoleAccess_IsShowOnMenuForMaster";
-                NewColoumList.push(add);
+                let textList = "ShowList";
+                let textAdd = "ShowAdd";
+                let ischeckList = "RoleAccess_IsShowOnMenuForList"
+                let ischeckAdd = "RoleAccess_IsShowOnMenuForMaster";
 
-                let list = { ...coln }
-                list.text = "ShowList";
-                list.dataField = "RoleAccess_IsShowOnMenuForList";
-                NewColoumList.push(list)
+                let colnObj2 = columnFunc(textList, checkShow, ischeckList);
+                let colnObj1 = columnFunc(textAdd, checkShow, ischeckAdd);
+
+                NewColoumList.push(colnObj1);
+                NewColoumList.push(colnObj2);
             } else {
-                NewColoumList.push(coln)
+                let ischeckAdd = `RoleAccess_${i.Name}`;
+                let colnObj3 = columnFunc(i.Name, checkShow, ischeckAdd)
+                NewColoumList.push(colnObj3)
             }
-
-
         })
         const a = [...InitialCol, ...NewColoumList]
         setTableHederList(a)
@@ -1165,17 +1178,14 @@ const RoleAccessAdd = () => {
             division = 0
         }
         if (role > 0) {
-            dispatch(GO_Button_HandlerForRoleAccessListPage(role, division, company));
+            dispatch(GO_Button_RoleAccess_AddPage_Action(role, division, company));
             setShowTableOnUI(true)
         }
         else if (role === undefined) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please Select Role",
-                })
-            );
+            CustomAlert({
+                Type: 4,
+                Message: "Please Select Role",
+            })
 
         }
     }
@@ -1202,70 +1212,120 @@ const RoleAccessAdd = () => {
                 dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
             }
             else if (found) {
-                dispatch(AlertState({
-                    Type: 4, Status: true,
+                CustomAlert({
+                    Type: 4,
                     Message: "Page Alredy Exist",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                }));
-
+                })
             }
             else {
-                dispatch(AlertState({
-                    Type: 4, Status: true,
-                    Message: "Page is Not Select",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                }));
+                CustomAlert({
+                    Type: 4,
+                    Message: "Please Select Page",
+                })
             }
         }
     }
 
-    function DeleteRolePage_Handler(id) {
-        dispatch(deleteRoleAcessMasterAction(id, deleteState))
+    function DeleteRolePage_Handler(config) {
+        const { btnId } = config;
+        btnIsDissablefunc({ btnId, state: false })
+        dispatch(deleteRoleAcessMasterAction(config))
     }
     function ChangeButtonHandeler() {
         setShowTableOnUI(false);
         setModule_DropdownSelect('')
         setPage_DropdownSelect('')
-        setTableListData1([])
-        // dispatch(roleAccssTabledataReduxSuccess([]))
+        dispatch(setTableData_roleAccss_AddPageSuccess([]))
     }
-    function saveHandeller() { }
 
 
-    const TableData = [{ id: 1, Name: 12 }]
     const pageOptions = {
-        sizePerPage: deleteState.length + 1,
+        sizePerPage: tableDataRedux.length + 1,
         // totalSize: TableData.length,
         custom: true,
     };
 
-    const pagesListColumns = [
-        {
-            text: "Item Name",
-            dataField: "Name",
-            sort: true,
-        },
-        {
-            text: "Current GSTPercentage",
-            dataField: "CurrentGSTPercentage",
-            sort: true,
+    const saveHandeller = (event) => {
 
-        },
-    ]
+        event.preventDefault();
+        const btnId = event.target.id
+        // btnIsDissablefunc({ btnId, state: true })
+        try {
+
+            function ischeckboxCheck(i1) {
+                let accArray = [];
+                let isShowOnMenu_Id
+
+                PageAccess.map((i2) => {
+                    const cond = `RoleAccess_${i2.Name}`
+                    if ((i2.Name === "IsShowOnMenu")) {
+                        isShowOnMenu_Id = i2.id
+                    }
+                    else if ((i1[cond] > 0)) {
+                        accArray.push({ "PageAccess": i2.id })
+                    }
+                })
+                return { accArray, isShowOnMenu_Id }
+            }
+
+            const jsonArray = [];
+            tableDataRedux.map((i1) => {
+
+                let { accArray, isShowOnMenu_Id } = ischeckboxCheck(i1);
+                let showList = i1.RoleAccess_IsShowOnMenuForList > 0
+                let showAdd = i1.RoleAccess_IsShowOnMenuForMaster > 0
+                let isAccess = accArray.length > 0;
+                let isrelated = i1.RelatedPageID > 0;
+                let divisionID = division_dropdown_Select.value
+
+                const listRowOBJFunc = () => {
+                    let showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    return {
+                        Role: role_dropdown_Select.value,
+                        Company: company_dropdown_Select.value,
+                        Division: divisionID === 0 ? '' : divisionID,
+                        Modules: i1.ModuleID,
+                        Pages: i1.PageID,
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
+                        RolePageAccess: [...showArray, ...accArray],
+                    }
+                };
+
+                const addRowOBJFunc = () => {
+                    let showArray = [{ "PageAccess": isShowOnMenu_Id }]
+                    return {
+                        Role: role_dropdown_Select.value,
+                        Company: company_dropdown_Select.value,
+                        Division: divisionID === 0 ? '' : divisionID,
+                        Modules: i1.ModuleID,
+                        Pages: i1.PageID,
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
+                        RolePageAccess: [...showArray, ...accArray],
+                    }
+                };
+
+                if (isAccess || showList || showAdd) {
+                    if (showList) jsonArray.push(listRowOBJFunc());
+                    if (showAdd && isrelated) jsonArray.push(addRowOBJFunc());
+                }
+            })
+            const jsonBody = JSON.stringify(jsonArray)
+            dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
+
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    }
 
 
 
     const RoleAccTable = () => {
-        // if (PageAccess.length > 0) {
-        //     return <></>
-        // }
+
         return <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
                 <ToolkitProvider
                     keyField="id"
-                    data={[...deleteState]}
+                    data={tableDataRedux}
                     columns={[...tableHederList]}
                     search
                 >
@@ -1306,7 +1366,7 @@ const RoleAccessAdd = () => {
 
 
     return <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content" >
             <MetaTags> <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <Container fluid>
                 <CardBody >
@@ -1456,9 +1516,6 @@ const RoleAccessAdd = () => {
                                         </Col>
                                     </Row>
                                 </CardHeader>
-
-
-
                             </div>
                     }
 

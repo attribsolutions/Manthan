@@ -50,25 +50,21 @@ export const PageDropdownForRoleAccessList_Success = (data) => ({
   payload: data,
 });
 
-export const GO_Button_HandlerForRoleAccessListPage = (id1, id2, id3) => ({
+export const GO_Button_RoleAccess_AddPage_Action = (id1, id2, id3) => ({
   type: GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   id1, id2, id3,
 });
 
-export const GO_Button_HandlerForRoleAccessListPage_Success = (data) => ({
-  type: GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload: data,
-});
 
 export const AddPageHandlerForRoleAccessListPage = (id) => ({
   type: ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   id,
 });
 
-export const AddPageHandlerForRoleAccessListPage_Success = (data) => ({
-  type: ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  payload: data,
-});
+// export const AddPageHandlerForRoleAccessListPage_Success = (data) => ({
+//   type: ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
+//   payload: data,
+// });
 
 export const saveRoleAccessAddAction = (config = {}) => ({
   type: SAVE_ROLE_ACCESS_ADD_ACTION,
@@ -93,7 +89,7 @@ export const getRoleAccessListPageSuccess = (data) => ({
 });
 
 // Copy RoleAccess For RoleAccess
-export const saveCopyRoleAccessAction = (config={}) => ({
+export const saveCopyRoleAccessAction = (config = {}) => ({
   type: SAVE_COPY_ROLE_ACCESS_ACTION,
   config,
 });
@@ -138,25 +134,25 @@ export const updateRoleAcessActionSuccess = (resp) => ({
 
 
 
-export const setTableData_roleAccss_AddPage= (array=[]) => ({
+export const setTableData_roleAccss_AddPage = (array = []) => ({
   type: SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE,
   array,
 });
 
 
-export const setTableData_roleAccss_AddPageSuccess = (array=[]) => ({
+export const setTableData_roleAccss_AddPageSuccess = (array = []) => ({
   type: SET_TABLE_DATA_ROLE_ACCSS_ADD_PAGE_SUCCESS,
   payload: array,
 });
 
 
-export const deleteRoleAcessMasterAction = (id ) => ({
+export const deleteRoleAcessMasterAction = (config = {}) => ({
   type: DELETE_ROLE_ACCESS_MASTER,
-  id,
+  config,
 });
 
-
-export const deleteRoleAcessMasterActionSuccess = (data) => ({
-  type: DELETE_ROLE_ACCESS_MASTER_SUCCESS,
-  payload: data,
+export const IscheckRoleAcessMasterAction = (id, cell, check) => ({
+  type: "IS_CHECK_ROLE_ACCESS_MASTER",
+  id, cell, check,
 });
+

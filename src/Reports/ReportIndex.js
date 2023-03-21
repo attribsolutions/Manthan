@@ -15,16 +15,13 @@ export const VanLoadingSheetSKU = "VanLoadingSheetSKU"
 export const VanLoadingPartyWiseInvoice = "VanLoadingPartyWiseInvoice"
 export const invoiceA5 = "invoiceA5"
 
-
 const generateReport = (resp) => {
-    
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)
             break;
         case invoice:
             InvioceReport(resp.Data)
-            //ordeRreport(resp.Data)
             break;
         case Stock:
             StockReport(resp.Data)
@@ -35,14 +32,10 @@ const generateReport = (resp) => {
         case IBinvoice:
             InvioceReport(resp.Data)
             break;
-        case VanLoadingSheetSKU:
-            VanLoadingSheet(resp.Data)
-            break;
         case VanLoadingPartyWiseInvoice:
             VanLoadingSheet(resp.Data)
             break;
         case invoiceA5:
-            
             InvioceReporta5(resp.Data)
             break;
 
@@ -50,4 +43,6 @@ const generateReport = (resp) => {
             break;
     }
 }
+
+
 export default generateReport;
