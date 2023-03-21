@@ -48,9 +48,10 @@ import {
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { map, Map } from "leaflet";
 
 
-const PartyMasterBulkUpdate = (props) => {
+const PartyMasterBulkUpdate= (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -60,6 +61,7 @@ const PartyMasterBulkUpdate = (props) => {
     const [RouteSelect, setRouteSelect] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
 
+    
     const fileds = {
         id: "",
         RoutesName: "",
@@ -237,17 +239,17 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const goButtonHandler = () => {
-        debugger
+
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             Route: RouteSelect.value,
-             Type: SelectFieldName.label
+            Type: SelectFieldName.label
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
 
     useEffect(async () => {
-        debugger
+
         if ((Data.Status === true) && (Data.StatusCode === 200)) {
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             if (pageMode === "other") {
@@ -259,14 +261,31 @@ const PartyMasterBulkUpdate = (props) => {
         }
     }, [Data])
 
-    function SelectFieldHandler(event, user) {
+    function SelectFieldHandler(event) {
 
         let val = event.label;
         setvalue(val)
         setSelectFieldName(val)
 
     }
+    debugger
+  const data = Data
+  
 
+
+
+    const columns = []
+    // Data.forEach(i, k => {
+    //     // columns.push({
+    //     //     text: .key,
+    //     //     dataField: .key,
+    //     // })
+    // });
+
+
+   
+
+    
     function tableSelectHandler(event, user) {
 
         //     let val = event.target.value;
@@ -283,8 +302,8 @@ const PartyMasterBulkUpdate = (props) => {
 
     const pagesListColumns = [
         {
-            text: "SubParty",
-            dataField: "SubParty",
+            text: "PartyName",
+            dataField: "PartyName",
         },
         {
             text: val,
@@ -292,7 +311,7 @@ const PartyMasterBulkUpdate = (props) => {
 
         },
         {
-            text: "New value",
+            text: "Newvalue",
             dataField: "Newvalue",
             formatter: (cellContent, user) => (
                 <>
@@ -521,6 +540,8 @@ const PartyMasterBulkUpdate = (props) => {
         )
     }
 };
+
+
 
 export default PartyMasterBulkUpdate
 
