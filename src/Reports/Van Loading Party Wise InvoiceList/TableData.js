@@ -1,3 +1,4 @@
+import { convertDatefunc } from "../../components/Common/CommonFunction";
 
 export const columns = [
     "SR No.",
@@ -7,8 +8,8 @@ export const columns = [
     "Box",
     "Outer ",
     // "Pcs",
-    "quantity",
-    "UnitName",
+    "Quantity",
+    "Unit",
 ];
 export const columns1 = [
     "SR No.",
@@ -25,7 +26,10 @@ export const columns1 = [
 export const PageHedercolumns = [
     "Billed by",
     "Billed to",
-    ''
+    "",
+    '',
+    "",
+    ""
 ]
 
 export const Rows = (data) => {
@@ -37,11 +41,14 @@ export const Rows = (data) => {
     let TotalBox = 0
     let TotalPcs = 0
     let TotalQuantity = 0
+    let SrNO = 1
+
+
 
     InvoiceItems.forEach((element, key) => {
-         
+
         const tableitemRow = [
-            element.Item,
+            SrNO++,
             element.ItemName,
             element.BatchCode,
             element.MRP,
@@ -89,12 +96,12 @@ export const Rows1 = (data) => {
     const returnArr = [];
     let Gst = 0
     let TotalAmount = 0
-
+    let SrNO = 1
 
     InvoiceParent.forEach((element, key) => {
         const tableitemRow = [
-            element.srNO,
-            element.InvoiceDate,
+            SrNO++,
+            convertDatefunc(element.InvoiceDate),
             element.FullInvoiceNumber,
             element.CustomerName,
             element.GrandTotal,
@@ -103,6 +110,7 @@ export const Rows1 = (data) => {
             element.Credit,
             element.OnlineRTGS,
         ];
+
 
         function totalLots() {
             TotalAmount = Number(TotalAmount) + Number(element.GrandTotal)
@@ -145,12 +153,22 @@ export const Rows1 = (data) => {
 }
 
 
-export const ReportHederRows = (data) => {
+export const ReportHederRows = (doc, data) => {
+    debugger
     const Address = data.PartyDetails.PartyAddress
     const Routes = data.PartyDetails.RouteName
+    const DriverName = data.PartyDetails.DriverName
+    const VehicleNo = data.PartyDetails.VehicleNo
+
     var reportArray = [
         ["Address:", `${Address}`,],
-        ["Routes:", `${Routes}`],
+
+        // ["Routes:", `${Routes}                   DriverName:${  DriverName}                      Vehicle No:${VehicleNo}     `],
+        ["Routes:", `${Routes} `," DriverName:", `${DriverName}`,   "Vehicle No:",`${VehicleNo}`],
+
+
+        //
+
         // [`FSSAI :f23dfxxxxxwe55`, ,`To Date:      ${data.Todate}`  ],
         // [,,`INR NO :${data.FullInvoiceNumber}`]
     ]

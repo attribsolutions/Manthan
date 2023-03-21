@@ -22,6 +22,8 @@ import { Tbody } from "react-super-responsive-table";
 import { MetaTags } from "react-meta-tags";
 import {
     AddPageHandlerForRoleAccessListPage,
+    deleteRoleAcessMasterAction,
+    deleteRoleAcessMasterActionSuccess,
     getPageAccess_DropDown_API,
     GO_Button_HandlerForRoleAccessListPage,
     GO_Button_HandlerForRoleAccessListPage_Success,
@@ -44,9 +46,10 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 
 
-const RoleAccessAdd = () => {
+const RoleAccessAdd1 = () => {
     const dispatch = useDispatch();
     const history = useHistory()
     const [userAccState, setUserAccState] = useState('');
@@ -339,7 +342,7 @@ const RoleAccessAdd = () => {
     }
 
     const saveHandeller = (event) => {
-          
+
         event.preventDefault();
         const btnId = event.target.id
         btnIsDissablefunc({ btnId, state: true })
@@ -893,25 +896,36 @@ const RoleAccessAdd = () => {
         )
     }
 };
-const InitialCol = [
 
-    {
-        text: "Module Name",
-        dataField: "ModuleName",
-    },
-    {
-        text: "PageName",
-        dataField: "PageName",
-    }
-]
-const RoleAccessAdd1 = () => {
-
+const RoleAccessAdd = () => {
     const dispatch = useDispatch();
     const history = useHistory()
+
+    const InitialCol = [
+        {
+            text: "Action",
+            dataField: "",
+            formatter: (cellContent, user) => (
+                <div style={{ justifyContent: 'center' }} >
+                    <Button className={deltBtnCss}> <i className="mdi mdi-delete font-size-18 text-danger text-right"
+                        onClick={() => { DeleteRolePage_Handler(user.ID) }}></i></Button>
+                </div>
+            )
+        },
+        {
+            text: "Module Name",
+            dataField: "ModuleName",
+        },
+        {
+            text: "PageName",
+            dataField: "PageName",
+        }
+    ]
+
     const [userAccState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [editCreatedBy, setEditCreatedBy] = useState('');
-    const [tableListData, setTableListData] = useState([])
+    const [tableDataRedux1, setTableListData1] = useState([])
     const [tableHederList, setTableHederList] = useState(InitialCol)
     const [showTableOnUI, setShowTableOnUI] = useState(false)
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "Select...", value: 0 });
@@ -921,7 +935,6 @@ const RoleAccessAdd1 = () => {
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-
     const location = { ...history.location };
 
     const {
@@ -934,7 +947,9 @@ const RoleAccessAdd1 = () => {
         Roles,
         partyList,
         userAccess = [],
-        company
+        company,
+        deleteState,
+        tableDataRedux=[]
     } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         companyList: state.Company.companyList,
@@ -946,10 +961,15 @@ const RoleAccessAdd1 = () => {
         addpageDropdownRedux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
         GoButtonRedux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
         postMsg: state.RoleAccessReducer.postMsg,
+        tableDataRedux:state. RoleAccessReducer.AddPageTableDataRedux,
+        
         userAccess: state.Login.RoleAccessUpdateData,
         company: state.Company.companyList,
+        deleteState: state.RoleAccessReducer.deleteState
+
     }));
-    debugger
+
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -994,38 +1014,22 @@ const RoleAccessAdd1 = () => {
 
 
 
+
     useEffect(() => {
         var Array = []
         var eleList = {}
-
-        let count1 = 0
-        GoButtonRedux.map((indexdata) => {
-            count1 = count1 + 1
-
-            eleList = indexdata;
-            eleList["ID"] = count1;
-
-            Array.push(eleList)
-            eleList = {}
-        })
-        setTableListData(Array)
-    }, [GoButtonRedux])
-
-    useEffect(() => {
-
-        var Array = []
-        var eleList = {}
-        let NewID = tableListData.length + 1
-        let previousData = tableListData
+        let NewID = deleteState.length + 1
+        let previousData = [...deleteState]
 
         let indexdata = addpageDropdownRedux[0]
 
         if (!(indexdata === undefined)) {
             eleList = indexdata
-            eleList["ID"] = NewID;
+            eleList["id"] = NewID;
             Array.push(eleList)
             previousData = previousData.concat(Array)
-            setTableListData(previousData)
+            dispatch(deleteRoleAcessMasterActionSuccess([...previousData]))
+
         }
 
     }, [addpageDropdownRedux])
@@ -1033,8 +1037,9 @@ const RoleAccessAdd1 = () => {
 
     useEffect(() => {
 
-        const NewColoumList = PageAccess.map((i) => {
-            return ({
+        const NewColoumList = []
+        PageAccess.map((i) => {
+            const coln = {
                 text: i.Name,
                 dataField: `RoleAccess_${i.Name}`,
                 formatter: (cellContent, user) => (
@@ -1054,9 +1059,24 @@ const RoleAccessAdd1 = () => {
                             </Col>
                         </div>
                     </>
-                ),
+                )
             }
-            )
+
+            if (i.Name === "IsShowOnMenu") {
+                let add = { ...coln }
+                add.text = "ShowAdd";
+                add.dataField = "RoleAccess_IsShowOnMenuForMaster";
+                NewColoumList.push(add);
+
+                let list = { ...coln }
+                list.text = "ShowList";
+                list.dataField = "RoleAccess_IsShowOnMenuForList";
+                NewColoumList.push(list)
+            } else {
+                NewColoumList.push(coln)
+            }
+
+
         })
         const a = [...InitialCol, ...NewColoumList]
         setTableHederList(a)
@@ -1122,6 +1142,7 @@ const RoleAccessAdd1 = () => {
         setDivision_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
+
     // for module dropdown
     const Module_DropdownSelectHandller = (e) => {
         var module = e.value;
@@ -1167,7 +1188,7 @@ const RoleAccessAdd1 = () => {
             var pageId = 0
             PageDropdownRedux.forEach((i) => {
                 pageId = i.id
-                let found = tableListData.find((inx) => { return inx.PageID === pageId })
+                let found = tableDataRedux.find((inx) => { return inx.PageID === pageId })
                 if ((found === undefined) && !(pageId === 0)) {
                     dispatch(AddPageHandlerForRoleAccessListPage(pageId));
                 }
@@ -1175,7 +1196,7 @@ const RoleAccessAdd1 = () => {
         }
         else {
 
-            let found = tableListData.find((inx) => { return inx.PageID === selectePageID })
+            let found = tableDataRedux.find((inx) => { return inx.PageID === selectePageID })
 
             if ((found === undefined) && !(selectePageID === undefined)) {
                 dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
@@ -1200,17 +1221,22 @@ const RoleAccessAdd1 = () => {
         }
     }
 
-
-
-
-    function ChangeButtonHandeler() { }
+    function DeleteRolePage_Handler(id) {
+        dispatch(deleteRoleAcessMasterAction(id, deleteState))
+    }
+    function ChangeButtonHandeler() {
+        setShowTableOnUI(false);
+        setModule_DropdownSelect('')
+        setPage_DropdownSelect('')
+        setTableListData1([])
+        // dispatch(roleAccssTabledataReduxSuccess([]))
+    }
     function saveHandeller() { }
-
 
 
     const TableData = [{ id: 1, Name: 12 }]
     const pageOptions = {
-        sizePerPage: tableListData.length + 1,
+        sizePerPage: deleteState.length + 1,
         // totalSize: TableData.length,
         custom: true,
     };
@@ -1239,8 +1265,8 @@ const RoleAccessAdd1 = () => {
             {({ paginationProps, paginationTableProps }) => (
                 <ToolkitProvider
                     keyField="id"
-                    data={tableListData}
-                    columns={tableHederList}
+                    data={[...deleteState]}
+                    columns={[...tableHederList]}
                     search
                 >
                     {(toolkitProps) => (
@@ -1257,8 +1283,8 @@ const RoleAccessAdd1 = () => {
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                             {...toolkitProps.baseProps}
                                             {...paginationTableProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps, )}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps,)}
                                     </div>
                                 </Col>
                             </Row>

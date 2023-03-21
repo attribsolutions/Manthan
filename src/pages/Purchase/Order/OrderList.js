@@ -133,7 +133,13 @@ const OrderList = () => {
             makeBtnShow = true;
             makeBtnName = "Make GRN"
         }
+        else if (subPageMode === url.GRN_STP_3) {
+            page_Id = pageId.GRN_STP_3
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make GRN"
 
+        }
         dispatch(getOrderListPage(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType })
         setPageMode(page_Mode)
@@ -229,12 +235,20 @@ const OrderList = () => {
 
                     isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
                     challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
+                     
+                    let isMode = 1                               // define isMode for MakeBtn API
+                    
+                    if (list[0].POType === "Challan") {
+                        isMode = 2
+                    }
+                    else if (subPageMode === url.GRN_STP_3) {
+                        isMode=3
+                    }
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
-                        Mode: list[0].POType === "Challan" ? 2 : 1
+                        Mode: isMode
                     })
-
+                 
                     dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
                 } else {
@@ -284,9 +298,21 @@ const OrderList = () => {
                 OrderType: order_Type.SaleOrder,
                 IBType: IBType ? IBType : otherState.IBType
             }
+            const GRN_STP_3_filters = {
+                FromDate: values.FromDate,
+                ToDate: values.ToDate,
+                Supplier: values.Supplier.value,
+                Customer: loginPartyID(),
+                OrderType: order_Type.InvoiceToGRN,
+                IBType: IBType ? IBType : otherState.IBType
+            }
             if (subPageMode === url.ORDER_LIST_4) {
                 filtersBody = JSON.stringify(SO_filters);
-            } else {
+            }
+            else if (subPageMode === url.GRN_STP_3) {
+                filtersBody = JSON.stringify(GRN_STP_3_filters);
+            }
+            else {
                 filtersBody = JSON.stringify(PO_filters);
             }
             dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));

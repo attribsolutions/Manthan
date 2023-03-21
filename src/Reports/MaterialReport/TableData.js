@@ -43,7 +43,6 @@ export const Rows = (data) => {
             TotalOutQuantity = Number(TotalOutQuantity) + Number(element.OutQuantity)
             TotalIssueQuanity = Number(TotalIssueQuanity) + Number( element.IssueQuanity)
             TotalBalance = Number(TotalBalance) + Number(element.Balance)
-
             // let cgst = data["tableTot"].TotalCGst
             // return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
         };

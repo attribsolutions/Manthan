@@ -10,7 +10,9 @@ import {
   SAVE_PARTY_SUB_PARTY,
   POST_PARTY_SUB_PARTY_SUCCESS,
   UPDATE_PARTY_SUB_PARTY,
-  UPDATE_PARTY_SUB_PARTY_SUCCESS
+  UPDATE_PARTY_SUB_PARTY_SUCCESS,
+  DELETE_ID_FOR_MASTER_PAGE,
+  DELETE_ID_FOR_MASTER_PAGE_SUCCESS
 } from "./actionType";
 
 
@@ -71,5 +73,15 @@ export const deletePartySubParty = (config = {}) => ({                          
 });
 export const deletePartySubPartySuccess = (resp) => ({                       // Delete Success
   type: DELETE_PARTY_SUB_PARTY_SUCCESS,
+  payload: resp
+});
+
+export const deleteIDForMasterPage = (id) => ({                          //Delete  Action
+  type: DELETE_ID_FOR_MASTER_PAGE,
+  id,
+
+});
+export const deleteIDForMasterPageSuccess = (resp) => ({                       // Delete Success
+  type: DELETE_ID_FOR_MASTER_PAGE_SUCCESS,
   payload: resp
 });

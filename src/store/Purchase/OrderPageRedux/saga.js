@@ -109,7 +109,7 @@ function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filt
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)||(subPageMode === url.ORDER_LIST_4)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
-    else if (subPageMode === url.GRN_STP) {
+    else if ((subPageMode === url.GRN_STP)||subPageMode === url.GRN_STP_3) {
       response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {

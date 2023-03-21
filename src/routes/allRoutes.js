@@ -244,8 +244,11 @@ const userRoutes = [
   { path: path.GRN_ADD, component: GRNAdd },
   { path: path.GRN_STP, component: OrderList },
 
-  //******************************* Purchase Module ************************************//
+  { path: path.GRN_lIST_3, component: GRNList },
+  { path: path.GRN_ADD_3, component: GRNAdd },
+  { path: path.GRN_STP_3, component: OrderList },
 
+  //******************************* Purchase Module ************************************//
 
   { path: path.ORDER_1, component: Order },
   { path: path.ORDER_LIST_1, component: OrderList },

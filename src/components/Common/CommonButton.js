@@ -43,7 +43,6 @@ const UpdateBtn = (props) => {
   const { module = '', onClick } = props;
   const btnId = `Update-${module.replace(/ /g, "")}`;
     
-
   return (
     <div>
       <button

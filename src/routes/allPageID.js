@@ -122,6 +122,10 @@ export const GRN_ADD = 55
 export const GRN_lIST = 56
 export const GRN_STP = 124
 
+export const GRN_ADD_3 = 165
+export const GRN_lIST_3 = 166
+export const GRN_STP_3 = 164
+
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
 
