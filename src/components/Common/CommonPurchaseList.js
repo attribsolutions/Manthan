@@ -355,7 +355,7 @@ const CommonPurchaseList = (props) => {
                     </PaginationProvider>
 
                     {/* {
-                        (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
+                        (`/${userAccState.ActualPagePath}` === url.GRN_STP_1) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button

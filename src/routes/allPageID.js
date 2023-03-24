@@ -118,16 +118,14 @@ export const IB_ORDER_SO_LIST = 147
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
-export const GRN_ADD = 55
-export const GRN_lIST = 56
-export const GRN_STP = 124
+export const GRN_ADD_1= 55
+export const GRN_LIST_1 = 56
+export const GRN_STP_1 = 124
 
 export const GRN_ADD_3 = 165
-export const GRN_lIST_3 = 166
+export const GRN_LIST_3 = 166
 export const GRN_STP_3 = 164
 
-// export const GRN_ADD_PAGE_3 = 169   
-// export const GRN_ADD_PAGE_lIST = 170
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70

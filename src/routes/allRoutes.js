@@ -241,11 +241,11 @@ const userRoutes = [
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
 
-  { path: path.GRN_lIST, component: GRNList },
-  { path: path.GRN_ADD, component: GRNAdd },
-  { path: path.GRN_STP, component: OrderList },
+  { path: path.GRN_LIST_1, component: GRNList },
+  { path: path.GRN_ADD_1, component: GRNAdd },
+  { path: path.GRN_STP_1, component: OrderList },
 
-  { path: path.GRN_lIST_3, component: GRNList },
+  { path: path.GRN_LIST_3, component: GRNList },
   { path: path.GRN_ADD_3, component: GRNAdd },
   { path: path.GRN_STP_3, component: OrderList },
 
