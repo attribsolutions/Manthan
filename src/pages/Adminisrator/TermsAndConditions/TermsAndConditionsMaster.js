@@ -12,7 +12,6 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import {
-    AlertState,
     commonPageField,
     commonPageFieldSuccess
 } from "../../../store/actions";

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import {
   Card,
@@ -37,7 +37,7 @@ import { commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 
 const AddUser = (props) => {
 
-  const formRef = useRef(null);
+  // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
 

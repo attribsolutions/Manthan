@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import './Search.scss'
-import { Search } from "react-bootstrap-table2-toolkit";
-let view = false;
-const onchange = (e) => {
-    e.preventDefault();
-    view = e.target.value.length
-}
+// import { Search } from "react-bootstrap-table2-toolkit";
+// let view = false;
+// const onchange = (e) => {
+//     e.preventDefault();
+//     view = e.target.value.length
+// }
 export default function SearchBoxSecond() {
-    const { SearchBar } = Search;
+    // const { SearchBar } = Search;
 
     const [searchRoleData, setSearchRoleData] = useState([])
     // const  RoleAccessData=demoRolleAcess
@@ -62,7 +62,7 @@ export default function SearchBoxSecond() {
                 /*for each item in the array...*/
                 for (i = 0; i < arr.length; i++) {
                     /*check if the item starts with the same letters as the text field value:*/
-                    if (arr[i].Name.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    if (arr[i].Name.substr(0, val.length).toUpperCase() === val.toUpperCase()) {
                         /*create a DIV element for each matching element:*/
                         b = document.createElement("DIV");
                         /*make the matching letters bold:*/
@@ -95,19 +95,19 @@ export default function SearchBoxSecond() {
                 // 
                 var x = document.getElementById(this.id + "autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
-                if (e.keyCode == 40) {
+                if (e.keyCode === 40) {
                     /*If the arrow DOWN key is pressed,
                     increase the currentFocus variable:*/
                     currentFocus++;
                     /*and and make the current item more visible:*/
                     addActive(x);
-                } else if (e.keyCode == 38) { //up
+                } else if (e.keyCode === 38) { //up
                     /*If the arrow UP key is pressed,
                     decrease the currentFocus variable:*/
                     currentFocus--;
                     /*and and make the current item more visible:*/
                     addActive(x);
-                } else if (e.keyCode == 13) {
+                } else if (e.keyCode === 13) {
                     /*If the ENTER key is pressed, prevent the form from being submitted,*/
                     e.preventDefault();
                     if (currentFocus > -1) {
@@ -259,19 +259,19 @@ export const mySearchProps1 = (props1) => {
     props2 = props1;
 };
 
-let input;
-const handleClick = () => {
-    props2.onSearch(input.value);
-};
-function onChange2() {
+// let input;
+// const handleClick = () => {
+//     props2.onSearch(input.value);
+// };
+// function onChange2() {
     
-    var a = input.value
+//     var a = input.value
 
-    if (!(a[0] === "/")) {
-        const str = a.substring(1);
-        props2.onSearch(str);
-    }
-}
+//     if (!(a[0] === "/")) {
+//         const str = a.substring(1);
+//         props2.onSearch(str);
+//     }
+// }
 
 
 
@@ -282,7 +282,7 @@ function onChange2() {
 const MySearch = () => {
     
 
-    let input;
+    // let input;
     const handleClick = (e) => {
         
         var a = e.target.value
