@@ -52,8 +52,7 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         ...INIT_STATE,
       }
 
-
-    default:
+      default:
       return state
   }
 }

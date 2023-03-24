@@ -124,7 +124,7 @@ export const GRN_ADD = "/GRN"
 
 export const GRN_STP_3 = "/GRN_STP_3"
 export const GRN_lIST_3 = "/GRN_List_3"
-export const GRN_ADD_3 = "/GRN_3"
+export const GRN_ADD_3 = "/GRN_ADD_3"
 
 // export const GRN_ADD_PAGE_3 = "/GRNAdd3"
 // export const GRN_ADD_PAGE_lIST =  "/GRNADDList3"

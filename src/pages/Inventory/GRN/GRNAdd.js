@@ -37,18 +37,18 @@ let initialTableData = []
 function initialState(history) {
 
     let page_Id = '';
-    let listPath = ''
+    let subPageMode = ''
     let sub_Mode = history.location.pathname;
 
     if (sub_Mode === url.GRN_ADD) {
         page_Id = pageId.GRN_ADD;
-        listPath = url.GRN_lIST
+        subPageMode = url.GRN_ADD
     }
     else if (sub_Mode === url.GRN_ADD_3) {
         page_Id = pageId.GRN_ADD_3;
-        listPath = url.GRN_lIST_3
+        subPageMode = url.GRN_ADD_3
     }
-    return { page_Id, listPath }
+    return { page_Id, subPageMode }
 };
 
 const GRNAdd = (props) => {
@@ -191,7 +191,7 @@ const GRNAdd = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
-    const [listPath, setListPath] = useState(() => initialState(history).listPath)
+    const [subPageMode, setSubPageMode] = useState(() => initialState(history).subPageMode)
     const [grnDate, setgrnDate] = useState(currentDate);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
@@ -222,7 +222,7 @@ const GRNAdd = (props) => {
         dispatch(getSupplierAddress())
     }, [])
 
-     // userAccess useEffect
+    // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -321,7 +321,7 @@ const GRNAdd = (props) => {
                 Message: postMsg.Message,
             })
             if (promise) {
-                history.push({ pathname: listPath })
+                history.push({ pathname: subPageMode })
             }
 
         } else if (postMsg.Status === true) {
@@ -358,13 +358,12 @@ const GRNAdd = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
     }
 
-    const pagesListColumns = [
+    const pagesListColumns1 = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
 
             formatter: (value, row) => {
-                debugger
                 return (<div className=" mt-2">
                     <span key={row.id}>{value}</span>
                 </div>)
@@ -378,7 +377,6 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 return (
                     <div className="text-end" >
-
                         <samp key={row.id} className="font-asian"> {value}</samp>
                     </div>
                 )
@@ -462,6 +460,30 @@ const GRNAdd = (props) => {
             },
             headerStyle: (colum, colIndex) => {
                 return { width: '150px', textAlign: 'center' };
+            }
+        },
+
+        {  //-------------MRP column ----------------------------------
+            text: "MRP",
+            dataField: "",
+            hidden: (subPageMode === url.GRN_lIST_3) ? false : true,
+            formatter: (value, row, k) => {
+                return (
+                    <span className="text-right" >
+                        <Input
+                            key={row.id}
+                            type="text"
+                            className=" text-end"
+                            defaultValue={row.MRP}
+                            autoComplete="off"
+                            disabled={true}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center' };
             }
         },
 
@@ -581,7 +603,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: ((pageMode === mode.view) || listPath === url.GRN_lIST_3) ? true : false,
+            hidden: ((pageMode === mode.view) || subPageMode === url.GRN_lIST_3) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -618,6 +640,47 @@ const GRNAdd = (props) => {
                 return { width: '30px', textAlign: 'center', text: "center" };
             }
         },
+    ];
+    const pagesListColumns = [
+        {//------------- ItemName column ----------------------------------
+            text: "Item Name",
+            dataField: "ItemName",
+        },
+
+        {//------------- Quntity  column ----------------------------------
+            text: "Invoice-Qty",
+            dataField: "poQuantity",
+        },
+
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
+            dataField: "UnitName",
+        },
+
+        {  //-------------MRP column ----------------------------------
+            text: "MRP",
+            dataField: "MRP",
+        },
+        {  //-------------Rate column ----------------------------------
+            text: "Rate",
+            dataField: "Rate",
+        },
+
+        {//------------- ItemName column ----------------------------------
+            text: "Amount",
+            dataField: "Amount",
+        },
+
+        {//------------- Batch Code column ----------------------------------
+            text: "BatchCode",
+            dataField: "BatchCode",
+        },
+
+        {//------------- Batch Date column ----------------------------------
+            text: "Batch Date",
+            dataField: "BatchDate",
+        },
+
     ];
 
     const defaultSorted = [
@@ -687,7 +750,9 @@ const GRNAdd = (props) => {
 
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-
+                if (subPageMode === url.GRN_ADD_3) {
+                    debugger
+                     i.Quantity = i.poQuantity }
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
@@ -777,7 +842,7 @@ const GRNAdd = (props) => {
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {
-                // dispatch(saveGRNAction({ jsonBody, btnId }))
+                dispatch(saveGRNAction({ jsonBody, btnId }))
             }
         } catch (error) { returnFunc() }
     }
@@ -870,7 +935,7 @@ const GRNAdd = (props) => {
                                 </FormGroup>
 
 
-                                {listPath === url.GRN_ADD_3 ?
+                                {subPageMode === url.GRN_ADD_3 ?
                                     <FormGroup className="mb-2 row  " >
                                         <Label className="col-md-4 p-2"
                                             style={{ width: "130px" }}>Close PO</Label>
