@@ -127,8 +127,8 @@ const OrderList = () => {
             makeBtnName = "Make Invoice"
             IBType = "IBSO"
         }
-        else if (subPageMode === url.GRN_STP) {
-            page_Id = pageId.GRN_STP
+        else if (subPageMode === url.GRN_STP_1) {
+            page_Id = pageId.GRN_STP_1
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make GRN"
@@ -195,7 +195,6 @@ const OrderList = () => {
     }, [makeIBInvoice])
 
     const makeBtnFunc = (list = []) => {
-        debugger
         const obj = list[0]
         if (subPageMode === url.IB_INVOICE_STP) {
             const jsonBody = JSON.stringify({
@@ -230,7 +229,7 @@ const OrderList = () => {
                 });
 
                 if (isGRNSelect) {
-                    let path = (subPageMode === url.GRN_STP_3 ? url.GRN_ADD_3 : url.GRN_ADD)
+                    let path = (subPageMode === url.GRN_STP_3 ? url.GRN_ADD_3 : url.GRN_ADD_1)
                     isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
                     challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 

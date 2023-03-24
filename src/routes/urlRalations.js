@@ -144,16 +144,15 @@ export const Production_Add_Mode = url.PRODUCTION_LIST
 
 //******************************* Inventory  ************************************//
 
-export const GRNList = url.GRN_STP
-export const GRN = url.GRN_lIST
-export const GRN_STP = url.GRN_lIST
+export const GRN_LIST_1 = url.GRN_STP_1
+export const GRN_ADD_1 = url.GRN_LIST_3
+export const GRN_STP_1 = url.GRN_LIST_3
 
 export const GRNList_3 = url.GRN_STP_3
-export const GRN_3 = url.GRN_lIST_3
-export const GRN_STP_3 = url.GRN_lIST_3
+export const GRN_ADD_3 = url.GRN_LIST_3
+export const GRN_STP_3 = url.GRN_LIST_3
 
-// export const GRNAdd3 = url.GRN_ADD_PAGE_3
-// export const GRNADDList3 =  "/GRNADDList3"
+
 
 export const ChallanList = url.CHALLAN
 export const Challan = url.CHALLAN_LIST

@@ -40,9 +40,9 @@ function initialState(history) {
     let subPageMode = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.GRN_ADD) {
-        page_Id = pageId.GRN_ADD;
-        subPageMode = url.GRN_ADD
+    if (sub_Mode === url.GRN_ADD_1) {
+        page_Id = pageId.GRN_ADD_1;
+        subPageMode = url.GRN_ADD_1
     }
     else if (sub_Mode === url.GRN_ADD_3) {
         page_Id = pageId.GRN_ADD_3;
@@ -466,7 +466,7 @@ const GRNAdd = (props) => {
         {  //-------------MRP column ----------------------------------
             text: "MRP",
             dataField: "",
-            hidden: (subPageMode === url.GRN_lIST_3) ? false : true,
+            hidden: (subPageMode === url.GRN_LIST_3) ? false : true,
             formatter: (value, row, k) => {
                 return (
                     <span className="text-right" >
@@ -603,7 +603,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: ((pageMode === mode.view) || subPageMode === url.GRN_lIST_3) ? true : false,
+            hidden: ((pageMode === mode.view) || subPageMode === url.GRN_LIST_3) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -752,7 +752,8 @@ const GRNAdd = (props) => {
                 const cgstAmt = (GstAmount(i))
                 if (subPageMode === url.GRN_ADD_3) {
                     debugger
-                     i.Quantity = i.poQuantity }
+                    i.Quantity = i.poQuantity
+                }
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,

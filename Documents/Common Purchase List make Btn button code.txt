@@ -268,7 +268,7 @@ const CommonPurchaseList = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        // if ((`/${userAccState.ActualPagePath}` === url.GRN_STP) && (makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
+        // if ((`/${userAccState.ActualPagePath}` === url.GRN_STP_1) && (makeBtnShow) && (PageFieldMaster.length - 1 === k)) {
 
         //     columns.push({
         //         text: "Select",
@@ -413,7 +413,7 @@ const CommonPurchaseList = (props) => {
                     </PaginationProvider>
 
                     {/* {
-                        (`/${userAccState.ActualPagePath}` === url.GRN_STP) ?
+                        (`/${userAccState.ActualPagePath}` === url.GRN_STP_1) ?
                             (tableList.length == 0) ? null :
                                 <div className=" " style={{ paddingBottom: 'center' }}>
                                     <button
