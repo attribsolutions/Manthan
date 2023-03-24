@@ -84,16 +84,16 @@
 //   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
 //   useEffect(() => {
 
-//     let pathName = props.location.pathname
-//     let userAcc = RoleAccessUpdateData.find((inx) => {
-//       const path = inx.ActualPagePath.toLowerCase()
-//       return (`/${path}` === (pathName.toLowerCase()))
-//     })
-//     if (userAcc === undefined) { }
-//     else if (!userAcc.RoleAccess_IsShowOnMenu) {
-//       pathName = urlRel[`${userAcc.ActualPagePath}`]
+    // let pathName = props.location.pathname
+    // let userAcc = RoleAccessUpdateData.find((inx) => {
+    //   const path = inx.ActualPagePath.toLowerCase()
+    //   return (`/${path}` === (pathName.toLowerCase()))
+    // })
+    // if (userAcc === undefined) { }
+    // else if (!userAcc.RoleAccess_IsShowOnMenu) {
+    //   pathName = urlRel[`${userAcc.ActualPagePath}`]
 
-//     }
+    // }
 
 //     const initMenu = () => {
 //       new MetisMenu("#side-menu");
@@ -199,7 +199,7 @@ import { Link } from "react-router-dom";
 import { roleAceessAction } from "../../store/actions";
 // import { useSelector } from "react-redux";
 import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/CommonFunction";
-
+import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -267,8 +267,17 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    const pathName = props.location.pathname;
+    // const pathName = props.location.pathname;
+    let pathName = props.location.pathname
+    let userAcc = RoleAccessUpdateData.find((inx) => {
+      const path = inx.ActualPagePath.toLowerCase()
+      return (`/${path}` === (pathName.toLowerCase()))
+    })
+    if (userAcc === undefined) { }
+    else if (!userAcc.RoleAccess_IsShowOnMenu) {
+      pathName = urlRel[`${userAcc.ActualPagePath}`]
 
+    }
     const initMenu = () => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;

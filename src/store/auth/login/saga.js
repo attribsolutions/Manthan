@@ -8,8 +8,7 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess, loginSuccess,
-  logoutUserSuccess,
+  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess, 
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
   roleAceessActionSuccess
@@ -82,11 +81,6 @@ function* afterLoginUserDetails_genFun({ id }) {
 function* logoutUser({ payload: { history } }) {
   try {
     localStorage.removeItem("authUser")
-
-    // if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-    //   const response = yield call(fireBaseBackend.logout)
-    //   yield put(logoutUserSuccess(response))
-    // }
     history.push("/login")
   } catch (error) {
     yield put(apiError(error))

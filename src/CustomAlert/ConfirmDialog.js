@@ -23,14 +23,15 @@ const ConfirmDialog = () => {
                 break;
             case 4: component = <AlertWarning />
                 break;
-            case 5: component = <AlertPermission_1 />
+            case 5: component = <AlertPermission1 />
                 break;
-            case 6: component = <AlertPermission_2 />
+            case 6: component = <AlertPermission2 />
                 break;
-            case 7: component = <AlertPermission_3 />
+            case 7: component = <AlertPermission3 />
                 break;
-            case 8: component = <AlertPermission_4 />
+            case 8: component = <AlertPermission4 />
                 break;
+            default: return null;
         }
     }
 
@@ -209,7 +210,7 @@ const AlertDanger = () => {
     )
 };
 
-const AlertPermission_1 = () => {
+const AlertPermission1 = () => {
     const dispatch = useDispatch();
 
     const { onCancel, confirmState } = useConfirm();
@@ -258,7 +259,7 @@ const AlertPermission_1 = () => {
     )
 };
 
-const AlertPermission_2 = () => {
+const AlertPermission2 = () => {
 
     const { onCancel, confirmState } = useConfirm();
 
@@ -305,7 +306,7 @@ const AlertPermission_2 = () => {
     )
 };
 
-const AlertPermission_3 = () => {
+const AlertPermission3 = () => {
 
     const { onConfirm, onCancel, confirmState } = useConfirm();
     const {
@@ -354,7 +355,7 @@ const AlertPermission_3 = () => {
     )
 };
 
-const AlertPermission_4 = () => {
+const AlertPermission4 = () => {
 
     const { onConfirm, onCancel, confirmState } = useConfirm();
     const {
