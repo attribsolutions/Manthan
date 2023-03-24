@@ -1,26 +1,26 @@
 import { invoice } from "../ReportIndex";
 
 export const columns =[
-    "HSNCode Item Name",
+    "HSN Item Name",
     "Quantity",
     "Rate",
-    "BasicAmount",
+    "Basic Amt",
     "CGST %",
-    "CGSTAmount",
+    "CGST Amt",
     "SGST %",
-    "SGSTAmount",
+    "SGST Amt",
     "Total Amt" 
 ];
 
 export const columns1 =[
-    "HSNCode Item Name",
+    "HSN Item Name",
     "Quantity",
     "Rate",
-    "BasicAmount",
+    "Basic Amt",
     "CGST %",
-    "CGSTAmount",
+    "CGST Amt",
     "SGST %",
-    "SGSTAmount",
+    "SGST Amt",
     "Debit note",
     "Credit note",
     "Total Amt" 

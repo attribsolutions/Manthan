@@ -292,7 +292,7 @@ export const tableBody = (doc, data) => {
 
 export const pageFooter = (doc, data) => {
 
-    let stringNumber = toWords(45757)
+    let stringNumber = toWords(Number(data.GrandTotal))
     // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 750, 30, 750);//horizontal line Footer 2
