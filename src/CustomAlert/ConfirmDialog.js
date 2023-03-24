@@ -219,7 +219,6 @@ const AlertPermission1 = () => {
         Message = "400 Error",
         PermissionAction = false,
         ID,//ID=deleted ID
-        subPageMode = ''
     } = confirmState;
 
     const outerNo = (e, no) => {
@@ -415,7 +414,9 @@ const MessageFun = ({ msg }) => {
 
                     count = count + 1;
                 }
+                return null
             })
+            return null
         })
         return msgarr.map((i) => (<div style={{ textAlign: 'left' }}><p> <h5>{i}</h5></p></div>))
     }
