@@ -29,7 +29,7 @@ import { GRN } from "../../../helpers/url_helper";
 import GRNAdd from "./GRNAdd";
 
 const GRNList = () => {
-      
+
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -119,7 +119,7 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-
+   
         const id = list[0].id
         const makeBody = JSON.stringify({
             GRN: id,

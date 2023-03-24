@@ -35,7 +35,7 @@ import * as pageId from "../../../routes/allPageID"
 let initialTableData = []
 
 function initialState(history) {
-      
+
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -52,7 +52,137 @@ function initialState(history) {
 };
 
 const GRNAdd = (props) => {
-      
+
+    // const Data = [
+    //     {
+    //         Item: 4,
+    //         ItemName: "Peda",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 24,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8995.000",
+    //         GST: 4,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 24,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         Item: 4,
+    //         ItemName: "Peda",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 24,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8995.000",
+    //         GST: 4,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 24,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         Item: 4,
+    //         ItemName: "Peda",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 24,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8995.000",
+    //         GST: 4,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 24,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         Item: 5,
+    //         ItemName: "Dahi",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 23,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8984.000",
+    //         GST: 6,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 23,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     }]
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -92,7 +222,7 @@ const GRNAdd = (props) => {
         dispatch(getSupplierAddress())
     }, [])
 
-    // userAccess useEffect
+     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -233,11 +363,12 @@ const GRNAdd = (props) => {
             text: "Item Name",
             dataField: "ItemName",
 
-            formatter: (value, row) => (
-                <div className=" mt-2">
+            formatter: (value, row) => {
+                debugger
+                return (<div className=" mt-2">
                     <span key={row.id}>{value}</span>
-                </div>
-            ),
+                </div>)
+            }
         },
 
         {//------------- Quntity first column ----------------------------------
@@ -450,7 +581,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: (pageMode === mode.view) ? true : false,
+            hidden: ((pageMode === mode.view) || listPath === url.GRN_lIST_3) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -537,7 +668,6 @@ const GRNAdd = (props) => {
         const newArr = list.filter(i => { return (!(i.id === r.id)) })
         initialTableData = newArr
         setgrnItemList(newArr)
-
     }
 
     const saveHandeller = (event) => {
@@ -577,14 +707,12 @@ const GRNAdd = (props) => {
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),
                     IGSTPercentage: 0,
-
                     BatchDate: i.BatchDate,
                     BatchCode: i.BatchCode,
                     DiscountType: "0",
                     Discount: "0.00",
                     DiscountAmount: "0.00",
                     TaxType: "GST",
-
                 }
                 let isfound = itemArr.filter(ind => {
                     return ind.Item === i.Item
@@ -649,7 +777,7 @@ const GRNAdd = (props) => {
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {
-                dispatch(saveGRNAction({ jsonBody, btnId }))
+                // dispatch(saveGRNAction({ jsonBody, btnId }))
             }
         } catch (error) { returnFunc() }
     }
@@ -741,75 +869,79 @@ const GRNAdd = (props) => {
                                     </Col>
                                 </FormGroup>
 
-                                <FormGroup className="mb-2 row  " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Close PO</Label>
-                                    <Col md="7" style={{ marginLeft: "-14px" }}>
-                                        {
-                                            openPOdata.length === 1 ?
-                                                <Input
-                                                    type="checkbox"
-                                                    style={{ paddingTop: "7px" }}
-                                                    placeholder="Enter Invoice No"
-                                                    disabled={pageMode === mode.view ? true : false}
-                                                    onChange={(e) => openPOdata[0].Inward = e.target.checked}
-                                                />
-                                                :
-                                                <Dropdown
-                                                    className="d-none d-lg-inline-block ms-1"
 
-                                                    isOpen={openPOdrp}
-                                                    toggle={() => {
-                                                        setopenPOdrp(!openPOdrp)
-                                                    }}
-                                                >
-                                                    <DropdownToggle
-                                                        className="btn header-item noti-icon mt-n2 mb-n3 "
-                                                        tag="button"
+                                {listPath === url.GRN_ADD_3 ?
+                                    <FormGroup className="mb-2 row  " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "130px" }}>Close PO</Label>
+                                        <Col md="7" style={{ marginLeft: "-14px" }}>
+                                            {
+                                                openPOdata.length === 1 ?
+                                                    <Input
+                                                        type="checkbox"
+                                                        style={{ paddingTop: "7px" }}
+                                                        placeholder="Enter Invoice No"
+                                                        disabled={pageMode === mode.view ? true : false}
+                                                        onChange={(e) => openPOdata[0].Inward = e.target.checked}
+                                                    />
+                                                    :
+                                                    <Dropdown
+                                                        className="d-none d-lg-inline-block ms-1"
+
+                                                        isOpen={openPOdrp}
+                                                        toggle={() => {
+                                                            setopenPOdrp(!openPOdrp)
+                                                        }}
                                                     >
-                                                        <FeatherIcon
-                                                            icon="square"
-                                                            className="icon-sm text-primary"
-                                                        />
-                                                    </DropdownToggle>
-                                                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
-                                                        <Row className="row  g-0 " >
-                                                            {openPOdata.map((index, key) => {
-                                                                return (
-                                                                    <Col className="col col-6 dropdown-icon-item-custom  text-black "
-                                                                    >
-                                                                        <li onClick={e => {
-                                                                            openPOdata[key].Inward = !openPOdata[key].Inward
-                                                                            document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
-                                                                        }} >
-                                                                            <Row className="row ">
-                                                                                <Col className=" col user-select ">
-                                                                                    <li>
-                                                                                        <Label className="" >{index.ChallanNo}</Label>
-                                                                                    </li>
-                                                                                </Col>
+                                                        <DropdownToggle
+                                                            className="btn header-item noti-icon mt-n2 mb-n3 "
+                                                            tag="button"
+                                                        >
+                                                            <FeatherIcon
+                                                                icon="square"
+                                                                className="icon-sm text-primary"
+                                                            />
+                                                        </DropdownToggle>
+                                                        <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
+                                                            <Row className="row  g-0 " >
+                                                                {openPOdata.map((index, key) => {
+                                                                    return (
+                                                                        <Col className="col col-6 dropdown-icon-item-custom  text-black "
+                                                                        >
+                                                                            <li onClick={e => {
+                                                                                openPOdata[key].Inward = !openPOdata[key].Inward
+                                                                                document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
+                                                                            }} >
+                                                                                <Row className="row ">
+                                                                                    <Col className=" col user-select ">
+                                                                                        <li>
+                                                                                            <Label className="" >{index.ChallanNo}</Label>
+                                                                                        </li>
+                                                                                    </Col>
 
-                                                                                <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
-                                                                                    <Input
-                                                                                        id={`hasInwardCheck${key}`}
-                                                                                        className="col col-2 text-black "
-                                                                                        type="checkbox"
-                                                                                        defaultChecked={openPOdata[key].Inward}
-                                                                                    />
-                                                                                </Col>
-                                                                            </Row>
-                                                                        </li>
-                                                                    </Col>
-                                                                )
-                                                            })}
-                                                        </Row>
+                                                                                    <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
+                                                                                        <Input
+                                                                                            id={`hasInwardCheck${key}`}
+                                                                                            className="col col-2 text-black "
+                                                                                            type="checkbox"
+                                                                                            defaultChecked={openPOdata[key].Inward}
+                                                                                        />
+                                                                                    </Col>
+                                                                                </Row>
+                                                                            </li>
+                                                                        </Col>
+                                                                    )
+                                                                })}
+                                                            </Row>
 
-                                                    </DropdownMenu>
-                                                </Dropdown>
-                                        }
+                                                        </DropdownMenu>
+                                                    </Dropdown>
+                                            }
 
-                                    </Col>
-                                </FormGroup>
+                                        </Col>
+                                    </FormGroup> : null}
+
+
 
                             </Col>
                         </Row>
@@ -863,6 +995,7 @@ const GRNAdd = (props) => {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    editCreatedBy={editCreatedBy}
                                     userAcc={userAccState}
                                     module={"GRN"} onClick={saveHandeller}
                                 />
