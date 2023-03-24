@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data } from "./DemoData";
+// import { Data } from "./DemoData";
 
 
 var pageHeder = function (doc,data) {

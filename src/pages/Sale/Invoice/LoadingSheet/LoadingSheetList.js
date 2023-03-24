@@ -14,7 +14,7 @@ import {
 import * as pageId from "../../../../routes//allPageID";
 import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { LoadingSheetListAction, LoadingSheetlistfilter, LoadingSheetlistfilters } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheetListAction } from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
@@ -108,10 +108,10 @@ const LoadingSheetList = () => {
     function downBtnFunc(row, downbtnType) {
         console.log(downbtnType)
         if (downbtnType === "IsMultipleInvoicePrint") {
-            var ReportType = report.invoiceA5
+            let ReportType = report.invoiceA5
             dispatch(getpdfReportdata(MultipleInvoice_API, ReportType, row.id))
         } else {
-            var ReportType = report.VanLoadingPartyWiseInvoice
+            let ReportType = report.VanLoadingPartyWiseInvoice
             dispatch(getpdfReportdata(LoadingSheet_API, ReportType, row.id))
         }
     }
