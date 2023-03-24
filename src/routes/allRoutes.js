@@ -126,12 +126,11 @@ import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
 import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
-import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 import Report from "../Reports/AllReportPage";
 import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
-import GRNAdd_3 from "../pages/Inventory/GRN/GRNAdd_3";
+
 const userRoutes = [
 
   // *************************** Administration *******************************//

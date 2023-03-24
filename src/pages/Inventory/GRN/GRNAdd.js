@@ -265,8 +265,8 @@ const GRNAdd = (props) => {
             setgrnItemList(initialTableData)
             grnDetails.OrderItem = []
 
+            setInvoiceNo(grnItems.InvoiceNumber)
             setGrnDetail(grnDetails)
-
             const myArr = grnDetails.challanNo.split(",");
             myArr.map(i => ({ Name: i, hascheck: false }))
             setopenPOdata(grnDetails.GRNReferences)
@@ -295,7 +295,8 @@ const GRNAdd = (props) => {
 
                 setEditData(hasEditVal);
 
-                const { GRNItems = [], GRNReferences = [] } = hasEditVal;
+                const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
+
                 let ChallanNo1 = ''
 
                 GRNReferences.forEach(ele => {
@@ -303,6 +304,7 @@ const GRNAdd = (props) => {
                 });
                 ChallanNo1 = ChallanNo1.replace(/,*$/, '');
 
+                setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
                 setgrnItemList(GRNItems)
                 dispatch(editGRNIdSuccess({ Status: false }))
@@ -358,7 +360,7 @@ const GRNAdd = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
     }
 
-    const pagesListColumns1 = [
+    const tableColumnsMode_1 = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
@@ -641,7 +643,7 @@ const GRNAdd = (props) => {
             }
         },
     ];
-    const pagesListColumns = [
+    const tableColumnsMode_3 = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
@@ -927,7 +929,7 @@ const GRNAdd = (props) => {
                                         <Input
                                             type="text"
                                             style={{ backgroundColor: "white" }}
-                                            value={EditData.InvoiceNumber}
+                                            value={invoiceNo}
                                             placeholder="Enter Invoice No"
                                             disabled={pageMode === mode.view ? true : false}
                                             onChange={(e) => setInvoiceNo(e.target.value)}
@@ -1019,7 +1021,7 @@ const GRNAdd = (props) => {
                                 keyField="id"
                                 defaultSorted={defaultSorted}
                                 data={grnItemList}
-                                columns={pagesListColumns}
+                                columns={subPageMode === url.GRN_ADD_3 ? tableColumnsMode_3 : tableColumnsMode_1}
                                 search
                             >
                                 {(toolkitProps,) => (
