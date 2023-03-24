@@ -1,5 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { saveVehicleMasterSuccess, getVehicleListSuccess, getMethod_DriverList_ForDropDown_Success, getVehicleType_for_dropdown_Success, deleteVehicleID_Success, editVehicleID_Success, updateVehicleID_Success } from "./action";
+import { saveVehicleMasterSuccess, getVehicleListSuccess,
+   getVehicleType_for_dropdown_Success, deleteVehicleID_Success,
+    editVehicleID_Success, updateVehicleID_Success } from "./action";
 import {
   Vehicle_Get_API,
   Vehicle_Post_API,

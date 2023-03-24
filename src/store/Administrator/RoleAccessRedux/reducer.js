@@ -1,4 +1,3 @@
-import { LOGOUT_REST } from "../../auth/login/actionTypes"
 import {
   DELETE_ROLE_ACCESS_lIST_SUCCESS,
   GET_ROLEACCESS_LIST_PAGE_SUCCESS,
