@@ -14,7 +14,7 @@ import {
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     btnIsDissablefunc,
     currentDate,
