@@ -65,7 +65,6 @@ const Inward = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInwardSuccess({ Status: false }))
-            // saveDissable(false);//save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -74,7 +73,6 @@ const Inward = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
-            // saveDissable(false);//save Button Is enable function
             dispatch(postInwardSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -136,7 +134,6 @@ const Inward = (props) => {
             }]
         });
 
-        // saveDissable(true);//save Button Is dissable function
 
         if (pageMode === mode.edit) {
         } else {

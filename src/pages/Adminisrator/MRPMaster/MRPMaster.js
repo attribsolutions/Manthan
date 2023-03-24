@@ -22,7 +22,7 @@ import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import {
     get_Division_ForDropDown,
     get_Party_ForDropDown
@@ -38,8 +38,7 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturnFunc, loginUserID, saveDissable, loginCompanyID } from "../../../components/Common/CommonFunction";
-import * as pageId from "../../../routes/allPageID"
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
 
 const MRPMaster = (props) => {
 

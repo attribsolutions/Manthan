@@ -137,8 +137,9 @@ const InvoiceList = () => {
 
 
     function downBtnFunc(row) {
+          
         var ReportType = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, row.id))
+        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, ReportType, {editId: row.id}))
     }
 
     function goButtonHandler(event, IBType) {

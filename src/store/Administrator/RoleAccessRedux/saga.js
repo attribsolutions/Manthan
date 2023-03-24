@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
   RoleAccessAdd_AddPage_Button_Api,
   RoleAccessAdd_Delete_Api,
@@ -11,6 +11,7 @@ import {
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   DELETE_ROLE_ACCESS_lIST,
+  DELETE_ROLE_ACCESS_MASTER,
   GET_ROLEACCESS_LIST_PAGE,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
@@ -19,16 +20,15 @@ import {
   SAVE_ROLE_ACCESS_ADD_ACTION,
 } from "./actionType";
 import {
-  AddPageHandlerForRoleAccessListPage_Success,
   getRoleAccessListPageSuccess,
   GetRoleListForRoleAccessListPage_Success,
-  GO_Button_HandlerForRoleAccessListPage_Success,
-  PageDropdownForRoleAccessList_Success,
   saveRoleAccessAddActionSuccess,
   saveCopyRoleAccessActionSuccess,
   DeleteRoleAcessSuccess,
+  setTableData_roleAccss_AddPageSuccess,
+  PageDropdownForRoleAccessList_Success,
 } from "./actions";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { btnIsDissablefunc, CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
 
 
@@ -50,14 +50,28 @@ function* PageDropdownForRoleAccessList_GenFunc({ id1, id2 }) {
 function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
   try {
     const response = yield call(RoleAccessAdd_GO_Button_Api, id1, id2, id3);
-    yield put(GO_Button_HandlerForRoleAccessListPage_Success(response.Data));
+    const newArray = response.Data.map((i, k) => {
+      i.id = k + 1;
+      return i
+    })
+    yield put(setTableData_roleAccss_AddPageSuccess(newArray));
   } catch (error) { CommonConsole(error) }
 }
 
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
+     
   try {
     const response = yield call(RoleAccessAdd_AddPage_Button_Api, id);
-    yield put(AddPageHandlerForRoleAccessListPage_Success(response.Data));
+    const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
+    const tableList = yield select(getState);
+
+    let preArray = [...response.Data, ...tableList]
+    // tableList.unshift
+    let newArray = preArray.map((i, k) => {
+      i.id = k + 1;
+      return i
+    })
+    yield put(setTableData_roleAccss_AddPageSuccess(newArray));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -82,7 +96,7 @@ function* getList_RoleAccessList_GenFunc() { // get api
 }
 
 
-function* Delete_RoleAccessList_GenFunc({ config}) {// delete Api
+function* Delete_RoleAccessList_GenFunc({ config }) {// delete Api
   try {
     const response = yield call(RoleAccessAdd_Delete_Api, config);
     yield put(DeleteRoleAcessSuccess(response));
@@ -99,6 +113,42 @@ function* saveRoleAccessCopy_GenFun({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
+function* deleteRoleAccessMaster_GenFun({ config }) {
+  try {
+    const { btnId, deleteId } = config;
+    const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
+    const tableList = yield select(getState);
+    const newList = tableList.filter((index) => {
+      return (!(index.id === deleteId))
+    })
+    yield put(setTableData_roleAccss_AddPageSuccess(newList));
+    btnIsDissablefunc({ btnId, state: false })
+
+  } catch (error) {
+    const { btnId } = config;
+    btnIsDissablefunc({ btnId, state: false })
+    CommonConsole(error)
+  }
+}
+function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
+  try {
+       
+    const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
+    const tableList = yield select(getState);
+    const newList = tableList.map((index) => {
+
+      if (index.id === id) { index[`${cell}`] = check ? 1 : 0 }
+      return index
+    })
+    yield put(setTableData_roleAccss_AddPageSuccess(newList));
+
+  } catch (error) {
+
+    CommonConsole(error)
+  }
+}
+
+
 
 function* RoleAccessSaga() {
   yield takeEvery(DELETE_ROLE_ACCESS_lIST, Delete_RoleAccessList_GenFunc);
@@ -109,6 +159,9 @@ function* RoleAccessSaga() {
   yield takeEvery(SAVE_ROLE_ACCESS_ADD_ACTION, saveRoleAccessAdd_GenFunc);
   yield takeEvery(SAVE_COPY_ROLE_ACCESS_ACTION, saveRoleAccessCopy_GenFun);
   yield takeEvery(GET_ROLEACCESS_LIST_PAGE, getList_RoleAccessList_GenFunc);
+  yield takeEvery(DELETE_ROLE_ACCESS_MASTER, deleteRoleAccessMaster_GenFun);
+  yield takeEvery("IS_CHECK_ROLE_ACCESS_MASTER", isCheckRoleAccessMaster_GenFun);
+
 
 }
 

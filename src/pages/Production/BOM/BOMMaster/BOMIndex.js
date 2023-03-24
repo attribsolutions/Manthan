@@ -299,7 +299,6 @@ const BOMMaster = (props) => {
     //             return;
     //         }
 
-    //         // saveDissable(true);//save Button Is dissable function
 
     //         if (pageMode === mode.edit) {
     //             dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));

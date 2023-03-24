@@ -1,6 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
+import { convertDatefunc } from "../../components/Common/CommonFunction";
 import { VanLoadingSheetSKU } from "../ReportIndex";
 import * as table from './TableData'
 
@@ -59,10 +60,17 @@ export const reportHeder1 = (doc, data) => {
             if (data1.row.cells[0].raw === "Address:")
              {
                 data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[1].colSpan = 5
+               
+
+
+
             }
             if (data1.row.cells[0].raw === "Routes:")
             {
                data1.row.cells[0].styles.fontStyle = "bold"
+               data1.row.cells[2].styles.fontStyle = "bold"
+               data1.row.cells[4].styles.fontStyle = "bold"
            }
         },
 
@@ -91,15 +99,35 @@ export const reportHeder1 = (doc, data) => {
             },
            
             1: {
-                columnWidth: 400,
+                columnWidth: 100,
                 halign: 'left',
             },
+            2: {
+                valign: "top",
+                columnWidth: 65,
+                halign: 'left',
+            },
+            3: {
+                columnWidth: 140,
+                halign: 'left',
+            }, 
+            4: {
+                columnWidth: 60,
+                halign: 'left',
+            },
+            5: {
+                columnWidth: 120,
+                halign: 'left',
+            },
+
+
+           
            
         },
         tableLineColor: "black",
         startY:85
     };
-    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
+    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(doc,data), options3);
 }
 
 export const reportHeder2 = (doc, data) => {
@@ -116,7 +144,8 @@ export const reportHeder3 = (doc, data) => {
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
     doc.text(`Loading No:${data.PartyDetails.LoadingSheetNo}`, 415, 30) //Invoice Id
-    doc.text(`Loading Date: ${data.PartyDetails.Date}`, 415, 50) //Invoice date
+    var date = convertDatefunc(data.PartyDetails.Date)
+    doc.text(`Loading Date: ${date}`, 415, 50) //Invoice date
     doc.setFontSize(11)
 }
 // original

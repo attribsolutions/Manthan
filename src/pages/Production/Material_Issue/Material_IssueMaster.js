@@ -206,15 +206,6 @@ const MaterialIssueMaster = (props) => {
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
             dispatch(saveBOMMasterSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            // saveDissable(false);//save Button Is enable function
-
-            // dispatch(AlertState({
-            //     Type: 1,
-            //     Status: true,
-            //     Message: "Item is out of stock",
-            //     RedirectPath: url.MATERIAL_ISSUE_LIST,
-            // }))
             if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,

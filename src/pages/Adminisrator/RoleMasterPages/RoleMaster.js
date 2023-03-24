@@ -37,7 +37,7 @@ import {
   resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, saveDissable } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -173,7 +173,6 @@ const RoleMaster = (props) => {
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
-      saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === mode.dropdownAdd) {
@@ -194,7 +193,6 @@ const RoleMaster = (props) => {
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-      saveDissable(false);//save Button Is enable function
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -208,13 +206,11 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      saveDissable(false);//Update Button Is enable function
       setState(() => resetFunction(fileds, state))// Clear form values  
       history.push({
         pathname: url.ROLE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//Update Button Is enable function
       dispatch(userUpdateActionSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -260,7 +256,6 @@ const RoleMaster = (props) => {
           UpdatedOn: "2022-05-20T11:22:55.711483Z"
         });
 
-        saveDissable(true);//save Button Is dissable function
         if (pageMode === mode.edit) {
           dispatch(userUpdateAction({ jsonBody, updateId: values.id, btnId }));
 
