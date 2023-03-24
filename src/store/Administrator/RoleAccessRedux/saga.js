@@ -59,7 +59,7 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
 }
 
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
-  debugger
+     
   try {
     const response = yield call(RoleAccessAdd_AddPage_Button_Api, id);
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
@@ -132,7 +132,7 @@ function* deleteRoleAccessMaster_GenFun({ config }) {
 }
 function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
   try {
-    debugger
+       
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableList = yield select(getState);
     const newList = tableList.map((index) => {

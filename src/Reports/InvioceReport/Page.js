@@ -20,8 +20,8 @@ function pageFooter(doc,data) {
     style.reportFooter(doc,data);
 }
 
- const InvioceReport=(data)=> {
-//    const data = Data
+ const InvioceReport=()=> {
+   const data = Data
 
    
     var doc = new jsPDF('p', 'pt', 'a4');

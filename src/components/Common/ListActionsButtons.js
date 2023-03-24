@@ -98,7 +98,7 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-            debugger
+               
 
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false
