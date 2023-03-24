@@ -1,7 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { GoButton_Post_API, MRP_MasterPage_delete_API, Post_MRPMaster_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { SpinnerState } from "../../Utilites/Spinner/actions";
 
 import {
   POST_MRP_MASTER_DATA,

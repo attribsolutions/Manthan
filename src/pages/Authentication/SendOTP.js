@@ -1,6 +1,6 @@
 import React from "react";
-import { Col, Container, Row, CardHeader, Label } from "reactstrap";
-import { AvForm, AvInput, AvGroup, AvFeedback,AvField } from "availity-reactstrap-validation";
+import { Col, Container, Row,  } from "reactstrap";
+import { AvForm, AvGroup,AvField } from "availity-reactstrap-validation";
 import { useHistory } from "react-router-dom";
 import MetaTags from "react-meta-tags"
 import { Link } from "react-router-dom"
