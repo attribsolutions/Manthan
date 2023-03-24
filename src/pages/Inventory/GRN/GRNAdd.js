@@ -35,24 +35,154 @@ import * as pageId from "../../../routes/allPageID"
 let initialTableData = []
 
 function initialState(history) {
-      
+
     let page_Id = '';
-    let listPath = ''
+    let subPageMode = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.GRN_ADD) {
-        page_Id = pageId.GRN_ADD;
-        listPath = url.GRN_lIST
+    if (sub_Mode === url.GRN_ADD_1) {
+        page_Id = pageId.GRN_ADD_1;
+        subPageMode = url.GRN_ADD_1
     }
     else if (sub_Mode === url.GRN_ADD_3) {
         page_Id = pageId.GRN_ADD_3;
-        listPath = url.GRN_lIST_3
+        subPageMode = url.GRN_ADD_3
     }
-    return { page_Id, listPath }
+    return { page_Id, subPageMode }
 };
 
 const GRNAdd = (props) => {
-      
+
+    // const Data = [
+    //     {
+    //         Item: 4,
+    //         ItemName: "Peda",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 24,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8995.000",
+    //         GST: 4,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 24,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         Item: 4,
+    //         ItemName: "Peda",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 24,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8995.000",
+    //         GST: 4,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 24,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         Item: 4,
+    //         ItemName: "Peda",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 24,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8995.000",
+    //         GST: 4,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 24,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         Item: 5,
+    //         ItemName: "Dahi",
+    //         Quantity: "1.000",
+    //         MRP: null,
+    //         MRPValue: null,
+    //         Rate: "10.00",
+    //         TaxType: "GST",
+    //         Unit: 23,
+    //         UnitName: "Kg",
+    //         BaseUnitQuantity: "8984.000",
+    //         GST: 6,
+    //         GSTPercentage: "5.00",
+    //         MarginValue: null,
+    //         BasicAmount: "10.00",
+    //         GSTAmount: "0.50",
+    //         CGST: "0.25",
+    //         SGST: "0.25",
+    //         IGST: "0.00",
+    //         CGSTPercentage: "2.50",
+    //         SGSTPercentage: "2.50",
+    //         IGSTPercentage: "0.00",
+    //         Amount: "10.50",
+    //         BatchCode: "0",
+    //         BatchDate: "2023-03-15",
+    //         UnitDetails: [
+    //             {
+    //                 Unit: 23,
+    //                 UnitName: "Kg"
+    //             }
+    //         ]
+    //     }]
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -61,7 +191,7 @@ const GRNAdd = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
-    const [listPath, setListPath] = useState(() => initialState(history).listPath)
+    const [subPageMode, setSubPageMode] = useState(() => initialState(history).subPageMode)
     const [grnDate, setgrnDate] = useState(currentDate);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
@@ -191,7 +321,7 @@ const GRNAdd = (props) => {
                 Message: postMsg.Message,
             })
             if (promise) {
-                history.push({ pathname: listPath })
+                history.push({ pathname: subPageMode })
             }
 
         } else if (postMsg.Status === true) {
@@ -228,16 +358,16 @@ const GRNAdd = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
     }
 
-    const pagesListColumns = [
+    const pagesListColumns1 = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "ItemName",
 
-            formatter: (value, row) => (
-                <div className=" mt-2">
+            formatter: (value, row) => {
+                return (<div className=" mt-2">
                     <span key={row.id}>{value}</span>
-                </div>
-            ),
+                </div>)
+            }
         },
 
         {//------------- Quntity first column ----------------------------------
@@ -247,7 +377,6 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 return (
                     <div className="text-end" >
-
                         <samp key={row.id} className="font-asian"> {value}</samp>
                     </div>
                 )
@@ -331,6 +460,30 @@ const GRNAdd = (props) => {
             },
             headerStyle: (colum, colIndex) => {
                 return { width: '150px', textAlign: 'center' };
+            }
+        },
+
+        {  //-------------MRP column ----------------------------------
+            text: "MRP",
+            dataField: "",
+            hidden: (subPageMode === url.GRN_LIST_3) ? false : true,
+            formatter: (value, row, k) => {
+                return (
+                    <span className="text-right" >
+                        <Input
+                            key={row.id}
+                            type="text"
+                            className=" text-end"
+                            defaultValue={row.MRP}
+                            autoComplete="off"
+                            disabled={true}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center' };
             }
         },
 
@@ -450,7 +603,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: (pageMode === mode.view) ? true : false,
+            hidden: ((pageMode === mode.view) || subPageMode === url.GRN_LIST_3) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -487,6 +640,47 @@ const GRNAdd = (props) => {
                 return { width: '30px', textAlign: 'center', text: "center" };
             }
         },
+    ];
+    const pagesListColumns = [
+        {//------------- ItemName column ----------------------------------
+            text: "Item Name",
+            dataField: "ItemName",
+        },
+
+        {//------------- Quntity  column ----------------------------------
+            text: "Invoice-Qty",
+            dataField: "poQuantity",
+        },
+
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
+            dataField: "UnitName",
+        },
+
+        {  //-------------MRP column ----------------------------------
+            text: "MRP",
+            dataField: "MRP",
+        },
+        {  //-------------Rate column ----------------------------------
+            text: "Rate",
+            dataField: "Rate",
+        },
+
+        {//------------- ItemName column ----------------------------------
+            text: "Amount",
+            dataField: "Amount",
+        },
+
+        {//------------- Batch Code column ----------------------------------
+            text: "BatchCode",
+            dataField: "BatchCode",
+        },
+
+        {//------------- Batch Date column ----------------------------------
+            text: "Batch Date",
+            dataField: "BatchDate",
+        },
+
     ];
 
     const defaultSorted = [
@@ -537,7 +731,6 @@ const GRNAdd = (props) => {
         const newArr = list.filter(i => { return (!(i.id === r.id)) })
         initialTableData = newArr
         setgrnItemList(newArr)
-
     }
 
     const saveHandeller = (event) => {
@@ -557,7 +750,10 @@ const GRNAdd = (props) => {
 
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-
+                if (subPageMode === url.GRN_ADD_3) {
+                    debugger
+                    i.Quantity = i.poQuantity
+                }
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
@@ -577,14 +773,12 @@ const GRNAdd = (props) => {
                     CGSTPercentage: (i.GSTPercentage / 2),
                     SGSTPercentage: (i.GSTPercentage / 2),
                     IGSTPercentage: 0,
-
                     BatchDate: i.BatchDate,
                     BatchCode: i.BatchCode,
                     DiscountType: "0",
                     Discount: "0.00",
                     DiscountAmount: "0.00",
                     TaxType: "GST",
-
                 }
                 let isfound = itemArr.filter(ind => {
                     return ind.Item === i.Item
@@ -741,75 +935,79 @@ const GRNAdd = (props) => {
                                     </Col>
                                 </FormGroup>
 
-                                <FormGroup className="mb-2 row  " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Close PO</Label>
-                                    <Col md="7" style={{ marginLeft: "-14px" }}>
-                                        {
-                                            openPOdata.length === 1 ?
-                                                <Input
-                                                    type="checkbox"
-                                                    style={{ paddingTop: "7px" }}
-                                                    placeholder="Enter Invoice No"
-                                                    disabled={pageMode === mode.view ? true : false}
-                                                    onChange={(e) => openPOdata[0].Inward = e.target.checked}
-                                                />
-                                                :
-                                                <Dropdown
-                                                    className="d-none d-lg-inline-block ms-1"
 
-                                                    isOpen={openPOdrp}
-                                                    toggle={() => {
-                                                        setopenPOdrp(!openPOdrp)
-                                                    }}
-                                                >
-                                                    <DropdownToggle
-                                                        className="btn header-item noti-icon mt-n2 mb-n3 "
-                                                        tag="button"
+                                {subPageMode === url.GRN_ADD_3 ?
+                                    <FormGroup className="mb-2 row  " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "130px" }}>Close PO</Label>
+                                        <Col md="7" style={{ marginLeft: "-14px" }}>
+                                            {
+                                                openPOdata.length === 1 ?
+                                                    <Input
+                                                        type="checkbox"
+                                                        style={{ paddingTop: "7px" }}
+                                                        placeholder="Enter Invoice No"
+                                                        disabled={pageMode === mode.view ? true : false}
+                                                        onChange={(e) => openPOdata[0].Inward = e.target.checked}
+                                                    />
+                                                    :
+                                                    <Dropdown
+                                                        className="d-none d-lg-inline-block ms-1"
+
+                                                        isOpen={openPOdrp}
+                                                        toggle={() => {
+                                                            setopenPOdrp(!openPOdrp)
+                                                        }}
                                                     >
-                                                        <FeatherIcon
-                                                            icon="square"
-                                                            className="icon-sm text-primary"
-                                                        />
-                                                    </DropdownToggle>
-                                                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
-                                                        <Row className="row  g-0 " >
-                                                            {openPOdata.map((index, key) => {
-                                                                return (
-                                                                    <Col className="col col-6 dropdown-icon-item-custom  text-black "
-                                                                    >
-                                                                        <li onClick={e => {
-                                                                            openPOdata[key].Inward = !openPOdata[key].Inward
-                                                                            document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
-                                                                        }} >
-                                                                            <Row className="row ">
-                                                                                <Col className=" col user-select ">
-                                                                                    <li>
-                                                                                        <Label className="" >{index.ChallanNo}</Label>
-                                                                                    </li>
-                                                                                </Col>
+                                                        <DropdownToggle
+                                                            className="btn header-item noti-icon mt-n2 mb-n3 "
+                                                            tag="button"
+                                                        >
+                                                            <FeatherIcon
+                                                                icon="square"
+                                                                className="icon-sm text-primary"
+                                                            />
+                                                        </DropdownToggle>
+                                                        <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
+                                                            <Row className="row  g-0 " >
+                                                                {openPOdata.map((index, key) => {
+                                                                    return (
+                                                                        <Col className="col col-6 dropdown-icon-item-custom  text-black "
+                                                                        >
+                                                                            <li onClick={e => {
+                                                                                openPOdata[key].Inward = !openPOdata[key].Inward
+                                                                                document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
+                                                                            }} >
+                                                                                <Row className="row ">
+                                                                                    <Col className=" col user-select ">
+                                                                                        <li>
+                                                                                            <Label className="" >{index.ChallanNo}</Label>
+                                                                                        </li>
+                                                                                    </Col>
 
-                                                                                <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
-                                                                                    <Input
-                                                                                        id={`hasInwardCheck${key}`}
-                                                                                        className="col col-2 text-black "
-                                                                                        type="checkbox"
-                                                                                        defaultChecked={openPOdata[key].Inward}
-                                                                                    />
-                                                                                </Col>
-                                                                            </Row>
-                                                                        </li>
-                                                                    </Col>
-                                                                )
-                                                            })}
-                                                        </Row>
+                                                                                    <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
+                                                                                        <Input
+                                                                                            id={`hasInwardCheck${key}`}
+                                                                                            className="col col-2 text-black "
+                                                                                            type="checkbox"
+                                                                                            defaultChecked={openPOdata[key].Inward}
+                                                                                        />
+                                                                                    </Col>
+                                                                                </Row>
+                                                                            </li>
+                                                                        </Col>
+                                                                    )
+                                                                })}
+                                                            </Row>
 
-                                                    </DropdownMenu>
-                                                </Dropdown>
-                                        }
+                                                        </DropdownMenu>
+                                                    </Dropdown>
+                                            }
 
-                                    </Col>
-                                </FormGroup>
+                                        </Col>
+                                    </FormGroup> : null}
+
+
 
                             </Col>
                         </Row>
@@ -863,6 +1061,7 @@ const GRNAdd = (props) => {
                         (grnItemList.length > 0) ?
                             <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
                                 <SaveButton pageMode={pageMode}
+                                    editCreatedBy={editCreatedBy}
                                     userAcc={userAccState}
                                     module={"GRN"} onClick={saveHandeller}
                                 />

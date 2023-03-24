@@ -26,27 +26,14 @@ const initialState = {
 const Login = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_USER:
-      state = {
-        ...state,
-        loading: true,
-      }
-
-    case LOGIN_SUCCESS:
-      state = {
-        ...state,
-        loading: false,
-      }
-
-    case LOGOUT_USER:
-      state = {
-        ...state,
-      }
+      state = { ...state, loading: true, }
       break
-    case LOGOUT_USER_SUCCESS:
-      state = {
-        ...state,
-      }
-
+    case LOGIN_SUCCESS: state = { ...state, loading: false, }
+      break
+    case LOGOUT_USER: state = { ...state, }
+      break
+    case LOGOUT_USER_SUCCESS: state = { ...state, }
+      break
     case API_ERROR:
       state = { ...state, loginError: action.payload, loading: false }
       break
@@ -62,6 +49,7 @@ const Login = (state = initialState, action) => {
         ...state,
         divisionDropdown: action.payload,
       }
+
     case ROLE_ACCESS_API_CALL_SUCCESS:
       return {
         ...state,
@@ -83,8 +71,8 @@ const Login = (state = initialState, action) => {
     case RESET_ROLE_ACCESS_ACTION:
       return {
         ...state,
-        roleAccessSidbarData:[],
-        RoleAccessUpdateData:[]
+        roleAccessSidbarData: [],
+        RoleAccessUpdateData: []
       }
 
     case LOGOUT_REST:
@@ -93,7 +81,7 @@ const Login = (state = initialState, action) => {
       }
     default:
       state = { ...state }
-      break
+      break;
   }
   return state
 }

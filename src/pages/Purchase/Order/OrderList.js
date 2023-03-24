@@ -127,8 +127,8 @@ const OrderList = () => {
             makeBtnName = "Make Invoice"
             IBType = "IBSO"
         }
-        else if (subPageMode === url.GRN_STP) {
-            page_Id = pageId.GRN_STP
+        else if (subPageMode === url.GRN_STP_1) {
+            page_Id = pageId.GRN_STP_1
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make GRN"
@@ -174,7 +174,6 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
@@ -195,9 +194,7 @@ const OrderList = () => {
         }
     }, [makeIBInvoice])
 
-
     const makeBtnFunc = (list = []) => {
-
         const obj = list[0]
         if (subPageMode === url.IB_INVOICE_STP) {
             const jsonBody = JSON.stringify({
@@ -232,24 +229,24 @@ const OrderList = () => {
                 });
 
                 if (isGRNSelect) {
-
+                    let path = (subPageMode === url.GRN_STP_3 ? url.GRN_ADD_3 : url.GRN_ADD_1)
                     isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
                     challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-                     
+
                     let isMode = 1                               // define isMode for MakeBtn API
-                    
+
                     if (list[0].POType === "Challan") {
                         isMode = 2
                     }
                     else if (subPageMode === url.GRN_STP_3) {
-                        isMode=3
+                        isMode = 3
                     }
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
                         Mode: isMode
                     })
-                 
-                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
+
+                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: path, grnRef, challanNo }))
 
                 } else {
                     alert("Please Select Order1")

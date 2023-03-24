@@ -131,6 +131,7 @@ import Report from "../Reports/AllReportPage";
 import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
+import GRNAdd_3 from "../pages/Inventory/GRN/GRNAdd_3";
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -240,13 +241,16 @@ const userRoutes = [
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
 
-  { path: path.GRN_lIST, component: GRNList },
-  { path: path.GRN_ADD, component: GRNAdd },
-  { path: path.GRN_STP, component: OrderList },
+  { path: path.GRN_LIST_1, component: GRNList },
+  { path: path.GRN_ADD_1, component: GRNAdd },
+  { path: path.GRN_STP_1, component: OrderList },
 
-  { path: path.GRN_lIST_3, component: GRNList },
+  { path: path.GRN_LIST_3, component: GRNList },
   { path: path.GRN_ADD_3, component: GRNAdd },
   { path: path.GRN_STP_3, component: OrderList },
+
+  // { path: path.GRN_ADD_PAGE_3, component: GRNAdd_3 },
+
 
   //******************************* Purchase Module ************************************//
 

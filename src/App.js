@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
-import React, { useEffect } from "react"
+import React from "react"
 
 import { Switch, BrowserRouter as Router, useHistory } from "react-router-dom"
-import { connect, useSelector } from "react-redux"
+import { connect } from "react-redux"
 
 // Import Routes all
 import { userRoutes, authRoutes } from "./routes/allRoutes"

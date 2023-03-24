@@ -25,11 +25,10 @@ import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
-import { GRN } from "../../../helpers/url_helper";
 import GRNAdd from "./GRNAdd";
 
 const GRNList = () => {
-      
+
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -73,16 +72,16 @@ const GRNList = () => {
         let masterPath = '';
         let makeBtnShow = false
         let newBtnPath = ''
-
-        if (subPageMode === url.GRN_lIST) {
-            page_Id = pageId.GRN_lIST;
-            masterPath = url.GRN_ADD;
-            newBtnPath = url.GRN_STP;
+debugger
+        if (subPageMode === url.GRN_LIST_1) {
+            page_Id = pageId.GRN_LIST_1;
+            masterPath = url.GRN_ADD_1;
+            newBtnPath = url.GRN_STP_1;
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
-        else if (subPageMode === url.GRN_lIST_3) {
-            page_Id = pageId.GRN_lIST_3;
+        else if (subPageMode === url.GRN_LIST_3) {
+            page_Id = pageId.GRN_LIST_3;
             masterPath = url.GRN_ADD_3;
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
@@ -119,7 +118,7 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-
+   
         const id = list[0].id
         const makeBody = JSON.stringify({
             GRN: id,
