@@ -803,7 +803,6 @@ const Challan = (props) => {
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-
                                     keyField={"id"}
                                     data={GoButton}
                                     columns={pagesListColumns}

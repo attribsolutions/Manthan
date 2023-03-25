@@ -120,7 +120,7 @@ export const reportHeder4 = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
-
+    debugger
     let stringNumber = toWords(Number(data.GrandTotal))
     doc.addImage(upi_qr_code, 'PNG', 362, 313, 70, 60)
     doc.setDrawColor(0, 0, 0);
