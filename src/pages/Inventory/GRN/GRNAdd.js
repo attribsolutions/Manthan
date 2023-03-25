@@ -20,10 +20,10 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { editGRNIdSuccess, getGRN_itemMode2_Success, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
+import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { breadcrumbReturnFunc, loginUserID, currentDate, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import FeatherIcon from "feather-icons-react";
@@ -53,135 +53,6 @@ function initialState(history) {
 
 const GRNAdd = (props) => {
 
-    // const Data = [
-    //     {
-    //         Item: 4,
-    //         ItemName: "Peda",
-    //         Quantity: "1.000",
-    //         MRP: null,
-    //         MRPValue: null,
-    //         Rate: "10.00",
-    //         TaxType: "GST",
-    //         Unit: 24,
-    //         UnitName: "Kg",
-    //         BaseUnitQuantity: "8995.000",
-    //         GST: 4,
-    //         GSTPercentage: "5.00",
-    //         MarginValue: null,
-    //         BasicAmount: "10.00",
-    //         GSTAmount: "0.50",
-    //         CGST: "0.25",
-    //         SGST: "0.25",
-    //         IGST: "0.00",
-    //         CGSTPercentage: "2.50",
-    //         SGSTPercentage: "2.50",
-    //         IGSTPercentage: "0.00",
-    //         Amount: "10.50",
-    //         BatchCode: "0",
-    //         BatchDate: "2023-03-15",
-    //         UnitDetails: [
-    //             {
-    //                 Unit: 24,
-    //                 UnitName: "Kg"
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         Item: 4,
-    //         ItemName: "Peda",
-    //         Quantity: "1.000",
-    //         MRP: null,
-    //         MRPValue: null,
-    //         Rate: "10.00",
-    //         TaxType: "GST",
-    //         Unit: 24,
-    //         UnitName: "Kg",
-    //         BaseUnitQuantity: "8995.000",
-    //         GST: 4,
-    //         GSTPercentage: "5.00",
-    //         MarginValue: null,
-    //         BasicAmount: "10.00",
-    //         GSTAmount: "0.50",
-    //         CGST: "0.25",
-    //         SGST: "0.25",
-    //         IGST: "0.00",
-    //         CGSTPercentage: "2.50",
-    //         SGSTPercentage: "2.50",
-    //         IGSTPercentage: "0.00",
-    //         Amount: "10.50",
-    //         BatchCode: "0",
-    //         BatchDate: "2023-03-15",
-    //         UnitDetails: [
-    //             {
-    //                 Unit: 24,
-    //                 UnitName: "Kg"
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         Item: 4,
-    //         ItemName: "Peda",
-    //         Quantity: "1.000",
-    //         MRP: null,
-    //         MRPValue: null,
-    //         Rate: "10.00",
-    //         TaxType: "GST",
-    //         Unit: 24,
-    //         UnitName: "Kg",
-    //         BaseUnitQuantity: "8995.000",
-    //         GST: 4,
-    //         GSTPercentage: "5.00",
-    //         MarginValue: null,
-    //         BasicAmount: "10.00",
-    //         GSTAmount: "0.50",
-    //         CGST: "0.25",
-    //         SGST: "0.25",
-    //         IGST: "0.00",
-    //         CGSTPercentage: "2.50",
-    //         SGSTPercentage: "2.50",
-    //         IGSTPercentage: "0.00",
-    //         Amount: "10.50",
-    //         BatchCode: "0",
-    //         BatchDate: "2023-03-15",
-    //         UnitDetails: [
-    //             {
-    //                 Unit: 24,
-    //                 UnitName: "Kg"
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         Item: 5,
-    //         ItemName: "Dahi",
-    //         Quantity: "1.000",
-    //         MRP: null,
-    //         MRPValue: null,
-    //         Rate: "10.00",
-    //         TaxType: "GST",
-    //         Unit: 23,
-    //         UnitName: "Kg",
-    //         BaseUnitQuantity: "8984.000",
-    //         GST: 6,
-    //         GSTPercentage: "5.00",
-    //         MarginValue: null,
-    //         BasicAmount: "10.00",
-    //         GSTAmount: "0.50",
-    //         CGST: "0.25",
-    //         SGST: "0.25",
-    //         IGST: "0.00",
-    //         CGSTPercentage: "2.50",
-    //         SGSTPercentage: "2.50",
-    //         IGSTPercentage: "0.00",
-    //         Amount: "10.50",
-    //         BatchCode: "0",
-    //         BatchDate: "2023-03-15",
-    //         UnitDetails: [
-    //             {
-    //                 Unit: 23,
-    //                 UnitName: "Kg"
-    //             }
-    //         ]
-    //     }]
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -271,7 +142,7 @@ const GRNAdd = (props) => {
             myArr.map(i => ({ Name: i, hascheck: false }))
             setopenPOdata(grnDetails.GRNReferences)
             items.Status = false
-            dispatch(getGRN_itemMode2_Success(items))
+            dispatch(makeGRN_Mode_1ActionSuccess(items))
 
             dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItems.OrderAmount}`))
         }

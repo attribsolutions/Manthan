@@ -90,6 +90,7 @@ import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
 
 import GRNList from "../pages/Inventory/GRN/GRNList";
 import GRNAdd from "../pages/Inventory/GRN/GRNAdd";
+import GRNAdd3 from "../pages/Inventory/GRN/GRNAdd_3";
 
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
@@ -245,7 +246,7 @@ const userRoutes = [
   { path: path.GRN_STP_1, component: OrderList },
 
   { path: path.GRN_LIST_3, component: GRNList },
-  { path: path.GRN_ADD_3, component: GRNAdd },
+  { path: path.GRN_ADD_3, component: GRNAdd3 },
   { path: path.GRN_STP_3, component: OrderList },
 
   // { path: path.GRN_ADD_PAGE_3, component: GRNAdd_3 },
