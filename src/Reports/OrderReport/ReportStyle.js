@@ -107,24 +107,12 @@ export const reportHeder3 = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
-
-
-
-
     var options1 = {
-
         didParseCell: (data1) => {
             debugger
-
-
             if (data1.row.cells[0].raw === "Terms And Condition") {
-
                 data1.row.cells[0].styles.fontSize = 10
-
                 data1.row.cells[0].styles.fontStyle = "bold"
-              
-
-
             }
         
         },
