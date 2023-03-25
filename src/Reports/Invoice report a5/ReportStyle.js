@@ -120,7 +120,6 @@ export const reportHeder4 = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
-    debugger
     let stringNumber = toWords(Number(data.GrandTotal))
     doc.addImage(upi_qr_code, 'PNG', 362, 313, 70, 60)
     doc.setDrawColor(0, 0, 0);
@@ -187,7 +186,7 @@ export const reportFooter = (doc, data) => {
     doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
     doc.setFont(undefined, 'bold')
-    doc.text(`Ruppe:`, 33, 305,)
+    doc.text(`Rupees:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
 

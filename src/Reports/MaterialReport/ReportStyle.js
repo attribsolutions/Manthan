@@ -105,109 +105,7 @@ export const reportHeder3 = (doc, data) => {
 // original
 
 export const reportFooter = (doc, data) => {
-    var optionsTable2 = {
-        margin: {
-            top: 45, left: 35, right: 35,
-        },
-        theme: 'grid',
-        headerStyles: {
-            cellPadding: 4,
-            lineWidth: 1,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 3,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                columnWidth: 80,
-            },
-            1: {
-                columnWidth: 50,
-                halign: 'right',
-            },
-            2: {
-                columnWidth: 40,
-                halign: 'center',
-            },
-            3: {
-                halign: 'center',
-            },
-            4: {
-                halign: 'center',
-            },
-            5: {
-                halign: 'center',
-            },
-            6: {
-                halign: 'center',
-            },
-            7: {
-                halign: 'center',
-            },
-            8: {
-                fontStyle: 'bold',
-                halign: 'center',
-            },
-        },
-        startY: doc.autoTableEndPosY(),// 45,
-    };
-    const optionsTable3 = {
-
-        margin: {
-            top: 45, left: 35, right: 200
-        },
-        showHead: 'never',
-        theme: 'plain',
-        headerStyles: {
-            cellPadding: 1,
-            lineWidth: 0,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
-            fillColor: "white",
-            textColor: [0, 0, 0], //Black     
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            textColor: [30, 30, 30],
-            cellPadding: 1,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                // valign: "top",
-                // columnWidth: 280,
-                // fontStyle: 'bold',
-            },
-        },
-        didParseCell: function (cell, data) {
-            if (cell.row.index === 0) {
-                cell.cell.styles.fontSize = 7;
-                cell.cell.styles.lineColor = 'gray'
-                cell.cell.styles.lineWidth = 0.5
-            }
-        },
-        startY: 745,
-
-
-    };
+   
     // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
 
   
@@ -236,10 +134,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[5].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
                
-
-
-
-
             }
 
             if (data1.row.raw[6] ==="Dispatch" ) {
@@ -382,7 +276,7 @@ export const pageFooter = (doc, data) => {
    quantity whitch it/these purports to be `, 34, 760,)
     doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
-    doc.text(`Ruppe:${stringNumber} `, 33, 693,)
+    doc.text(`Rupees:${stringNumber} `, 33, 693,)
     let finalY = doc.previousAutoTable.finalY;
     if (finalY > 675) {
         pageBorder(doc)
