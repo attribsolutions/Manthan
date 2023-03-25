@@ -2,7 +2,7 @@
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
-import { toWords } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../Report_common_function";
 import { convertDatefunc } from "../../components/Common/CommonFunction";
 
 
@@ -163,10 +163,12 @@ export const reportFooter = (doc, data) => {
     doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 348, 'right')
 
     doc.setFont(undefined, 'Normal')
-    doc.setFontSize(12)
+    doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 440, 365,)
-    doc.text(`${data.GrandTotal}`, 560, 365, 'right')
+    doc.text(`Amount :`, 439, 365,)
+    const GrandTotal = Math.round(data.GrandTotal)
+    const Total = numberWithCommas((GrandTotal).toFixed(2))
+    doc.text(`${Total}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -189,7 +191,6 @@ export const reportFooter = (doc, data) => {
     doc.text(`Rupees:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 305,)
-
 
     const optionsTable4 = {
         margin: {

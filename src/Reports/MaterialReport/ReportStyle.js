@@ -105,10 +105,7 @@ export const reportHeder3 = (doc, data) => {
 // original
 
 export const reportFooter = (doc, data) => {
-   
     // doc.autoTable(table.ReportFotterColumns2, table.ReportFooterRow2(data),);
-
-  
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
