@@ -331,10 +331,11 @@ export const Rows1 = (data) => {
     return a1;
 }
 export const ReportHederRows = (data) => {
+    debugger
     var reportArray = [
         [`${data.SupplierName}`, `${data.CustomerName}`, `${data.POTypeName}`],
         [`${data.ShippingAddress}`, `${data.BillingAddress}`,`${data.CustomerName}` ],
-        [`${data.ShippingFssai}`,`FSSAI :ui3dfxxxxxwe55`,`${data.BillingAddress}`,],
+        [`FSSAI:${data.ShippingFssai}`,`FSSAI :ui3dfxxxxxwe55`,`${data.BillingAddress}`,],
     ]
     return reportArray;
 }
