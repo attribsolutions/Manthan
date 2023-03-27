@@ -3,7 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { convertDatefunc } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
-import { toWords } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../Report_common_function";
 
 import * as table from './TableData'
 
@@ -241,7 +241,9 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(12)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 440, 803,)
-    doc.text(`${data.GrandTotal}`, 560, 803, 'right')
+    const GrandTotal = Math.round(data.GrandTotal)
+    const Total = numberWithCommas((GrandTotal).toFixed(2))
+    doc.text(`${Total}`, 560, 803, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -261,7 +263,7 @@ export const reportFooter = (doc, data) => {
     doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 755,)
     doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 765,)
     doc.setFont(undefined, 'bold')
-    doc.text(`Ruppe:`, 33, 740,)
+    doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 740,)
 
@@ -434,7 +436,7 @@ export const tableBody = (doc, data) => {
 }
 
 export const pageFooter = (doc, data) => {
-    debugger
+     
     //   
     // let finalY = doc.previousAutoTable.finalY;
 
