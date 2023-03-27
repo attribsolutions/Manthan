@@ -18,10 +18,6 @@ import {
 } from './actionType'
 
 
-// export const orderAddfilters = filter => ({
-//   type: ORDER_ADD_FILTERS,
-//   payload: filter,
-// })
 export const orderlistfilters = filter => ({
   type: ORDER_LIST_FILTERS,
   payload: filter,

@@ -107,12 +107,12 @@ function* Item_tagname_GenFunc() {
 }
 
 // Brand tag Name 
-function* Brand_tagname_GenFunc() {
-  try {
-    const response = yield call(apiCall.Get_Brand_Tag);
-    yield put(action.getBrandtagSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
-}
+// function* Brand_tagname_GenFunc() {
+//   try {
+//     const response = yield call(apiCall.Get_Brand_Tag);
+//     yield put(action.getBrandtagSuccess(response.Data));
+//   } catch (error) { CommonConsole(error) }
+// }
 
 function* Group_DropDown_GenFunc({ id }) {
   try {

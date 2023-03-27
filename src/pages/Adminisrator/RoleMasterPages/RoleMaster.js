@@ -141,7 +141,7 @@ const RoleMaster = (props) => {
           label: data.EmployeeTypeName
         }))
 
-        const { id, Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
+        const { id, Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;

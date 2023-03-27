@@ -90,6 +90,7 @@ import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
 
 import GRNList from "../pages/Inventory/GRN/GRNList";
 import GRNAdd from "../pages/Inventory/GRN/GRNAdd";
+import GRNAdd3 from "../pages/Inventory/GRN/GRNAdd_3";
 
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
@@ -126,12 +127,11 @@ import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
 import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
-import CreditLimitList from "../pages/Adminisrator/CreditPages/CreditLimitList";
 import Report from "../Reports/AllReportPage";
 import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
-import GRNAdd_3 from "../pages/Inventory/GRN/GRNAdd_3";
+
 const userRoutes = [
 
   // *************************** Administration *******************************//
@@ -246,7 +246,7 @@ const userRoutes = [
   { path: path.GRN_STP_1, component: OrderList },
 
   { path: path.GRN_LIST_3, component: GRNList },
-  { path: path.GRN_ADD_3, component: GRNAdd },
+  { path: path.GRN_ADD_3, component: GRNAdd3 },
   { path: path.GRN_STP_3, component: OrderList },
 
   // { path: path.GRN_ADD_PAGE_3, component: GRNAdd_3 },

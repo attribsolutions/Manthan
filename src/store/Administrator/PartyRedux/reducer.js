@@ -1,4 +1,3 @@
-import { getAddressTypes } from "./action";
 import {
     DELETE_PARTY_ID_SUCCESS,
     EDIT_PARTY_ID_SUCCESS,

@@ -3,7 +3,7 @@ import {
   deleteGRNIdSuccess,
   editGRNIdSuccess,
   getGRNListPageSuccess,
-  getGRN_itemMode2_Success,
+  makeGRN_Mode_1ActionSuccess,
   saveGRNSuccess,
   updateGRNIdSuccess,
 } from "./actions";
@@ -16,13 +16,12 @@ import {
 import {
   DELETE_GRN_FOR_GRN_PAGE,
   EDIT_GRN_FOR_GRN_PAGE,
-  GET_GRN_ITEM_MODE_2,
+  MAKE_GRN_MODE_1_ACTION,
   GET_GRN_LIST_PAGE,
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
 } from "./actionType";
 import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
-
 
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
@@ -68,22 +67,30 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   } catch (error) { CommonConsole(error) }
 }
 
-function* getGRNitem_Mode2_GenFunc({ data }) {         // Make_GRN Items  genrator function
+function* makeGRN_Mode1_GenFunc({ data }) {         // Make_GRN Items  genrator function
   const { jsonBody, pageMode = '', path = '', grnRef = [], challanNo = '' } = data
   try {
-    const response = yield call(GRN_Make_API, jsonBody);
+    const response =yield call(GRN_Make_API, jsonBody);
+
+    response.Data.OrderItem.sort(function (a, b) {
+      if (a.Item > b.Item) { return 1; }
+      else if (a.Item < b.Item) { return -1; }
+      return 0;
+    });
+  
+    
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
     response.Data["GRNReferences"] = grnRef;
     response.Data["challanNo"] = challanNo;
-    yield put(getGRN_itemMode2_Success(response))
+    yield put(makeGRN_Mode_1ActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
-
+// 
 
 function* GRNSaga() {
 
-  yield takeEvery(GET_GRN_ITEM_MODE_2, getGRNitem_Mode2_GenFunc);
+  yield takeEvery(MAKE_GRN_MODE_1_ACTION, makeGRN_Mode1_GenFunc);
   yield takeEvery(SAVE_GRN_FROM_GRN_PAGE_ACTION, saveGRNGenFunc);
   yield takeEvery(EDIT_GRN_FOR_GRN_PAGE, Edit_GRN_GenratorFunction);
   yield takeEvery(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)

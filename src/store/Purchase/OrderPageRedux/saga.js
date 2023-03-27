@@ -1,4 +1,4 @@
-import { call, delay, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import {
   deleteOrderIdSuccess,
   postOrderSuccess,
@@ -33,7 +33,6 @@ import *as url from "../../../routes/route_url"
 
 function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
    
-  yield delay(400)
   try {
 
     const { subPageMode, data } = action

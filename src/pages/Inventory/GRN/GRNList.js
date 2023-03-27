@@ -15,8 +15,8 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
-import { GetCustomer, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, CommonConsole, loginPartyID } from "../../../components/Common/CommonFunction";
+import {   GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { btnIsDissablefunc,  loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -38,7 +38,7 @@ const GRNList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            customer: state.CommonAPI_Reducer.customer,
+            customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -72,7 +72,6 @@ const GRNList = () => {
         let masterPath = '';
         let makeBtnShow = false
         let newBtnPath = ''
-debugger
         if (subPageMode === url.GRN_LIST_1) {
             page_Id = pageId.GRN_LIST_1;
             masterPath = url.GRN_ADD_1;
@@ -87,11 +86,12 @@ debugger
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
+        debugger
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(GetCustomer())
+        dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler()
     }, []);
 

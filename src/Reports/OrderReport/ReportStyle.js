@@ -1,7 +1,8 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import * as table from './TableData'
-import { toWords } from "../Report_common_function";
+import { toWords, numberWithCommas } from "../Report_common_function";
+import { convertDatefunc } from "../../components/Common/CommonFunction";
 
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
@@ -38,7 +39,7 @@ export const reportHeder1 = (doc, data) => {
     // doc.line(570, 795, 410, 795);//horizontal line buttom Amount 2
 
 
-//Header Table Style 
+    //Header Table Style 
 
     var options3 = {
         margin: {
@@ -54,7 +55,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 2,
             fontSize: 8,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -66,7 +67,7 @@ export const reportHeder1 = (doc, data) => {
                 halign: 'left',
             },
             1: {
-                columnWidth: 190,
+                columnWidth: 189,
                 halign: 'left',
             },
             2: {
@@ -75,7 +76,7 @@ export const reportHeder1 = (doc, data) => {
             },
 
         },
-        startY:85
+        startY: 85
 
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
@@ -98,14 +99,62 @@ export const reportHeder3 = (doc, data) => {
 
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.OrderNo} `, 415, 25) //Invoice Id
-    doc.text(`Order Date: ${data.OrderDate}`, 415, 40) //Invoice date
-    doc.text(`DeliveryDate: ${data.DeliveryDate}`, 415, 55) //Invoice date
+    var date = convertDatefunc(data.OrderDate)
+    doc.text(`Order Date: ${date}`, 415, 40) //Invoice date
+    var date = convertDatefunc(data.DeliveryDate)
+    doc.text(`DeliveryDate: ${date}`, 415, 55) //Invoice date
 
 }
 
 export const reportFooter = (doc, data) => {
+    var options1 = {
+        didParseCell: (data1) => {
+            debugger
+            if (data1.row.cells[0].raw === "Terms And Condition") {
+                data1.row.cells[0].styles.fontSize = 10
+                data1.row.cells[0].styles.fontStyle = "bold"
+            }
+        
+        },
+        margin: {
+            top: 45, left: 35, right: 35, bottom: 10
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 395,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 765,
+
+    };
+
+    doc.autoTable(table.Footercolumn, table.ReportRows(data), options1);
     doc.setFontSize(9)
 }
+
+
+
+
 
 export const tableBody = (doc, data) => {
 
@@ -116,7 +165,7 @@ export const tableBody = (doc, data) => {
     var options = {
 
         didParseCell: (data1) => {
-            
+
 
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
@@ -147,19 +196,20 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',   
+            halign: 'left',
             fillColor: "white",
-            textColor: [0, 0, 0],  
+            textColor: [0, 0, 0],
             fontSize: 8,
             rowHeight: 10,
             lineColor: [0, 0, 0]
         },
         bodyStyles: {
+            columnWidth: 'wrap',
             textColor: [30, 30, 30],
             cellPadding: 3,
             fontSize: 7,
-            columnWidth: 'wrap',
-            lineColor: [0, 0, 0],
+            // fontStyle: 'bold',
+            lineColor: [6, 3, 1]
         },
         columnStyles: {
             0: {
@@ -200,15 +250,7 @@ export const tableBody = (doc, data) => {
                 fontStyle: 'bold',
                 halign: 'right',
             },
-            9: {
-                columnWidth: 58,
-                fontStyle: 'bold',
-                halign: 'right',
-            },
-            10: {
-                fontStyle: 'bold',
-                halign: 'right',
-            },
+
         },
 
         tableLineColor: "black",
@@ -219,60 +261,9 @@ export const tableBody = (doc, data) => {
     doc.autoTable(table.columns, table.Rows(data), options);
 
     const optionsTable4 = {
-
         margin: {
             left: 30, right: 30, bottom: 140
         },
-        showHead: 'never',
-        // theme: 'plain',
-        headerStyles: {
-            // columnWidth: 'wrap',
-            // cellPadding: 1,
-            // lineWidth: 0,
-            // valign: 'top',
-            // fontStyle: 'bold',
-            // halign: 'left',    //'center' or 'right'
-            // fillColor: "white",
-            // textColor: [0, 0, 0], //Black     
-            // // textColor: [255, 255, 255], //White     
-            // // fillColor: "white"
-            // fontSize: 8,
-            // rowHeight: 10,
-            // lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            // columnWidth: 'wrap',
-            // textColor: [30, 30, 30],
-            // cellPadding: 2,
-            // fontSize: 7,
-            // fontStyle: 'bold',
-            // lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-                // columnWidth:10,
-                // fontStyle: 'bold',
-            },
-            1: {
-                halign: 'right',    //'center' or 'left'
-                valign: "top",
-                // columnWidth: 140,
-                // fontStyle: 'bold',
-            },
-        },
-        didParseCell: function (cell, data) {
-            console.log("didParseCell", cell)
-            console.log(" didParse data", data)
-
-            if (cell.row.index === 4) {
-                // cell.cell.styles.fontSize = 12;
-                // cell.cell.styles.lineColor = 'gray'
-                // cell.cell.styles.lineWidth = 0.5
-
-            }
-        },
-
     };
 
     doc.autoTable(optionsTable4);
@@ -291,8 +282,9 @@ export const tableBody = (doc, data) => {
 }
 
 export const pageFooter = (doc, data) => {
-
-    let stringNumber = toWords(Number(data.GrandTotal))
+    const GrandTotal = Math.round(data.OrderAmount)
+    const Total = numberWithCommas((GrandTotal).toFixed(2))
+    let stringNumber = toWords(Number(GrandTotal))
     // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 750, 30, 750);//horizontal line Footer 2
@@ -335,10 +327,12 @@ export const pageFooter = (doc, data) => {
     doc.text(`${(TotalBasicAmount).toFixed(2)}`, 560, 795, 'right')
 
     doc.setFont(undefined, 'Normal')
-    doc.setFontSize(12)
+    doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`Order Amt:`, 434, 810,)
-    doc.text(`${data.OrderAmount}`, 560, 810, 'right')
+    doc.text(`Order Amt:`, 433, 810,)
+    // const GrandTotal = Math.round(data.OrderAmount)
+    //  const GrandTotal = numberWithCommas((56784936).toFixed(2))
+    doc.text(`${Total}`, 560, 810, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -347,17 +341,19 @@ export const pageFooter = (doc, data) => {
     const terms = data.OrderTermsAndCondition
     doc.setFont(undefined, 'bold')
     doc.setFontSize(10)
-    doc.text(`Terms And Condition  `, 33, 775, "justify")
+    // doc.text(`Terms And Condition  `, 33, 775, "justify")
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(9)
-    
-    doc.autoTable(terms);
-    const slicedArray = terms.slice(0, 3);
-    // doc.text(`${slicedArray[0]}`, 35, 793, "justify")
-    doc.text(`${slicedArray[0] === undefined ? "" :slicedArray[0].TermsAndCondition}`, 33, 782, "justify")
-    doc.text(`${slicedArray[1] === undefined ? "" :slicedArray[1].TermsAndCondition}`, 33, 792, "justify")
-    doc.text(`${slicedArray[2] === undefined ? "" :slicedArray[2].TermsAndCondition}`, 33, 802, "justify")
-    doc.text(`${slicedArray[3] === undefined ? "" :slicedArray[3].TermsAndCondition}`, 33, 812, "justify")
+
+
+
+    // doc.autoTable(terms);
+    // const slicedArray = terms.slice(0, 3);
+    // // doc.text(`${slicedArray[0]}`, 35, 793, "justify")
+    // doc.text(`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`, 33, 783, "justify")
+    // doc.text(`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`, 33, 793, "justify")
+    // doc.text(`${slicedArray[2] === undefined ? "" : slicedArray[2].TermsAndCondition}`, 33, 803, "justify")
+    // doc.text(`${slicedArray[3] === undefined ? "" : slicedArray[3].TermsAndCondition}`, 33, 813, "justify")
 
     // doc.text(`${slicedArray[2]}`, 35, 813, "justify")
     // doc.text(`Received By `, 180, 785,"justify")
@@ -374,9 +370,9 @@ export const pageFooter = (doc, data) => {
     // doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
     // doc.text(`INR NO : 12547yfewyrt5675w6wer78sdf687s6d7f8676yse87fugh43 `, 34, 740)
     doc.setFont(undefined, 'bold')
-    doc.text(`Ruppe:`, 33, 762,)
+    doc.text(`Rupees:`, 33, 762,)
     doc.setFont(undefined, 'Normal')
-    doc.text(`${stringNumber}`, 63, 762,)
+    doc.text(`${stringNumber}`, 65, 762,)
 
 
     let finalY = doc.previousAutoTable.finalY;

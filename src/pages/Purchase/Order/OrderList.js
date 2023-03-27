@@ -15,7 +15,7 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import Order from "./Order";
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
+import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { btnIsDissablefunc, currentDate, excelDownCommonFunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
@@ -45,7 +45,6 @@ const OrderList = () => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [orderlistFilter, setorderlistFilter] = useState('');
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
@@ -66,11 +65,9 @@ const OrderList = () => {
     );
 
     const gobtnId = `gobtn-${subPageMode}`
-    const { fromdate = currentDate, todate = currentDate, supplierSelect = { value: "", label: "All" }, } = orderlistFilter;
     const { userAccess, pageField, GRNitem, supplier, tableList, makeIBInvoice } = reducers;
 
     const values = { ...state.values }
-    const { isError } = state;
     const { fieldLabel } = state;
 
     const action = {
@@ -246,7 +243,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: path, grnRef, challanNo }))
+                    dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode, path: path, grnRef, challanNo }))
 
                 } else {
                     alert("Please Select Order1")

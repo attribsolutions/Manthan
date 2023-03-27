@@ -14,13 +14,10 @@ function reportBody(doc, data) {
     style.tableBody(doc, data);
 }
 function pageFooter(doc, data) {
-    
     // style.reportFooter(doc,data);
     style.pageFooter(doc, data);
     style.reportFooter(doc,data);
-
 }
-
 const ordeRreport = (data) => {
     
     var doc = new jsPDF('p', 'pt', 'a4');

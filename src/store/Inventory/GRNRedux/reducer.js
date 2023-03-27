@@ -2,7 +2,7 @@ import { currentDate } from "../../../components/Common/CommonFunction";
 import {
   DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
   EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
-  GET_GRN_ITEM_MODE_2_SUCCESS,
+  MAKE_GRN_MODE_1_ACTION_SUCCESS,
   GET_GRN_LIST_PAGE_SUCCESS,
   SAVE_GRN_FROM_GRN_PAGE_SUCCESS,
   SET_GRN_LIST_FILTERS,
@@ -32,7 +32,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
         grnlistFilter: action.payload,
       }
 
-    case GET_GRN_ITEM_MODE_2_SUCCESS:
+    case MAKE_GRN_MODE_1_ACTION_SUCCESS:
       return {
         ...state,
         GRNitem: action.payload,

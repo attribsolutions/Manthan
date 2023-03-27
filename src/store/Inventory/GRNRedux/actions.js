@@ -4,8 +4,8 @@ import {
   DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
   EDIT_GRN_FOR_GRN_PAGE,
   EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
-  GET_GRN_ITEM_MODE_2,
-  GET_GRN_ITEM_MODE_2_SUCCESS,
+  MAKE_GRN_MODE_1_ACTION,
+  MAKE_GRN_MODE_1_ACTION_SUCCESS,
   GET_GRN_LIST_PAGE,
   GET_GRN_LIST_PAGE_SUCCESS,
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
@@ -19,17 +19,6 @@ import {
 export const grnlistfilters = filter => ({
   type: SET_GRN_LIST_FILTERS,
   payload: filter,
-})
-
-
-export const getGRN_itemMode2 = (data, pageMode, path) => ({
-  type: GET_GRN_ITEM_MODE_2,
-  data, pageMode, path
-});
-
-export const getGRN_itemMode2_Success = list => ({
-  type: GET_GRN_ITEM_MODE_2_SUCCESS,
-  payload: list,
 })
 
 
@@ -81,6 +70,17 @@ export const deleteGRNIdSuccess = (resp) => ({
   type: DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
   payload: resp,
 });
+
+
+export const makeGRN_Mode_1Action = (data, pageMode, path) => ({
+  type: MAKE_GRN_MODE_1_ACTION,
+  data, pageMode, path
+});
+
+export const makeGRN_Mode_1ActionSuccess = list => ({
+  type: MAKE_GRN_MODE_1_ACTION_SUCCESS,
+  payload: list,
+})
 
 
 
