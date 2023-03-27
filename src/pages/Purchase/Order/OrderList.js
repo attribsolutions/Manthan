@@ -165,12 +165,6 @@ const OrderList = () => {
         label: " All"
     });
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
@@ -183,7 +177,6 @@ const OrderList = () => {
     useEffect(() => {
 
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
-
             history.push({
                 pathname: makeIBInvoice.path,
                 page_Mode: makeIBInvoice.page_Mode,
