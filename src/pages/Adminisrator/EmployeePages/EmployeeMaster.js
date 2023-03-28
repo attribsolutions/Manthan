@@ -127,7 +127,7 @@ const AddEmployee = (props) => {
   useEffect(() => {
 
     if ((hasShowloction || hasShowModal)) {
-debugger
+
       let hasEditVal = null
       if (hasShowloction) {
         setPageMode(location.pageMode)
