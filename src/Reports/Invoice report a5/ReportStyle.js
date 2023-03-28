@@ -3,7 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
-import { convertDatefunc } from "../../components/Common/CommonFunction";
+import { convertDatefunc, convertOnlyTimefunc, convertTimefunc } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -24,8 +24,8 @@ export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
 }
+
 export const reportHeder1 = (doc, data) => {
-      
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
@@ -114,7 +114,6 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
-
         startY: 55,
 
     };
@@ -146,7 +145,6 @@ export const reportHeder1 = (doc, data) => {
         },
         tableLineColor: "black",
         startY: 55,
-        // endY: doc.previousAutoTable.finalY+3
 
     };
     var DetailsOfTransportStyle = {
@@ -206,11 +204,6 @@ export const reportHeder1 = (doc, data) => {
     priLength()
 
 
-
-    // doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    // doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    // doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data),DetailsOfTransportStyle);
-
 }
 
 export const reportHeder2 = (doc, data) => {
@@ -230,7 +223,8 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 25) //Invoice Id
     var date = convertDatefunc(data.InvoiceDate)
-    doc.text(`Invoice Date: ${date}`, 415, 40) //Invoice date
+    var time = convertOnlyTimefunc(data.CreatedOn)
+    doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
 
 
 }
