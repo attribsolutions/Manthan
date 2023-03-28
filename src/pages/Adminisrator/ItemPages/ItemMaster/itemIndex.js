@@ -540,15 +540,15 @@ const ItemsMaster = (props) => {
                 isvalid = false
                 inValidMsg.push("Division:Is Requried")
             }
-            if (formValue.BrandName.length < 1) {
-                setInValidDrop(i => {
-                    const a = { ...i }
-                    a.BrandName = true
-                    return a
-                })
-                isvalid = false
-                inValidMsg.push("Brand Name:Is Requried")
-            }
+            // if (formValue.BrandName.length < 1) {
+            //     setInValidDrop(i => {
+            //         const a = { ...i }
+            //         a.BrandName = true
+            //         return a
+            //     })
+            //     isvalid = false
+            //     inValidMsg.push("Brand Name:Is Requried")
+            // }
             if (!Group_Tab_TableData.length > 0) {
                 isvalid = false
                 inValidMsg.push(" GroupType Primary:Is Requried")

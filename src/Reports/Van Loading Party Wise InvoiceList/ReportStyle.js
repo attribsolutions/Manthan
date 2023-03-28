@@ -1,8 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { convertDatefunc } from "../../components/Common/CommonFunction";
-import { VanLoadingSheetSKU } from "../ReportIndex";
+import { convertDatefunc, convertOnlyTimefunc } from "../../components/Common/CommonFunction";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -60,10 +59,6 @@ export const reportHeder1 = (doc, data) => {
             if (data1.row.cells[0].raw === "Address:") {
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].colSpan = 5
-
-
-
-
             }
             if (data1.row.cells[0].raw === "Routes:") {
                 data1.row.cells[0].styles.fontStyle = "bold"
@@ -143,7 +138,8 @@ export const reportHeder3 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Loading No:${data.PartyDetails.LoadingSheetNo}`, 415, 30) //Invoice Id
     var date = convertDatefunc(data.PartyDetails.Date)
-    doc.text(`Loading Date: ${date}`, 415, 50) //Invoice date
+    var time = convertOnlyTimefunc(data.CreatedOn)
+    doc.text(`Loading Date:${date} `, 415, 50) //Invoice date
     doc.setFontSize(11)
 }
 // original

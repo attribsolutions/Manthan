@@ -35,7 +35,7 @@ function* get_LoadingSheet_List_GenFun({filters}) {
         const response = yield call(Loading_Sheet_get_API, filters);
         const newList = yield response.Data.map((i) => {
             var date = convertDatefunc(i.Date)
-            var time = convertTimefunc(i.Date)
+            var time = convertTimefunc(i.CreatedOn)
             i.Date = (`${date} ${time}`)
             return i
     })

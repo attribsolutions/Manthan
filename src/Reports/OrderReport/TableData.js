@@ -159,7 +159,7 @@ export const Rows = (data) => {
             element.SGST,
             // element.Comment,
             element.Amount,
-        "row"
+            "row"
         ];
 
         function totalLots() {
@@ -224,21 +224,7 @@ export const ReportFotterColumns = [
     "TaxbleAmt.", "IGST", "Total Amt"
 ];
 
-export const ReportFooterRow = (element) => {
-    // data.InvoiceServiceItems.forEach(element => {
-    var a = [[
-        'first', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ], [
-        '1211', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ], [
-        '1211', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ], [
-        'last', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ],
-    ]
-    return a
-    // })
-}
+
 export const ReportFotterColumns2 = [
     "SGST",
 ];
@@ -246,14 +232,14 @@ export const ReportFotterColumns2 = [
 
 
 export const ReportRows = (data, doc) => {
-      
+
     const terms = data.OrderTermsAndCondition
     const slicedArray = terms.slice(0, 2);
     var TableArray = [["Terms And Condition"],
-        [`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`,
-        ],
-        [`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`,
-        ],
+    [`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`,
+    ],
+    [`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`,
+    ],
         // [`${slicedArray[2] === undefined ? "" : slicedArray[2].TermsAndCondition}`
         // ],
         // [`${slicedArray[3] === undefined ? "" : slicedArray[3].TermsAndCondition}`
