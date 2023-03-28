@@ -51,11 +51,11 @@ const ProfileMenu = props => {
           id="page-header-user-dropdown"
           tag="button"
         >
-          <img
+          {/* <img
             className="rounded-circle header-profile-user"
             src={user1}
             alt="Header Avatar"
-          />
+          /> */}
           <span className="d-none d-xl-inline-block ms-2 me-1">{username}</span>
           <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
         </DropdownToggle>
