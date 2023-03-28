@@ -20,7 +20,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import {  BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../../Purchase/Order/OrderPageCalulation";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
@@ -34,23 +34,6 @@ import * as pageId from "../../../routes/allPageID"
 
 let initialTableData = []
 
-function initialState(history) {
-
-    let page_Id = '';
-    let subPageMode = ''
-    let sub_Mode = history.location.pathname;
-
-    if (sub_Mode === url.GRN_ADD_1) {
-        page_Id = pageId.GRN_ADD_1;
-        subPageMode = url.GRN_ADD_1
-    }
-    else if (sub_Mode === url.GRN_ADD_3) {
-        page_Id = pageId.GRN_ADD_3;
-        subPageMode = url.GRN_ADD_3
-    }
-    return { page_Id, subPageMode }
-};
-
 const GRNAdd = (props) => {
 
 
@@ -61,8 +44,6 @@ const GRNAdd = (props) => {
     const [userAccState, setUserAccState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const [page_id, setPage_id] = useState(() => initialState(history).page_Id)
-    const [subPageMode, setSubPageMode] = useState(() => initialState(history).subPageMode)
     const [grnDate, setgrnDate] = useState(currentDate);
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
@@ -70,7 +51,6 @@ const GRNAdd = (props) => {
     const [openPOdrp, setopenPOdrp] = useState(false);
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
-    const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
 
@@ -88,8 +68,9 @@ const GRNAdd = (props) => {
     }));
 
     useEffect(() => {
+        let page_Id = pageId.GRN_ADD_1;
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_id))
+        dispatch(commonPageField(page_Id))
         dispatch(getSupplierAddress())
     }, [])
 
@@ -159,7 +140,6 @@ const GRNAdd = (props) => {
             else if (hasShowModal) {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
-                setModalCss(true)
             }
 
             if (hasEditVal) {
@@ -194,7 +174,7 @@ const GRNAdd = (props) => {
                 Message: postMsg.Message,
             })
             if (promise) {
-                history.push({ pathname: subPageMode })
+                history.push({ pathname: url.GRN_LIST_1 })
             }
 
         } else if (postMsg.Status === true) {
@@ -254,7 +234,7 @@ const GRNAdd = (props) => {
                     </div>
                 )
             },
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '100px', textAlign: 'center', text: "end" };
             }
         },
@@ -290,7 +270,7 @@ const GRNAdd = (props) => {
                     </span>
                 )
             },
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: '130px', textAlign: 'center' };
             }
         },
@@ -298,7 +278,7 @@ const GRNAdd = (props) => {
         {  //------------- Unit column ----------------------------------
             text: "Unit",
             dataField: "",
-            formatter: (value, row, key) => {
+            formatter: (value, row) => {
 
                 if (row.UnitDetails === undefined) {
                     row["UnitDetails"] = []
@@ -339,17 +319,29 @@ const GRNAdd = (props) => {
         {  //-------------MRP column ----------------------------------
             text: "MRP",
             dataField: "",
-            hidden: (subPageMode === url.GRN_LIST_3) ? false : true,
             formatter: (value, row, k) => {
                 return (
                     <span className="text-right" >
                         <Input
-                            key={row.id}
+
                             type="text"
                             className=" text-end"
                             defaultValue={row.MRP}
+
+                            id={`MRP${row.id}`}
                             autoComplete="off"
-                            disabled={true}
+                            key={row.id}
+                            disabled={ true }
+                            // disabled={pageMode === mode.view ? true : false}
+                            onChange={(e) => {
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    row.MRP = val;
+                                } else {
+                                    document.getElementById(`MRP${row.id}`).value = row.Quantity
+                                }
+                            }}
                         />
                     </span>
                 )
@@ -476,7 +468,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: ((pageMode === mode.view) || subPageMode === url.GRN_LIST_3) ? true : false,
+            hidden: (pageMode === mode.view) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -513,47 +505,6 @@ const GRNAdd = (props) => {
                 return { width: '30px', textAlign: 'center', text: "center" };
             }
         },
-    ];
-    const tableColumnsMode_3 = [
-        {//------------- ItemName column ----------------------------------
-            text: "Item Name",
-            dataField: "ItemName",
-        },
-
-        {//------------- Quntity  column ----------------------------------
-            text: "Invoice-Qty",
-            dataField: "poQuantity",
-        },
-
-        {  //------------- Unit column ----------------------------------
-            text: "Unit",
-            dataField: "UnitName",
-        },
-
-        {  //-------------MRP column ----------------------------------
-            text: "MRP",
-            dataField: "MRP",
-        },
-        {  //-------------Rate column ----------------------------------
-            text: "Rate",
-            dataField: "Rate",
-        },
-
-        {//------------- ItemName column ----------------------------------
-            text: "Amount",
-            dataField: "Amount",
-        },
-
-        {//------------- Batch Code column ----------------------------------
-            text: "BatchCode",
-            dataField: "BatchCode",
-        },
-
-        {//------------- Batch Date column ----------------------------------
-            text: "Batch Date",
-            dataField: "BatchDate",
-        },
-
     ];
 
     const defaultSorted = [
@@ -623,10 +574,7 @@ const GRNAdd = (props) => {
 
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-                if (subPageMode === url.GRN_ADD_3) {
-                      
-                    i.Quantity = i.poQuantity
-                }
+
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
@@ -809,76 +757,75 @@ const GRNAdd = (props) => {
                                 </FormGroup>
 
 
-                                {subPageMode === url.GRN_ADD_3 ?
-                                    <FormGroup className="mb-2 row  " >
-                                        <Label className="col-md-4 p-2"
-                                            style={{ width: "130px" }}>Close PO</Label>
-                                        <Col md="7" style={{ marginLeft: "-14px" }}>
-                                            {
-                                                openPOdata.length === 1 ?
-                                                    <Input
-                                                        type="checkbox"
-                                                        style={{ paddingTop: "7px" }}
-                                                        placeholder="Enter Invoice No"
-                                                        disabled={pageMode === mode.view ? true : false}
-                                                        onChange={(e) => openPOdata[0].Inward = e.target.checked}
-                                                    />
-                                                    :
-                                                    <Dropdown
-                                                        className="d-none d-lg-inline-block ms-1"
+                                <FormGroup className="mb-2 row  " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Close PO</Label>
+                                    <Col md="7" style={{ marginLeft: "-14px" }}>
+                                        {
+                                            openPOdata.length === 1 ?
+                                                <Input
+                                                    type="checkbox"
+                                                    style={{ paddingTop: "7px" }}
+                                                    placeholder="Enter Invoice No"
+                                                    disabled={pageMode === mode.view ? true : false}
+                                                    onChange={(e) => openPOdata[0].Inward = e.target.checked}
+                                                />
+                                                :
+                                                <Dropdown
+                                                    className="d-none d-lg-inline-block ms-1"
 
-                                                        isOpen={openPOdrp}
-                                                        toggle={() => {
-                                                            setopenPOdrp(!openPOdrp)
-                                                        }}
+                                                    isOpen={openPOdrp}
+                                                    toggle={() => {
+                                                        setopenPOdrp(!openPOdrp)
+                                                    }}
+                                                >
+                                                    <DropdownToggle
+                                                        className="btn header-item noti-icon mt-n2 mb-n3 "
+                                                        tag="button"
                                                     >
-                                                        <DropdownToggle
-                                                            className="btn header-item noti-icon mt-n2 mb-n3 "
-                                                            tag="button"
-                                                        >
-                                                            <FeatherIcon
-                                                                icon="square"
-                                                                className="icon-sm text-primary"
-                                                            />
-                                                        </DropdownToggle>
-                                                        <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
-                                                            <Row className="row  g-0 " >
-                                                                {openPOdata.map((index, key) => {
-                                                                    return (
-                                                                        <Col className="col col-6 dropdown-icon-item-custom  text-black "
-                                                                        >
-                                                                            <li onClick={e => {
-                                                                                openPOdata[key].Inward = !openPOdata[key].Inward
-                                                                                document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
-                                                                            }} >
-                                                                                <Row className="row ">
-                                                                                    <Col className=" col user-select ">
-                                                                                        <li>
-                                                                                            <Label className="" >{index.ChallanNo}</Label>
-                                                                                        </li>
-                                                                                    </Col>
+                                                        <FeatherIcon
+                                                            icon="square"
+                                                            className="icon-sm text-primary"
+                                                        />
+                                                    </DropdownToggle>
+                                                    <DropdownMenu className="dropdown-menu-lg dropdown-menu-custom"  >
+                                                        <Row className="row  g-0 " >
+                                                            {openPOdata.map((index, key) => {
+                                                                return (
+                                                                    <Col className="col col-6 dropdown-icon-item-custom  text-black "
+                                                                    >
+                                                                        <li onClick={e => {
+                                                                            openPOdata[key].Inward = !openPOdata[key].Inward
+                                                                            document.getElementById(`hasInwardCheck${key}`).checked = openPOdata[key].Inward;
+                                                                        }} >
+                                                                            <Row className="row ">
+                                                                                <Col className=" col user-select ">
+                                                                                    <li>
+                                                                                        <Label className="" >{index.ChallanNo}</Label>
+                                                                                    </li>
+                                                                                </Col>
 
-                                                                                    <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
-                                                                                        <Input
-                                                                                            id={`hasInwardCheck${key}`}
-                                                                                            className="col col-2 text-black "
-                                                                                            type="checkbox"
-                                                                                            defaultChecked={openPOdata[key].Inward}
-                                                                                        />
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </li>
-                                                                        </Col>
-                                                                    )
-                                                                })}
-                                                            </Row>
+                                                                                <Col className=" col  mt-2" style={{ paddingLeft: "inherit" }}>
+                                                                                    <Input
+                                                                                        id={`hasInwardCheck${key}`}
+                                                                                        className="col col-2 text-black "
+                                                                                        type="checkbox"
+                                                                                        defaultChecked={openPOdata[key].Inward}
+                                                                                    />
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </li>
+                                                                    </Col>
+                                                                )
+                                                            })}
+                                                        </Row>
 
-                                                        </DropdownMenu>
-                                                    </Dropdown>
-                                            }
+                                                    </DropdownMenu>
+                                                </Dropdown>
+                                        }
 
-                                        </Col>
-                                    </FormGroup> : null}
+                                    </Col>
+                                </FormGroup>
 
 
 
@@ -892,7 +839,7 @@ const GRNAdd = (props) => {
                                 keyField="id"
                                 defaultSorted={defaultSorted}
                                 data={grnItemList}
-                                columns={subPageMode === url.GRN_ADD_3 ? tableColumnsMode_3 : tableColumnsMode_1}
+                                columns={tableColumnsMode_1}
                                 search
                             >
                                 {(toolkitProps,) => (

@@ -9,6 +9,7 @@ import {
     Label,
     Row
 } from "reactstrap";
+import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,10 +49,9 @@ import {
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { map, Map } from "leaflet";
 
 
-const PartyMasterBulkUpdate= (props) => {
+const PartyMasterBulkUpdate = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -61,7 +61,7 @@ const PartyMasterBulkUpdate= (props) => {
     const [RouteSelect, setRouteSelect] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
 
-    
+
     const fileds = {
         id: "",
         RoutesName: "",
@@ -126,42 +126,6 @@ const PartyMasterBulkUpdate= (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             const { id, Route, RouteName } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-    //             hasValid.RouteName.valid = true;
-
-    //             values.id = id
-    //             values.RouteName = { label: RouteName, value: Route };
-
-    //             const jsonBody = JSON.stringify({
-    //                 // Item: Item,
-    //                 // Bom: Bom,
-    //                 // Quantity: parseFloat(Quantity),
-    //                 // Party: Party
-    //             });
-    //             // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             // dispatch(editWorkOrderListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
 
 
     useEffect(() => {
@@ -239,7 +203,7 @@ const PartyMasterBulkUpdate= (props) => {
     }));
 
     const goButtonHandler = () => {
-        
+
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             Route: RouteSelect.value,
@@ -249,7 +213,7 @@ const PartyMasterBulkUpdate= (props) => {
     }
 
     useEffect(async () => {
-       
+
         if ((Data.Status === true) && (Data.StatusCode === 200)) {
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             if (pageMode === "other") {
@@ -268,24 +232,8 @@ const PartyMasterBulkUpdate= (props) => {
         setSelectFieldName(val)
 
     }
-  
-  const data = Data
-  
 
 
-
-    const columns = []
-    // Data.forEach(i, k => {
-    //     // columns.push({
-    //     //     text: .key,
-    //     //     dataField: .key,
-    //     // })
-    // });
-
-
-   
-
-    
     function tableSelectHandler(event, user) {
 
         //     let val = event.target.value;
@@ -311,7 +259,7 @@ const PartyMasterBulkUpdate= (props) => {
 
         },
         {
-            text: "Newvalue",
+            text: "New value",
             dataField: "Newvalue",
             formatter: (cellContent, user) => (
                 <>
@@ -331,8 +279,38 @@ const PartyMasterBulkUpdate= (props) => {
                 </>
             ),
         },
-    ];
+        {
+            text: "Date",
+            dataField: "",
+            hidden: SelectFieldName.label === "FSSAINo" ? false : true,
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Flatpickr
+                                    name='fromdate'
+                                    // value={fromdate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                        defaultDate: "today"
 
+                                    }}
+                                // onChange={fromdateOnchange}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+
+    ];
+ console.log(SelectFieldName)
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,

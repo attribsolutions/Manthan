@@ -412,20 +412,17 @@ const Invoice = (props) => {
                             backgroundColor: "#b9be511a",
                             display: showAllStockState ? "bolck" : "none"
                         }}
-                    // style={{ display: showAllStockState ? "none" : "block" }}
+
                     >
                         <Table className="table table-bordered table-responsive mb-1" >
 
                             <Thead  >
 
-                                <tr className="" style={{ zIndex: -3 }}>
-                                    <th className="">Batch Code </th>
-                                    <th className="" >Supplier BatchCode</th>
-                                    <th className="" >Batch Date</th>
-                                    {/* <th className="" >Batch Date</th> */}
-
-
-                                    <th className="">
+                                <tr style={{ zIndex: -3 }}>
+                                    <th >Batch Code </th>
+                                    <th  >Supplier BatchCode</th>
+                                    <th  >Batch Date</th>
+                                    <th >
                                         <div>
                                             <samp >Stock Quantity</samp>
                                         </div>
@@ -436,6 +433,7 @@ const Invoice = (props) => {
                                         </div>
                                         <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
                                     </th>
+                                    <th  >Rate</th>
                                 </tr>
                             </Thead>
                             <Tbody  >
@@ -474,6 +472,11 @@ const Invoice = (props) => {
                                                     ></Input>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <div style={{ width: "100px" }}>
+                                                    {index1.Rate}
+                                                </div>
+                                            </td>
                                         </tr>
                                     )
                                 })}
@@ -484,7 +487,7 @@ const Invoice = (props) => {
 
         },
         {//***************Rate********************************************************************* */
-            text: "Rate",
+            text: "Discount",
             dataField: "Rate",
         }
 
@@ -672,7 +675,7 @@ const Invoice = (props) => {
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
         btnIsDissablefunc({ btnId, state: true })
-        
+
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
@@ -686,7 +689,7 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = (event) => {
-        
+
         event.preventDefault();
 
         const btnId = event.target.id

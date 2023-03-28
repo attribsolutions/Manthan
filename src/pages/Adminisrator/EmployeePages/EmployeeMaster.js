@@ -49,9 +49,8 @@ const AddEmployee = (props) => {
     DOB: "",
     PAN: "",
     AadharNo: "",
-    working_hours: "",
+    working_hours: "8",
     CompanyName: "",
-    DesignationName: "",
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
@@ -68,7 +67,6 @@ const AddEmployee = (props) => {
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
-    designation,
     employeeType,
     State,
     district,
@@ -78,7 +76,6 @@ const AddEmployee = (props) => {
     userAccess,
     pageField,
     updateMsg } = useSelector((state) => ({
-      designation: state.EmployeesReducer.designation,
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
       district: state.PartyMasterReducer.DistrictOnState,
@@ -102,7 +99,6 @@ const AddEmployee = (props) => {
   useEffect(() => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.EMPLOYEE))
-    dispatch(getDesignationID());
     dispatch(getEmployeeTypelist());
     dispatch(getPartyListAPI())
     dispatch(getState());
@@ -131,7 +127,7 @@ const AddEmployee = (props) => {
   useEffect(() => {
 
     if ((hasShowloction || hasShowModal)) {
-
+debugger
       let hasEditVal = null
       if (hasShowloction) {
         setPageMode(location.pageMode)
@@ -277,10 +273,7 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
-  const Designation_DropdownOptions = designation.map((data) => ({
-    value: data.id,
-    label: data.Name
-  }));
+
 
   function EmployeeType_Dropdown_Handler(e) {
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
@@ -653,7 +646,7 @@ const AddEmployee = (props) => {
                           : <></>}
                       </Row>
 
-                      <Row>
+                      {/* <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.DesignationName} </Label>
                           <Col sm={12}>
@@ -691,7 +684,7 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.working_hours}</span>
                           )}
                         </FormGroup>
-                      </Row>
+                      </Row> */}
 
                       <FormGroup className="mt-3">
                         <Row>
