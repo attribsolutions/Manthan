@@ -49,7 +49,7 @@ const AddEmployee = (props) => {
     DOB: "",
     PAN: "",
     AadharNo: "",
-    working_hours: "8",
+    // working_hours: "8",
     CompanyName: "",
     EmployeeTypeName: "",
     StateName: "",
@@ -160,9 +160,9 @@ debugger
         hasValid.DOB.valid = true;
         hasValid.PAN.valid = true;
         hasValid.AadharNo.valid = true;
-        hasValid.working_hours.valid = true;
+        // hasValid.working_hours.valid = true;
         hasValid.CompanyName.valid = true;
-        hasValid.DesignationName.valid = true;
+        // hasValid.DesignationName.valid = true;
         hasValid.EmployeeTypeName.valid = true;
         hasValid.StateName.valid = true;
         hasValid.DistrictName.valid = true;
@@ -175,9 +175,9 @@ debugger
         values.DOB = DOB
         values.PAN = PAN;
         values.AadharNo = AadharNo
-        values.working_hours = working_hours;
+        // values.working_hours = working_hours;
         values.Name = Name;
-        values.DesignationName = { label: DesignationName, value: Designation_id };
+        // values.DesignationName = { label: DesignationName, value: Designation_id };
         values.CompanyName = { label: CompanyName, value: Company_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
@@ -273,8 +273,6 @@ debugger
     label: data.Name
   }));
 
-
-
   function EmployeeType_Dropdown_Handler(e) {
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
 
@@ -287,7 +285,6 @@ debugger
     }
     else {
       setPartyDropDownShow_UI(false)
-
     }
     setState((i) => {
       const a = { ...i }
@@ -314,7 +311,6 @@ debugger
     event.preventDefault();
     const btnId = event.target.id;
 
-
     try {
       if (formValid(state, setState)) {
         btnIsDissablefunc({ btnId, state: true })
@@ -335,7 +331,6 @@ debugger
           emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
         }
 
-
         const jsonBody = JSON.stringify({
           Name: values.Name,
           Address: values.Address,
@@ -344,8 +339,8 @@ debugger
           DOB: values.DOB,
           PAN: values.PAN,
           AadharNo: values.AadharNo,
-          working_hours: values.working_hours,
-          Designation: values.DesignationName.value,
+          working_hours: 8,
+          Designation: "",
           EmployeeType: values.EmployeeTypeName.value,
           State: values.StateName.value,
           District: values.DistrictName.value,
@@ -363,7 +358,6 @@ debugger
         }
       }
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
