@@ -483,6 +483,24 @@ const Order = (props) => {
             }
         },
 
+        
+        {//------------- MRP column ----------------------------------
+            text: "MRP",
+            dataField: "MRPValue",
+            // sort: true,
+            formatter: (value, row, k) => {
+
+                return (
+                    <div key={row.id} className="text-end">
+                        <span>{row.MRPValue}</span>
+                    </div>
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            },
+        },
+
         { //------------- Comment column ----------------------------------
             text: "Comment",
             dataField: "",
@@ -538,7 +556,8 @@ const Order = (props) => {
             Party: supplierSelect.value,
             Customer: loginPartyID(),
             EffectiveDate: orderdate,
-            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id
+            OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            RateParty: supplierSelect.value
         })
         dispatch(GoButton_For_Order_Add(subPageMode, jsonBody))
     };
@@ -597,7 +616,7 @@ const Order = (props) => {
                     id: i.editrowId,
                     Item: i.Item_id,
                     Quantity: isdel ? 0 : i.Quantity,
-                    MRP: i.MRP,
+                    MRP: i.MRP_id,
                     Rate: i.Rate,
                     Unit: i.Unit_id,
                     BaseUnitQuantity: i.BaseUnitQuantity,
@@ -696,14 +715,14 @@ const Order = (props) => {
             }))
 
             if (isVDC_POvalidMsg.length > 0) {
-                await CustomAlert({
+                 CustomAlert({
                     Type: 4,
                     Message: isVDC_POvalidMsg,
                 })
                 return returnFunc();
             };
             if (validMsg.length > 0) {
-                await CustomAlert({
+                 CustomAlert({
                     Type: 4,
                     Message: validMsg,
                 })
@@ -711,7 +730,7 @@ const Order = (props) => {
                 return returnFunc();
             }
             if (itemArr.length === 0) {
-                await CustomAlert({
+                CustomAlert({
                     Type: 4,
                     Message: "Please Enter One Item Quantity",
                 })
@@ -719,14 +738,14 @@ const Order = (props) => {
                 return returnFunc();
             }
             if (orderTypeSelect.length === 0) {
-                await CustomAlert({
+                CustomAlert({
                     Type: 4,
                     Message: "Please Select PO Type",
                 })
-                return
+                return returnFunc();
             }
             if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
-                await CustomAlert({
+                 CustomAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })
