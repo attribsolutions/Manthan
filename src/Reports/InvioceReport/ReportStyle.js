@@ -4,9 +4,8 @@ import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { convertDatefunc } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
-
 import * as table from './TableData'
-
+let initial_y = 0
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
@@ -26,10 +25,8 @@ export const pageHeder = (doc, data) => {
         doc.text('TAX INVOICE', 200, 40,)
     } else {
         doc.setFontSize(15)
-        doc.text('INTER BRANCH INVOICE', 200,40,)
-
+        doc.text('INTER BRANCH INVOICE', 200, 40,)
     }
-
     //Tax invoice Header
 }
 
@@ -46,18 +43,59 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
-    doc.line(409, 95, 30, 95)//horizontal line 4
+    // doc.line(409, 95, 30, 95)//horizontal line 4
     doc.line(30, 789, 30, 16);//vertical left 1
     doc.line(570, 789, 570, 16);//vertical left 2
     doc.line(408, 160, 408, 16);//vertical right 1
     doc.line(220, 160, 220, 63);//vertical right 2
 
-    var options3 = {
+    // var options3 = {
+    //     margin: {
+    //         top: 45, left: 35, right: 35,// bottom:100 
+    //     },
+    //     showHead: 'always',
+    //     theme: "plain",
+    //     styles: {
+    //         overflow: 'linebreak',
+    //         fontSize: 8,
+    //         height: 0,
+    //     },
+    //     bodyStyles: {
+    //         columnWidth: 'wrap',
+    //         textColor: [30, 30, 30],
+    //         cellPadding: 2,
+    //         fontSize: 8,
+    //         fontStyle: 'bold',
+    //         lineColor: [0, 0, 0]
+    //     },
+    //     columnStyles: {
+    //         0: {
+    //             valign: "top",
+    //             columnWidth: 185,
+    //             halign: 'lfet',
+    //         },
+    //         1: {
+    //             columnWidth: 190,
+    //             halign: 'left',
+    //         },
+    //         2: {
+    //             columnWidth: 160,
+    //             halign: 'left',
+    //         },
+
+    //     },
+    //     tableLineColor: "black",
+    //     startY: 85
+
+    // };
+    // doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
+
+    var BilledByStyle = {
         margin: {
-            top: 45, left: 35, right: 35,// bottom:100 
+            top: 45, left: 30, right: 35,
         },
         showHead: 'always',
-        theme: "plain",
+        theme: 'plain',
         styles: {
             overflow: 'linebreak',
             fontSize: 8,
@@ -74,32 +112,103 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 185,
+                columnWidth: 190,
+                halign: 'lfet',
+            }
+        },
+        tableLineColor: "black",
+        startY: 80,
+    };
+
+    var BilledToStyle = {
+        margin: {
+            top: 45, left: 220, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 188,
                 halign: 'lfet',
             },
-            1: {
-                columnWidth: 190,
-                halign: 'left',
-            },
-            2: {
-                columnWidth: 160,
-                halign: 'left',
+        },
+        tableLineColor: "black",
+        startY: 80,
+    };
+
+    var DetailsOfTransportStyle = {
+        margin: {
+            top: 45, left: 408, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 162,
+                halign: 'lfet',
             },
 
         },
         tableLineColor: "black",
-        startY: 85
+
+        startY: 80,
 
     };
-    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
+
+    // let initial_y = 0
+    const priLength = () => {
+        let final_y = doc.previousAutoTable.finalY
+        if (final_y > initial_y) {
+            initial_y = final_y
+        }
+
+    }
+
+    doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
+    priLength()
+
+    doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
+    priLength()
+
+    doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
+    priLength()
 }
+
 
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`GSTIN:${data.PartyGSTIN}`, 38, 90)
-    doc.text(`GSTIN:${data.CustomerGSTIN}`, 238, 90)
+    //     doc.text(`GSTIN:${data.PartyGSTIN}`, 38, 90)
+    //     doc.text(`GSTIN:${data.CustomerGSTIN}`, 238, 90)
 }
 
 export const reportHeder3 = (doc, data) => {
@@ -249,14 +358,6 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
     doc.setFont('Tahoma')
     doc.setFontSize(8)
-    // doc.text(`Prepared by `, 35, 785,)
-    // doc.text(`Received By `, 180, 785,)
-    // doc.setFontSize(10)
-    // doc.text(`${data.PartyName} `, 390, 785,)
-    // doc.setFontSize(10)
-    // doc.text(`${data.CustomerName} `, 140, 811,)
-    // doc.setFontSize(9)
-    // doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
          of the nature and quantity which it/these purports to be `, 34, 790,)
@@ -268,54 +369,54 @@ export const reportFooter = (doc, data) => {
     doc.text(`${stringNumber}`, 65, 740,)
 
 
-    const optionsTable4 = {
-        margin: {
-            top: 100, left: 50, right: 30,
-        },
-        showHead: 'never',
-        theme: 'grid',
-        headerStyles: {
-            cellPadding: 1,
-            lineWidth: 0,
-            valign: 'top',
-            fontStyle: 'bold',
-            halign: 'left',
-            fillColor: "white",
-            textColor: [0, 0, 0],
-            fontSize: 8,
-            rowHeight: 10,
-            lineColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            columnWidth: 'wrap',
-            textColor: [30, 30, 30],
-            cellPadding: 2,
-            fontSize: 7,
-            fontStyle: 'bold',
-            lineColor: [0, 0, 0]
-        },
-        columnStyles: {
-            0: {
-                valign: "top",
-            },
-            1: {
-                halign: 'right',
-                valign: "top",
-            },
-        },
-        didParseCell: function (cell, data) {
-            console.log("didParseCell", cell)
-            console.log(" didParse data", data)
+    // const optionsTable4 = {
+    //     margin: {
+    //         top: 100, left: 50, right: 30,
+    //     },
+    //     showHead: 'never',
+    //     theme: 'grid',
+    //     headerStyles: {
+    //         cellPadding: 1,
+    //         lineWidth: 0,
+    //         valign: 'top',
+    //         fontStyle: 'bold',
+    //         halign: 'left',
+    //         fillColor: "white",
+    //         textColor: [0, 0, 0],
+    //         fontSize: 8,
+    //         rowHeight: 10,
+    //         lineColor: [0, 0, 0]
+    //     },
+    //     bodyStyles: {
+    //         columnWidth: 'wrap',
+    //         textColor: [30, 30, 30],
+    //         cellPadding: 2,
+    //         fontSize: 7,
+    //         fontStyle: 'bold',
+    //         lineColor: [0, 0, 0]
+    //     },
+    //     columnStyles: {
+    //         0: {
+    //             valign: "top",
+    //         },
+    //         1: {
+    //             halign: 'right',
+    //             valign: "top",
+    //         },
+    //     },
+    //     didParseCell: function (cell, data) {
+    //         console.log("didParseCell", cell)
+    //         console.log(" didParse data", data)
 
-            if (cell.row.index === 4) {
-                cell.cell.styles.fontSize = 12;
-                cell.cell.styles.lineWidth = 1
-            }
-        },
-        startY: 100
-    };
-    doc.setFontSize(9)
-    doc.autoTable(optionsTable4,);
+    //         if (cell.row.index === 4) {
+    //             cell.cell.styles.fontSize = 12;
+    //             cell.cell.styles.lineWidth = 1
+    //         }
+    //     },
+    //     startY: 100
+    // };
+    // doc.setFontSize(9)
+    // doc.autoTable(optionsTable4,);
 }
 
 
@@ -325,12 +426,10 @@ export const reportFooter = (doc, data) => {
 
 
 export const tableBody = (doc, data) => {
-    const tableRow = table.Rows(data);
-    const { OrderItem = [] } = data
 
-    console.log(tableRow)
     var options = {
         didParseCell: (data1) => {
+            debugger
             if (data1.row.cells[5].raw === "isaddition") {
                 data1.row.cells[2].colSpan = 2
                 data1.row.cells[0].colSpan = 2
@@ -347,9 +446,16 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[4].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
             }
+
+            if (data1.row.cells[0].raw === "HSN Item Name") {
+                data1.row.cells[4].colSpan = 2
+                data1.row.cells[6].colSpan = 2
+
+                
+            }
         },
         margin: {
-            left: 30, right: 25,top:65
+            left: 30, right: 25, top: 65
         },
         theme: 'grid',
         headerStyles: {
@@ -357,7 +463,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
             fontSize: 8,
@@ -374,10 +480,10 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 120,
+                columnWidth: 170,
             },
             1: {
-                columnWidth: 70,
+                columnWidth: 50,
                 halign: 'right',
             },
             2: {
@@ -385,23 +491,23 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             3: {
-                columnWidth: 60,
+                columnWidth: 50,
                 halign: 'right',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 28,
                 halign: 'right',
             },
             5: {
-                columnWidth: 50,
-                halign: 'right',
-            },
-            6: {
                 columnWidth: 40,
                 halign: 'right',
             },
+            6: {
+                columnWidth: 28,
+                halign: 'right',
+            },
             7: {
-                columnWidth: 50,
+                columnWidth: 40,
                 halign: 'right',
             },
             8: {
@@ -410,33 +516,15 @@ export const tableBody = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: doc.autoTableEndPosY(45),// 45,
+        startY: initial_y,
     };
 
     doc.autoTable(table.columns, table.Rows(data), options,);
-    const optionsTable4 = {
-        margin: {
-            left: 30, right: 30, bottom: 100
-        },
-        showHead: 'never',
-        theme: 'grid',
-
-    };
-
-    doc.autoTable(optionsTable4);
-    doc.autoTable({
-        html: '#table',
-        didParseCell(data) {
-            if (data.cell.row.index === 0) {
-                data.cell.styles.textColor = [255, 255, 255];
-                data.cell.styles.fillColor = '#FF5783';
-            }
-        }
-    })
+   
 }
 
 export const pageFooter = (doc, data) => {
-     
+
     //   
     // let finalY = doc.previousAutoTable.finalY;
 
@@ -455,7 +543,7 @@ export const pageFooter = (doc, data) => {
     //     // pageHeder(doc, data)
     // //     reportHeder1(doc, data)
     // //     reportHeder2(doc, data)
-   
+
     //     // reportHeder3(doc, data)
     // }
     const pageCount = doc.internal.getNumberOfPages()

@@ -138,7 +138,7 @@ const GRNList = () => {
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
                 Party: loginPartyID(),
-                OrderType: (subPageMode === url.GRN_LIST_1) ? order_Type.PurchaseOrder : order_Type.SaleOrder
+                // OrderType: (subPageMode === url.GRN_LIST_1) ? order_Type.PurchaseOrder : order_Type.SaleOrder
             });
             dispatch(getGRNListPage({ filtersBody, btnId }));
         } catch (error) { }
