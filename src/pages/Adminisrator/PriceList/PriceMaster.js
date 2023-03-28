@@ -22,7 +22,6 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AlertState } from "../../../store/actions";
 import {
     delete_PriceList,
     delete_PriceListSuccess,

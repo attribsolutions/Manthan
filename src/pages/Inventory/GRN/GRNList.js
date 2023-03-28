@@ -15,8 +15,8 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
-import { GetCustomer, GetVender } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc, CommonConsole, loginPartyID } from "../../../components/Common/CommonFunction";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -25,21 +25,23 @@ import { order_Type } from "../../../components/Common/C-Varialbes";
 import { useHistory } from "react-router-dom";
 import { makeChallanAction, makeChallanActionSuccess } from "../../../store/Inventory/ChallanRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
-import { GRN } from "../../../helpers/url_helper";
 import GRNAdd from "./GRNAdd";
 
 const GRNList = () => {
-      
+
     const history = useHistory();
     const dispatch = useDispatch();
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
+    const [otherState, setOtherState] = useState({
+        masterPath: '',
+        makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
+    });
 
     const reducers = useSelector(
         (state) => ({
-            customer: state.CommonAPI_Reducer.customer,
+            customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -73,26 +75,26 @@ const GRNList = () => {
         let masterPath = '';
         let makeBtnShow = false
         let newBtnPath = ''
-
-        if (subPageMode === url.GRN_lIST) {
-            page_Id = pageId.GRN_lIST;
-            masterPath = url.GRN_ADD;
-            newBtnPath = url.GRN_STP;
+        if (subPageMode === url.GRN_LIST_1) {
+            page_Id = pageId.GRN_LIST_1;
+            masterPath = url.GRN_ADD_1;
+            newBtnPath = url.GRN_STP_1;
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
-        else if (subPageMode === url.GRN_lIST_3) {
-            page_Id = pageId.GRN_lIST_3;
+        else if (subPageMode === url.GRN_LIST_3) {
+            page_Id = pageId.GRN_LIST_3;
             masterPath = url.GRN_ADD_3;
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
+        setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(GetCustomer())
+        dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler()
     }, []);
 
@@ -136,7 +138,7 @@ const GRNList = () => {
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
                 Party: loginPartyID(),
-                OrderType: order_Type.SaleOrder
+                OrderType: (subPageMode === url.GRN_LIST_1) ? order_Type.PurchaseOrder : order_Type.SaleOrder
             });
             dispatch(getGRNListPage({ filtersBody, btnId }));
         } catch (error) { }

@@ -7,9 +7,6 @@ import ForgetSaga from "./auth/forgetpwd/saga"
 import ProfileSaga from "./auth/profile/saga"
 import LayoutSaga from "./layout/saga"
 
-// *********************** Breadcrumb ***********************
-import Breadcrumb_Saga from "./Utilites/Breadcrumb/saga"
-
 // {/*   *********************** spinner ***********************
 import Spinner_Saga from "./Utilites/Spinner/saga"
 
@@ -83,7 +80,6 @@ export default function* rootSaga() {
     fork(LayoutSaga),
     fork(Spinner_Saga),
     fork(CustomSearch_Saga),
-    fork(Breadcrumb_Saga),
     fork(CommonPageField_Saga),
     fork(pdfReport_Saga),
     fork(Alert_Saga),

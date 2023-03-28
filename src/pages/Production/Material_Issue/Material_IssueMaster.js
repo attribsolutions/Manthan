@@ -119,7 +119,7 @@ const MaterialIssueMaster = (props) => {
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
 
             const { ListData, Data } = GoButton
-            const { id, Item, ItemName, Unit, WorkDate, Quantity, NumberOfLot, Bom, MaterialIssueItems = [] } = ListData
+            const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom,  } = ListData
             setState((i) => {
                 i.values.MaterialIssueDate = currentDate
                 i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -165,7 +165,7 @@ const MaterialIssueMaster = (props) => {
             if (hasEditVal) {
 
                 setItemselect(hasEditVal)
-                const { id, Item, ItemName, WorkDate, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
+                const { id, Item, ItemName, LotQuantity, NumberOfLot, MaterialIssueItems = [] } = hasEditVal
                 // const { BatchesData = [] } = MaterialIssueItems
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate

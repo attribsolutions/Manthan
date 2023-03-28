@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { GET_PDF_MULTIPLEINVOICE_DATA, GET_PDF_REPORT_DATA } from "./actionType";
-import { Data } from "./DemoData";
+// import { Data } from "./DemoData";
 
-import { getpdfReportdataSuccess, postpdfMultipleReportdataSuccess } from "./actions";
-import { get_Group_List_Api, MultipleInvoice_API } from "../../../helpers/backend_helper";
+import { getpdfReportdataSuccess, } from "./actions";
+import { get_Group_List_Api } from "../../../helpers/backend_helper";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 

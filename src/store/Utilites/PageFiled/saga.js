@@ -4,7 +4,6 @@ import { COMMON_PAGE_FILED, COMMON_PAGE_FILED_lIST } from "./actionType";
 
 import {
   commonPageFieldSuccess,
-  SpinnerState,
   commonPageFieldListSuccess
 } from "../../actions"
 import { hasError500 } from "../CommonError/actions";

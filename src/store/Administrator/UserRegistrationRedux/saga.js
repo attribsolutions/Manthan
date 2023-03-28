@@ -10,7 +10,11 @@ import {
 } from "../../../helpers/backend_helper";
 import {
   ADD_USER, GET_USER_LIST_FOR_USER,
-  DELETE_USER_ACTION, EDIT_USER_ACTION, UPDATE_USER_ACTION, GET_USER_PARTIES_FOR_USER_MASTER, GET_EMPLOYEE_FOR_USER_REGISTRATION
+  DELETE_USER_ACTION,
+  EDIT_USER_ACTION,
+  UPDATE_USER_ACTION,
+  GET_USER_PARTIES_FOR_USER_MASTER,
+  GET_EMPLOYEE_FOR_USER_REGISTRATION
 } from './actionType'
 import {
   saveUserMasterActionSuccess,
@@ -83,7 +87,7 @@ function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
     const rewRes = response.Data.map(i1 => {
       let newRole = []
       editRole.map(i2 => {
-        if (i2.Party == i1.Party_id) {
+        if (i2.Party === i1.Party_id) {
           newRole = i2.PartyRoles.map(i3 => ({
             value: i3.Role,
             label: i3.RoleName

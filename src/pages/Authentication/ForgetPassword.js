@@ -12,7 +12,14 @@ import { withRouter, Link, useHistory } from "react-router-dom"
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation"
 
 // action
-import { changePasswordForForgetPassword, changePasswordForForgetPasswordError, changePasswordForForgetPasswordSuccess, userForgetPassword, userForgetPassword_sendOTP, userForgetPassword_sendOTP_Error, userForgetPassword_sendOTP_Success } from "../../store/actions"
+import {
+  changePasswordForForgetPassword,
+  changePasswordForForgetPasswordError,
+  changePasswordForForgetPasswordSuccess,
+  userForgetPassword_sendOTP,
+  userForgetPassword_sendOTP_Error,
+  userForgetPassword_sendOTP_Success
+} from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -21,7 +28,7 @@ import resetImage from "../../assets/images/resetpassword.png"
 
 const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  // const history = useHistory();
   const [paswErr, setPaswErr] = useState(false)
   const { sendOTPSuccessMsg_redux, sendOtpMegError_reducx, sendPasswordError_reducx, sendPasswordMsg_reducx } = useSelector(state => ({
     sendOTPSuccessMsg_redux: state.ForgetPassword.sendOTPSuccessMsg,
@@ -85,7 +92,7 @@ const ForgetPasswordPage = props => {
   function handleValidSubmit1(event, values) {
     var paswd = values.password1
     var pawdcn = values.passwordcon
-    
+
     if (!(paswd === pawdcn)) {
       // setPaswErr("form-control is-invalid mb-2")
       setPaswErr(true)
@@ -130,7 +137,7 @@ const ForgetPasswordPage = props => {
                             <h5 className="mb-0">  Reset Password</h5>
                           </div>
 
-                          {sendOtpMegError||sendPasswordError ? (
+                          {sendOtpMegError || sendPasswordError ? (
                             <Alert color="danger" style={{ marginTop: "13px" }}>
                               {sendOtpMegError}{sendPasswordError}
                             </Alert>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import { Card, CardHeader, Col, Container, FormGroup, Label, Row, Button } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -130,7 +130,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     let IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
+    if (pageMode === "edit" || pageMode === "other") { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>

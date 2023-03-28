@@ -1,13 +1,8 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Card,
-    CardBody,
-    CardHeader,
     Col,
     Container,
     FormGroup,
-    Input,
-    Label,
     Row,
 } from "reactstrap";
 
@@ -75,12 +70,12 @@ const RouteUpdate = (props) => {
         dispatch(GetRoutesList())
     }, []);
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+    // const values = { ...state.values }
+    // const { isError } = state;
+    // const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    // const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect

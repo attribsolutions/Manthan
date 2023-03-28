@@ -8,8 +8,6 @@ import {
     FormGroup,
     Label,
     Row,
-    Table,
-    Button,
     Input,
 } from "reactstrap";
 import Select from "react-select";
@@ -20,12 +18,10 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import {
     saveVehicleMaster,
     getVehicleList,
-    getMethod_DriverList_ForDropDown,
     getVehicleType_for_dropdown,
     saveVehicleMasterSuccess,
     getVehicleListSuccess,
@@ -33,7 +29,6 @@ import {
     updateVehicleID,
     updateVehicleID_Success
 } from "../../../store/Administrator/VehicleRedux/action";
-import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,

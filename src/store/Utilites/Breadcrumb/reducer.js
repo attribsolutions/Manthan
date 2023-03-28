@@ -37,7 +37,7 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         showCountlabel: action.payload,
       }
     case COMMON_BREADCRUMB_ALL_DETAIL:
-      let payload = Object.assign({}, {...state.breadcrumbDetail},{... action.payload});
+      let payload = Object.assign({ ...state.breadcrumbDetail }, { ...action.payload });
       return {
         ...state,
         breadcrumbDetail: payload,
@@ -52,8 +52,7 @@ const BreadcrumbReducer = (state = INIT_STATE, action) => {
         ...INIT_STATE,
       }
 
-
-    default:
+      default:
       return state
   }
 }

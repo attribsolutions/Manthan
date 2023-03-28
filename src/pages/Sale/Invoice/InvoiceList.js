@@ -14,7 +14,7 @@ import {
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { GetCustomer, GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     btnIsDissablefunc,
     currentDate,
@@ -110,7 +110,7 @@ const InvoiceList = () => {
             makeBtnShow = true;
             IBType = "IBGRN"
         }
-
+        setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -118,7 +118,7 @@ const InvoiceList = () => {
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Count"} :0`))
         dispatch(GetVenderSupplierCustomer(subPageMode))
         goButtonHandler("event", IBType)
-    }, []);
+    }, [dispatch]);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -128,13 +128,6 @@ const InvoiceList = () => {
         value: "",
         label: " All"
     });
-
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
 
     function downBtnFunc(row) {
           
@@ -261,9 +254,6 @@ const InvoiceList = () => {
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
             <div className="page-content">
-
-
-
                 {
                     (pageField) ?
                         <CommonPurchaseList

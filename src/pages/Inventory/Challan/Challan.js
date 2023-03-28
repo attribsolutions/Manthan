@@ -21,7 +21,7 @@ import {
 import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 
-import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, GoBtnDissable, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -44,7 +44,7 @@ const Challan = (props) => {
     const history = useHistory();
     const subPageMode = history.location.pathname
 
-    const goBtnId = `ADDGoBtn${subPageMode}`
+    // const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
@@ -54,7 +54,7 @@ const Challan = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [challanItemList, setchallanItemList] = useState([]);
+    // const [challanItemList, setchallanItemList] = useState([]);                                                                                    
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -67,8 +67,6 @@ const Challan = (props) => {
         userAccess,
         GoButton = [],
         vender,
-        vendorSupplierCustomer,
-        gobutton_Add,
         challanitems
     } = useSelector((state) => ({
         challanitems: state.ChallanReducer.challanitems,
@@ -805,7 +803,6 @@ const Challan = (props) => {
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
-
                                     keyField={"id"}
                                     data={GoButton}
                                     columns={pagesListColumns}

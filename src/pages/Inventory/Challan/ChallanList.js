@@ -16,7 +16,7 @@ import * as pageId from "../../../routes/allPageID"
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { challanlistfilters, deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
-import { getGRN_itemMode2 } from "../../../store/Inventory/GRNRedux/actions";
+import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
 import Challan from "./Challan";
 
 const ChallanList = () => {
@@ -100,7 +100,7 @@ const ChallanList = () => {
         
         // const obj = { ...list[0], id: list[0].id }
         // history.push({
-        //     pathname: url.GRN_ADD,
+        //     pathname: url.GRN_ADD_1,
         //     pageMode: mode.modeSTPsave
         // })
         const challanNo = list[0].FullChallanNumber
@@ -113,7 +113,7 @@ const ChallanList = () => {
             OrderIDs: list[0].id.toString(),
             Mode: 2 // mode when challan to make GRN
         })
-        dispatch(getGRN_itemMode2({ jsonBody, pageMode: mode.modeSTPsave, grnRef, path: url.GRN_ADD, challanNo }))
+        dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, grnRef, path: url.GRN_ADD_1, challanNo }))
     };
 
     function goButtonHandler() {

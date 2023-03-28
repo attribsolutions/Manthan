@@ -137,17 +137,7 @@ const Layout = props => {
     }
   };
 
-  useEffect(() => {
-    // 
-    const locationPath = history.location.pathname
-    let userAcc = userAccess.find((inx) => {
-      return (`/${inx.RelatedPageIDPath}` === locationPath)
 
-    });
-
-
-  }, []);
-  // pageId={pageId.GROUP_lIST}
   return (
     <React.Fragment>
            <div id="overlay" >

@@ -1,4 +1,4 @@
-import { call, delay, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import {
   deleteOrderIdSuccess,
   postOrderSuccess,
@@ -33,7 +33,6 @@ import *as url from "../../../routes/route_url"
 
 function* goButtonGenFunc(action) {                      // GO-Botton order Add Page by subPageMode  
    
-  yield delay(400)
   try {
 
     const { subPageMode, data } = action
@@ -109,7 +108,7 @@ function* orderList_GoBtn_GenFunc({ config }) {              //  Order List Filt
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2)||(subPageMode === url.ORDER_LIST_4)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
-    else if ((subPageMode === url.GRN_STP)||subPageMode === url.GRN_STP_3) {
+    else if ((subPageMode === url.GRN_STP_1)||subPageMode === url.GRN_STP_3) {
       response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {

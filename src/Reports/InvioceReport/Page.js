@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data } from "./DemoData";
+// import { Data } from "./DemoData";
 
 
 var pageHeder = function (doc,data) {
@@ -21,9 +21,6 @@ function pageFooter(doc,data) {
 }
 
  const InvioceReport=(data)=> {
-//    const data = Data
-
-   
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc,data);
     reportBody(doc, data);

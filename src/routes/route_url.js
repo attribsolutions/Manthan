@@ -118,13 +118,13 @@ export const ORDER_LIST_4 = '/OrderList_4'
 
 //******************************* Inventory Module ************************************//
 
-export const GRN_STP = "/GRN_STP"
-export const GRN_lIST = "/GRNList"
-export const GRN_ADD = "/GRN"
+export const GRN_STP_1 = "/GRN_STP_1"
+export const GRN_LIST_1 = "/GRN_LIST_1"
+export const GRN_ADD_1 = "/GRN_ADD_1"
 
 export const GRN_STP_3 = "/GRN_STP_3"
-export const GRN_lIST_3 = "/GRN_List_3"
-export const GRN_ADD_3 = "/GRN_3"
+export const GRN_LIST_3 = "/GRN_LIST_3"
+export const GRN_ADD_3 = "/GRN_ADD_3"
 
 export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
