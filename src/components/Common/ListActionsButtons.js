@@ -95,6 +95,7 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
                 && !(userAccState.RoleAccess_IsView)
                 && !(userAccState.RoleAccess_IsDelete)
+                && !(userAccState.RoleAccess_IsDeleteSelf)
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
