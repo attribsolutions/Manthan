@@ -624,7 +624,7 @@ const GRNAdd = (props) => {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
                 if (subPageMode === url.GRN_ADD_3) {
-                    debugger
+                      
                     i.Quantity = i.poQuantity
                 }
                 const arr = {

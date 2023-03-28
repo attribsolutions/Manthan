@@ -1,7 +1,8 @@
 import { invoice } from "../ReportIndex";
 
-export const columns =[
+export const columns = [
     "HSN Item Name",
+    "MRP",
     "Quantity",
     "Rate",
     "Basic Amt",
@@ -9,10 +10,10 @@ export const columns =[
     "CGST Amt",
     "SGST %",
     "SGST Amt",
-    "Total Amt" 
+    "Total Amt"
 ];
 
-export const columns1 =[
+export const columns1 = [
     "HSN Item Name",
     "Quantity",
     "Rate",
@@ -23,15 +24,18 @@ export const columns1 =[
     "SGST Amount",
     "Debit note",
     "Credit note",
-    "Total Amt" 
+    "Total Amt"
 ];
 
 
-
-export const PageHedercolumns = [
+export const BilledBy = [
     "Billed by",
-    "Billed to",
-    ''
+]
+export const BilledTo = [
+    "Billed by",
+]
+export const DetailsOfTransport = [
+    "Billed by",
 ]
 
 export const Rows = (data) => {
@@ -46,45 +50,44 @@ export const Rows = (data) => {
     let totalQuantity = 0
 
     InvoiceItems.forEach((element, key) => {
-      
         const tableitemRow = [
             element.ItemName,
-            `${element.Quantity} ${element.UnitName}`,
+            element.MRP,
+            `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
-            element.CGSTPercentage,
+            ` ${element.CGSTPercentage}%`,
             element.CGST,
-            element.SGSTPercentage,
+            ` ${element.SGSTPercentage}%`,
             element.SGST,
             element.Amount,
-            
-           
+
         ];
 
         function totalLots() {
             totalQuantity = Number(totalQuantity) + Number(element.Quantity)
             totalCGst = Number(totalCGst) + Number(element.CGST)
             totalSGst = Number(totalSGst) + Number(element.SGST)
-            totalAmount = Number(totalAmount) + Number( element.Amount)
+            totalAmount = Number(totalAmount) + Number(element.Amount)
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst)})
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
         };
 
         function totalrow() {
             return [
-                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
-                " ",
-                `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)} ${element.UnitName}`,
+                `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                ``,
                 "",
+                `isaddition`,
                 `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
-                "isaddition",
+                ``,
                 `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
-                `Amount:${parseFloat(totalAmount).toFixed(2)}`,
+                `Amt:${parseFloat(totalAmount).toFixed(2)}`,
             ];
         };
-
 
         if (Gst === 0) { Gst = element.GSTPercentage };
         let aa = { TotalCGst: 0, totalSGst: 0 }
@@ -111,25 +114,38 @@ export const Rows = (data) => {
     })
     return returnArr;
 }
-export const ReportFotterColumns = [
-    "SGST",
-    "CGST", "Quantity",
-    "GST % ",
-    "TaxbleAmt.", "IGST", "Total Amt"
-];
 
-export const ReportHederRows = (data) => {
-    
-   
-    var reportArray = [
-        [, ,'Driver Name : Sameer'],
-        [`${data.CustomerName}`, `${data.PartyName}`,`vehical No :MH34566` ,],
-        [`Maharashtra`, `Karnatak`,`State:Maharashtra`,],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`,`E-way Bill :24654364633`],
-        [,, `INR NO :${data.FullInvoiceNumber}`]
+export const BilledByRow = (data) => {
+    var BilledByArray = [
+        [`${data.CustomerName}`],
+        ["Robert Robertson, 1234 NW  "],
+        [`GSTIN:${data.CustomerGSTIN}`],
+        [`FSSAI :f23dfxxxxxwe55`],
     ]
-  
-    return reportArray;
+    return BilledByArray;
+}
+export const BilledToRow = (data) => {
+
+    var BilledToArray = [
+        [`${data.PartyName}`],
+        ["Robert Robertson, 1234 NW "],
+        [`GSTIN:${data.PartyGSTIN}`,],
+        [`FSSAI :ui3dfxxxxxwe55`],
+    ]
+
+    return BilledToArray;
+}
+export const DetailsOfTransportRow = (data) => {
+
+    var DetailsOfTransportArray = [
+        ['Driver Name : Sameer'],
+        [`vehical No :MH34566`],
+        [`State:Maharashtra `],
+        [`E-way Bill :24654364633`],
+        [`INR NO :${data.FullInvoiceNumber}`]
+    ]
+
+    return DetailsOfTransportArray;
 }
 
 
