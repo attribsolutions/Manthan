@@ -5,9 +5,9 @@ export const columns =[
     "Quantity",
     "Rate",
     "Basic Amt",
-    "CGST %",
+    "CGST ",
     "CGST Amt",
-    "SGST %",
+    "SGST ",
     "SGST Amt",
     "Total Amt" 
 ];
@@ -28,10 +28,19 @@ export const columns1 =[
 
 
 
-export const PageHedercolumns = [
+// export const PageHedercolumns = [
+//     "Billed by",
+//     "Billed to",
+//     ''
+// ]
+export const BilledBy = [
+    "Billed by",  
+]
+export const BilledTo = [
     "Billed by",
-    "Billed to",
-    ''
+]
+export const DetailsOfTransport = [
+    "Billed by",
 ]
 
 export const Rows = (data) => {
@@ -48,13 +57,13 @@ export const Rows = (data) => {
     InvoiceItems.forEach((element, key) => {
       
         const tableitemRow = [
-            element.ItemName,
-            `${element.Quantity} ${element.UnitName}`,
+            element.ItemName ,
+            `${Number(element.Quantity).toFixed(2)}${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
-            element.CGSTPercentage,
+            `${element.CGSTPercentage}%`,
             element.CGST,
-            element.SGSTPercentage,
+            `${element.SGSTPercentage}%`,
             element.SGST,
             element.Amount,
             
@@ -73,13 +82,13 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
-                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}`,
+                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)}${element.UnitName}`,
                 " ",
-                `BasicAmount:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
-                `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+                `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
                 "isaddition",
-                `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+                `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
                 `Amount:${parseFloat(totalAmount).toFixed(2)}`,
             ];
@@ -111,21 +120,52 @@ export const Rows = (data) => {
     })
     return returnArr;
 }
-export const ReportFotterColumns = [
-    "SGST",
-    "CGST", "Quantity",
-    "GST % ",
-    "TaxbleAmt.", "IGST", "Total Amt"
-];
 
-export const ReportHederRows = (data) => {
-   
-    var reportArray = [
-        [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
-        [`${data.PartyName}`, `${data.CustomerName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],
-        [`maharashtra`, `karnatak`,data.ReportType===invoice?`vehical No :MH34566`:`E-way Bill :24654364633` ],
-        [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, data.ReportType===invoice?`E-way Bill :24654364633`:`INR NO :${data.FullInvoiceNumber}`, ],
-        [,,  data.ReportType===invoice?`INR NO :${data.FullInvoiceNumber}`:null]
+
+
+export const BilledByRow = (data) => {
+    var BilledByArray = [
+        [`${data.PartyName}`],   
+        [`maharashtra`],
+        [`GSTIN:${data.CustomerGSTIN}`],
+        [`FSSAI :f23dfxxxxxwe55`],
     ]
-    return reportArray;
+    return BilledByArray;
+} 
+export const BilledToRow = (data) => {
+    
+    var BilledToArray = [
+        [`${data.CustomerName}`],
+        [`karnatak`],
+        [`GSTIN:${data.PartyGSTIN}`,],
+        [`FSSAI :ui3dfxxxxxwe55`],
+    ]
+  
+    return BilledToArray;
 }
+export const DetailsOfTransportRow = (data) => {
+
+    var DetailsOfTransportArray = [
+        [data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
+        [`vehical No :MH34566`],
+        [`State:Maharashtra `],
+        [`E-way Bill :24654364633`],
+        [`INR NO :${data.FullInvoiceNumber}`]
+    ]
+  
+    return DetailsOfTransportArray;
+}
+
+
+
+// export const ReportHederRows = (data) => {
+   
+//     var reportArray = [
+//         [, ,data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
+//         [`${data.PartyName}`, `${data.CustomerName}`,data.ReportType===invoice?`Driver Name : Sameer`:`vehical No :MH34566` ,],
+//         [`maharashtra`, `karnatak`,data.ReportType===invoice?`vehical No :MH34566`:`E-way Bill :24654364633` ],
+//         [`FSSAI :f23dfxxxxxwe55`, `FSSAI :ui3dfxxxxxwe55`, data.ReportType===invoice?`E-way Bill :24654364633`:`INR NO :${data.FullInvoiceNumber}`, ],
+//         [,,  data.ReportType===invoice?`INR NO :${data.FullInvoiceNumber}`:null]
+//     ]
+//     return reportArray;
+// }
