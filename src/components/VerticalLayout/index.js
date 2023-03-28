@@ -84,7 +84,6 @@ const Layout = props => {
         const timer = ms => new Promise(res => setTimeout(res, ms))
         async function load() { // We need to wrap the loop into an async function for this to work
           for (let i = 0; i < 101; i++) {
-            console.log(i)
             setCount(i);
             await timer();
           }
