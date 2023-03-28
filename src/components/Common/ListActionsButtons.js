@@ -104,7 +104,7 @@ export const listPageActionsButtonFunc = (props) => {
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false
             return (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'right' }} >
 
 
                     {

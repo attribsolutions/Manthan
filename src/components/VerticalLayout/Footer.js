@@ -1,12 +1,26 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { Container, Row, Col } from "reactstrap"
-import { loginCompanyID, loginUserDetails } from "../Common/CommonFunction"
+import { getUserDetailsAction } from "../../store/actions"
+import { loginUserDetails } from "../Common/CommonFunction"
 
 const Footer = () => {
 
+  const dispatch = useDispatch()
+
+  const reducers = useSelector(
+    (state) => ({
+      userAccess: state.Login.afterLoginUserDetails,
+    })
+  );
+  useEffect(() => {
+    dispatch(getUserDetailsAction(localStorage.getItem("userId")))
+},[dispatch]);
+  
+  
   let FooterDetails = loginUserDetails()
-   
+
 
   return (
     <React.Fragment>
@@ -35,7 +49,7 @@ const Footer = () => {
               <span className="pl-4 text-primary">{FooterDetails.RoleName}</span>
             </Col>
             <Col md={2} ><span className="text-black">Company : </span>
-              <span className="pl-4 text-primary">{loginCompanyID()}</span>
+              <span className="pl-4 text-primary">{reducers.userAccess.CompanyName}</span>
             </Col>
 
             <Col md={4} >
@@ -45,7 +59,7 @@ const Footer = () => {
                   AttribSolution
                 </Link>
               </div></Col>
-            
+
           </Row>
         </Container>
       </footer>

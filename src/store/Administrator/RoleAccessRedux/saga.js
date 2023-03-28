@@ -132,7 +132,7 @@ function* deleteRoleAccessMaster_GenFun({ config }) {
 }
 function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
   try {
-    debugger
+      
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableDataRedux = yield select(getState);
     const newList = tableDataRedux.map((index) => {
