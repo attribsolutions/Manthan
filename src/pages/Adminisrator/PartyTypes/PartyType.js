@@ -35,7 +35,7 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -49,9 +49,9 @@ const PartyType = (props) => {
     const fileds = {
         id: "",
         Name: "",
-        IsSCM: false,
+        IsSCM: loginIsSCMCompany() > 0 ? true : false,
         IsDivision: false,
-        IsRetailer:false
+        IsRetailer: false
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -121,18 +121,18 @@ const PartyType = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, IsSCM, IsDivision,IsRetailer } = hasEditVal
+                const { id, Name, IsSCM, IsDivision, IsRetailer } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.IsSCM = IsSCM;
                 values.IsDivision = IsDivision;
-                values.IsRetailer=IsRetailer
+                values.IsRetailer = IsRetailer
 
                 values.id = id
                 hasValid.Name.valid = true;
                 hasValid.IsSCM.valid = true;
                 hasValid.IsDivision.valid = true;
-                hasValid.IsRetailer.valid=true
+                hasValid.IsRetailer.valid = true
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -211,7 +211,7 @@ const PartyType = (props) => {
                     Name: values.Name,
                     IsSCM: values.IsSCM,
                     IsDivision: values.IsDivision,
-                    IsRetailer:values.IsRetailer,
+                    IsRetailer: values.IsRetailer,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -280,6 +280,7 @@ const PartyType = (props) => {
                                                                         <div className="form-check form-switch form-switch-md mb-2">
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 checked={values.IsSCM}
+                                                                                disabled={loginIsSCMCompany() > 0 ? true : false}
                                                                                 name="IsSCM"
                                                                                 onChange={(e) => {
                                                                                     setState((i) => {
