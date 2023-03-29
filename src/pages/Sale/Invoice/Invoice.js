@@ -260,8 +260,6 @@ const Invoice = (props) => {
                     <div className="width-100">Item Name</div>)
             },
             formatter: (cellContent, index1) => {
-
-
                 return (
                     <>
                         <div><samp id={`ItemName${index1.id}`}>{cellContent}</samp></div>
@@ -277,7 +275,7 @@ const Invoice = (props) => {
             dataField: "",
             headerFormatter: (cell, index1 = [], k) => {
                 return (
-                    <div className="width-100">Quantity</div>)
+                    <div style={{ maxWidth: "50px", minWidth: "50px" }} >Quantity</div>)
             },
             formatter: (cellContent, user) => (
                 <div >
@@ -434,6 +432,7 @@ const Invoice = (props) => {
                                         <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
                                     </th>
                                     <th  >Rate</th>
+                                    <th  >MRP</th>
                                 </tr>
                             </Thead>
                             <Tbody  >
@@ -477,6 +476,11 @@ const Invoice = (props) => {
                                                     {index1.Rate}
                                                 </div>
                                             </td>
+                                            <td>
+                                                <div style={{ width: "100px" }}>
+                                                    {index1.MRP}
+                                                </div>
+                                            </td>
                                         </tr>
                                     )
                                 })}
@@ -487,8 +491,37 @@ const Invoice = (props) => {
 
         },
         {//***************Rate********************************************************************* */
-            text: "Discount",
-            dataField: "Rate",
+
+            dataField: "",
+            headerFormatter: (cell, index1 = [], k) => {
+                return (
+                    <div style={{ maxWidth: "200px", minWidth: "200px" }} >Discount</div>)
+            },
+            formatter: (Rate, row, key) => {
+
+                return (
+                    <>
+                        <Row className="col-12" >
+                            <Col sm={6}  >
+                                <Select
+                                    className="react-dropdown"
+                                    classNamePrefix="dropdown"
+                                    options={[{ value: 1, label: "Rs" },
+                                    { value: 2, label: "%" }]}
+                                // onChange={(e) => (e, row)}
+                                />
+                            </Col>
+                            <Col sm={6}>
+                                <Input
+                                    type="text" defaultValue={row.Rate}
+                                //  disabled={true}
+                                >
+                                </Input>
+                            </Col>
+                        </Row>
+                    </>
+                )
+            },
         }
 
     ];
