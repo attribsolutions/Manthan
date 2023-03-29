@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   changeLayout,
   changeSidebarTheme,
@@ -21,10 +21,14 @@ import CustomAlert from "../Common/CustomAlert";
 import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
+import { Progress } from "reactstrap";
 
 const Layout = props => {
   const dispatch = useDispatch();
   const history = useHistory()
+  const [Count, setCount] = useState(0);
+
+
 
   const {
     isPreloader,
@@ -63,22 +67,30 @@ const Layout = props => {
   /*
   layout  settings
   */
+  debugger
   useEffect(() => {
     // document.body.addEventListener("click", hideRightbar, true);
-
     try {
       if (isPreloader === true) {
         document.getElementById("preloader").style.display = "block";
         // document.getElementById("status").style.display = "block";
 
-        setTimeout(function () {
-          document.getElementById("preloader").style.display = "none";
-          // document.getElementById("status").style.display = "none";
-        }, 1000);
+        // setTimeout(function () {
+        //   
+        //   document.getElementById("preloader").style.display = "none";
+
+        //   // document.getElementById("status").style.display = "none";
+        // }, 1000);
+        const timer = ms => new Promise(res => setTimeout(res, ms))
+        async function load() { // We need to wrap the loop into an async function for this to work
+          for (let i = 0; i < 101; i++) {
+            setCount(i);
+            await timer();
+          }
+        }
+        load();
       } else {
         document.getElementById("preloader").style.display = "none";
-
-        // document.getElementById("status").style.display = "none";
       }
     } catch (e) { }
   }, [isPreloader]);
@@ -88,7 +100,16 @@ const Layout = props => {
   }, []);
 
   useEffect(() => {
+    if (Count === 100) {
+      document.getElementById("preloader").style.display = "none";
+    }
+  });
+
+
+
+  useEffect(() => {
     dispatch(changeLayout("vertical"));
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -140,35 +161,55 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-           <div id="overlay" >
-                <div className="cv-spinner">
-                    <span className="spinner"></span>
-                    {/* <button className="btn btn-primary" type="button" disabled>
+      <div id="overlay" >
+        <div className="cv-spinner">
+          <span className="spinner"></span>
+          {/* <button className="btn btn-primary" type="button" disabled>
                     <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
                     Loading...
                 </button> */}
-                </div>
-            </div>
-        <div className="pace pace-active" id="preloader">
+        </div>
+      </div>
+
+
+
+
+      <div className="pace pace-active" id="preloader">
+        <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+          <Progress
+            value={Count}
+            color="primary"
+            style={{ width: '100%', height: "4px" }}
+            animated
+          ></Progress>
+        </div>
+      </div>
+
+
+
+
+
+
+      {/* <div className="pace pace-active" id="preloader">
           <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
             <div className="pace-progress-inner"></div>
           </div>
-          <div className="pace-activity"></div></div>
-         
-        <div id="layout-wrapper">
-          <CustomAlert />
-          {/* <Spinner /> */}
-          <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-          <BreadcrumbNew />
-          <Sidebar
-            theme={leftSideBarTheme}
-            type={leftSideBarType}
-            isMobile={isMobile}
-          />
-          <div className="main-content">{props.children}</div>
-          <Footer />
-        </div>
-     
+          <div className="pace-activity"></div></div> */}
+
+      <div id="layout-wrapper">
+        <CustomAlert />
+        {/* <Spinner /> */}
+        <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
+        <BreadcrumbNew />
+        <Sidebar
+          theme={leftSideBarTheme}
+          type={leftSideBarType}
+          isMobile={isMobile}
+        />
+        <div className="main-content">{props.children}</div>
+        <Footer />
+      </div>
+
     </React.Fragment>
   );
 };

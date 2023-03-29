@@ -362,7 +362,7 @@ export const reportFooter = (doc, data) => {
     // doc.autoTable(optionsTable4,);
 }
 export const tableBody = (doc, data) => {
-    debugger
+      
       
     var options = {
         didParseCell: (data1) => {

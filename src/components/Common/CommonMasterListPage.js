@@ -245,7 +245,7 @@ const CommonListPage = (props) => {
       order: sortType, // desc or asc
     },
   ];
-
+  
   const pageOptions = {
     sizePerPage: 15,
     // totalSize: tableList.length,
