@@ -66,11 +66,13 @@ const PartyMasterBulkUpdate = (props) => {
         id: "",
         RoutesName: "",
         PartyName: "",
-        SelectField: ""
+        SelectField: "",
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [val, setvalue] = useState()
+    const [FSSAIExipry, setFSSAIExipry] = useState()
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -131,7 +133,7 @@ const PartyMasterBulkUpdate = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
-            TypeID: 5
+            TypeID: 2
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
@@ -230,7 +232,6 @@ const PartyMasterBulkUpdate = (props) => {
         let val = event.label;
         setvalue(val)
         setSelectFieldName(val)
-
     }
 
 
@@ -259,6 +260,57 @@ const PartyMasterBulkUpdate = (props) => {
 
         },
         {
+            text: "FSSAIExipry",
+            dataField: "FSSAIExipry",
+            hidden: SelectFieldName.label === "FSSAINo" ? false : true,
+            formatter: () => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Flatpickr
+                                    name='fromdate'
+                                    //  value={FSSAIExipry}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                        defaultDate: FSSAIExipry
+
+                                    }}
+                                //    onChange={setFSSAIExipry}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+        {
+            text: "State",
+            dataField: "State",
+            hidden: SelectFieldName.label === "State" ? false : true,
+            formatter: (user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                        <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                     defaultValue={user.SelectFieldName}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => tableSelectHandler(e, user)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+        {
             text: "New value",
             dataField: "Newvalue",
             formatter: (cellContent, user) => (
@@ -279,38 +331,10 @@ const PartyMasterBulkUpdate = (props) => {
                 </>
             ),
         },
-        {
-            text: "Date",
-            dataField: "",
-            hidden: SelectFieldName.label === "FSSAINo" ? false : true,
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Flatpickr
-                                    name='fromdate'
-                                    // value={fromdate}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                        defaultDate: "today"
 
-                                    }}
-                                // onChange={fromdateOnchange}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
-        },
 
     ];
- console.log(SelectFieldName)
+    console.log(SelectFieldName)
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
