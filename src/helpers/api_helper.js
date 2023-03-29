@@ -26,7 +26,6 @@ export function get(url, btnId) {
 
   CommonConsole("get api call");
   AuthonticationFunction();
-
   return axiosApi.get(url)
     .then(response => {
       return CheckAPIResponse({ method: "get", url, response, btnId });
@@ -34,7 +33,6 @@ export function get(url, btnId) {
     .catch(response => {
       return CheckAPIResponse({ method: "get", url, response, btnId });
     });
-
 }
 
 export function post(url, body, btnId) {
@@ -42,19 +40,17 @@ export function post(url, body, btnId) {
   CommonConsole("Post api call");
   AuthonticationFunction();
 
-  return axiosApi
-    .post(url, body, {
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      }
-    }).then(response => {
-      return CheckAPIResponse({ method: "post", url, response, body, btnId });
-    }).catch(response => {
-      return CheckAPIResponse({ method: "post", url, response, body, btnId });
-    });
+  return axiosApi.post(url, body, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }
+  }).then(response => {
+    return CheckAPIResponse({ method: "post", url, response, body, btnId });
+  }).catch(response => {
+    return CheckAPIResponse({ method: "post", url, response, body, btnId });
+  });
 };
-
 
 export function put(url, body, btnId,) {
 
@@ -69,7 +65,7 @@ export function put(url, body, btnId,) {
   }).then(response => {
     return CheckAPIResponse({ method: "put", url, response, body, btnId });
   }).catch(response => {
-    return CheckAPIResponse({ method: "put", url, response,body, btnId });
+    return CheckAPIResponse({ method: "put", url, response, body, btnId });
   });
 }
 
@@ -95,7 +91,7 @@ export function postForget(url, body,) {
       }
     })
     .then(response => {
-      return CheckAPIResponse({ method: "postForget",body, url, response });
+      return CheckAPIResponse({ method: "postForget", body, url, response });
     })
     .catch(response => {
       return CheckAPIResponse({ method: "postForget", url, response });
