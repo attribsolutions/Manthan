@@ -28,7 +28,8 @@ function pageFooter(doc,data) {
      doc.setProperties({
           title: "Report"
       });
-    // window.open(doc.output('dataurlnewwindow'));
+    // window.open('dataurlnewwindow');
+    debugger
     doc.output('dataurlnewwindow');
 
     // return(<></>);
