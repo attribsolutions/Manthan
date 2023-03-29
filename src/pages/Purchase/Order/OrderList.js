@@ -185,6 +185,7 @@ const OrderList = () => {
     }, [makeIBInvoice])
 
     const makeBtnFunc = (list = []) => {
+        debugger
         const obj = list[0]
         if (subPageMode === url.IB_INVOICE_STP) {
             const jsonBody = JSON.stringify({
@@ -210,7 +211,7 @@ const OrderList = () => {
                             Invoice: null,
                             Order: ele.POType === "Challan" ? '' : ele.id,
                             ChallanNo: ele.FullOrderNumber,
-                            Inward: false,
+                            Inward: url.GRN_STP_3 ? true : false,
                             Challan: ele.POType === "Challan" ? ele.id : ''
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
