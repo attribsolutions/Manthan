@@ -43,11 +43,11 @@ import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions"
 import {
     GoButton_For_Party_Master_Bulk_Update_Add,
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
+    postPartyName_for_dropdown,
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
     postSelect_Field_for_dropdown,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
@@ -59,6 +59,7 @@ const PartyMasterBulkUpdate = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [RouteSelect, setRouteSelect] = useState([]);
+    const [Party, setParty] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
 
 
@@ -74,7 +75,6 @@ const PartyMasterBulkUpdate = (props) => {
     const [FSSAIExipry, setFSSAIExipry] = useState()
 
 
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -82,7 +82,7 @@ const PartyMasterBulkUpdate = (props) => {
         userAccess,
         RoutesList,
         SelectField,
-        SSDD_List,
+        PartyName,
         Data
     } = useSelector((state) => ({
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
@@ -92,7 +92,7 @@ const PartyMasterBulkUpdate = (props) => {
         Data: state.PartyMasterBulkUpdateReducer.goButton,
         RoutesList: state.RoutesReducer.RoutesList,
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
-        SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+        PartyName: state.PartyMasterBulkUpdateReducer.PartyName,
     }));
 
     const location = { ...history.location }
@@ -108,7 +108,6 @@ const PartyMasterBulkUpdate = (props) => {
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(SSDD_List_under_Company());
         dispatch(GetRoutesList());
     }, []);
 
@@ -129,7 +128,6 @@ const PartyMasterBulkUpdate = (props) => {
     }, [userAccess])
 
 
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -138,6 +136,14 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            CompanyID: loginCompanyID(),
+            PartyID: loginPartyID(),
+            Type: 1
+        });
+        dispatch(postPartyName_for_dropdown(jsonBody));
+    }, []);
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -199,7 +205,7 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
 
-    const PartyDropdown_Options = SSDD_List.map(i => ({
+    const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
         label: i.Name
     }));
@@ -208,7 +214,7 @@ const PartyMasterBulkUpdate = (props) => {
 
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
-            Route: RouteSelect.value,
+             Route: RouteSelect.value,
             Type: SelectFieldName.label
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
@@ -288,28 +294,28 @@ const PartyMasterBulkUpdate = (props) => {
                 </>
             ),
         },
-        {
-            text: "State",
-            dataField: "State",
-            hidden: SelectFieldName.label === "State" ? false : true,
-            formatter: (user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                        <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                     defaultValue={user.SelectFieldName}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => tableSelectHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
-        },
+        // {
+        //     text: "",
+        //     dataField: "",
+        //     // hidden: SelectFieldName.label === "State" ? false : true,
+        //     formatter: (user) => (
+        //         <>
+        //             <div style={{ justifyContent: 'center' }}>
+        //                 <Col>
+        //                     <FormGroup className=" col col-sm-4 ">
+        //                         <Input
+        //                             id=""
+        //                             type="text"
+        //                             // defaultValue={user.SelectFieldName}
+        //                             className="col col-sm text-center"
+        //                             onChange={(e) => tableSelectHandler(e, user)}
+        //                         />
+        //                     </FormGroup>
+        //                 </Col>
+        //             </div>
+        //         </>
+        //     ),
+        // },
         {
             text: "New value",
             dataField: "Newvalue",
@@ -440,23 +446,21 @@ const PartyMasterBulkUpdate = (props) => {
                                                         <Col md="3" >
                                                             <FormGroup className=" row  mt-2" >
                                                                 <Label htmlFor="validationCustom01" className="mt-1"
-                                                                    style={{ width: "100px" }}>{fieldLabel.PartyName} </Label>
+                                                                    style={{ width: "100px" }}>PartyName </Label>
                                                                 <div className="col col-6 sm-1">
                                                                     <Select
                                                                         name="PartyName"
-                                                                        value={values.PartyName}
+                                                                        value={Party}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={PartyDropdown_Options}
-                                                                        onChange={(hasSelect, evn) => {
-                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                        }}
+                                                                        onChange={(e) => { setParty(e) }}
                                                                     />
                                                                 </div>
-                                                                {/* {isError.PartyName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                                        )} */}
+                                                                {isError.PartyName.length > 0 && (
+                                                                    <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                                )}
                                                             </FormGroup>
                                                         </Col>
 

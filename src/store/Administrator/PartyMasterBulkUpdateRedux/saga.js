@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
     postParty_Master_Bulk_Update_Success,
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
-    postParty_for_dropdown_Success,
+    postPartyName_for_dropdown_Success,
     postSelect_Field_for_dropdown_Success
 } from "./actions";
 import {
@@ -14,7 +14,7 @@ import {
 import {
     GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE,
     POST_PARTY_MASTER_BULK_UPDATE_PAGE,
-    POST_PARTY_DROPDOWN,
+    POST_PARTY_NAME_DROPDOWN,
     POST_SELECT_FIELD_DROPDOWN
 } from "./actionTypes";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
@@ -35,11 +35,11 @@ function* Post_PartyMasterBulkUpdate_GenratorFunction({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
-function* Post_Party_GenratorFunction({ config }) {
+function* Post_Party_GenratorFunction({jsonBody}) {
 
     try {
-        const response = yield call(post_PartyAPI, config);
-        yield put(postParty_for_dropdown_Success(response));
+        const response = yield call(post_PartyAPI, jsonBody);
+        yield put(postPartyName_for_dropdown_Success(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
@@ -55,7 +55,7 @@ function* Post_SelectField_GenratorFunction({jsonBody}) {
 function* PartyMasterBulkUpdateSaga() {
     yield takeEvery(GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE, GoButton_PartyMasterBulkUpdate_post_genfun);
     yield takeEvery(POST_PARTY_MASTER_BULK_UPDATE_PAGE, Post_PartyMasterBulkUpdate_GenratorFunction);
-    yield takeEvery(POST_PARTY_DROPDOWN, Post_Party_GenratorFunction);
+    yield takeEvery(POST_PARTY_NAME_DROPDOWN, Post_Party_GenratorFunction);
     yield takeEvery(POST_SELECT_FIELD_DROPDOWN, Post_SelectField_GenratorFunction);
 }
 
