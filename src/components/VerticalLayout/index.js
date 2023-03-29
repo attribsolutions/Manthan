@@ -67,7 +67,7 @@ const Layout = props => {
   /*
   layout  settings
   */
-  debugger
+  
   useEffect(() => {
     // document.body.addEventListener("click", hideRightbar, true);
     try {

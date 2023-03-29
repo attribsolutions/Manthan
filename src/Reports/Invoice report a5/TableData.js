@@ -81,9 +81,9 @@ export const Rows = (data) => {
                 ``,
                 "",
                 `isaddition`,
-                `TotalCGST:${parseFloat(totalCGst).toFixed(2)}`,
+                `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
                 ``,
-                `TotalSGST:${parseFloat(totalSGst).toFixed(2)}`,
+                `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
                 "",
                 `Amt:${parseFloat(totalAmount).toFixed(2)}`,
             ];
