@@ -69,7 +69,7 @@ export function put(url, body, btnId,) {
   }).then(response => {
     return CheckAPIResponse({ method: "put", url, response, body, btnId });
   }).catch(response => {
-    return CheckAPIResponse({ method: "put", url, response, btnId });
+    return CheckAPIResponse({ method: "put", url, response,body, btnId });
   });
 }
 
