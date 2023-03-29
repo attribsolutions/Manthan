@@ -306,7 +306,7 @@ export const reportFooter = (doc, data) => {
     //  Without Signature
 
     let stringNumber = toWords(Number(data.GrandTotal))
-    doc.addImage(upi_qr_code, 'PNG', 365, 753, 66, 56)
+    doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
