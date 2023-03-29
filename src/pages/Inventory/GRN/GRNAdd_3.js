@@ -88,6 +88,7 @@ const GRNAdd3 = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
+
         if ((items.Status === true)) {
             const grnDetails = { ...items.Data }
             let arr = []
@@ -96,7 +97,7 @@ const GRNAdd3 = (props) => {
             let tQty = 0
             let id = 1
             grnDetails.OrderItem.forEach((i, k) => {
-                i.BatchDate_conv=convertDatefunc(i.BatchDate)
+                i.BatchDate_conv = convertDatefunc(i.BatchDate)
                 if (k === 0) {
                     i.id = id
                     arr.push(i)
@@ -118,8 +119,8 @@ const GRNAdd3 = (props) => {
                     arr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                     ++id;
                     i.id = id
-                    tAmount =  Number(i.Amount)
-                    tQty =  Number(i.Quantity)
+                    tAmount = Number(i.Amount)
+                    tQty = Number(i.Quantity)
                     arr.push(i)
                     arr.push({ id, ItemName: "Total", Amount: tAmount.toFixed(3), Quantity: tQty.toFixed(3) })
                 }
@@ -282,6 +283,7 @@ const GRNAdd3 = (props) => {
 
 
     const saveHandeller = (event) => {
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -455,16 +457,15 @@ const GRNAdd3 = (props) => {
 
                                         <Input
                                             type="checkbox"
+                                            checked={true}
                                             style={{ paddingTop: "7px" }}
                                             placeholder="Enter Invoice No"
-                                            disabled={pageMode === mode.view ? true : false}
-                                            onChange={(e) => openPOdata[0].Inward = e.target.checked}
+                                            disabled={true}
+                                            // onChange={(e) => openPOdata[0].Inward = true}
                                         />
 
                                     </Col>
                                 </FormGroup>
-
-
 
                             </Col>
                         </Row>
