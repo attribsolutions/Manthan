@@ -18,7 +18,7 @@ import {
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc,  } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -46,7 +46,6 @@ const RouteUpdate = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -66,13 +65,9 @@ const RouteUpdate = (props) => {
         const page_Id = pageId.ROUTE_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(RouteUpdateListAPI())
         dispatch(GetRoutesList())
+        dispatch(RouteUpdateListAPI())
     }, []);
-
-    // const values = { ...state.values }
-    // const { isError } = state;
-    // const { fieldLabel } = state;
 
     const location = { ...history.location }
     // const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -217,12 +212,12 @@ const RouteUpdate = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css ,marginBottom:"200px"}}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
                     <Container fluid>
 
                         <form noValidate>
                             <PaginationProvider
-                            
+
                                 pagination={paginationFactory(pageOptions)}
                             >
                                 {({ paginationProps, paginationTableProps }) => (
