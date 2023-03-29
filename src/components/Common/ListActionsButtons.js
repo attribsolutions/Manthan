@@ -121,7 +121,7 @@ export const listPageActionsButtonFunc = (props) => {
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-invoice" ></span> </Button>
-                            : <div></div>
+                            : null
                     }
                        
 
@@ -158,7 +158,7 @@ export const listPageActionsButtonFunc = (props) => {
                             >
                                 <span style={{ marginLeft: "6px", marginRight: "6px" }}
                                     className=" fas fa-file-download" ></span> </Button>
-                            : <div></div>
+                            : null
                     }
                     {
                         //** if condition start
