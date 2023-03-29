@@ -368,7 +368,6 @@ export const reportFooter = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.text(`${stringNumber}`, 65, 740,)
 
-
     // const optionsTable4 = {
     //     margin: {
     //         top: 100, left: 50, right: 30,
@@ -418,11 +417,6 @@ export const reportFooter = (doc, data) => {
     // doc.setFontSize(9)
     // doc.autoTable(optionsTable4,);
 }
-
-
-
-
-
 
 
 export const tableBody = (doc, data) => {
