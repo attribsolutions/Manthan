@@ -44,6 +44,8 @@ import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedu
 import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { calculate, discountCalculate } from "./invoiceCaculations";
+import CustomTable from "../../../CustomTable/Table";
 
 const Invoice = (props) => {
 
@@ -257,14 +259,29 @@ const Invoice = (props) => {
             dataField: "ItemName",
             headerFormatter: (cell, index1 = [], k) => {
                 return (
-                    <div className="width-100">Item Name</div>)
+                    <>
+                        <div className="width-100">Item Name</div>
+                    </>)
             },
             formatter: (cellContent, index1) => {
                 return (
                     <>
-                        <div><samp id={`ItemName${index1.id}`}>{cellContent}</samp></div>
-                        {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
-                            : <></>}
+                        <div >
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "spaceBetween",
+                                backgroundColor: "#f1f1f1",
+                                textAlign: "center",
+                            }}>
+                                <div className=" "><samp id={`ItemName${index1.id}`}>{cellContent}</samp></div>
+                                {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
+                                    : <></>}
+                                <div><samp id={`ItemName${index1.id}`}>{cellContent}</samp></div>
+
+                            </div>
+                        </div>
+
                     </>
                 )
             },
@@ -440,17 +457,17 @@ const Invoice = (props) => {
                                     return (
                                         < tr key={index1.id} >
                                             <td>
-                                                <div style={{ width: "150px" }}>
+                                                <div style={{ width: "120px" }}>
                                                     {index2.SystemBatchCode}
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style={{ width: "150px" }}>
+                                                <div style={{ width: "120px" }}>
                                                     {index2.BatchCode}
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style={{ width: "100px" }}>
+                                                <div style={{ width: "90px" }}>
                                                     {convertDatefunc(index2.BatchDate)}
                                                 </div>
                                             </td>
@@ -472,12 +489,12 @@ const Invoice = (props) => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style={{ width: "100px" }}>
+                                                <div style={{ width: "50px" }}>
                                                     {index1.Rate}
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style={{ width: "100px" }}>
+                                                <div style={{ width: "50px" }}>
                                                     {index1.MRP}
                                                 </div>
                                             </td>
@@ -490,34 +507,34 @@ const Invoice = (props) => {
             ),
 
         },
-        {//***************Rate********************************************************************* */
-
+        {//***************Discount********************************************************************* */
+            text: "Discount",
             dataField: "",
             headerFormatter: (cell, index1 = [], k) => {
                 return (
-                    <div style={{ maxWidth: "200px", minWidth: "200px" }} >Discount</div>)
+                    <div style={{ maxWidth: "70px", minWidth: "70px" }} >Discount</div>)
             },
             formatter: (Rate, row, key) => {
-
+                if (!row.DiscountType) row.DiscountType = 2
+                if (!row.Discount) row.Discount = 0
                 return (
                     <>
-                        <Row className="col-12" >
-                            <Col sm={6}  >
-                                <Select
-                                    className="react-dropdown"
-                                    classNamePrefix="dropdown"
-                                    options={[{ value: 1, label: "Rs" },
-                                    { value: 2, label: "%" }]}
-                                // onChange={(e) => (e, row)}
-                                />
-                            </Col>
-                            <Col sm={6}>
-                                <Input
-                                    type="text" defaultValue={row.Rate}
-                                //  disabled={true}
-                                >
-                                </Input>
-                            </Col>
+                        <Row className="mb-1" key={`${row.id}${key}`}>
+                            <Select
+                                className="react-dropdown "
+                                defaultValue={{ value: 1, label: "Rs" }}
+                                options={[{ value: 1, label: "Rs" },
+                                { value: 2, label: "%" }]}
+                                onChange={(e) => { row.DiscountType = e.value }}
+                            />
+                        </Row>
+                        <Row style={{ paddingLeft: "10px", paddingRight: "10px" }} >
+                            <Input
+
+                                type="text" defaultValue={row.Discount}
+                                onChange={(e) => { row.Discount = e.target.value }}
+                            >
+                            </Input>
                         </Row>
                     </>
                 )
@@ -750,10 +767,11 @@ const Invoice = (props) => {
                             GSTPercentage: ele.GST,
                             Quantity: ele.Qty
                         }
-                        const basicAmt = parseFloat(basicAmount(demo))
-                        const cgstAmt = (GstAmount(demo))
-                        const amount = Amount(demo)
-                        grand_total = grand_total + Number(amount)
+
+                        const calculate = discountCalculate(ele, index)
+
+                        grand_total = grand_total + Number(calculate.tAmount)
+
                         invoiceItems.push({
                             Item: index.Item,
                             Unit: index.UnitDrop.value,
@@ -765,22 +783,50 @@ const Invoice = (props) => {
                             LiveBatch: ele.LiveBatche,
                             MRP: ele.LiveBatcheMRPID,
                             Rate: ele.Rate,
-                            BasicAmount: basicAmt.toFixed(2),
-                            GSTAmount: cgstAmt.toFixed(2),
+                            BasicAmount: calculate.discountBaseAmt,
+                            GSTAmount: calculate.gstAmt,
                             GST: ele.LiveBatcheGSTID,
-                            CGST: (cgstAmt / 2).toFixed(2),
-                            SGST: (cgstAmt / 2).toFixed(2),
+                            CGST: calculate.CGST,
+                            SGST: calculate.SGST,
                             IGST: 0,
                             GSTPercentage: ele.GST,
                             CGSTPercentage: (ele.GST / 2),
                             SGSTPercentage: (ele.GST / 2),
                             IGSTPercentage: 0,
-                            Amount: amount,
+                            Amount: calculate.tAmount,
                             TaxType: 'GST',
-                            DiscountType: "",
-                            Discount: "0",
-                            DiscountAmount: "0",
+                            DiscountType: index.DiscountType,
+                            Discount: index.Discount,
+                            DiscountAmount: calculate.disCountAmt,
                         })
+
+                        // invoiceItems.push({
+                        //     Item: index.Item,
+                        //     Unit: index.UnitDrop.value,
+                        //     BatchCode: ele.BatchCode,
+                        //     Quantity: ele.Qty,
+                        //     BatchDate: ele.BatchDate,
+                        //     BatchID: ele.id,
+                        //     BaseUnitQuantity: ele.BaseUnitQuantity,
+                        //     LiveBatch: ele.LiveBatche,
+                        //     MRP: ele.LiveBatcheMRPID,
+                        //     Rate: ele.Rate,
+                        //     BasicAmount: basicAmt.toFixed(2),
+                        //     GSTAmount: cgstAmt.toFixed(2),
+                        //     GST: ele.LiveBatcheGSTID,
+                        //     CGST: (cgstAmt / 2).toFixed(2),
+                        //     SGST: (cgstAmt / 2).toFixed(2),
+                        //     IGST: 0,
+                        //     GSTPercentage: ele.GST,
+                        //     CGSTPercentage: (ele.GST / 2),
+                        //     SGSTPercentage: (ele.GST / 2),
+                        //     IGSTPercentage: 0,
+                        //     Amount: amount,
+                        //     TaxType: 'GST',
+                        //     DiscountType: "",
+                        //     Discount: "0",
+                        //     DiscountAmount: "0",
+                        // })
                     }
                 })
             })
@@ -826,7 +872,6 @@ const Invoice = (props) => {
                 jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
             }
             // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
             if (pageMode === mode.edit) {
                 returnFunc()
             }
@@ -910,6 +955,7 @@ const Invoice = (props) => {
                                 </Col>
                             </Row>
                         </Col>
+                       
 
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
