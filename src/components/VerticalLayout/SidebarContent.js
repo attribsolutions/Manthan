@@ -348,7 +348,7 @@ const SidebarContent = (props) => {
 
 
   // useEffect(() => {
-  //   debugger
+  //   
   //   let pathName = props.location.pathname
   //   var ul = document.getElementById("Menu");
   //   ul.classList.add("mm-collapse");
