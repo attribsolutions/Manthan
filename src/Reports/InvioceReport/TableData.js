@@ -150,14 +150,11 @@ export const BilledToRow = (data) => {
 }
 export const DetailsOfTransportRow = (data) => {
 debugger
-    const PoNumber = data.InvoicesReferences.map((Data) => ({
-        value: Data.Order,
-    }));
-    const obj = Object.assign({}, PoNumber)
-    console.log(Object.values(obj));
-    var iterator = PoNumber.values();
+
+let result = data.InvoicesReferences.map(a => a.Order);
+    const PONumber =result.toString()
     var DetailsOfTransportArray = [
-        [data.ReportType===invoice?`${`PO Number:1`}`:'Driver Name : Sameer'],
+        [data.ReportType===invoice?` PO Number:${PONumber}`:'Driver Name : Sameer'],
         [`vehical No :MH34566`],
         [`${data.PartyState}`],
         [`E-way Bill :24654364633`],
