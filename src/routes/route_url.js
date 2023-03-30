@@ -1,4 +1,6 @@
 
+export const DASHBORD = "/Dashboard"
+
 // ***************************** Utility **************************************//
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"

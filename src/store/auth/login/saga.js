@@ -125,6 +125,7 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
         arrayMain.push(objMain)
         arrayChild = []
         objMain = {}
+        
       })
 
       arrayMain.forEach((i) => {
