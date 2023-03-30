@@ -1,3 +1,4 @@
+import { convertDatefunc } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 
 export const columns = [
@@ -116,21 +117,28 @@ export const Rows = (data) => {
 }
 
 export const BilledByRow = (data) => {
+    debugger
+
+    let DefaultAddress = data.PartyAddress.filter( IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
+    var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
     var BilledByArray = [
-        [`${data.CustomerName}`],
-        ["Robert Robertson, 1234 NW  "],
-        [`GSTIN:${data.CustomerGSTIN}`],
-        [`FSSAI :f23dfxxxxxwe55`],
+        [`${data.PartyName}`],
+        [`${data.PartyState}`],
+        [`${DefaultAddress[0].Address}`],
+        [`GSTIN:${data.PartyGSTIN}`],
+        [`FSSAI NO${DefaultAddress[0].FSSAINo} (Exp:${date})`],
     ]
     return BilledByArray;
 }
 export const BilledToRow = (data) => {
-
+    let DefaultAddress = data.CustomerAddress.filter(IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
+    var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
     var BilledToArray = [
-        [`${data.PartyName}`],
-        ["Robert Robertson, 1234 NW "],
-        [`GSTIN:${data.PartyGSTIN}`,],
-        [`FSSAI :ui3dfxxxxxwe55`],
+        [`${data.CustomerName}`],
+        [`${data.CustomerState}`],
+        [`${DefaultAddress[0].Address}`],
+        [`GSTIN:${data.CustomerGSTIN}`,],
+        [`FSSAI NO:${DefaultAddress[0].FSSAINo} (Exp:${date})`],
     ]
 
     return BilledToArray;
