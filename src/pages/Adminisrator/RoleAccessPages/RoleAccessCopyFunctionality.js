@@ -142,17 +142,14 @@ const RoleAccessCopyFunctionality = (props) => {
 
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-
                             <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
                                 <Col md="4" className="p-2 ">
                                     <Label className="p-2 col-sm-3">Role</Label>
                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{copyRole_Dropdown_Select.label}</h></Button>
                                 </Col>
-
                                 {(copyDivision_dropdown_Select.value > 0)
                                     ?
                                     <Col md="4" className="p-2 ">
-
                                         <Label className=" p-2 col-sm-3 ">Division</Label>
                                         <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{copyDivision_dropdown_Select.label}</h></Button>
                                     </Col>
