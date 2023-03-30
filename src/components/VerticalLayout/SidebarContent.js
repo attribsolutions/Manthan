@@ -326,7 +326,7 @@ const SidebarContent = (props) => {
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
       pathName = urlRel[`${userAcc.ActualPagePath}`]
     }
-    
+
     const initMenu = () => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
@@ -347,20 +347,6 @@ const SidebarContent = (props) => {
   }, [activateParentDropdown, RoleAccessUpdateData.length <= 0]);
 
 
-  // useEffect(() => {
-  //   
-  //   let pathName = props.location.pathname
-  //   var ul = document.getElementById("Menu");
-  //   ul.classList.add("mm-collapse");
-  //   if (pathName === "/Dashboard") {
-
-  //     ul.classList.remove("mm-collapse");
-
-  //   }
-
-  // });
-
-
   useEffect(() => {
     ref.current.recalculate();
   });
@@ -378,26 +364,27 @@ const SidebarContent = (props) => {
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled " id="side-menu">
-            {/* <li>
-              <Link to="/#" className="has-arrow">
-                <FeatherIcon icon="home" />
-                <span>{ props.t("Menu")}</span>
-              </Link>
-              <ul className="sub-menu"  id="Menu">
-                <li>
-                  <Link to="/Dashboard">{props.t("Dashboard")}</Link>
-                </li>
-              </ul>
-            </li> */}
+         
             {RoleAccessData.map((item) => {
 
-              return (
+              if (item.ModuleName === "Dashboard") {
+                let isdashboard = ''
+                if (item.ModuleData.length > 0) { isdashboard = item.ModuleData[0] }
+                return (
+                  <li >
+                    <Link to={`/${isdashboard.ActualPagePath}`} >
+                      <FeatherIcon icon={item.ModuleIcon} />
+                      <span>{props.t(isdashboard.ModuleName)}</span>
+                    </Link>
+                  </li >
+                )
+              }
+              else return (
                 <li >
                   <Link to="/#" className="has-arrow">
                     <FeatherIcon icon={item.ModuleIcon} />
                     <span>{props.t(item.ModuleName)}</span>
                   </Link>
-                  {/* <ul className="sub-menu " > */}
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {

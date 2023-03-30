@@ -41,11 +41,10 @@ import {
     makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Amount, basicAmount, GstAmount } from "../../Purchase/Order/OrderPageCalulation";
 
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { calculate, discountCalculate } from "./invoiceCaculations";
-import CustomTable from "../../../CustomTable/Table";
+import { discountCalculate } from "./invoiceCaculations";
+import "./invoice.scss"
 
 const Invoice = (props) => {
 
@@ -257,42 +256,31 @@ const Invoice = (props) => {
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <>
-                        <div className="width-100">Item Name</div>
-                    </>)
-            },
+            classes: () => ('invoice-item-row'),
             formatter: (cellContent, index1) => {
                 return (
                     <>
-                        <div >
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "spaceBetween",
-                                backgroundColor: "#f1f1f1",
-                                textAlign: "center",
-                            }}>
-                                <div className=" "><samp id={`ItemName${index1.id}`}>{cellContent}</samp></div>
-                                {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
-                                    : <></>}
-
-                            </div>
+                        <div className="invoice-item-row-div-1">
+                            <samp id={`ItemName${index1.id}`}>{cellContent}</samp>
+                            {/* {cellContent} */}
                         </div>
-
+                        {/* {
+                            (index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
+                                : <></>
+                        } */}
+                        <div className="invoice-item-row-div-2">
+                            <span> total :<samp>14545454</samp> </span>
+                        </div>
                     </>
                 )
             },
+
 
         },
         {//***************Quantity********************************************************************* */
             text: "Quantity",
             dataField: "",
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div style={{ maxWidth: "50px", minWidth: "50px" }} >Quantity</div>)
-            },
+            classes: () => ('invoice-quantity-row'),
             formatter: (cellContent, user) => (
                 <div >
                     <Input type="text"
@@ -313,13 +301,9 @@ const Invoice = (props) => {
         {//***************Unit Dropdown********************************************************************* */
             text: "Unit",
             dataField: "id",
+            classes: () => ('invoice-unit-row'),
 
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div className="width-100" >Unit</div>)
-            },
             formatter: (value, row, key) => {
-
                 return (
                     <Select
                         classNamePrefix="select2-selection"
