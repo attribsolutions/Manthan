@@ -29,7 +29,7 @@ function pageFooter(doc,data) {
           title: "Report"
       });
     // window.open('dataurlnewwindow');
-    debugger
+    
     doc.output('dataurlnewwindow');
 
     // return(<></>);

@@ -270,7 +270,7 @@ export const BilledToRow = (data) => {
     var BilledToArray = [
         [`${data.CustomerName}`],
         [`${data.BillingAddress}`],
-        [`FSSAI :ui3dfxxxxxwe55`],
+        [`FSSAI:${data.BillingFssai}`],
     ]
 
     return BilledToArray;

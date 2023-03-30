@@ -16,7 +16,8 @@ function AddressDetails_Tab(props) {
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(true);
     const [imageTable, setImageTable] = useState('');
-
+    
+    
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
     }
@@ -118,6 +119,21 @@ function AddressDetails_Tab(props) {
         })
     }
 
+    const handleChange = event => {
+        debugger
+        let val = event.target.value
+        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
+        if (result) {
+            setPIN(val);
+        }
+        else if (val === "") {
+            setPIN(val)
+        }
+        else {
+            event.target.value = ""
+        }
+    };
+
     return (
         <Row>
             {/* <div className='abc1'> */}
@@ -213,7 +229,7 @@ function AddressDetails_Tab(props) {
                                 <Col md="4">
                                     <FormGroup >
                                         <Label> PIN </Label>
-                                        <AvField name="PIN" type="text"
+                                        <Input name="PIN" type="text"
                                             value={PIN}
                                             placeholder=" PIN No. "
                                             autoComplete='off'
@@ -225,12 +241,14 @@ function AddressDetails_Tab(props) {
                                             //     }
                                             // }
                                             // }
-                                            onChange={PINHandler}
+                                            onChange={handleChange}
                                         />
                                     </FormGroup>
                                 </Col>
+
                                 <Col md="1">  </Col>
-                                <Col md="4" style={{ width: "8cm" }}>
+
+                                <Col md="4" >
                                     <FormGroup >
                                         <Label >FSSI Document</Label>
                                         <Input type="file"
@@ -243,6 +261,7 @@ function AddressDetails_Tab(props) {
                                         />
                                     </FormGroup>
                                 </Col>
+
                                 <Col md="1">  </Col>
                                 <FormGroup className="col col-sm-4 mt-4">
                                     <Row className="justify-content-md-left">
