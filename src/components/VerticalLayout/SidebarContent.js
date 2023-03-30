@@ -364,7 +364,7 @@ const SidebarContent = (props) => {
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled " id="side-menu">
-         
+
             {RoleAccessData.map((item) => {
 
               if (item.ModuleName === "Dashboard") {
@@ -390,7 +390,10 @@ const SidebarContent = (props) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
                         return (
                           <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}` }}>{props.t(index.Name)}</Link>
+                            <Link to={{ pathname: `/${index.ActualPagePath}` }}>
+                              <FeatherIcon icon={index.Icon} />
+                              {props.t(index.Name)}
+                            </Link>
                           </li>
                         )
                       }
