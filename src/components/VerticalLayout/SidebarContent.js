@@ -391,7 +391,6 @@ const SidebarContent = (props) => {
                         return (
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}` }}>
-                              <FeatherIcon icon={index.Icon} />
                               {props.t(index.Name)}
                             </Link>
                           </li>
