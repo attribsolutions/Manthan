@@ -51,7 +51,8 @@ const PartyType = (props) => {
         Name: "",
         IsSCM: loginIsSCMCompany() > 0 ? true : false,
         IsDivision: false,
-        IsRetailer: false
+        IsRetailer: false,
+        IsVendor: false
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -121,18 +122,20 @@ const PartyType = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, IsSCM, IsDivision, IsRetailer } = hasEditVal
+                const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.IsSCM = IsSCM;
                 values.IsDivision = IsDivision;
                 values.IsRetailer = IsRetailer
+                values.IsVendor = IsVendor
 
                 values.id = id
                 hasValid.Name.valid = true;
                 hasValid.IsSCM.valid = true;
                 hasValid.IsDivision.valid = true;
                 hasValid.IsRetailer.valid = true
+                hasValid.IsVendor.valid = true
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -212,6 +215,7 @@ const PartyType = (props) => {
                     IsSCM: values.IsSCM,
                     IsDivision: values.IsDivision,
                     IsRetailer: values.IsRetailer,
+                    IsVendor: values.IsVendor,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -332,6 +336,29 @@ const PartyType = (props) => {
                                                                                     setState((i) => {
                                                                                         const a = { ...i }
                                                                                         a.values.IsRetailer = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
+
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-5">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsVendor} </Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsVendor}
+                                                                                name="IsVendor"
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsVendor = e.target.checked;
                                                                                         return a
                                                                                     })
                                                                                 }}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-    
+
     CardBody,
     Col,
     Container,
@@ -34,7 +34,6 @@ import {
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
-import "./table-fixed.scss"
 import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
@@ -47,7 +46,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
-
 
 const RoleAccessAdd1 = () => {
     const dispatch = useDispatch();
@@ -1325,6 +1323,10 @@ const RoleAccessAdd = () => {
 
     const RoleAccTable = () => {
 
+        // return <CustomTable
+        //     data={tableDataRedux}
+        //     columns={tableHederList}
+        // />
         return (
             <div className='sticky-div1'>
                 <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -1368,6 +1370,7 @@ const RoleAccessAdd = () => {
                 </PaginationProvider>
             </div>
         )
+
     }
     let IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1537,4 +1540,7 @@ const RoleAccessAdd = () => {
         </div>
     </React.Fragment>
 }
+
+
+
 export default RoleAccessAdd
