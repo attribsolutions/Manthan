@@ -47,6 +47,7 @@ import {
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
     postSelect_Field_for_dropdown,
+    updatePartyMasterBulkID,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
@@ -209,7 +210,18 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const goButtonHandler = () => {
-
+        if (Party.length === 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select PartyName",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             Route: RouteSelect.value,
@@ -217,19 +229,6 @@ const PartyMasterBulkUpdate = (props) => {
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
-
-    useEffect(async () => {
-
-        if ((Data.Status === true) && (Data.StatusCode === 200)) {
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            if (pageMode === "other") {
-                CustomAlert({
-                    Type: 1,
-                    Message: Data.Message,
-                })
-            }
-        }
-    }, [Data])
 
     function SelectFieldHandler(event) {
 
@@ -332,7 +331,8 @@ const PartyMasterBulkUpdate = (props) => {
             ),
         },
     ];
-    console.log(SelectFieldName)
+
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
@@ -340,6 +340,7 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -355,11 +356,11 @@ const PartyMasterBulkUpdate = (props) => {
                 const jsonBody = JSON.stringify(arr)({
                     PartyID: loginPartyID(),
                     Route: RouteSelect.value,
-                    Type: SelectFieldName.label,
+                    Type: SelectFieldName.label
                 });
 
                 if (pageMode === mode.edit) {
-                    // dispatch(updateGeneralID({ jsonBody, updateId: values.id, btnId }));
+                     dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
@@ -388,7 +389,7 @@ const PartyMasterBulkUpdate = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form onSubmit={SaveHandler} noValidate>
-                                    <Row >
+                                    <Row>
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">

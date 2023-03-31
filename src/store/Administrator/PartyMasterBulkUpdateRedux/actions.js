@@ -6,7 +6,9 @@ import {
     POST_SELECT_FIELD_DROPDOWN,
     POST_SELECT_FIELD_SUCCESS,
     POST_PARTY_NAME_DROPDOWN,
-    POST_PARTY_NAME_SUCCESS
+    POST_PARTY_NAME_SUCCESS,
+    UPDATE_PARTY_MASTER_BULK,
+    UPDATE_PARTY_MASTER_BULK_SUCCESS,
   } from './actionTypes'
   
   export const GoButton_For_Party_Master_Bulk_Update_Add = (jsonBody) => ({
@@ -48,3 +50,12 @@ import {
     type: POST_PARTY_NAME_SUCCESS,
     payload: resp,
   });
+
+  export const updatePartyMasterBulkID = (updateData, id) => ({
+    type: UPDATE_PARTY_MASTER_BULK,
+    updateData, id,
+  })
+  export const updatePartyMasterBulkIDSuccess = (data) => ({
+    type: UPDATE_PARTY_MASTER_BULK_SUCCESS,
+    payload: data,
+  })
