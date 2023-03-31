@@ -12,9 +12,9 @@ import {
   UPDATE_ROUTES_ID_SUCCESS
 } from "./actionTypes";
 
-export const GetRoutesList = (config = {}) => ({
+export const GetRoutesList = (jsonBody) => ({
   type: GET_ROUTES_LIST,
-  config,
+  jsonBody,
 });
 
 export const GetRoutesListSuccess = (resp) => ({
