@@ -223,11 +223,12 @@ const PartyMasterBulkUpdate = (props) => {
             );
             return;
         }
-
+        
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             Route: RouteSelect.length === 0 ? "0" : RouteSelect.value,
-            Type:  SelectFieldName.length === 0 ? "0" : SelectFieldName.label
+            Type:  SelectFieldName.length === 0 ? "0" : SelectFieldName.label,
+            FilterPartyID:Party.value,
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
