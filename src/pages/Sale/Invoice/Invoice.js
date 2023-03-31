@@ -262,15 +262,11 @@ const Invoice = (props) => {
                     <>
                         <div className="invoice-item-row-div-1">
                             <samp id={`ItemName${index1.id}`}>{cellContent}</samp>
-                            {/* {cellContent} */}
                         </div>
-                        {/* {
+                        {
                             (index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
                                 : <></>
-                        } */}
-                        <div className="invoice-item-row-div-2">
-                            <span> total :<samp>14545454</samp> </span>
-                        </div>
+                        }
                     </>
                 )
             },
@@ -278,33 +274,67 @@ const Invoice = (props) => {
 
         },
         {//***************Quantity********************************************************************* */
-            text: "Quantity",
+            text: "Quantity/Unit",
             dataField: "",
             classes: () => ('invoice-quantity-row'),
-            formatter: (cellContent, user) => (
-                <div >
-                    <Input type="text"
-                        disabled={pageMode === 'edit' ? true : false}
-                        id={`OrderQty${user.id}`}
-                        style={{ textAlign: "right" }}
-                        className=" width-100"
-                        key={user.id}
-                        autoComplete="off"
-                        defaultValue={user.Quantity}
-                        onChange={(event) => orderQtyOnChange(event, user)}
-                    ></Input>
-                    <samp className="mt-1">Order Qty:{user.OrderQty} {user.UnitName}</samp>
-                </div>
+            formatter: (cellContent, row) => (
+                <>
+                    <div className="div-1">
+                        <label className="label">Qty</label>
+                        <Input type="text"
+                            disabled={pageMode === 'edit' ? true : false}
+                            id={`OrderQty${row.id}`}
+                            className="input"
+                            style={{ textAlign: "right" }}
+                            key={row.id}
+                            autoComplete="off"
+                            defaultValue={row.Quantity}
+                            onChange={(event) => orderQtyOnChange(event, row)}
+                        />
+                    </div>
+                    <div className="div-1 ">
+                        <label className="label">Unit</label>
+                        <div id="select">
+                            <Select
+                                classNamePrefix="select2-selection"
+                                id={"ddlUnit"}
+                                isDisabled={pageMode === 'edit' ? true : false}
+                                defaultValue={row.UnitDrop}
+                                // value={{value:row.Unit,label:row.UnitName}}
+                                // className=" width-100"
+                                options={
+                                    row.UnitDetails.map(i => ({
+                                        label: i.UnitName,
+                                        value: i.Unit,
+                                        ConversionUnit: i.ConversionUnit,
+                                        Unitlabel: i.Unitlabel
+                                    }))
+                                }
+                                onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
+                            >
+                            </Select >
+                        </div>
+
+                    </div>
+                    <div className="bottom-div">
+                        <span>Order-Qty :</span>
+                        <samp >{row.OrderQty}</samp>
+                        <samp >{row.UnitName}</samp></div>
+                </>
 
             )
         },
         {//***************Unit Dropdown********************************************************************* */
             text: "Unit",
             dataField: "id",
+            hidden: true,
             classes: () => ('invoice-unit-row'),
 
             formatter: (value, row, key) => {
+
                 return (
+
+
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
@@ -493,51 +523,48 @@ const Invoice = (props) => {
         {//***************Discount********************************************************************* */
             text: "Discount",
             dataField: "",
-            headerFormatter: (cell, index1 = [], k) => {
-                return (
-                    <div style={{ maxWidth: "70px", minWidth: "70px" }} >Discount</div>)
-            },
+            classes: () => ('invoice-discount-row'),
             formatter: (Rate, row, key) => {
                 if (!row.DiscountType) row.DiscountType = 2
                 if (!row.Discount) row.Discount = 0
                 return (
                     <>
-                        <Row className="mb-1" key={`${row.id}${key}`}>
-                            <Select
-                                className="react-dropdown "
-                                defaultValue={{ value: 1, label: "Rs" }}
-                                options={[{ value: 1, label: "Rs" },
-                                { value: 2, label: "%" }]}
-                                onChange={(e) => { row.DiscountType = e.value }}
-                            />
-                        </Row>
-                        <Row style={{ paddingLeft: "10px", paddingRight: "10px" }} >
-                            <Input
+                        <div className="div-1">
+                            <label className="label" >Type</label>
+                            <div id="select">
+                                <Select
+                                    className="react-dropdown "
+                                    defaultValue={{ value: 2, label: " % " }}
+                                    options={[{ value: 1, label: "Rs" },
+                                    { value: 2, label: "%" }]}
+                                    onChange={(e) => {
+                                        row.DiscountType = e.value
+                                        stockDistributeFunc(row)
+                                    }}
+                                /></div>
 
+                        </div>
+                        <div className="div-1">
+                            <label className="label">Value</label>
+                            <Input
+                                className="input"
+                                style={{ textAlign: "right" }}
                                 type="text" defaultValue={row.Discount}
-                                onChange={(e) => { row.Discount = e.target.value }}
-                            >
-                            </Input>
-                        </Row>
+                                onChange={(e) => {
+                                    row.Discount = e.target.value
+                                    stockDistributeFunc(row)
+                                }}
+                            />
+                        </div>
+                        <div className="bottom-div">
+                            <span>Amount:</span>
+                            <samp id={`tAmount${row.id}`}>{row.OrderQty}</samp>
+                        </div>
+
                     </>
                 )
             },
         },
-        {//***************demo********************************************************************* */
-            text: "demo",
-            dataField: "",
-            hidden: true,
-            formatter: (Rate, row, key) => {
-                return (
-                    <div>
-                        <div>ff</div>
-                        <div>hh</div>
-                        <div>gg</div>
-
-                    </div>
-                )
-            },
-        }
 
     ];
 
@@ -648,6 +675,7 @@ const Invoice = (props) => {
     function stockDistributeFunc(index) {
 
         const v1 = index.Quantity;
+        let tAmount = 0
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
         index.StockDetails = index.StockDetails.map(i2 => {
@@ -667,12 +695,23 @@ const Invoice = (props) => {
             try {
                 document.getElementById(`batchQty${index.id}-${i2.id}`).value = i2.Qty
             } catch (e) { }
+
+
+            if (i2.Qty > 0) {
+                const calculate = discountCalculate(i2, index)
+                tAmount = tAmount + Number(calculate.tAmount)
+            }
+
+
             return i2
         });
+
 
         const t1 = (v1 * index.ConversionUnit);
         const t2 = index.StockUnit;
         const t3 = index.StockTotal;
+        const tA4 = tAmount.toFixed(2)
+        index.tAmount = tA4
 
         if (t1 > t3) {
             try {
@@ -686,6 +725,7 @@ const Invoice = (props) => {
         } catch (e) { };
         try {
             document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
+            document.getElementById(`tAmount${index.id}`).innerText = tA4;
         } catch (e) { };
 
     };
@@ -736,7 +776,7 @@ const Invoice = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    const SaveHandler = (event) => {
+    const SaveHandler = async (event) => {
 
         event.preventDefault();
 
@@ -839,17 +879,17 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-
-            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            debugger
+            const forInvoice_1_json = () => ( {  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
                 InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
             });
 
-            const forIB_Invoice_json = () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forIB_Invoice_json =async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
-                IBChallansReferences: OrderIDs.map(i => ({ Demand: i }))
+                IBChallansReferences: await OrderIDs.map(i => ({ Demand: i }))
             });
 
             const for_common_json = () => ({     //   Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
