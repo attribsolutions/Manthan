@@ -124,31 +124,39 @@ export const Rows = (data) => {
 
 
 export const BilledByRow = (data) => {
+    
     var BilledByArray = [
-        [`${data.PartyName}`],   
-        [`maharashtra`],
-        [`GSTIN:${data.CustomerGSTIN}`],
-        [`FSSAI :f23dfxxxxxwe55`],
+       
+        [`${data.PartyName}`], 
+        [`${data.PartyAddress[0].Address}`]  ,
+        [`${data.PartyState}`],
+        [`GSTIN:${data.PartyGSTIN}`],
+        [`FSSAINo:${data.PartyFSSAINo}`],
     ]
     return BilledByArray;
 } 
 export const BilledToRow = (data) => {
     
+    
     var BilledToArray = [
         [`${data.CustomerName}`],
-        [`karnatak`],
-        [`GSTIN:${data.PartyGSTIN}`,],
-        [`FSSAI :ui3dfxxxxxwe55`],
+        [`${data.CustomerAddress}`]  ,
+        [`${data.CustomerState}`],
+        [`GSTIN:${data.CustomerGSTIN}`,],
+        [`FSSAINo:${data.CustomerFSSAINo}`],
     ]
   
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
+debugger
 
+let result = data.InvoicesReferences.map(a => a.Order);
+    const PONumber =result.toString()
     var DetailsOfTransportArray = [
-        [data.ReportType===invoice?`Purches Order No: 1`:'Driver Name : Sameer'],
+        [data.ReportType===invoice?` PO Number:${PONumber}`:'Driver Name : Sameer'],
         [`vehical No :MH34566`],
-        [`State:Maharashtra `],
+        [`${data.PartyState}`],
         [`E-way Bill :24654364633`],
         [`INR NO :${data.FullInvoiceNumber}`]
     ]

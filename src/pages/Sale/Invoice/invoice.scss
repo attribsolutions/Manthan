@@ -1,0 +1,65 @@
+.invoice-item-row {
+    // border: 1px solid green;
+    // border: none !important;
+    // float: left;
+    min-height: 180px;
+    margin: 2px;
+    padding: 10px;
+    min-width: 117px;
+    position: relative;
+}
+
+.invoice-item-row-div-1 {
+    font-size: 16px;
+    // color: rgb(161, 175, 255);
+    font-weight: bold;
+    // text-align: center
+}
+
+.invoice-item-row-div-2 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    text-align: center;
+    max-width: 120px;
+    min-width: 120px;
+}
+
+.invoice-item-row-div-2 span {
+    // color: aqua;
+}
+
+.invoice-item-row-div-2 samp {
+    // color: bisque;
+
+}
+
+.invoice-quantity-row {
+    // border: none !important;
+    // float: left;
+    // min-height: 180px;
+    // margin: 2px;
+    // padding: 10px;
+    min-width: 117px;
+    position: relative;
+}
+
+.invoice-quantity-row input {
+    // border-top:   0 !important;
+    // border-left:   0 !important;
+    // border-right:   0 !important;
+    // border-width: 2px;
+}
+
+
+.invoice-unit-row {
+    // border: 1px solid green;
+    // border: none !important;
+    // float: left;
+    // min-height: 180px;
+    // margin: 2px;
+    // padding: 10px;
+    min-width: 117px;
+    position: relative;
+}

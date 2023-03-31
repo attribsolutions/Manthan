@@ -133,6 +133,10 @@ import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 
 const userRoutes = [
+  // *************************** DashBord *******************************//
+  
+  
+  { path: path.DASHBORD, component: Dashboard },
 
   // *************************** Administration *******************************//
   { path: path.MODULE, component: Modules },

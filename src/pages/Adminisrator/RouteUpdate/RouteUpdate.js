@@ -213,7 +213,7 @@ const RouteUpdate = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
-                    <Container fluid>
+                    {/* <Container fluid> */}
 
                         <form noValidate>
                             <PaginationProvider
@@ -279,7 +279,7 @@ const RouteUpdate = (props) => {
                             }
 
                         </form>
-                    </Container>
+                    {/* </Container> */}
                 </div>
             </React.Fragment>
         );

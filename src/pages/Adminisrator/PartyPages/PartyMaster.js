@@ -35,12 +35,14 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturnFunc,  loginPartyID, loginUserID } from "../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, loginPartyID, loginUserID } from "../../../components/Common/CommonFunction"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -58,7 +60,9 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState([]);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
     const [PartyPrefix, setPartyPrefix] = useState([]);
-
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [suppilerSelect, setSuppilerSelect] = useState([]);
+    console.log(suppilerSelect)
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -73,7 +77,8 @@ const PartyMaster = (props) => {
         PartyTypes,
         priceListByPartyType,
         userAccess,
-        updateMsg
+        updateMsg,
+        Supplier
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         updateMsg: state.PartyMasterReducer.updateMessage,
@@ -84,7 +89,8 @@ const PartyMaster = (props) => {
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
         userAccess: state.Login.RoleAccessUpdateData,
-        priceListByPartyType: state.PriceListReducer.priceListByPartyType
+        priceListByPartyType: state.PriceListReducer.priceListByPartyType,
+        Supplier: state.CommonAPI_Reducer.SSDD_List
     }));
 
     const location = { ...history.location }
@@ -126,6 +132,7 @@ const PartyMaster = (props) => {
 
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy);
 
                 setState_DropDown_select({
                     label: hasEditVal.State.Name,
@@ -165,6 +172,7 @@ const PartyMaster = (props) => {
         dispatch(getPriceList());
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
+        dispatch(SSDD_List_under_Company())
     }, [dispatch]);
 
     useEffect(() => {
@@ -262,6 +270,11 @@ const PartyMaster = (props) => {
         division: index.IsDivision
     }));
 
+    const SupplierOptions = Supplier.map((index) => ({
+        value: index.id,
+        label: index.Name
+    }));
+
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -344,6 +357,12 @@ const PartyMaster = (props) => {
             return;
         }
 
+        const Supplier = suppilerSelect.map((i) => ({
+            Party: i.value,
+            CreatedBy: loginUserID(),
+            UpdatedBy: loginUserID(),
+        }))
+
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
@@ -381,13 +400,7 @@ const PartyMaster = (props) => {
                     IBInwardprefix: values.IBInwardprefix
                 }
             ],
-            PartySubParty: [
-                {
-                    Party: loginPartyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                }
-            ]
+            PartySubParty: Supplier
         });
 
         if (pageMode === mode.edit) {
@@ -500,7 +513,7 @@ const PartyMaster = (props) => {
                                                                             type="text"
                                                                             placeholder="Please Enter Name"
                                                                             autoComplete='off'
-                                                                            autoFocus={true}
+                                                                            // autoFocus={true}
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
                                                                             }}
@@ -684,7 +697,7 @@ const PartyMaster = (props) => {
                                                                 <Col md="3">
                                                                     <FormGroup >
                                                                         <Label htmlFor="validationCustom01">State</Label>
-                                                                        <Col sm={12} style={{ height: "2.9cm" }}>
+                                                                        <Col sm={12} >
                                                                             <Select
                                                                                 value={state_DropDown_select}
                                                                                 options={StateValues}
@@ -731,7 +744,45 @@ const PartyMaster = (props) => {
                                                                         </Row>
                                                                     </FormGroup>
                                                                 </Col>
+
+                                                                {/* <Col md={1} className="mx-n1"> </Col>
+                                                                <FormGroup className="mb-2 col col-sm-4 ">
+                                                                    <Label htmlFor="validationCustom01">Suppiler</Label>
+                                                                    <Select
+                                                                        name="Suppiler"
+                                                                        value={suppilerSelect}
+                                                                        isSearchable={false}
+                                                                        isMulti={true}
+                                                                        // options={EmployeeType_DropdownOptions}
+                                                                        // onChange={(e) => SuppilerOnChange(e)}
+                                                                        classNamePrefix="dropdown"
+                                                                    />
+                                                                </FormGroup> */}
+
+
+
                                                             </Row>
+
+                                                            <Row className="mt-3" >
+                                                                <Col md="3">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="validationCustom01">Suppiler </Label>
+                                                                        {/* style={{ height: "2.9cm" }} */}
+                                                                        <Col sm={12} >
+                                                                            <Select
+                                                                                name="Suppiler"
+                                                                                value={suppilerSelect}
+                                                                                isSearchable={false}
+                                                                                isMulti={true}
+                                                                                options={SupplierOptions}
+                                                                                onChange={(e) => setSuppilerSelect(e)}
+                                                                                classNamePrefix="dropdown"
+                                                                            />
+                                                                        </Col>
+                                                                    </FormGroup>
+                                                                </Col>
+                                                            </Row>
+
                                                         </CardBody>
                                                     </Card>
                                                 </TabPane>
@@ -918,7 +969,7 @@ const PartyMaster = (props) => {
                                             </TabContent>
                                         </CardBody>
 
-                                        <div style={{marginLeft:"35px",marginBottom:"60px"}}>
+                                        {/* <div style={{ marginLeft: "35px", marginBottom: "60px" }}>
                                             {
                                                 (pageMode === mode.edit) ?
                                                     (userPageAccessState.RoleAccess_IsEdit) ?
@@ -944,6 +995,14 @@ const PartyMaster = (props) => {
                                                     )
                                                         : null
                                             }
+                                        </div> */}
+
+                                        <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
+                                            <SaveButton pageMode={pageMode}
+                                                userAcc={userPageAccessState}
+                                                editCreatedBy={editCreatedBy}
+                                                module={"PartyMaster"}
+                                            />
                                         </div>
                                     </Card>
                                 </Col>

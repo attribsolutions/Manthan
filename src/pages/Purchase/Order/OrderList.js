@@ -185,7 +185,7 @@ const OrderList = () => {
     }, [makeIBInvoice])
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         const obj = list[0]
         if (subPageMode === url.IB_INVOICE_STP) {
             const jsonBody = JSON.stringify({
