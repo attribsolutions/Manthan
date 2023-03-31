@@ -210,6 +210,7 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const goButtonHandler = () => {
+    
         if (Party.length === 0) {
             dispatch(
                 AlertState({
@@ -222,10 +223,11 @@ const PartyMasterBulkUpdate = (props) => {
             );
             return;
         }
+
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
-            Route: RouteSelect.value,
-            Type: SelectFieldName.label
+            Route: RouteSelect.length === 0 ? "0" : RouteSelect.value,
+            Type:  SelectFieldName.length === 0 ? "0" : SelectFieldName.label
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
@@ -332,7 +334,6 @@ const PartyMasterBulkUpdate = (props) => {
         },
     ];
 
-
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
@@ -340,7 +341,7 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
         try {
