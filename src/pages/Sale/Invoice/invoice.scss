@@ -16,50 +16,111 @@
     // text-align: center
 }
 
-.invoice-item-row-div-2 {
+
+.invoice-quantity-row {
+    position: relative;
+    table-layout: fixed;
+    width: 175px;
+}
+
+.invoice-quantity-row .div-1 {
+    padding-bottom: 5px;
+    display: flex;
+}
+
+.invoice-quantity-row .div-1 .input {
+    display: block;
+    text-align: "right";
+    margin-left: 5px !important;
+    min-width: 115px !important;
+    max-width: 115px !important;
+    background-color: azure;
+}
+
+.invoice-quantity-row .div-1 .label {
+    align-items: center;
+    padding-right: 5px;
+    padding-top: 7px;
+}
+
+.invoice-quantity-row .div-1 #select {
+    margin-left: 1px !important;
+    min-width: 115px !important;
+    max-width: 115px !important;
+    // background-color: rgb(3, 27, 27);
+}
+
+.invoice-quantity-row .bottom-div {
     position: absolute;
     bottom: 0;
     left: 0;
-    margin: auto;
-    text-align: center;
-    max-width: 120px;
-    min-width: 120px;
 }
 
-.invoice-item-row-div-2 span {
-    // color: aqua;
+.invoice-quantity-row .bottom-div samp {
+    padding-left: 4px;
 }
 
-.invoice-item-row-div-2 samp {
-    // color: bisque;
-
+.invoice-quantity-row .bottom-div span {
+    flex-grow: 3;
+    flex-basis: 50px;
+    margin-left: 8px;
 }
 
-.invoice-quantity-row {
-    // border: none !important;
-    // float: left;
-    // min-height: 180px;
-    // margin: 2px;
-    // padding: 10px;
-    min-width: 117px;
+.invoice-discount-row {
+    position: relative;
+    table-layout: fixed;
+    width: 100px;
     position: relative;
 }
 
-.invoice-quantity-row input {
-    // border-top:   0 !important;
-    // border-left:   0 !important;
-    // border-right:   0 !important;
-    // border-width: 2px;
+.invoice-discount-row .div-1 {
+    // padding-bottom: 5px;
+    display: flex;
 }
 
+.invoice-discount-row .div-1 .input {
+    display: block;
+    text-align: "right" !important;
+    margin-left: 5px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    background-color: azure;
+    height: 38px;
+}
 
-.invoice-unit-row {
-    // border: 1px solid green;
-    // border: none !important;
-    // float: left;
-    // min-height: 180px;
-    // margin: 2px;
-    // padding: 10px;
-    min-width: 117px;
-    position: relative;
+.invoice-discount-row .div-1 .label {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 8px 5px 7px 5px;
+    align-items: center;
+    border-color:  #0000002e;
+    // padding-right: 5px;
+    // padding-top: 7px;
+}
+
+.invoice-discount-row .div-1 #select {
+    margin-left: 10px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    // background-color: rgb(3, 27, 27);
+}
+
+.invoice-discount-row .bottom-div {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.invoice-discount-row .bottom-div samp {
+    padding-top: 6px;
+    padding-left: 4px;
+    font-size: 130%;
+}
+
+.invoice-discount-row .bottom-div span {
+    flex-grow: 3;
+    padding-top: 6px;
+    margin-left: 8px;
+    flex-basis: 50px
 }
