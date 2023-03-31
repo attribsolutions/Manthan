@@ -176,7 +176,6 @@ const RoutesMaster = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state)) // Clear form values 
-            // breadcrumbReturnFunc({ dispatch, userAcc });
             history.push({
                 pathname: url.ROUTES_LIST,
             })

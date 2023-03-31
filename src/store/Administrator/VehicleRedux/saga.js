@@ -25,10 +25,10 @@ import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonF
 // const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
 // Get List Page API
 function* Get_Vehicle_GenFun({ jsonBody }) {
-  debugger
-  const filters = loginJsonBody();// required only PartyID and CompanyID
+
+  const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody); // required only PartyID and CompanyID
   try {
-    const response = yield call(Vehicle_Get_API, jsonBody);
+    const response = yield call(Vehicle_Get_API, filters);
     yield put(getVehicleListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
