@@ -47,6 +47,7 @@ import {
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
     postSelect_Field_for_dropdown,
+    updatePartyMasterBulkID,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
@@ -166,7 +167,6 @@ const PartyMasterBulkUpdate = (props) => {
                     Status: true,
                     Message: postMsg.Message,
                     RedirectPath: url.PARTY_MASTER_BULK_UPDATE,
-
                 }))
             }
         }
@@ -204,34 +204,31 @@ const PartyMasterBulkUpdate = (props) => {
         label: index.Name,
     }));
 
-
     const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
     const goButtonHandler = () => {
-
+        if (Party.length === 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select PartyName",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
-             Route: RouteSelect.value,
+            Route: RouteSelect.value,
             Type: SelectFieldName.label
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
-
-    useEffect(async () => {
-
-        if ((Data.Status === true) && (Data.StatusCode === 200)) {
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            if (pageMode === "other") {
-                CustomAlert({
-                    Type: 1,
-                    Message: Data.Message,
-                })
-            }
-        }
-    }, [Data])
 
     function SelectFieldHandler(event) {
 
@@ -239,7 +236,6 @@ const PartyMasterBulkUpdate = (props) => {
         setvalue(val)
         setSelectFieldName(val)
     }
-
 
     function tableSelectHandler(event, user) {
 
@@ -254,7 +250,6 @@ const PartyMasterBulkUpdate = (props) => {
         //     }
     }
 
-
     const pagesListColumns = [
         {
             text: "PartyName",
@@ -263,7 +258,6 @@ const PartyMasterBulkUpdate = (props) => {
         {
             text: val,
             dataField: val,
-
         },
         {
             text: "FSSAIExipry",
@@ -284,7 +278,6 @@ const PartyMasterBulkUpdate = (props) => {
                                         altFormat: "d-m-Y",
                                         dateFormat: "Y-m-d",
                                         defaultDate: FSSAIExipry
-
                                     }}
                                 //    onChange={setFSSAIExipry}
                                 />
@@ -337,10 +330,9 @@ const PartyMasterBulkUpdate = (props) => {
                 </>
             ),
         },
-
-
     ];
-    console.log(SelectFieldName)
+
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
@@ -348,27 +340,33 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                const jsonBody = JSON.stringify({
-
-                    Party: loginPartyID(),
+                arr.push(Data)
+                const arr = Data.map(i => {
+                    Data = {
+                        SubPartyID: 2,
+                        Value1:SelectFieldName.value
+                    }
+                })
+                const jsonBody = JSON.stringify(arr)({
+                    PartyID: loginPartyID(),
                     Route: RouteSelect.value,
-                    SelectField: SelectFieldName.value
+                    Type: SelectFieldName.label
                 });
+
                 if (pageMode === mode.edit) {
-                    // dispatch(updateGeneralID({ jsonBody, updateId: values.id, btnId }));
+                     dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
-
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false })}
     };
 
 
@@ -391,7 +389,7 @@ const PartyMasterBulkUpdate = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form onSubmit={SaveHandler} noValidate>
-                                    <Row >
+                                    <Row>
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
@@ -546,7 +544,6 @@ const PartyMasterBulkUpdate = (props) => {
         )
     }
 };
-
 
 
 export default PartyMasterBulkUpdate
