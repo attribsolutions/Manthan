@@ -97,7 +97,6 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
@@ -210,7 +209,7 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const goButtonHandler = () => {
-    
+
         if (Party.length === 0) {
             dispatch(
                 AlertState({
@@ -223,34 +222,30 @@ const PartyMasterBulkUpdate = (props) => {
             );
             return;
         }
-        
+
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             Route: RouteSelect.length === 0 ? "0" : RouteSelect.value,
-            Type:  SelectFieldName.length === 0 ? "0" : SelectFieldName.label,
-            FilterPartyID:Party.value,
+            Type: SelectFieldName.length === 0 ? "0" : SelectFieldName.label,
+            FilterPartyID: Party.value,
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
 
     function SelectFieldHandler(event) {
-
         let val = event.label;
         setvalue(val)
         setSelectFieldName(val)
     }
 
-    function tableSelectHandler(event, user) {
-
-        //     let val = event.target.value;
-        //     setvalue(val)
-
-        //    if (val === "") {
-        //         user.SelectFieldName = event.target.value;
-        //     }
-        //     else {
-        //         event.target.value = user.SelectFieldName
-        //     }
+    function tableSelectHandler(event, hasSelect) {
+       
+        let input = event.target.value
+        setState((i) => {
+            const v1 = { ...i }
+            v1.values.Newvalue = input
+            return v1
+        })
     }
 
     const pagesListColumns = [
@@ -325,7 +320,7 @@ const PartyMasterBulkUpdate = (props) => {
                                     type="text"
                                     defaultValue={user.SelectFieldName}
                                     className="col col-sm text-center"
-                                    onChange={(e) => tableSelectHandler(e, user)}
+                                    onChange={(event) => tableSelectHandler(event, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -343,32 +338,35 @@ const PartyMasterBulkUpdate = (props) => {
 
     const SaveHandler = (event) => {
 
+        const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                arr.push(Data)
-                const arr = Data.map(i => {
-                    Data = {
-                        SubPartyID: 2,
-                        Value1:SelectFieldName.value
+
+                Data.forEach(i => {
+                   const arr = {
+                        SubPartyID: i.SubPartyID,
+                        Value1: values.Newvalue
                     }
+                    arr1.push(arr)
                 })
-                const jsonBody = JSON.stringify(arr)({
+
+                const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
-                    Route: RouteSelect.value,
-                    Type: SelectFieldName.label
+                    Type: SelectFieldName.label,
+                    UpdateData:arr1
                 });
 
                 if (pageMode === mode.edit) {
-                     dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
+                    dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false })}
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
 
@@ -390,7 +388,7 @@ const PartyMasterBulkUpdate = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
+                                <form noValidate>
                                     <Row>
                                         <Col md={12}>
                                             <Card>
