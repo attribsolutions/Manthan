@@ -18,9 +18,9 @@ import { CommonConsole, convertDatefunc, loginJsonBody, } from "../../../compone
 
 function* Get_Driver_GenFun({ jsonBody }) { // List API Using Post Method
 
-    const filters = loginJsonBody();// required only PartyID and CompanyID
+    const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);// required only PartyID and CompanyID
     try {
-        const response = yield call(get_DriverList_API, jsonBody);
+        const response = yield call(get_DriverList_API, filters);
         const newList = yield response.Data.map((i) => {
             var date = convertDatefunc(i.DOB)
             i.DOB = (`${date}`)
