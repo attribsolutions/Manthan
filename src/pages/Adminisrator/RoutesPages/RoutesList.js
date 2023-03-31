@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -14,10 +14,17 @@ import {
     GetRoutesList,
     updateRoutesIDSuccess
 } from "../../../store/Administrator/RoutesRedux/actions";
+import { loginCompanyID, loginPartyID, loginRoleID } from "../../../components/Common/CommonFunction";
+import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 
 const RoutesList = (props) => {
 
     const dispatch = useDispatch();
+    const RoleID = loginRoleID()
+
+  const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.RoutesReducer.RoutesList,
@@ -29,6 +36,8 @@ const RoutesList = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
+
+    const { pageField, userAccess = [] } = reducers;
 
     const action = {
         getList: GetRoutesList,
@@ -44,36 +53,48 @@ const RoutesList = (props) => {
         const page_Id = pageId.ROUTES_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(GetRoutesList());
+        goButtonHandler(true)
     }, []);
-    const { pageField, userAccess = [] } = reducers;
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Party: loginPartyID(),
-    //         Company: loginCompanyID()
-    //     });
-    //     dispatch(GetRoutesList(jsonBody));
-    // }, []);
+    const goButtonHandler = () => {
 
-    return (
+        const jsonBody = JSON.stringify({
+          CompanyID: loginCompanyID(),
+          PartyID: party.value,
+        });
+        dispatch(GetRoutesList(jsonBody));
+      }
+    
+      return (
+      
         <React.Fragment>
-            <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
-            {
-                (pageField) ?
-                    <CommonListPage
-                        action={action}
-                        reducers={reducers}
-                        MasterModal={RoutesMaster}
-                        masterPath={url.ROUTES}
-                        ButtonMsgLable={"Routes"}
-                        deleteName={"Name"}
-                    />
-                    : null
-            }
-
-        </React.Fragment>
+        <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+        <div className="page-content">
+  
+          {RoleID === 2 ?
+            <PartyDropdownList
+              state={party}
+              setState={setParty}
+              action={goButtonHandler}
+            />
+            : null}
+          {
+            (pageField) ?
+              <CommonPurchaseList
+                action={action}
+                reducers={reducers}
+                showBreadcrumb={false}
+                MasterModal={RoutesMaster}
+                masterPath={url.ROUTES}
+                newBtnPath={url.ROUTES}
+                ButtonMsgLable={"Routes"}
+                deleteName={"Name"}
+                goButnFunc={goButtonHandler}
+              />
+              : null
+          }
+        </div>
+      </React.Fragment>
     )
 }
 

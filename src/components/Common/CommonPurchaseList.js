@@ -139,6 +139,7 @@ const CommonPurchaseList = (props) => {
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+            breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
             dispatch(updateSucc({ Status: false }));
             goButnFunc();
             isAlertFunc(1, updateMsg);

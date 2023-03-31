@@ -29,10 +29,10 @@ function* save_Routes_Master_GenFun({ config = {} }) {
     } catch (error) { CommonConsole(error) }
 }
 
-function* Routes_List_GenratorFunction() { //Routes List Api Using Post Method
+function* Routes_List_GenratorFunction({jsonBody}) { //Routes List Api Using Post Method
     const filters = loginJsonBody()
     try {
-        const response = yield call(Routes_Get_API, filters);
+        const response = yield call(Routes_Get_API, jsonBody);
         yield put(GetRoutesListSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
