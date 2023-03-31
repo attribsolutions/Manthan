@@ -24,7 +24,7 @@ const PartyDropdownMaster = (props) => {
 
     return (
         <React.Fragment>
-            <FormGroup className="mb-2 col col-sm-3 ">
+           
                 <Label htmlFor="validationCustom01">{fieldLabel} </Label>
                 <Select
                     id="Party "
@@ -42,7 +42,6 @@ const PartyDropdownMaster = (props) => {
                         })
                     }}
                 />
-            </FormGroup>
         </React.Fragment >
     );
 }

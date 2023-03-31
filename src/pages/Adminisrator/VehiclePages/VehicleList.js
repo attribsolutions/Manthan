@@ -23,7 +23,7 @@ const VehicleList = () => {
   const dispatch = useDispatch();
   const RoleID = loginRoleID()
 
-  const [party, setParty] = useState({ value: loginPartyID(), label: "select..." });
+  const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
 
   const reducers = useSelector(
     (state) => ({
