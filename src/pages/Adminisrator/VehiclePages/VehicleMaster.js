@@ -132,17 +132,19 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, } = hasEditVal
+                const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, Party,PartyName} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
                 hasValid.Description.valid = true;
                 hasValid.VehicleTypeName.valid = true;
+                hasValid.Party.valid = true;
 
                 values.id = id
                 values.VehicleNumber = VehicleNumber
                 values.Description = Description
                 values.VehicleTypeName = { label: VehicleTypeName, value: VehicleType };
+                values.Party = {value:Party,label:PartyName}
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
@@ -332,11 +334,13 @@ const VehicleMaster = (props) => {
                                                     <Col md="1">  </Col>
 
                                                     {RoleID === 2 ?
-                                                        <PartyDropdownMaster
-                                                            fieldLabel={fieldLabel.Party}
-                                                            state={values.Party}
-                                                            setState={setState}
-                                                        />
+                                                        <FormGroup className="mb-2 col col-sm-3 ">
+                                                            <PartyDropdownMaster
+                                                                fieldLabel={fieldLabel.Party}
+                                                                state={values.Party}
+                                                                setState={setState}
+                                                            />
+                                                        </FormGroup>
                                                         : null}
 
                                                 </Row>
