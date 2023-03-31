@@ -39,21 +39,24 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
+import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 
 const VehicleMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const RoleID = loginRoleID()
 
     const fileds = {
         id: "",
         VehicleNumber: "",
         Description: "",
         VehicleTypeName: "",
+        Party: ''
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -75,14 +78,13 @@ const VehicleMaster = (props) => {
             VehicleList: state.VehicleReducer.VehicleList,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageField,
         }));
 
     useEffect(() => {
         const page_Id = pageId.VEHICLE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getVehicleList());
         dispatch(getVehicleType_for_dropdown());
     }, []);
 
@@ -113,7 +115,6 @@ const VehicleMaster = (props) => {
         };
     }, [userAccess])
 
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
     useEffect(() => {
 
@@ -131,17 +132,19 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, } = hasEditVal
+                const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, Party,PartyName} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
                 hasValid.Description.valid = true;
                 hasValid.VehicleTypeName.valid = true;
+                hasValid.Party.valid = true;
 
                 values.id = id
                 values.VehicleNumber = VehicleNumber
                 values.Description = Description
                 values.VehicleTypeName = { label: VehicleTypeName, value: VehicleType };
+                values.Party = {value:Party,label:PartyName}
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
@@ -228,7 +231,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party: loginPartyID(),
+                    Party: RoleID === 2 ? values.Party.value : loginPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -263,97 +266,103 @@ const VehicleMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form noValidate>
-                                    <Row className="">
-                                        <Col md={12}>
-                                            <Card>
-                                                <CardBody className="c_card_body">
-                                                    <Row className="mt-1">
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.VehicleTypeName}</Label>
-                                                                <Col sm={12}>
-                                                                    <Select
-                                                                        id="VehicleDropDown "
-                                                                        name="VehicleTypeName"
-                                                                        value={values.VehicleTypeName}
-                                                                        isSearchable={false}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={VehicleType_DropdownOptions}
-                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                    />
-                                                                    {isError.VehicleTypeName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.VehicleTypeName}</small></span>
-                                                                    )}
-                                                                </Col>
-                                                            </FormGroup>
+
+                                    <Col md={12}>
+                                        <Card>
+                                            <CardBody className="c_card_body">
+                                                <Row>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.VehicleTypeName} </Label>
+                                                        <Select
+                                                            id="VehicleDropDown "
+                                                            name="VehicleTypeName"
+                                                            value={values.VehicleTypeName}
+                                                            isSearchable={false}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={VehicleType_DropdownOptions}
+                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                        />
+                                                        {isError.VehicleTypeName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.VehicleTypeName}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
+                                                        <Input
+                                                            name="VehicleNumber"
+                                                            id="VehicleNumber"
+                                                            value={values.VehicleNumber}
+                                                            type="text"
+                                                            className={isError.VehicleNumber.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter VehicleNumber"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.VehicleNumber.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.VehicleNumber}</span>
+                                                        )}
+                                                    </FormGroup>
+                                                </Row>
+
+                                                <Row className="mt-2">
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
+                                                        <Input
+                                                            name="Description"
+                                                            id="Description"
+                                                            value={values.Description}
+                                                            type="text"
+                                                            className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Description"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.Description.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.Description}</span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+
+                                                    {RoleID === 2 ?
+                                                        <FormGroup className="mb-2 col col-sm-3 ">
+                                                            <PartyDropdownMaster
+                                                                fieldLabel={fieldLabel.Party}
+                                                                state={values.Party}
+                                                                setState={setState}
+                                                            />
+                                                        </FormGroup>
+                                                        : null}
+
+                                                </Row>
+
+
+                                                <FormGroup>
+                                                    <Row>
+                                                        <Col sm={2} className="mt-3">
+                                                            <SaveButton pageMode={pageMode}
+                                                                onClick={SaveHandler}
+                                                                userAcc={userPageAccessState}
+                                                                editCreatedBy={editCreatedBy}
+                                                                module={"VehicleMaster"}
+                                                            />
                                                         </Col>
-
-                                                        <Col md="1" className="mx-n1">  </Col>
-                                                        <Col md="4">
-                                                            <FormGroup className="mb-2 col col-sm-9 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
-                                                                <Input
-                                                                    name="VehicleNumber"
-                                                                    id="VehicleNumber"
-                                                                    value={values.VehicleNumber}
-                                                                    type="text"
-                                                                    className={isError.VehicleNumber.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter VehicleNumber"
-                                                                    autoComplete='off'
-                                                                    onChange={(event) => {
-                                                                        onChangeText({ event, state, setState })
-                                                                        dispatch(Breadcrumb_inputName(event.target.value))
-                                                                    }}
-                                                                />
-                                                                {isError.VehicleNumber.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.VehicleNumber}</span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Col>
-
-                                                        <Row>
-                                                            <Col md="3">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Description} </Label>
-                                                                    <Input
-                                                                        name="Description"
-                                                                        id="Description"
-                                                                        value={values.Description}
-                                                                        type="text"
-                                                                        className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                        placeholder="Please Enter Description"
-                                                                        autoComplete='off'
-                                                                        onChange={(event) => {
-                                                                            onChangeText({ event, state, setState })
-                                                                            dispatch(Breadcrumb_inputName(event.target.value))
-                                                                        }}
-                                                                    />
-                                                                    {isError.Description.length > 0 && (
-                                                                        <span className="invalid-feedback">{isError.Description}</span>
-                                                                    )}
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-
-                                                        <FormGroup>
-                                                            <Row>
-                                                                <Col sm={2} className="mt-3">
-                                                                    <SaveButton pageMode={pageMode}
-                                                                        onClick={SaveHandler}
-                                                                        userAcc={userPageAccessState}
-                                                                        editCreatedBy={editCreatedBy}
-                                                                        module={"VehicleMaster"}
-                                                                    />
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup >
                                                     </Row>
+                                                </FormGroup >
 
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                    </Row>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+
                                 </form>
                             </CardBody>
                         </Card>

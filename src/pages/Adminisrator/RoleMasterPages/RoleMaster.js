@@ -309,6 +309,7 @@ const RoleMaster = (props) => {
                                 <span className="invalid-feedback">{isError.Name}</span>
                               )}
                             </FormGroup>
+
                             <Col md={1} className="mx-n1"> </Col>
                             <FormGroup className="mb-2 col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
@@ -325,6 +326,7 @@ const RoleMaster = (props) => {
                                 <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
                               )}
                             </FormGroup>
+                            
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>

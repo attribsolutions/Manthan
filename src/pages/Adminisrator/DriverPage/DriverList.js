@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DriverMaster from "./DriverMaster";
 import {
@@ -14,10 +14,17 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
+import { loginCompanyID, loginPartyID, loginRoleID } from "../../../components/Common/CommonFunction";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
+import PartyDropdownList from "../../../components/Common/PartyDropdownComp/PartyDropdownList";
 
 const DriverList = () => {
 
   const dispatch = useDispatch();
+  const RoleID = loginRoleID()
+
+  const [party, setParty] = useState({ value: loginPartyID(), label: "Select..." });
+
   const reducers = useSelector(
     (state) => ({
       tableList: state.DriverReducer.DriverList,
@@ -29,6 +36,8 @@ const DriverList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
+
+  const { pageField, userAccess = [] } = reducers
 
   const action = {
     getList: getDriverList,
@@ -43,26 +52,62 @@ const DriverList = () => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getDriverList())
+    goButtonHandler(true)
   }, []);
 
-  const { pageField,userAccess=[] } = reducers
+  const goButtonHandler = () => {
 
-    return (
+    const jsonBody = JSON.stringify({
+      CompanyID: loginCompanyID(),
+      PartyID: party.value,
+    });
+    dispatch(getDriverList(jsonBody));
+  }
+
+  return (
+    // <React.Fragment>
+    //   <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
+    //   {
+    //     (pageField) ?
+    //       <CommonListPage
+    //         action={action}
+    //         reducers={reducers}
+    //         MasterModal={DriverMaster}
+    //         masterPath={url.DRIVER}
+    //         ButtonMsgLable={"Driver"}
+    //         deleteName={"Name"}
+    //       />
+    //       : null
+    //   }
+    // </React.Fragment>
+
     <React.Fragment>
       <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-      {
-        (pageField) ?
-          <CommonListPage
-            action={action}
-            reducers={reducers}
-            MasterModal={DriverMaster}
-            masterPath={url.DRIVER}
-            ButtonMsgLable={"Driver"}
-            deleteName={"Name"}
+      <div className="page-content">
+
+        {RoleID === 2 ?
+          <PartyDropdownList
+            state={party}
+            setState={setParty}
+            action={goButtonHandler}
           />
-          : null
-      }
+          : null}
+        {
+          (pageField) ?
+            <CommonPurchaseList
+              action={action}
+              reducers={reducers}
+              showBreadcrumb={false}
+              MasterModal={DriverMaster}
+              masterPath={url.DRIVER}
+              newBtnPath={url.DRIVER}
+              ButtonMsgLable={"Driver"}
+              deleteName={"Name"}
+              goButnFunc={goButtonHandler}
+            />
+            : null
+        }
+      </div>
     </React.Fragment>
   )
 }

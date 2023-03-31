@@ -1,7 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { saveVehicleMasterSuccess, getVehicleListSuccess,
-   getVehicleType_for_dropdown_Success, deleteVehicleID_Success,
-    editVehicleID_Success, updateVehicleID_Success } from "./action";
+import {
+  saveVehicleMasterSuccess, getVehicleListSuccess,
+  getVehicleType_for_dropdown_Success, deleteVehicleID_Success,
+  editVehicleID_Success, updateVehicleID_Success
+} from "./action";
 import {
   Vehicle_Get_API,
   Vehicle_Post_API,
@@ -22,10 +24,11 @@ import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonF
 
 // const jsonBody = { "Party": loginPartyID(), "Company": loginCompanyID() }
 // Get List Page API
-function* Get_Vehicle_GenFun() {
+function* Get_Vehicle_GenFun({ jsonBody }) {
+  debugger
   const filters = loginJsonBody();// required only PartyID and CompanyID
   try {
-    const response = yield call(Vehicle_Get_API, filters);
+    const response = yield call(Vehicle_Get_API, jsonBody);
     yield put(getVehicleListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -68,7 +71,7 @@ function* Delete_Vehicle_ID_GenFun({ config }) {
 function* get_VehicleTypes_DropDown_GenFun() {
   const filters = loginJsonBody()
   try {
-    const response = yield call(VehicleTypes_Get_API_for_Dropdown,filters);
+    const response = yield call(VehicleTypes_Get_API_for_Dropdown, filters);
     yield put(getVehicleType_for_dropdown_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }

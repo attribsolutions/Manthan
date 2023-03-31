@@ -215,70 +215,70 @@ const RouteUpdate = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
                     {/* <Container fluid> */}
 
-                        <form noValidate>
-                            <PaginationProvider
+                    <form noValidate>
+                        <PaginationProvider
 
-                                pagination={paginationFactory(pageOptions)}
-                            >
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
+                            pagination={paginationFactory(pageOptions)}
+                        >
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
 
-                                        keyField="id"
-                                        data={Data}
-                                        columns={pagesListColumns}
+                                    keyField="id"
+                                    data={Data}
+                                    columns={pagesListColumns}
 
-                                        search
-                                    >
-                                        {toolkitProps => (
-                                            <React.Fragment>
-                                                <div className="table">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        bordered={true}
-                                                        striped={false}
-                                                        noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
-                                                        classes={"table align-middle table-nowrap table-hover"}
-                                                        headerWrapperClasses={"thead-light"}
+                                    search
+                                >
+                                    {toolkitProps => (
+                                        <React.Fragment>
+                                            <div className="table">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    bordered={true}
+                                                    striped={false}
+                                                    noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
+                                                    classes={"table align-middle table-nowrap table-hover"}
+                                                    headerWrapperClasses={"thead-light"}
 
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
+                                                    {...toolkitProps.baseProps}
+                                                    {...paginationTableProps}
+                                                />
+                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </div>
+
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone
+                                                        {...paginationProps}
                                                     />
-                                                    {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone
-                                                            {...paginationProps}
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )
-                                        }
-                                    </ToolkitProvider>
-                                )
-                                }
-
-                            </PaginationProvider>
-
-                            {Data.length > 0 ?
-                                <FormGroup style={{ marginTop: "-25px" }}>
-                                    <Row >
-                                        <Col sm={2} className="mt-n4">
-                                            <SaveButton pageMode={pageMode}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
-                                                module={"RouteUpdate"}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </FormGroup >
-                                : null
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )
+                                    }
+                                </ToolkitProvider>
+                            )
                             }
 
-                        </form>
+                        </PaginationProvider>
+
+                        {Data.length > 0 ?
+                            <FormGroup style={{ marginTop: "-25px" }}>
+                                <Row >
+                                    <Col sm={2} className="mt-n4">
+                                        <SaveButton pageMode={pageMode}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            module={"RouteUpdate"}
+                                        />
+                                    </Col>
+                                </Row>
+                            </FormGroup >
+                            : null
+                        }
+
+                    </form>
                     {/* </Container> */}
                 </div>
             </React.Fragment>
