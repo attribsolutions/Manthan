@@ -49,7 +49,7 @@ import {
     postSelect_Field_for_dropdown,
     updatePartyMasterBulkID,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+
 
 
 const PartyMasterBulkUpdate = (props) => {
