@@ -3,19 +3,22 @@ import {
     postParty_Master_Bulk_Update_Success,
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
     postPartyName_for_dropdown_Success,
-    postSelect_Field_for_dropdown_Success
+    postSelect_Field_for_dropdown_Success,
+    updatePartyMasterBulkIDSuccess
 } from "./actions";
 import {
     PartyMasterBulkUpdate_GoButton_Post_API,
     Post_PartyMasterBulkUpdateAPI,
     post_PartyAPI,
-    post_SelectFieldAPI
+    post_SelectFieldAPI,
+    Update_Party_Bulk,
 } from "../../../helpers/backend_helper";
 import {
     GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE,
     POST_PARTY_MASTER_BULK_UPDATE_PAGE,
     POST_PARTY_NAME_DROPDOWN,
-    POST_SELECT_FIELD_DROPDOWN
+    POST_SELECT_FIELD_DROPDOWN,
+    UPDATE_PARTY_MASTER_BULK
 } from "./actionTypes";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
@@ -51,12 +54,20 @@ function* Post_SelectField_GenratorFunction({jsonBody}) {
     } catch (error) { CommonConsole(error) }
 }
 
+function* Update_Party_Bulk_GenratorFunction({ updateData, id }) {
+    try {
+      const response = yield call(Update_Party_Bulk, updateData, id);
+      yield put(updatePartyMasterBulkIDSuccess(response))
+    } catch (error) { CommonConsole(error) }
+  }
+  
 
 function* PartyMasterBulkUpdateSaga() {
     yield takeEvery(GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE, GoButton_PartyMasterBulkUpdate_post_genfun);
     yield takeEvery(POST_PARTY_MASTER_BULK_UPDATE_PAGE, Post_PartyMasterBulkUpdate_GenratorFunction);
     yield takeEvery(POST_PARTY_NAME_DROPDOWN, Post_Party_GenratorFunction);
     yield takeEvery(POST_SELECT_FIELD_DROPDOWN, Post_SelectField_GenratorFunction);
+    yield takeEvery(UPDATE_PARTY_MASTER_BULK, Update_Party_Bulk_GenratorFunction);
 }
 
 export default PartyMasterBulkUpdateSaga;
