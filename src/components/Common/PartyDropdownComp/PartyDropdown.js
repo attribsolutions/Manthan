@@ -6,13 +6,14 @@ import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action"
 
 const PartyDropdownMaster = (props) => {
 
-    const { state, setState, fieldLabel } = props
-
     const dispatch = useDispatch();
+
+    const { state, setState, fieldLabel } = props
 
     const { PartyList } = useSelector((state) => ({
         PartyList: state.PartyMasterReducer.partyList
     }));
+    
     useEffect(() => {
         dispatch(getPartyListAPI())
     }, []);
