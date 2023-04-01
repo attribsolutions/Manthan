@@ -191,8 +191,8 @@ const CommonPurchaseList = (props) => {
                 })
             }
             else {
-                tog_center();
-            }
+                setmodal_edit(true)
+              }
         }
     }, [editData]);
 
@@ -206,9 +206,17 @@ const CommonPurchaseList = (props) => {
     }
 
 
+    // function tog_center() {
+    //     debugger
+    //     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
+    // }
+
     function tog_center() {
-        setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
-    }
+        if (modal_edit) {
+          breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+        }
+        setmodal_edit(false)
+      }
 
     // ****** columns sort by sequnce
     PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense

@@ -32,7 +32,7 @@ import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalula
 import { SaveButton, Go_Button, Change_Button } from "../../../components/Common/CommonButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc, loginRoleID } from "../../../components/Common/CommonFunction";
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
@@ -42,6 +42,7 @@ import * as pageId from "../../../routes/allPageID"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 import { editPartyItemID, editPartyItemIDSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { order_Type } from "../../../components/Common/C-Varialbes";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 let editVal = {}
 
@@ -74,6 +75,7 @@ const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const RoleID = loginRoleID();
 
     const fileds = {
         id: "",
@@ -97,6 +99,7 @@ const Order = (props) => {
     const [poToDate, setpoToDate] = useState(currentDate);
     const [orderdate, setorderdate] = useState(currentDate);
     const [supplierSelect, setsupplierSelect] = useState('');
+    const [partySelect, setPartySelect] = useState('');
 
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
@@ -114,6 +117,7 @@ const Order = (props) => {
         updateMsg,
         supplierAddress = [],
         pageField,
+        PartyList,
         assingItemData = ''
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
@@ -124,7 +128,8 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        assingItemData: state.PartyItemsReducer.editData
+        assingItemData: state.PartyItemsReducer.editData,
+        PartyList: state.PartyMasterReducer.partyList
     }));;
 
     useEffect(() => {
@@ -136,6 +141,7 @@ const Order = (props) => {
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
         dispatch(getOrderType())
+        dispatch(getPartyListAPI())
     }, []);
 
     const values = { ...state.values }
@@ -334,6 +340,11 @@ const Order = (props) => {
         label: i.Name,
     }));
 
+    const Party_DropdownOptions = PartyList.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
 
@@ -483,7 +494,7 @@ const Order = (props) => {
             }
         },
 
-        
+
         {//------------- MRP column ----------------------------------
             text: "MRP",
             dataField: "MRPValue",
@@ -539,8 +550,6 @@ const Order = (props) => {
         custom: true,
     };
 
-
-
     const goButtonHandler = async () => {
 
         if (!supplierSelect > 0) {
@@ -568,6 +577,10 @@ const Order = (props) => {
 
     function supplierOnchange(e) {
         setsupplierSelect(e)
+    };
+
+    function partyOnchange(e) {
+        setPartySelect(e)
     };
 
     function Open_Assign_func() {
@@ -715,14 +728,14 @@ const Order = (props) => {
             }))
 
             if (isVDC_POvalidMsg.length > 0) {
-                 CustomAlert({
+                CustomAlert({
                     Type: 4,
                     Message: isVDC_POvalidMsg,
                 })
                 return returnFunc();
             };
             if (validMsg.length > 0) {
-                 CustomAlert({
+                CustomAlert({
                     Type: 4,
                     Message: validMsg,
                 })
@@ -745,7 +758,7 @@ const Order = (props) => {
                 return returnFunc();
             }
             if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
-                 CustomAlert({
+                CustomAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
                 })
@@ -820,6 +833,29 @@ const Order = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content">
+                    {RoleID === 2 ?
+                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
+                            <div className=" mt-1 mb-2 row ">
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "115px" }}>Party</Label>
+                                        <Col sm="6">
+                                            <Select
+                                                value={partySelect}
+                                                classNamePrefix="select2-Customer"
+                                                isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                options={Party_DropdownOptions}
+                                                onChange={partyOnchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                            </div>
+                        </div>
+                        : null}
+
 
                     <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
                         <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
