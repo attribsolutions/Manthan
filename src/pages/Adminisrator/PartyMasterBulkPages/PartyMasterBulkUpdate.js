@@ -172,7 +172,7 @@ const PartyMasterBulkUpdate = (props) => {
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             dispatch(AlertState({
-                Type: 4,
+                Type: 1,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
@@ -210,12 +210,12 @@ const PartyMasterBulkUpdate = (props) => {
 
     const goButtonHandler = () => {
 
-        if (Party.length === 0) {
+        if (SelectFieldName.length === 0) {
             dispatch(
                 AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "Please Select PartyName",
+                    Message: "Please Select SelectField",
                     RedirectPath: false,
                     PermissionAction: false,
                 })
@@ -225,9 +225,9 @@ const PartyMasterBulkUpdate = (props) => {
 
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
-            Route: RouteSelect.length === 0 ? "0" : RouteSelect.value,
-            Type: SelectFieldName.length === 0 ? "0" : SelectFieldName.label,
-            FilterPartyID: Party.value,
+            Route: RouteSelect.length === 0 ? 0 : RouteSelect.value,
+            Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
+            FilterPartyID:Party.length === 0 ? 0 : Party.value,
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
@@ -238,14 +238,10 @@ const PartyMasterBulkUpdate = (props) => {
         setSelectFieldName(val)
     }
 
-    function tableSelectHandler(event, hasSelect) {
+    function tableSelectHandler(event,user) {
        
         let input = event.target.value
-        setState((i) => {
-            const v1 = { ...i }
-            v1.values.Newvalue = input
-            return v1
-        })
+        user.Newvalue = input
     }
 
     const pagesListColumns = [
@@ -318,9 +314,10 @@ const PartyMasterBulkUpdate = (props) => {
                                 <Input
                                     id=""
                                     type="text"
-                                    defaultValue={user.SelectFieldName}
+                                    defaultValue={user.Newvalue}
                                     className="col col-sm text-center"
-                                    onChange={(event) => tableSelectHandler(event, user)}
+                                     onChange={(event) => tableSelectHandler(event,user)}
+                                      
                                 />
                             </FormGroup>
                         </Col>
@@ -348,7 +345,7 @@ const PartyMasterBulkUpdate = (props) => {
                 Data.forEach(i => {
                    const arr = {
                         SubPartyID: i.SubPartyID,
-                        Value1: values.Newvalue
+                        Value1: i.Newvalue
                     }
                     arr1.push(arr)
                 })
