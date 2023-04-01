@@ -123,7 +123,7 @@ const DriverMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, DOB, Address ,Party,PartyName} = hasEditVal
+                const { id, Name, DOB, Address, Party, PartyName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -135,7 +135,7 @@ const DriverMaster = (props) => {
                 values.DOB = DOB;
                 values.Address = Address;
                 values.id = id
-                values.Party = {value:Party,label:PartyName}
+                values.Party = { value: Party, label: PartyName }
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
@@ -346,8 +346,6 @@ const DriverMaster = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup >
-
-                                                    {/* </Row> */}
 
                                                 </CardBody>
                                             </Card>
