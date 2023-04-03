@@ -239,8 +239,7 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function tableSelectHandler(event,user) {
-       
-        let input = event.target.value
+        let input = event.target.value;
         user.Newvalue = input
     }
 
