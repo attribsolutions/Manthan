@@ -47,6 +47,9 @@ import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 import RoutesSaga from "./Administrator/RoutesRedux/saga"
 import SalesManSaga from "./Administrator/SalesManRedux/saga"
+import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
+import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
+
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -66,10 +69,7 @@ import InvoiceSaga from "./Sales/Invoice/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
 import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
-
 import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
-import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
-
 
 export default function* rootSaga() {
   yield all([
@@ -127,6 +127,6 @@ export default function* rootSaga() {
     fork(RouteUpdateSaga),
     fork(LoadingSheetSaga),
     fork(PartyMasterBulkUpdateSaga),
-  
+    fork(ManagementPartiesSaga)
   ])
 }

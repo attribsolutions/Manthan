@@ -30,7 +30,7 @@ const PartyDropdownMaster = (props) => {
         <React.Fragment>
             <Row className="col-12">
                 <Col className="col-4" >
-                    <Label htmlFor="validationCustom01">Company </Label>
+                    <Label htmlFor="validationCustom01 ">Company </Label>
                     <Select
                         id="Party "
                         name="Party"

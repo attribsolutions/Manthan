@@ -19,6 +19,7 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
+    onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, } from "../../../components/Common/CommonFunction";
@@ -30,7 +31,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import {  Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
+import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
 import { getPartyListAPI, getPartyListAPISuccess } from "../../../store/Administrator/PartyRedux/action";
 
@@ -45,6 +46,12 @@ const ManagementEmpParties = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
 
+
+    const fileds = {
+        Employee: ""
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         employeeList,
@@ -66,9 +73,21 @@ const ManagementEmpParties = (props) => {
         dispatch(getPartyListAPI())
     }, []);
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
     const location = { ...history.location }
-    // const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     // userAccess useEffect
     useEffect(() => {
@@ -128,9 +147,23 @@ const ManagementEmpParties = (props) => {
     const employeeListOptions = employeeList.map((index) => ({
         value: index.id,
         label: index.Name,
-
     }));
 
+    function goButtonHandler(event) {
+        event.preventDefault();
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                // WorkOrder: values.ItemName.value,
+                // Item: values.ItemName.Item,
+                // Company: loginCompanyID(),
+                // Party: loginPartyID(),
+                // Quantity: parseInt(values.LotQuantity)
+            });
+            const body = { jsonBody, pageMode }
+            // dispatch(goButtonForMaterialIssue_Master_Action(body));
+        }
+    }
+    
     function SelectAll(event, row, key) {
         const arr = []
         partyList.forEach(ele => {
@@ -225,6 +258,8 @@ const ManagementEmpParties = (props) => {
         // dispatch(Post_RouteUpdate({ jsonBody, btnId }));
     };
 
+    
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -241,26 +276,33 @@ const ManagementEmpParties = (props) => {
                             <Col sm="5">
                                 <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "83px" }}>Employee</Label>
+                                        style={{ width: "83px" }}> {fieldLabel.Employee}</Label>
                                     <Col sm="6">
                                         <Select
-                                            name="RoutesName"
-                                            value={employeeSelect}
+                                            name="Employee"
+                                            value={values.Employee}
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             options={employeeListOptions}
-                                            onChange={(e) => { setEmployeeSelect(e) }}
+                                            // onChange={(e) => { setEmployeeSelect(e) }}
+                                            onChange={(hasSelect, evn) => {
+                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                // State_Dropdown_Handler(hasSelect)
+                                            }}
                                         />
+                                        {isError.Employee.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Employee}</small></span>
+                                        )}
                                     </Col>
                                 </FormGroup>
                             </Col>
 
-                            {/* <Col sm="1" className="mx-4 ">
+                            <Col sm="1" className="mx-4 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                // onClick={() => action()}
+                                    onClick={(e) => goButtonHandler(e)}
                                 >Go</Button>
-                            </Col> */}
+                            </Col>
                         </div>
                     </div>
 
