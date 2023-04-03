@@ -124,8 +124,8 @@ function PageFieldMaster_Tab(props) {
         <>
             <div className="table-rep-plugin  mx-n4">
                 <div
-                    className="Scroll_div"
-                    data-pattern="priority-columns "
+                    // className="Scroll_div"
+                    // data-pattern="priority-columns "
                 >
                     <Table className="table table-bordered table-responsive ">
                         <Thead  >

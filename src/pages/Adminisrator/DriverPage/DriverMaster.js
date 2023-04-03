@@ -243,7 +243,17 @@ const DriverMaster = (props) => {
                     <Container fluid>
 
                         <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
+                        <Card className="card-header   text-black c_card_header">
 
+                            <Row>
+
+                                <PartyDropdownMaster
+                                    state={state}
+                                    setState={setState} />
+
+                            </Row>
+
+                        </Card>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -322,16 +332,7 @@ const DriverMaster = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
-                                                    {RoleID === 2 ?
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <PartyDropdownMaster
-                                                                    fieldLabel={fieldLabel.Party}
-                                                                    state={values.Party}
-                                                                    setState={setState} />
-                                                            </FormGroup>
-                                                        </Row>
-                                                        : null}
+
 
                                                     <FormGroup className="mt-2">
                                                         <Row>

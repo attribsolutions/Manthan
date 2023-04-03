@@ -88,8 +88,8 @@ function* getCustomerGenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-function* vendorSupplierCustomer_genFunc({ subPageMode }) {
-  
+function* vendorSupplierCustomer_genFunc({ subPageMode,RoleID }) {
+  debugger
   let response;
 
   const isVender = (subPageMode === url.ORDER_1 //vendor mode 1
@@ -113,6 +113,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     || subPageMode === url.IB_INVOICE_LIST
     || subPageMode === url.INWARD_LIST
   );
+
   const json = { "PartyID": loginPartyID(), "Company": loginCompanyID() }
 
   try {

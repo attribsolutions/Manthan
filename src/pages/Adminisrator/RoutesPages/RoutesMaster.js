@@ -273,7 +273,7 @@ const RoutesMaster = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
-                                                    {RoleID === 2 ?
+                                                    {/* {RoleID === 2 ?
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
                                                                 <PartyDropdownMaster
@@ -282,7 +282,7 @@ const RoutesMaster = (props) => {
                                                                     setState={setState} />
                                                             </FormGroup>
                                                         </Row>
-                                                        : null}
+                                                        : null} */}
 
                                                     <Row>
                                                         <FormGroup className="mt-2 col col-sm-5">

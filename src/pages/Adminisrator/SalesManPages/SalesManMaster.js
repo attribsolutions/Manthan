@@ -294,7 +294,7 @@ const SalesManMaster = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
-                                                    {RoleID === 2 ?
+                                                    {/* {RoleID === 2 ?
                                                         <Row>
                                                             <FormGroup className="mt-2 col col-sm-4 ">
                                                                 <PartyDropdownMaster
@@ -303,7 +303,7 @@ const SalesManMaster = (props) => {
                                                                     setState={setState} />
                                                             </FormGroup>
                                                         </Row>
-                                                        : null}
+                                                        : null} */}
 
                                                     <Row>
                                                         <FormGroup className="mt-2 col col-sm-5">

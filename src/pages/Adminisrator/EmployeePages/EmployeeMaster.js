@@ -340,7 +340,7 @@ const AddEmployee = (props) => {
           PAN: values.PAN,
           AadharNo: values.AadharNo,
           working_hours: 8,
-          Designation: "",
+          // Designation: "",
           EmployeeType: values.EmployeeTypeName.value,
           State: values.StateName.value,
           District: values.DistrictName.value,

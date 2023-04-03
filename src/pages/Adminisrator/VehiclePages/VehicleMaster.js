@@ -333,7 +333,7 @@ const VehicleMaster = (props) => {
 
                                                     <Col md="1">  </Col>
 
-                                                    {RoleID === 2 ?
+                                                    {/* {RoleID === 2 ?
                                                         <FormGroup className="mb-2 col col-sm-3 ">
                                                             <PartyDropdownMaster
                                                                 fieldLabel={fieldLabel.Party}
@@ -341,7 +341,7 @@ const VehicleMaster = (props) => {
                                                                 setState={setState}
                                                             />
                                                         </FormGroup>
-                                                        : null}
+                                                        : null} */}
 
                                                 </Row>
 
