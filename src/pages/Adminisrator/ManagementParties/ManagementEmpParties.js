@@ -34,6 +34,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
 import { getPartyListAPI, getPartyListAPISuccess } from "../../../store/Administrator/PartyRedux/action";
+import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 
 const ManagementEmpParties = (props) => {
 
@@ -45,12 +46,11 @@ const ManagementEmpParties = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
-
-
+   
     const fileds = {
         Employee: ""
     }
-
+    
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -80,6 +80,7 @@ const ManagementEmpParties = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
 
     useEffect(() => {
 
@@ -152,18 +153,10 @@ const ManagementEmpParties = (props) => {
     function goButtonHandler(event) {
         event.preventDefault();
         if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                // WorkOrder: values.ItemName.value,
-                // Item: values.ItemName.Item,
-                // Company: loginCompanyID(),
-                // Party: loginPartyID(),
-                // Quantity: parseInt(values.LotQuantity)
-            });
-            const body = { jsonBody, pageMode }
-            // dispatch(goButtonForMaterialIssue_Master_Action(body));
+            dispatch(getPartyTableList(values.Employee.value));
         }
     }
-    
+
     function SelectAll(event, row, key) {
         const arr = []
         partyList.forEach(ele => {
@@ -229,17 +222,6 @@ const ManagementEmpParties = (props) => {
             PartyID: index.id,
         }))
 
-        if (employeeSelect.length === 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Employee is Required",
-                })
-            );
-            return;
-        }
-
         if (CheckArray.length === 0) {
             dispatch(
                 AlertState({
@@ -258,7 +240,7 @@ const ManagementEmpParties = (props) => {
         // dispatch(Post_RouteUpdate({ jsonBody, btnId }));
     };
 
-    
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -317,7 +299,6 @@ const ManagementEmpParties = (props) => {
                                     keyField="id"
                                     data={partyList}
                                     columns={pagesListColumns}
-
                                     search
                                 >
                                     {toolkitProps => (

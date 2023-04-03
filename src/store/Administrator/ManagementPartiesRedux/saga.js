@@ -12,8 +12,25 @@ function* save_ManagementParties_GenFunc({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
+function* getPartyListGenFunc({ EmployeeID }) {                                   // getList API
+   debugger
+  try {
+      const response = yield call(apiCall.Go_Button_Post_API, EmployeeID);
+      response.Data.map((party) => {
+        party["Check"] = false
+        if (party.Party > 0) {
+          { party["Check"] = true }
+        }
+        return party
+      });
+      yield put(action.getPartyTableListSuccess(response.Data));
+    } catch (error) { CommonConsole(error) }
+  }
+  
 function* ManagementPartiesSaga() {
     yield takeEvery(actionType.SAVE_MANAGEMENT_PARTIES, save_ManagementParties_GenFunc)
+    yield takeEvery(actionType.GET_PARTY_TABLE_LIST, getPartyListGenFunc)
+
 }
 
 export default ManagementPartiesSaga;  

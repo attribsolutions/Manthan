@@ -80,6 +80,7 @@ export const loginRoleID = () => {//+++++++++++++++++++++ Seesion Company Id++++
 }
 
 export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
+
     let created_By = 0
     try {
         created_By = JSON.parse(localStorage.getItem('userId'))
@@ -88,11 +89,21 @@ export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id++++++
 }
 
 export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+   debugger
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
     } catch (e) { CommonConsole("Common login CompanyID  Error") }
     return user_Company
+}
+
+export const loginCompanyName = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
+    debugger
+    let user_CompanyName =''
+    try {
+        user_CompanyName = JSON.parse(localStorage.getItem('CompanyName'))
+    } catch (e) { CommonConsole("Common login CompanyName  Error") }
+    return user_CompanyName
 }
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
@@ -156,7 +167,7 @@ export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++
 
 export function convertOnlyTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
     const date = new Date(inputDate);
- 
+
     let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
     let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
     let timeString = hours + ":" + minutes;
@@ -204,7 +215,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
     if (btnId) {
         try {
             document.getElementById(btnId).disabled = state;
-          
+
             document.getElementById("overlay").style.display = state ? "block" : "none";
 
             document.getElementById("preloader").style.display = state ? "block" : "none";
@@ -232,7 +243,7 @@ export async function CheckAPIResponse({ method, url, response, body, btnId }) {
     const con6 = ((method === "post" || method === "put"))
     const con7 = ((data.StatusCode === 100));
 
-    
+
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
