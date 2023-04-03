@@ -8,7 +8,7 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess, 
+  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
   roleAceessActionSuccess
@@ -54,13 +54,14 @@ function* loginUser({ payload: { user, history } }) {
 function* afterLoginUserDetails_genFun({ id }) {
 
   try {
-
+   
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
       UserId: id,
     })
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
+    localStorage.setItem("CompanyName", response.Data.CompanyName)
     localStorage.setItem("CompanyGroup", response.Data.CompanyGroup)
     if (response.Data.IsSCMCompany) {
       localStorage.setItem("IsSCMCompany", 1)
@@ -125,7 +126,7 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
         arrayMain.push(objMain)
         arrayChild = []
         objMain = {}
-        
+
       })
 
       arrayMain.forEach((i) => {

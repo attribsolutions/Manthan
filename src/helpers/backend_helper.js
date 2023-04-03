@@ -513,6 +513,7 @@ export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOI
 
 // Management Parties API
 export const Management_Parties_Post_API = ({ jsonBody, btnId }) => post(url.MANAGEMENT_PARTIES, jsonBody, btnId)//  postapi
+export const Go_Button_Post_API = (EmployeeID) => post(url.GO_BUTTON_API_MANAGEMENT_PARTIES, EmployeeID)//  postapi
 
 
 export {
