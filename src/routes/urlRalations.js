@@ -109,7 +109,10 @@ export const ImportMaster = url.IMPORT_MASTER_LIST
 export const ImportTypeList = url.IMPORT_MASTER
 
 export const RouteUpdate = url.ROUTE_UPDATE
+
 export const PartyMasterBulkUpdate = url.PARTY_MASTER_BULK_UPDATE
+
+export const ManagementParties = url.MANAGEMENT_PARTIES
 
 //******************************* Purchase Module ************************************//
 

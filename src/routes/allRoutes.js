@@ -131,6 +131,7 @@ import Report from "../Reports/AllReportPage";
 import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
+import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -240,6 +241,8 @@ const userRoutes = [
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
+
+  { path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

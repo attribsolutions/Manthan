@@ -9,7 +9,7 @@ import {
     Table,
 } from "reactstrap";
 import Select from "react-select";
-import { Tbody, Thead } from "react-super-responsive-table";
+import { Tbody, Th, Thead, Tr } from "react-super-responsive-table";
 // import './css.css'
 function PageFieldMaster_Tab(props) {
 
@@ -122,14 +122,14 @@ function PageFieldMaster_Tab(props) {
 
     return (
         <>
-            <div className="table-rep-plugin  mx-n4">
-                <div
-                    className="Scroll_div"
+            <div className="table-rep-plugin  mx-n4 " >
+                <div 
+                    className=" table-responsive "
                     data-pattern="priority-columns "
                 >
-                    <Table className="table table-bordered table-responsive ">
+                    <Table className="table table-bordered ">
                         <Thead  >
-                            <tr  className="colorhead">
+                            <tr className="colorhead">
                                 <th className="thsticky colorhead" >Control ID</th>
                                 <th className="">Field Label</th>
                                 <th className="">Control Type</th>
@@ -150,7 +150,7 @@ function PageFieldMaster_Tab(props) {
 
                             {pageFieldTabTable.map((TableValue, key) => (
                                 <tr  >
-                                    <td className='thsticky 'style={{ zIndex:"1",}}>
+                                    <td className='thsticky ' style={{ zIndex: "1", }}>
                                         <div style={{ width: "150px", }}>
                                             <Input
                                                 type="text"
@@ -165,7 +165,7 @@ function PageFieldMaster_Tab(props) {
                                     <td>
                                         <div style={{ width: "150px" }} className='sticky'>
                                             <Input
-                                            className='sticky'
+                                                className='sticky'
                                                 type="text"
                                                 id={`FieldLabel${key}`}
                                                 autoComplete="off"
