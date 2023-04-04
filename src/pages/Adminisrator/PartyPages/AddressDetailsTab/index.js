@@ -15,9 +15,9 @@ function AddressDetails_Tab(props) {
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(true);
-    const [imageTable, setImageTable] = useState('');
-    
-    
+    const [imageTable, setImageTable] = useState([]);
+
+
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
     }
@@ -30,16 +30,12 @@ function AddressDetails_Tab(props) {
         setAddress(event.target.value)
     }
 
-    const PINHandler = (event) => {
-        setPIN(event.target.value)
-    }
-
     const IsDefaultHandler = (event) => {
         setIsDefault(event.target.checked)
     }
 
     const addRowsHandler = (data) => {
-    
+
         const invalidMsg1 = []
 
         if ((address === "")) {
@@ -54,18 +50,18 @@ function AddressDetails_Tab(props) {
         if ((PIN === "")) {
             invalidMsg1.push(`PIN Is Required`)
         };
-        if ((address === "") || (FSSAINo === "") || (FSSAIExipry === "") || (PIN === "")) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: JSON.stringify(invalidMsg1),
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
-            return;
-        }
+        // if ((address === "") || (FSSAINo === "") || (FSSAIExipry === "") || (PIN === "")) {
+        //     dispatch(
+        //         AlertState({
+        //             Type: 4,
+        //             Status: true,
+        //             Message: JSON.stringify(invalidMsg1),
+        //             RedirectPath: false,
+        //             PermissionAction: false,
+        //         })
+        //     );
+        //     return;
+        // }
 
         const val = {
             Address: address,
@@ -89,15 +85,17 @@ function AddressDetails_Tab(props) {
     }
 
     const clearState = () => {
+        debugger
         setAddress('');
         setFSSAIExipry('');
         setFSSAINo('');
         setIsDefault(false);
         setPIN('');
-        setImageTable('');
+        setImageTable('')
     };
 
     const onchangeHandler = async (event) => {
+        debugger
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
         let ImageUpload = base64
@@ -105,7 +103,7 @@ function AddressDetails_Tab(props) {
     }
 
     const convertBase64 = (file) => {
-
+        debugger
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file);

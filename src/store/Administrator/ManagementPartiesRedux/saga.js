@@ -12,10 +12,10 @@ function* save_ManagementParties_GenFunc({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
-function* getPartyListGenFunc({ EmployeeID }) {                                   // getList API
+function* getPartyListGenFunc({ jsonBody }) {                                   // getList API
    debugger
   try {
-      const response = yield call(apiCall.Go_Button_Post_API, EmployeeID);
+      const response = yield call(apiCall.Go_Button_Post_API, jsonBody);
       response.Data.map((party) => {
         party["Check"] = false
         if (party.Party > 0) {

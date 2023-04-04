@@ -29,7 +29,8 @@ const PartyDropdownMaster = (props) => {
 
     return (
         <React.Fragment>
-            <Row className="col-12">
+            <div className="px-2 text-black "  >
+                {/* <Row className="col-12"> */}
                 {/* <Col className="col-4" >
                     <Label htmlFor="validationCustom01 ">Company </Label>
                     <Select
@@ -51,8 +52,34 @@ const PartyDropdownMaster = (props) => {
                     />
                 </Col>
                 <Col md={1}> </Col> */}
-                <Col className="col-4">
-                    <Label htmlFor="validationCustom01">{fieldLabel.Party} </Label>
+                <div className="row ">
+                    <Col sm="6">
+                        <FormGroup className=" row" >
+                            <Label className="col-sm-6 p-2"
+                                style={{ width: "83px" }}>{fieldLabel.Party}</Label>
+                            <Col sm="7">
+                                <Select
+                                    name="RoutesName"
+                                    value={values.Party}
+                                    isSearchable={true}
+                                    className="react-dropdown"
+                                    classNamePrefix="dropdown"
+                                    options={Party_DropdownOptions}
+                                    onChange={(e) => {
+                                        setState((i) => {
+                                            const a = { ...i }
+                                            a.values.Party = e;
+                                            return a
+                                        })
+                                    }}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                </div>
+            </div>
+            {/* <Col className="col-4">
+                    <Label htmlFor="validationCustom01" >{fieldLabel.Party} </Label>
                     <Select
                         id="Party "
                         name="Party"
@@ -68,8 +95,8 @@ const PartyDropdownMaster = (props) => {
                                 return a
                             })
                         }}
-                    /></Col>
-            </Row>
+                    /></Col> */}
+            {/* </Row> */}
 
         </React.Fragment >
     );
