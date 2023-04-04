@@ -34,7 +34,7 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID,loginCompanyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -47,7 +47,8 @@ const EmployeeTypesMaster = (props) => {
         id: "",
         Name: "",
         IsPartyConnection: false,
-        IsSCM: false
+        IsSCM: false,
+        IsSalesTeamMember: false
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -97,7 +98,7 @@ const EmployeeTypesMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({dispatch,userAcc});
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -118,15 +119,19 @@ const EmployeeTypesMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, IsPartyConnection, IsSCM } = hasEditVal
+                const { id, Name, IsPartyConnection, IsSCM, IsSalesTeamMember } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.IsPartyConnection = IsPartyConnection;
                 values.IsSCM = IsSCM;
                 values.id = id
+                values.IsSalesTeamMember = IsSalesTeamMember;
+
                 hasValid.Name.valid = true;
                 hasValid.IsSCM.valid = true;
                 hasValid.IsPartyConnection.valid = true;
+                hasValid.IsSalesTeamMember.valid = true;
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -196,7 +201,7 @@ const EmployeeTypesMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-  
+
 
     const SaveHandler = async (event) => {
         event.preventDefault();
@@ -208,14 +213,15 @@ const EmployeeTypesMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsPartyConnection: values.IsPartyConnection,
-                    Company:loginCompanyID(),
+                    Company: loginCompanyID(),
                     IsSCM: values.IsSCM,
+                    IsSalesTeamMember: values.IsSalesTeamMember,
                     CreatedBy: loginUserID(),
                     CreatedOn: "2022-07-18T00:00:00",
                     UpdatedBy: loginUserID(),
                     UpdatedOn: "2022-07-18T00:00:00"
                 });
-                
+
                 if (pageMode === mode.edit) {
                     dispatch(updateEmployeeTypeID({ jsonBody, updateId: values.id, btnId }));
                 }
@@ -227,7 +233,7 @@ const EmployeeTypesMaster = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-  
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -247,7 +253,7 @@ const EmployeeTypesMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black">
-                                <form  noValidate>
+                                <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -320,11 +326,35 @@ const EmployeeTypesMaster = (props) => {
                                                             </FormGroup>
                                                         </Row>
 
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-5">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label htmlFor="horizontal-firstname-input"
+                                                                        className="col-sm-5 col-form-label" >{fieldLabel.IsSalesTeamMember} </Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                name="IsSalesTeamMember"
+                                                                                checked={values.IsSalesTeamMember}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsSalesTeamMember = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
+
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode}
-                                                                    onClick={SaveHandler}
+                                                                        onClick={SaveHandler}
                                                                         userAcc={userPageAccessState}
                                                                         editCreatedBy={editCreatedBy}
                                                                         module={"EmployeeTypesMaster"}
