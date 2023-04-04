@@ -284,7 +284,8 @@ const PartyType = (props) => {
                                                 <Row>
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-4 col-form-label" >{fieldLabel.IsSCM} </Label>
+                                                            <Label htmlFor="horizontal-firstname-input" 
+                                                            className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-2">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -306,7 +307,8 @@ const PartyType = (props) => {
 
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-4 col-form-label" >{fieldLabel.IsDivision} </Label>
+                                                            <Label htmlFor="horizontal-firstname-input" 
+                                                            className="col-sm-5 col-form-label" >{fieldLabel.IsDivision} </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -334,7 +336,7 @@ const PartyType = (props) => {
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input"
-                                                             className="col-sm-4 col-form-label" >{fieldLabel.IsRetailer} </Label>
+                                                             className="col-sm-5 col-form-label" >{fieldLabel.IsRetailer} </Label>
                                                             <Col md={1} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -356,7 +358,7 @@ const PartyType = (props) => {
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input" 
-                                                            className="col-sm-4 col-form-label" >{fieldLabel.IsVendor} </Label>
+                                                            className="col-sm-5 col-form-label" >{fieldLabel.IsVendor} </Label>
                                                             <Col md={1} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
@@ -403,7 +405,7 @@ const PartyType = (props) => {
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input"
-                                                                className="col-sm-4 col-form-label" >{fieldLabel.IsAdminDivision} </Label>
+                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsAdminDivision} </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
