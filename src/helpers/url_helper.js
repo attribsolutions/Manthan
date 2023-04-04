@@ -288,3 +288,4 @@ export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sh
 // Management Parties API
 export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
 export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'
+export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
