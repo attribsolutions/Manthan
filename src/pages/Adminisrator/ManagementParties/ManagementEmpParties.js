@@ -111,12 +111,10 @@ const ManagementEmpParties = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveManagementParties_Success({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
-            // setEmployeeSelect('')
             dispatch(getPartyTableListSuccess([]))
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -152,7 +150,6 @@ const ManagementEmpParties = (props) => {
     }));
 
     function goButtonHandler(event) {
-        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -228,7 +225,18 @@ const ManagementEmpParties = (props) => {
             Party: index.id,
         }))
 
-        if (CheckArray.length === 0) {
+        const trueValues = array.map((index) => {
+            return (index.Check === true)
+        })
+
+        const totalTrueValues = trueValues.reduce((count, value) => {
+            if (value === true) {
+                count++
+            }
+            return count
+        }, 0)
+
+        if ((totalTrueValues === 0)) {
             dispatch(
                 AlertState({
                     Type: 4,
@@ -239,7 +247,6 @@ const ManagementEmpParties = (props) => {
             return;
         }
         const jsonBody = JSON.stringify(PartiesJson)
-
         // console.log(jsonBody)
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
