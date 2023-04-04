@@ -980,9 +980,6 @@ const Invoice = (props) => {
                                                         <div> <Input id={`partytAmt${i.id}-${i.Party}`} type="text" placeholder="Calculate Invoice Value" disabled={true} /></div>
                                                     </div>
                                                 </div >
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
                                                             <BootstrapTable
                                                                 keyField={"id"}
                                                                 responsive
@@ -995,10 +992,6 @@ const Invoice = (props) => {
 
                                                                 {...toolkitProps.baseProps}
                                                             />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-
                                             </React.Fragment>
                                         )}
                                     </ToolkitProvider>
