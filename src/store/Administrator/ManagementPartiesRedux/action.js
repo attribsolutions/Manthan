@@ -15,9 +15,9 @@ export const saveManagementParties_Success = (resp) => ({// Save  success
     payload: resp,
 });
 
-export const getPartyTableList = (EmployeeID) => ({   // After EmployeeID Select Party List API
+export const getPartyTableList = (jsonBody) => ({   // After EmployeeID Select Party List API
     type: GET_PARTY_TABLE_LIST,  
-    EmployeeID,
+    jsonBody,
   });
   
   export const getPartyTableListSuccess = (resp) => ({        // After EmployeeID Select Party List API success

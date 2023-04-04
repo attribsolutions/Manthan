@@ -286,5 +286,5 @@ export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter A
 export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
 
 // Management Parties API
-export const MANAGEMENT_PARTIES = '/ManagementParties'
-export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementParties'
+export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
+export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'

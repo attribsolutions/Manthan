@@ -89,7 +89,7 @@ export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id++++++
 }
 
 export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-   debugger
+
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
@@ -98,7 +98,7 @@ export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+
 }
 
 export const loginCompanyName = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-    debugger
+
     let user_CompanyName =''
     try {
         user_CompanyName = JSON.parse(localStorage.getItem('CompanyName'))

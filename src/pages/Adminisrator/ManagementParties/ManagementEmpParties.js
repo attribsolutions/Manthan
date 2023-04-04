@@ -20,9 +20,10 @@ import {
     formValid,
     initialFiledFunc,
     onChangeSelect,
+    resetFunction,
 } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, } from "../../../components/Common/CommonFunction";
+import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -33,8 +34,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
-import { getPartyListAPI, getPartyListAPISuccess } from "../../../store/Administrator/PartyRedux/action";
-import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 
 const ManagementEmpParties = (props) => {
 
@@ -46,11 +46,11 @@ const ManagementEmpParties = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
-   
+
     const fileds = {
         Employee: ""
     }
-    
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -58,9 +58,9 @@ const ManagementEmpParties = (props) => {
         partyList,
         pageField,
         userAccess } = useSelector((state) => ({
-            postMsg: state.RouteUpdateReducer.postMsg,
+            postMsg: state.ManagementPartiesReducer.postMsg,
             employeeList: state.EmployeesReducer.employeeList,
-            partyList: state.PartyMasterReducer.partyList,
+            partyList: state.ManagementPartiesReducer.partyList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -70,7 +70,7 @@ const ManagementEmpParties = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getEmployeelist())
-        dispatch(getPartyListAPI())
+        // dispatch(getPartyListAPI())
     }, []);
 
     const values = { ...state.values }
@@ -113,10 +113,11 @@ const ManagementEmpParties = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(Post_RouteUpdateSuccess({ Status: false }))
+            dispatch(saveManagementParties_Success({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
-            setEmployeeSelect('')
-            dispatch(getPartyListAPISuccess([]))
+            // setEmployeeSelect('')
+            dispatch(getPartyTableListSuccess([]))
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -134,7 +135,7 @@ const ManagementEmpParties = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(Post_RouteUpdateSuccess({ Status: false }))
+            dispatch(saveManagementParties_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -151,9 +152,14 @@ const ManagementEmpParties = (props) => {
     }));
 
     function goButtonHandler(event) {
+        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
-            dispatch(getPartyTableList(values.Employee.value));
+            const jsonBody = JSON.stringify({
+                "Company": loginCompanyID(),
+                "Employee": values.Employee.value
+            })
+            dispatch(getPartyTableList(jsonBody));
         }
     }
 
@@ -175,7 +181,7 @@ const ManagementEmpParties = (props) => {
         },
         {
             text: "Party Type",
-            dataField: "PartyType.Name",
+            dataField: "PartyType",
         },
         {
             text: "State",
@@ -218,8 +224,8 @@ const ManagementEmpParties = (props) => {
         })
 
         const PartiesJson = CheckArray.map((index) => ({
-            EmployeeID: employeeSelect.value,
-            PartyID: index.id,
+            Employee: values.Employee.value,
+            Party: index.id,
         }))
 
         if (CheckArray.length === 0) {
@@ -227,17 +233,15 @@ const ManagementEmpParties = (props) => {
                 AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "Minimum One Party is Selected",
+                    Message: "At least One Party is Selected",
                 })
             );
             return;
         }
-        const jsonBody = JSON.stringify({
-            Data: PartiesJson
-        })
+        const jsonBody = JSON.stringify(PartiesJson)
 
-        console.log(jsonBody)
-        // dispatch(Post_RouteUpdate({ jsonBody, btnId }));
+        // console.log(jsonBody)
+        dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
 
@@ -267,6 +271,7 @@ const ManagementEmpParties = (props) => {
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             options={employeeListOptions}
+                                            isDisabled={(partyList.length > 0) ? true : false}
                                             // onChange={(e) => { setEmployeeSelect(e) }}
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -279,12 +284,25 @@ const ManagementEmpParties = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
+                            {partyList.length === 0 ?
+                                <Col sm="1" className="mx-4 ">
+                                    <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
+                                        onClick={(e) => goButtonHandler(e)}
+                                    >Go</Button>
+                                </Col> :
+                                <Col sm="1" className="mx-4 mt-3">
+                                    <Change_Button onClick={(e) => dispatch(getPartyTableListSuccess([]))} />
+                                </Col>
+                            }
 
-                            <Col sm="1" className="mx-4 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                    onClick={(e) => goButtonHandler(e)}
-                                >Go</Button>
-                            </Col>
+
+                            {/* {pageMode === mode.defaultsave ?
+                                (orderItemTable.length === 0) ?
+                                    < Go_Button onClick={(e) => goButtonHandler()} />
+                                    :
+                                    <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
+                                : null
+                            } */}
                         </div>
                     </div>
 
