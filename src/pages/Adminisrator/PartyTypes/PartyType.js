@@ -401,7 +401,7 @@ const PartyType = (props) => {
                                                     </FormGroup>
                                                 </Row> */}
 
-                                                <Row>
+                                                {/* <Row>
                                                     <FormGroup className="mb-2 col col-sm-4">
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input"
@@ -423,7 +423,7 @@ const PartyType = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
-                                                </Row>
+                                                </Row> */}
 
                                                 <FormGroup>
                                                     <Row>
