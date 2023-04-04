@@ -1,4 +1,6 @@
 import {
+    GET_EMPLOYEE_DROPDWOPN_LIST,
+    GET_EMPLOYEE_DROPDWOPN_LIST_SUCCESS,
     GET_PARTY_TABLE_LIST,
     GET_PARTY_TABLE_LIST_SUCCESS,
     SAVE_MANAGEMENT_PARTIES,
@@ -22,5 +24,16 @@ export const getPartyTableList = (jsonBody) => ({   // After EmployeeID Select P
   
   export const getPartyTableListSuccess = (resp) => ({        // After EmployeeID Select Party List API success
     type: GET_PARTY_TABLE_LIST_SUCCESS,
+    payload: resp,
+  })
+
+  //Employee Dropdown API
+  export const getEmployeedropdownList = (jsonBody) => ({   
+    type: GET_EMPLOYEE_DROPDWOPN_LIST,  
+    jsonBody,
+  });
+  
+  export const getEmployeedropdownListSuccess = (resp) => ({       
+    type: GET_EMPLOYEE_DROPDWOPN_LIST_SUCCESS,
     payload: resp,
   })

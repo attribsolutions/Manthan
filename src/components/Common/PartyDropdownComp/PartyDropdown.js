@@ -4,7 +4,8 @@ import { Col, FormGroup, Label, Row } from "reactstrap";
 import Select from "react-select";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
-import { loginCompanyID, loginCompanyName } from "../CommonFunction";
+import { loginCompanyID, loginCompanyName, loginEmployeeID } from "../CommonFunction";
+import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 
 const PartyDropdownMaster = (props) => {
 
@@ -14,22 +15,35 @@ const PartyDropdownMaster = (props) => {
 
     const { values, fieldLabel } = state
     const [company, setCompany] = useState([])
-    const { employeeList } = useSelector((state) => ({
-        employeeList: state.EmployeesReducer.employeeList
+    const { partyList } = useSelector((state) => ({
+        partyList: state.ManagementPartiesReducer.partyList,
     }));
 
     useEffect(() => {
         dispatch(getEmployeelist())
     }, []);
 
-    const Party_DropdownOptions = employeeList.map((data) => ({
-        value: data.Company_id,
-        label: data.CompanyName
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "Company": loginCompanyID(),
+            "Employee": loginEmployeeID()
+        })
+        dispatch(getPartyTableList(jsonBody));
+    }, []);
+
+    const PartyList = partyList.map((data) => ({
+        value: data.Name,
+        label: data.Party
     }));
+
+    const PartyList_Options = PartyList.filter((index) => {
+        return index.Party > 0
+    });
+
 
     return (
         <React.Fragment>
-            <div className="px-2 text-black "  >
+            <div className=" text-black mt-2"  >
                 {/* <Row className="col-12"> */}
                 {/* <Col className="col-4" >
                     <Label htmlFor="validationCustom01 ">Company </Label>
@@ -56,7 +70,7 @@ const PartyDropdownMaster = (props) => {
                     <Col sm="6">
                         <FormGroup className=" row" >
                             <Label className="col-sm-6 p-2"
-                                style={{ width: "83px" }}>{fieldLabel.Party}</Label>
+                                style={{ width: "83px", marginLeft: "20px" }}>{fieldLabel.Party}</Label>
                             <Col sm="7">
                                 <Select
                                     name="RoutesName"
@@ -64,7 +78,7 @@ const PartyDropdownMaster = (props) => {
                                     isSearchable={true}
                                     className="react-dropdown"
                                     classNamePrefix="dropdown"
-                                    options={Party_DropdownOptions}
+                                    options={PartyList_Options}
                                     onChange={(e) => {
                                         setState((i) => {
                                             const a = { ...i }

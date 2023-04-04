@@ -33,11 +33,12 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, loginEmployeeID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
+import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 
 const DriverMaster = (props) => {
 
@@ -65,6 +66,7 @@ const DriverMaster = (props) => {
         updateMsg,
         pageField,
         userAccess,
+        
     } = useSelector((state) => ({
         postMsg: state.DriverReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -144,6 +146,7 @@ const DriverMaster = (props) => {
             dispatch(editDriverID_Success({ Status: false }))
         }
     }, [])
+
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -244,7 +247,7 @@ const DriverMaster = (props) => {
 
                         <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
 
-                        <Card className="card-header text-black "
+                        <Card className=" text-black "
                             style={{ backgroundColor: "	#C8C8C8" }}>
                             <Row>
                                 <PartyDropdownMaster

@@ -34,7 +34,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
-import { getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { getEmployeedropdownList, getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 
 const ManagementEmpParties = (props) => {
 
@@ -59,7 +59,7 @@ const ManagementEmpParties = (props) => {
         pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.ManagementPartiesReducer.postMsg,
-            employeeList: state.EmployeesReducer.employeeList,
+            employeeList: state.ManagementPartiesReducer.employeeList,
             partyList: state.ManagementPartiesReducer.partyList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -69,8 +69,8 @@ const ManagementEmpParties = (props) => {
         const page_Id = pageId.MANAGEMENT_PARTIES
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getEmployeelist())
-        // dispatch(getPartyListAPI())
+        dispatch(getEmployeedropdownList())
+        // // dispatch(getPartyListAPI())
     }, []);
 
     const values = { ...state.values }
