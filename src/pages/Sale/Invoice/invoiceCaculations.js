@@ -4,6 +4,8 @@ export const discountCalculate = (row,index) => {
     let qty = 0
     let gstPercentage = 0
     let disCountAmt = 0
+    if(index.Discount===undefined||null){index.Discount=0}
+    if(index.DiscountType===undefined||null){index.DiscountType=2}
 
 
     if (!(row.Rate == '')) { rate = row.Rate; };
