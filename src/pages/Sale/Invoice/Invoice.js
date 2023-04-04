@@ -50,7 +50,6 @@ import { discountCalculate } from "./invoiceCaculations";
 import "./invoice.scss"
 import demoData from "./demodata.json"
 import { numberWithCommas } from "../../../Reports/Report_common_function"
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const Invoice = (props) => {
 
@@ -103,24 +102,16 @@ const Invoice = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    debugger
-    useLayoutEffect(() => {
-        debugger
-    }, [])
+
 
     useEffect(() => {
-        debugger
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-        goButtonHandler()
-
     }, []);
-    useLayoutEffect(() => {
-        debugger
-    }, [])
-    debugger
+
+  
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -265,17 +256,7 @@ const Invoice = (props) => {
 
     }));
 
-    const mainTableColumn = [
-        {//***************main Header********************************************************************* */
-            text: "Item Name",
-            dataField: "ItemName",
-            classes: () => ('invoice-item-row'),
-            headerStyle: () => ({ display: "none" }),
-            formatter: (cellContent, index1, rowIndex, b) => {
-
-            },
-        }
-    ]
+ 
     const pagesListColumns = [
 
 
@@ -999,9 +980,6 @@ const Invoice = (props) => {
                                                         <div> <Input id={`partytAmt${i.id}-${i.Party}`} type="text" placeholder="Calculate Invoice Value" disabled={true} /></div>
                                                     </div>
                                                 </div >
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
                                                             <BootstrapTable
                                                                 keyField={"id"}
                                                                 responsive
@@ -1014,10 +992,6 @@ const Invoice = (props) => {
 
                                                                 {...toolkitProps.baseProps}
                                                             />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-
                                             </React.Fragment>
                                         )}
                                     </ToolkitProvider>
