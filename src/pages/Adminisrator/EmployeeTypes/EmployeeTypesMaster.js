@@ -212,9 +212,9 @@ const EmployeeTypesMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
-                    IsPartyConnection: values.IsPartyConnection,
+                    // IsPartyConnection: values.IsPartyConnection,
                     Company: loginCompanyID(),
-                    IsSCM: values.IsSCM,
+                    // IsSCM: values.IsSCM,
                     IsSalesTeamMember: values.IsSalesTeamMember,
                     CreatedBy: loginUserID(),
                     CreatedOn: "2022-07-18T00:00:00",
@@ -280,7 +280,7 @@ const EmployeeTypesMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
-                                                        <Row>
+                                                        {/* <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
@@ -301,9 +301,9 @@ const EmployeeTypesMaster = (props) => {
                                                                     </Col>
                                                                 </Row>
                                                             </FormGroup>
-                                                        </Row>
+                                                        </Row> */}
 
-                                                        <Row>
+                                                        {/* <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
@@ -324,7 +324,7 @@ const EmployeeTypesMaster = (props) => {
                                                                     </Col>
                                                                 </Row>
                                                             </FormGroup>
-                                                        </Row>
+                                                        </Row> */}
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">

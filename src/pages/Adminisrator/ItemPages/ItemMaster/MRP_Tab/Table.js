@@ -97,7 +97,7 @@ function MRPTable(props) {
           <Table className="table table-bordered table-hover">
 
             <Thead>
-              <tr>
+              <tr >
                 <th className="col col-sm-3" >Division</th>
                 <th className="col col-sm-3">Party Name</th>
                 <th className="col col-sm-3">Effective Date</th>
