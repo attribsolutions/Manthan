@@ -49,6 +49,7 @@ import {
     postSelect_Field_for_dropdown,
     updatePartyMasterBulkID,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
 
 
 
@@ -62,6 +63,8 @@ const PartyMasterBulkUpdate = (props) => {
     const [RouteSelect, setRouteSelect] = useState([]);
     const [Party, setParty] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
+    const [state_DropDown_select, setState_DropDown_select] = useState([]);
+    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState([]);
 
 
     const fileds = {
@@ -71,7 +74,6 @@ const PartyMasterBulkUpdate = (props) => {
         SelectField: "",
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
     const [val, setvalue] = useState()
     const [FSSAIExipry, setFSSAIExipry] = useState()
 
@@ -84,12 +86,16 @@ const PartyMasterBulkUpdate = (props) => {
         RoutesList,
         SelectField,
         PartyName,
-        Data
+        Data,
+        DistrictOnState,
+        State
     } = useSelector((state) => ({
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
+        State: state.EmployeesReducer.State,
+        DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Data: state.PartyMasterBulkUpdateReducer.goButton,
         RoutesList: state.RoutesReducer.RoutesList,
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
@@ -203,9 +209,19 @@ const PartyMasterBulkUpdate = (props) => {
         label: index.Name,
     }));
 
+    const DistrictOnStateValues = DistrictOnState.map((index) => ({
+        value: index.id,
+        label: index.Name
+    }));
+
     const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
         label: i.Name
+    }));
+
+    const StateValues = State.map((index) => ({
+        value: index.id,
+        label: index.Name
     }));
 
     const goButtonHandler = () => {
@@ -227,7 +243,7 @@ const PartyMasterBulkUpdate = (props) => {
             PartyID: loginPartyID(),
             Route: RouteSelect.length === 0 ? 0 : RouteSelect.value,
             Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
-            FilterPartyID:Party.length === 0 ? 0 : Party.value,
+            FilterPartyID: Party.length === 0 ? 0 : Party.value,
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
@@ -238,9 +254,19 @@ const PartyMasterBulkUpdate = (props) => {
         setSelectFieldName(val)
     }
 
-    function tableSelectHandler(event,user) {
+    function tableSelectHandler(event, user) {
         let input = event.target.value;
         user.Newvalue = input
+    }
+
+    function handllerState(e) {
+        setState_DropDown_select(e)
+        dispatch(getDistrictOnState(e.value))
+        setDistrict_dropdown_Select('')
+    }
+
+    function handllerDistrictOnState(e) {
+        setDistrict_dropdown_Select(e)
     }
 
     const pagesListColumns = [
@@ -260,7 +286,7 @@ const PartyMasterBulkUpdate = (props) => {
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
-                            <FormGroup className=" col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4">
                                 <Flatpickr
                                     name='fromdate'
                                     //  value={FSSAIExipry}
@@ -280,28 +306,84 @@ const PartyMasterBulkUpdate = (props) => {
                 </>
             ),
         },
-        // {
-        //     text: "",
-        //     dataField: "",
-        //     // hidden: SelectFieldName.label === "State" ? false : true,
-        //     formatter: (user) => (
-        //         <>
-        //             <div style={{ justifyContent: 'center' }}>
-        //                 <Col>
-        //                     <FormGroup className=" col col-sm-4 ">
-        //                         <Input
-        //                             id=""
-        //                             type="text"
-        //                             // defaultValue={user.SelectFieldName}
-        //                             className="col col-sm text-center"
-        //                             onChange={(e) => tableSelectHandler(e, user)}
-        //                         />
-        //                     </FormGroup>
-        //                 </Col>
-        //             </div>
-        //         </>
-        //     ),
-        // },
+
+        {
+            text: "New Value",
+            dataField: "Newvalue",
+            hidden: SelectFieldName.label === "FSSAINo" ? false : true,
+            formatter: () => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4">
+                                <Flatpickr
+                                    name='fromdate'
+                                    //  value={FSSAIExipry}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                        defaultDate: FSSAIExipry
+                                    }}
+                                //    onChange={setFSSAIExipry}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+
+        {
+            text: "New Value",
+            dataField: "Newvalue",
+            hidden: SelectFieldName.label === "State" ? false : true,
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }}>
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Select
+                                    value={state_DropDown_select}
+                                    options={StateValues}
+                                    onChange={(e) => {
+                                        handllerState(e, user)
+                                        tableSelectHandler(user)
+                                    }}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+
+        {
+            text: "New Value",
+            dataField: "Newvalue",
+            hidden: SelectFieldName.label === "District" ? false : true,
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }}>
+                        <Col>
+                            <FormGroup className=" col col-sm-4">
+                                <Select
+                                    value={district_dropdown_Select}
+                                    options={DistrictOnStateValues}
+                                    onChange={(e) => {
+                                        handllerDistrictOnState(e, user)
+                                        tableSelectHandler(user)                                                                                                                                      
+                                    }}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+
         {
             text: "New value",
             dataField: "Newvalue",
@@ -315,8 +397,7 @@ const PartyMasterBulkUpdate = (props) => {
                                     type="text"
                                     defaultValue={user.Newvalue}
                                     className="col col-sm text-center"
-                                     onChange={(event) => tableSelectHandler(event,user)}
-                                      
+                                    onChange={(event) => tableSelectHandler(event, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -342,7 +423,7 @@ const PartyMasterBulkUpdate = (props) => {
                 btnIsDissablefunc({ btnId, state: true })
 
                 Data.forEach(i => {
-                   const arr = {
+                    const arr = {
                         SubPartyID: i.SubPartyID,
                         Value1: i.Newvalue
                     }
@@ -352,7 +433,7 @@ const PartyMasterBulkUpdate = (props) => {
                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
-                    UpdateData:arr1
+                    UpdateData: arr1
                 });
 
                 if (pageMode === mode.edit) {
