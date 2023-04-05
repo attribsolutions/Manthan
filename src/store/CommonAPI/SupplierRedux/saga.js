@@ -6,11 +6,13 @@ import {
   getSupplierSuccess,
   GetVenderSuccess,
   GetVenderSupplierCustomerSuccess,
+  Party_Dropdown_List_Success,
   Retailer_List_Success,
   SSDD_List_under_Company_Success,
 } from "./actions";
 import {
   get_OrderType_Api,
+  Party_Dropdown_Get_API,
   Party_Master_Edit_API,
   Retailer_List_under_Company_PartyAPI,
   SSDD_List_under_Company_API,
@@ -24,6 +26,7 @@ import {
   GET_SUPPLIER_ADDRESS,
   GET_VENDER,
   GET_VENDER_SUPPLIER_CUSTOMER,
+  PARTY_DROPDOWN_LIST,
   RETAILER_LIST,
   SSDD_LIST_UNDER_COMPANY,
 } from "./actionType";
@@ -153,6 +156,13 @@ function* Retailer_List_GenFunc({ data }) {
   } catch (error) { CommonConsole(error) }
 }
 
+function* Party_Dropdown_List_GenFunc({loginEmployeeID}) {
+debugger
+  try {
+    const response = yield call(Party_Dropdown_Get_API, loginEmployeeID);
+    yield put(Party_Dropdown_List_Success(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
 
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
@@ -163,6 +173,8 @@ function* SupplierSaga() {
   yield takeEvery(GET_CUSTOMER, getCustomerGenFunc);
   yield takeEvery(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
   yield takeEvery(RETAILER_LIST, Retailer_List_GenFunc);
+  yield takeEvery(PARTY_DROPDOWN_LIST, Party_Dropdown_List_GenFunc);
+
 
 }
 

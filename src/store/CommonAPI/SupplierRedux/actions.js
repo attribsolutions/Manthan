@@ -15,6 +15,8 @@ import {
   SSDD_LIST_UNDER_COMPANY_SUCCESS,
   RETAILER_LIST,
   RETAILER_LIST_SUCCESS,
+  PARTY_DROPDOWN_LIST,
+  PARTY_DROPDOWN_LIST_SUCCESS,
 } from './actionType'
 
 
@@ -99,5 +101,16 @@ export const Retailer_List = (data) => ({
 
 export const Retailer_List_Success = resp => ({
   type: RETAILER_LIST_SUCCESS,
+  payload: resp,
+})
+
+// Party Dropdown List API For all Pages used
+export const Party_Dropdown_List = (loginEmployeeID) => ({
+  type: PARTY_DROPDOWN_LIST,
+  loginEmployeeID
+});
+
+export const Party_Dropdown_List_Success = resp => ({
+  type: PARTY_DROPDOWN_LIST_SUCCESS,
   payload: resp,
 })
