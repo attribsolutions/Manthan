@@ -415,7 +415,7 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-debugger
+
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -426,7 +426,8 @@ debugger
                 Data.forEach(i => {
                     const arr = {
                         SubPartyID: i.SubPartyID,
-                        Value1:i.Newvalue
+                         Value1:i.Newvalue
+                       
                     }
                     arr1.push(arr)
                 })
