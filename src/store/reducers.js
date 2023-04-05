@@ -51,7 +51,7 @@ import RoutesReducer from "./Administrator/RoutesRedux/reducer"
 import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
 import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
-
+import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 
@@ -68,11 +68,10 @@ import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 
 //  *********************** Sale ***********************
 import InvoiceReducer from "./Sales/Invoice/reducer"
-
+import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 //  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
-import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -131,5 +130,6 @@ const rootReducer = combineReducers({
   ChallanReducer,
   RouteUpdateReducer,
   LoadingSheetReducer,
+  ManagementPartiesReducer,
 })
 export default rootReducer

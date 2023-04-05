@@ -67,7 +67,7 @@ const Layout = props => {
   /*
   layout  settings
   */
-  
+
   useEffect(() => {
     // document.body.addEventListener("click", hideRightbar, true);
     try {
@@ -162,13 +162,13 @@ const Layout = props => {
   return (
     <React.Fragment>
       <div id="overlay" >
-        <div className="cv-spinner">
+        {/* <div className="cv-spinner">
           <span className="spinner"></span>
-          {/* <button className="btn btn-primary" type="button" disabled>
-                    <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
-                    Loading...
-                </button> */}
-        </div>
+          <button className="btn btn-primary" type="button" disabled>
+            <span className="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
+            Loading...
+          </button>
+        </div> */}
       </div>
 
 

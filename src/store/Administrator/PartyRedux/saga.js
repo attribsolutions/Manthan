@@ -56,6 +56,7 @@ function* Get_Party_GenratorFunction() {
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceListName"] = index.PriceList.Name; }
       index["PartyAddress"] = address(index);
+      index["Check"] = false
       return index;
     });
     yield put(getPartyListAPISuccess(data1))

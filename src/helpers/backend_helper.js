@@ -511,7 +511,10 @@ export const MultipleInvoice_API = (id) => get(`${url.MULTIPLEINVOICE_API}/${id}
 export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${id}`)//dropdown api
 
 
-
+// Management Parties API
+export const Management_Parties_Post_API = ({ jsonBody, btnId }) => post(url.MANAGEMENT_PARTIES, jsonBody, btnId)//  postapi
+export const Go_Button_Post_API = (jsonBody) => post(url.GO_BUTTON_API_MANAGEMENT_PARTIES, jsonBody)//  postapi
+export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOWN_API, jsonBody)//  postapi
 
 
 export {

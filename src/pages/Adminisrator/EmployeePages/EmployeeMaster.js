@@ -160,9 +160,7 @@ const AddEmployee = (props) => {
         hasValid.DOB.valid = true;
         hasValid.PAN.valid = true;
         hasValid.AadharNo.valid = true;
-        // hasValid.working_hours.valid = true;
         hasValid.CompanyName.valid = true;
-        // hasValid.DesignationName.valid = true;
         hasValid.EmployeeTypeName.valid = true;
         hasValid.StateName.valid = true;
         hasValid.DistrictName.valid = true;
@@ -175,9 +173,7 @@ const AddEmployee = (props) => {
         values.DOB = DOB
         values.PAN = PAN;
         values.AadharNo = AadharNo
-        // values.working_hours = working_hours;
         values.Name = Name;
-        // values.DesignationName = { label: DesignationName, value: Designation_id };
         values.CompanyName = { label: CompanyName, value: Company_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
@@ -307,7 +303,7 @@ const AddEmployee = (props) => {
   }
 
   const SaveHandler = (event) => {
-    
+
     event.preventDefault();
     const btnId = event.target.id;
 
@@ -339,8 +335,6 @@ const AddEmployee = (props) => {
           DOB: values.DOB,
           PAN: values.PAN,
           AadharNo: values.AadharNo,
-          working_hours: 8,
-          Designation: "",
           EmployeeType: values.EmployeeTypeName.value,
           State: values.StateName.value,
           District: values.DistrictName.value,

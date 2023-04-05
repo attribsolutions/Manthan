@@ -285,4 +285,7 @@ export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOI
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
 export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
 
-
+// Management Parties API
+export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
+export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'
+export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'

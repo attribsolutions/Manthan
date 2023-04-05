@@ -1,5 +1,8 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useLayoutEffect, useState, } from "react";
 import {
+    Button,
+    Card,
+    CardBody,
     Col,
     FormGroup,
     Input,
@@ -9,10 +12,10 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
@@ -26,9 +29,9 @@ import {
 } from "../../../store/Production/BOMRedux/action";
 import { breadcrumbReturnFunc, convertDatefunc, loginUserID, currentDate, loginPartyID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+
 import BootstrapTable from "react-bootstrap-table-next";
-import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
@@ -45,6 +48,8 @@ import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedu
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate } from "./invoiceCaculations";
 import "./invoice.scss"
+import demoData from "./demodata.json"
+import { numberWithCommas } from "../../../Reports/Report_common_function"
 
 const Invoice = (props) => {
 
@@ -98,15 +103,15 @@ const Invoice = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    useEffect(() => {
 
+    useEffect(() => {
         dispatch(GetVenderSupplierCustomer(subPageMode))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-
     }, []);
 
+  
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -251,45 +256,51 @@ const Invoice = (props) => {
 
     }));
 
-
+ 
     const pagesListColumns = [
+
+
+
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
             classes: () => ('invoice-item-row'),
-            formatter: (cellContent, index1) => {
+            formatter: (cellContent, index1,) => {
                 return (
                     <>
                         <div className="invoice-item-row-div-1">
-                            <samp id={`ItemName${index1.id}`}>{cellContent}</samp>
+                            <samp id={`ItemName${index1.id}-${index1.Party}`}>{cellContent}</samp>
                         </div>
                         {
-                            (index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
-                                : <></>
+                            (index1.StockInValid) &&
+                            <div>
+                                <samp id={`StockInvalidMsg${index1.id}-${index1.Party}`} style={{ color: "red" }}>
+                                    {index1.StockInvalidMsg}
+                                </samp>
+                            </div>
+
                         }
                     </>
                 )
             },
-
-
         },
         {//***************Quantity********************************************************************* */
-            text: "Quantity/Unit",
+            text: "Quantity Unit",
             dataField: "",
             classes: () => ('invoice-quantity-row'),
-            formatter: (cellContent, row) => (
+            formatter: (cellContent, index1) => (
                 <>
                     <div className="div-1">
                         <label className="label">Qty</label>
                         <Input type="text"
                             disabled={pageMode === 'edit' ? true : false}
-                            id={`OrderQty${row.id}`}
+                            id={`OrderQty${index1.id}-${index1.Party}`}
                             className="input"
                             style={{ textAlign: "right" }}
-                            key={row.id}
+                            key={index1.id}
                             autoComplete="off"
-                            defaultValue={row.Quantity}
-                            onChange={(event) => orderQtyOnChange(event, row)}
+                            defaultValue={index1.Quantity}
+                            onChange={(event) => orderQtyOnChange(event, index1)}
                         />
                     </div>
                     <div className="div-1 ">
@@ -299,18 +310,17 @@ const Invoice = (props) => {
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
                                 isDisabled={pageMode === 'edit' ? true : false}
-                                defaultValue={row.UnitDrop}
-                                // value={{value:row.Unit,label:row.UnitName}}
+                                defaultValue={index1.UnitDrop}
                                 // className=" width-100"
                                 options={
-                                    row.UnitDetails.map(i => ({
+                                    index1.UnitDetails.map(i => ({
                                         label: i.UnitName,
                                         value: i.Unit,
                                         ConversionUnit: i.ConversionUnit,
                                         Unitlabel: i.Unitlabel
                                     }))
                                 }
-                                onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
+                                onChange={(event) => orderQtyUnit_SelectOnchange(event, index1)}
                             >
                             </Select >
                         </div>
@@ -318,97 +328,69 @@ const Invoice = (props) => {
                     </div>
                     <div className="bottom-div">
                         <span>Order-Qty :</span>
-                        <samp >{row.OrderQty}</samp>
-                        <samp >{row.UnitName}</samp></div>
+                        <samp >{index1.OrderQty}</samp>
+                        <samp >{index1.UnitName}</samp></div>
                 </>
 
-            )
+            ),
         },
-        {//***************Unit Dropdown********************************************************************* */
-            text: "Unit",
-            dataField: "id",
-            hidden: true,
-            classes: () => ('invoice-unit-row'),
 
-            formatter: (value, row, key) => {
-
-                return (
-
-
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        isDisabled={pageMode === 'edit' ? true : false}
-                        defaultValue={row.UnitDrop}
-                        // value={{value:row.Unit,label:row.UnitName}}
-                        className=" width-100"
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.Unit,
-                                ConversionUnit: i.ConversionUnit,
-                                Unitlabel: i.Unitlabel
-                            }))
-                        }
-                        onChange={(event) => orderQtyUnit_SelectOnchange(event, row)}
-                    >
-                    </Select >
-                )
-            },
-        },
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
-            headerFormatter: (cell, index1 = [], k) => {
+            // attrs: (cell, row, rowIndex, colIndex) => (
+            //     rowIndex === 0 ? { hidden: true } : {}
+            // ),
+            // headerFormatter: (cell, index1 = [], k) => {
 
-                return (
-                    <div className="d-flex flex-content-start">
-                        {OrderItemDetails.length > 0 ? <div>
-                            <samp id="allplus-circle">
-                                <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
-                                    style={{
-                                        position: "",
-                                        display: showAllStockState ? "none" : "block"
-                                    }}
-                                    onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
-                                        // showAllStockOnclick(true) 
-                                    }}
-                                >
-                                </i>
-                            </samp>
-                            <samp id="allminus-circle"  >
-                                <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
-                                    style={{
-                                        position: "",
-                                        // display: "none"
-                                        display: showAllStockState ? "block" : "none"
-                                    }}
-                                    onClick={(e) => {
-                                        setShowAllStockState(!showAllStockState)
-                                        // showAllStockOnclick(false)
-                                    }}
-                                ></i>
-                            </samp>
-                        </div>
-                            : null
-                        }
+            //     return (
+            //         <div className="d-flex flex-content-start">
+            //             {OrderItemDetails.length > 0 ? <div>
+            //                 <samp id={`${allplus-circle}-${index1.Party}`}>
+            //                     <i className=" mdi mdi-plus-circle-outline text-primary font-size-16 "
+            //                         style={{
+            //                             position: "",
+            //                             display: showAllStockState ? "none" : "block"
+            //                         }}
+            //                         onClick={(e) => {
+            //                             setShowAllStockState(!showAllStockState)
+            //                             // showAllStockOnclick(true) 
+            //                         }}
+            //                     >
+            //                     </i>
+            //                 </samp>
+            //                 <samp id={`${allminus-circle}-${index1.Party}`}  >
+            //                     <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
+            //                         style={{
+            //                             position: "",
+            //                             // display: "none"
+            //                             display: showAllStockState ? "block" : "none"
+            //                         }}
+            //                         onClick={(e) => {
+            //                             setShowAllStockState(!showAllStockState)
+            //                             // showAllStockOnclick(false)
+            //                         }}
+            //                     ></i>
+            //                 </samp>
+            //             </div>
+            //                 : null
+            //             }
 
-                        <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
-                            <samp > Stock Details</samp>
-                        </div>
+            //             <div style={{ paddingLeft: "1px", paddingTop: "1px" }}>
+            //                 <samp > Stock Details</samp>
+            //             </div>
 
-                    </div>
-                )
-            },
+            //         </div>
+            //     )
+            // },
 
             formatter: (cellContent, index1) => (
                 <div>
-                    <div key={`plus-circle-icon${index1.id}`}>
+                    <div key={`plus-circle-icon${index1.id}-${index1.Party}`}>
                         {
                             (index1.StockTotal > 0) ?
                                 <>
-                                    <samp key={`plus-circle${index1.id}`} id={`plus-circle${index1.id}`}
+                                    <samp key={`plus-circle${index1.id}-${index1.Party}`} id={`plus-circle${index1.id}-${index1.Party}`}
                                         style={{
                                             display: showAllStockState ? "none" : "block"
                                         }}
@@ -424,7 +406,7 @@ const Invoice = (props) => {
                                 : <samp style={{ fontWeight: "bold", textShadow: 1, }}>{'Total Stock:0'}</samp>
                         }
 
-                        <samp key={`minus-circle${index1.id}`} id={`minus-circle${index1.id}`}
+                        <samp key={`minus-circle${index1.id}-${index1.Party}`} id={`minus-circle${index1.id}-${index1.Party}`}
                             style={{ display: showAllStockState ? "block" : "none" }}
                         >
                             <i className="mdi mdi-minus-circle-outline text-primary font-size-16"
@@ -435,17 +417,16 @@ const Invoice = (props) => {
 
                     </div >
 
-                    <div id={`view${index1.id}`}
+                    <div id={`view${index1.id}-${index1.Party}`}
                         style={{
                             backgroundColor: "#b9be511a",
                             display: showAllStockState ? "bolck" : "none"
                         }}
 
                     >
-                        <Table className="table table-bordered table-responsive mb-1" >
+                        <table className="table table-bordered table-responsive mb-1" >
 
-                            <Thead  >
-
+                            <thead  >
                                 <tr style={{ zIndex: -3 }}>
                                     <th >Batch Code </th>
                                     <th  >Supplier BatchCode</th>
@@ -459,16 +440,16 @@ const Invoice = (props) => {
                                         <div>
                                             <samp >Quantity</samp>
                                         </div>
-                                        <samp id={`stocktotal${index1.id}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
+                                        <samp id={`stocktotal${index1.id}-${index1.Party}`}>{`Total:${index1.InpStockQtyTotal} ${index1.StockUnit}`} </samp>
                                     </th>
                                     <th  >Rate</th>
                                     <th  >MRP</th>
                                 </tr>
-                            </Thead>
-                            <Tbody  >
+                            </thead>
+                            <tbody  >
                                 {cellContent.map((index2) => {
                                     return (
-                                        < tr key={index1.id} >
+                                        < tr key={`${index1.id}-${index1.Party}`} >
                                             <td>
                                                 <div style={{ width: "120px" }}>
                                                     {index2.SystemBatchCode}
@@ -494,8 +475,8 @@ const Invoice = (props) => {
                                                     <Input type="text"
                                                         disabled={pageMode === 'edit' ? true : false}
                                                         style={{ textAlign: "right" }}
-                                                        key={`batchQty${index1.id}-${index2.id}`}
-                                                        id={`batchQty${index1.id}-${index2.id}`}
+                                                        key={`batchQty${index1.id}-${index2.id}-${index1.Party}`}
+                                                        id={`batchQty${index1.id}-${index2.id}-${index1.Party}`}
                                                         defaultValue={index2.Qty}
                                                         onChange={(event) => StockQtyOnChange(event, index1, index2)}
                                                     ></Input>
@@ -514,8 +495,9 @@ const Invoice = (props) => {
                                         </tr>
                                     )
                                 })}
-                            </Tbody>
-                        </Table></div>
+                            </tbody>
+                        </table>
+                    </div>
                 </div >
             ),
 
@@ -524,7 +506,7 @@ const Invoice = (props) => {
             text: "Discount",
             dataField: "",
             classes: () => ('invoice-discount-row'),
-            formatter: (Rate, row, key) => {
+            formatter: (cell, row,) => {
                 if (!row.DiscountType) row.DiscountType = 2
                 if (!row.Discount) row.Discount = 0
                 return (
@@ -539,7 +521,7 @@ const Invoice = (props) => {
                                     { value: 2, label: "%" }]}
                                     onChange={(e) => {
                                         row.DiscountType = e.value
-                                        stockDistributeFunc(row)
+                                        discountOnchange(row)
                                     }}
                                 /></div>
 
@@ -552,13 +534,13 @@ const Invoice = (props) => {
                                 type="text" defaultValue={row.Discount}
                                 onChange={(e) => {
                                     row.Discount = e.target.value
-                                    stockDistributeFunc(row)
+                                    discountOnchange(row)
                                 }}
                             />
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount${row.id}`}>{row.OrderQty}</samp>
+                            <samp id={`tAmount${row.id}-${row.Party}`}>{row.OrderQty}</samp>
                         </div>
 
                     </>
@@ -566,13 +548,12 @@ const Invoice = (props) => {
             },
         },
 
+
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        custom: true,
-    };
-
+    function discountOnchange(row) {
+        TotalAmtCalcFunc(row)
+    }
     function showAllStockOnclick(isplus = false) {
         try {
             if (isplus) {
@@ -606,13 +587,13 @@ const Invoice = (props) => {
     function showStockOnclick(index1, isplus = false) {
         try {
             if (isplus) {
-                document.getElementById(`view${index1.id}`).style.display = "block";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "none";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "block";
+                document.getElementById(`view${index1.id}-${index1.Party}`).style.display = "block";
+                document.getElementById(`plus-circle${index1.id}-${index1.Party}`).style.display = "none";
+                document.getElementById(`minus-circle${index1.id}-${index1.Party}`).style.display = "block";
             } else {
-                document.getElementById(`view${index1.id}`).style.display = "none";
-                document.getElementById(`plus-circle${index1.id}`).style.display = "block";
-                document.getElementById(`minus-circle${index1.id}`).style.display = "none";
+                document.getElementById(`view${index1.id}-${index1.Party}`).style.display = "none";
+                document.getElementById(`plus-circle${index1.id}-${index1.Party}`).style.display = "block";
+                document.getElementById(`minus-circle${index1.id}-${index1.Party}`).style.display = "none";
             }
         } catch (w) { }
     }
@@ -670,12 +651,29 @@ const Invoice = (props) => {
             document.getElementById(`OrderQty${index1.id}`).value = index1.Quantity
             // C2 end
         } catch (e) { };
+        TotalAmtCalcFunc(index1)
     };
+
+    function TotalAmtCalcFunc(index1) {
+
+
+        let tAmount = 0
+        index1.StockDetails.map(i2 => {
+            if (i2.Qty > 0) {
+                const calculate = discountCalculate(i2, index1)
+                tAmount = tAmount + Number(calculate.tAmount)
+            }
+        })
+        const tA4 = tAmount.toFixed(2)
+        index1.tAmount = tA4
+        try {
+            document.getElementById(`tAmount${index1.id}-${index1.Party}`).innerText = tA4;
+        } catch (e) { }
+    }
 
     function stockDistributeFunc(index) {
 
         const v1 = index.Quantity;
-        let tAmount = 0
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
         index.StockDetails = index.StockDetails.map(i2 => {
@@ -693,15 +691,8 @@ const Invoice = (props) => {
                 i2.Qty = 0;
             }
             try {
-                document.getElementById(`batchQty${index.id}-${i2.id}`).value = i2.Qty
+                document.getElementById(`batchQty${index.id}-${i2.id}-${index.Party}`).value = i2.Qty
             } catch (e) { }
-
-
-            if (i2.Qty > 0) {
-                const calculate = discountCalculate(i2, index)
-                tAmount = tAmount + Number(calculate.tAmount)
-            }
-
 
             return i2
         });
@@ -710,28 +701,27 @@ const Invoice = (props) => {
         const t1 = (v1 * index.ConversionUnit);
         const t2 = index.StockUnit;
         const t3 = index.StockTotal;
-        const tA4 = tAmount.toFixed(2)
-        index.tAmount = tA4
+
 
         if (t1 > t3) {
             try {
-                document.getElementById(`OrderQty${index.id}`).value = t3.toFixed(3)
+                document.getElementById(`OrderQty${index.id}-${index.Party}`).value = t3.toFixed(3)
             } catch (e) { }
         };
         try {
             index.StockInValid = false
             index.StockInvalidMsg = null
-            document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
+            document.getElementById(`StockInvalidMsg${index.id}-${index.Party}`).style.display = "none";
         } catch (e) { };
         try {
-            document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
-            document.getElementById(`tAmount${index.id}`).innerText = tA4;
+            document.getElementById(`stocktotal${index.id}-${index.Party}`).innerText = `Total:${t1} ${t2}`
+
         } catch (e) { };
 
     };
 
     function orderQtyOnChange(event, index) {
-
+        debugger
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
@@ -751,6 +741,7 @@ const Invoice = (props) => {
         index.Quantity = val1
 
         stockDistributeFunc(index)
+        TotalAmtCalcFunc(index)
     };
 
     function orderQtyUnit_SelectOnchange(event, index) {
@@ -767,6 +758,7 @@ const Invoice = (props) => {
         try {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
+                // Customer: 1,
                 Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
                 Party: loginPartyID(),
                 OrderIDs: ""
@@ -775,6 +767,29 @@ const Invoice = (props) => {
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
+    const calculationFunc = () => {
+        let all_tAmt = 0
+
+        demoData.forEach((index1, key1) => {
+            let invoiceAmt = 0
+            index1.OrderItemDetails.forEach((index2, key2) => {
+                TotalAmtCalcFunc(index2)
+
+                invoiceAmt = invoiceAmt + Number(index2.tAmount)
+            })
+
+            all_tAmt = all_tAmt + Number(invoiceAmt)
+            index1.invoiceAmt = invoiceAmt.toFixed(2)
+            const tA4 = numberWithCommas(index1.invoiceAmt)
+            try {
+                document.getElementById(`partytAmt${index1.id}-${index1.Party}`).value = tA4;
+            } catch (e) { }
+        })
+        const tIn = numberWithCommas(all_tAmt.toFixed(2));
+        dispatch(BreadcrumbShowCountlabel(`${"Invoice Total"}:₹ ${tIn}`))
+
+    }
 
     const SaveHandler = async (event) => {
 
@@ -880,13 +895,13 @@ const Invoice = (props) => {
                 return returnFunc()
             }
             debugger
-            const forInvoice_1_json = () => ( {  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
                 InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
             });
 
-            const forIB_Invoice_json =async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            const forIB_Invoice_json = async () => ({    //   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 IBChallanDate: values.InvoiceDate,
                 IBChallanItems: invoiceItems,
                 IBChallansReferences: await OrderIDs.map(i => ({ Demand: i }))
@@ -919,6 +934,76 @@ const Invoice = (props) => {
             }
         } catch (e) { returnFunc() }
 
+    }
+
+
+
+    const Table = () => {
+        if (OrderItemDetails.length > 0) {
+            return demoData.map(i => {
+                const { SearchBar, ClearSearchButton } = Search;
+                return (
+                    <>
+                        <div className="multiinvoice">
+                            <div className="_cardbody">
+                                <div className="table-responsive bg-colour-white ">
+
+                                    <ToolkitProvider
+                                        keyField={"id"}
+                                        data={i.OrderItemDetails}
+                                        columns={pagesListColumns}
+                                        showPaginationBottom={false}
+                                        search
+                                    >
+                                        {(toolkitProps) => (
+                                            <React.Fragment>
+                                                <div className="_heder" >
+                                                    <div className="div-1">
+                                                        <div>
+                                                            <Label>{"Krupa Traders"}</Label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="div-2">
+                                                        <div>  <SearchBar {...toolkitProps.searchProps} /></div>
+                                                    </div>
+                                                    <div className="div-2">
+                                                        <div>
+                                                            <Label >Invoice No</Label>
+                                                        </div>
+                                                        <div> <Input type="text" /></div>
+                                                    </div>
+
+                                                    <div className="div-2">
+                                                        <div>
+                                                            <Label >Amount</Label>
+                                                        </div>
+                                                        <div> <Input id={`partytAmt${i.id}-${i.Party}`} type="text" placeholder="Calculate Invoice Value" disabled={true} /></div>
+                                                    </div>
+                                                </div >
+                                                            <BootstrapTable
+                                                                keyField={"id"}
+                                                                responsive
+                                                                striped={false}
+                                                                noDataIndication={
+                                                                    <div className="text-danger text-center ">
+                                                                        Items Not available
+                                                                    </div>
+                                                                }
+
+                                                                {...toolkitProps.baseProps}
+                                                            />
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                </div>
+                            </div>
+                        </div>
+                    </>)
+
+            })
+
+        }
+        else return null
     }
 
     if (!(userPageAccessState === '')) {
@@ -993,14 +1078,18 @@ const Invoice = (props) => {
                                 </Col>
                             </Row>
                         </Col>
+                        {Table()}
 
 
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                        {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
                                     keyField={"id"}
                                     data={OrderItemDetails}
                                     columns={pagesListColumns}
+                                    showPaginationBottom={false}
+                                    // data={demoData}
+                                    // columns={demoColumn}
 
                                     search
                                 >
@@ -1014,6 +1103,7 @@ const Invoice = (props) => {
                                                             responsive
                                                             bordered={false}
                                                             striped={false}
+                                                            trClassFormat={trClassFormat}
                                                             classes={"table  table-bordered"}
                                                             noDataIndication={
                                                                 <div className="text-danger text-center ">
@@ -1036,19 +1126,24 @@ const Invoice = (props) => {
                                 </ToolkitProvider>
                             )}
 
-                        </PaginationProvider>
+                        </PaginationProvider> */}
 
-                        {OrderItemDetails.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton
-                                    pageMode={pageMode}
-                                    onClick={SaveHandler}
-                                    id={saveBtnid}
-                                    userAcc={userPageAccessState}
-                                    module={"Material Issue"}
-                                />
-                            </Col>
-                        </FormGroup > : null}
+                        {OrderItemDetails.length > 0 &&
+
+                            <div className={"invoice-savebtn"}>
+                                <div className="div-1">
+                                    <Button type='button' color="warning" onClick={calculationFunc}>calculate</Button>
+                                </div>
+                                <div className="div-1">
+                                    <SaveButton
+                                        pageMode={pageMode}
+                                        onClick={SaveHandler}
+                                        id={saveBtnid}
+                                        userAcc={userPageAccessState}
+                                        module={"Material Issue"}
+                                    />
+                                </div>
+                            </div >}
                     </form>
                 </div>
             </React.Fragment>
