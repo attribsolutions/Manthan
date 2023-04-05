@@ -269,14 +269,15 @@ const PartyMasterBulkUpdate = (props) => {
         setDistrict_dropdown_Select(e)
     }
 
+   
     const pagesListColumns = [
         {
             text: "PartyName",
             dataField: "PartyName",
         },
         {
-            text: val,
-            dataField: val,
+            text: Data.length <= 0 ? null : val,
+            dataField: Data.length <= 0 ? null : val,
         },
         {
             text: "FSSAIExipry",
@@ -414,7 +415,7 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-
+debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -425,7 +426,7 @@ const PartyMasterBulkUpdate = (props) => {
                 Data.forEach(i => {
                     const arr = {
                         SubPartyID: i.SubPartyID,
-                        Value1: i.Newvalue
+                        Value1:i.Newvalue
                     }
                     arr1.push(arr)
                 })
