@@ -66,7 +66,7 @@ const DriverMaster = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        
+
     } = useSelector((state) => ({
         postMsg: state.DriverReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -247,16 +247,18 @@ const DriverMaster = (props) => {
 
                         <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
 
-                        <Card className=" text-black "
-                            style={{ backgroundColor: "	#C8C8C8" }}>
-                            <Row>
-                                <PartyDropdownMaster
-                                    state={state}
-                                    setState={setState} />
-                            </Row>
-                        </Card>
+                        {/* <Card className=" text-black "
+                            style={{ backgroundColor: "	#C8C8C8" }}> */}
 
-                        <Card className="text-black">
+                     
+                            <PartyDropdownMaster
+                                state={state}
+                                setState={setState} />
+                     
+
+                        {/* </Card> */}
+
+                        <Card className="text-black ">
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
