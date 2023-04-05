@@ -7,6 +7,7 @@ import {
   GET_VENDER_SUPPLIER_CUSTOMER_SUCCESS,
   SSDD_LIST_UNDER_COMPANY_SUCCESS,
   RETAILER_LIST_SUCCESS,
+  PARTY_DROPDOWN_LIST_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -17,7 +18,8 @@ const INIT_STATE = {
   customer: [],
   vendorSupplierCustomer: [],
   SSDD_List: [],
-  RetailerList:[]
+  RetailerList:[],
+  partyList:[]
 }
 
 const CommonAPI_Reducer = (state = INIT_STATE, action) => {
@@ -66,6 +68,11 @@ const CommonAPI_Reducer = (state = INIT_STATE, action) => {
         ...state,
         RetailerList: action.payload,
       }
+      case PARTY_DROPDOWN_LIST_SUCCESS:
+        return {
+          ...state,
+          partyList: action.payload,
+        }
     default:
       return state
   }
