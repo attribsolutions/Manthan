@@ -6,6 +6,7 @@ import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action"
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
 import { loginCompanyID, loginCompanyName, loginEmployeeID } from "../CommonFunction";
 import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { Party_Dropdown_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const PartyDropdownMaster = (props) => {
 
@@ -16,32 +17,28 @@ const PartyDropdownMaster = (props) => {
     const { values, fieldLabel } = state
     const [company, setCompany] = useState([])
     const { partyList } = useSelector((state) => ({
-        partyList: state.ManagementPartiesReducer.partyList,
+        partyList: state.CommonAPI_Reducer.partyList,
     }));
 
     useEffect(() => {
-        dispatch(getEmployeelist())
+        // dispatch(getEmployeelist())
+        dispatch(Party_Dropdown_List(loginEmployeeID()))
     }, []);
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            "Company": loginCompanyID(),
-            "Employee": loginEmployeeID()
-        })
-        dispatch(getPartyTableList(jsonBody));
-    }, []);
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         "Company": loginCompanyID(),
+    //         "Employee": loginEmployeeID()
+    //     })
+    //     dispatch(getPartyTableList(jsonBody));
+    // }, []);
 
-    const PartyList = partyList.map((data) => ({
-        value: data.Name,
-        label: data.Party
+    const PartyList_Options = partyList.map((data) => ({
+        value: data.id,
+        label: data.Name
     }));
 
-    const PartyList_Options = PartyList.filter((index) => {
-        return index.Party > 0
-    });
-
-
-    return (
+     return (
         <React.Fragment>
             <div className=" text-black mt-2"  >
                 {/* <Row className="col-12"> */}
