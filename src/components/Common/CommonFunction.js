@@ -211,13 +211,15 @@ export function CommonConsole(error) {
 }
 
 export function btnIsDissablefunc({ btnId, state = false }) {
+    
 
     if (btnId) {
         try {
+           
             document.getElementById(btnId).disabled = state;
-
+            
             document.getElementById("overlay").style.display = state ? "block" : "none";
-
+         
             document.getElementById("preloader").style.display = state ? "block" : "none";
 
 

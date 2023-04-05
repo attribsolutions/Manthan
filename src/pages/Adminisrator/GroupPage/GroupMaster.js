@@ -90,6 +90,7 @@ const GroupMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+      
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -105,8 +106,9 @@ const GroupMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+    
         if ((hasShowloction || hasShowModal)) {
-
+         
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
