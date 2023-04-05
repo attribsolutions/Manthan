@@ -161,6 +161,7 @@ const ManagementEmpParties = (props) => {
     }
 
     function SelectAll(event, row, key) {
+        debugger
         const arr = []
         partyList.forEach(ele => {
             if (ele.id === row.id) {
@@ -188,24 +189,38 @@ const ManagementEmpParties = (props) => {
             text: "District",
             dataField: "District",
         },
-        {
-            text: "Select",
-            dataField: "Check",
-            formatter: (cellContent, row, key) => {
-
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Input
-                        id=""
-                        key={row.id}
-                        defaultChecked={row.Check}
-                        type="checkbox"
-                        className="col col-sm text-center"
-                        onChange={e => { SelectAll(e.target.checked, row, key) }}
-                    />
-                </span>)
-            }
-        }
+        // {
+        //     text: "Select",
+        //     mode: 'checkbox',
+        //     clickToSelect: true,
+        //     getSelection: () => <><Input type="checkbox"></Input></>,
+        //     selectionRenderer: ({ mode, ...rest }) => (
+        //         <Input type={mode} {...rest} />
+        //     ),
+        //     dataField: "Check",
+        //     formatter: (cellContent, row, key) => {
+        //         return (<span style={{ justifyContent: 'center' }}>
+        //             <Input
+        //                 id=""
+        //                 key={row.id}
+        //                 defaultChecked={row.Check}
+        //                 type="checkbox"
+        //                 className="col col-sm text-center"
+        //                 onChange={e => { SelectAll(e.target.checked, row, key) }}
+        //             />
+        //         </span>)
+        //     }
+        // }
     ];
+
+    // const selectRow = {
+    //     mode: 'checkbox',
+    //     clickToSelect: true,
+    //     selectionHeaderRenderer: () => <><Input type="checkbox"></Input></>,
+    //     selectionRenderer: ({ mode, ...rest }) => (
+    //       <Input type={ mode } { ...rest } />
+    //     )
+    //   };
 
     const pageOptions = {
         sizePerPage: 10,
@@ -251,6 +266,58 @@ const ManagementEmpParties = (props) => {
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
+    const onSelectAll = (isSelected, b, v) => {
+        debugger
+        const arr = b
+        if (isSelected) {
+            b.forEach(ele => {
+                return ele.Check = isSelected
+            })
+            setArray(arr)
+        } else {
+            return [];
+        }
+    }
+
+    const selectRow = (row, b, c) => {
+        debugger
+        const arr = []
+
+        partyList.forEach(ele => {
+            if (ele.id === row.id) {
+                ele.Check = b
+            }
+            arr.push(ele)
+        })
+        setArray(arr)
+
+    }
+
+    const selected = (a, b) => {
+        debugger
+    }
+    const checkbox = {
+
+        mode: "checkbox",
+        onSelectAll: onSelectAll,
+        onSelect: selectRow,
+        selected: partyList.map((index) => { return (index.Check) && index.id }),
+        selectColumnPosition: "right"
+        // formatter: (cellContent, row, key) => {
+        //     debugger
+        //     return (<span style={{ justifyContent: 'center' }}>
+        //         <Input
+        //             id=""
+        //             key={row.id}
+        //             // defaultChecked={row.Check}
+        //             type="checkbox"
+        //             className="col col-sm text-center"
+        //             onSelect={e => { SelectAll(e.target.checked, row, key) }}
+        //         />
+        //     </span>)
+        // }
+
+    }
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -333,6 +400,7 @@ const ManagementEmpParties = (props) => {
                                                     keyField={"id"}
                                                     bordered={true}
                                                     striped={false}
+                                                    selectRow={checkbox}
                                                     noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                                     classes={"table align-middle table-nowrap table-hover"}
                                                     headerWrapperClasses={"thead-light"}
