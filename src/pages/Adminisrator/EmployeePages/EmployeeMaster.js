@@ -28,12 +28,13 @@ import {
   resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 
 const AddEmployee = (props) => {
 
@@ -62,7 +63,7 @@ const AddEmployee = (props) => {
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
-  const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
+  // const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
@@ -146,11 +147,10 @@ const AddEmployee = (props) => {
           label: data.Name
         }))
 
-        if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
+        // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, working_hours,
-          CompanyName, DesignationName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
-          State_id, District_id, Company_id, EmployeeType_id, Designation_id } = hasEditVal
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
+          State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -248,11 +248,6 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
-  const Company_DropdownOptions = company.map((data) => ({
-    value: data.id,
-    label: data.Name
-  }));
-
   const EmployeeType_DropdownOptions = employeeType.map((data) => ({
     value: data.id,
     label: data.Name,
@@ -269,28 +264,28 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
-  function EmployeeType_Dropdown_Handler(e) {
-    dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
+  // function EmployeeType_Dropdown_Handler(e) {
+  //   // dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
 
-    const IsPartyConnection = employeeType.find((element) => {
-      return element.id === e.value
-    });
+  //   // const IsPartyConnection = employeeType.find((element) => {
+  //   //   return element.id === e.value
+  //   // });
 
-    if (IsPartyConnection.IsPartyConnection) {
-      setPartyDropDownShow_UI(true)
-    }
-    else {
-      setPartyDropDownShow_UI(false)
-    }
-    setState((i) => {
-      const a = { ...i }
-      a.values.CompanyName = "";
-      a.values.EmployeeParties = "";
-      a.hasValid.CompanyName.valid = false
-      a.hasValid.EmployeeParties.valid = false
-      return a
-    })
-  }
+  //   // if (IsPartyConnection.IsPartyConnection) {
+  //   //   setPartyDropDownShow_UI(true)
+  //   // }
+  //   // else {
+  //   //   setPartyDropDownShow_UI(false)
+  //   // }
+  //   setState((i) => {
+  //     const a = { ...i }
+  //     a.values.CompanyName = "";
+  //     a.values.EmployeeParties = "";
+  //     a.hasValid.CompanyName.valid = false
+  //     a.hasValid.EmployeeParties.valid = false
+  //     return a
+  //   })
+  // }
 
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
@@ -339,7 +334,7 @@ const AddEmployee = (props) => {
           State: values.StateName.value,
           District: values.DistrictName.value,
           EmployeeParties: emplPartie,
-          Company: values.CompanyName.value,
+          Company: loginCompanyID(),
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID()
         });
@@ -365,6 +360,7 @@ const AddEmployee = (props) => {
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
+        
             <Card className="text-black">
               <CardHeader className="card-header   text-dark c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -541,6 +537,7 @@ const AddEmployee = (props) => {
                             )}
                           </Col>
                         </FormGroup>
+
                         <Col md="1"></Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.DistrictName} </Label>
@@ -580,7 +577,7 @@ const AddEmployee = (props) => {
                               options={EmployeeType_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
-                                EmployeeType_Dropdown_Handler(hasSelect)
+                                // EmployeeType_Dropdown_Handler(hasSelect)
                               }}
                             />
                             {isError.EmployeeTypeName.length > 0 && (
@@ -590,89 +587,24 @@ const AddEmployee = (props) => {
                         </FormGroup>
 
                         <Col md="1">  </Col>
-                        <FormGroup className="mb-2 col col-sm-3 ">
-                          <Label htmlFor="validationCustom01"> {fieldLabel.CompanyName} </Label>
-                          <Col sm={12}>
+                        <div className="col-lg-3 col-md-4">
+                          <div className="mb-3">
+                            <Label htmlFor="validationCustom01">{fieldLabel.EmployeeParties} </Label>
                             <Select
-                              name="CompanyName"
-                              value={values.CompanyName}
+                              name="EmployeeParties"
+                              value={values.EmployeeParties}
                               isSearchable={true}
+                              isMulti={true}
                               className="react-dropdown"
-                              classNamePrefix="dropdown"
-                              options={Company_DropdownOptions}
+                              options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
                               }}
-                            />
-                            {isError.CompanyName.length > 0 && (
-                              <span className="text-danger f-8"><small>{isError.CompanyName}</small></span>
-                            )}
-                          </Col>
-                        </FormGroup>
-
-
-                        <Col md="1">  </Col>
-                        {partyDropDownShow_UI ?
-                          <div className="col-lg-3 col-md-4">
-                            <div className="mb-3">
-                              <Label htmlFor="validationCustom01">{fieldLabel.EmployeeParties} </Label>
-                              <Select
-                                name="EmployeeParties"
-                                value={values.EmployeeParties}
-                                isSearchable={true}
-                                isMulti={true}
-                                className="react-dropdown"
-                                options={Party_DropdownOptions}
-                                onChange={(hasSelect, evn) => {
-                                  onChangeSelect({ hasSelect, evn, state, setState });
-                                }}
-                                classNamePrefix="dropdown"
-                              />
-
-                            </div>
-                          </div>
-                          : <></>}
-                      </Row>
-
-                      {/* <Row>
-                        <FormGroup className="mb-2 col col-sm-3 ">
-                          <Label htmlFor="validationCustom01"> {fieldLabel.DesignationName} </Label>
-                          <Col sm={12}>
-                            <Select
-                              name="DesignationName"
-                              value={values.DesignationName}
-                              isSearchable={true}
-                              className="react-dropdown"
                               classNamePrefix="dropdown"
-                              options={Designation_DropdownOptions}
-                              onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                             />
-                            {isError.DesignationName.length > 0 && (
-                              <span className="text-danger f-8"><small>{isError.DesignationName}</small></span>
-                            )}
-                          </Col>
-                        </FormGroup>
-
-
-                        <Col md="1">  </Col>
-                        <FormGroup className="mb-2 col col-sm-3 ">
-                          <Label htmlFor="validationCustom01">{fieldLabel.working_hours} </Label>
-                          <Input
-                            name="working_hours"
-                            value={values.working_hours}
-                            type="text"
-                            className={isError.working_hours.length > 0 ? "is-invalid form-control" : "form-control"}
-                            placeholder="Please Enter working hours"
-                            autoComplete='off'
-                            onChange={(event) => {
-                              onChangeText({ event, state, setState })
-                            }}
-                          />
-                          {isError.working_hours.length > 0 && (
-                            <span className="invalid-feedback">{isError.working_hours}</span>
-                          )}
-                        </FormGroup>
-                      </Row> */}
+                          </div>
+                        </div>
+                      </Row>
 
                       <FormGroup className="mt-3">
                         <Row>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, FormGroup, Label, Row } from "reactstrap";
+import { Card, Col, FormGroup, Label, Row } from "reactstrap";
 import Select from "react-select";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
@@ -21,28 +21,23 @@ const PartyDropdownMaster = (props) => {
     }));
 
     useEffect(() => {
-        // dispatch(getEmployeelist())
         dispatch(Party_Dropdown_List(loginEmployeeID()))
     }, []);
-
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         "Company": loginCompanyID(),
-    //         "Employee": loginEmployeeID()
-    //     })
-    //     dispatch(getPartyTableList(jsonBody));
-    // }, []);
 
     const PartyList_Options = partyList.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-     return (
+    return (
         <React.Fragment>
-            <div className=" text-black mt-2"  >
-                {/* <Row className="col-12"> */}
-                {/* <Col className="col-4" >
+            <Card className=" text-black "
+                style={{ backgroundColor: "	#C8C8C8" }}>
+
+                <div className=" text-black mt-2"  >
+
+                    {/* <Row className="col-12"> */}
+                    {/* <Col className="col-4" >
                     <Label htmlFor="validationCustom01 ">Company </Label>
                     <Select
                         id="Party "
@@ -63,52 +58,35 @@ const PartyDropdownMaster = (props) => {
                     />
                 </Col>
                 <Col md={1}> </Col> */}
-                <div className="row ">
-                    <Col sm="6">
-                        <FormGroup className=" row" >
-                            <Label className="col-sm-6 p-2"
-                                style={{ width: "83px", marginLeft: "20px" }}>{fieldLabel.Party}</Label>
-                            <Col sm="7">
-                                <Select
-                                    name="RoutesName"
-                                    value={values.Party}
-                                    isSearchable={true}
-                                    className="react-dropdown"
-                                    classNamePrefix="dropdown"
-                                    options={PartyList_Options}
-                                    onChange={(e) => {
-                                        setState((i) => {
-                                            const a = { ...i }
-                                            a.values.Party = e;
-                                            return a
-                                        })
-                                    }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-                </div>
-            </div>
-            {/* <Col className="col-4">
-                    <Label htmlFor="validationCustom01" >{fieldLabel.Party} </Label>
-                    <Select
-                        id="Party "
-                        name="Party"
-                        value={values.Party}
-                        isSearchable={false}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={Party_DropdownOptions}
-                        onChange={(e) => {
-                            setState((i) => {
-                                const a = { ...i }
-                                a.values.Party = e;
-                                return a
-                            })
-                        }}
-                    /></Col> */}
-            {/* </Row> */}
 
+                    <div className="row ">
+                        <Col sm="6">
+                            <FormGroup className=" row" >
+                                <Label className="col-sm-6 p-2"
+                                    style={{ width: "83px", marginLeft: "20px" }}>{fieldLabel.Party}</Label>
+                                <Col sm="7">
+                                    <Select
+                                        name="RoutesName"
+                                        value={values.Party}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        options={PartyList_Options}
+                                        onChange={(e) => {
+                                            setState((i) => {
+                                                const a = { ...i }
+                                                a.values.Party = e;
+                                                return a
+                                            })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </div>
+
+            </Card>
         </React.Fragment >
     );
 }
