@@ -109,8 +109,8 @@ function MRPTab(props) {
               <Col className=" col col-11 ">
 
                 <Row>
-                  {!(IsSCMCompany === 1) ?
-                    <div className=" col col-sm-3 ">
+                  {!(IsSCMCompany === 1) &&
+                    <> <div className=" col col-sm-3 ">
                       <Label>Division</Label>
                       <Select
                         id={`dropDivision-${0}`}
@@ -119,19 +119,17 @@ function MRPTab(props) {
                         onChange={DivisiontHandler}
                       />
                     </div>
-                    : null}
-
-                  {!(IsSCMCompany === 1) ?
-                    <div className="mb-3 col col-sm-3 ">
-                      <Label>Party Name</Label>
-                      <Select
-                        id={`dropPartyName-${0}`}
-                        value={partyName}
-                        options={Party_DropdownOptions}
-                        onChange={PartyNameHandler}
-                      />
-                    </div>
-                    : null}
+                      <div className="mb-3 col col-sm-3 ">
+                        <Label>Party Name</Label>
+                        <Select
+                          id={`dropPartyName-${0}`}
+                          value={partyName}
+                          options={Party_DropdownOptions}
+                          onChange={PartyNameHandler}
+                        />
+                      </div>
+                    </>
+                  }
 
                   <div className="mb-3 col col-sm-3 ">
                     <Label>Effective Date</Label>

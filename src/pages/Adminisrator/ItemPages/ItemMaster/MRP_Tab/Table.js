@@ -10,6 +10,8 @@ function MRPTable(props) {
   const dispatch = useDispatch();
   const IsSCMCompany = loginIsSCMCompany();
 
+  const hasSCMhide = (IsSCMCompany === 1 ? true : false)
+
   const { deleteMsg, } = useSelector((state) => ({
     deleteMsg: state.MRPMasterReducer.deleteIdForMRPMaster,
   }));
@@ -63,12 +65,13 @@ function MRPTable(props) {
     }
   }, [deleteMsg]);
 
+
   const tableRows = props.tableData.map((info) => {
     return (
       <tr>
         {/* <td>{info.id}</td> */}
-        <td >{info.DivisionName}</td>
-        <td>{info.PartyName}</td>
+        <td hidden={hasSCMhide}>{info.DivisionName}</td>
+        <td hidden={hasSCMhide}>{info.PartyName}</td>
         <td>{info.EffectiveDate}</td>
         <td>{info.MRP}</td>
         <td>
@@ -90,16 +93,14 @@ function MRPTable(props) {
 
   return (
     <>
-
       <div>
-
         {props.tableData.length > 0 ? (
           <Table className="table table-bordered table-hover">
 
             <Thead>
               <tr >
-                <th className="col col-sm-3" >Division</th>
-                <th className="col col-sm-3">Party Name</th>
+                <th className="col col-sm-3" hidden={hasSCMhide}>Division</th>
+                <th className="col col-sm-3" hidden={hasSCMhide}>Party Name</th>
                 <th className="col col-sm-3">Effective Date</th>
                 <th className="col col-sm-3" >MRP</th>
                 <th className="col col-sm-3">{"Action"}</th>
