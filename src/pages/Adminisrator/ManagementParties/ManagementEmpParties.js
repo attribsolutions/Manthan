@@ -295,7 +295,7 @@ const ManagementEmpParties = (props) => {
         mode: "checkbox",
         onSelectAll: onSelectAll,
         onSelect: selectRow,
-        selected: partyList.map((index) => { return (index.Check) && index.id }),
+        selected: partyList.map((index) => { return (index.Check) && index.id}),
         selectColumnPosition: "right",
 
         // style: { backgroundColor: '#c8e6c9' }
