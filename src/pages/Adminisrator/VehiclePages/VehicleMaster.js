@@ -132,7 +132,7 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, Party,PartyName} = hasEditVal
+                const { id, VehicleNumber, Description, VehicleType, VehicleTypeName, Party, PartyName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
@@ -144,7 +144,7 @@ const VehicleMaster = (props) => {
                 values.VehicleNumber = VehicleNumber
                 values.Description = Description
                 values.VehicleTypeName = { label: VehicleTypeName, value: VehicleType };
-                values.Party = {value:Party,label:PartyName}
+                values.Party = { value: Party, label: PartyName }
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
@@ -257,7 +257,11 @@ const VehicleMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
+                        {RoleID === 2 ?
+                            <PartyDropdownMaster
+                                state={state}
+                                setState={setState} />
+                            : null}
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

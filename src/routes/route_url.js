@@ -104,9 +104,9 @@ export const CREDITLIMIT_LIST = "/CreditLimitList"
 export const IMPORT_MASTER = "/Import_Master"
 export const IMPORT_MASTER_LIST = "/Import_Type_List"
 
-export const ROUTE_UPDATE ="/RouteUpdate"
+export const ROUTE_UPDATE = "/RouteUpdate"
 
-export const PARTY_MASTER_BULK_UPDATE ="/PartyMasterBulkUpdate"
+export const PARTY_MASTER_BULK_UPDATE = "/PartyMasterBulkUpdate"
 
 export const MANAGEMENT_PARTIES = "/ManagementParties"
 //******************************* Purchase Module ************************************//
@@ -137,8 +137,6 @@ export const REPORT = "/Report"
 
 //******************************* Production Module ************************************//
 
-
-
 export const BIllOf_MATERIALS = "/BOM"
 export const BIllOf_MATERIALS_LIST = "/BOMList"
 
@@ -157,14 +155,13 @@ export const PRODUCTION_REISSUE = "/ProductionReIssue"
 export const PRODUCTION_REISSUE_LIST = "/ProductionReIssueList"
 export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 
-
 //******************************* Sale Module  ************************************//
 
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
 
-export const LOADING_SHEET ="/Loading_Sheet"
-export const LOADING_SHEET_LIST ="/Loading_Sheet_List"
+export const LOADING_SHEET = "/Loading_Sheet"
+export const LOADING_SHEET_LIST = "/Loading_Sheet_List"
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
@@ -180,6 +177,6 @@ export const IB_INVOICE_LIST = "/IB_Invoice_List" // IB Invoice List
 export const IB_GRN_LIST = "/IB_GRN_List" // IB GRN List
 export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 
-
-
-
+//********************************Accounting ***********************************//
+export const RECEIPTS = "/Receipts"
+export const RECEIPTS_LIST = "/ReceiptList"
