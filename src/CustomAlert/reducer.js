@@ -6,7 +6,7 @@ export const initialState = {
     Type: '',
 };
 
-function fun(state, action) {
+function statefun(state, action) {
 
     let s = { ...state };
     let p = { ...action.payload };
@@ -35,7 +35,7 @@ function fun(state, action) {
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case SHOW_CONFIRM:
-            fun(state, action)
+            statefun(state, action)
             return {
                 Status: true,
                 ...action.payload,
