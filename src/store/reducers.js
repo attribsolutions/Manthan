@@ -52,6 +52,8 @@ import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
 import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
 import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
+import BankReducer from "./Account/BankRedux/reducer"
+
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 
@@ -127,6 +129,7 @@ const rootReducer = combineReducers({
   WorkOrderReducer,
   MaterialIssueReducer,
   ProductionReducer,
+  BankReducer,
   ProductionReIssueReducer,
   InvoiceReducer,
   InwardReducer,

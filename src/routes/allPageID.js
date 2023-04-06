@@ -107,6 +107,9 @@ export const PARTY_MASTER_BULK_UPDATE = 161
 
 export const MANAGEMENT_PARTIES = 172
 
+export const BANK = 175
+export const BANK_LIST = 176
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54

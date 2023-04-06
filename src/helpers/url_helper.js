@@ -204,6 +204,10 @@ export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/PartyWiseUpdate
 export const PARTY_MASTER_BULK_UPDATE = '/PartyWiseSave'
 export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
 
+//Bank
+export const BANK = '/Bank'
+export const BANK_LIST = '/BankFilter'
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
@@ -290,5 +294,7 @@ export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
 export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'
 export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
 
+
 // Receipt
 export const RECEIPT_GO_BUTTON_API = '/ReceiptInvoices'
+
