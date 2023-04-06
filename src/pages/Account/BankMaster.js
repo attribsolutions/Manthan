@@ -24,19 +24,23 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeSelect,
     onChangeText,
     resetFunction,
 } from "../../components/Common/validationFunction";
 import { SaveButton } from "../../components/Common/CommonButton";
 
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginPartyID, loginUserID } from "../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginCompanyID,
+    loginPartyID,
+    loginUserID
+} from "../../components/Common/CommonFunction";
 import * as url from "../../routes/route_url";
 import * as pageId from "../../routes/allPageID"
 import * as mode from "../../routes/PageMode"
 import {
     editBankIDSuccess,
-    postBanklistSuccess,
     saveBankMaster,
     saveBankMaster_Success,
     updateBankID,
@@ -221,10 +225,10 @@ const BankMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
-                    BranchName:values.BranchName,
-                    IFSC:values.IFSC,
-                    AccountNo:values.AccountNo,
-                    IsSelfDepositoryBank:values.IsSelfDepositoryBank,
+                    BranchName: values.BranchName,
+                    IFSC: values.IFSC,
+                    AccountNo: values.AccountNo,
+                    IsSelfDepositoryBank: values.IsSelfDepositoryBank,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                     Party: loginPartyID(),
