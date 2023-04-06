@@ -25,7 +25,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginPartyID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -34,9 +34,9 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
-import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
-import { getEmployeedropdownList, getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { ReceiptGoButtonMaster } from "../../../store/Accounting/Receipt/action";
 
 const Receipts = (props) => {
 
@@ -62,21 +62,57 @@ const Receipts = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
-        employeeList,
-        partyList ,
+        ReceiptGoButton,
         pageField,
+        RetailerList,
         userAccess } = useSelector((state) => ({
             postMsg: state.ManagementPartiesReducer.postMsg,
-            employeeList: state.ManagementPartiesReducer.employeeList,
-            partyList: state.ManagementPartiesReducer.partyList,
+            ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
+            RetailerList: state.CommonAPI_Reducer.RetailerList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+    // const Data = [
+    //     {
+    //         id: 7,
+    //         ReceiptDate: "2023-03-15",
+    //         BillNo: "21/22-I00063",
+    //         BillAmount: "354.00",
+    //         Paid: "354.00",
+    //         BalAmt: "354.00",
+    //     },
+    //     {
+    //         id: 8,
+    //         ReceiptDate: "2023-03-15",
+    //         BillNo: "21/22-I00063",
+    //         BillAmount: "224.00",
+    //         Paid: "0.00",
+    //         BalAmt: "224.00",
+    //     },
+    //     {
+    //         id: 9,
+    //         ReceiptDate: "2023-03-15",
+    //         BillNo: "21/22-I00063",
+    //         BillAmount: "537.00",
+    //         Paid: "0.00",
+    //         BalAmt: "537.00",
+    //     }
+    // ]
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+    }, []);
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
     }, []);
 
     const values = { ...state.values }
@@ -149,54 +185,57 @@ const Receipts = (props) => {
         }
     }, [postMsg])
 
-    const employeeListOptions = employeeList.map((index) => ({
+    const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
-    function goButtonHandler(event) {
-
-        event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                "Company": loginCompanyID(),
-                "Employee": values.Employee.value
-            })
-            dispatch(getPartyTableList(jsonBody));
-        }
-    }
-
     const pagesListColumns = [
         {
             text: "Receipt Date",
-            dataField: "Name",
+            dataField: "InvoiceDate",
         },
         {
             text: "Bill No",
-            dataField: "PartyType",
+            dataField: "FullInvoiceNumber",
         },
         {
             text: "Bill Amount",
-            dataField: "State",
+            dataField: "GrandTotal",
         },
         {
             text: "Paid",
-            dataField: "District",
+            dataField: "PaidAmount",
         },
         {
             text: "Bal Amt",
-            dataField: "District",
+            dataField: "BalanceAmount",
         },
         {
             text: "Calculate",
-            dataField: "District",
+            dataField: "",
+            formatter: (cellContent, row, key) => {
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Input
+                        id=""
+                        key={row.id}
+                        // defaultChecked={row.Check}
+                        type="text"
+                        className="col col-sm text-center"
+                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                    />
+                </span>)
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            },
         },
 
     ];
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: partyList.length,
+        totalSize: ReceiptGoButton.length,
         custom: true,
     };
 
@@ -238,6 +277,17 @@ const Receipts = (props) => {
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
+    function onChangeAmountHandler(e) {
+        debugger
+    }
+
+    function CustomerOnChange(e) {
+        const jsonBody = JSON.stringify({
+            Party: loginPartyID(),
+            Customer: e.value
+        });
+        dispatch(ReceiptGoButtonMaster(jsonBody));
+    }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -296,9 +346,10 @@ const Receipts = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                // options={RouteName_Options}
+                                                options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
+                                                    CustomerOnChange(hasSelect)
                                                 }
                                                 }
                                             />
@@ -430,6 +481,7 @@ const Receipts = (props) => {
                                                 autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
+                                                    onChangeAmountHandler(event.target.value)
                                                 }}
                                             />
                                             {isError.AmountPaid.length > 0 && (
@@ -472,7 +524,7 @@ const Receipts = (props) => {
                                 <ToolkitProvider
 
                                     keyField="id"
-                                    data={partyList}
+                                    data={ReceiptGoButton}
                                     columns={pagesListColumns}
 
                                     search

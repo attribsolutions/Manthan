@@ -70,6 +70,7 @@ import InwardSaga from "./Inter Branch/InwardRedux/saga"
 import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
 import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
+import ReceiptSaga from "./Accounting/Receipt/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -127,6 +128,7 @@ export default function* rootSaga() {
     fork(RouteUpdateSaga),
     fork(LoadingSheetSaga),
     fork(PartyMasterBulkUpdateSaga),
-    fork(ManagementPartiesSaga)
+    fork(ManagementPartiesSaga),
+    fork(ReceiptSaga),
   ])
 }
