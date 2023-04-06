@@ -111,7 +111,7 @@ const Invoice = (props) => {
         dispatch(GoButtonForinvoiceAddSuccess([]))
     }, []);
 
-  
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -256,7 +256,7 @@ const Invoice = (props) => {
 
     }));
 
- 
+
     const pagesListColumns = [
 
 
@@ -672,7 +672,7 @@ const Invoice = (props) => {
     }
 
     function stockDistributeFunc(index) {
-
+        debugger
         const v1 = index.Quantity;
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
@@ -980,18 +980,18 @@ const Invoice = (props) => {
                                                         <div> <Input id={`partytAmt${i.id}-${i.Party}`} type="text" placeholder="Calculate Invoice Value" disabled={true} /></div>
                                                     </div>
                                                 </div >
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                responsive
-                                                                striped={false}
-                                                                noDataIndication={
-                                                                    <div className="text-danger text-center ">
-                                                                        Items Not available
-                                                                    </div>
-                                                                }
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    responsive
+                                                    striped={false}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
 
-                                                                {...toolkitProps.baseProps}
-                                                            />
+                                                    {...toolkitProps.baseProps}
+                                                />
                                             </React.Fragment>
                                         )}
                                     </ToolkitProvider>

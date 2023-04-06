@@ -517,6 +517,10 @@ export const Management_Parties_Post_API = ({ jsonBody, btnId }) => post(url.MAN
 export const Go_Button_Post_API = (jsonBody) => post(url.GO_BUTTON_API_MANAGEMENT_PARTIES, jsonBody)//  postapi
 export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOWN_API, jsonBody)//  postapi
 
+//*********************************Accounting Module ************************************ */
+// Receipt
+export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
+
 
 export {
   getLoggedInUser,

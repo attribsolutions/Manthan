@@ -73,6 +73,9 @@ import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
 
+//***************************Accounting ************************** */
+import ReceiptReducer from "./Accounting/Receipt/reducer"
+
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -131,5 +134,6 @@ const rootReducer = combineReducers({
   RouteUpdateReducer,
   LoadingSheetReducer,
   ManagementPartiesReducer,
+  ReceiptReducer,
 })
 export default rootReducer
