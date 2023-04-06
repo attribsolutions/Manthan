@@ -247,16 +247,11 @@ const DriverMaster = (props) => {
 
                         <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
 
-                        {/* <Card className=" text-black "
-                            style={{ backgroundColor: "	#C8C8C8" }}> */}
-
-                     
+                        {RoleID === 2 ?
                             <PartyDropdownMaster
                                 state={state}
                                 setState={setState} />
-                     
-
-                        {/* </Card> */}
+                            : null}
 
                         <Card className="text-black ">
                             <CardHeader className="card-header   text-black c_card_header"  >
