@@ -19,7 +19,17 @@ function* ReceiptGoButtonGenFunc({jsonBody}) {                                  
   } catch (error) { CommonConsole(error) }
 }
 
+function* ReceiptModeGenFunc({jsonBody}) {                                   // getList API
+  try {
+    const response = yield call(apiCall.Receipt_Go_Button_API,jsonBody);
+    yield put(action.ReceiptModeAPI_Success(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
+
+
 function* ReceiptSaga() {
   yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
+  yield takeEvery(actionType.RECEIPT_MODE_API, ReceiptModeGenFunc)
+
 }
 export default ReceiptSaga;  

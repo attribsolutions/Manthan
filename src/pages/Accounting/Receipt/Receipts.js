@@ -25,7 +25,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginPartyID, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -37,6 +37,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { ReceiptGoButtonMaster } from "../../../store/Accounting/Receipt/action";
+import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 const Receipts = (props) => {
 
@@ -47,7 +48,7 @@ const Receipts = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
-
+    const [orderlistFilter, setorderlistFilter] = useState({ Date: currentDate });
     const fileds = {
         Date: "",
         OpeningBalance: "",
@@ -65,40 +66,16 @@ const Receipts = (props) => {
         ReceiptGoButton,
         pageField,
         RetailerList,
+        ReceiptModeList,
         userAccess } = useSelector((state) => ({
             postMsg: state.ManagementPartiesReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
+            ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
-    // const Data = [
-    //     {
-    //         id: 7,
-    //         ReceiptDate: "2023-03-15",
-    //         BillNo: "21/22-I00063",
-    //         BillAmount: "354.00",
-    //         Paid: "354.00",
-    //         BalAmt: "354.00",
-    //     },
-    //     {
-    //         id: 8,
-    //         ReceiptDate: "2023-03-15",
-    //         BillNo: "21/22-I00063",
-    //         BillAmount: "224.00",
-    //         Paid: "0.00",
-    //         BalAmt: "224.00",
-    //     },
-    //     {
-    //         id: 9,
-    //         ReceiptDate: "2023-03-15",
-    //         BillNo: "21/22-I00063",
-    //         BillAmount: "537.00",
-    //         Paid: "0.00",
-    //         BalAmt: "537.00",
-    //     }
-    // ]
+    const { Date } = orderlistFilter;
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
@@ -108,12 +85,21 @@ const Receipts = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Type: 1,
+            Type: 4,
             PartyID: loginPartyID(),
             CompanyID: loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 3
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
+    }, []);
+
 
     const values = { ...state.values }
     const { isError } = state;
@@ -190,6 +176,10 @@ const Receipts = (props) => {
         label: index.Name,
     }));
 
+    const ReceiptModeOptions = ReceiptModeList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
     const pagesListColumns = [
         {
             text: "Receipt Date",
@@ -277,8 +267,33 @@ const Receipts = (props) => {
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
-    function onChangeAmountHandler(e) {
+    function onChangeAmountHandler(event) {
+
+        let BalanceAmount = ReceiptGoButton.map((index) => {
+            return parseInt(index.BalanceAmount)
+        })
+        const sum = BalanceAmount.reduce((partialSum, a) => partialSum + a, 0);
+
+        let value1 = Math.max('', Math.min(sum, parseInt(event.target.value)));
+
+        event.target.value = value1
+        if (event.target.value === "NaN") {
+            value1 = 0
+        }
+        setState((i) => {
+            i.values.AmountPaid = value1
+            i.hasValid.AmountPaid.valid = true;
+            return i
+        })
         debugger
+        values.AmountPaid = ReceiptGoButton.map((index) => {
+            debugger
+            let amt = Number(index.BalanceAmount)
+            if ((values.AmountPaid > amt) && !(amt === 0)) {
+                let Amount = values.AmountPaid - amt
+                index.BalanceAmount = Amount.toFixed(3)
+            }
+        })
     }
 
     function CustomerOnChange(e) {
@@ -315,12 +330,12 @@ const Receipts = (props) => {
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
                                                 autoComplete="0,''"
-                                                disabled={pageMode === mode.edit ? true : false}
+                                                // disabled={pageMode === mode.edit ? true : false}
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: (pageMode === mode.edit) ? values.Date : "today"
+                                                    // defaultDate: (pageMode === mode.edit) ? values.Date : "today"
                                                 }}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
@@ -399,7 +414,7 @@ const Receipts = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                // options={RouteName_Options}
+                                                options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                 }}
@@ -411,8 +426,7 @@ const Receipts = (props) => {
                                     </FormGroup>
                                 </Col >
                             </Row>
-
-                            <Row>
+                            {(values.ReceiptMode.label === "Cheque") && <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -462,7 +476,8 @@ const Receipts = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-                            </Row>
+                            </Row>}
+
 
                             <Row>
                                 <Col sm="6">
@@ -481,7 +496,7 @@ const Receipts = (props) => {
                                                 autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
-                                                    onChangeAmountHandler(event.target.value)
+                                                    onChangeAmountHandler(event)
                                                 }}
                                             />
                                             {isError.AmountPaid.length > 0 && (
