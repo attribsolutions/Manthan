@@ -17,11 +17,13 @@ const PartyDropdownMaster = (props) => {
     const { values, fieldLabel } = state
     const [company, setCompany] = useState([])
     const { partyList } = useSelector((state) => ({
-        partyList: state.CommonAPI_Reducer.partyList,
+        // partyList: state.CommonAPI_Reducer.partyList,
+        partyList: state.PartyMasterReducer.partyList,
     }));
 
     useEffect(() => {
-        dispatch(Party_Dropdown_List(loginEmployeeID()))
+        // dispatch(Party_Dropdown_List(loginEmployeeID()))
+        dispatch(getPartyListAPI())
     }, []);
 
     const PartyList_Options = partyList.map((data) => ({

@@ -237,6 +237,12 @@ const RoutesMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
+                        
+                        {RoleID === 2 ?
+                            <PartyDropdownMaster
+                                state={state}
+                                setState={setState} />
+                            : null}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header">

@@ -124,14 +124,13 @@ export const IB_ORDER_SO_LIST = 147
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
-export const GRN_ADD_1= 55
+export const GRN_ADD_1 = 55
 export const GRN_LIST_1 = 56
 export const GRN_STP_1 = 124
 
 export const GRN_ADD_3 = 165
 export const GRN_LIST_3 = 166
 export const GRN_STP_3 = 164
-
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
@@ -173,3 +172,8 @@ export const CHALLAN_LIST = 138
 
 export const LOADING_SHEET = 155
 export const LOADING_SHEET_LIST = 156
+
+//**************************** Accounting ***********************************//
+
+export const RECEIPTS = 173
+export const RECEIPTS_LIST = 174

@@ -132,6 +132,7 @@ import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
+import Receipts from "../pages/Accounting/Receipt/Receipts";
 
 import BankMaster from "../pages/Account/BankMaster";
 import BankList from "../pages/Account/BankList";
@@ -281,9 +282,6 @@ const userRoutes = [
   { path: path.REPORT, component: Report },
 
   //******************************* PRODUCTION  Module ************************************//
-
-
-
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
 
@@ -323,6 +321,8 @@ const userRoutes = [
   { path: path.IB_INVOICE, component: Invoice },
   { path: path.IB_INVOICE_STP, component: OrderList },
 
+  //********************************Accounting ***********************************//
+  { path: path.RECEIPTS, component: Receipts },
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
