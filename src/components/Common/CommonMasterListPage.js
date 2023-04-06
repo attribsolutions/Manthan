@@ -95,6 +95,7 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
+    debugger
     let downList = [];
     let listObj = {};
 

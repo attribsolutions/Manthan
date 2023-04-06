@@ -114,6 +114,9 @@ export const PartyMasterBulkUpdate = url.PARTY_MASTER_BULK_UPDATE
 
 export const ManagementParties = url.MANAGEMENT_PARTIES
 
+export const BankMaster = url.BANK_LIST
+export const BankList = url.BANK
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1

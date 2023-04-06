@@ -49,6 +49,7 @@ import RoutesSaga from "./Administrator/RoutesRedux/saga"
 import SalesManSaga from "./Administrator/SalesManRedux/saga"
 import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
 import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
+import BankSaga from "./Account/BankRedux/saga"
 
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
@@ -111,6 +112,7 @@ export default function* rootSaga() {
     fork(CreditLimitSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
+    fork(BankSaga),
     fork(SubGroupSaga),
     fork(GeneralSaga),
     fork(GSTSaga),

@@ -109,6 +109,10 @@ export const ROUTE_UPDATE ="/RouteUpdate"
 export const PARTY_MASTER_BULK_UPDATE ="/PartyMasterBulkUpdate"
 
 export const MANAGEMENT_PARTIES = "/ManagementParties"
+
+export const BANK = "/BankMaster"
+export const BANK_LIST = "/BankList"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"

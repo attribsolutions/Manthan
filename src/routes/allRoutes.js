@@ -133,6 +133,9 @@ import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
 
+import BankMaster from "../pages/Account/BankMaster";
+import BankList from "../pages/Account/BankList";
+
 const userRoutes = [
   // *************************** DashBord *******************************//
   
@@ -243,6 +246,10 @@ const userRoutes = [
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
   { path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },
+
+  { path: path.BANK, component: BankMaster },
+  { path: path.BANK_LIST, component: BankList },
+
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
