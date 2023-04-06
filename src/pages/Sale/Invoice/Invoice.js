@@ -672,7 +672,7 @@ const Invoice = (props) => {
     }
 
     function stockDistributeFunc(index) {
-        debugger
+
         const v1 = index.Quantity;
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
@@ -771,21 +771,21 @@ const Invoice = (props) => {
     const calculationFunc = () => {
         let all_tAmt = 0
 
-        demoData.forEach((index1, key1) => {
-            let invoiceAmt = 0
-            index1.OrderItemDetails.forEach((index2, key2) => {
-                TotalAmtCalcFunc(index2)
+        // demoData.forEach((index1, key1) => {
+        let invoiceAmt = 0
+        OrderItemDetails.forEach((index2, key2) => {
+            TotalAmtCalcFunc(index2)
 
-                invoiceAmt = invoiceAmt + Number(index2.tAmount)
-            })
-
-            all_tAmt = all_tAmt + Number(invoiceAmt)
-            index1.invoiceAmt = invoiceAmt.toFixed(2)
-            const tA4 = numberWithCommas(index1.invoiceAmt)
-            try {
-                document.getElementById(`partytAmt${index1.id}-${index1.Party}`).value = tA4;
-            } catch (e) { }
+            invoiceAmt = invoiceAmt + Number(index2.tAmount)
         })
+
+        all_tAmt = all_tAmt + Number(invoiceAmt)
+        OrderItemDetails.invoiceAmt = invoiceAmt.toFixed(2)
+        const tA4 = numberWithCommas(OrderItemDetails.invoiceAmt)
+        try {
+            document.getElementById(`partytAmt${OrderItemDetails.id}-${OrderItemDetails.Party}`).value = tA4;
+        } catch (e) { }
+        // })
         const tIn = numberWithCommas(all_tAmt.toFixed(2));
         dispatch(BreadcrumbShowCountlabel(`${"Invoice Total"}:₹ ${tIn}`))
 
@@ -937,75 +937,6 @@ const Invoice = (props) => {
     }
 
 
-
-    const Table = () => {
-        if (OrderItemDetails.length > 0) {
-            return demoData.map(i => {
-                const { SearchBar, ClearSearchButton } = Search;
-                return (
-                    <>
-                        <div className="multiinvoice">
-                            <div className="_cardbody">
-                                <div className="table-responsive bg-colour-white ">
-
-                                    <ToolkitProvider
-                                        keyField={"id"}
-                                        data={i.OrderItemDetails}
-                                        columns={pagesListColumns}
-                                        showPaginationBottom={false}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <div className="_heder" >
-                                                    <div className="div-1">
-                                                        <div>
-                                                            <Label>{"Krupa Traders"}</Label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="div-2">
-                                                        <div>  <SearchBar {...toolkitProps.searchProps} /></div>
-                                                    </div>
-                                                    <div className="div-2">
-                                                        <div>
-                                                            <Label >Invoice No</Label>
-                                                        </div>
-                                                        <div> <Input type="text" /></div>
-                                                    </div>
-
-                                                    <div className="div-2">
-                                                        <div>
-                                                            <Label >Amount</Label>
-                                                        </div>
-                                                        <div> <Input id={`partytAmt${i.id}-${i.Party}`} type="text" placeholder="Calculate Invoice Value" disabled={true} /></div>
-                                                    </div>
-                                                </div >
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    striped={false}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                </div>
-                            </div>
-                        </div>
-                    </>)
-
-            })
-
-        }
-        else return null
-    }
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -1078,55 +1009,43 @@ const Invoice = (props) => {
                                 </Col>
                             </Row>
                         </Col>
-                        {Table()}
 
 
-                        {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={OrderItemDetails}
-                                    columns={pagesListColumns}
-                                    showPaginationBottom={false}
-                                    // data={demoData}
-                                    // columns={demoColumn}
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={OrderItemDetails}
+                            columns={pagesListColumns}
+                            showPaginationBottom={false}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    classes={"table  table-bordered"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
 
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            trClassFormat={trClassFormat}
-                                                            classes={"table  table-bordered"}
-                                                            noDataIndication={
-                                                                <div className="text-danger text-center ">
-                                                                    Items Not available
-                                                                </div>
-                                                            }
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
+                                </React.Fragment>
                             )}
+                        </ToolkitProvider>
 
-                        </PaginationProvider> */}
+
+
 
                         {OrderItemDetails.length > 0 &&
 

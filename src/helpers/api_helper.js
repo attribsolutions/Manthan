@@ -30,8 +30,8 @@ export function get(url, btnId) {
     .then(response => {
       return CheckAPIResponse({ method: "get", url, response, btnId });
     })
-    .catch(response => {
-      return CheckAPIResponse({ method: "get", url, response, btnId });
+    .catch(error => {
+      return CheckAPIResponse({ method: "get", url, error, btnId });
     });
 }
 
@@ -47,8 +47,8 @@ export function post(url, body, btnId) {
     }
   }).then(response => {
     return CheckAPIResponse({ method: "post", url, response, body, btnId });
-  }).catch(response => {
-    return CheckAPIResponse({ method: "post", url, response, body, btnId });
+  }).catch(error => {
+    return CheckAPIResponse({ method: "post", url, error, body, btnId });
   });
 };
 
@@ -64,8 +64,8 @@ export function put(url, body, btnId,) {
     }
   }).then(response => {
     return CheckAPIResponse({ method: "put", url, response, body, btnId });
-  }).catch(response => {
-    return CheckAPIResponse({ method: "put", url, response, body, btnId });
+  }).catch(error => {
+    return CheckAPIResponse({ method: "put", url, error, body, btnId });
   });
 }
 
@@ -76,8 +76,8 @@ export function del(url, btnId) {
 
   return axiosApi.delete(url,).then(response => {
     return CheckAPIResponse({ method: "delete", url, response, btnId });
-  }).catch(response => {
-    return CheckAPIResponse({ method: "delete", url, response, btnId });
+  }).catch(error => {
+    return CheckAPIResponse({ method: "delete", url, error, btnId });
   });
 }
 
@@ -93,8 +93,8 @@ export function postForget(url, body,) {
     .then(response => {
       return CheckAPIResponse({ method: "postForget", body, url, response });
     })
-    .catch(response => {
-      return CheckAPIResponse({ method: "postForget", url, response });
+    .catch(error => {
+      return CheckAPIResponse({ method: "postForget", url, error });
     });
 
 }
@@ -104,7 +104,7 @@ export async function getModify(url) {
   return axiosApi.get(url).then(response => {
     return CheckAPIResponse({ method: "get", url, response });
   })
-    .catch(response => {
-      return CheckAPIResponse({ method: "get", url, response });
+    .catch(error => {
+      return CheckAPIResponse({ method: "get", url, error });
     });
 }

@@ -80,7 +80,6 @@ export const loginRoleID = () => {//+++++++++++++++++++++ Seesion Company Id++++
 }
 
 export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
-
     let created_By = 0
     try {
         created_By = JSON.parse(localStorage.getItem('userId'))
@@ -89,21 +88,11 @@ export const loginUserID = () => {//++++++++++++++++++++++ Seesion User Id++++++
 }
 
 export const loginCompanyID = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-
     let user_Company = 0
     try {
         user_Company = JSON.parse(localStorage.getItem('Company'))
     } catch (e) { CommonConsole("Common login CompanyID  Error") }
     return user_Company
-}
-
-export const loginCompanyName = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-    
-    let user_CompanyName = ''
-    try {
-        user_CompanyName = localStorage.getItem('CompanyName')
-    } catch (e) { CommonConsole("Common login CompanyName  Error") }
-    return user_CompanyName
 }
 
 export const loginPartyID = () => {//+++++++++++++++++++++ Seesion loginPartyID Id+++++++++++++++++++++++++++++++
@@ -207,15 +196,13 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = '' }) {
 }
 
 export function CommonConsole(error) {
-    console.log(error);
+    console.log("CommonConsole =>:", error);
 }
 
 export function btnIsDissablefunc({ btnId, state = false }) {
 
-
     if (btnId) {
         try {
-
             document.getElementById(btnId).disabled = state;
 
             document.getElementById("overlay").style.display = state ? "block" : "none";
@@ -227,7 +214,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {
     }
 }
 
-export async function CheckAPIResponse({ method, url, response, body, btnId }) {
+export async function CheckAPIResponse({ method, url, response = {}, body, btnId, error = {} }) {
 
     if (btnId) {
         // await new Promise(r => setTimeout(r, 0));
@@ -237,51 +224,60 @@ export async function CheckAPIResponse({ method, url, response, body, btnId }) {
     const { data = '' } = response
     const con1 = ((data.StatusCode === 200));
     const con2 = ((data.StatusCode === 204));
-    const con3 = ((data.StatusCode === 226));
-
-    const con4 = ((data.StatusCode === 400));
-
-    const con5 = ((data.StatusCode === 406));
-    const con6 = ((method === "post" || method === "put"))
+    const con3 = ((data.StatusCode === 226));//reject 
+    const con4 = ((data.StatusCode === 400));//reject 
+    const con5 = ((data.StatusCode === 406));//reject 
+    const con6 = ((method === "post" || method === "put"))//for console body
     const con7 = ((data.StatusCode === 100));
 
+    if (!(error.data === undefined)) {
+        const { data = '' } = error
+        const err3 = ((data.StatusCode === 226));//reject 
+        const err4 = ((data.StatusCode === 400));//reject 
+        const err5 = ((data.StatusCode === 406));//reject);
+        if (err3) {
+            console.log(`${url}***${method} apiCall response:=>`, error.data)
+            await CustomAlert({ Type: 3, Message: JSON.stringify(error.data.Message) })
+            return Promise.reject(error.data)
+        }
+        else if (err4) {
+            console.log(`${url}***${method} apiCall response:=>`, error.data)
+            await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
+            return Promise.reject(error.data)
+        }
+
+        else if (err5) {
+            console.log(`${url}***${method} apiCall response:=>`, error.data)
+            await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
+            return Promise.reject(error.data)
+        }
+        else {
+            console.log(`${url}***${method} apiCall response:=>`, error)
+            await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
+            return Promise.reject(error)
+        }
+    }
 
 
     if (con6) {
         console.log(`${url}***=> ${method} Body =>`, body)
     }
     // **********************************************************************************
+
     if (con1 || con7) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     }
-
     else if (con2) {
         console.log(`${url}***${method} apiCall response:=>`, response.data)
         return response.data
     }
-
-    else if (con3) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) })
+    else if (con3 || con4 || con5) {
         return Promise.reject(response)
     }
 
-    else if (con4) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Exception Error` })
-        return Promise.reject(response)
-    }
 
-    else if (con5) {
-        console.log(`${url}***${method} apiCall response:=>`, response.data)
-        await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) })
-        return Promise.reject(response)
-    }
+    return Promise.reject(response)
 
-    else {
-        console.log(`${url}***${method} apiCall response:=>`, response)
-        await CustomAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` })
-        return Promise.reject(response)
-    }
+
 }

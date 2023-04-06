@@ -117,8 +117,6 @@ export const Rows = (data) => {
 }
 
 export const BilledByRow = (data) => {
-    debugger
-
     let DefaultAddress = data.PartyAddress.filter( IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
     var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
     var BilledByArray = [
