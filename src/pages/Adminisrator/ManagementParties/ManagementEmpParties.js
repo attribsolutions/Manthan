@@ -41,7 +41,6 @@ const ManagementEmpParties = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [employeeSelect, setEmployeeSelect] = useState([])
     const [array, setArray] = useState([]);
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -70,7 +69,7 @@ const ManagementEmpParties = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getEmployeedropdownList())
-        // // dispatch(getPartyListAPI())
+        dispatch(getPartyTableListSuccess([]))
     }, []);
 
     const values = { ...state.values }
@@ -150,6 +149,7 @@ const ManagementEmpParties = (props) => {
     }));
 
     function goButtonHandler(event) {
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -161,7 +161,7 @@ const ManagementEmpParties = (props) => {
     }
 
     function SelectAll(event, row, key) {
-        debugger
+
         const arr = []
         partyList.forEach(ele => {
             if (ele.id === row.id) {
@@ -213,15 +213,6 @@ const ManagementEmpParties = (props) => {
         // }
     ];
 
-    // const selectRow = {
-    //     mode: 'checkbox',
-    //     clickToSelect: true,
-    //     selectionHeaderRenderer: () => <><Input type="checkbox"></Input></>,
-    //     selectionRenderer: ({ mode, ...rest }) => (
-    //       <Input type={ mode } { ...rest } />
-    //     )
-    //   };
-
     const pageOptions = {
         sizePerPage: 10,
         totalSize: partyList.length,
@@ -266,12 +257,11 @@ const ManagementEmpParties = (props) => {
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
-    const onSelectAll = (isSelected, b, v) => {
-        debugger
-        const arr = b
-        if (isSelected) {
-            b.forEach(ele => {
-                return ele.Check = isSelected
+    const onSelectAll = (event, allarray) => {
+        const arr = allarray
+        if (event) {
+            allarray.forEach(ele => {
+                return ele.Check = event
             })
             setArray(arr)
         } else {
@@ -279,44 +269,36 @@ const ManagementEmpParties = (props) => {
         }
     }
 
-    const selectRow = (row, b, c) => {
-        debugger
+    const selectRow = (row, event) => {
         const arr = []
-
         partyList.forEach(ele => {
             if (ele.id === row.id) {
-                ele.Check = b
+                ele.Check = event
             }
             arr.push(ele)
         })
         setArray(arr)
-
     }
 
-    const selected = (a, b) => {
-        debugger
-    }
     const checkbox = {
+        headerFormatter: (value, row, k) => {
+            debugger
+            return (
+                // <div className="d-flex justify-content-between" key={row.id}>
+                    <div>
+                     SelectAll
+                    </div>
 
+                // </div>
+            )
+        },
         mode: "checkbox",
         onSelectAll: onSelectAll,
         onSelect: selectRow,
-        selected: partyList.map((index) => { return (index.Check) && index.id }),
-        selectColumnPosition: "right"
-        // formatter: (cellContent, row, key) => {
-        //     debugger
-        //     return (<span style={{ justifyContent: 'center' }}>
-        //         <Input
-        //             id=""
-        //             key={row.id}
-        //             // defaultChecked={row.Check}
-        //             type="checkbox"
-        //             className="col col-sm text-center"
-        //             onSelect={e => { SelectAll(e.target.checked, row, key) }}
-        //         />
-        //     </span>)
-        // }
+        selected: partyList.map((index) => { return (index.Check) && index.id}),
+        selectColumnPosition: "right",
 
+        // style: { backgroundColor: '#c8e6c9' }
     }
 
 

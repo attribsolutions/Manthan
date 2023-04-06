@@ -35,7 +35,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "./AddressDetailsTab"
-import { breadcrumbReturnFunc, loginPartyID, loginUserID } from "../../../components/Common/CommonFunction"
+import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID } from "../../../components/Common/CommonFunction"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -367,7 +367,7 @@ const PartyMaster = (props) => {
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
             PartyType: partyType_dropdown_Select.value,
-            Company: companyList_dropdown_Select.value,
+            Company: loginCompanyID(),
             PAN: values.PAN,
             Email: values.Email,
             MobileNo: values.MobileNo,
@@ -609,7 +609,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col md="1">  </Col>
-                                                                <Col md="3">
+                                                                {/* <Col md="3">
                                                                     <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Company Name </Label>
                                                                         <Select
@@ -617,6 +617,23 @@ const PartyMaster = (props) => {
                                                                             options={companyListValues}
                                                                             onChange={(e) => { handllercompanyList(e) }}
                                                                         />
+                                                                    </FormGroup>
+                                                                </Col> */}
+                                                                 <Col md="3">
+                                                                    <FormGroup>
+                                                                        <Label htmlFor="validationCustom01">Suppiler </Label>
+                                                                        {/* style={{ height: "2.9cm" }} */}
+                                                                        <Col sm={12} >
+                                                                            <Select
+                                                                                name="Suppiler"
+                                                                                value={suppilerSelect}
+                                                                                isSearchable={false}
+                                                                                isMulti={true}
+                                                                                options={SupplierOptions}
+                                                                                onChange={(e) => setSuppilerSelect(e)}
+                                                                                classNamePrefix="dropdown"
+                                                                            />
+                                                                        </Col>
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
@@ -764,23 +781,7 @@ const PartyMaster = (props) => {
                                                             </Row>
 
                                                             <Row className="mt-3" >
-                                                                <Col md="3">
-                                                                    <FormGroup>
-                                                                        <Label htmlFor="validationCustom01">Suppiler </Label>
-                                                                        {/* style={{ height: "2.9cm" }} */}
-                                                                        <Col sm={12} >
-                                                                            <Select
-                                                                                name="Suppiler"
-                                                                                value={suppilerSelect}
-                                                                                isSearchable={false}
-                                                                                isMulti={true}
-                                                                                options={SupplierOptions}
-                                                                                onChange={(e) => setSuppilerSelect(e)}
-                                                                                classNamePrefix="dropdown"
-                                                                            />
-                                                                        </Col>
-                                                                    </FormGroup>
-                                                                </Col>
+                                                               
                                                             </Row>
 
                                                         </CardBody>
