@@ -529,6 +529,8 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi
+export const ReceiptFilter_Go_Button_API = ({ filtersBody, btnId }) => post(url.RECEIPT_LIST_BY_FILTERS, filtersBody, btnId)
+export const Receipt_get_API = () => get(url.RECEIPT_POST_API)// Get subModule For H_pages
 
 
 export {
