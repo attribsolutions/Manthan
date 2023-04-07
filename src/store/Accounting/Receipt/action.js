@@ -1,4 +1,6 @@
 import {
+  DEPOSITOR_BANK_FILTER,
+  DEPOSITOR_BANK_FILTER_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
   SAVE_RECEIPT_MASTER,
@@ -15,7 +17,17 @@ export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-// Receipt Mode dropdown API
+export const DepositorBankFilter = (jsonBody) => ({// save Action
+  type: DEPOSITOR_BANK_FILTER,
+  jsonBody,
+});
+
+export const DepositorBankFilter_Success = (resp) => ({// Save  success
+  type: DEPOSITOR_BANK_FILTER_SUCCESS,
+  payload: resp,
+});
+
+// save API
 export const saveReceiptMaster = (config = {}) => ({// save Action
   type: SAVE_RECEIPT_MASTER,
   config,
