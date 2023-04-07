@@ -22,7 +22,7 @@ import {
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { RECEIPT_LIST } from "../../../routes/route_url";
+import { RECEIPTS_LIST } from "../../../routes/route_url";
 import {
     postReceiptListPage,
     ReceiptGoButtonMaster, Receiptlistfilters
@@ -44,7 +44,7 @@ const ReceiptList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(RECEIPT_LIST)
+    const [pageMode, setpageMode] = useState(RECEIPTS_LIST)
     const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -75,7 +75,7 @@ const ReceiptList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.RECEIPT_LIST
+        const page_Id = pageId.RECEIPTS_LIST
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))

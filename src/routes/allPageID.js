@@ -176,4 +176,9 @@ export const LOADING_SHEET_LIST = 156
 //**************************** Accounting ***********************************//
 
 export const RECEIPTS = 173
-export const RECEIPT_LIST = 174
+export const RECEIPTS_LIST = 174
+
+export const PAYMENT_ENTRY = 177
+export const PAYMENT_ENTRY_LIST = 178
+
+
