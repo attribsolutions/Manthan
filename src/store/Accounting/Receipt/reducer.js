@@ -1,7 +1,7 @@
 import { currentDate } from "../../../components/Common/CommonFunction"
 import {
   DEPOSITOR_BANK_FILTER_SUCCESS,
-  GET_RECEIPT_LIST_PAGE,
+  POST_RECEIPT_LIST_PAGE,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
   RECEIPT_LIST_FILTERS,
   SAVE_RECEIPT_MASTER_SUCCESS,
@@ -43,7 +43,7 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         postMsg: action.payload,
       }
 
-    case GET_RECEIPT_LIST_PAGE:
+    case POST_RECEIPT_LIST_PAGE:
       return {
         ...state,
         ReceiptList: [],
