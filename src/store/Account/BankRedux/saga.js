@@ -30,9 +30,11 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
     } catch (error) { CommonConsole(error) }
 }
 
-function* post_Bank_List_GenratorFunction({jsonBody}) {                        // postList API
-    const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);// required only PartyID and CompanyID
+function* post_Bank_List_GenratorFunction({ jsonBody }) {  
+    debugger                      // postList API
+    const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
+        debugger
         const response = yield call(post_Bank_List_Api, filters);
         yield put(postBanklistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }

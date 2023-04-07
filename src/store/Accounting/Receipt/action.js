@@ -1,8 +1,8 @@
 import {
   RECEIPT_GO_BUTTON_MASTER,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
-  RECEIPT_MODE_API,
-  RECEIPT_MODE_API_SUCCESS
+  SAVE_RECEIPT_MASTER,
+  SAVE_RECEIPT_MASTER_SUCCESS
 } from "./actionType";
 
 export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
@@ -16,12 +16,12 @@ export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
 });
 
 // Receipt Mode dropdown API
-export const ReceiptModeAPI = (jsonBody) => ({// save Action
-  type: RECEIPT_MODE_API,
-  jsonBody,
+export const saveReceiptMaster = (config = {}) => ({// save Action
+  type: SAVE_RECEIPT_MASTER,
+  config,
 });
 
-export const ReceiptModeAPI_Success = (resp) => ({// Save  success
-  type: RECEIPT_MODE_API_SUCCESS,
+export const saveReceiptMaster_Success = (resp) => ({// Save  success
+  type: SAVE_RECEIPT_MASTER_SUCCESS,
   payload: resp,
 });
