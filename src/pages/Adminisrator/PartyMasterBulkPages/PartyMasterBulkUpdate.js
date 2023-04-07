@@ -50,6 +50,8 @@ import {
     updatePartyMasterBulkID,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
+import { GetDistrictOnState } from "../../../helpers/url_helper";
+import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 
 
 
@@ -63,7 +65,9 @@ const PartyMasterBulkUpdate = (props) => {
     const [RouteSelect, setRouteSelect] = useState([]);
     const [Party, setParty] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
-    const [state_DropDown_select, setState_DropDown_select] = useState([]);
+    const [Date, setDate] = useState();
+
+    const [state_DropDown_select, setState_DropDown_select] = useState();
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState([]);
 
 
@@ -115,6 +119,8 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(GetRoutesList());
+        dispatch(getState())
+        // dispatch(GetDistrictOnState())
     }, []);
 
     // userAccess useEffect
@@ -244,6 +250,7 @@ const PartyMasterBulkUpdate = (props) => {
             Route: RouteSelect.length === 0 ? 0 : RouteSelect.value,
             Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
             FilterPartyID: Party.length === 0 ? 0 : Party.value,
+
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
@@ -260,16 +267,26 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function handllerState(e) {
+        debugger
         setState_DropDown_select(e)
-        dispatch(getDistrictOnState(e.value))
+      console.log(state_DropDown_select)  
+
         setDistrict_dropdown_Select('')
     }
 
     function handllerDistrictOnState(e) {
         setDistrict_dropdown_Select(e)
     }
-
    
+    
+    function fromdateOnchange(e, date) {
+        setDate(date)
+    }
+
+
+
+
+
     const pagesListColumns = [
         {
             text: "PartyName",
@@ -279,120 +296,45 @@ const PartyMasterBulkUpdate = (props) => {
             text: Data.length <= 0 ? null : val,
             dataField: Data.length <= 0 ? null : val,
         },
-        {
+
+
+    ];
+
+    if (SelectFieldName.label === "FSSAINo") {
+        let FSSAINo = {
             text: "FSSAIExipry",
             dataField: "FSSAIExipry",
-            hidden: SelectFieldName.label === "FSSAINo" ? false : true,
-            formatter: () => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4">
-                                <Flatpickr
-                                    name='fromdate'
-                                    //  value={FSSAIExipry}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                        defaultDate: FSSAIExipry
-                                    }}
-                                //    onChange={setFSSAIExipry}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
-        },
+        }
+        pagesListColumns.push(FSSAINo)
+    }
 
-        {
-            text: "New Value",
-            dataField: "Newvalue",
-            hidden: SelectFieldName.label === "FSSAINo" ? false : true,
-            formatter: () => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
+    const Newvalue = {
+        text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
+        dataField: "Newvalue",
+        formatter: (cellContent, user) => (
+            <>
+                {SelectFieldName.label === "District" || SelectFieldName.label === "State" ?
+                    <div >
                         <Col>
-                            <FormGroup className=" col col-sm-4">
-                                <Flatpickr
-                                    name='fromdate'
-                                    //  value={FSSAIExipry}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "d-m-Y",
-                                        dateFormat: "Y-m-d",
-                                        defaultDate: FSSAIExipry
-                                    }}
-                                //    onChange={setFSSAIExipry}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
-        },
+                            <FormGroup >
 
-        {
-            text: "New Value",
-            dataField: "Newvalue",
-            hidden: SelectFieldName.label === "State" ? false : true,
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }}>
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Select
+                               {SelectFieldName.label === "State"? <Select
                                     value={state_DropDown_select}
                                     options={StateValues}
-                                    onChange={(e) => {
-                                        handllerState(e, user)
-                                        tableSelectHandler(user)
-                                    }}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
-        },
-
-        {
-            text: "New Value",
-            dataField: "Newvalue",
-            hidden: SelectFieldName.label === "District" ? false : true,
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }}>
-                        <Col>
-                            <FormGroup className=" col col-sm-4">
+                                    onChange={(e) => { handllerState(e) }}
+                                />:
                                 <Select
                                     value={district_dropdown_Select}
                                     options={DistrictOnStateValues}
-                                    onChange={(e) => {
-                                        handllerDistrictOnState(e, user)
-                                        tableSelectHandler(user)                                                                                                                                      
-                                    }}
-                                />
+                                    onChange={(e) => { handllerDistrictOnState(e) }}
+                                />}
+
                             </FormGroup>
                         </Col>
-                    </div>
-                </>
-            ),
-        },
-
-        {
-            text: "New value",
-            dataField: "Newvalue",
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
+                    </div> :
+                    <div >
                         <Col>
-                            <FormGroup className=" col col-sm-4 ">
+                            <FormGroup >
                                 <Input
                                     id=""
                                     type="text"
@@ -402,11 +344,44 @@ const PartyMasterBulkUpdate = (props) => {
                                 />
                             </FormGroup>
                         </Col>
-                    </div>
-                </>
-            ),
-        },
-    ];
+                    </div>}
+            </>
+        ),
+
+    }
+    pagesListColumns.push(Newvalue)
+
+    const dateColumn = {
+        text: " New FSSAIExipry",
+        dataField: "",
+        formatter: (cellContent, user) => (
+            <>
+                <div >
+                    {/* <Col> */}
+                    <FormGroup >
+                        <Flatpickr
+                            name='fromdate'
+                            className="form-control d-block p-2 bg-white text-dark"
+                            placeholder="Select..."
+                            // value={fromdate}
+                            options={{
+                                altInput: true,
+                                altFormat: "d-m-Y",
+                                dateFormat: "Y-m-d",
+                            }}
+                            onChange={fromdateOnchange}
+                        />
+                    </FormGroup>
+                    {/* </Col> */}
+                </div>
+
+            </>
+        ),
+    }
+    if (SelectFieldName.label === "FSSAINo") {
+        pagesListColumns.push(dateColumn)
+    }
+
 
     const pageOptions = {
         sizePerPage: 10,
@@ -422,20 +397,22 @@ const PartyMasterBulkUpdate = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-
                 Data.forEach(i => {
+
                     const arr = {
                         SubPartyID: i.SubPartyID,
-                         Value1:i.Newvalue
-                       
+                        Value1:i.Newvalue,
+                        FSSAIExipry: i.FSSAIExipry,
+                        FSSAINo: i.FSSAINo
                     }
                     arr1.push(arr)
                 })
-
+                debugger
                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
                     UpdateData: arr1
+
                 });
 
                 if (pageMode === mode.edit) {
@@ -458,7 +435,7 @@ const PartyMasterBulkUpdate = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -472,7 +449,6 @@ const PartyMasterBulkUpdate = (props) => {
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody className="c_card_body">
-
                                                     <Row>
                                                         <Col md="4" >
                                                             <FormGroup className=" row  mt-2" >
@@ -498,7 +474,6 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 </div>
                                                             </FormGroup>
                                                         </Col>
-
                                                         <Col md="4" >
                                                             <FormGroup className=" row  mt-2" >
                                                                 <Label className="mt-1"
@@ -565,7 +540,7 @@ const PartyMasterBulkUpdate = (props) => {
                                             >
                                                 {toolkitProps => (
                                                     <React.Fragment>
-                                                        <div className="table">
+                                                        {<div className="table">
                                                             <BootstrapTable
                                                                 keyField={"id"}
                                                                 bordered={true}
@@ -579,7 +554,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                             />
                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
                                                             {mySearchProps(toolkitProps.searchProps)}
-                                                        </div>
+                                                        </div>}
 
                                                         <Row className="align-items-md-center mt-30">
                                                             <Col className="pagination pagination-rounded justify-content-end mb-2">

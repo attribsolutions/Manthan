@@ -407,6 +407,7 @@ const PartyMaster = (props) => {
             dispatch(updatePartyID(jsonBody, EditData.id));
         }
         else {
+            debugger
             dispatch(postPartyData(jsonBody));
         }
     };
