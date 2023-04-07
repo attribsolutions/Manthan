@@ -5,13 +5,6 @@ import * as action from "./action";
 import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
 
 
-function* save_Receipt_GenFunc({ config }) {   // Save API
-  try {
-    const response = yield call(apiCall.Receipt_Post_API, config);
-    yield put(action.saveReceiptMaster(response));
-  } catch (error) { CommonConsole(error) }
-}
-
 function* ReceiptGoButtonGenFunc({ jsonBody }) {                                   // getList API
   try {
     const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
@@ -30,11 +23,17 @@ function* Depositor_Bank_GenFunc({ jsonBody }) {
   } catch (error) { CommonConsole(error) }
 }
 
+function* save_Receipt_GenFunc({ config }) { 
+  debugger  // Save API
+  try {
+    const response = yield call(apiCall.Receipt_Post_API, config);
+    yield put(action.saveReceiptMaster_Success(response));
+  } catch (error) { CommonConsole(error) }
+}
 
 function* ReceiptSaga() {
-  yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
   yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
-  yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, Depositor_Bank_GenFunc)
-
+  yield takeEvery(actionType.DEPOSITOR_BANK_FILTER, Depositor_Bank_GenFunc)
+  yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
 }
 export default ReceiptSaga;  
