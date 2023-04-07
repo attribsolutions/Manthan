@@ -36,7 +36,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { ReceiptGoButtonMaster, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { DepositorBankFilter, ReceiptGoButtonMaster, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -72,12 +72,14 @@ const Receipts = (props) => {
         RetailerList,
         BankList,
         ReceiptModeList,
+        DepositorBank,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             BankList: state.BankReducer.BankList,
+            DepositorBank: state.ReceiptReducer.DepositorBank,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -89,6 +91,8 @@ const Receipts = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(postBanklist())
+        dispatch(DepositorBankFilter())
+
     }, []);
 
     useEffect(() => {
@@ -295,6 +299,7 @@ const Receipts = (props) => {
     const saveHandeller = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
@@ -320,7 +325,6 @@ const Receipts = (props) => {
                         }
                     ]
                 })
-
 
                 if (pageMode === mode.edit) {
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
