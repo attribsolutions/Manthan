@@ -297,4 +297,4 @@ export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
 
 // Receipt
 export const RECEIPT_GO_BUTTON_API = '/ReceiptInvoices'
-
+export const RECEIPT_POST_API = '/Receipt'

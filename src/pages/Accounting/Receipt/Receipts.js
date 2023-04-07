@@ -25,7 +25,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, loginUserID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -36,8 +36,9 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { ReceiptGoButtonMaster } from "../../../store/Accounting/Receipt/action";
+import { ReceiptGoButtonMaster, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { postBanklist } from "../../../store/Account/BankRedux/action";
 
 const Receipts = (props) => {
 
@@ -48,7 +49,9 @@ const Receipts = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [orderlistFilter, setorderlistFilter] = useState({ Date: currentDate });
+
     const fileds = {
         Date: "",
         OpeningBalance: "",
@@ -61,26 +64,31 @@ const Receipts = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         ReceiptGoButton,
         pageField,
         RetailerList,
+        BankList,
         ReceiptModeList,
         userAccess } = useSelector((state) => ({
-            postMsg: state.ManagementPartiesReducer.postMsg,
+            postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
+            BankList: state.BankReducer.BankList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
     const { Date } = orderlistFilter;
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(postBanklist())
     }, []);
 
     useEffect(() => {
@@ -99,7 +107,6 @@ const Receipts = (props) => {
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
-
 
     const values = { ...state.values }
     const { isError } = state;
@@ -139,10 +146,9 @@ const Receipts = (props) => {
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveManagementParties_Success({ Status: false }))
+            dispatch(saveReceiptMaster_Success({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            dispatch(Breadcrumb_inputName(''))
-            dispatch(getPartyTableListSuccess([]))
+            // dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -155,12 +161,12 @@ const Receipts = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.MANAGEMENT_PARTIES,
+                    RedirectPath: url.RECEIPTS,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(saveManagementParties_Success({ Status: false }))
+            dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -180,6 +186,12 @@ const Receipts = (props) => {
         value: index.id,
         label: index.Name,
     }));
+
+    const BankListOptions = BankList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
     const pagesListColumns = [
         {
             text: "Receipt Date",
@@ -203,13 +215,14 @@ const Receipts = (props) => {
         },
         {
             text: "Calculate",
-            dataField: "",
+            dataField: "Calculate",
             formatter: (cellContent, row, key) => {
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Input
-                        id=""
-                        key={row.id}
-                        // defaultChecked={row.Check}
+                        key={`batchQty${key}`}
+                        id={`batchQty${row.FullInvoiceNumber}`}
+                        value={Number(row.Calculate)}
                         type="text"
                         className="col col-sm text-center"
                     // onChange={e => { SelectAll(e.target.checked, row, key) }}
@@ -229,46 +242,9 @@ const Receipts = (props) => {
         custom: true,
     };
 
-    const SaveHandler = async (event) => {
-        event.preventDefault();
-        const btnId = event.target.id
-        const CheckArray = array.filter((index) => {
-            return (index.Check === true)
-        })
-
-        const PartiesJson = CheckArray.map((index) => ({
-            Employee: values.Employee.value,
-            Party: index.id,
-        }))
-
-        const trueValues = array.map((index) => {
-            return (index.Check === true)
-        })
-
-        const totalTrueValues = trueValues.reduce((count, value) => {
-            if (value === true) {
-                count++
-            }
-            return count
-        }, 0)
-
-        if ((totalTrueValues === 0)) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "At least One Party is Selected",
-                })
-            );
-            return;
-        }
-        const jsonBody = JSON.stringify(PartiesJson)
-        // console.log(jsonBody)
-        dispatch(saveManagementParties({ jsonBody, btnId }));
-    };
 
     function onChangeAmountHandler(event) {
-
+        debugger
         let BalanceAmount = ReceiptGoButton.map((index) => {
             return parseInt(index.BalanceAmount)
         })
@@ -285,14 +261,26 @@ const Receipts = (props) => {
             i.hasValid.AmountPaid.valid = true;
             return i
         })
-        debugger
-        values.AmountPaid = ReceiptGoButton.map((index) => {
+        let value = Number(event.target.value)
+        ReceiptGoButton.map((index) => {
             debugger
             let amt = Number(index.BalanceAmount)
-            if ((values.AmountPaid > amt) && !(amt === 0)) {
-                let Amount = values.AmountPaid - amt
-                index.BalanceAmount = Amount.toFixed(3)
+            if ((value > amt) && !(amt === 0)) {
+                debugger
+                let Amount = value - amt
+                index.Calculate = amt.toFixed(3)
             }
+            else if ((value <= amt) && (value > 0)) {
+                index.Calculate = value.toFixed(3)
+                value = 0
+            }
+            else {
+                index.Calculate = 0;
+            }
+            try {
+                document.getElementById(`batchQty${index.FullInvoiceNumber}`).value = index.Calculate
+            } catch (e) { }
+
         })
     }
 
@@ -303,6 +291,46 @@ const Receipts = (props) => {
         });
         dispatch(ReceiptGoButtonMaster(jsonBody));
     }
+
+    const saveHandeller = async (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+
+                const jsonBody = JSON.stringify({
+                    "ReceiptDate": Date,
+                    "Description": values.Description,
+                    "AmountPaid": values.AmountPaid,
+                    "BalanceAmount": values.BalanceAmount,
+                    "OpeningBalanceAdjusted": "",
+                    "ChequeDate": "",
+                    "DocumentNo": "",
+                    "Bank": values.BankName.value,
+                    "Customer": values.CustomerName.value,
+                    "DepositorBank": "",
+                    "Party": loginPartyID(),
+                    "ReceiptMode": values.ReceiptMode.value,
+                    "CreatedBy": loginUserID(),
+                    "UpdatedBy": loginUserID(),
+                    "ReceiptInvoices": [
+                        {
+                            "Invoice": 1
+                        }
+                    ]
+                })
+
+
+                if (pageMode === mode.edit) {
+                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
+                }
+                else {
+                    dispatch(saveReceiptMaster({ jsonBody, btnId }));
+                }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -438,7 +466,7 @@ const Receipts = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                // options={RouteName_Options}
+                                                options={BankListOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                 }}
@@ -577,6 +605,22 @@ const Receipts = (props) => {
                             }
 
                         </PaginationProvider>
+
+                        {
+                            ReceiptGoButton.length > 0 ?
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                        <SaveButton pageMode={pageMode}
+                                            onClick={saveHandeller}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                            module={"Receipts"}
+                                        />
+
+                                    </Col>
+                                </FormGroup >
+                                : null
+                        }
                     </form >
                 </div >
             </React.Fragment>
