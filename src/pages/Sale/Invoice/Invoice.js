@@ -672,7 +672,7 @@ const Invoice = (props) => {
     }
 
     function stockDistributeFunc(index) {
-
+        debugger
         const v1 = index.Quantity;
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
@@ -683,16 +683,17 @@ const Invoice = (props) => {
             if ((orderqty > stockqty) && !(orderqty === 0)) {
                 orderqty = orderqty - stockqty
                 i2.Qty = stockqty.toFixed(3)
-            } else if ((orderqty <= stockqty) && (orderqty > 0)) {
-                i2.Qty = orderqty.toFixed(3)
-                orderqty = 0
             }
-            else {
-                i2.Qty = 0;
-            }
-            try {
-                document.getElementById(`batchQty${index.id}-${i2.id}-${index.Party}`).value = i2.Qty
-            } catch (e) { }
+            //  else if ((orderqty <= stockqty) && (orderqty > 0)) {
+            //     i2.Qty = orderqty.toFixed(3)
+            //     orderqty = 0
+            // }
+            // else {
+            //     i2.Qty = 0;
+            // }
+            // try {
+            //     document.getElementById(`batchQty${index.id}-${i2.id}-${index.Party}`).value = i2.Qty
+            // } catch (e) { }
 
             return i2
         });

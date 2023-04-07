@@ -19,7 +19,7 @@ import { loginCompanyID, loginPartyID } from "../../components/Common/CommonFunc
 const BankList = () => {
 
     const dispatch = useDispatch();
-    debugger
+    
     const reducers = useSelector(
         (state) => ({
             tableList: state.BankReducer.BankList,
@@ -46,15 +46,16 @@ const BankList = () => {
         const page_Id = pageId.BANK_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+        dispatch(postBanklist())
     }, []);
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Company: loginCompanyID(),
-        });
-        dispatch(postBanklist(jsonBody));
-    }, []);
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Party: loginPartyID(),
+    //         Company: loginCompanyID(),
+    //     });
+    //     dispatch(postBanklist(jsonBody));
+    // }, []);
 
     const { pageField, userAccess = [] } = reducers;
 
