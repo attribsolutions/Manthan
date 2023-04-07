@@ -31,10 +31,10 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
 }
 
 function* post_Bank_List_GenratorFunction({ jsonBody }) {  
-    debugger                      // postList API
+                     // postList API
     const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
-        debugger
+
         const response = yield call(post_Bank_List_Api, filters);
         yield put(postBanklistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }

@@ -5,13 +5,6 @@ import * as action from "./action";
 import { CommonConsole, convertDatefunc, convertTimefunc, loginJsonBody } from "../../../components/Common/CommonFunction";
 
 
-function* save_Receipt_GenFunc({ config }) {   // Save API
-  try {
-    const response = yield call(apiCall.Receipt_Post_API, config);
-    yield put(action.saveReceiptMaster(response));
-  } catch (error) { CommonConsole(error) }
-}
-
 function* ReceiptGoButtonGenFunc({ jsonBody }) {                                   // getList API
   try {
     const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
@@ -29,6 +22,7 @@ function* Depositor_Bank_GenFunc({ jsonBody }) {
     yield put(action.DepositorBankFilter_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
+
 
 function* get_Receipt_List_GenFun({filters}) {
   try {
@@ -52,14 +46,24 @@ function* Receiptfilter_Post_API_GenFun({ filters }) {
           return index
       });
       yield put(action.Receiptlistfilters(response));
+
+function* save_Receipt_GenFunc({ config }) { 
+ 
+  try {
+    const response = yield call(apiCall.Receipt_Post_API, config);
+    yield put(action.saveReceiptMaster_Success(response));
+
   } catch (error) { CommonConsole(error) }
 }
 
 function* ReceiptSaga() {
-  yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
   yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
   yield takeEvery(actionType.DEPOSITOR_BANK_FILTER, Depositor_Bank_GenFunc)
+
   yield takeEvery(actionType.GET_RECEIPT_LIST_PAGE, get_Receipt_List_GenFun)
   yield takeEvery(actionType.RECEIPT_LIST_FILTERS, Receiptfilter_Post_API_GenFun)
+
+  yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
+
 }
 export default ReceiptSaga;  

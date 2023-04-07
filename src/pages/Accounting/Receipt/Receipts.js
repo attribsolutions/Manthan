@@ -36,7 +36,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, ReceiptGoButtonMaster, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { DepositorBankFilter, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -50,7 +50,7 @@ const Receipts = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [orderlistFilter, setorderlistFilter] = useState({ Date: currentDate });
+    const [orderlistFilter, setorderlistFilter] = useState({ Date: currentDate, ChequeDate: currentDate });
 
     const fileds = {
         Date: "",
@@ -61,6 +61,8 @@ const Receipts = (props) => {
         Description: "",
         BankName: "",
         ChequeNo: "",
+        DepositorBankName: "",
+        ChequeDate: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -84,7 +86,7 @@ const Receipts = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const { Date } = orderlistFilter;
+    const { Date, ChequeDate } = orderlistFilter;
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
@@ -92,7 +94,7 @@ const Receipts = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(postBanklist())
         dispatch(DepositorBankFilter())
-
+        dispatch(ReceiptGoButtonMaster_Success([]))
     }, []);
 
     useEffect(() => {
@@ -111,6 +113,14 @@ const Receipts = (props) => {
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
+
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Company: loginCompanyID(),
+    //         TypeID: 9
+    //     });
+    //     dispatch(postSelect_Field_for_dropdown(jsonBody));
+    // }, []);
 
     const values = { ...state.values }
     const { isError } = state;
@@ -149,8 +159,10 @@ const Receipts = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
+            dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             // dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
@@ -196,6 +208,11 @@ const Receipts = (props) => {
         label: index.Name,
     }));
 
+    const DepositorBankOptions = DepositorBank.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
     const pagesListColumns = [
         {
             text: "Receipt Date",
@@ -237,7 +254,6 @@ const Receipts = (props) => {
                 return { width: '140px', textAlign: 'center' };
             },
         },
-
     ];
 
     const pageOptions = {
@@ -245,7 +261,6 @@ const Receipts = (props) => {
         totalSize: ReceiptGoButton.length,
         custom: true,
     };
-
 
     function onChangeAmountHandler(event) {
         debugger
@@ -297,8 +312,19 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id
+        const ReceiptInvoices1 = ReceiptGoButton.map((index) => ({
+            Invoice: index.Invoice,
+            GrandTotal: index.GrandTotal,
+            PaidAmount: index.Calculate,
+            flag: 0
+        }))
+
+        const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
+            return index.PaidAmount > 0
+        })
 
         try {
             if (formValid(state, setState)) {
@@ -308,22 +334,20 @@ const Receipts = (props) => {
                     "ReceiptDate": Date,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
-                    "BalanceAmount": values.BalanceAmount,
+                    "BalanceAmount": "",
                     "OpeningBalanceAdjusted": "",
-                    "ChequeDate": "",
-                    "DocumentNo": "",
+                    "DocumentNo": values.ChequeNo,
+                    "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.CustomerName.value,
-                    "DepositorBank": "",
+                    "ChequeDate": ChequeDate,
+                    "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
+                    "ReceiptType": 12,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": [
-                        {
-                            "Invoice": 1
-                        }
-                    ]
+                    "ReceiptInvoices": FilterReceiptInvoices
                 })
 
                 if (pageMode === mode.edit) {
@@ -449,6 +473,18 @@ const Receipts = (props) => {
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
+                                                    setState((i) => {
+                                                        debugger
+                                                        i.values.BankName = '';
+                                                        i.values.DepositorBankName = '';
+                                                        i.values.ChequeNo = '';
+                                                        i.values.ChequeDate = '';
+                                                        i.hasValid.BankName.valid = true;
+                                                        i.hasValid.DepositorBankName.valid = true;
+                                                        i.hasValid.ChequeNo.valid = true;
+                                                        i.hasValid.ChequeDate.valid = true;
+                                                        return i
+                                                    })
                                                 }}
                                             />
                                             {isError.ReceiptMode.length > 0 && (
@@ -458,58 +494,120 @@ const Receipts = (props) => {
                                     </FormGroup>
                                 </Col >
                             </Row>
-                            {(values.ReceiptMode.label === "Cheque") && <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BankName} </Label>
-                                        <Col sm="7">
-                                            <Select
-                                                name="BankName"
-                                                value={values.BankName}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={BankListOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                }}
-                                            />
-                                            {isError.BankName.length > 0 && (
-                                                <span className="invalid-feedback">{isError.BankName}</span>
-                                            )}
-                                        </Col>
 
-                                    </FormGroup>
-                                </Col >
+                            {(values.ReceiptMode.label === "Cheque") || (values.ReceiptMode.label === "RTGS") ?
+                                // (values.ReceiptMode.label === "RTGS") &&
+                                < Row >
+                                    <Col sm="6">
+                                        <FormGroup className=" row mt-2 " >
+                                            <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BankName} </Label>
+                                            <Col sm="7">
+                                                <Select
+                                                    name="BankName"
+                                                    value={values.BankName}
+                                                    isSearchable={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={BankListOptions}
+                                                    onChange={(hasSelect, evn) => {
+                                                        onChangeSelect({ hasSelect, evn, state, setState });
+                                                    }}
+                                                />
+                                                {isError.BankName.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.BankName}</span>
+                                                )}
+                                            </Col>
 
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeNo}</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="ChequeNo"
-                                                id="txtName"
-                                                value={values.ChequeNo}
-                                                type="text"
-                                                className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Cheque Number"
-                                                autoComplete='off'
-                                                autoFocus={true}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                    // dispatch(Breadcrumb_inputName(event.target.value))
-                                                }}
-                                            />
-                                            {isError.ChequeNo.length > 0 && (
-                                                <span className="invalid-feedback">{isError.ChequeNo}</span>
-                                            )}
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-                            </Row>}
+                                        </FormGroup>
+                                    </Col >
 
+                                    <Col sm="6">
+                                        <FormGroup className=" row mt-2 " >
+                                            <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DepositorBankName} </Label>
+                                            <Col sm="7">
+                                                <Select
+                                                    name="DepositorBankName"
+                                                    value={values.DepositorBankName}
+                                                    isSearchable={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    options={DepositorBankOptions}
+                                                    onChange={(hasSelect, evn) => {
+                                                        onChangeSelect({ hasSelect, evn, state, setState });
+                                                    }}
+                                                />
+                                                {isError.DepositorBankName.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.DepositorBankName}</span>
+                                                )}
+                                            </Col>
+
+                                        </FormGroup>
+                                    </Col >
+
+
+                                </Row>
+                                : null}
+
+                            {(values.ReceiptMode.label === "Cheque") &&
+                                <Row>
+
+                                    <Col sm="6">
+                                        <FormGroup className=" row mt-2 " >
+                                            <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeNo}</Label>
+                                            <Col sm="7">
+                                                <Input
+                                                    name="ChequeNo"
+                                                    id="txtName"
+                                                    value={values.ChequeNo}
+                                                    type="text"
+                                                    className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    placeholder="Please Enter Cheque Number"
+                                                    autoComplete='off'
+                                                    autoFocus={true}
+                                                    onChange={(event) => {
+                                                        onChangeText({ event, state, setState })
+                                                        // dispatch(Breadcrumb_inputName(event.target.value))
+                                                    }}
+                                                />
+                                                {isError.ChequeNo.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.ChequeNo}</span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+
+                                    <Col sm="6">
+                                        <FormGroup className=" row mt-2 " >
+                                            <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
+                                            <Col sm="7">
+                                                <Flatpickr
+                                                    name="ChequeDate"
+                                                    value={ChequeDate}
+                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                    placeholder="YYYY-MM-DD"
+                                                    autoComplete="0,''"
+                                                    // disabled={pageMode === mode.edit ? true : false}
+                                                    options={{
+                                                        altInput: true,
+                                                        altFormat: "d-m-Y",
+                                                        dateFormat: "Y-m-d",
+                                                        // defaultDate: (pageMode === mode.edit) ? values.Date : "today"
+                                                    }}
+                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                    onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                />
+                                                {isError.ChequeDate.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.ChequeDate}</span>
+                                                )}
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+                                </Row>
+                            }
 
                             <Row>
                                 <Col sm="6">
@@ -563,7 +661,9 @@ const Receipts = (props) => {
                                     </FormGroup>
                                 </Col >
                             </Row>
+
                         </div>
+
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
                         >
@@ -610,24 +710,24 @@ const Receipts = (props) => {
 
                         </PaginationProvider>
 
-                        {
-                            ReceiptGoButton.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            onClick={saveHandeller}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"Receipts"}
-                                        />
+                        {ReceiptGoButton.length > 0 ?
+                            <FormGroup>
+                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                    <SaveButton pageMode={pageMode}
+                                        onClick={saveHandeller}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                        module={"Receipts"}
+                                    />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                                </Col>
+                            </FormGroup >
+                            : null
                         }
+
                     </form >
                 </div >
-            </React.Fragment>
+            </React.Fragment >
         );
     }
     else {
