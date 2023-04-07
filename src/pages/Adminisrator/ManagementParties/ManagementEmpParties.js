@@ -282,7 +282,7 @@ const ManagementEmpParties = (props) => {
 
     const checkbox = {
         headerFormatter: (value, row, k) => {
-            debugger
+            
             return (
                 // <div className="d-flex justify-content-between" key={row.id}>
                     <div>

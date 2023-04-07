@@ -92,7 +92,7 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ subPageMode,RoleID }) {
-  debugger
+  
   let response;
 
   const isVender = (subPageMode === url.ORDER_1 //vendor mode 1
@@ -157,7 +157,7 @@ function* Retailer_List_GenFunc({ data }) {
 }
 
 function* Party_Dropdown_List_GenFunc({loginEmployeeID}) {
-debugger
+
   try {
     const response = yield call(Party_Dropdown_Get_API, loginEmployeeID);
     yield put(Party_Dropdown_List_Success(response.Data));

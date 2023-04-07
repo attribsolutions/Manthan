@@ -27,6 +27,8 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
+    currentDate,
+    invertDatefunc,
     loginCompanyID,
     loginPartyID
 } from "../../../components/Common/CommonFunction";
@@ -68,7 +70,7 @@ const PartyMasterBulkUpdate = (props) => {
     const [Date, setDate] = useState();
 
     const [state_DropDown_select, setState_DropDown_select] = useState();
-    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState([]);
+    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState();
 
 
     const fileds = {
@@ -114,7 +116,7 @@ const PartyMasterBulkUpdate = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
+        // dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -146,6 +148,7 @@ const PartyMasterBulkUpdate = (props) => {
             TypeID: 2
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
+        dispatch(getDistrictOnState(22))
     }, []);
 
     useEffect(() => {
@@ -216,6 +219,7 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const DistrictOnStateValues = DistrictOnState.map((index) => ({
+
         value: index.id,
         label: index.Name
     }));
@@ -244,8 +248,9 @@ const PartyMasterBulkUpdate = (props) => {
             );
             return;
         }
-
+        debugger
         const jsonBody = JSON.stringify({
+
             PartyID: loginPartyID(),
             Route: RouteSelect.length === 0 ? 0 : RouteSelect.value,
             Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
@@ -256,33 +261,34 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function SelectFieldHandler(event) {
-        let val = event.label;
-        setvalue(val)
-        setSelectFieldName(val)
+      
+        debugger
+        setSelectFieldName(event)
+
     }
 
     function tableSelectHandler(event, user) {
+
         let input = event.target.value;
         user.Newvalue = input
     }
 
-    function handllerState(e) {
-        debugger
-        setState_DropDown_select(e)
-      console.log(state_DropDown_select)  
+    function handllerState(event, user) {
+        user.Newvalue = event.value
+        setState_DropDown_select(event)
 
-        setDistrict_dropdown_Select('')
     }
 
-    function handllerDistrictOnState(e) {
-        setDistrict_dropdown_Select(e)
-    }
-   
-    
-    function fromdateOnchange(e, date) {
-        setDate(date)
+    function handllerDistrictOnState(event, user) {
+        user.Newvalue = event.value
+        setDistrict_dropdown_Select(event)
     }
 
+
+    function fromdateOnchange(event, user) {
+        const Date = invertDatefunc(event[0])
+        user.NewFSSAIExipry = Date
+    }
 
 
 
@@ -293,8 +299,8 @@ const PartyMasterBulkUpdate = (props) => {
             dataField: "PartyName",
         },
         {
-            text: Data.length <= 0 ? null : val,
-            dataField: Data.length <= 0 ? null : val,
+            text:  SelectFieldName.label,
+            dataField: SelectFieldName.label,
         },
 
 
@@ -314,65 +320,67 @@ const PartyMasterBulkUpdate = (props) => {
         formatter: (cellContent, user) => (
             <>
                 {SelectFieldName.label === "District" || SelectFieldName.label === "State" ?
-                    <div >
+                    <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
 
-                               {SelectFieldName.label === "State"? <Select
-                                    value={state_DropDown_select}
-                                    options={StateValues}
-                                    onChange={(e) => { handllerState(e) }}
-                                />:
-                                <Select
-                                    value={district_dropdown_Select}
-                                    options={DistrictOnStateValues}
-                                    onChange={(e) => { handllerDistrictOnState(e) }}
-                                />}
+                                {SelectFieldName.label === "State" ?
+                                    <Select
+                                        value={state_DropDown_select}
+                                        // defaultValue={user.Newvalue}
+                                        options={StateValues}
+                                        onChange={(event) => handllerState(event, user)}
+                                    /> :
+                                    <Select
+                                        value={district_dropdown_Select}
+                                        options={DistrictOnStateValues}
+                                        onChange={(event) => handllerDistrictOnState(event, user)}
+                                    />}
 
                             </FormGroup>
                         </Col>
                     </div> :
-                    <div >
+                    <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
                                 <Input
                                     id=""
                                     type="text"
+                                    placeholder="Enter New Value"
                                     defaultValue={user.Newvalue}
                                     className="col col-sm text-center"
                                     onChange={(event) => tableSelectHandler(event, user)}
+
                                 />
                             </FormGroup>
                         </Col>
                     </div>}
             </>
         ),
-
     }
     pagesListColumns.push(Newvalue)
-
     const dateColumn = {
         text: " New FSSAIExipry",
         dataField: "",
         formatter: (cellContent, user) => (
             <>
-                <div >
-                    {/* <Col> */}
-                    <FormGroup >
-                        <Flatpickr
-                            name='fromdate'
-                            className="form-control d-block p-2 bg-white text-dark"
-                            placeholder="Select..."
-                            // value={fromdate}
-                            options={{
-                                altInput: true,
-                                altFormat: "d-m-Y",
-                                dateFormat: "Y-m-d",
-                            }}
-                            onChange={fromdateOnchange}
-                        />
-                    </FormGroup>
-                    {/* </Col> */}
+                <div style={{ width: "180px" }} >
+                    <Col sm={12}>
+                        <FormGroup sm={6}>
+                            <Flatpickr
+                                name='fromdate'
+                                className="form-control d-block p-2 bg-white text-dark"
+                                placeholder="Select..."
+                                // value={fromdate}
+                                options={{
+                                    altInput: true,
+                                    altFormat: "d-m-Y",
+                                    dateFormat: "Y-m-d",
+                                }}
+                                onChange={(event) => fromdateOnchange(event, user)}
+                            />
+                        </FormGroup>
+                    </Col>
                 </div>
 
             </>
@@ -390,29 +398,31 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
-
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
+                debugger
                 Data.forEach(i => {
+                    if (i.Newvalue || i.NewFSSAIExipry) {
+                        debugger
+                        const arr = {
+                            SubPartyID: i.SubPartyID,
+                            Value1: i.Newvalue,
+                            Value2: i.NewFSSAIExipry
 
-                    const arr = {
-                        SubPartyID: i.SubPartyID,
-                        Value1:i.Newvalue,
-                        FSSAIExipry: i.FSSAIExipry,
-                        FSSAINo: i.FSSAINo
+                        }
+                        arr1.push(arr)
                     }
-                    arr1.push(arr)
+
                 })
                 debugger
                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
                     UpdateData: arr1
-
                 });
 
                 if (pageMode === mode.edit) {
@@ -450,23 +460,20 @@ const PartyMasterBulkUpdate = (props) => {
                                             <Card>
                                                 <CardBody className="c_card_body">
                                                     <Row>
-                                                        <Col md="4" >
+                                                        <Col sm={4} >
                                                             <FormGroup className=" row  mt-2" >
                                                                 <Label className="mt-1"
-                                                                    style={{ width: "110px" }}>SelectField </Label>
+                                                                    style={{ width: "95px" }}>SelectField </Label>
                                                                 <div className="col col-6 sm-1">
                                                                     <Select
                                                                         name="SelectField"
-                                                                        value={SelectFieldName}
+                                                                        value={val}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={SelectFieldDropdown_options}
-                                                                        onChange={(e, v) => {
-                                                                            SelectFieldHandler(e, v)
-                                                                            setSelectFieldName(e, v)
-                                                                        }
-                                                                        }
+                                                                        onChange={(event) => SelectFieldHandler(event)}
+                                                            
                                                                     />
                                                                     {isError.SelectField.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
@@ -474,7 +481,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 </div>
                                                             </FormGroup>
                                                         </Col>
-                                                        <Col md="4" >
+                                                        <Col sm={4} >
                                                             <FormGroup className=" row  mt-2" >
                                                                 <Label className="mt-1"
                                                                     style={{ width: "110px" }}>RoutesName </Label>
@@ -495,11 +502,11 @@ const PartyMasterBulkUpdate = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
-                                                        <Col md="3" >
+                                                        <Col sm={3} >
                                                             <FormGroup className=" row  mt-2" >
                                                                 <Label htmlFor="validationCustom01" className="mt-1"
                                                                     style={{ width: "100px" }}>PartyName </Label>
-                                                                <div className="col col-6 sm-1">
+                                                                <div className="col col-7 sm-1">
                                                                     <Select
                                                                         name="PartyName"
                                                                         value={Party}
@@ -540,7 +547,7 @@ const PartyMasterBulkUpdate = (props) => {
                                             >
                                                 {toolkitProps => (
                                                     <React.Fragment>
-                                                        {<div className="table">
+                                                         <div className="table">
                                                             <BootstrapTable
                                                                 keyField={"id"}
                                                                 bordered={true}
@@ -554,7 +561,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                             />
                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
                                                             {mySearchProps(toolkitProps.searchProps)}
-                                                        </div>}
+                                                        </div>
 
                                                         <Row className="align-items-md-center mt-30">
                                                             <Col className="pagination pagination-rounded justify-content-end mb-2">

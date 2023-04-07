@@ -149,7 +149,7 @@ export const BilledToRow = (data) => {
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
-debugger
+
 
 let result = data.InvoicesReferences.map(a => a.Order);
     const PONumber =result.toString()
