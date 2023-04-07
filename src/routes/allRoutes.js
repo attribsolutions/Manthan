@@ -133,7 +133,7 @@ import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
 import Receipts from "../pages/Accounting/Receipt/Receipts";
-
+import ReceiptList from "../pages/Accounting/Receipt/ReceiptList";
 import BankMaster from "../pages/Account/BankMaster";
 import BankList from "../pages/Account/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
@@ -324,8 +324,10 @@ const userRoutes = [
 
   //********************************Accounting ***********************************//
   { path: path.RECEIPTS, component: Receipts },
+  { path: path.RECEIPTS_LIST, component: ReceiptList },
 
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
+
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

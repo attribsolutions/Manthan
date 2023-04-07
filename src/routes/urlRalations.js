@@ -189,3 +189,5 @@ export const ReceiptList = url.RECEIPTS_LIST
 
 export const PaymentEntry = url.PAYMENT_ENTRY
 export const PaymentEntryList = url.PAYMENT_ENTRY_LIST
+
+
