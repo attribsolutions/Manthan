@@ -317,13 +317,13 @@ const Receipts = (props) => {
         const btnId = event.target.id
         const ReceiptInvoices1 = ReceiptGoButton.map((index) => ({
             Invoice: index.Invoice,
-            GrandTotal: index.Calculate,
-            PaidAmount: index.PaidAmount,
+            GrandTotal: index.GrandTotal,
+            PaidAmount: index.Calculate,
             flag: 0
         }))
 
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
-            return index.GrandTotal > 0
+            return index.PaidAmount > 0
         })
 
         try {
