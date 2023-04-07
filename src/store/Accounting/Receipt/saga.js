@@ -46,6 +46,8 @@ function* Receiptfilter_Post_API_GenFun({ filters }) {
           return index
       });
       yield put(action.Receiptlistfilters(response));
+    }catch (error) { CommonConsole(error) } 
+}
 
 function* save_Receipt_GenFunc({ config }) { 
  

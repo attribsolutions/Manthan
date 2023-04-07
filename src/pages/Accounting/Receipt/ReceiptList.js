@@ -193,8 +193,8 @@ const ReceiptList = () => {
                         <Col sm="5">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-sm-1 p-2"
-                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CustomerName} </Label>
-                                <Col sm="7">
+                                    style={{ width: "90px", marginRight: "0.4cm" }}>CustomerName </Label>
+                                <Col sm="6">
                                     <Select
                                         name="CustomerName"
                                         value={values.CustomerName}
@@ -215,7 +215,7 @@ const ReceiptList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1" className="mx-4 ">
+                        <Col sm="2" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
