@@ -85,7 +85,7 @@ function AddressDetails_Tab(props) {
     }
 
     const clearState = () => {
-        debugger
+        
         setAddress('');
         setFSSAIExipry('');
         setFSSAINo('');
@@ -95,7 +95,7 @@ function AddressDetails_Tab(props) {
     };
 
     const onchangeHandler = async (event) => {
-        debugger
+        
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
         let ImageUpload = base64
@@ -103,7 +103,7 @@ function AddressDetails_Tab(props) {
     }
 
     const convertBase64 = (file) => {
-        debugger
+        
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file);

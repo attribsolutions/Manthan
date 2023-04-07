@@ -24,7 +24,7 @@ const PartyDropdownList = (props) => {
     }));
 
     // const goButtonHandler = () => {
-    //     debugger
+    //     
     //     if (state.length === 0) {
     //         CustomAlert({
     //             Type: 3,

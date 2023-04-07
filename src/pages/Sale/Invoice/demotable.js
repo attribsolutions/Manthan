@@ -77,7 +77,7 @@ const DemoTable = () => {
         //         row.header === true ? { "colSpan": "3" } : {}
         //     ),
         //     style: (cell, row, rowIndex, colIndex) => {
-        //         debugger
+        //         
         //         if (!row.header === true) {
         //             return { display: "none",hidden:true } //make sure other things are not displayed
         //         } else return {}
@@ -128,7 +128,7 @@ const DemoTable = () => {
                 row.header === true ? { "colSpan": "4" } : {}
             ),
             // style: (cell, row, rowIndex, colIndex) => {
-            //     debugger
+            //     
             //     if (!row.header === true) {
             //         return { display: "none", } //make sure other things are not displayed
             //     } else return {}
@@ -279,7 +279,7 @@ const DemoTable = () => {
         d
     }) {
 
-        // debugger
+        // 
         let hasReturn = false
 
         let cell = typeof value !== 'undefined' && typeof row.header === "undefined"
@@ -305,7 +305,7 @@ const DemoTable = () => {
         }
         return hasReturn;
 
-        // debugger
+        // 
         // let aa = row.ItemName;
         // if (aa === undefined || null) aa = ''
 
@@ -331,7 +331,7 @@ const DemoTable = () => {
                     search={{
                         onColumnMatch,
                         afterSearch: (newResult,c,v,b) => {
-                            debugger
+                            
                             console.log("newResult", newResult)}
                     }}
                 // search={{ searchFormatted: true }}

@@ -672,7 +672,7 @@ const Invoice = (props) => {
     }
 
     function stockDistributeFunc(index) {
-        debugger
+        
         const v1 = index.Quantity;
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
@@ -722,7 +722,7 @@ const Invoice = (props) => {
     };
 
     function orderQtyOnChange(event, index) {
-        debugger
+        
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
@@ -895,7 +895,7 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-            debugger
+            
             const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,

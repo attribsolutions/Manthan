@@ -207,7 +207,7 @@ const CommonPurchaseList = (props) => {
 
 
     // function tog_center() {
-    //     debugger
+    //     
     //     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     // }
 
