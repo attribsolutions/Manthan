@@ -45,15 +45,13 @@ const PaymentEntry = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [array, setArray] = useState([]);
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [orderlistFilter, setorderlistFilter] = useState({ Date: currentDate, ChequeDate: currentDate });
 
     const fileds = {
-        Date: "",
+        Date: currentDate,
         OpeningBalance: "",
         CustomerName: "",
         ReceiptMode: "",
@@ -62,7 +60,7 @@ const PaymentEntry = (props) => {
         BankName: "",
         ChequeNo: "",
         DepositorBankName: "",
-        ChequeDate: "",
+        ChequeDate: currentDate,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -86,8 +84,6 @@ const PaymentEntry = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const { Date, ChequeDate } = orderlistFilter;
-
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
@@ -99,7 +95,7 @@ const PaymentEntry = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Type: 4,
+            Type: 5,
             PartyID: loginPartyID(),
             CompanyID: loginCompanyID()
         });
@@ -262,6 +258,23 @@ const PaymentEntry = (props) => {
         custom: true,
     };
 
+    function Date_Onchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Date = date;
+            a.hasValid.Date.valid = true
+            return a
+        })
+    }
+
+    function ChequeDate_Onchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ChequeDate = date;
+            a.hasValid.ChequeDate.valid = true
+            return a
+        })
+    }
     // function onChangeAmountHandler(event) {
     //     debugger
     //     let BalanceAmount = ReceiptGoButton.map((index) => {
@@ -312,16 +325,47 @@ const PaymentEntry = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
+        if (values.ReceiptMode.label === "Cheque") {
+            const invalidMsg1 = []
+
+            if (values.BankName === "") {
+                invalidMsg1.push(`BankName Is Required`)
+            }
+            if (values.DepositorBankName === "") {
+                invalidMsg1.push(`DepositorBankName Is Required`)
+            };
+            if (values.ChequeNo === "") {
+                invalidMsg1.push(`ChequeNo Is Required`)
+            };
+            // if (values.ChequeDate === "") {
+            //     invalidMsg1.push(`ChequeDate Is Required`)
+            // };
+
+            if ((values.BankName === "")
+                || (values.DepositorBankName === "")
+                || (values.ChequeNo === "")
+            ) {
+
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: JSON.stringify(invalidMsg1),
+                    })
+                );
+                return;
+            }
+        }
 
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-
+                debugger
                 const jsonBody = JSON.stringify({
-                    "ReceiptDate": Date,
+                    "ReceiptDate": values.Date,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
@@ -330,7 +374,7 @@ const PaymentEntry = (props) => {
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.CustomerName.value,
-                    "ChequeDate": ChequeDate,
+                    "ChequeDate": values.ChequeDate,
                     "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
@@ -371,24 +415,17 @@ const PaymentEntry = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="Date"
-                                                value={Date}
+                                                name='Date'
+                                                value={values.Date}
                                                 className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                // disabled={pageMode === mode.edit ? true : false}
+                                                placeholder="Select..."
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    // defaultDate: (pageMode === mode.edit) ? values.Date : "today"
                                                 }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onChange={Date_Onchange}
                                             />
-                                            {isError.Date.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Date}</span>
-                                            )}
                                         </Col>
 
                                     </FormGroup>
@@ -468,11 +505,11 @@ const PaymentEntry = (props) => {
                                                         i.values.BankName = '';
                                                         i.values.DepositorBankName = '';
                                                         i.values.ChequeNo = '';
-                                                        i.values.ChequeDate = '';
+                                                        // i.values.ChequeDate = '';
                                                         i.hasValid.BankName.valid = true;
                                                         i.hasValid.DepositorBankName.valid = true;
                                                         i.hasValid.ChequeNo.valid = true;
-                                                        i.hasValid.ChequeDate.valid = true;
+                                                        // i.hasValid.ChequeDate.valid = true;
                                                         return i
                                                     })
                                                 }}
@@ -575,24 +612,17 @@ const PaymentEntry = (props) => {
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
                                             <Col sm="7">
                                                 <Flatpickr
-                                                    name="ChequeDate"
-                                                    value={ChequeDate}
+                                                    name='ChequeDate'
+                                                    value={values.ChequeDate}
                                                     className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
-                                                    autoComplete="0,''"
-                                                    // disabled={pageMode === mode.edit ? true : false}
+                                                    placeholder="Select..."
                                                     options={{
                                                         altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
-                                                        // defaultDate: (pageMode === mode.edit) ? values.Date : "today"
                                                     }}
-                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                    onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                    onChange={ChequeDate_Onchange}
                                                 />
-                                                {isError.ChequeDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ChequeDate}</span>
-                                                )}
                                             </Col>
                                         </FormGroup>
                                     </Col >

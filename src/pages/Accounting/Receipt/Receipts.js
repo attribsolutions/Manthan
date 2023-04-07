@@ -50,10 +50,9 @@ const Receipts = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [orderlistFilter, setorderlistFilter] = useState({ Date: currentDate, ChequeDate: currentDate });
 
     const fileds = {
-        Date: "",
+        Date: currentDate,
         OpeningBalance: "",
         CustomerName: "",
         ReceiptMode: "",
@@ -62,7 +61,7 @@ const Receipts = (props) => {
         BankName: "",
         ChequeNo: "",
         DepositorBankName: "",
-        ChequeDate: "",
+        ChequeDate: currentDate,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -85,8 +84,6 @@ const Receipts = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
-    const { Date, ChequeDate } = orderlistFilter;
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
@@ -162,7 +159,7 @@ const Receipts = (props) => {
         debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
-            dispatch(ReceiptGoButtonMaster_Success([]))
+            // dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             // dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
@@ -312,9 +309,42 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
-        const btnId = event.target.id
+        const btnId = event.target.id;
+
+        if (values.ReceiptMode.label === "Cheque") {
+            const invalidMsg1 = []
+
+            if (values.BankName === "") {
+                invalidMsg1.push(`BankName Is Required`)
+            }
+            if (values.DepositorBankName === "") {
+                invalidMsg1.push(`DepositorBankName Is Required`)
+            };
+            if (values.ChequeNo === "") {
+                invalidMsg1.push(`ChequeNo Is Required`)
+            };
+            if (values.ChequeDate === "") {
+                invalidMsg1.push(`ChequeDate Is Required`)
+            };
+
+            if ((values.BankName === "")
+                || (values.DepositorBankName === "")
+                || (values.ChequeNo === "")
+                || (values.ChequeDate === "")) {
+
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: JSON.stringify(invalidMsg1),
+                    })
+                );
+                return;
+            }
+        }
+
         const ReceiptInvoices1 = ReceiptGoButton.map((index) => ({
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
@@ -326,12 +356,13 @@ const Receipts = (props) => {
             return index.PaidAmount > 0
         })
 
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    "ReceiptDate": Date,
+                    "ReceiptDate": values.Date,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
@@ -340,7 +371,7 @@ const Receipts = (props) => {
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.CustomerName.value,
-                    "ChequeDate": ChequeDate,
+                    "ChequeDate": values.ReceiptMode.label === "Cheque" ? values.ChequeDate : "",
                     "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
@@ -356,10 +387,44 @@ const Receipts = (props) => {
                 else {
                     dispatch(saveReceiptMaster({ jsonBody, btnId }));
                 }
+                console.log("jsonBody", jsonBody)
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function ReceiptModeOnchange(event) {
+        debugger
+        setState((i) => {
+            debugger
+            i.values.BankName = '';
+            i.values.DepositorBankName = '';
+            i.values.ChequeNo = '';
+            // i.values.ChequeDate = '';
+            i.hasValid.BankName.valid = true;
+            i.hasValid.DepositorBankName.valid = true;
+            i.hasValid.ChequeNo.valid = true;
+            // i.hasValid.ChequeDate.valid = true;
+            return i
+        })
+    }
+
+    function Date_Onchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Date = date;
+            a.hasValid.Date.valid = true
+            return a
+        })
+    }
+
+    function ChequeDate_Onchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ChequeDate = date;
+            a.hasValid.ChequeDate.valid = true
+            return a
+        })
+    }
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -381,24 +446,17 @@ const Receipts = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="Date"
-                                                value={Date}
+                                                name='Date'
+                                                value={values.Date}
                                                 className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                // disabled={pageMode === mode.edit ? true : false}
+                                                placeholder="Select..."
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    // defaultDate: (pageMode === mode.edit) ? values.Date : "today"
                                                 }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onChange={Date_Onchange}
                                             />
-                                            {isError.Date.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Date}</span>
-                                            )}
                                         </Col>
 
                                     </FormGroup>
@@ -473,18 +531,8 @@ const Receipts = (props) => {
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
-                                                    setState((i) => {
-                                                        debugger
-                                                        i.values.BankName = '';
-                                                        i.values.DepositorBankName = '';
-                                                        i.values.ChequeNo = '';
-                                                        i.values.ChequeDate = '';
-                                                        i.hasValid.BankName.valid = true;
-                                                        i.hasValid.DepositorBankName.valid = true;
-                                                        i.hasValid.ChequeNo.valid = true;
-                                                        i.hasValid.ChequeDate.valid = true;
-                                                        return i
-                                                    })
+                                                    ReceiptModeOnchange(hasSelect)
+
                                                 }}
                                             />
                                             {isError.ReceiptMode.length > 0 && (
@@ -585,24 +633,17 @@ const Receipts = (props) => {
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeDate}</Label>
                                             <Col sm="7">
                                                 <Flatpickr
-                                                    name="ChequeDate"
-                                                    value={ChequeDate}
+                                                    name='ChequeDate'
+                                                    value={values.ChequeDate}
                                                     className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="YYYY-MM-DD"
-                                                    autoComplete="0,''"
-                                                    // disabled={pageMode === mode.edit ? true : false}
+                                                    placeholder="Select..."
                                                     options={{
                                                         altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
-                                                        // defaultDate: (pageMode === mode.edit) ? values.Date : "today"
                                                     }}
-                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                    onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                    onChange={ChequeDate_Onchange}
                                                 />
-                                                {isError.ChequeDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ChequeDate}</span>
-                                                )}
                                             </Col>
                                         </FormGroup>
                                     </Col >
