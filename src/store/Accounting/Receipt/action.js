@@ -1,8 +1,8 @@
 import {
   DEPOSITOR_BANK_FILTER,
   DEPOSITOR_BANK_FILTER_SUCCESS,
-  GET_RECEIPT_LIST_PAGE,
-  GET_RECEIPT_LIST_PAGE_SUCCESS,
+  POST_RECEIPT_LIST_PAGE,
+  POST_RECEIPT_LIST_PAGE_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
   RECEIPT_LIST_FILTERS,
@@ -41,13 +41,13 @@ export const saveReceiptMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const getReceiptListPage = (config={}) => ({
-  type: GET_RECEIPT_LIST_PAGE,
+export const postReceiptListPage = (config={}) => ({
+  type: POST_RECEIPT_LIST_PAGE,
  config,
 });
 
-export const getReceiptListPageSuccess = (resp) => ({
-  type: GET_RECEIPT_LIST_PAGE_SUCCESS,
+export const postReceiptListPageSuccess = (resp) => ({
+  type: POST_RECEIPT_LIST_PAGE_SUCCESS,
   payload: resp,
 });
 

@@ -24,10 +24,11 @@ import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import { RECEIPT_LIST } from "../../../routes/route_url";
 import {
-    getReceiptListPage,
+    postReceiptListPage,
     ReceiptGoButtonMaster, Receiptlistfilters
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
+import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const ReceiptList = () => {
 
@@ -64,7 +65,7 @@ const ReceiptList = () => {
     const { fromdate, todate } = ReceiptFilters;
 
     const action = {
-        getList: getReceiptListPage,
+        getList: postReceiptListPage,
         editId: editBOMList,
         deleteId: deleteBOMId,
         postSucc: postMessage,
@@ -108,6 +109,15 @@ const ReceiptList = () => {
         label: index.Name,
     }));
 
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
+
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
@@ -115,7 +125,7 @@ const ReceiptList = () => {
             CompanyID: loginCompanyID(),
             PartyID: loginPartyID(),
         });
-        dispatch(getReceiptListPage(jsonBody));
+        dispatch(postReceiptListPage(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
