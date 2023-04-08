@@ -131,7 +131,7 @@ const Receipts = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-   
+
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -539,20 +539,17 @@ const Receipts = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptMode} </Label>
                                         <Col sm="7">
                                             <Select
+                                                id="ReceiptMode "
                                                 name="ReceiptMode"
                                                 value={values.ReceiptMode}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                    ReceiptModeOnchange(hasSelect)
-
-                                                }}
+                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                             {isError.ReceiptMode.length > 0 && (
-                                                <span className="invalid-feedback">{isError.ReceiptMode}</span>
+                                                <span className="text-danger f-8"><small>{isError.ReceiptMode}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>

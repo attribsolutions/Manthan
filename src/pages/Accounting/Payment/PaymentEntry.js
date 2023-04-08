@@ -388,20 +388,17 @@ const PaymentEntry = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
                                             <Select
+                                                id="Customer "
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                    CustomerOnChange(hasSelect)
-                                                }
-                                                }
+                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                             {isError.Customer.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Customer}</span>
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
                                             )}
                                         </Col>
 
@@ -441,20 +438,17 @@ const PaymentEntry = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptMode} </Label>
                                         <Col sm="7">
                                             <Select
+                                                id="ReceiptMode "
                                                 name="ReceiptMode"
                                                 value={values.ReceiptMode}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                    // ReceiptModeOnchange(hasSelect)
-
-                                                }}
+                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                             {isError.ReceiptMode.length > 0 && (
-                                                <span className="invalid-feedback">{isError.ReceiptMode}</span>
+                                                <span className="text-danger f-8"><small>{isError.ReceiptMode}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
