@@ -25,7 +25,7 @@ import {
     ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import PaymentEntry from "./PaymentEntry";
@@ -53,7 +53,7 @@ const PaymentEntryList = () => {
             deleteMsg: state.BOMReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.RetailerList,
+            RetailerList: state.CommonAPI_Reducer.supplier,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -93,6 +93,7 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+        dispatch(getSupplier())
         goButtonHandler(true)
     }, []);
 
@@ -113,14 +114,14 @@ const PaymentEntryList = () => {
         label: index.Name,
     }));
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Type: 4,
+    //         PartyID: loginPartyID(),
+    //         CompanyID: loginCompanyID()
+    //     });
+    //     dispatch(Retailer_List(jsonBody));
+    // }, []);
 
     const goButtonHandler = (async) => {
 
