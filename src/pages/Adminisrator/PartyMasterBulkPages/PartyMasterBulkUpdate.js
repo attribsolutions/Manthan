@@ -40,7 +40,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     GoButton_For_Party_Master_Bulk_Update_Add,
@@ -58,6 +58,8 @@ import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 
 
 const PartyMasterBulkUpdate = (props) => {
+    debugger
+    const count = useRef(0)
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -116,7 +118,7 @@ const PartyMasterBulkUpdate = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        // dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -163,7 +165,7 @@ const PartyMasterBulkUpdate = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
+            // dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             setRouteSelect('')
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
@@ -219,7 +221,6 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const DistrictOnStateValues = DistrictOnState.map((index) => ({
-
         value: index.id,
         label: index.Name
     }));
@@ -248,7 +249,7 @@ const PartyMasterBulkUpdate = (props) => {
             );
             return;
         }
-        debugger
+        
         const jsonBody = JSON.stringify({
 
             PartyID: loginPartyID(),
@@ -262,9 +263,9 @@ const PartyMasterBulkUpdate = (props) => {
 
     function SelectFieldHandler(event) {
       
-        debugger
+        
         setSelectFieldName(event)
-
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
     }
 
     function tableSelectHandler(event, user) {
@@ -284,14 +285,10 @@ const PartyMasterBulkUpdate = (props) => {
         setDistrict_dropdown_Select(event)
     }
 
-
     function fromdateOnchange(event, user) {
         const Date = invertDatefunc(event[0])
         user.NewFSSAIExipry = Date
     }
-
-
-
 
     const pagesListColumns = [
         {
@@ -303,7 +300,6 @@ const PartyMasterBulkUpdate = (props) => {
             dataField: SelectFieldName.label,
         },
 
-
     ];
 
     if (SelectFieldName.label === "FSSAINo") {
@@ -314,29 +310,28 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(FSSAINo)
     }
 
+    if (SelectFieldName.label === "State") {
+        let District = {
+            text: "District",
+            dataField: "District",
+        }
+        pagesListColumns.push(District)
+    }
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
         formatter: (cellContent, user) => (
             <>
-                {SelectFieldName.label === "District" || SelectFieldName.label === "State" ?
+                { SelectFieldName.label === "State" ?
                     <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
-
-                                {SelectFieldName.label === "State" ?
                                     <Select
                                         value={state_DropDown_select}
                                         // defaultValue={user.Newvalue}
                                         options={StateValues}
                                         onChange={(event) => handllerState(event, user)}
-                                    /> :
-                                    <Select
-                                        value={district_dropdown_Select}
-                                        options={DistrictOnStateValues}
-                                        onChange={(event) => handllerDistrictOnState(event, user)}
-                                    />}
-
+                                    /> 
                             </FormGroup>
                         </Col>
                     </div> :
@@ -350,7 +345,6 @@ const PartyMasterBulkUpdate = (props) => {
                                     defaultValue={user.Newvalue}
                                     className="col col-sm text-center"
                                     onChange={(event) => tableSelectHandler(event, user)}
-
                                 />
                             </FormGroup>
                         </Col>
@@ -358,6 +352,31 @@ const PartyMasterBulkUpdate = (props) => {
             </>
         ),
     }
+
+    const DistrictColumn = {
+        text: " New District",
+        dataField: "",
+        formatter: (cellContent, user) => (
+            <>
+               <div style={{ width: "180px" }}>
+                        <Col>
+                            <FormGroup >
+                                    <Select
+                                        value={district_dropdown_Select}
+                                        options={DistrictOnStateValues}
+                                        onChange={(event) => handllerDistrictOnState(event, user)}
+                                    />
+                            </FormGroup>
+                        </Col>
+                    </div>
+            </>
+        ),
+    }
+    if (SelectFieldName.label === "State") {
+        pagesListColumns.push(DistrictColumn)
+    }
+
+
     pagesListColumns.push(Newvalue)
     const dateColumn = {
         text: " New FSSAIExipry",
@@ -404,10 +423,10 @@ const PartyMasterBulkUpdate = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                debugger
+                
                 Data.forEach(i => {
-                    if (i.Newvalue || i.NewFSSAIExipry) {
-                        debugger
+                    if (i.Newvalue || i.NewFSSAIExipry||i.District) {
+                        
                         const arr = {
                             SubPartyID: i.SubPartyID,
                             Value1: i.Newvalue,
@@ -418,7 +437,7 @@ const PartyMasterBulkUpdate = (props) => {
                     }
 
                 })
-                debugger
+                
                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
