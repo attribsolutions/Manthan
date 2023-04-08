@@ -171,7 +171,7 @@ const PaymentEntry = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.PAYMENT_ENTRY,
+                    RedirectPath: url.PAYMENT_ENTRY_LIST,
                 }))
             }
         }
@@ -206,55 +206,6 @@ const PaymentEntry = (props) => {
         value: index.id,
         label: index.Name,
     }));
-
-    const pagesListColumns = [
-        {
-            text: "Receipt Date",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "Bill No",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Bill Amount",
-            dataField: "GrandTotal",
-        },
-        {
-            text: "Paid",
-            dataField: "PaidAmount",
-        },
-        {
-            text: "Bal Amt",
-            dataField: "BalanceAmount",
-        },
-        {
-            text: "Calculate",
-            dataField: "Calculate",
-            formatter: (cellContent, row, key) => {
-
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
-                        key={`batchQty${key}`}
-                        id={`batchQty${row.FullInvoiceNumber}`}
-                        value={Number(row.Calculate)}
-                        type="text"
-                        className="col col-sm text-center"
-                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
-                    />
-                </span>)
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            },
-        },
-    ];
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: ReceiptGoButton.length,
-        custom: true,
-    };
 
     function ReceiptDate_Onchange(e, date) {
         setState((i) => {
