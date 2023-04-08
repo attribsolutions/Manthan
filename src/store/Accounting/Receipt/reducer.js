@@ -1,19 +1,17 @@
-import { currentDate } from "../../../components/Common/CommonFunction"
 import {
   DEPOSITOR_BANK_FILTER_SUCCESS,
-  POST_RECEIPT_LIST_PAGE,
+  RECEIPT_LIST_API_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
-  RECEIPT_LIST_FILTERS,
   SAVE_RECEIPT_MASTER_SUCCESS,
+  RECEIPT_TYPE_API_SUCCESS,
 } from "./actionType"
-
 
 const INIT_STATE = {
   ReceiptGoButton: [],
   DepositorBank: [],
   ReceiptList: [],
   postMsg: { Status: false },
-  ReceiptFilters: { fromdate: currentDate, todate: currentDate, CusomerSelect: { value: '', label: "All" } },
+  ReceiptType:[],
 }
 
 const ReceiptReducer = (state = INIT_STATE, action) => {
@@ -23,12 +21,6 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         ReceiptGoButton: action.payload,
-      }
-
-    case RECEIPT_LIST_FILTERS:
-      return {
-        ...state,
-        ReceiptFilters: action.payload,
       }
 
     case DEPOSITOR_BANK_FILTER_SUCCESS:
@@ -43,12 +35,17 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         postMsg: action.payload,
       }
 
-    case POST_RECEIPT_LIST_PAGE:
+    case RECEIPT_LIST_API_SUCCESS:
       return {
         ...state,
-        ReceiptList: [],
+        ReceiptList: action.payload,
       }
 
+    case RECEIPT_TYPE_API_SUCCESS:
+      return {
+        ...state,
+        ReceiptType: action.payload,
+      }
     default:
       return state
   }

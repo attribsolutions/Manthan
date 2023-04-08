@@ -4,8 +4,8 @@ import * as actionType from "./actionType";
 import * as action from "./action";
 import { CommonConsole, convertDatefunc, convertTimefunc, loginJsonBody } from "../../../components/Common/CommonFunction";
 
-
-function* ReceiptGoButtonGenFunc({ jsonBody }) {                                   // getList API
+   // customer dropdown click then table values display
+function* ReceiptGoButtonGenFunc({ jsonBody }) {
   try {
     const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
     response.Data.map((index) => {
@@ -15,6 +15,7 @@ function* ReceiptGoButtonGenFunc({ jsonBody }) {                                
   } catch (error) { CommonConsole(error) }
 }
 
+// Dropdown API
 function* Depositor_Bank_GenFunc({ jsonBody }) {
   const filters = loginJsonBody()
   try {
@@ -23,34 +24,20 @@ function* Depositor_Bank_GenFunc({ jsonBody }) {
   } catch (error) { CommonConsole(error) }
 }
 
-
-function* post_Receipt_List_GenFun({filters}) {
+// Receipt List API
+function* Receipt_List_GenFun({ jsonBody }) {
   try {
-      const response = yield call(apiCall.Receipt_Post_API, filters);
-      const newList = yield response.Data.map((i) => {
-          var date = convertDatefunc(i.Date)
-          var time = convertTimefunc(i.CreatedOn)
-          i.Date = (`${date} ${time}`)
-          return i
-  })
-      yield put(action.postReceiptListPageSuccess(newList));
-  } catch (error) { CommonConsole(error) }  
+    const response = yield call(apiCall.Receipt_Filter_API, jsonBody);
+    // const newList = yield response.Data.map((i) => {
+    //   var date = convertDatefunc(i.ReceiptDate)
+    //   i.Date = (date)
+    // })
+    yield put(action.ReceiptListAPISuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
 }
 
-function* Receiptfilter_Post_API_GenFun({ filters }) {
-     
-  try {
-      const response = yield call(apiCall.ReceiptFilter_Go_Button_API, filters);
-      response.Data.map((index) => {
-          index["Check"] = false
-          return index
-      });
-      yield put(action.Receiptlistfilters(response));
-    }catch (error) { CommonConsole(error) } 
-}
-
-function* save_Receipt_GenFunc({ config }) { 
- 
+// Post API 
+function* save_Receipt_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.Receipt_Post_API, config);
     yield put(action.saveReceiptMaster_Success(response));
@@ -58,12 +45,21 @@ function* save_Receipt_GenFunc({ config }) {
   } catch (error) { CommonConsole(error) }
 }
 
+// Receipt Type API
+function* Receipt_Type_GenFunc({ jsonBody }) {
+ 
+  try {
+    const response = yield call(apiCall.Receipt_Type_API, jsonBody);
+    yield put(action.ReceiptTypeAPISuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
+
 function* ReceiptSaga() {
   yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
   yield takeEvery(actionType.DEPOSITOR_BANK_FILTER, Depositor_Bank_GenFunc)
-  yield takeEvery(actionType.POST_RECEIPT_LIST_PAGE, post_Receipt_List_GenFun)
-  yield takeEvery(actionType.RECEIPT_LIST_FILTERS, Receiptfilter_Post_API_GenFun)
+  yield takeEvery(actionType.RECEIPT_LIST_API, Receipt_List_GenFun)
   yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
+  yield takeEvery(actionType.RECEIPT_TYPE_API, Receipt_Type_GenFunc)
 
 }
 export default ReceiptSaga;  

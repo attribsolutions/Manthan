@@ -1,13 +1,15 @@
 import {
   DEPOSITOR_BANK_FILTER,
   DEPOSITOR_BANK_FILTER_SUCCESS,
-  POST_RECEIPT_LIST_PAGE,
-  POST_RECEIPT_LIST_PAGE_SUCCESS,
+  RECEIPT_LIST_API,
+  RECEIPT_LIST_API_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
   RECEIPT_LIST_FILTERS,
   SAVE_RECEIPT_MASTER,
-  SAVE_RECEIPT_MASTER_SUCCESS
+  SAVE_RECEIPT_MASTER_SUCCESS,
+  RECEIPT_TYPE_API,
+  RECEIPT_TYPE_API_SUCCESS
 } from "./actionType";
 
 export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
@@ -41,17 +43,23 @@ export const saveReceiptMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const postReceiptListPage = (config={}) => ({
-  type: POST_RECEIPT_LIST_PAGE,
- config,
+export const ReceiptListAPI = (jsonBody) => ({
+  type: RECEIPT_LIST_API,
+  jsonBody,
 });
 
-export const postReceiptListPageSuccess = (resp) => ({
-  type: POST_RECEIPT_LIST_PAGE_SUCCESS,
+export const ReceiptListAPISuccess = (resp) => ({
+  type: RECEIPT_LIST_API_SUCCESS,
   payload: resp,
 });
 
-export const Receiptlistfilters = filter => ({
-  type: RECEIPT_LIST_FILTERS,
-  payload: filter,
-})
+// only use for Receipt type ID post in jsonbody
+export const ReceiptTypeAPI = (jsonBody) => ({
+  type: RECEIPT_TYPE_API,
+  jsonBody,
+});
+
+export const ReceiptTypeAPISuccess = (resp) => ({
+  type: RECEIPT_TYPE_API_SUCCESS,
+  payload: resp,
+});

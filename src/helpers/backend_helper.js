@@ -204,8 +204,8 @@ export const RoleAccessAdd_GO_Button_Api = (id1, id2, id3) => get(`${url.GO_BUTT
 export const RoleAccessAdd_AddPage_Button_Api = (id1) => get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
 export const RoleAccessAdd_Save_Api = ({ jsonBody, btnId }) => post(url.ROLE_ACCESS, jsonBody, btnId) //save api RoleAccessAdd 
 export const RoleAccessAdd_List_Api = (jsonbody) => post(url.GET_ROLEACCESS_LIST_PAGE_API, jsonbody)// RoleAccess List Page API
-export const RoleAccessCopy_Save_Api = ({ jsonBody, btnId }) => post(url.POST_COPY_ROLE_ACCESS_API, jsonBody, btnId )//save api RoleAccessCopy 
-export const RoleAccessAdd_Delete_Api = ({role, division, company,btnId}) => del(`${url.DELETE_ROLE_ACCESS_API}/${role}/${division}/${company}`,btnId)//POST COPY  RoleAccess API
+export const RoleAccessCopy_Save_Api = ({ jsonBody, btnId }) => post(url.POST_COPY_ROLE_ACCESS_API, jsonBody, btnId)//save api RoleAccessCopy 
+export const RoleAccessAdd_Delete_Api = ({ role, division, company, btnId }) => del(`${url.DELETE_ROLE_ACCESS_API}/${role}/${division}/${company}`, btnId)//POST COPY  RoleAccess API
 
 // Employee Type API
 export const Employee_Type_API = ({ jsonBody, btnId }) => post(url.EMPLOYEE_TYPE_API, jsonBody, btnId)// post api
@@ -371,7 +371,7 @@ export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url
 export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Bank Api
-export const post_Bank_List_Api = (filters) => post(url.BANK_LIST,filters) 
+export const post_Bank_List_Api = (filters) => post(url.BANK_LIST, filters)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
@@ -394,7 +394,7 @@ export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, f
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
 export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE, jsonBody)// Go Button post api
-export const post_PartyAPI = ( jsonBody ) => post(url.PARTY_DROPDOWN, jsonBody)// post api
+export const post_PartyAPI = (jsonBody) => post(url.PARTY_DROPDOWN, jsonBody)// post api
 export const post_SelectFieldAPI = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)// post api
 export const Update_Party_Bulk = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_BULK_UPDATE}/${updateId}`, jsonBody, btnId)// update api
 
@@ -529,8 +529,8 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi
-export const ReceiptFilter_Go_Button_API = ({ filtersBody, btnId }) => post(url.RECEIPT_LIST_BY_FILTERS, filtersBody, btnId)
-export const Receipt_get_API = () => get(url.RECEIPT_POST_API)// Get subModule For H_pages
+export const Receipt_Filter_API =  (jsonBody) => post(url.RECEIPT_FILTERS, jsonBody)// Get subModule For H_pages
+export const Receipt_Type_API = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
 
 
 export {
