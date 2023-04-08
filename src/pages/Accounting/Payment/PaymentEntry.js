@@ -35,8 +35,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { DepositorBankFilter, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -51,9 +51,9 @@ const PaymentEntry = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
-        Date: currentDate,
+        ReceiptDate: currentDate,
         OpeningBalance: "",
-        CustomerName: "",
+        Customer: "",
         ReceiptMode: "",
         AmountPaid: "",
         Description: "",
@@ -72,14 +72,16 @@ const PaymentEntry = (props) => {
         RetailerList,
         BankList,
         ReceiptModeList,
+        ReceiptType,
         DepositorBank,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
-            RetailerList: state.CommonAPI_Reducer.RetailerList,
+            RetailerList: state.CommonAPI_Reducer.supplier,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             BankList: state.BankReducer.BankList,
             DepositorBank: state.ReceiptReducer.DepositorBank,
+            ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -90,33 +92,29 @@ const PaymentEntry = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(postBanklist())
         dispatch(DepositorBankFilter())
-        // dispatch(ReceiptGoButtonMaster_Success([]))
-    }, []);
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 5,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
+        dispatch(getSupplier())
     }, []);
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
-            TypeID: 3
+            TypeID: 4
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Company: loginCompanyID(),
-    //         TypeID: 9
-    //     });
-    //     dispatch(postSelect_Field_for_dropdown(jsonBody));
-    // }, []);
+    // Receipt Type API Values **** only Post Json Body
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 3
+        });
+        dispatch(ReceiptTypeAPI(jsonBody));
+    }, []);
+
+    const ReceiptTypeID = ReceiptType.filter((index) => {
+        return index.Name === "Payment Entry"
+    })
 
     const values = { ...state.values }
     const { isError } = state;
@@ -258,11 +256,11 @@ const PaymentEntry = (props) => {
         custom: true,
     };
 
-    function Date_Onchange(e, date) {
+    function ReceiptDate_Onchange(e, date) {
         setState((i) => {
             const a = { ...i }
-            a.values.Date = date;
-            a.hasValid.Date.valid = true
+            a.values.ReceiptDate = date;
+            a.hasValid.ReceiptDate.valid = true
             return a
         })
     }
@@ -365,7 +363,7 @@ const PaymentEntry = (props) => {
                 btnIsDissablefunc({ btnId, state: true })
                 debugger
                 const jsonBody = JSON.stringify({
-                    "ReceiptDate": values.Date,
+                    "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
@@ -373,12 +371,12 @@ const PaymentEntry = (props) => {
                     "DocumentNo": values.ChequeNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
-                    "Customer": values.CustomerName.value,
+                    "Customer": values.Customer.value,
                     "ChequeDate": values.ChequeDate,
                     "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
-                    "ReceiptType": 12,
+                    "ReceiptType": ReceiptTypeID[0].id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": []
@@ -412,11 +410,11 @@ const PaymentEntry = (props) => {
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}  </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name='Date'
-                                                value={values.Date}
+                                                name='ReceiptDate'
+                                                value={values.ReceiptDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -424,7 +422,7 @@ const PaymentEntry = (props) => {
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
-                                                onChange={Date_Onchange}
+                                                onChange={ReceiptDate_Onchange}
                                             />
                                         </Col>
 
@@ -436,11 +434,11 @@ const PaymentEntry = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CustomerName} </Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
                                             <Select
-                                                name="CustomerName"
-                                                value={values.CustomerName}
+                                                name="Customer"
+                                                value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -451,8 +449,8 @@ const PaymentEntry = (props) => {
                                                 }
                                                 }
                                             />
-                                            {isError.CustomerName.length > 0 && (
-                                                <span className="invalid-feedback">{isError.CustomerName}</span>
+                                            {isError.Customer.length > 0 && (
+                                                <span className="invalid-feedback">{isError.Customer}</span>
                                             )}
                                         </Col>
 
@@ -500,18 +498,8 @@ const PaymentEntry = (props) => {
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
-                                                    setState((i) => {
-                                                        debugger
-                                                        i.values.BankName = '';
-                                                        i.values.DepositorBankName = '';
-                                                        i.values.ChequeNo = '';
-                                                        // i.values.ChequeDate = '';
-                                                        i.hasValid.BankName.valid = true;
-                                                        i.hasValid.DepositorBankName.valid = true;
-                                                        i.hasValid.ChequeNo.valid = true;
-                                                        // i.hasValid.ChequeDate.valid = true;
-                                                        return i
-                                                    })
+                                                    // ReceiptModeOnchange(hasSelect)
+
                                                 }}
                                             />
                                             {isError.ReceiptMode.length > 0 && (
@@ -523,7 +511,6 @@ const PaymentEntry = (props) => {
                             </Row>
 
                             {(values.ReceiptMode.label === "Cheque") || (values.ReceiptMode.label === "RTGS") ?
-                                // (values.ReceiptMode.label === "RTGS") &&
                                 < Row >
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
@@ -737,7 +724,7 @@ const PaymentEntry = (props) => {
                                     onClick={saveHandeller}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
-                                    module={"Receipts"}
+                                    module={"PaymentEntry"}
                                 />
 
                             </Col>

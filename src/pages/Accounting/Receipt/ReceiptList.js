@@ -22,13 +22,13 @@ import {
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import { RECEIPTS_LIST } from "../../../routes/route_url";
 import {
-    postReceiptListPage,
-    ReceiptGoButtonMaster, Receiptlistfilters
+    ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button } from "../../../components/Common/CommonButton";
+import * as mode from "../../../routes/PageMode"
 
 const ReceiptList = () => {
 
@@ -38,13 +38,13 @@ const ReceiptList = () => {
     const fileds = {
         FromDate: currentDate,
         ToDate: currentDate,
-        CustomerName: { value: "", label: "All" }
+        Customer: { value: "", label: "All" }
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(RECEIPTS_LIST)
+    const [pageMode, setpageMode] = useState(mode.defaultList)
     const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -54,24 +54,37 @@ const ReceiptList = () => {
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
+            ReceiptType: state.ReceiptReducer.ReceiptType,
             editData: state.BOMReducer.editData,
-            ReceiptFilters: state.ReceiptReducer.ReceiptFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
-    const { userAccess, pageField, tableList, ReceiptFilters, RetailerList } = reducers;
-    const { fromdate, todate } = ReceiptFilters;
+    const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
 
     const action = {
-        getList: postReceiptListPage,
+        getList: ReceiptListAPI,
         editId: editBOMList,
         deleteId: deleteBOMId,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
         deleteSucc: deleteBOMIdSuccess
     }
+
+    // Receipt Type API Values **** only Post Json Body
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 3
+        });
+        dispatch(ReceiptTypeAPI(jsonBody));
+
+    }, []);
+
+    const ReceiptTypeID = ReceiptType.filter((index) => {
+        return index.Name === "Receipt"
+    })
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -81,23 +94,14 @@ const ReceiptList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
         goButtonHandler(true)
-
     }, []);
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
     const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     useEffect(() => {
-        const pageId = 174
+        const page_Id = pageId.RECEIPTS_LIST
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
@@ -118,120 +122,130 @@ const ReceiptList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-    const goButtonHandler = () => {
+    const goButtonHandler = (async) => {
+
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            CompanyID: loginCompanyID(),
+            FromDate: values.FromDate,
+            ToDate: values.ToDate,
+            CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
+            ReceiptType: 29,
         });
-        dispatch(postReceiptListPage(jsonBody));
+        dispatch(ReceiptListAPI(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...ReceiptFilters }
-        newObj.fromdate = date
-        dispatch(Receiptlistfilters(newObj))
+        setState((i) => {
+            const a = { ...i }
+            a.values.FromDate = date;
+            a.hasValid.FromDate.valid = true
+            return a
+        })
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...ReceiptFilters }
-        newObj.todate = date
-        dispatch(Receiptlistfilters(newObj))
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = date;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
     }
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
 
     function CustomerOnChange(e) {
-        const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Customer: e.value
-        });
-        dispatch(ReceiptGoButtonMaster(jsonBody));
+
+        setState((i) => {
+            const a = { ...i }
+            a.values.Customer = e;
+            a.hasValid.Customer.valid = true
+            return a
+        })
+
     }
 
+    const HeaderContent = () => {
+        return (
+            <div className="px-2   c_card_filter text-black" >
+                <div className="row" >
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "83px" }}>FromDate</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name='FromDate'
+                                    value={values.FromDate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={fromdateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "65px" }}>ToDate</Label>
+                            <Col sm="7">
+                                <Flatpickr
+                                    name="ToDate"
+                                    value={values.ToDate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={todateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+
+                    <Col sm="5">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                style={{ width: "115px" }}>Customer</Label>
+                            <Col sm="5">
+                                <Select
+                                    name="Customer"
+                                    classNamePrefix="select2-Customer"
+                                    value={values.Customer}
+                                    options={customerOptions}
+                                    onChange={CustomerOnChange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
+
+                    <Col sm="1" className="mt-3 ">
+                        <Go_Button onClick={goButtonHandler} />
+                    </Col>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
-
-                <div className="px-2   c_card_header text-black" >
-                    <div className="row">
-                        <Col sm="5">
-                            <FormGroup className=" row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="6">
-                                    <Flatpickr
-                                        name='fromdate'
-                                        value={fromdate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={fromdateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm="5" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
-                                <Col sm="6 ">
-                                    <Flatpickr
-                                        name="todate"
-                                        value={todate}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={todateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm="5">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-sm-1 p-2"
-                                    style={{ width: "90px", marginRight: "0.4cm" }}>CustomerName </Label>
-                                <Col sm="6">
-                                    <Select
-                                        name="CustomerName"
-                                        value={values.CustomerName}
-                                        isSearchable={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        options={customerOptions}
-                                        onChange={(hasSelect, evn) => {
-                                            onChangeSelect({ hasSelect, evn, state, setState });
-                                            CustomerOnChange(hasSelect)
-                                        }
-                                        }
-                                    />
-                                    {isError.CustomerName.length > 0 && (
-                                        <span className="invalid-feedback">{isError.CustomerName}</span>
-                                    )}
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm="2" className="mx-4 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
-                        </Col>
-                    </div>
-                </div>
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -241,10 +255,12 @@ const ReceiptList = () => {
                             MasterModal={Receipts}
                             masterPath={url.RECEIPTS}
                             newBtnPath={url.RECEIPTS}
-                            ButtonMsgLable={"Receipt"}
-                            deleteName={"Receipt"}
                             pageMode={pageMode}
+                            HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
+                            ButtonMsgLable={"Receipt"}
+                            deleteName={"FullReceiptNumber"}
+
                         />
                         : null
                 }
