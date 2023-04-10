@@ -1,8 +1,6 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Button,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -12,30 +10,22 @@ import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeDate,
     onChangeSelect,
     onChangeText,
     resetFunction,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, loginUserID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
-import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { DepositorBankFilter, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
@@ -67,7 +57,6 @@ const PaymentEntry = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
-        ReceiptGoButton,
         pageField,
         RetailerList,
         BankList,
@@ -76,7 +65,6 @@ const PaymentEntry = (props) => {
         DepositorBank,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
-            ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             RetailerList: state.CommonAPI_Reducer.supplier,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             BankList: state.BankReducer.BankList,
@@ -125,7 +113,6 @@ const PaymentEntry = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
@@ -224,46 +211,6 @@ const PaymentEntry = (props) => {
             return a
         })
     }
-    // function onChangeAmountHandler(event) {
-    //     debugger
-    //     let BalanceAmount = ReceiptGoButton.map((index) => {
-    //         return parseInt(index.BalanceAmount)
-    //     })
-    //     const sum = BalanceAmount.reduce((partialSum, a) => partialSum + a, 0);
-
-    //     let value1 = Math.max('', Math.min(sum, parseInt(event.target.value)));
-
-    //     event.target.value = value1
-    //     if (event.target.value === "NaN") {
-    //         value1 = 0
-    //     }
-    //     setState((i) => {
-    //         i.values.AmountPaid = value1
-    //         i.hasValid.AmountPaid.valid = true;
-    //         return i
-    //     })
-    //     let value = Number(event.target.value)
-    //     ReceiptGoButton.map((index) => {
-    //         debugger
-    //         let amt = Number(index.BalanceAmount)
-    //         if ((value > amt) && !(amt === 0)) {
-    //             debugger
-    //             let Amount = value - amt
-    //             index.Calculate = amt.toFixed(3)
-    //         }
-    //         else if ((value <= amt) && (value > 0)) {
-    //             index.Calculate = value.toFixed(3)
-    //             value = 0
-    //         }
-    //         else {
-    //             index.Calculate = 0;
-    //         }
-    //         try {
-    //             document.getElementById(`batchQty${index.FullInvoiceNumber}`).value = index.Calculate
-    //         } catch (e) { }
-
-    //     })
-    // }
 
     function CustomerOnChange(e) {
         const jsonBody = JSON.stringify({
@@ -274,7 +221,7 @@ const PaymentEntry = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
         if (values.ReceiptMode.label === "Cheque") {
@@ -289,9 +236,6 @@ const PaymentEntry = (props) => {
             if (values.ChequeNo === "") {
                 invalidMsg1.push(`ChequeNo Is Required`)
             };
-            // if (values.ChequeDate === "") {
-            //     invalidMsg1.push(`ChequeDate Is Required`)
-            // };
 
             if ((values.BankName === "")
                 || (values.DepositorBankName === "")
@@ -417,7 +361,6 @@ const PaymentEntry = (props) => {
                                                 value={values.OpeningBalance}
                                                 type="text"
                                                 className={isError.OpeningBalance.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                // placeholder="Please Enter Opening Balance"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -529,7 +472,6 @@ const PaymentEntry = (props) => {
                                                     autoFocus={true}
                                                     onChange={(event) => {
                                                         onChangeText({ event, state, setState })
-                                                        // dispatch(Breadcrumb_inputName(event.target.value))
                                                     }}
                                                 />
                                                 {isError.ChequeNo.length > 0 && (
@@ -579,7 +521,6 @@ const PaymentEntry = (props) => {
                                                 autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
-                                                    // onChangeAmountHandler(event)
                                                 }}
                                             />
                                             {isError.AmountPaid.length > 0 && (
@@ -616,54 +557,7 @@ const PaymentEntry = (props) => {
                             </Row>
 
                         </div>
-                        {/* 
-                        <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-
-                                    keyField="id"
-                                    data={ReceiptGoButton}
-                                    columns={pagesListColumns}
-
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
-
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
-                            )
-                            }
-
-                        </PaginationProvider> */}
-
-
+                     
                         <FormGroup>
                             <Col>
                                 <SaveButton pageMode={pageMode}

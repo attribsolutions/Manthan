@@ -316,7 +316,6 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event) {
-        // dispatch(onChangeText({ event, state, setState }))
 
         let BalanceAmount = ReceiptGoButton.map((index) => {
             return parseInt(index.BalanceAmount)
@@ -389,7 +388,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        debugger
+     
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -404,9 +403,6 @@ const Receipts = (props) => {
             };
             if (values.ChequeNo === "") {
                 invalidMsg1.push(`ChequeNo Is Required`)
-            };
-            if (values.ChequeDate === "") {
-                invalidMsg1.push(`ChequeDate Is Required`)
             };
 
             if ((values.BankName === "")
@@ -466,7 +462,6 @@ const Receipts = (props) => {
                 else {
                     dispatch(saveReceiptMaster({ jsonBody, btnId }));
                 }
-                // console.log("jsonBody", jsonBody)
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -547,7 +542,6 @@ const Receipts = (props) => {
                                                 disabled={true}
                                                 value={OpeningBalanceAmount}
                                                 type="text"
-
                                             />
                                         </Col>
                                     </FormGroup>
@@ -654,7 +648,6 @@ const Receipts = (props) => {
                                                     // autoFocus={true}
                                                     onChange={(event) => {
                                                         onChangeText({ event, state, setState })
-                                                        // dispatch(Breadcrumb_inputName(event.target.value))
                                                     }}
                                                 />
                                                 {isError.ChequeNo.length > 0 && (
