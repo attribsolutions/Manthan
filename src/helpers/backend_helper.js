@@ -525,13 +525,14 @@ export const Go_Button_Post_API = (jsonBody) => post(url.GO_BUTTON_API_MANAGEMEN
 export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOWN_API, jsonBody)//  postapi
 
 //*********************************Accounting Module ************************************ */
-// Receipt
+// Receipt and Payment Entry
 export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
+export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
 export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_API, jsonBody, btnId)//  postapi
-export const Receipt_Filter_API =  (jsonBody) => post(url.RECEIPT_FILTERS, jsonBody)// Get subModule For H_pages
+export const Receipt_Filter_API = (jsonBody) => post(url.RECEIPT_FILTERS, jsonBody)// Get subModule For H_pages
 export const Receipt_Type_API = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
-
+export const Receipt_Delete_API = ({ deleteId, btnId }) => del(`${url.RECEIPT_POST_API}/${deleteId}`, btnId)// delete api
 
 export {
   getLoggedInUser,
