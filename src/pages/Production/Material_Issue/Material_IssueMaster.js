@@ -59,7 +59,7 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
-    console.log("Itemselect", Itemselect)
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -483,6 +483,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
+        debugger
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;

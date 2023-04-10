@@ -85,9 +85,6 @@ const Receipts = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-
-
-
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
         dispatch(commonPageFieldSuccess(null));
@@ -219,7 +216,6 @@ const Receipts = (props) => {
         label: index.Name,
     }));
 
-
     const pagesListColumns = [
         {
             text: "Receipt Date",
@@ -245,15 +241,15 @@ const Receipts = (props) => {
             text: "Calculate",
             dataField: "Calculate",
             formatter: (cellContent, row, key) => {
-
+                debugger
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Input
                         key={`batchQty${key}`}
                         id={`batchQty${row.FullInvoiceNumber}`}
-                        value={Number(row.Calculate)}
+                        value={row.Calculate}
                         type="text"
                         className="col col-sm text-center"
-                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                        // onChange={(event) => handleChange(event, row, key)}
                     />
                 </span>)
             },
@@ -262,6 +258,53 @@ const Receipts = (props) => {
             },
         },
     ];
+
+    function handleChange(event, index1, key) {
+        debugger
+        index1.Calculate = Number(event.target.value)
+        // index1.Calculate = input
+        // let result = /^\d*(\.\d{0,3})?$/.test(input);
+
+
+        // } else if (((index1.Calculate >= 0) && (!(input === '')))) {
+        //     val1 = index1.Calculate
+        // } else {
+        //     val1 = 0
+        // }
+
+        // event.target.value = val1;
+
+        // let Qtysum = 0
+        // index1.BatchesData.forEach((i) => {
+        //     if (!(i.id === index2.id)) {
+        //         Qtysum = Number(Qtysum) + Number(i.Qty)
+        //     }
+        // });
+
+        // Qtysum = Number(Qtysum) + Number(val1);
+        // index2.Qty = val1;
+        // let diffrence = Math.abs(index1.Quantity - Qtysum);
+
+        // if ((Qtysum === index1.Quantity)) {
+        //     try {
+        //         document.getElementById(`ItemName${index1.id}`).style.color = ""
+        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
+        //         index1["invalid"] = false
+        //         index1["invalidMsg"] = ''
+
+        //     } catch (e) { }
+        // } else {
+        //     try {
+        //         const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
+        //             : (`Short Quantity ${diffrence} ${index1.UnitName}`)
+        //         index1["invalid"] = true;
+        //         index1["invalidMsg"] = msg;
+
+        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
+        //     } catch (e) { }
+        // }
+    };
+
 
     const pageOptions = {
         sizePerPage: 10,
@@ -289,16 +332,17 @@ const Receipts = (props) => {
         })
         let value = Number(event.target.value)
         let Amount = value
+
         ReceiptGoButton.map((index) => {
-            debugger
+
             let amt = Number(index.BalanceAmount)
             if ((Amount > amt) && !(amt === 0)) {
 
                 Amount = Amount - amt
-                index.Calculate = amt.toFixed(3)
+                index.Calculate = amt.toFixed(2)
             }
             else if ((Amount <= amt) && (Amount > 0)) {
-                index.Calculate = Amount.toFixed(3)
+                index.Calculate = Amount.toFixed(2)
                 Amount = 0
             }
             else {
@@ -307,7 +351,6 @@ const Receipts = (props) => {
             try {
                 document.getElementById(`batchQty${index.FullInvoiceNumber}`).value = index.Calculate
             } catch (e) { }
-
         })
     }
 
@@ -323,6 +366,36 @@ const Receipts = (props) => {
         });
         dispatch(ReceiptGoButtonMaster(jsonBody));
 
+    }
+    
+    function ReceiptModeOnchange(event) {
+        setState((i) => {
+            i.values.BankName = '';
+            i.values.DepositorBankName = '';
+            i.values.ChequeNo = '';
+            i.hasValid.BankName.valid = true;
+            i.hasValid.DepositorBankName.valid = true;
+            i.hasValid.ChequeNo.valid = true;
+            return i
+        })
+    }
+
+    function ReceiptDate_Onchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ReceiptDate = date;
+            a.hasValid.ReceiptDate.valid = true
+            return a
+        })
+    }
+
+    function ChequeDate_Onchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ChequeDate = date;
+            a.hasValid.ChequeDate.valid = true
+            return a
+        })
     }
 
     const saveHandeller = async (event) => {
@@ -408,39 +481,6 @@ const Receipts = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    function ReceiptModeOnchange(event) {
-        debugger
-        setState((i) => {
-            debugger
-            i.values.BankName = '';
-            i.values.DepositorBankName = '';
-            i.values.ChequeNo = '';
-            // i.values.ChequeDate = '';
-            i.hasValid.BankName.valid = true;
-            i.hasValid.DepositorBankName.valid = true;
-            i.hasValid.ChequeNo.valid = true;
-            // i.hasValid.ChequeDate.valid = true;
-            return i
-        })
-    }
-
-    function ReceiptDate_Onchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ReceiptDate = date;
-            a.hasValid.ReceiptDate.valid = true
-            return a
-        })
-    }
-
-    function ChequeDate_Onchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ChequeDate = date;
-            a.hasValid.ChequeDate.valid = true
-            return a
-        })
-    }
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -514,10 +554,11 @@ const Receipts = (props) => {
                                             <Input
                                                 name="OpeningBalance"
                                                 id="txtName"
+                                                disabled={true}
                                                 value={values.OpeningBalance}
                                                 type="text"
                                                 className={isError.OpeningBalance.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Opening Balance"
+                                                // placeholder="Please Enter Opening Balance"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -546,7 +587,13 @@ const Receipts = (props) => {
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                // onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, }),
+                                                //     ReceiptModeOnchange()
+                                                // }
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    ReceiptModeOnchange(hasSelect)
+                                                }}
                                             />
                                             {isError.ReceiptMode.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptMode}</small></span>
