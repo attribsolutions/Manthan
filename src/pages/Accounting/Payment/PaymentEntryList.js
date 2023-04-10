@@ -94,7 +94,6 @@ const PaymentEntryList = () => {
     }, []);
 
     useEffect(() => {
-        debugger
         goButtonHandler(true)
     }, []);
 
@@ -113,17 +112,19 @@ const PaymentEntryList = () => {
         label: index.Name,
     }));
 
-    async function goButtonHandler() {
-        debugger
-        const ReceiptTypeID = await ReceiptType.filter((index) => {
-            return index.Name === "Payment Entry"
-        })
+    const ReceiptTypeID = ReceiptType.filter((index) => {
+        return index.Name === "Payment Entry"
+    })
+
+    function goButtonHandler() {
+
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
             ReceiptType: 30,
+            // ReceiptType: ReceiptTypeID[0].id,
         });
         dispatch(ReceiptListAPI(jsonBody));
     }

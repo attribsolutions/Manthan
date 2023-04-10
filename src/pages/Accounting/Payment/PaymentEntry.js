@@ -413,10 +413,11 @@ const PaymentEntry = (props) => {
                                             <Input
                                                 name="OpeningBalance"
                                                 id="txtName"
+                                                disabled={true}
                                                 value={values.OpeningBalance}
                                                 type="text"
                                                 className={isError.OpeningBalance.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Opening Balance"
+                                                // placeholder="Please Enter Opening Balance"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
