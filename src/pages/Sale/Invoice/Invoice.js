@@ -50,6 +50,7 @@ import { discountCalculate } from "./invoiceCaculations";
 import "./invoice.scss"
 import demoData from "./demodata.json"
 import { numberWithCommas } from "../../../Reports/Report_common_function"
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const Invoice = (props) => {
 
@@ -672,7 +673,7 @@ const Invoice = (props) => {
     }
 
     function stockDistributeFunc(index) {
-        
+
         const v1 = index.Quantity;
         let orderqty = Number(v1) * Number(index.ConversionUnit);
 
@@ -722,7 +723,7 @@ const Invoice = (props) => {
     };
 
     function orderQtyOnChange(event, index) {
-        
+
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
@@ -895,7 +896,7 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-            
+
             const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
@@ -1011,7 +1012,7 @@ const Invoice = (props) => {
                             </Row>
                         </Col>
 
-
+                        {/* 
                         <ToolkitProvider
                             keyField={"id"}
                             data={OrderItemDetails}
@@ -1043,9 +1044,12 @@ const Invoice = (props) => {
 
                                 </React.Fragment>
                             )}
-                        </ToolkitProvider>
+                        </ToolkitProvider> */}
 
-
+                        <CustomToolkit
+                            data={OrderItemDetails}
+                            columns={pagesListColumns}
+                        />
 
 
                         {OrderItemDetails.length > 0 &&
@@ -1077,3 +1081,66 @@ const Invoice = (props) => {
 };
 
 export default Invoice
+
+
+const CustomToolkit = ({ data = [], columns = [] }) => {
+    const [tableData, setTableData] = CustomeHook(data, columns)
+
+
+    debugger
+    return (
+        <BootstrapTable
+            keyField={"id"}
+            data={tableData}
+            columns={columns}
+            responsive
+            bordered={false}
+            striped={false}
+            classes={"table  table-bordered"}
+            noDataIndication={
+                <div className="text-danger text-center ">
+                    Items Not available
+                </div>
+            }
+        // {...toolkitProps.baseProps}
+        />
+    )
+
+}
+const CustomeHook = (data = [], columns = []) => {
+
+    const [tableData, setTableData] = useState([])
+    useEffect(() => {
+        setTableData(data)
+    }, [data])
+
+    const serach = (text) => {
+        let search = text.toLowerCase()
+
+        let filter = data.filter((item) => {
+            let found = false
+            let cell = item.ItemName.toLowerCase()
+            found = cell.includes(search)
+            // for (let i = 0; i < columns.length; i++) {
+            //     let isCell = item[columns[i].dataField]
+            //     debugger
+            //     if (!(isCell === null) || !(isCell === undefined)) {
+
+            //         isCell = JSON.stringify(isCell)
+            //         isCell = isCell.toLowerCase()
+            //         let isinclude = isCell.includes(search)
+            //         if (isinclude && !found) {
+            //             found = isinclude
+            //         }
+            //     }
+            // }
+            return found
+
+        })
+        setTableData(filter)
+
+    }
+    mySearchProps({ onSearch: serach },)
+
+    return [tableData, setTableData]
+}
