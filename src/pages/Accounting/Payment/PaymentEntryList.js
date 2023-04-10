@@ -22,6 +22,8 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
+    deleteReceiptList,
+    deleteReceiptList_Success,
     ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
@@ -50,7 +52,7 @@ const PaymentEntryList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.ReceiptReducer.ReceiptList,
-            deleteMsg: state.BOMReducer.deleteMsg,
+            deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
@@ -68,10 +70,10 @@ const PaymentEntryList = () => {
     const action = {
         getList: ReceiptListAPI,
         editId: editBOMList,
-        deleteId: deleteBOMId,
+        deleteId: deleteReceiptList,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteBOMIdSuccess
+        deleteSucc: deleteReceiptList_Success
     }
 
     // Receipt Type API Values **** only Post Json Body

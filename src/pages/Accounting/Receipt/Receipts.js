@@ -1,8 +1,6 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Button,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -12,19 +10,17 @@ import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeDate,
     onChangeSelect,
     onChangeText,
     resetFunction,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, loginPartyID, loginUserID, } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
@@ -35,7 +31,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { DepositorBankFilter, GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -51,14 +47,14 @@ const Receipts = (props) => {
 
     const fileds = {
         ReceiptDate: currentDate,
-        OpeningBalance: "",
+        OpeningBalanceAmt: "",
         Customer: "",
         ReceiptMode: "",
         AmountPaid: "",
-        Description: "",
         BankName: "",
         ChequeNo: "",
         DepositorBankName: "",
+        Description: "",
         ChequeDate: currentDate,
     }
 
@@ -67,6 +63,7 @@ const Receipts = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         ReceiptGoButton,
+        OpeningBalance,
         pageField,
         RetailerList,
         BankList,
@@ -76,6 +73,7 @@ const Receipts = (props) => {
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
+            OpeningBalance: state.ReceiptReducer.OpeningBalance,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             ReceiptType: state.ReceiptReducer.ReceiptType,
@@ -84,6 +82,8 @@ const Receipts = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+    const { OpeningBalanceAmount = '' } = OpeningBalance
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
@@ -94,6 +94,7 @@ const Receipts = (props) => {
         dispatch(ReceiptGoButtonMaster_Success([]))
     }, []);
 
+    // Customer dropdown Options
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
@@ -112,7 +113,7 @@ const Receipts = (props) => {
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
-    // Receipt Type API Values **** only Post Json Body
+    // Receipt Type API Values **** only Use Post Json Body
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -120,10 +121,6 @@ const Receipts = (props) => {
         });
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
-
-    const ReceiptTypeID = ReceiptType.filter((index) => {
-        return index.Name === "Receipt"
-    })
 
     const values = { ...state.values }
     const { isError } = state;
@@ -196,6 +193,10 @@ const Receipts = (props) => {
         }
     }, [postMsg])
 
+    const ReceiptTypeID = ReceiptType.filter((index) => {
+        return index.Name === "Receipt"
+    })
+
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -239,17 +240,29 @@ const Receipts = (props) => {
         },
         {
             text: "Calculate",
-            dataField: "Calculate",
-            formatter: (cellContent, row, key) => {
-                debugger
+            dataField: "",
+            formatter: (cellContent, row, key, array) => {
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Input
-                        key={`batchQty${key}`}
-                        id={`batchQty${row.FullInvoiceNumber}`}
-                        value={row.Calculate}
-                        type="text"
+                        key={`Quantity${row.FullInvoiceNumber}`}
+                        id={`Quantity${row.FullInvoiceNumber}`}
+                        defaultValue={row.Calculate}
+                        // type="text"
+                        autoComplete="off"
                         className="col col-sm text-center"
-                        // onChange={(event) => handleChange(event, row, key)}
+                        onChange={(e) => CalculateOnchange(e, row, key)}
+                    // onChange={(e) => {
+                    //     debugger
+                    //     const val = e.target.value
+                    //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                    //     if ((isnum) || (val === '')) {
+                    //         row["Calculate"] = val
+                    //     } else {
+                    //         document.getElementById(`Quantity${key}`).value = row.Calculate
+                    //     }
+
+                    // }}
                     />
                 </span>)
             },
@@ -259,60 +272,51 @@ const Receipts = (props) => {
         },
     ];
 
-    function handleChange(event, index1, key) {
-        debugger
-        index1.Calculate = Number(event.target.value)
-        // index1.Calculate = input
-        // let result = /^\d*(\.\d{0,3})?$/.test(input);
-
-
-        // } else if (((index1.Calculate >= 0) && (!(input === '')))) {
-        //     val1 = index1.Calculate
-        // } else {
-        //     val1 = 0
-        // }
-
-        // event.target.value = val1;
-
-        // let Qtysum = 0
-        // index1.BatchesData.forEach((i) => {
-        //     if (!(i.id === index2.id)) {
-        //         Qtysum = Number(Qtysum) + Number(i.Qty)
-        //     }
-        // });
-
-        // Qtysum = Number(Qtysum) + Number(val1);
-        // index2.Qty = val1;
-        // let diffrence = Math.abs(index1.Quantity - Qtysum);
-
-        // if ((Qtysum === index1.Quantity)) {
-        //     try {
-        //         document.getElementById(`ItemName${index1.id}`).style.color = ""
-        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
-        //         index1["invalid"] = false
-        //         index1["invalidMsg"] = ''
-
-        //     } catch (e) { }
-        // } else {
-        //     try {
-        //         const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
-        //             : (`Short Quantity ${diffrence} ${index1.UnitName}`)
-        //         index1["invalid"] = true;
-        //         index1["invalidMsg"] = msg;
-
-        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
-        //     } catch (e) { }
-        // }
-    };
-
-
     const pageOptions = {
         sizePerPage: 10,
         totalSize: ReceiptGoButton.length,
         custom: true,
     };
 
-    function onChangeAmountHandler(event) {
+    // Customer dropdown function
+    function CustomerOnChange(e) {
+        setState((i) => {
+            i.values.AmountPaid = ''
+            i.hasValid.AmountPaid.valid = false;
+            return i
+        })
+        const jsonBody = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: e.value,
+            ReceiptDate: values.ReceiptDate
+        });
+
+        dispatch(ReceiptGoButtonMaster(jsonBody));
+        dispatch(GetOpeningBalance(jsonBody));
+    }
+
+    // Calculate Input box onChange Function
+    function CalculateOnchange(event, row, key) {
+
+        let value1 = Math.max('', Math.min(row.BalanceAmount, parseInt(event.target.value)));
+        event.target.value = value1
+
+        if (event.target.value === 'NaN') {
+            event.target.value = 0
+        }
+        row.Calculate = event.target.value
+
+        let CalculateAmount = ReceiptGoButton.map((index) => {
+            return parseInt(index.Calculate)
+        })
+        const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
+
+        document.getElementById("AmountPaid").value = sum
+
+    };
+
+    function AmountPaid_onChange(event) {
+        // dispatch(onChangeText({ event, state, setState }))
 
         let BalanceAmount = ReceiptGoButton.map((index) => {
             return parseInt(index.BalanceAmount)
@@ -339,35 +343,21 @@ const Receipts = (props) => {
             if ((Amount > amt) && !(amt === 0)) {
 
                 Amount = Amount - amt
-                index.Calculate = amt.toFixed(2)
+                index.Calculate = amt.toFixed(0)
             }
             else if ((Amount <= amt) && (Amount > 0)) {
-                index.Calculate = Amount.toFixed(2)
+                index.Calculate = Amount.toFixed(0)
                 Amount = 0
             }
             else {
                 index.Calculate = 0;
             }
             try {
-                document.getElementById(`batchQty${index.FullInvoiceNumber}`).value = index.Calculate
+                document.getElementById(`Quantity${index.FullInvoiceNumber}`).value = index.Calculate
             } catch (e) { }
         })
     }
 
-    function CustomerOnChange(e) {
-        setState((i) => {
-            i.values.AmountPaid = ''
-            i.hasValid.AmountPaid.valid = false;
-            return i
-        })
-        const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Customer: e.value
-        });
-        dispatch(ReceiptGoButtonMaster(jsonBody));
-
-    }
-    
     function ReceiptModeOnchange(event) {
         setState((i) => {
             i.values.BankName = '';
@@ -399,7 +389,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -476,7 +466,7 @@ const Receipts = (props) => {
                 else {
                     dispatch(saveReceiptMaster({ jsonBody, btnId }));
                 }
-                console.log("jsonBody", jsonBody)
+                // console.log("jsonBody", jsonBody)
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -549,25 +539,16 @@ const Receipts = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.OpeningBalance}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.OpeningBalanceAmt}</Label>
                                         <Col sm="7">
                                             <Input
-                                                name="OpeningBalance"
-                                                id="txtName"
+                                                name="OpeningBalanceAmt"
+                                                id="OpeningBalanceAmt"
                                                 disabled={true}
-                                                value={values.OpeningBalance}
+                                                value={OpeningBalanceAmount}
                                                 type="text"
-                                                className={isError.OpeningBalance.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                // placeholder="Please Enter Opening Balance"
-                                                autoComplete='off'
-                                                autoFocus={true}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
+
                                             />
-                                            {isError.OpeningBalance.length > 0 && (
-                                                <span className="invalid-feedback">{isError.OpeningBalance}</span>
-                                            )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -587,9 +568,6 @@ const Receipts = (props) => {
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
-                                                // onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, }),
-                                                //     ReceiptModeOnchange()
-                                                // }
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     ReceiptModeOnchange(hasSelect)
@@ -667,13 +645,13 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Input
                                                     name="ChequeNo"
-                                                    id="txtName"
+                                                    // id="txtName"
                                                     value={values.ChequeNo}
                                                     type="text"
                                                     className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Cheque Number"
                                                     autoComplete='off'
-                                                    autoFocus={true}
+                                                    // autoFocus={true}
                                                     onChange={(event) => {
                                                         onChangeText({ event, state, setState })
                                                         // dispatch(Breadcrumb_inputName(event.target.value))
@@ -717,16 +695,16 @@ const Receipts = (props) => {
                                         <Col sm="7">
                                             <Input
                                                 name="AmountPaid"
-                                                id="txtName"
+                                                id="AmountPaid"
                                                 value={values.AmountPaid}
                                                 type="text"
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
-                                                autoFocus={true}
+                                                // autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
-                                                    onChangeAmountHandler(event)
+                                                    AmountPaid_onChange(event)
                                                 }}
                                             />
                                             {isError.AmountPaid.length > 0 && (
@@ -743,16 +721,15 @@ const Receipts = (props) => {
                                         <Col sm="7">
                                             <Input
                                                 name="Description"
-                                                id="txtName"
+                                                // id="Description"
                                                 value={values.Description}
                                                 type="text"
                                                 className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Amount"
+                                                placeholder="Please Enter Description"
                                                 autoComplete='off'
-                                                autoFocus={true}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
+                                                // onChange={(event) => { onChangeDescription(event) }}
+                                                // autoFocus={true}
+                                                onChange={(event) => { onChangeText({ event, state, setState }) }}
                                             />
                                             {isError.Description.length > 0 && (
                                                 <span className="invalid-feedback">{isError.Description}</span>

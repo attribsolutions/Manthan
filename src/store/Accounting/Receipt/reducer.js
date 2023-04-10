@@ -4,6 +4,8 @@ import {
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
   SAVE_RECEIPT_MASTER_SUCCESS,
   RECEIPT_TYPE_API_SUCCESS,
+  DELETE_RECEIPT_LIST_SUCCESS,
+  GET_OPENING_BALANCE_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -11,7 +13,9 @@ const INIT_STATE = {
   DepositorBank: [],
   ReceiptList: [],
   postMsg: { Status: false },
-  ReceiptType:[],
+  ReceiptType: [],
+  deleteMsg: { Status: false },
+  OpeningBalance: []
 }
 
 const ReceiptReducer = (state = INIT_STATE, action) => {
@@ -21,6 +25,12 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         ReceiptGoButton: action.payload,
+      }
+
+    case GET_OPENING_BALANCE_SUCCESS:
+      return {
+        ...state,
+        OpeningBalance: action.payload,
       }
 
     case DEPOSITOR_BANK_FILTER_SUCCESS:
@@ -46,6 +56,13 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         ...state,
         ReceiptType: action.payload,
       }
+
+    case DELETE_RECEIPT_LIST_SUCCESS:
+      return {
+        ...state,
+        deleteMsg: action.payload,
+      }
+
     default:
       return state
   }

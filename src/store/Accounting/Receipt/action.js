@@ -5,11 +5,14 @@ import {
   RECEIPT_LIST_API_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER,
   RECEIPT_GO_BUTTON_MASTER_SUCCESS,
-  RECEIPT_LIST_FILTERS,
   SAVE_RECEIPT_MASTER,
   SAVE_RECEIPT_MASTER_SUCCESS,
   RECEIPT_TYPE_API,
-  RECEIPT_TYPE_API_SUCCESS
+  RECEIPT_TYPE_API_SUCCESS,
+  DELETE_RECEIPT_LIST,
+  DELETE_RECEIPT_LIST_SUCCESS,
+  GET_OPENING_BALANCE,
+  GET_OPENING_BALANCE_SUCCESS
 } from "./actionType";
 
 export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
@@ -19,6 +22,17 @@ export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
 
 export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
   type: RECEIPT_GO_BUTTON_MASTER_SUCCESS,
+  payload: resp,
+});
+
+// OpeningBalance value
+export const GetOpeningBalance = (jsonBody) => ({// save Action
+  type: GET_OPENING_BALANCE,
+  jsonBody,
+});
+
+export const GetOpeningBalance_Success = (resp) => ({// Save  success
+  type: GET_OPENING_BALANCE_SUCCESS,
   payload: resp,
 });
 
@@ -61,5 +75,16 @@ export const ReceiptTypeAPI = (jsonBody) => ({
 
 export const ReceiptTypeAPISuccess = (resp) => ({
   type: RECEIPT_TYPE_API_SUCCESS,
+  payload: resp,
+});
+
+// delete API
+export const deleteReceiptList = (config = {}) => ({// save Action
+  type: DELETE_RECEIPT_LIST,
+  config,
+});
+
+export const deleteReceiptList_Success = (resp) => ({// Save  success
+  type: DELETE_RECEIPT_LIST_SUCCESS,
   payload: resp,
 });
