@@ -249,7 +249,7 @@ const PartyMasterBulkUpdate = (props) => {
             );
             return;
         }
-        
+
         const jsonBody = JSON.stringify({
 
             PartyID: loginPartyID(),
@@ -262,8 +262,8 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function SelectFieldHandler(event) {
-      
-        
+
+
         setSelectFieldName(event)
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
     }
@@ -280,8 +280,17 @@ const PartyMasterBulkUpdate = (props) => {
 
     }
 
+    function diisionhandler(event, user) {
+        debugger
+        user.Newvalue = event.target.checked
+
+
+    }
+
+
+
     function handllerDistrictOnState(event, user) {
-        user.Newvalue = event.value
+        user.NewDistrict = event.value
         setDistrict_dropdown_Select(event)
     }
 
@@ -296,7 +305,7 @@ const PartyMasterBulkUpdate = (props) => {
             dataField: "PartyName",
         },
         {
-            text:  SelectFieldName.label,
+            text: SelectFieldName.label,
             dataField: SelectFieldName.label,
         },
 
@@ -322,33 +331,47 @@ const PartyMasterBulkUpdate = (props) => {
         dataField: "Newvalue",
         formatter: (cellContent, user) => (
             <>
-                { SelectFieldName.label === "State" ?
+                {SelectFieldName.label === "State" ?
                     <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
-                                    <Select
-                                        value={state_DropDown_select}
-                                        // defaultValue={user.Newvalue}
-                                        options={StateValues}
-                                        onChange={(event) => handllerState(event, user)}
-                                    /> 
-                            </FormGroup>
-                        </Col>
-                    </div> :
-                    <div style={{ width: "180px" }}>
-                        <Col>
-                            <FormGroup >
-                                <Input
-                                    id=""
-                                    type="text"
-                                    placeholder="Enter New Value"
-                                    defaultValue={user.Newvalue}
-                                    className="col col-sm text-center"
-                                    onChange={(event) => tableSelectHandler(event, user)}
+                                <Select
+                                    value={state_DropDown_select}
+                                    // defaultValue={user.Newvalue}
+                                    options={StateValues}
+                                    onChange={(event) => handllerState(event, user)}
                                 />
                             </FormGroup>
                         </Col>
-                    </div>}
+                    </div> :
+                    SelectFieldName.label === "	IsDivision" ?
+
+                        <Col md={2} style={{ marginTop: '9px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3">
+                                <Input type="checkbox" className="form-check-input"
+                                    checked={values.IsActive}
+                                    onChange={(event) => diisionhandler(event, user)}
+                                    name="IsActive"
+
+                                />
+                            </div>
+                        </Col> :
+
+                        <div style={{ width: "180px" }}>
+                            <Col>
+                                <FormGroup >
+                                    <Input
+                                        id=""
+                                        type="text"
+                                        placeholder="Enter New Value"
+                                        defaultValue={user.Newvalue}
+                                        className="col col-sm text-center"
+                                        onChange={(event) => tableSelectHandler(event, user)}
+                                    />
+                                </FormGroup>
+                            </Col>
+                        </div>
+                }
             </>
         ),
     }
@@ -358,22 +381,19 @@ const PartyMasterBulkUpdate = (props) => {
         dataField: "",
         formatter: (cellContent, user) => (
             <>
-               <div style={{ width: "180px" }}>
-                        <Col>
-                            <FormGroup >
-                                    <Select
-                                        value={district_dropdown_Select}
-                                        options={DistrictOnStateValues}
-                                        onChange={(event) => handllerDistrictOnState(event, user)}
-                                    />
-                            </FormGroup>
-                        </Col>
-                    </div>
+                <div style={{ width: "180px" }}>
+                    <Col>
+                        <FormGroup >
+                            <Select
+                                value={district_dropdown_Select}
+                                options={DistrictOnStateValues}
+                                onChange={(event) => handllerDistrictOnState(event, user)}
+                            />
+                        </FormGroup>
+                    </Col>
+                </div>
             </>
         ),
-    }
-    if (SelectFieldName.label === "State") {
-        pagesListColumns.push(DistrictColumn)
     }
 
 
@@ -408,6 +428,10 @@ const PartyMasterBulkUpdate = (props) => {
     if (SelectFieldName.label === "FSSAINo") {
         pagesListColumns.push(dateColumn)
     }
+    if (SelectFieldName.label === "State") {
+        pagesListColumns.push(DistrictColumn)
+    }
+
 
 
     const pageOptions = {
@@ -423,31 +447,37 @@ const PartyMasterBulkUpdate = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                
+
+
                 Data.forEach(i => {
-                    if (i.Newvalue || i.NewFSSAIExipry||i.District) {
-                        
+                    debugger
+                    if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
+
                         const arr = {
                             SubPartyID: i.SubPartyID,
                             Value1: i.Newvalue,
-                            Value2: i.NewFSSAIExipry
+                            Value2: i.NewFSSAIExipry,
+                            Value2: i.NewDistrict
 
                         }
                         arr1.push(arr)
                     }
 
                 })
-                
+                debugger
+
                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
                     UpdateData: arr1
+                    
                 });
 
                 if (pageMode === mode.edit) {
                     dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
+                    
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
             }
@@ -492,7 +522,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                                         classNamePrefix="dropdown"
                                                                         options={SelectFieldDropdown_options}
                                                                         onChange={(event) => SelectFieldHandler(event)}
-                                                            
+
                                                                     />
                                                                     {isError.SelectField.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
@@ -566,7 +596,7 @@ const PartyMasterBulkUpdate = (props) => {
                                             >
                                                 {toolkitProps => (
                                                     <React.Fragment>
-                                                         <div className="table">
+                                                        <div className="table">
                                                             <BootstrapTable
                                                                 keyField={"id"}
                                                                 bordered={true}
