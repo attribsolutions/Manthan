@@ -1,13 +1,11 @@
 import axios from "axios"
 import { CheckAPIResponse, CommonConsole } from "../components/Common/CommonFunction"
 
-const API_URL = "http://103.135.203.145:8000"
+const API_URL = "http://103.135.203.145:80001"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
 })
-
-
 
 
 const AuthonticationFunction = () => {
