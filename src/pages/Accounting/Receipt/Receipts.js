@@ -311,7 +311,13 @@ const Receipts = (props) => {
         })
         const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
 
-        document.getElementById("AmountPaid").value = sum
+        // document.getElementById("AmountPaid").value = sum
+        setState((i) => {
+            const a = { ...i }
+            a.values.AmountPaid = sum;
+            a.hasValid.AmountPaid.valid = true;
+            return a
+        })
 
     };
 
@@ -388,7 +394,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-     
+
         event.preventDefault();
         const btnId = event.target.id;
 
