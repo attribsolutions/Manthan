@@ -64,6 +64,7 @@ const ReceiptList = () => {
     );
 
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
+    const values = { ...state.values }
 
     const action = {
         getList: ReceiptListAPI,
@@ -73,20 +74,6 @@ const ReceiptList = () => {
         updateSucc: updateBOMListSuccess,
         deleteSucc: deleteReceiptList_Success
     }
-
-    // Receipt Type API Values **** only Post Json Body
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
-            TypeID: 3
-        });
-        dispatch(ReceiptTypeAPI(jsonBody));
-
-    }, []);
-
-    const ReceiptTypeID = ReceiptType.filter((index) => {
-        return index.Name === "Receipt"
-    })
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -98,8 +85,6 @@ const ReceiptList = () => {
         goButtonHandler(true)
     }, []);
 
-    const values = { ...state.values }
-
     useEffect(() => {
         const page_Id = pageId.RECEIPTS_LIST
         let userAcc = userAccess.find((inx) => {
@@ -110,6 +95,22 @@ const ReceiptList = () => {
         }
     }, [userAccess])
 
+    // Receipt Type API Values **** only Post Json Body
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 3
+        });
+        dispatch(ReceiptTypeAPI(jsonBody));
+
+    }, []);
+
+    useEffect(() => {
+        if (ReceiptType.length > 0) {
+            goButtonHandler(true)
+        }
+    }, [ReceiptType]);
+    
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -124,17 +125,21 @@ const ReceiptList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-    const goButtonHandler = (async) => {
+    function goButtonHandler() {
+        const ReceiptTypeID = ReceiptType.find((index) => {
+            return index.Name === "Receipt"
+        })
 
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            ReceiptType: 29,
+            ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody));
     }
+
 
     function fromdateOnchange(e, date) {
         setState((i) => {

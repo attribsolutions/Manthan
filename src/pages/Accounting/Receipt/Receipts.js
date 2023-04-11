@@ -193,7 +193,7 @@ const Receipts = (props) => {
         }
     }, [postMsg])
 
-    const ReceiptTypeID = ReceiptType.filter((index) => {
+    const ReceiptTypeID = ReceiptType.find((index) => {
         return index.Name === "Receipt"
     })
 
@@ -456,7 +456,7 @@ const Receipts = (props) => {
                     "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
-                    "ReceiptType": ReceiptTypeID[0].id,
+                    "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": FilterReceiptInvoices

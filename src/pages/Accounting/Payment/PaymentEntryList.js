@@ -63,7 +63,7 @@ const PaymentEntryList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType=[] } = reducers;
 
     const values = { ...state.values }
 
@@ -85,6 +85,12 @@ const PaymentEntryList = () => {
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
 
+    useEffect(() => {
+        if (ReceiptType.length > 0) {
+            goButtonHandler(true)
+        }
+    }, [ReceiptType]);
+
     // Featch Modules List data  First Rendering
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY_LIST
@@ -93,10 +99,6 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
         dispatch(getSupplier())
-    }, []);
-
-    useEffect(() => {
-        goButtonHandler(true)
     }, []);
 
     useEffect(() => {
@@ -114,19 +116,17 @@ const PaymentEntryList = () => {
         label: index.Name,
     }));
 
-    const ReceiptTypeID = ReceiptType.filter((index) => {
-        return index.Name === "Payment Entry"
-    })
-
     function goButtonHandler() {
+        const ReceiptTypeID = ReceiptType.find((index) => {
+            return index.Name === "Payment Entry"
+        })
 
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            ReceiptType: 30,
-            // ReceiptType: ReceiptTypeID[0].id,
+            ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody));
     }
