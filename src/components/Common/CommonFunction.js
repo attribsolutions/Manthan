@@ -48,11 +48,9 @@ const currentDatefunc = () => {
   //+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
   const current = new Date();
   const month = current.getMonth() + 1;
-  const currentDate = `${current.getFullYear()}-${
-    month < 10 ? `0${month}` : `${month}`
-  }-${
-    current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
-  }`;
+  const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
+    }-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
+    }`;
   return currentDate;
 };
 
@@ -62,19 +60,19 @@ export const invertDatefunc = (inp) => {
   //+++++++++++++++ Current Date++++++++++++++++++++++++++++
   const current = new Date(inp);
   const month = current.getMonth() + 1;
-  const currentDate = `${current.getFullYear()}-${
-    month < 10 ? `0${month}` : `${month}`
-  }-${
-    current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
-  }`;
+  const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
+    }-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`
+    }`;
   return currentDate;
 };
 
 export const loginUserDetails = () => {
   //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
-  let user_Details = null;
+  let user_Details = '';
+  debugger
   try {
-    user_Details = JSON.parse(localStorage.getItem("roleId"));
+    const a = localStorage.getItem("roleId")
+    if (!a === null) user_Details = JSON.parse(a);
   } catch (e) {
     CommonConsole("Common user_Details  Error");
   }
@@ -89,7 +87,7 @@ export const loginRoleID = () => {
   } catch (e) {
     CommonConsole("Common Role ID  Error");
   }
-  return null;
+  return '';
 };
 
 export const loginUserID = () => {
@@ -182,9 +180,8 @@ export function convertTimefunc(inputDate) {
   const date = new Date(inputDate);
   let month = date.getMonth() + 1;
 
-  let convDate = `${
-    date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
-  }-${month < 10 ? `0${month}` : `${month}`}`;
+  let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
+    }-${month < 10 ? `0${month}` : `${month}`}`;
 
   let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
   let minutes =
@@ -224,9 +221,8 @@ export function convertDatefunc(inputDate) {
   const date = new Date(inputDate);
   let month = date.getMonth() + 1;
 
-  let convDate = `${
-    date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
-  }-${month < 10 ? `0${month}` : `${month}`}-${date.getFullYear()}`;
+  let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
+    }-${month < 10 ? `0${month}` : `${month}`}-${date.getFullYear()}`;
   return convDate;
 }
 
