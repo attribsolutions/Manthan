@@ -141,7 +141,7 @@ const PaymentEntry = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+        
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))

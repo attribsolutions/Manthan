@@ -1087,7 +1087,7 @@ const CustomToolkit = ({ data = [], columns = [] }) => {
     const [tableData, setTableData] = CustomeHook(data, columns)
 
 
-    debugger
+    
     return (
         <BootstrapTable
             keyField={"id"}
@@ -1123,7 +1123,7 @@ const CustomeHook = (data = [], columns = []) => {
             found = cell.includes(search)
             // for (let i = 0; i < columns.length; i++) {
             //     let isCell = item[columns[i].dataField]
-            //     debugger
+            //     
             //     if (!(isCell === null) || !(isCell === undefined)) {
 
             //         isCell = JSON.stringify(isCell)

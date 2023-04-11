@@ -1,4 +1,4 @@
-
+import CheckBox from "jspdf";
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { convertDatefunc } from "../../components/Common/CommonFunction";
@@ -23,93 +23,139 @@ export const Receipts = (doc, data) => {
     doc.roundedRect(120, 37, 190, 30, 5, 5, 'S')
     doc.text('PAYMENT RECEIPT ', 125, 60,)
 
+
+    debugger
+    doc.AcroForm.CheckBox()
+
+    // var doc = new jsPDF();
+    doc.text('CheckBox:', 10, 125);
+    var checkBox = new CheckBox();
+    checkBox.fieldName = "CheckBox1";
+    checkBox.Rect = [50, 120, 30, 10];
+    checkBox.value = 'Yes'
+    
+
+    checkBox.appearanceState = 'Off' //unchecked
+    checkBox.appearanceState = 'On' //checked
+
+
+
+
+
+
+
+
     doc.setFontSize(10)
     doc.addFont("Arial", 'Normal')
     doc.text('RECEIPT NO:', 60, 130,)
+    doc.setFont(undefined, 'Normal')
     doc.text(`${data.FullReceiptNumber}`, 140, 130,)
     doc.setLineWidth(0);
-    doc.line(170, 132, 130, 132); // RECEIPT NO LINE (Top)
+    doc.line(170, 132, 130, 132); // RECEIPT NO LINE 
 
 
     doc.text('Bill NO:', 270, 130,)
     doc.setLineWidth(0);
-    doc.line(310, 132, 350, 132); // RECEIPT NO LINE (Top)
+    doc.line(310, 132, 350, 132);
 
 
-
-
+    doc.setFont(undefined, 'bold')
     doc.text('Recived with thanks from:', 60, 160,)
+    doc.setFont(undefined, 'Normal')
     doc.text(`${data.Party}`, 190, 159,)
     doc.setLineWidth(0);
-    doc.line(550, 162, 183, 162); // RECEIPT NO LINE (Top)
+    doc.line(550, 162, 183, 162);
 
+
+    doc.setFont(undefined, 'bold')
     doc.text('Amount in Word :', 60, 190,)
+    doc.setFont(undefined, 'Normal')
     let stringNumber = toWords(Number(data.AmountPaid))
     doc.text(`${stringNumber}`, 170, 189,)
     doc.setLineWidth(0);
     doc.line(550, 190, 143, 190); // RECEIPT NO LINE (Top)
 
+
+    doc.setFont(undefined, 'bold')
     doc.text('Receipt Mode', 60, 220,)
     doc.setLineWidth(0);
+    doc.setFont(undefined, 'Normal')
     doc.text(`${data.ReceiptMode}`, 160, 219,)
     doc.line(220, 220, 130, 220); // RECEIPT NO LINE (Top)
 
+
     if (data.ReceiptMode === "RTGS") {
 
+        doc.setFont(undefined, 'bold')
         doc.text('Bank', 60, 250,)
         doc.setLineWidth(0);
+        doc.setFont(undefined, 'Normal')
         doc.line(300, 250, 90, 250); // RECEIPT NO LINE (Top)
 
+        doc.setFont(undefined, 'bold')
         doc.text('Depositor Bank', 320, 250,)
         doc.setLineWidth(0);
+        doc.setFont(undefined, 'Normal')
         doc.line(550, 250, 400, 250); // RECEIPT NO LINE (Top)
 
+        doc.setFont(undefined, 'bold')
         doc.text('Description', 60, 280,)
+        doc.setFont(undefined, 'Normal')
         doc.setLineWidth(0);
         doc.line(550, 280, 130, 280); // RECEIPT NO LINE (Top)
 
     }
+
 
 
     if (data.ReceiptMode === "Cheque") {
+        doc.setFont(undefined, 'bold')
         doc.text('Cheque No :', 226, 220,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${data.ChequeNO}`, 300, 219,)
         doc.setLineWidth(0);
         doc.line(340, 220, 282, 220); // RECEIPT NO LINE (Top)
 
+
+        doc.setFont(undefined, 'bold')
         doc.text('Cheque Date :', 360, 220,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${data.ChequeDate}`, 440, 219,)
         doc.setLineWidth(0);
         doc.line(425, 220, 550, 220); // RECEIPT NO LINE (Top)
 
+
+        doc.setFont(undefined, 'bold')
         doc.text('Bank :', 60, 250,)
+        doc.setFont(undefined, 'Normal')
+        doc.text(`${data.Bank}`, 100, 249,)
         doc.setLineWidth(0);
         doc.line(300, 250, 90, 250); // RECEIPT NO LINE (Top)
 
+
+        doc.setFont(undefined, 'bold')
         doc.text('Depositor Bank :', 320, 250,)
+        doc.setFont(undefined, 'Normal')
         doc.setLineWidth(0);
         doc.line(550, 250, 400, 250); // RECEIPT NO LINE (Top)
 
+
+        doc.setFont(undefined, 'bold')
         doc.text('Description :', 60, 280,)
+        doc.setFont(undefined, 'Normal')
         doc.setLineWidth(0);
         doc.line(550, 280, 130, 280); // RECEIPT NO LINE (Top)
 
     }
-       
-        
-    debugger
 
-    if (data.ReceiptMode === "cash" ) {
+
+    if (data.ReceiptMode === "cash") {
+        doc.setFont(undefined, 'bold')
         doc.text('Description :', 60, 250,)
+        doc.setFont(undefined, 'Normal')
         doc.setLineWidth(0);
         doc.line(550, 250, 130, 250); // RECEIPT NO LINE (Top)
     }
-    
-
-
-
-
-
-
-
 
 
 

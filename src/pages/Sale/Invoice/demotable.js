@@ -267,7 +267,7 @@ const Invoice = (props) => {
                 row.header === true ? { "colSpan": "4" } : {}
             ),
             style: (cell, row, rowIndex, colIndex) => {
-                debugger
+                
                 if (!row.header === true) {
                     return { display: "none", hidden: true } //make sure other things are not displayed
                 } else return {}
@@ -775,7 +775,7 @@ const Invoice = (props) => {
     };
 
     function orderQtyOnChange(event, index) {
-        debugger
+        
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
@@ -948,7 +948,7 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-            debugger
+            
             const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
@@ -1172,7 +1172,7 @@ const CustomTable = ({ data = [], columns, PageSize = 100 }) => {
         let hasHedRow = [...filter]
         
         filter.forEach(k => {
-debugger
+
             let find = filter.find(i => {
                 return ((i.header === true) && (k.Party === i.Party))
             })

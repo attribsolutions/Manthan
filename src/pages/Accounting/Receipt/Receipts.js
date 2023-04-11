@@ -254,7 +254,7 @@ const Receipts = (props) => {
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
                     // onChange={(e) => {
-                    //     debugger
+                    //     
                     //     const val = e.target.value
                     //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                     //     if ((isnum) || (val === '')) {
