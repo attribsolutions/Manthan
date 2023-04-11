@@ -40,11 +40,9 @@ const Report = () => {
 
     }
     function downlodeinvoice() {
-        const jsonBody = JSON.stringify({
-            InvoiceIDs: [70, 71]
-        });
-        var ReportType = report;
-        dispatch(getpdfReportdata(get_Group_List_Api, jsonBody, ReportType))
+    
+        var ReportType = report.Receipt;
+        dispatch(getpdfReportdata(get_Group_List_Api, ReportType))
 
     }
 
@@ -104,7 +102,7 @@ const Report = () => {
                         >
                             <i className="bx bx-printer font-size-18"></i>
                         </Button>
-                        <span style={{ marginLeft: "10px" }}>Van Loading Sheet SKU Wise Summary</span>
+                        <span style={{ marginLeft: "10px" }}>Receipts</span>
 
 
 
