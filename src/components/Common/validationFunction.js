@@ -175,7 +175,7 @@ export const onChangeDate = ({ v, e, state, setState }) => {
     formValChange({ event, state, setState })
 }
 export const onChangeText = ({ event, state, setState }) => {
-    debugger
+    
     formValChange({ event, state, setState })
 }
 

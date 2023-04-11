@@ -4,15 +4,14 @@ export const Address = [
 
 
 export const AddressDetails = (data) => {
-    debugger
+    
     
     var AddressDetails = [
        
-        [`${data.Customer}`], 
-        [`${data.CustomerAddress}`]  ,
-        [`${data.Contact}`],
-        [`${data.Email}`],
-        [`${data.ReceiptDate}`],
+        [`Name${data.Customer}`], 
+        [`Address:${data.CustomerAddress}`]  ,
+        [`Contact:${data.Contact}`],
+        [`Date:${data.ReceiptDate}`],
 
     ]
     return AddressDetails;

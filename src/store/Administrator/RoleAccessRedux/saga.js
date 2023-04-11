@@ -42,14 +42,18 @@ function* GetRoleAccessListForRoleAccessList_GenFunc({ id1, id2 }) {
 
 function* PageDropdownForRoleAccessList_GenFunc({ id1, id2 }) {
   try {
+    
     const response = yield call(RoleAccessAdd_PageDropdown_Api, id1, id2);
     yield put(PageDropdownForRoleAccessList_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
+  
   try {
+    
     const response = yield call(RoleAccessAdd_GO_Button_Api, id1, id2, id3);
+    
     const newArray = response.Data.map((i, k) => {
       i.id = k + 1;
       return i
@@ -61,6 +65,7 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
 
   try {
+    
     const response = yield call(RoleAccessAdd_AddPage_Button_Api, id);
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableList = yield select(getState);
@@ -132,7 +137,7 @@ function* deleteRoleAccessMaster_GenFun({ config }) {
 }
 function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
   try {
-      
+
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableDataRedux = yield select(getState);
     const newList = tableDataRedux.map((index) => {

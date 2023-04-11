@@ -1178,6 +1178,7 @@ const RoleAccessAdd = () => {
             division = 0
         }
         if (role > 0) {
+            
             dispatch(GO_Button_RoleAccess_AddPage_Action(role, division, company));
             setShowTableOnUI(true)
         }
@@ -1246,6 +1247,7 @@ const RoleAccessAdd = () => {
     };
 
     const saveHandeller = (event) => {
+        
 
         event.preventDefault();
         const btnId = event.target.id
@@ -1314,6 +1316,7 @@ const RoleAccessAdd = () => {
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
+            
             dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }

@@ -250,6 +250,7 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
+    
     if (RoleAccessUpdateData.length <= 0) {
       let role = loginUserDetails()
       if (role) {

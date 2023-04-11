@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import { useMemo } from "react";
 import Receipts from "./Receipts";
+import * as report from '../../../Reports/ReportIndex'
 import {
     deleteBOMId,
     deleteBOMIdSuccess,
@@ -31,6 +32,8 @@ import { initialFiledFunc, onChangeSelect } from "../../../components/Common/val
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import { get_Group_List_Api } from "../../../helpers/backend_helper";
 
 const ReceiptList = () => {
 
@@ -138,6 +141,12 @@ const ReceiptList = () => {
         });
         dispatch(ReceiptListAPI(jsonBody));
     }
+
+    function downBtnFunc(row) {
+        var ReportType = report.Receipt;
+        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
+    }
+    
 
 
     function fromdateOnchange(e, date) {
@@ -264,6 +273,7 @@ const ReceiptList = () => {
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
                             ButtonMsgLable={"Receipt"}
                             deleteName={"FullReceiptNumber"}
 

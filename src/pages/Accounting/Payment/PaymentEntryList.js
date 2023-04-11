@@ -31,6 +31,10 @@ import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRed
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import PaymentEntry from "./PaymentEntry";
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import * as report from '../../../Reports/ReportIndex'
+import { get_Group_List_Api } from "../../../helpers/backend_helper";
+
 
 const PaymentEntryList = () => {
 
@@ -169,6 +173,11 @@ const PaymentEntryList = () => {
 
     }
 
+    function downBtnFunc(row) {
+        var ReportType = report.Receipt;
+        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
+    }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -255,6 +264,8 @@ const PaymentEntryList = () => {
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
+
                             ButtonMsgLable={"PaymentEntry"}
                             deleteName={"FullReceiptNumber"}
 
