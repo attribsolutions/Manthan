@@ -26,7 +26,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { DepositorBankFilter, GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -42,7 +42,7 @@ const PaymentEntry = (props) => {
 
     const fileds = {
         ReceiptDate: currentDate,
-        OpeningBalance: "",
+        OpeningBalanceAmt: "",
         Customer: "",
         ReceiptMode: "",
         AmountPaid: "",
@@ -59,6 +59,7 @@ const PaymentEntry = (props) => {
     const { postMsg,
         pageField,
         RetailerList,
+        OpeningBalance,
         BankList,
         ReceiptModeList,
         ReceiptType,
@@ -66,6 +67,7 @@ const PaymentEntry = (props) => {
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
+            OpeningBalance: state.ReceiptReducer.OpeningBalance,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             BankList: state.BankReducer.BankList,
             DepositorBank: state.ReceiptReducer.DepositorBank,
@@ -73,6 +75,8 @@ const PaymentEntry = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+    const { OpeningBalanceAmount = '' } = OpeningBalance
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY
@@ -213,11 +217,18 @@ const PaymentEntry = (props) => {
     }
 
     function CustomerOnChange(e) {
+        setState((i) => {
+            i.values.AmountPaid = ''
+            i.hasValid.AmountPaid.valid = false;
+            return i
+        })
         const jsonBody = JSON.stringify({
-            Party: loginPartyID(),
-            Customer: e.value
+            PartyID: loginPartyID(),
+            CustomerID: e.value,
+            ReceiptDate: values.ReceiptDate
         });
-        dispatch(ReceiptGoButtonMaster(jsonBody));
+
+        dispatch(GetOpeningBalance(jsonBody));
     }
 
     const saveHandeller = async (event) => {
@@ -256,13 +267,13 @@ const PaymentEntry = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                debugger
+
                 const jsonBody = JSON.stringify({
                     "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
-                    "OpeningBalanceAdjusted": "",
+                    "OpeningBalanceAdjusted":"",
                     "DocumentNo": values.ChequeNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
@@ -339,7 +350,10 @@ const PaymentEntry = (props) => {
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={customerOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    CustomerOnChange(hasSelect)
+                                                }}
                                             />
                                             {isError.Customer.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -352,24 +366,15 @@ const PaymentEntry = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.OpeningBalance}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.OpeningBalanceAmt}</Label>
                                         <Col sm="7">
                                             <Input
-                                                name="OpeningBalance"
-                                                id="txtName"
+                                                name="OpeningBalanceAmt"
+                                                id="OpeningBalanceAmt"
                                                 disabled={true}
-                                                value={values.OpeningBalance}
+                                                value={OpeningBalanceAmount}
                                                 type="text"
-                                                className={isError.OpeningBalance.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                autoComplete='off'
-                                                autoFocus={true}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
                                             />
-                                            {isError.OpeningBalance.length > 0 && (
-                                                <span className="invalid-feedback">{isError.OpeningBalance}</span>
-                                            )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -557,7 +562,7 @@ const PaymentEntry = (props) => {
                             </Row>
 
                         </div>
-                     
+
                         <FormGroup>
                             <Col>
                                 <SaveButton pageMode={pageMode}
