@@ -104,10 +104,6 @@ const PaymentEntry = (props) => {
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
 
-    const ReceiptTypeID = ReceiptType.filter((index) => {
-        return index.Name === "Payment Entry"
-    })
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -177,6 +173,10 @@ const PaymentEntry = (props) => {
             }));
         }
     }, [postMsg])
+
+    const ReceiptTypeID = ReceiptType.find((index) => {
+        return index.Name === "Payment Entry"
+    })
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -282,7 +282,7 @@ const PaymentEntry = (props) => {
                     "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
-                    "ReceiptType": ReceiptTypeID[0].id,
+                    "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": []
