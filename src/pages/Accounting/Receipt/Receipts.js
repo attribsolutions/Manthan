@@ -31,7 +31,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -92,6 +92,7 @@ const Receipts = (props) => {
         dispatch(postBanklist())
         dispatch(DepositorBankFilter())
         dispatch(ReceiptGoButtonMaster_Success([]))
+        dispatch(GetOpeningBalance_Success([]))
     }, []);
 
     // Customer dropdown Options

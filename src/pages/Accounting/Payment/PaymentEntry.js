@@ -26,7 +26,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { postBanklist } from "../../../store/Account/BankRedux/action";
 
@@ -85,6 +85,7 @@ const PaymentEntry = (props) => {
         dispatch(postBanklist())
         dispatch(DepositorBankFilter())
         dispatch(getSupplier())
+        dispatch(GetOpeningBalance_Success([]))
     }, []);
 
     useEffect(() => {
