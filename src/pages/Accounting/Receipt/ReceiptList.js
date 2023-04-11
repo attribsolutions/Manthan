@@ -23,6 +23,8 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
+    deleteReceiptList,
+    deleteReceiptList_Success,
     ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
@@ -50,7 +52,7 @@ const ReceiptList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.ReceiptReducer.ReceiptList,
-            deleteMsg: state.BOMReducer.deleteMsg,
+            deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -62,15 +64,35 @@ const ReceiptList = () => {
     );
 
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
+    const values = { ...state.values }
 
     const action = {
         getList: ReceiptListAPI,
         editId: editBOMList,
-        deleteId: deleteBOMId,
+        deleteId: deleteReceiptList,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteBOMIdSuccess
+        deleteSucc: deleteReceiptList_Success
     }
+
+    // Featch Modules List data  First Rendering
+    useEffect(() => {
+        const page_Id = pageId.RECEIPTS_LIST
+        setpageMode(hasPagePath)
+        dispatch(commonPageFieldListSuccess(null))
+        dispatch(commonPageFieldList(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+    }, []);
+
+    useEffect(() => {
+        const page_Id = pageId.RECEIPTS_LIST
+        let userAcc = userAccess.find((inx) => {
+            return (inx.id === page_Id)
+        })
+        if (!(userAcc === undefined)) {
+            setUserAccState(userAcc)
+        }
+    }, [userAccess])
 
     // Receipt Type API Values **** only Post Json Body
     useEffect(() => {
@@ -82,31 +104,11 @@ const ReceiptList = () => {
 
     }, []);
 
-    const ReceiptTypeID = ReceiptType.filter((index) => {
-        return index.Name === "Receipt"
-    })
-
-    // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.RECEIPTS_LIST
-        setpageMode(hasPagePath)
-        dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
-        goButtonHandler(true)
-    }, []);
-
-    const values = { ...state.values }
-
-    useEffect(() => {
-        const page_Id = pageId.RECEIPTS_LIST
-        let userAcc = userAccess.find((inx) => {
-            return (inx.id === page_Id)
-        })
-        if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
+        if (ReceiptType.length > 0) {
+            goButtonHandler(true)
         }
-    }, [userAccess])
+    }, [ReceiptType]);
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -122,17 +124,21 @@ const ReceiptList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-    const goButtonHandler = (async) => {
+    function goButtonHandler() {
+        const ReceiptTypeID = ReceiptType.find((index) => {
+            return index.Name === "Receipt"
+        })
 
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            ReceiptType: 29,
+            ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody));
     }
+
 
     function fromdateOnchange(e, date) {
         setState((i) => {

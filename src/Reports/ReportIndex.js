@@ -4,6 +4,8 @@ import StockReport from "./StockReport/Page";
 import MaterialReport from "./MaterialReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import InvioceReporta5 from "./Invoice report a5/Page";
+import Receipts from "./Receipts/Page";
+
 
 
 export const order1 = "order1"
@@ -14,6 +16,9 @@ export const IBinvoice = "IBinvoice"
 export const VanLoadingSheetSKU = "VanLoadingSheetSKU"
 export const VanLoadingPartyWiseInvoice = "VanLoadingPartyWiseInvoice"
 export const invoiceA5 = "invoiceA5"
+export const Receipt = "Receipt"
+
+
 
 const generateReport = (resp) => {
     switch (resp.ReportType) {
@@ -38,6 +43,10 @@ const generateReport = (resp) => {
         case invoiceA5:
             InvioceReporta5(resp.Data)
             break;
+        case Receipt:
+            Receipts(resp.Data)
+            break;
+
 
         default:
             break;

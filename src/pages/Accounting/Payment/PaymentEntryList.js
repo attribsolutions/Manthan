@@ -22,6 +22,8 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
+    deleteReceiptList,
+    deleteReceiptList_Success,
     ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
@@ -50,7 +52,7 @@ const PaymentEntryList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.ReceiptReducer.ReceiptList,
-            deleteMsg: state.BOMReducer.deleteMsg,
+            deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
@@ -61,15 +63,17 @@ const PaymentEntryList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType=[] } = reducers;
+
+    const values = { ...state.values }
 
     const action = {
         getList: ReceiptListAPI,
         editId: editBOMList,
-        deleteId: deleteBOMId,
+        deleteId: deleteReceiptList,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteBOMIdSuccess
+        deleteSucc: deleteReceiptList_Success
     }
 
     // Receipt Type API Values **** only Post Json Body
@@ -79,12 +83,13 @@ const PaymentEntryList = () => {
             TypeID: 3
         });
         dispatch(ReceiptTypeAPI(jsonBody));
-
     }, []);
 
-    const ReceiptTypeID = ReceiptType.filter((index) => {
-        return index.Name === "Receipt"
-    })
+    useEffect(() => {
+        if (ReceiptType.length > 0) {
+            goButtonHandler(true)
+        }
+    }, [ReceiptType]);
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -94,10 +99,7 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
         dispatch(getSupplier())
-        goButtonHandler(true)
     }, []);
-
-    const values = { ...state.values }
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY_LIST
@@ -114,23 +116,17 @@ const PaymentEntryList = () => {
         label: index.Name,
     }));
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Type: 4,
-    //         PartyID: loginPartyID(),
-    //         CompanyID: loginCompanyID()
-    //     });
-    //     dispatch(Retailer_List(jsonBody));
-    // }, []);
-
-    const goButtonHandler = (async) => {
+    function goButtonHandler() {
+        const ReceiptTypeID = ReceiptType.find((index) => {
+            return index.Name === "Payment Entry"
+        })
 
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            ReceiptType: 30,
+            ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody));
     }
