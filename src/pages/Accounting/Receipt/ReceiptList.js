@@ -82,7 +82,6 @@ const ReceiptList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
-        goButtonHandler(true)
     }, []);
 
     useEffect(() => {
@@ -110,7 +109,7 @@ const ReceiptList = () => {
             goButtonHandler(true)
         }
     }, [ReceiptType]);
-    
+
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
