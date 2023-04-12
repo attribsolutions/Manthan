@@ -179,6 +179,7 @@ export const LOADING_SHEET_LIST = 156
 
 export const RECEIPTS = 173
 export const RECEIPTS_LIST = 174
+export const RECEIPTS_LIST_2 = 180
 
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178

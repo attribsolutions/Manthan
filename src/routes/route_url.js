@@ -168,6 +168,9 @@ export const INVOICE_LIST_1 = "/InvoiceList_1"
 
 export const LOADING_SHEET = "/Loading_Sheet"
 export const LOADING_SHEET_LIST = "/Loading_Sheet_List"
+export const LOADING_SHEET_LIST_UPDATE = "/Loading_Sheet_List_Update"
+
+
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
@@ -186,6 +189,7 @@ export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 //********************************Accounting ***********************************//
 export const RECEIPTS = "/Receipts"
 export const RECEIPTS_LIST = "/ReceiptList"
+export const RECEIPTS_LIST_2 = "/Receipt_List_2"
 
 export const PAYMENT_ENTRY = "/PaymentEntry"
 export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"

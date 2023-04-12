@@ -31,10 +31,9 @@ import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRed
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import PaymentEntry from "./PaymentEntry";
-import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import * as report from '../../../Reports/ReportIndex'
 import { get_Group_List_Api } from "../../../helpers/backend_helper";
-
+import * as report from '../../../Reports/ReportIndex'
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 const PaymentEntryList = () => {
 
@@ -50,8 +49,10 @@ const PaymentEntryList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(mode.defaultList)
+    const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [userAccState, setUserAccState] = useState('');
+    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' });
 
     const reducers = useSelector(
         (state) => ({
@@ -67,7 +68,7 @@ const PaymentEntryList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType=[] } = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType = [] } = reducers;
 
     const values = { ...state.values }
 
@@ -95,15 +96,47 @@ const PaymentEntryList = () => {
         }
     }, [ReceiptType]);
 
-    // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.PAYMENT_ENTRY_LIST
-        setpageMode(hasPagePath)
+
+        let page_Id = '';
+        let page_Mode = mode.defaultList;
+        let masterPath = '';
+        let makeBtnShow = false;
+        let newBtnPath = '';
+        let makeBtnName = '';
+
+        if (subPageMode === url.PAYMENT_ENTRY_LIST) {
+            page_Id = pageId.PAYMENT_ENTRY_LIST;
+            masterPath = url.PAYMENT_ENTRY;
+            newBtnPath = url.PAYMENT_ENTRY;
+        }
+        else if (subPageMode === url.RECEIPTS_LIST_2) {
+            page_Id = pageId.RECEIPTS_LIST_2
+            page_Mode = mode.modeSTPsave
+            makeBtnShow = true;
+            makeBtnName = "Make Payment"
+        }
+
+
+        dispatch(ReceiptListAPI(""))//for clear privious order list
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName })
+        setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
         dispatch(getSupplier())
+
     }, []);
+
+    // Featch Modules List data  First Rendering
+    // useEffect(() => {
+    //     const page_Id = pageId.PAYMENT_ENTRY_LIST
+    //     setpageMode(hasPagePath)
+    //     dispatch(commonPageFieldListSuccess(null))
+    //     dispatch(commonPageFieldList(page_Id))
+    //     dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+    //     dispatch(getSupplier())
+    // }, []);
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY_LIST
@@ -132,7 +165,7 @@ const PaymentEntryList = () => {
             PartyID: loginPartyID(),
             ReceiptType: ReceiptTypeID.id,
         });
-        dispatch(ReceiptListAPI(jsonBody));
+        dispatch(ReceiptListAPI(jsonBody, subPageMode));
     }
 
     function fromdateOnchange(e, date) {
@@ -171,11 +204,6 @@ const PaymentEntryList = () => {
             return a
         })
 
-    }
-
-    function downBtnFunc(row) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
     }
 
     const HeaderContent = () => {
@@ -248,11 +276,39 @@ const PaymentEntryList = () => {
         )
     }
 
+    function downBtnFunc(row) {
+        var ReportType = report.Receipt;
+        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
+    }
+
+    const makeBtnFunc = (list = []) => {
+
+        // var { PartyID, CustomerID, CustomerID } = list[0]
+        history.push({
+            pathname: url.RECEIPTS,
+            pageMode: mode.modeSTPsave,
+            [mode.editValue]: list[0]
+        })
+
+        // try {
+        //     const jsonBody = JSON.stringify({
+        //         WorkOrder: jsonData.id,
+        //         Item: jsonData.Item,
+        //         Company: loginCompanyID(),
+        //         Party: loginPartyID(),
+        //         Quantity: parseInt(jsonData.Quantity)
+        //     })
+        //     const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }
+        //     // dispatch(goButtonForMaterialIssue_Master_Action(body))
+
+        // } catch (e) { }
+    }
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
-                {
+                {/* {
                     (pageField) ?
                         <CommonPurchaseList
                             action={action}
@@ -264,10 +320,32 @@ const PaymentEntryList = () => {
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
-                            downBtnFunc={downBtnFunc}
-
                             ButtonMsgLable={"PaymentEntry"}
                             deleteName={"FullReceiptNumber"}
+
+                        />
+                        : null
+                } */}
+                {
+                    (pageField) ?
+                        <CommonPurchaseList
+                            action={action}
+                            reducers={reducers}
+                            showBreadcrumb={false}
+                            masterPath={otherState.masterPath}
+                            newBtnPath={otherState.newBtnPath}
+                            makeBtnShow={otherState.makeBtnShow}
+                            pageMode={pageMode}
+                            HeaderContent={HeaderContent}
+
+                            goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
+                            // editBodyfunc={editBodyfunc}
+                            makeBtnFunc={makeBtnFunc}
+                            ButtonMsgLable={"PaymentEntry"}
+                            deleteName={"FullReceiptNumber"}
+                            makeBtnName={otherState.makeBtnName}
+                            MasterModal={PaymentEntry}
 
                         />
                         : null
