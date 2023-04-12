@@ -377,6 +377,11 @@ export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${edit
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
 export const detelet_Bank_List_Api = ({ deleteId, btnId }) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
 
+//Bank Assign Api
+export const PartyBankfilter_API = (filters) => post(url.PARTY_BANK_FILTER, filters)
+export const Post_Bank_Assign_API = ({ jsonBody, btnId }) => post(url.BANK_ASSIGN, jsonBody, btnId)// post api
+
+
 //Credit Limit
 export const Post_CreditLimit_Master_API = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
 export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_CREDIT_LIMIT, jsonBody)// Go Button post api

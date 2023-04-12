@@ -138,6 +138,7 @@ import BankMaster from "../pages/Accounting/Bank/BankMaster";
 import BankList from "../pages/Accounting/Bank/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
+import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -253,6 +254,7 @@ const userRoutes = [
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
 
+  { path: path.BANK_ASSIGN, component: BankAssign },
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

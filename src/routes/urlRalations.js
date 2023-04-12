@@ -117,6 +117,8 @@ export const ManagementParties = url.MANAGEMENT_PARTIES
 export const BankMaster = url.BANK_LIST
 export const BankList = url.BANK
 
+export const BankAssign = url.BANK_ASSIGN
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1
