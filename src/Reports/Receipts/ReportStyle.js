@@ -9,19 +9,25 @@ let initial_y = 0
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(0);
+
+
     doc.line(570, 16, 30, 16);//horizontal line (Top)
     doc.line(30, 379, 30, 16);//vertical line (left)
     doc.line(570, 379, 570, 16);//vertical line (Right)
     doc.line(570, 379, 30, 379);//horizontal line (Bottom)   
 }
 
-
 export const Receipts = (doc, data) => {
+    doc.setLineDash([7, 3, 1, 3], 10)
+
     doc.setFont(undefined, 'bold')
     doc.setFontSize(19)
     doc.setLineWidth(1);
-    doc.roundedRect(120, 37, 190, 30, 5, 5, 'S')
-    doc.text('PAYMENT RECEIPT ', 125, 60,)
+    doc.roundedRect(45, 37, 220, 30, 5, 5, 'S')
+    doc.text('PAYMENT RECEIPT ', 60, 60,)
+
+   
+
 
 
 
@@ -42,13 +48,14 @@ export const Receipts = (doc, data) => {
 
 
     doc.setFont(undefined, 'bold')
+    doc.setFontSize(11)
     doc.text('Recived with thanks from:', 60, 160,)
     doc.setFont(undefined, 'Normal')
     doc.text(`${data.Party}`, 190, 159,)
     doc.setLineWidth(0);
     doc.line(550, 162, 183, 162);
 
-
+    doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text('Amount in Word :', 60, 190,)
     doc.setFont(undefined, 'Normal')
@@ -59,7 +66,7 @@ export const Receipts = (doc, data) => {
 
 
     doc.setFont(undefined, 'bold')
-    doc.text('Receipt Mode', 60, 220,)
+    doc.text('Receipt Mode :', 60, 220,)
     doc.setLineWidth(0);
     doc.setFont(undefined, 'Normal')
     doc.text(`${data.ReceiptMode}`, 160, 219,)
@@ -69,19 +76,19 @@ export const Receipts = (doc, data) => {
     if (data.ReceiptMode === "RTGS") {
 
         doc.setFont(undefined, 'bold')
-        doc.text('Bank', 60, 250,)
+        doc.text('Bank :', 60, 250,)
         doc.setLineWidth(0);
         doc.setFont(undefined, 'Normal')
         doc.line(300, 250, 90, 250); // RECEIPT NO LINE (Top)
 
         doc.setFont(undefined, 'bold')
-        doc.text('Depositor Bank', 320, 250,)
+        doc.text('Depositor Bank :', 320, 250,)
         doc.setLineWidth(0);
         doc.setFont(undefined, 'Normal')
         doc.line(550, 250, 400, 250); // RECEIPT NO LINE (Top)
 
         doc.setFont(undefined, 'bold')
-        doc.text('Description', 60, 280,)
+        doc.text('Description :', 60, 280,)
         doc.setFont(undefined, 'Normal')
         doc.setLineWidth(0);
         doc.line(550, 280, 130, 280); // RECEIPT NO LINE (Top)
@@ -155,7 +162,7 @@ export const Receipts = (doc, data) => {
 
 
     doc.text('Authorized Signatory ', 430, 360,)
-    doc.line(550, 348, 400, 348); // RECEIPT NO LINE (Top)
+    // doc.line(550, 348, 400, 348); // RECEIPT NO LINE (Top)
 
 
 
@@ -171,19 +178,19 @@ export const Receipts = (doc, data) => {
 
     var BilledByStyle = {
         margin: {
-            top: 0, left: 380, right: 35,
+            top: 0, left: 350, right: 35,
         },
         showHead: 'always',
         theme: 'plain',
         styles: {
             overflow: 'linebreak',
-            fontSize: 8,
+            fontSize: 9,
             height: 0,
         },
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 2,
+            cellPadding: 1,
             fontSize: 10,
             fontStyle: 'bold',
             lineColor: [0, 0, 0]
@@ -191,7 +198,7 @@ export const Receipts = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 190,
+                columnWidth: 220,
                 halign: 'lfet',
             }
         },
@@ -200,6 +207,15 @@ export const Receipts = (doc, data) => {
     };
 
     doc.autoTable(table.Address, table.AddressDetails(data), BilledByStyle);
+    let finalY = doc.previousAutoTable.finalY;
+
+    doc.line(570, finalY, 30, finalY); // RECEIPT NO LINE 
+    doc.line(570, finalY+4, 30, finalY+4); // RECEIPT NO LINE 
+
+    doc.line(570, 340, 30, 340); // RECEIPT NO LINE 
+
+    debugger
+
 
 
 
