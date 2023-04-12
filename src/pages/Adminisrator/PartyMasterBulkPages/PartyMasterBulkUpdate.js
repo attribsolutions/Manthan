@@ -58,7 +58,7 @@ import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 
 
 const PartyMasterBulkUpdate = (props) => {
-    debugger
+    
     const count = useRef(0)
 
     const dispatch = useDispatch();
@@ -281,7 +281,7 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function diisionhandler(event, user) {
-        debugger
+        
         user.Newvalue = event.target.checked
 
 
@@ -450,7 +450,7 @@ const PartyMasterBulkUpdate = (props) => {
 
 
                 Data.forEach(i => {
-                    debugger
+                    
                     if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
 
                         const arr = {
@@ -464,7 +464,7 @@ const PartyMasterBulkUpdate = (props) => {
                     }
 
                 })
-                debugger
+                
 
                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
