@@ -33,7 +33,7 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { get_Group_List_Api } from "../../../helpers/backend_helper";
+import { Receipt_Print } from "../../../helpers/backend_helper";
 
 const ReceiptList = () => {
 
@@ -144,7 +144,7 @@ const ReceiptList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
+        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
     }
 
     function fromdateOnchange(e, date) {
