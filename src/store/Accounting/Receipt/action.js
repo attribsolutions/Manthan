@@ -59,9 +59,9 @@ export const saveReceiptMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const ReceiptListAPI = (jsonBody) => ({
+export const ReceiptListAPI = (jsonBody,subPageMode) => ({
   type: RECEIPT_LIST_API,
-  jsonBody,
+  jsonBody,subPageMode,
 });
 
 export const ReceiptListAPISuccess = (resp) => ({

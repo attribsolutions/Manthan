@@ -165,7 +165,7 @@ const PaymentEntryList = () => {
             PartyID: loginPartyID(),
             ReceiptType: ReceiptTypeID.id,
         });
-        dispatch(ReceiptListAPI(jsonBody));
+        dispatch(ReceiptListAPI(jsonBody, subPageMode));
     }
 
     function fromdateOnchange(e, date) {
@@ -282,7 +282,7 @@ const PaymentEntryList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-       
+
         // var { PartyID, CustomerID, CustomerID } = list[0]
         history.push({
             pathname: url.RECEIPTS,
