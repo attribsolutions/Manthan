@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import BankMaster from "./BankMaster";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../store/actions";
-import CommonListPage from "../../components/Common/CommonMasterListPage";
-import * as pageId from "../../routes/allPageID"
-import * as url from "../../routes/route_url";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
+import * as pageId from "../../../routes/allPageID"
+import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
     deleteBankIDSuccess,
@@ -13,8 +13,8 @@ import {
     postBanklist,
     saveBankMaster_Success,
     updateBankIDSuccess
-} from "../../store/Account/BankRedux/action";
-import { loginCompanyID, loginPartyID } from "../../components/Common/CommonFunction";
+} from "../../../store/Accounting/BankRedux/action";
+
 
 const BankList = () => {
 

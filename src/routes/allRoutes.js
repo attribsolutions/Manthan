@@ -134,8 +134,8 @@ import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/Pa
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
 import Receipts from "../pages/Accounting/Receipt/Receipts";
 import ReceiptList from "../pages/Accounting/Receipt/ReceiptList";
-import BankMaster from "../pages/Account/BankMaster";
-import BankList from "../pages/Account/BankList";
+import BankMaster from "../pages/Accounting/Bank/BankMaster";
+import BankList from "../pages/Accounting/Bank/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
 
