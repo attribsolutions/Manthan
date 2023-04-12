@@ -3,6 +3,7 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 import { CommonConsole, convertDatefunc, convertTimefunc, loginCompanyID, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
+import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
 function* ReceiptGoButtonGenFunc({ jsonBody }) {
@@ -35,9 +36,17 @@ function* Depositor_Bank_GenFunc({ jsonBody }) {
 }
 
 // Receipt List API
-function* Receipt_List_GenFun({ jsonBody }) {
-  try {
-    const response = yield call(apiCall.Receipt_Filter_API, jsonBody);
+function* Receipt_List_GenFun({ jsonBody ,subPageMode}) {
+  debugger
+  let response;
+  try { 
+    if (subPageMode===url.PAYMENT_ENTRY_LIST) {
+      response = yield call(apiCall.Receipt_Filter_API, jsonBody);
+    }
+    else if (subPageMode===url.RECEIPTS_LIST_2) {
+      response = yield call(apiCall.Make_Receipt_to_Payment_API, jsonBody);
+    }
+    // const response = yield call(apiCall.Receipt_Filter_API, jsonBody);
     // const newList = yield response.Data.map((i) => {
     //   var date = convertDatefunc(i.ReceiptDate)
     //   i.Date = (date)
