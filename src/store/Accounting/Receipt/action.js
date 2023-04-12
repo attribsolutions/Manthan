@@ -12,7 +12,9 @@ import {
   DELETE_RECEIPT_LIST,
   DELETE_RECEIPT_LIST_SUCCESS,
   GET_OPENING_BALANCE,
-  GET_OPENING_BALANCE_SUCCESS
+  GET_OPENING_BALANCE_SUCCESS,
+  BANK_LIST_API,
+  BANK_LIST_API_SUCCESS
 } from "./actionType";
 
 export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
@@ -86,5 +88,16 @@ export const deleteReceiptList = (config = {}) => ({// save Action
 
 export const deleteReceiptList_Success = (resp) => ({// Save  success
   type: DELETE_RECEIPT_LIST_SUCCESS,
+  payload: resp,
+});
+
+// Party Wise Bank list
+export const BankListAPI = (jsonBody) => ({
+  type: BANK_LIST_API,
+  jsonBody,
+});
+
+export const BankListAPISuccess = (resp) => ({
+  type: BANK_LIST_API_SUCCESS,
   payload: resp,
 });
