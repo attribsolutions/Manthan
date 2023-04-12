@@ -49,7 +49,7 @@ import RoutesSaga from "./Administrator/RoutesRedux/saga"
 import SalesManSaga from "./Administrator/SalesManRedux/saga"
 import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
 import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
-import BankSaga from "./Account/BankRedux/saga"
+import BankSaga from "./Accounting/BankRedux/saga"
 
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"

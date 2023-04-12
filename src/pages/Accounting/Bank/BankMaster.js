@@ -10,15 +10,14 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
-} from "../../store/actions";
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../store/actions";
+import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -26,26 +25,20 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction,
-} from "../../components/Common/validationFunction";
-import { SaveButton } from "../../components/Common/CommonButton";
-
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginCompanyID,
     loginPartyID,
     loginUserID
-} from "../../components/Common/CommonFunction";
-import * as url from "../../routes/route_url";
-import * as pageId from "../../routes/allPageID"
-import * as mode from "../../routes/PageMode"
-import {
-    editBankIDSuccess,
-    saveBankMaster,
-    saveBankMaster_Success,
-    updateBankID,
-    updateBankIDSuccess
-} from "../../store/Account/BankRedux/action";
+} from "../../../components/Common/CommonFunction";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
+import { editBankIDSuccess, saveBankMaster, saveBankMaster_Success, updateBankID, updateBankIDSuccess } from "../../../store/Accounting/BankRedux/action";
+
 
 const BankMaster = (props) => {
 
