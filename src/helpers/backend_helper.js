@@ -531,6 +531,7 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 
 //*********************************Accounting Module ************************************ */
 // Receipt and Payment Entry
+export const Receipt_Print = (id) => get(`${url.RECEIPT_POST_API}/${id}`)//dropdown api
 export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
 export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
