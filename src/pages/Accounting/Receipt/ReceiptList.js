@@ -139,15 +139,13 @@ const ReceiptList = () => {
             PartyID: loginPartyID(),
             ReceiptType: ReceiptTypeID.id,
         });
-        dispatch(ReceiptListAPI(jsonBody));
+        dispatch(ReceiptListAPI(jsonBody, hasPagePath));
     }
 
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
         dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
     }
-    
-
 
     function fromdateOnchange(e, date) {
         setState((i) => {
