@@ -25,6 +25,7 @@ import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList
 import * as url from "../../../../routes/route_url"
 import * as mode from "../../../../routes/PageMode"
 
+
 import { useHistory } from "react-router-dom";
 
 const LoadingSheetList = () => {
@@ -116,6 +117,30 @@ const LoadingSheetList = () => {
         }
     }
 
+
+
+    const updateBtnFunc = (list = []) => {
+        history.push(url.LOADING_SHEET_LIST_UPDATE);
+        debugger
+       
+
+        // const jsonBody = JSON.stringify({
+        //     OrderIDs: list[0].id.toString(),
+        //     Mode: 2 // mode when challan to make GRN
+        // })
+        // dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, grnRef, path: url.GRN_ADD_1, challanNo }))
+    };
+
+
+
+
+
+
+
+
+
+
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
@@ -184,6 +209,7 @@ const LoadingSheetList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
+                            updateBtnFunc={updateBtnFunc}
                             ButtonMsgLable={"LoadingSheet"}
                             deleteName={"FullGRNNumber"}
                             MasterModal={LoadingSheet}

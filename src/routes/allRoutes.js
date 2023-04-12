@@ -138,6 +138,7 @@ import BankMaster from "../pages/Accounting/Bank/BankMaster";
 import BankList from "../pages/Accounting/Bank/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
+import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
@@ -309,6 +310,7 @@ const userRoutes = [
 
   { path: path.LOADING_SHEET, component: LoadingSheet },
   { path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
+  { path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },

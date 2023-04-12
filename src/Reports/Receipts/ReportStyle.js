@@ -40,11 +40,6 @@ export const Receipts = (doc, data) => {
 
 
 
-
-
-
-
-
     doc.setFontSize(10)
     doc.addFont("Arial", 'Normal')
     doc.text('RECEIPT NO:', 60, 130,)

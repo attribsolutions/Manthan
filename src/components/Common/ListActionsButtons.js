@@ -30,6 +30,7 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
+        updateBtnFunc,
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
@@ -63,6 +64,7 @@ export const listPageActionsButtonFunc = (props) => {
         downBtnFunc(rowData, downbtnType);
     };
 
+    
 
     async function deleteHandler(rowData, btnId) {
         if (deleteBodyfunc) {
@@ -219,8 +221,23 @@ export const listPageActionsButtonFunc = (props) => {
                                     className=" fas fa-file-download" ></span> </Button>
                             : null
                     }
-
-
+                    
+                    {
+                        (updateBtnFunc) ?
+                            <Button style={{width:"30px"}}
+                                type="button"
+                                id={`btn-delete-${rowData.id}`}
+                                className={editSelfBtnCss}
+                                title={`Update ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnId = `btn-delete-${rowData.id}`
+                                    updateBtnFunc(rowData, mode.copy, btnId)
+                                }}
+                            >
+                                <i  className="dripicons-document-edit "></i>
+                            </Button>
+                            : null
+                    }
 
                     {
                         (userAccState.RoleAccess_IsDelete)
@@ -273,6 +290,8 @@ export const listPageActionsButtonFunc = (props) => {
                             </Button>
                             : null
                     }
+
+
                 </div >
             )
         }
