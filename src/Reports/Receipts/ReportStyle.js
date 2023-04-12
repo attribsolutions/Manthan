@@ -24,19 +24,6 @@ export const Receipts = (doc, data) => {
     doc.text('PAYMENT RECEIPT ', 125, 60,)
 
 
-    debugger
-    doc.AcroForm.CheckBox()
-
-    // var doc = new jsPDF();
-    doc.text('CheckBox:', 10, 125);
-    var checkBox = new CheckBox();
-    checkBox.fieldName = "CheckBox1";
-    checkBox.Rect = [50, 120, 30, 10];
-    checkBox.value = 'Yes'
-    
-
-    checkBox.appearanceState = 'Off' //unchecked
-    checkBox.appearanceState = 'On' //checked
 
 
 

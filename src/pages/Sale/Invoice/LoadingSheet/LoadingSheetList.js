@@ -119,10 +119,13 @@ const LoadingSheetList = () => {
 
 
 
-    const updateBtnFunc = (list = []) => {
-        history.push(url.LOADING_SHEET_LIST_UPDATE);
-        debugger
-       
+    const updateBtnFunc = (list) => {
+        
+debugger
+        
+        
+        history.push(url.LOADING_SHEET_LIST_UPDATE,list);
+
 
         // const jsonBody = JSON.stringify({
         //     OrderIDs: list[0].id.toString(),
