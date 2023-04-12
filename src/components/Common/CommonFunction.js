@@ -69,10 +69,11 @@ export const invertDatefunc = (inp) => {
 export const loginUserDetails = () => {
   //+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++
   let user_Details = '';
-  
   try {
     const a = localStorage.getItem("roleId")
-    if (!a === null) user_Details = JSON.parse(a);
+    if (!(a === null)) {
+      user_Details = JSON.parse(a);
+    }
   } catch (e) {
     CommonConsole("Common user_Details  Error");
   }
