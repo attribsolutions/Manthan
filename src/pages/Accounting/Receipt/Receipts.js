@@ -164,14 +164,13 @@ const Receipts = (props) => {
                 i.values.BankName = { value: Bank, label: BankName }
                 i.values.Description = Description
                 i.values.ChequeNo = DocumentNo
-                i.values.AmountPaid = "1000.00"
+                i.values.AmountPaid = AmountPaid
 
                 i.hasValid.Customer.valid = true;
                 i.hasValid.AmountPaid.valid = true;
                 i.hasValid.BankName.valid = true;
                 i.hasValid.Description.valid = true;
                 i.hasValid.ReceiptMode.valid = true;
-                // i.hasValid.LotQuantity.valid = true;
                 return i
             })
             // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
@@ -185,7 +184,7 @@ const Receipts = (props) => {
                 dispatch(ReceiptGoButtonMaster(jsonBody));
                 dispatch(GetOpeningBalance(jsonBody));
             }
-            AmountPaidDistribution("1000.00")
+            AmountPaidDistribution(AmountPaid)
         }
     }, [])
 
