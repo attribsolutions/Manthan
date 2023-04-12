@@ -267,7 +267,6 @@ const Invoice = (props) => {
                 row.header === true ? { "colSpan": "4" } : {}
             ),
             style: (cell, row, rowIndex, colIndex) => {
-                debugger
                 if (!row.header === true) {
                     return { display: "none", hidden: true } //make sure other things are not displayed
                 } else return {}

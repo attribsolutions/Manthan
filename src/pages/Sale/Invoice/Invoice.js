@@ -48,9 +48,9 @@ import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedu
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { discountCalculate } from "./invoiceCaculations";
 import "./invoice.scss"
-import demoData from "./demodata.json"
+import demoData from "./demo1.json"
 import { numberWithCommas } from "../../../Reports/Report_common_function"
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import CustomTable from "../../../components/Common/CustomTable";
 
 const Invoice = (props) => {
 
@@ -260,17 +260,87 @@ const Invoice = (props) => {
 
     const pagesListColumns = [
 
+        {
+            dataField: "PartyName",
+            text: "party",
+            hidden: true,
+            attrs: (cell, row, rowIndex, colIndex) => (
+                row.header === true ? { "colSpan": "4" } : {}
+            ),
+            classes: () => ('multiinvoice'),
+            style: (cell, row, rowIndex, colIndex) => {
+                if (!row.header === true) {
+                    return { display: "none", hidden: true } //make sure other things are not displayed
+                } else return {}
+            },
+            formatter: (e, i) => {
+                return <div className="_heder" >
+                    <div className="div-1">
+                        <div>
+                            <Label>{i.PartyName}</Label>
+                        </div>
+                    </div>
+                    {/* <div className="div-2">
+                            <div>  <SearchBar {...toolkitProps.searchProps} /></div>
+                        </div> */}
+                    <div className="div-2">
+                        <div>
+                            <Label >Invoice No</Label>
+                        </div>
+                        <div> <Input type="text" /></div>
+                    </div>
 
+                    <div className="div-2">
+                        <div>
+                            <Label >Amount</Label>
+                        </div>
+                        <div>
+                            <Input id={`partytAmt${i.id}-${i.Party}`}
+                                type="text" placeholder="Calculate Invoice Value" disabled={true} />
+                        </div>
+                    </div>
+                </div >
+            },
+
+        },
 
         {//***************ItemName********************************************************************* */
             text: "Item Name",
             dataField: "ItemName",
-            classes: () => ('invoice-item-row'),
+            classes: (cell, row,) => (row.header === true ? "multiinvoice" : 'invoice-item-row'),
+            attrs: (cell, row, rowIndex, colIndex) => (
+                row.header === true ? { "colSpan": "4" } : {}
+            ),
             formatter: (cellContent, index1,) => {
+                if (index1.header) {
+                    return (<div className="_heder" >
+                        <div className="div-1">
+                            <div>
+                                <Label>{index1.PartyName}</Label>
+                            </div>
+                        </div>
+                        <div className="div-2">
+                            <div>
+                                <Label >Invoice No</Label>
+                            </div>
+                            <div> <Input type="text" /></div>
+                        </div>
+
+                        <div className="div-2">
+                            <div>
+                                <Label >Amount</Label>
+                            </div>
+                            <div>
+                                <Input id={`partytAmt${index1.id}-${index1.Party}`}
+                                    type="text" placeholder="Calculate Invoice Value" disabled={true} />
+                            </div>
+                        </div>
+                    </div >)
+                }
                 return (
                     <>
                         <div className="invoice-item-row-div-1">
-                            <samp id={`ItemName${index1.id}-${index1.Party}`}>{cellContent}</samp>
+                            <samp id={`ItemName${index1.id}-${index1.Party}`}>{index1.ItemName}</samp>
                         </div>
                         {
                             (index1.StockInValid) &&
@@ -289,6 +359,9 @@ const Invoice = (props) => {
             text: "Quantity Unit",
             dataField: "",
             classes: () => ('invoice-quantity-row'),
+            style: (cell, row, rowIndex, colIndex) => {
+                return (row.header === true) && { display: "none" } //make sure other things are not displayed
+            },
             formatter: (cellContent, index1) => (
                 <>
                     <div className="div-1">
@@ -339,6 +412,9 @@ const Invoice = (props) => {
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
+            style: (cell, row, rowIndex, colIndex) => {
+                return (row.header === true) && { display: "none" } //make sure other things are not displayed
+            },
             // attrs: (cell, row, rowIndex, colIndex) => (
             //     rowIndex === 0 ? { hidden: true } : {}
             // ),
@@ -507,6 +583,9 @@ const Invoice = (props) => {
             text: "Discount",
             dataField: "",
             classes: () => ('invoice-discount-row'),
+            style: (cell, row, rowIndex, colIndex) => {
+                return (row.header === true) && { display: "none" } //make sure other things are not displayed
+            },
             formatter: (cell, row,) => {
                 if (!row.DiscountType) row.DiscountType = 2
                 if (!row.Discount) row.Discount = 0
@@ -684,17 +763,16 @@ const Invoice = (props) => {
             if ((orderqty > stockqty) && !(orderqty === 0)) {
                 orderqty = orderqty - stockqty
                 i2.Qty = stockqty.toFixed(3)
+            } else if ((orderqty <= stockqty) && (orderqty > 0)) {
+                i2.Qty = orderqty.toFixed(3)
+                orderqty = 0
             }
-            //  else if ((orderqty <= stockqty) && (orderqty > 0)) {
-            //     i2.Qty = orderqty.toFixed(3)
-            //     orderqty = 0
-            // }
-            // else {
-            //     i2.Qty = 0;
-            // }
-            // try {
-            //     document.getElementById(`batchQty${index.id}-${i2.id}-${index.Party}`).value = i2.Qty
-            // } catch (e) { }
+            else {
+                i2.Qty = 0;
+            }
+            try {
+                document.getElementById(`batchQty${index.id}-${i2.id}-${index.Party}`).value = i2.Qty
+            } catch (e) { }
 
             return i2
         });
@@ -723,7 +801,6 @@ const Invoice = (props) => {
     };
 
     function orderQtyOnChange(event, index) {
-
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;
@@ -817,14 +894,8 @@ const Invoice = (props) => {
                 index.StockDetails.forEach((ele) => {
 
                     if (ele.Qty > 0) {
-                        var demo = {
-                            Rate: ele.Rate,
-                            GSTPercentage: ele.GST,
-                            Quantity: ele.Qty
-                        }
 
                         const calculate = discountCalculate(ele, index)
-
                         grand_total = grand_total + Number(calculate.tAmount)
 
                         invoiceItems.push({
@@ -854,34 +925,6 @@ const Invoice = (props) => {
                             Discount: index.Discount,
                             DiscountAmount: calculate.disCountAmt,
                         })
-
-                        // invoiceItems.push({
-                        //     Item: index.Item,
-                        //     Unit: index.UnitDrop.value,
-                        //     BatchCode: ele.BatchCode,
-                        //     Quantity: ele.Qty,
-                        //     BatchDate: ele.BatchDate,
-                        //     BatchID: ele.id,
-                        //     BaseUnitQuantity: ele.BaseUnitQuantity,
-                        //     LiveBatch: ele.LiveBatche,
-                        //     MRP: ele.LiveBatcheMRPID,
-                        //     Rate: ele.Rate,
-                        //     BasicAmount: basicAmt.toFixed(2),
-                        //     GSTAmount: cgstAmt.toFixed(2),
-                        //     GST: ele.LiveBatcheGSTID,
-                        //     CGST: (cgstAmt / 2).toFixed(2),
-                        //     SGST: (cgstAmt / 2).toFixed(2),
-                        //     IGST: 0,
-                        //     GSTPercentage: ele.GST,
-                        //     CGSTPercentage: (ele.GST / 2),
-                        //     SGSTPercentage: (ele.GST / 2),
-                        //     IGSTPercentage: 0,
-                        //     Amount: amount,
-                        //     TaxType: 'GST',
-                        //     DiscountType: "",
-                        //     Discount: "0",
-                        //     DiscountAmount: "0",
-                        // })
                     }
                 })
             })
@@ -896,7 +939,6 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-
             const forInvoice_1_json = () => ({  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
@@ -937,6 +979,7 @@ const Invoice = (props) => {
         } catch (e) { returnFunc() }
 
     }
+
 
 
     if (!(userPageAccessState === '')) {
@@ -1012,42 +1055,18 @@ const Invoice = (props) => {
                             </Row>
                         </Col>
 
-                        {/* 
-                        <ToolkitProvider
+                        <CustomTable
                             keyField={"id"}
-                            data={OrderItemDetails}
-                            columns={pagesListColumns}
-                            showPaginationBottom={false}
-                            search
-                        >
-                            {(toolkitProps) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={"table  table-bordered"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider> */}
-
-                        <CustomToolkit
-                            data={OrderItemDetails}
+                            responsive
+                            bordered={false}
+                            striped={false}
+                            classes={"table  table-bordered"}
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Items Not available
+                                </div>
+                            }
+                            data={demoData}
                             columns={pagesListColumns}
                         />
 
@@ -1083,64 +1102,5 @@ const Invoice = (props) => {
 export default Invoice
 
 
-const CustomToolkit = ({ data = [], columns = [] }) => {
-    const [tableData, setTableData] = CustomeHook(data, columns)
 
 
-    debugger
-    return (
-        <BootstrapTable
-            keyField={"id"}
-            data={tableData}
-            columns={columns}
-            responsive
-            bordered={false}
-            striped={false}
-            classes={"table  table-bordered"}
-            noDataIndication={
-                <div className="text-danger text-center ">
-                    Items Not available
-                </div>
-            }
-        // {...toolkitProps.baseProps}
-        />
-    )
-
-}
-const CustomeHook = (data = [], columns = []) => {
-
-    const [tableData, setTableData] = useState([])
-    useEffect(() => {
-        setTableData(data)
-    }, [data])
-
-    const serach = (text) => {
-        let search = text.toLowerCase()
-
-        let filter = data.filter((item) => {
-            let found = false
-            let cell = item.ItemName.toLowerCase()
-            found = cell.includes(search)
-            // for (let i = 0; i < columns.length; i++) {
-            //     let isCell = item[columns[i].dataField]
-            //     debugger
-            //     if (!(isCell === null) || !(isCell === undefined)) {
-
-            //         isCell = JSON.stringify(isCell)
-            //         isCell = isCell.toLowerCase()
-            //         let isinclude = isCell.includes(search)
-            //         if (isinclude && !found) {
-            //             found = isinclude
-            //         }
-            //     }
-            // }
-            return found
-
-        })
-        setTableData(filter)
-
-    }
-    mySearchProps({ onSearch: serach },)
-
-    return [tableData, setTableData]
-}
