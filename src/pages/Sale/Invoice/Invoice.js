@@ -1178,55 +1178,5 @@ const Invoice = (props) => {
 
 export default Invoice;
 
-// return (
-//     <BootstrapTable
-//         keyField={"id"}
-//         data={tableData}
-//         columns={columns}
-//         responsive
-//         bordered={false}
-//         striped={false}
-//         classes={"table  table-bordered"}
-//         noDataIndication={
-//             <div className="text-danger text-center ">
-//                 Items Not available
-//             </div>
-//         }
-//     // {...toolkitProps.baseProps}
-//     />
-// )
 
-const CustomeHook = (data = [], columns = []) => {
-  const [tableData, setTableData] = useState([]);
-  useEffect(() => {
-    setTableData(data);
-  }, [data]);
 
-  const serach = (text) => {
-    let search = text.toLowerCase();
-
-    let filter = data.filter((item) => {
-      let found = false;
-      let cell = item.ItemName.toLowerCase();
-      found = cell.includes(search);
-      // for (let i = 0; i < columns.length; i++) {
-      //     let isCell = item[columns[i].dataField]
-      //
-      //     if (!(isCell === null) || !(isCell === undefined)) {
-
-      //         isCell = JSON.stringify(isCell)
-      //         isCell = isCell.toLowerCase()
-      //         let isinclude = isCell.includes(search)
-      //         if (isinclude && !found) {
-      //             found = isinclude
-      //         }
-      //     }
-      // }
-      return found;
-    });
-    setTableData(filter);
-  };
-  mySearchProps({ onSearch: serach });
-
-  return [tableData, setTableData];
-};
