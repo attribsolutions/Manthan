@@ -10,15 +10,14 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
-} from "../../store/actions";
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../store/actions";
+import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -26,26 +25,20 @@ import {
     initialFiledFunc,
     onChangeText,
     resetFunction,
-} from "../../components/Common/validationFunction";
-import { SaveButton } from "../../components/Common/CommonButton";
-
+} from "../../../components/Common/validationFunction";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginCompanyID,
     loginPartyID,
     loginUserID
-} from "../../components/Common/CommonFunction";
-import * as url from "../../routes/route_url";
-import * as pageId from "../../routes/allPageID"
-import * as mode from "../../routes/PageMode"
-import {
-    editBankIDSuccess,
-    saveBankMaster,
-    saveBankMaster_Success,
-    updateBankID,
-    updateBankIDSuccess
-} from "../../store/Account/BankRedux/action";
+} from "../../../components/Common/CommonFunction";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
+import { editBankIDSuccess, saveBankMaster, saveBankMaster_Success, updateBankID, updateBankIDSuccess } from "../../../store/Accounting/BankRedux/action";
+
 
 const BankMaster = (props) => {
 
@@ -215,7 +208,6 @@ const BankMaster = (props) => {
     }, [pageField])
 
 
-
     const saveHandeller = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -225,10 +217,6 @@ const BankMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
-                    BranchName: values.BranchName,
-                    IFSC: values.IFSC,
-                    AccountNo: values.AccountNo,
-                    IsSelfDepositoryBank: values.IsSelfDepositoryBank,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                     Party: loginPartyID(),
@@ -238,7 +226,6 @@ const BankMaster = (props) => {
                 if (pageMode === mode.edit) {
                     dispatch(updateBankID({ jsonBody, updateId: values.id, btnId }));
                 }
-
                 else {
                     dispatch(saveBankMaster({ jsonBody, btnId }));
                 }
@@ -290,98 +277,6 @@ const BankMaster = (props) => {
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">IFSC </Label>
-                                                                <Input
-                                                                    name="IFSC"
-                                                                    id="txtName"
-                                                                    value={values.IFSC}
-                                                                    type="text"
-                                                                    className={isError.IFSC.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter IFSC"
-                                                                    autoComplete='off'
-                                                                    autoFocus={true}
-                                                                    onChange={(event) => {
-                                                                        onChangeText({ event, state, setState })
-                                                                        dispatch(Breadcrumb_inputName(event.target.value))
-                                                                    }}
-                                                                />
-                                                                {isError.IFSC.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.IFSC}</span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">Branch Name </Label>
-                                                                <Input
-                                                                    name="BranchName"
-                                                                    id="txtName"
-                                                                    value={values.BranchName}
-                                                                    type="text"
-                                                                    className={isError.BranchName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter BranchName"
-                                                                    autoComplete='off'
-                                                                    autoFocus={true}
-                                                                    onChange={(event) => {
-                                                                        onChangeText({ event, state, setState })
-                                                                        dispatch(Breadcrumb_inputName(event.target.value))
-                                                                    }}
-                                                                />
-                                                                {isError.BranchName.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.BranchName}</span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">Account No </Label>
-                                                                <Input
-                                                                    name="AccountNo"
-                                                                    id="txtName"
-                                                                    value={values.AccountNo}
-                                                                    type="text"
-                                                                    className={isError.AccountNo.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter AccountNo"
-                                                                    autoComplete='off'
-                                                                    autoFocus={true}
-                                                                    onChange={(event) => {
-                                                                        onChangeText({ event, state, setState })
-                                                                        dispatch(Breadcrumb_inputName(event.target.value))
-                                                                    }}
-                                                                />
-                                                                {isError.AccountNo.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.AccountNo}</span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" style={{ width: '180px' }}>Is Self Depository Bank</Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3">
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsSelfDepositoryBank}
-                                                                                name="IsSelfDepositoryBank"
-                                                                                onChange={(e) => {
-                                                                                    setState((i) => {
-                                                                                        const a = { ...i }
-                                                                                        a.values.IsSelfDepositoryBank = e.target.checked;
-                                                                                        return a
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Row>
 
                                                         <FormGroup >
                                                             <Row>

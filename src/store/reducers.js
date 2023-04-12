@@ -52,7 +52,7 @@ import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
 import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
 import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
-import BankReducer from "./Account/BankRedux/reducer"
+import BankReducer from "./Accounting/BankRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"

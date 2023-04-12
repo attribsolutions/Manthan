@@ -124,11 +124,12 @@ export const Rows = (data) => {
 
 
 export const BilledByRow = (data) => {
+    debugger
     
     var BilledByArray = [
        
         [`${data.PartyName}`], 
-        [`${data.PartyAddress[0].Address}`]  ,
+        [`${data.PartyAddress}`]  ,
         [`${data.PartyState}`],
         [`GSTIN:${data.PartyGSTIN}`],
         [`FSSAINo:${data.PartyFSSAINo}`],
@@ -154,8 +155,8 @@ export const DetailsOfTransportRow = (data) => {
 let result = data.InvoicesReferences.map(a => a.Order);
     const PONumber =result.toString()
     var DetailsOfTransportArray = [
-        [data.ReportType===invoice?` PO Number:${PONumber}`:'Driver Name : Sameer'],
-        [`vehical No :MH34566`],
+        [data.ReportType===invoice?` PO Number:${PONumber}`:`Driver Name :${data.DriverName}`],
+        [`vehical No :${data.VehicleNo}`],
         [`${data.PartyState}`],
         [`E-way Bill :24654364633`],
         [`INR NO :${data.FullInvoiceNumber}`]
