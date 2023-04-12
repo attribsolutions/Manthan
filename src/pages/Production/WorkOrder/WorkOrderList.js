@@ -148,6 +148,7 @@ const WorkOrderList = () => {
 
         } catch (e) { }
     }
+    
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>

@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, convertDatefunc, convertTimefunc, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { CommonConsole, convertDatefunc, convertTimefunc, loginCompanyID, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
 
 // customer dropdown click then table values display
 function* ReceiptGoButtonGenFunc({ jsonBody }) {
@@ -71,6 +71,15 @@ function* Delete_Receipt_ID_GenFunc({ config }) {          // delete API
   } catch (error) { CommonConsole(error) }
 }
 
+// Dropdown API
+function* Bank_List_GenFunc() {
+  const jsonBody = {"PartyID":loginPartyID(),"CompanyID":loginCompanyID()}
+  try {
+    const response = yield call(apiCall.Bank_List_API, jsonBody);
+    yield put(action.BankListAPISuccess(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
+
 function* ReceiptSaga() {
   yield takeEvery(actionType.RECEIPT_GO_BUTTON_MASTER, ReceiptGoButtonGenFunc)
   yield takeEvery(actionType.GET_OPENING_BALANCE, OpeningBalanceGenFunc)
@@ -79,7 +88,7 @@ function* ReceiptSaga() {
   yield takeEvery(actionType.SAVE_RECEIPT_MASTER, save_Receipt_GenFunc)
   yield takeEvery(actionType.RECEIPT_TYPE_API, Receipt_Type_GenFunc)
   yield takeEvery(actionType.DELETE_RECEIPT_LIST, Delete_Receipt_ID_GenFunc)
-
+  yield takeEvery(actionType.BANK_LIST_API, Bank_List_GenFunc)
 
 }
 export default ReceiptSaga;  

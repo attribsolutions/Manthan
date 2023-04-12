@@ -53,7 +53,7 @@ const PaymentEntryList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [userAccState, setUserAccState] = useState('');
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '' });
-    
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.ReceiptReducer.ReceiptList,
@@ -280,7 +280,30 @@ const PaymentEntryList = () => {
         var ReportType = report.Receipt;
         dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
     }
-    
+
+    const makeBtnFunc = (list = []) => {
+       
+        // var { PartyID, CustomerID, CustomerID } = list[0]
+        history.push({
+            pathname: url.RECEIPTS,
+            pageMode: mode.modeSTPsave,
+            [mode.editValue]: list[0]
+        })
+
+        // try {
+        //     const jsonBody = JSON.stringify({
+        //         WorkOrder: jsonData.id,
+        //         Item: jsonData.Item,
+        //         Company: loginCompanyID(),
+        //         Party: loginPartyID(),
+        //         Quantity: parseInt(jsonData.Quantity)
+        //     })
+        //     const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }
+        //     // dispatch(goButtonForMaterialIssue_Master_Action(body))
+
+        // } catch (e) { }
+    }
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
@@ -303,7 +326,7 @@ const PaymentEntryList = () => {
                         />
                         : null
                 } */}
-                 {
+                {
                     (pageField) ?
                         <CommonPurchaseList
                             action={action}
@@ -318,7 +341,7 @@ const PaymentEntryList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             // editBodyfunc={editBodyfunc}
-                            // makeBtnFunc={makeBtnFunc}
+                            makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"PaymentEntry"}
                             deleteName={"FullReceiptNumber"}
                             makeBtnName={otherState.makeBtnName}

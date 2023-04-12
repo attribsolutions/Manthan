@@ -533,6 +533,7 @@ export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_A
 export const Receipt_Filter_API = (jsonBody) => post(url.RECEIPT_FILTERS, jsonBody)// Get subModule For H_pages
 export const Receipt_Type_API = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
 export const Receipt_Delete_API = ({ deleteId, btnId }) => del(`${url.RECEIPT_POST_API}/${deleteId}`, btnId)// delete api
+export const Bank_List_API = (jsonBody) => post(url.BANK_LIST_API, jsonBody)//  postapi
 
 export {
   getLoggedInUser,
