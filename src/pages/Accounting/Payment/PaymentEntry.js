@@ -49,7 +49,7 @@ const PaymentEntry = (props) => {
         Description: "",
         BankName: "",
         ChequeNo: "",
-        DepositorBankName: "",
+        // DepositorBankName: "",
         ChequeDate: currentDate,
     }
 
@@ -63,14 +63,12 @@ const PaymentEntry = (props) => {
         BankList,
         ReceiptModeList,
         ReceiptType,
-        DepositorBank,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             BankList: state.BankReducer.BankList,
-            DepositorBank: state.ReceiptReducer.DepositorBank,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -194,10 +192,10 @@ const PaymentEntry = (props) => {
         label: index.Name,
     }));
 
-    const DepositorBankOptions = DepositorBank.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+    // const DepositorBankOptions = DepositorBank.map((index) => ({
+    //     value: index.id,
+    //     label: index.Name,
+    // }));
 
     function ReceiptDate_Onchange(e, date) {
         setState((i) => {
@@ -242,9 +240,6 @@ const PaymentEntry = (props) => {
             if (values.BankName === "") {
                 invalidMsg1.push(`BankName Is Required`)
             }
-            if (values.DepositorBankName === "") {
-                invalidMsg1.push(`DepositorBankName Is Required`)
-            };
             if (values.ChequeNo === "") {
                 invalidMsg1.push(`ChequeNo Is Required`)
             };
@@ -253,7 +248,6 @@ const PaymentEntry = (props) => {
                 || (values.DepositorBankName === "")
                 || (values.ChequeNo === "")
             ) {
-
                 dispatch(
                     AlertState({
                         Type: 4,
@@ -280,7 +274,7 @@ const PaymentEntry = (props) => {
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
                     "ChequeDate": values.ChequeDate,
-                    "DepositorBank": values.DepositorBankName.value,
+                    // "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptMode.value,
                     "ReceiptType": ReceiptTypeID.id,
@@ -431,7 +425,7 @@ const PaymentEntry = (props) => {
                                         </FormGroup>
                                     </Col >
 
-                                    <Col sm="6">
+                                    {/* <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DepositorBankName} </Label>
@@ -453,7 +447,7 @@ const PaymentEntry = (props) => {
                                             </Col>
 
                                         </FormGroup>
-                                    </Col >
+                                    </Col > */}
 
 
                                 </Row>

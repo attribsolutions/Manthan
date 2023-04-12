@@ -24,7 +24,7 @@ import { AlertState } from "../../actions"
 
 
 function* loginUser({ payload: { user, history } }) {
-
+  
   try {
     const response =
       yield call(Python_FoodERP_postJwtLogin, {
@@ -54,7 +54,7 @@ function* loginUser({ payload: { user, history } }) {
 function* afterLoginUserDetails_genFun({ id }) {
 
   try {
-   
+
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
       UserId: id,
     })

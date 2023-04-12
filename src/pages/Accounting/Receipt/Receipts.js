@@ -50,7 +50,7 @@ const Receipts = (props) => {
         OpeningBalanceAmt: "",
         Customer: "",
         ReceiptMode: "",
-        AmountPaid: "",
+        AmountPaid: 0,
         BankName: "",
         ChequeNo: "",
         DepositorBankName: "",
@@ -194,10 +194,6 @@ const Receipts = (props) => {
         }
     }, [postMsg])
 
-    const ReceiptTypeID = ReceiptType.find((index) => {
-        return index.Name === "Receipt"
-    })
-
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -274,7 +270,7 @@ const Receipts = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: 10,
+        // sizePerPage: 10,
         totalSize: ReceiptGoButton.length,
         custom: true,
     };
@@ -282,8 +278,8 @@ const Receipts = (props) => {
     // Customer dropdown function
     function CustomerOnChange(e) {
         setState((i) => {
-            i.values.AmountPaid = ''
-            i.hasValid.AmountPaid.valid = false;
+            i.values.AmountPaid = 0
+            i.hasValid.AmountPaid.valid = true;
             return i
         })
         const jsonBody = JSON.stringify({
@@ -298,49 +294,73 @@ const Receipts = (props) => {
 
     // Calculate Input box onChange Function
     function CalculateOnchange(event, row, key) {
+   
+        let input = event.target.value
+        let result = /^\d*(\.\d{0,2})?$/.test(input);
+        let val1 = 0;
+        if (result) {
+            let v1 = Number(row.BalanceAmount);
+            let v2 = Number(input)
+            if (v1 >= v2) { val1 = input }
+            else { val1 = v1 };
 
-        let value1 = Math.max('', Math.min(row.BalanceAmount, parseInt(event.target.value)));
-        event.target.value = value1
-
-        if (event.target.value === 'NaN') {
-            event.target.value = 0
         }
+        else if (result === false) {
+            val1 = row.Calculate
+        }
+        else {
+            val1 = 0
+        }
+
+        event.target.value = val1;
+
         row.Calculate = event.target.value
 
         let CalculateAmount = ReceiptGoButton.map((index) => {
-            return parseInt(index.Calculate)
+            return parseFloat(index.Calculate)
         })
         const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
 
         // document.getElementById("AmountPaid").value = sum
         setState((i) => {
             const a = { ...i }
-            a.values.AmountPaid = sum;
+            a.values.AmountPaid = sum.toFixed(2);
             a.hasValid.AmountPaid.valid = true;
             return a
         })
 
     };
 
-    function AmountPaid_onChange(event) {
+    function AmountPaid_onChange(event, state) {
+    
+        let input = event.target.value
+
+        let result = /^\d*(\.\d{0,2})?$/.test(input);
 
         let BalanceAmount = ReceiptGoButton.map((index) => {
-            return parseInt(index.BalanceAmount)
+            return parseFloat(index.BalanceAmount)
         })
         const sum = BalanceAmount.reduce((partialSum, a) => partialSum + a, 0);
 
-        let value1 = Math.max('', Math.min(sum, parseInt(event.target.value)));
+        let val1 = 0;
+        if (result) {
+            let v1 = Number(sum);
+            let v2 = Number(input)
+            if (v1 >= v2) { val1 = input }
+            else { val1 = v1 };
 
-        event.target.value = value1
-        if (event.target.value === "NaN") {
-            value1 = 0
         }
-        setState((i) => {
-            i.values.AmountPaid = value1
-            i.hasValid.AmountPaid.valid = true;
-            return i
-        })
+        else if (result === false) {
+            val1 = input.slice(0,-1);
+        }
+        else {
+            val1 = 0
+        }
+
+        event.target.value = val1;
+   
         let value = Number(event.target.value)
+
         let Amount = value
 
         ReceiptGoButton.map((index) => {
@@ -349,10 +369,10 @@ const Receipts = (props) => {
             if ((Amount > amt) && !(amt === 0)) {
 
                 Amount = Amount - amt
-                index.Calculate = amt.toFixed(0)
+                index.Calculate = amt.toFixed(2)
             }
             else if ((Amount <= amt) && (Amount > 0)) {
-                index.Calculate = Amount.toFixed(0)
+                index.Calculate = Amount.toFixed(2)
                 Amount = 0
             }
             else {
@@ -427,6 +447,10 @@ const Receipts = (props) => {
                 return;
             }
         }
+
+        const ReceiptTypeID = ReceiptType.find((index) => {
+            return index.Name === "Receipt"
+        })
 
         const ReceiptInvoices1 = ReceiptGoButton.map((index) => ({
             Invoice: index.Invoice,
@@ -646,13 +670,12 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Input
                                                     name="ChequeNo"
-                                                    // id="txtName"
                                                     value={values.ChequeNo}
                                                     type="text"
                                                     className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Cheque Number"
                                                     autoComplete='off'
-                                                    // autoFocus={true}
+                                                    autoFocus={true}
                                                     onChange={(event) => {
                                                         onChangeText({ event, state, setState })
                                                     }}
@@ -696,15 +719,15 @@ const Receipts = (props) => {
                                             <Input
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                value={values.AmountPaid}
-                                                type="text"
+                                                defaultValue={values.AmountPaid}
+                                                // type="text"
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
-                                                // autoFocus={true}
+                                                autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
-                                                    AmountPaid_onChange(event)
+                                                    AmountPaid_onChange(event, state)
                                                 }}
                                             />
                                             {isError.AmountPaid.length > 0 && (
@@ -721,14 +744,12 @@ const Receipts = (props) => {
                                         <Col sm="7">
                                             <Input
                                                 name="Description"
-                                                // id="Description"
                                                 value={values.Description}
                                                 type="text"
                                                 className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Description"
                                                 autoComplete='off'
-                                                // onChange={(event) => { onChangeDescription(event) }}
-                                                // autoFocus={true}
+                                                autoFocus={true}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
                                             />
                                             {isError.Description.length > 0 && (
@@ -767,7 +788,7 @@ const Receipts = (props) => {
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Receipt")}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
 
