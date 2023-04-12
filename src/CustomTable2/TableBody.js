@@ -1,12 +1,29 @@
+import { useMemo } from "react";
+
 const TableBody = ({ tableData, columns }) => {
+  const heders= useMemo(()=>{return columns.filter(i=>(!i.hidden))
+  },[columns])
   return (
     <tbody>
-      {tableData.map((data) => {
+      {tableData.map((row, rowIndex) => {
         return (
-          <tr key={data.id}>
-            {columns.map(({ dataField, formatter }) => {
-              let tData = data[dataField] ? data[dataField] : "——";
-              return <td key={dataField}>{formatter ? formatter(data[dataField], data, tableData) : tData}</td>;
+          <tr key={row.id} >
+            {heders.map(({
+              dataField,
+              formatter,
+              style = () => ({}),
+              attrs = () => ({}),
+              classes = () => ({}) },
+              colIndex) => {
+              let tData = row[dataField] ? row[dataField] : "——";
+
+              return <td key={dataField}
+                {...attrs(dataField, row, rowIndex, colIndex)}
+                style={style(dataField, row, rowIndex, colIndex)}
+                className={classes(dataField, row, rowIndex, colIndex)}
+              >
+                {formatter ? formatter(row[dataField], row, rowIndex, colIndex, tableData) : tData}
+              </td>;
             })}
           </tr>
         );

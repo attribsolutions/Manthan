@@ -138,6 +138,7 @@ import BankMaster from "../pages/Accounting/Bank/BankMaster";
 import BankList from "../pages/Accounting/Bank/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
+import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 
@@ -146,8 +147,8 @@ import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetU
 
 const userRoutes = [
   // *************************** DashBord *******************************//
-  
-  
+
+
   { path: path.DASHBORD, component: Dashboard },
 
   // *************************** Administration *******************************//
@@ -333,7 +334,11 @@ const userRoutes = [
   //********************************Accounting ***********************************//
   { path: path.RECEIPTS, component: Receipts },
   { path: path.RECEIPTS_LIST, component: ReceiptList },
+
   { path: path.RECEIPTS_LIST_2, component: PaymentEntryList },
+
+  { path: path.BULK_RECIPT, component: BulkRecipt },
+
 
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },

@@ -26,7 +26,7 @@ function getDefaultSorting(defaultTableData, columns) {
   return sorted;
 }
 
-export const useSortableTable = (data, columns) => {
+export const useSortableTable = ({ data, columns, customSearch }) => {
   const [tableData, setTableData] = useState(getDefaultSorting(data, columns));
 
   const handleSorting = (sortField, sortOrder) => {
@@ -46,6 +46,7 @@ export const useSortableTable = (data, columns) => {
   };
 
   const serach = (text) => {
+debugger
     let search = text.toLowerCase()
 
     let filter = data.filter((item) => {
@@ -68,7 +69,11 @@ export const useSortableTable = (data, columns) => {
     setTableData(filter)
 
   }
-  mySearchProps({ onSearch: serach },)
+  async function customSerachfunc(text) {
+    setTableData(await customSearch(text,data,columns))
+  }
+
+  mySearchProps({ onSearch: customSearch ? customSerachfunc : serach },)
 
   return [tableData, handleSorting, serach];
 };
