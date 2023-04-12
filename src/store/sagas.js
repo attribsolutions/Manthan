@@ -50,6 +50,7 @@ import SalesManSaga from "./Administrator/SalesManRedux/saga"
 import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
 import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
 import BankSaga from "./Accounting/BankRedux/saga"
+import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
 
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
@@ -114,6 +115,7 @@ export default function* rootSaga() {
     fork(GroupTypeSaga),
     fork(GroupSaga),
     fork(BankSaga),
+    fork(BankAssignSaga),
     fork(SubGroupSaga),
     fork(GeneralSaga),
     fork(GSTSaga),

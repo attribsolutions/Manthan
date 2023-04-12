@@ -208,6 +208,10 @@ export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
 export const BANK = '/Bank'
 export const BANK_LIST = '/BankFilter'
 
+// BankAssign
+export const BANK_ASSIGN = '/PartyBankSave'
+export const PARTY_BANK_FILTER = '/PartyBankFilter'
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"

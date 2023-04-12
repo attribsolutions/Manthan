@@ -113,6 +113,8 @@ export const MANAGEMENT_PARTIES = "/ManagementParties"
 export const BANK = "/BankMaster"
 export const BANK_LIST = "/BankList"
 
+export const BANK_ASSIGN = "/BankAssign"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
