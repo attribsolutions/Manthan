@@ -326,6 +326,7 @@ const userRoutes = [
   //********************************Accounting ***********************************//
   { path: path.RECEIPTS, component: Receipts },
   { path: path.RECEIPTS_LIST, component: ReceiptList },
+  { path: path.RECEIPTS_LIST_2, component: PaymentEntryList },
 
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
