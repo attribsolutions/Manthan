@@ -42,6 +42,8 @@ const LoadingSheetUpdate = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    debugger
+   const b = history
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -85,50 +87,13 @@ const LoadingSheetUpdate = (props) => {
     // const { fromdate, todate, Date } = orderlistFilter;
     const { Data = [] } = GoButton;
 
-    // const Data = [
-    //     {
-    //         id: 7,
-    //         InvoiceDate: "2023-03-15",
-    //         FullInvoiceNumber: "1",
-    //         Customer: "Krupa Traders",
-    //         CustomerID: 4,
-    //         PartyID: 5,
-    //         GrandTotal: "2000.2400",
-    //         CreatedOn: "2023-03-15 15:08:53.388361",
-    //         Check: false
-    //     },
-    //     {
-    //         id: 8,
-    //         InvoiceDate: "2023-03-15",
-    //         FullInvoiceNumber: "2",
-    //         Customer: "Katraj Division",
-    //         CustomerID: 4,
-    //         PartyID: 5,
-    //         GrandTotal: "3000.2080",
-    //         CreatedOn: "2023-03-15 15:08:53.388361",
-    //         Check: false
-    //     },
-    //     {
-    //         id: 9,
-    //         InvoiceDate: "2023-03-15",
-    //         FullInvoiceNumber: "3",
-    //         Customer: "Ranade",
-    //         CustomerID: 4,
-    //         PartyID: 5,
-    //         GrandTotal: "4000.10",
-    //         CreatedOn: "2023-03-15 15:08:53.388361",
-    //         Check: false
-    //     }
-    // ]
+
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetRoutesList());
-        dispatch(getVehicleList())
-        dispatch(invoiceListGoBtnfilter())
-        dispatch(getDriverList())
+    
     }, []);
 
     const location = { ...history.location }
@@ -157,7 +122,6 @@ const LoadingSheetUpdate = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             // dispatch(Breadcrumb_inputName(''))
 
@@ -178,7 +142,7 @@ const LoadingSheetUpdate = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
+        
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -196,36 +160,13 @@ const LoadingSheetUpdate = (props) => {
         }
     }, [pageField])
 
-    const RoutesListOptions = RoutesList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-        IsActive: index.IsActive
-    }));
 
-    const RouteName_Options = RoutesListOptions.filter((index) => {
-        return index.IsActive === true
-    });
+   
 
-    const VehicleNumber_Options = VehicleNumber.map((index) => ({
-        value: index.id,
-        label: index.VehicleNumber,
-    }));
+  
 
-    const Driver_Options = Driver.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
-    function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            Party: loginPartyID(),
-            Route: ""
-        });
-        dispatch(LoadingSheet_GoBtn_API(jsonBody));
-    }
-
+  
+    
     function SelectAll(event, row, key) {
 
         const arr = []
@@ -288,56 +229,20 @@ const LoadingSheetUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
 
-        const CheckArray = array.filter((index) => {
-            return (index.Check === true)
-        })
+   
 
-        const trueValues = array.map((index) => {
-            return (index.Check === true)
-        })
-
-        const totalInvoices = trueValues.reduce((count, value) => {
-            if (value === true) {
-                count++
-            }
-            return count
-        }, 0)
-
-        const GrandTotal = CheckArray.reduce((a, v) => a = a + parseFloat(v.GrandTotal), 0)
-
-        const LoadingSheetDetails = CheckArray.map((index) => ({
-            Invoice: index.id
-        }))
+    
 
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                if (LoadingSheetDetails.length === 0) {
-                    dispatch(
-                        AlertState({
-                            Type: 4,
-                            Status: true,
-                            Message: "Minimum one Invoice is Select",
-                        })
-                    );
-                    return btnIsDissablefunc({ btnId, state: false })
-                }
+              
 
                 const jsonBody = JSON.stringify({
-                    Date: values.Date,
-                    Party: loginPartyID(),
-                    Route: values.RouteName.value,
-                    Vehicle: values.VehicleNumber.value,
-                    Driver: values.DriverName.value,
-                    TotalAmount: GrandTotal.toFixed(2),
-                    InvoiceCount: totalInvoices,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    LoadingSheetDetails: LoadingSheetDetails
+                  
                 });
 
                 if (pageMode === mode.edit) {
-                    // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
                     dispatch(SaveLoadingSheetMaster({ jsonBody, btnId }));
@@ -351,24 +256,6 @@ const LoadingSheetUpdate = (props) => {
             const a = { ...i }
             a.values.Date = date;
             a.hasValid.Date.valid = true
-            return a
-        })
-    }
-
-    function FromDateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.FromDate = date;
-            a.hasValid.FromDate.valid = true
-            return a
-        })
-    }
-
-    function ToDateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ToDate = date;
-            a.hasValid.ToDate.valid = true
             return a
         })
     }
