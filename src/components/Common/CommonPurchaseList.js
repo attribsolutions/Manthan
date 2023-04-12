@@ -91,6 +91,7 @@ const CommonPurchaseList = (props) => {
         goButnFunc = () => { },
         makeBtnFunc = () => { },
         makeBtnShow,
+        updateBtnFunc,
         makeBtnName,
         downBtnFunc = () => { },
         pageMode,
@@ -276,6 +277,11 @@ const CommonPurchaseList = (props) => {
             })
         }
 
+        
+
+
+
+
         // ======================== for List Page Action Button ================================
 
         else if ((PageFieldMaster.length - 1 === k)) {
@@ -289,6 +295,7 @@ const CommonPurchaseList = (props) => {
                     editActionFun: editId,
                     deleteActionFun: deleteId,
                     downBtnFunc: downBtnFunc,
+                    updateBtnFunc: updateBtnFunc,
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
                     editBodyfunc: editBodyfunc,
