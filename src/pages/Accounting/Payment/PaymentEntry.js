@@ -26,9 +26,8 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { BankListAPI, DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { postBanklist } from "../../../store/Accounting/BankRedux/action";
 
 const PaymentEntry = (props) => {
 
@@ -68,7 +67,7 @@ const PaymentEntry = (props) => {
             RetailerList: state.CommonAPI_Reducer.supplier,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
-            BankList: state.BankReducer.BankList,
+            BankList: state.ReceiptReducer.bankList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -80,7 +79,7 @@ const PaymentEntry = (props) => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(postBanklist())
+        dispatch(BankListAPI())
         dispatch(DepositorBankFilter())
         dispatch(getSupplier())
         dispatch(GetOpeningBalance_Success([]))
@@ -139,7 +138,7 @@ const PaymentEntry = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
@@ -187,15 +186,15 @@ const PaymentEntry = (props) => {
         label: index.Name,
     }));
 
-    const BankListOptions = BankList.map((index) => ({
-        value: index.id,
-        label: index.Name,
+    const bankList = BankList.map((index) => ({
+        value: index.Bank,
+        label: index.BankName,
+        IsSelfDepositoryBank: index.IsSelfDepositoryBank
     }));
 
-    // const DepositorBankOptions = DepositorBank.map((index) => ({
-    //     value: index.id,
-    //     label: index.Name,
-    // }));
+    const BankListOptions = bankList.filter((index) => {
+        return index.IsSelfDepositoryBank === false
+    })
 
     function ReceiptDate_Onchange(e, date) {
         setState((i) => {
@@ -268,7 +267,7 @@ const PaymentEntry = (props) => {
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
-                    "OpeningBalanceAdjusted":"",
+                    "OpeningBalanceAdjusted": "",
                     "DocumentNo": values.ChequeNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,

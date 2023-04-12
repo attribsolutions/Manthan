@@ -6,6 +6,7 @@ import {
   RECEIPT_TYPE_API_SUCCESS,
   DELETE_RECEIPT_LIST_SUCCESS,
   GET_OPENING_BALANCE_SUCCESS,
+  BANK_LIST_API_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -15,7 +16,8 @@ const INIT_STATE = {
   postMsg: { Status: false },
   ReceiptType: [],
   deleteMsg: { Status: false },
-  OpeningBalance: []
+  OpeningBalance: [],
+  bankList:[]
 }
 
 const ReceiptReducer = (state = INIT_STATE, action) => {
@@ -63,6 +65,11 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         deleteMsg: action.payload,
       }
 
+      case BANK_LIST_API_SUCCESS:
+      return {
+        ...state,
+        bankList: action.payload,
+      }
     default:
       return state
   }

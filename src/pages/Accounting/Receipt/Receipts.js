@@ -31,9 +31,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { BankListAPI, DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { postBanklist } from "../../../store/Accounting/BankRedux/action";
 
 const Receipts = (props) => {
 
@@ -68,7 +67,6 @@ const Receipts = (props) => {
         RetailerList,
         BankList,
         ReceiptModeList,
-        DepositorBank,
         ReceiptType,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
@@ -77,8 +75,7 @@ const Receipts = (props) => {
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             ReceiptType: state.ReceiptReducer.ReceiptType,
-            BankList: state.BankReducer.BankList,
-            DepositorBank: state.ReceiptReducer.DepositorBank,
+            BankList: state.ReceiptReducer.bankList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -89,10 +86,9 @@ const Receipts = (props) => {
         const page_Id = pageId.RECEIPTS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(postBanklist())
-        dispatch(DepositorBankFilter())
         dispatch(ReceiptGoButtonMaster_Success([]))
         dispatch(GetOpeningBalance_Success([]))
+        dispatch(BankListAPI())
     }, []);
 
     // Customer dropdown Options
@@ -130,6 +126,68 @@ const Receipts = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+
+    useEffect(() => {
+        debugger
+        const editValue = history.location.editValue
+        const page_Mode = history.location.pageMode
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            let insidePageMode = null
+            if (hasShowloction) {
+                insidePageMode = location.pageMode;
+                setPageMode(location.pageMode)
+                hasEditVal = location[mode.editValue]
+            }
+            else if (hasShowModal) {
+                hasEditVal = props[mode.editValue]
+                insidePageMode = props.pageMode;
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+        }
+
+        if (hasShowloction) {
+
+            // setItemselect(hasEditVal)
+            const { id, PartyID, Party, CustomerID, Customer, ReceiptDate,
+                FullReceiptNumber, NumberOfLot, Description, ReceiptMode, ReceiptModeName,
+                Bank, BankName, DepositorBank, DepositorBankName,
+                ReceiptType, AmountPaid, DocumentNo, ChequeDate } = editValue
+            // const { BatchesData = [] } = MaterialIssueItems
+            setState((i) => {
+                i.values.Customer = { value: CustomerID, label: Customer }
+                i.values.ReceiptMode = { value: ReceiptMode, label: ReceiptModeName }
+                i.values.BankName = { value: Bank, label: BankName }
+                i.values.Description = Description
+                i.values.ChequeNo = DocumentNo
+                i.values.AmountPaid = "1000.00"
+
+                i.hasValid.Customer.valid = true;
+                i.hasValid.AmountPaid.valid = true;
+                i.hasValid.BankName.valid = true;
+                i.hasValid.Description.valid = true;
+                i.hasValid.ReceiptMode.valid = true;
+                // i.hasValid.LotQuantity.valid = true;
+                return i
+            })
+            // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+
+            if (page_Mode === mode.modeSTPsave) {
+                const jsonBody = JSON.stringify({
+                    PartyID: editValue.PartyID,
+                    CustomerID: editValue.CustomerID,
+                    ReceiptDate: editValue.ReceiptDate
+                });
+                dispatch(ReceiptGoButtonMaster(jsonBody));
+                dispatch(GetOpeningBalance(jsonBody));
+            }
+            AmountPaidDistribution("1000.00")
+        }
+    }, [])
 
     useEffect(() => {
 
@@ -204,15 +262,19 @@ const Receipts = (props) => {
         label: index.Name,
     }));
 
-    const BankListOptions = BankList.map((index) => ({
-        value: index.id,
-        label: index.Name,
+    const bankList = BankList.map((index) => ({
+        value: index.Bank,
+        label: index.BankName,
+        IsSelfDepositoryBank: index.IsSelfDepositoryBank
     }));
 
-    const DepositorBankOptions = DepositorBank.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+    const DepositorBankOptions = bankList.filter((index) => {
+        return index.IsSelfDepositoryBank === true
+    })
+
+    const BankListOptions = bankList.filter((index) => {
+        return index.IsSelfDepositoryBank === false
+    })
 
     const pagesListColumns = [
         {
@@ -270,7 +332,7 @@ const Receipts = (props) => {
     ];
 
     const pageOptions = {
-        // sizePerPage: 10,
+        sizePerPage: 10,
         totalSize: ReceiptGoButton.length,
         custom: true,
     };
@@ -294,7 +356,7 @@ const Receipts = (props) => {
 
     // Calculate Input box onChange Function
     function CalculateOnchange(event, row, key) {
-   
+        debugger
         let input = event.target.value
         let result = /^\d*(\.\d{0,2})?$/.test(input);
         let val1 = 0;
@@ -321,10 +383,11 @@ const Receipts = (props) => {
         })
         const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
 
-        // document.getElementById("AmountPaid").value = sum
+        // document.getElementById("AmountPaid").value = sum.toFixed(2)
+
         setState((i) => {
-            const a = { ...i }
-            a.values.AmountPaid = sum.toFixed(2);
+            let a = { ...i }
+            a.values.AmountPaid = sum.toFixed(2)
             a.hasValid.AmountPaid.valid = true;
             return a
         })
@@ -332,7 +395,7 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event, state) {
-    
+        debugger
         let input = event.target.value
 
         let result = /^\d*(\.\d{0,2})?$/.test(input);
@@ -351,15 +414,20 @@ const Receipts = (props) => {
 
         }
         else if (result === false) {
-            val1 = input.slice(0,-1);
+            val1 = input.slice(0, -1);
         }
         else {
             val1 = 0
         }
-
         event.target.value = val1;
-   
-        let value = Number(event.target.value)
+
+        AmountPaidDistribution(val1)
+
+    }
+
+    function AmountPaidDistribution(val1) {
+        debugger
+        let value = Number(val1)
 
         let Amount = value
 
@@ -719,7 +787,8 @@ const Receipts = (props) => {
                                             <Input
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                defaultValue={values.AmountPaid}
+                                                // defaultValue={values.AmountPaid}
+                                                value={values.AmountPaid}
                                                 // type="text"
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
