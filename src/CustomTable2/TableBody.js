@@ -3,6 +3,7 @@ import { useMemo } from "react";
 const TableBody = ({ tableData, columns }) => {
   const heders= useMemo(()=>{return columns.filter(i=>(!i.hidden))
   },[columns])
+  
   return (
     <tbody>
       {tableData.map((row, rowIndex) => {
