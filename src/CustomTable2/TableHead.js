@@ -1,9 +1,11 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
+
+
 
 const TableHead = ({ columns, handleSorting }) => {
+
   const [sortField, setSortField] = useState("");
   const [order, setOrder] = useState("asc");
-  // const [heders, setHeders] = useState([]);
 
   const handleSortingChange = (dataField) => {
 
@@ -39,7 +41,6 @@ const TableHead = ({ columns, handleSorting }) => {
       }
     })
     return isArray
-    // setHeders(isArray)
   }, [columns])
 
 debugger
