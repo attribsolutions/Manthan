@@ -2,7 +2,10 @@ import React from 'react';
 import classnames from 'classnames';
 import { usePagination, DOTS } from './usePagination';
 import './pagination.scss';
-const Pagination = props => {
+
+
+
+const PaginationBody = props => {
   const {
     onPageChange,
     currentPage,
@@ -62,4 +65,5 @@ const Pagination = props => {
   );
 };
 
-export default Pagination;
+export default PaginationBody;
+

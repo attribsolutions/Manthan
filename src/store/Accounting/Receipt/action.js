@@ -1,6 +1,4 @@
 import {
-  DEPOSITOR_BANK_FILTER,
-  DEPOSITOR_BANK_FILTER_SUCCESS,
   RECEIPT_LIST_API,
   RECEIPT_LIST_API_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER,
@@ -38,16 +36,6 @@ export const GetOpeningBalance_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const DepositorBankFilter = (jsonBody) => ({// save Action
-  type: DEPOSITOR_BANK_FILTER,
-  jsonBody,
-});
-
-export const DepositorBankFilter_Success = (resp) => ({// Save  success
-  type: DEPOSITOR_BANK_FILTER_SUCCESS,
-  payload: resp,
-});
-
 // save API
 export const saveReceiptMaster = (config = {}) => ({// save Action
   type: SAVE_RECEIPT_MASTER,
@@ -59,9 +47,9 @@ export const saveReceiptMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const ReceiptListAPI = (jsonBody,subPageMode) => ({
+export const ReceiptListAPI = (jsonBody, subPageMode) => ({
   type: RECEIPT_LIST_API,
-  jsonBody,subPageMode,
+  jsonBody, subPageMode,
 });
 
 export const ReceiptListAPISuccess = (resp) => ({

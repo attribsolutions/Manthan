@@ -46,7 +46,7 @@ export const useSortableTable = ({ data, columns, customSearch }) => {
   };
 
   const serach = (text) => {
-debugger
+
     let search = text.toLowerCase()
 
     let filter = data.filter((item) => {
@@ -54,13 +54,18 @@ debugger
 
       for (let i = 0; i < columns.length; i++) {
         let isCell = item[columns[i].dataField]
-        if (isCell === null || undefined) { break; };
-        isCell = isCell.toString()
-        isCell = isCell.toLowerCase()
-        let isinclude = isCell.includes(search)
 
-        if (isinclude && !found) {
-          found = isinclude
+        if (!(isCell === null)
+          && !(isCell === undefined)
+          && typeof isCell !== 'object'
+          && !Array.isArray(isCell)) {
+          isCell = isCell.toString()
+          isCell = isCell.toLowerCase()
+          let isinclude = isCell.includes(search)
+
+          if (isinclude && !found) {
+            found = isinclude
+          }
         }
       }
       return found
@@ -70,7 +75,7 @@ debugger
 
   }
   async function customSerachfunc(text) {
-    setTableData(await customSearch(text,data,columns))
+    setTableData(await customSearch(text, data, columns))
   }
 
   mySearchProps({ onSearch: customSearch ? customSerachfunc : serach },)

@@ -1,70 +1,40 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Button,
-    Card,
-    CardBody,
     Col,
     FormGroup,
     Input,
     Label,
     Row,
-    Table,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
-import { Link, useHistory } from "react-router-dom";
+import { commonPageField } from "../../../store/actions";
+import { useHistory } from "react-router-dom";
 import {
-    comAddPageFieldFunc,
     initialFiledFunc,
-    onChangeDate,
 } from "../../../components/Common/validationFunction";
-import Select from "react-select";
+
 import {
-    Change_Button,
-    Go_Button,
     SaveButton,
 } from "../../../components/Common/CommonButton";
-import { updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import {
     breadcrumbReturnFunc,
-    convertDatefunc,
-    loginUserID,
     currentDate,
-    loginPartyID,
-    btnIsDissablefunc,
+    groupBy,
 } from "../../../components/Common/CommonFunction";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 
-import BootstrapTable from "react-bootstrap-table-next";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
-import {
-    editInvoiceListSuccess,
-    GoButtonForinvoiceAdd,
-    GoButtonForinvoiceAddSuccess,
-    invoiceSaveAction,
-    invoiceSaveActionSuccess,
-    makeIB_InvoiceActionSuccess,
-} from "../../../store/Sales/Invoice/action";
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import "./bulk.scss";
 import demoData from "./bulkRecipt";
-import { numberWithCommas } from "../../../Reports/Report_common_function";
-import CustomTable, { groupBy } from "../../../components/Common/CustomTable";
 import CustomTable2 from "../../../CustomTable2/Table";
+import { bulkSearch } from "../../Sale/Invoice/invoiceCaculations";
 
 const BulkRecipt = (props) => {
 
@@ -72,7 +42,6 @@ const BulkRecipt = (props) => {
     const history = useHistory();
     const subPageMode = history.location.pathname;
 
-    const goBtnId = `ADDGoBtn${subPageMode}`;
     const saveBtnid = `saveBtn${subPageMode}`;
 
     const location = { ...history.location };
@@ -122,6 +91,7 @@ const BulkRecipt = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         }
     }, [userAccess]);
+
     const pagesListColumns = [
         {
             dataField: "PartyName",
@@ -223,7 +193,7 @@ const BulkRecipt = (props) => {
             },
             formatter: (cell, row, r, c, data = []) => {
                 return <>
-                    <Input onChange={(e) => { calculateOnChange(e, row, data) }}></Input>
+                    <Input defaultValue={row.Calculate} onChange={(e) => { calculateOnChange(e, row, data) }}></Input>
                 </>
             }
         }
@@ -232,16 +202,24 @@ const BulkRecipt = (props) => {
     ];
     function calculateOnChange(e, row, data = []) {
         row.Calculate = e.target.value
-        data.forEach(index1 => {
+
+        const grouped = groupBy(data, p => p.Party)
+        const collection = grouped.get(row.Party)
+        let addition = 0
+        collection.forEach(index1 => {
+            addition = addition + Number(index1.Calculate)
+        })
+        collection.forEach(index1 => {
             if (row.Party === index1.Party && index1.header === true) {
-                index1.AmountPaid = row.Calculate
-                document.getElementById(`paidAmt-${index1.id}-${index1.Party}`).innerText = row.Calculate
+                index1.AmountPaid = addition.toFixed(3)
+                document.getElementById(`paidAmt-${index1.id}-${index1.Party}`).innerText = index1.AmountPaid
             }
         })
-        debugger
 
     }
+    function SaveHandler() {
 
+    }
 
     if (!(userPageAccessState === "")) {
         return (
@@ -329,50 +307,30 @@ const BulkRecipt = (props) => {
                         <CustomTable2
                             data={demoData}
                             columns={pagesListColumns}
-                            customSearch={customSearch}>
-
-                        </CustomTable2>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        {/* <CustomTable
-                            keyField={"id"}
-                            responsive
-                            bordered={false}
-                            striped={false}
-                            classes={"table  table-bordered"}
+                            customSearch={bulkSearch}
+                            classes={" table table-responsive  table-bordered table-hover"}
                             noDataIndication={
                                 <div className="text-danger text-center ">
                                     Items Not available
                                 </div>
                             }
-                            data={demoData}
-                            columns={pagesListColumns}
-                        /> */}
+                        >
+                        </CustomTable2>
 
-                        {/* {OrderItemDetails.length > 0 && (
-                  <div className={"invoice-savebtn"}>
-                    <div className="div-1">
-                      <Button
-                        type="button"
-                        color="warning"
-                        onClick={calculationFunc}
-                      >
-                        calculate
-                      </Button>
-                    </div>
-                    <div className="div-1">
-                      <SaveButton
-                        pageMode={pageMode}
-                        onClick={SaveHandler}
-                        id={saveBtnid}
-                        userAcc={userPageAccessState}
-                        module={"Material Issue"}
-                      />
-                    </div>
-                  </div>
-                )} */}
+
+                        {demoData.length > 0 && (
+                            <div className={"invoice-savebtn"}>
+                                <div className="div-1">
+                                    <SaveButton
+                                        pageMode={pageMode}
+                                        onClick={SaveHandler}
+                                        id={saveBtnid}
+                                        userAcc={userPageAccessState}
+                                        module={userAccess.PageHeading}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </form>
                 </div>
             </React.Fragment>
@@ -384,41 +342,3 @@ const BulkRecipt = (props) => {
 export default BulkRecipt
 
 
-function customSearch(text,data,columns) {
-    debugger
-    let search = text.toLowerCase()
-
-    const filter = data.filter((item) => {
-        let found = false
-
-        if (item.header) { return true }
-
-        for (let i = 0; i < columns.length; i++) {
-
-            let isCell = item[columns[i].dataField]
-            if (!(isCell === null)
-                && !(isCell === undefined)
-                && typeof isCell !== 'object'
-                && !Array.isArray(isCell)
-            ) {
-                if (!found) {
-                    isCell = JSON.stringify(isCell)
-                    isCell = isCell.toLowerCase(isCell)
-                    found = isCell.includes(search)
-                }
-            }
-        }
-        return found
-
-    })
-    let hasHedRow1 = []
-    const grouped = groupBy(filter, pet => pet.Party);
-    grouped.forEach(i => {
-        if (i.length > 1) {
-            i.forEach(k => {
-                hasHedRow1.push(k)
-            })
-        }
-    })
-    return hasHedRow1
-}
