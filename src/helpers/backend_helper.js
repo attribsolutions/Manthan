@@ -380,6 +380,8 @@ export const detelet_Bank_List_Api = ({ deleteId, btnId }) => del(`${url.BANK}/$
 //Bank Assign Api
 export const PartyBankfilter_API = (filters) => post(url.PARTY_BANK_FILTER, filters)
 export const Post_Bank_Assign_API = ({ jsonBody, btnId }) => post(url.BANK_ASSIGN, jsonBody, btnId)// post api
+export const edit_Bank_Assign_Api = ({ editId, btnId }) => get(`${url.BANK_ASSIGN}/${editId}`, btnId) // edit api
+export const update_Bank_Assign_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK_ASSIGN}/${updateId}`, jsonBody, btnId)// update
 
 
 //Credit Limit

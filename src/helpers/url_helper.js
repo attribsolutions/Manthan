@@ -210,7 +210,7 @@ export const BANK_LIST = '/BankFilter'
 
 // BankAssign
 export const BANK_ASSIGN = '/PartyBankSave'
-export const PARTY_BANK_FILTER = '/PartyBankFilter'
+export const PARTY_BANK_FILTER = '/PartyBanksFilter'
 
 //******** purchase modal *********************************************************************************************************************** */
 
