@@ -66,6 +66,8 @@ const BankAssign = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [Arr, setArr] = useState([]);
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -113,47 +115,7 @@ const BankAssign = (props) => {
         };
     }, [userAccess])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             const { id, Name, BranchName, IFSC, AccountNo, IsSelfDepositoryBank } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-    //             hasValid.Name.valid = true;
-    //             hasValid.BranchName.valid = true;
-    //             hasValid.IFSC.valid = true;
-    //             hasValid.AccountNo.valid = true;
-    //             hasValid.IsSelfDepositoryBank.valid = true;
-
-    //             values.id = id
-    //             values.Name = Name;
-    //             values.BranchName = BranchName;
-    //             values.IFSC = IFSC;
-    //             values.AccountNo = AccountNo;
-    //             values.IsSelfDepositoryBank = IsSelfDepositoryBank;
-
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(Breadcrumb_inputName(hasEditVal.Name))
-    //             seteditCreatedBy(hasEditVal.CreatedBy)
-    //         }
-    //         dispatch(editBankIDSuccess({ Status: false }))
-    //     }
-    // }, [])
-
+   
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -213,6 +175,19 @@ const BankAssign = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.BankName}
+                        onChange={e => {
+                            setArr(ele => {
+                                let a = { ...ele };
+                                const newrr = [...ele].map(i => {
+                                    if (row.BankName === i.BankName) {
+                                        i.bankCheck = !i.bankCheck;
+                                    }
+                                    return i
+                                });
+                                return newrr
+                            })
+
+                        }}
                     />
                 </span>
                 )
@@ -236,16 +211,70 @@ const BankAssign = (props) => {
             text: "Account No",
             dataField: "AccountNo",
             sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`AccountNo${k}`}
+                            key={`AccountNo${row.id}`}
+
+                            defaultValue={row.AccountNo}
+                            autoComplete="off"
+                            onChange={(e) => { row["AccountNo"] = e.target.value }}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
         },
         {
             text: "IFSC",
             dataField: "IFSC",
             sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`IFSC${k}`}
+                            key={`IFSC${row.id}`}
+
+                            defaultValue={row.IFSC}
+                            autoComplete="off"
+                            onChange={(e) => { row["IFSC"] = e.target.value }}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
         },
         {
             text: "Branch ",
             dataField: "BranchName",
             sort: true,
+            formatter: (value, row, k) => {
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`BranchName${k}`}
+                            key={`BranchName${row.id}`}
+
+                            defaultValue={row.BranchName}
+                            autoComplete="off"
+                            onChange={(e) => { row["BranchName"] = e.target.value }}
+                        />
+                    </span>
+                )
+            },
+
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
         },
     ];
 
@@ -257,13 +286,14 @@ const BankAssign = (props) => {
 
     const saveHandeller = async (event) => {
         event.preventDefault();
+        const Find = Arr.filter((index) => {
+            return (index.bankCheck === true)
+        })
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-
-                const jsonBody = JSON.stringify({
-                    Name: values.Name,
+                    var Data = Find.map((index) => ({
                     BranchName: values.BranchName,
                     IFSC: values.IFSC,
                     AccountNo: values.AccountNo,
@@ -272,12 +302,10 @@ const BankAssign = (props) => {
                     UpdatedBy: loginUserID(),
                     Party: loginPartyID(),
                     Company: loginCompanyID(),
-                });
-
-                if (pageMode === mode.edit) {
-                    // dispatch(updateBankID({ jsonBody, updateId: values.id, btnId }));
+                }))
+                const jsonBody = JSON.stringify(Data)
+                if (pageMode === mode.edit) { 
                 }
-
                 else {
                     dispatch(saveBankAssign({ jsonBody, btnId }));
                 }
@@ -306,7 +334,7 @@ const BankAssign = (props) => {
                                 <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
-                                            <Card>
+                                            
                                                 <CardBody className="c_card_body">
                                                     <FormGroup>
                                                         <Row>
@@ -364,7 +392,7 @@ const BankAssign = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </CardBody>
-                                            </Card>
+                                           
                                         </Col>
                                     </Row>
                                 </form>

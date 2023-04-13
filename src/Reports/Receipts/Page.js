@@ -16,8 +16,8 @@ function pageFooter(doc,data) {
     style.pageFooter(doc,data);
 }
 
- const Receipts=()=> {
-    const data = Data
+ const Receipts=(data)=> {
+    
     var doc = new jsPDF('l', 'pt', 'a5');
     pageHeder(doc,data);
     reportBody(doc, data);

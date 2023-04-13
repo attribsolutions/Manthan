@@ -18,8 +18,8 @@ export const pageBorder = (doc) => {
 }
 
 export const Receipts = (doc, data) => {
+    debugger
     doc.setLineDash([7, 3, 1, 3], 10)
-
     doc.setFont(undefined, 'bold')
     doc.setFontSize(19)
     doc.setLineWidth(1);
@@ -69,11 +69,11 @@ export const Receipts = (doc, data) => {
     doc.text('Receipt Mode :', 60, 220,)
     doc.setLineWidth(0);
     doc.setFont(undefined, 'Normal')
-    doc.text(`${data.ReceiptMode}`, 160, 219,)
+    doc.text(`${data.ReceiptModeName}`, 160, 219,)
     doc.line(220, 220, 130, 220); // RECEIPT NO LINE (Top)
 
 
-    if (data.ReceiptMode === "RTGS") {
+    if (data.ReceiptModeName === "RTGS") {
 
         doc.setFont(undefined, 'bold')
         doc.text('Bank :', 60, 250,)
@@ -97,11 +97,11 @@ export const Receipts = (doc, data) => {
 
 
 
-    if (data.ReceiptMode === "Cheque") {
+    if (data.ReceiptModeName === "Cheque") {
         doc.setFont(undefined, 'bold')
         doc.text('Cheque No :', 226, 220,)
         doc.setFont(undefined, 'Normal')
-        doc.text(`${data.ChequeNO}`, 300, 219,)
+        doc.text(`${data.DocumentNo}`, 300, 219,)
         doc.setLineWidth(0);
         doc.line(340, 220, 282, 220); // RECEIPT NO LINE (Top)
 
@@ -117,7 +117,7 @@ export const Receipts = (doc, data) => {
         doc.setFont(undefined, 'bold')
         doc.text('Bank :', 60, 250,)
         doc.setFont(undefined, 'Normal')
-        doc.text(`${data.Bank}`, 100, 249,)
+        doc.text(`${data.BankName}`, 100, 249,)
         doc.setLineWidth(0);
         doc.line(300, 250, 90, 250); // RECEIPT NO LINE (Top)
 
@@ -125,6 +125,8 @@ export const Receipts = (doc, data) => {
         doc.setFont(undefined, 'bold')
         doc.text('Depositor Bank :', 320, 250,)
         doc.setFont(undefined, 'Normal')
+        doc.text(`${data.DepositorBankName}`, 420, 249,)
+
         doc.setLineWidth(0);
         doc.line(550, 250, 400, 250); // RECEIPT NO LINE (Top)
 
@@ -132,16 +134,20 @@ export const Receipts = (doc, data) => {
         doc.setFont(undefined, 'bold')
         doc.text('Description :', 60, 280,)
         doc.setFont(undefined, 'Normal')
+        doc.text(`${data.Description}`, 125, 279,)
+
         doc.setLineWidth(0);
         doc.line(550, 280, 130, 280); // RECEIPT NO LINE (Top)
 
     }
 
 
-    if (data.ReceiptMode === "cash") {
+    if (data.ReceiptModeName === "Cash") {
         doc.setFont(undefined, 'bold')
         doc.text('Description :', 60, 250,)
         doc.setFont(undefined, 'Normal')
+        doc.text(`${data.Description}`, 125, 249,)
+
         doc.setLineWidth(0);
         doc.line(550, 250, 130, 250); // RECEIPT NO LINE (Top)
     }
@@ -166,7 +172,10 @@ export const Receipts = (doc, data) => {
 
 
 
-    doc.text('Prepared By ', 60, 360,)
+    // doc.text('Prepared By ', 60, 360,)
+    doc.text(`Prepared By : ${data.Customer}`  , 60, 360,)
+
+   
     // doc.line(550, 348, 400, 348); // RECEIPT NO LINE (Top)
 
 

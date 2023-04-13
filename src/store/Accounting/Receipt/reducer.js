@@ -11,7 +11,6 @@ import {
 
 const INIT_STATE = {
   ReceiptGoButton: [],
-  DepositorBank: [],
   ReceiptList: [],
   postMsg: { Status: false },
   ReceiptType: [],
@@ -35,13 +34,7 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         OpeningBalance: action.payload,
       }
 
-    case DEPOSITOR_BANK_FILTER_SUCCESS:
-      return {
-        ...state,
-        DepositorBank: action.payload,
-      }
-
-    case SAVE_RECEIPT_MASTER_SUCCESS:
+     case SAVE_RECEIPT_MASTER_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
