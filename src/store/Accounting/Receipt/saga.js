@@ -46,6 +46,9 @@ function* Receipt_List_GenFun({ jsonBody ,subPageMode}) {
     else if (subPageMode===url.RECEIPTS_LIST_2) {
       response = yield call(apiCall.Make_Receipt_to_Payment_API, jsonBody);
     }
+    else if (subPageMode===url.RECEIPTS_LIST) {
+      response = yield call(apiCall.Receipt_Filter_API, jsonBody);
+    }
     // const response = yield call(apiCall.Receipt_Filter_API, jsonBody);
     // const newList = yield response.Data.map((i) => {
     //   var date = convertDatefunc(i.ReceiptDate)

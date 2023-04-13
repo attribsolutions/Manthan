@@ -189,7 +189,11 @@ export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 //********************************Accounting ***********************************//
 export const RECEIPTS = "/Receipts"
 export const RECEIPTS_LIST = "/ReceiptList"
+
 export const RECEIPTS_LIST_2 = "/Receipt_List_2"
+
+export const BULK_RECIPT = "/BulkRecipt"
+
 
 export const PAYMENT_ENTRY = "/PaymentEntry"
 export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"

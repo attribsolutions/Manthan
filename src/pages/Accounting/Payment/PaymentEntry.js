@@ -43,7 +43,7 @@ const PaymentEntry = (props) => {
         ReceiptDate: currentDate,
         OpeningBalanceAmt: "",
         Customer: "",
-        ReceiptMode: "",
+        ReceiptModeName: "",
         AmountPaid: "",
         Description: "",
         BankName: "",
@@ -233,7 +233,7 @@ const PaymentEntry = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
-        if (values.ReceiptMode.label === "Cheque") {
+        if (values.ReceiptModeName.label === "Cheque") {
             const invalidMsg1 = []
 
             if (values.BankName === "") {
@@ -275,7 +275,7 @@ const PaymentEntry = (props) => {
                     "ChequeDate": values.ChequeDate,
                     // "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
-                    "ReceiptMode": values.ReceiptMode.value,
+                    "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
@@ -378,27 +378,27 @@ const PaymentEntry = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptMode} </Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptModeName} </Label>
                                         <Col sm="7">
                                             <Select
-                                                id="ReceiptMode "
-                                                name="ReceiptMode"
-                                                value={values.ReceiptMode}
+                                                id="ReceiptModeName "
+                                                name="ReceiptModeName"
+                                                value={values.ReceiptModeName}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
-                                            {isError.ReceiptMode.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.ReceiptMode}</small></span>
+                                            {isError.ReceiptModeName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ReceiptModeName}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
                             </Row>
 
-                            {(values.ReceiptMode.label === "Cheque") || (values.ReceiptMode.label === "RTGS") ?
+                            {(values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS") ?
                                 < Row >
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
@@ -452,7 +452,7 @@ const PaymentEntry = (props) => {
                                 </Row>
                                 : null}
 
-                            {(values.ReceiptMode.label === "Cheque") &&
+                            {(values.ReceiptModeName.label === "Cheque") &&
                                 <Row>
 
                                     <Col sm="6">
