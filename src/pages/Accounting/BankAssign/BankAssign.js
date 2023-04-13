@@ -165,24 +165,6 @@ const BankAssign = (props) => {
             text: "Name",
             dataField: "BankName",
             sort: true,
-            formatter: (value, row, k) => {
-                return (
-                    <span >
-                        <Input type="text"
-                            id={`BankName${k}`}
-                            key={`BankName${row.id}`}
-
-                            defaultValue={row.BankName}
-                            autoComplete="off"
-                            onChange={(e) => { row["BankName"] = e.target.value }}
-                        />
-                    </span>
-                )
-            },
-
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
         },
         {
             text: "Depository Bank",
@@ -352,7 +334,7 @@ const BankAssign = (props) => {
                                 <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
-                                            <Card>
+                                            
                                                 <CardBody className="c_card_body">
                                                     <FormGroup>
                                                         <Row>
@@ -410,7 +392,7 @@ const BankAssign = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </CardBody>
-                                            </Card>
+                                           
                                         </Col>
                                     </Row>
                                 </form>
