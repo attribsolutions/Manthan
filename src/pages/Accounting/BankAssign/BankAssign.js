@@ -41,9 +41,12 @@ import * as mode from "../../../routes/PageMode"
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import {
+    editBankAssignIDSuccess,
     PartyBankfilter,
     saveBankAssign,
-    saveBankAssign_Success
+    saveBankAssign_Success,
+    updateBankAssignID,
+    updateBankAssignIDSuccess
 } from "../../../store/Accounting/BankAssignRedux/action";
 
 const BankAssign = (props) => {
@@ -73,10 +76,12 @@ const BankAssign = (props) => {
     const {
         postMsg,
         pageField,
+        updateMsg,
         Data,
         userAccess } = useSelector((state) => ({
             postMsg: state.BankAssignReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
+            updateMsg: state.BankAssignReducer.updateMessage,
             Data: state.BankAssignReducer.Data,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -117,6 +122,49 @@ const BankAssign = (props) => {
     }, [userAccess])
 
 
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                const { id, BankName, BranchName, IFSC, AccountNo, IsSelfDepositoryBank,IsDefault } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.BankName.valid = true;
+                hasValid.BranchName.valid = true;
+                hasValid.IFSC.valid = true;
+                hasValid.AccountNo.valid = true;
+                hasValid.IsSelfDepositoryBank.valid = true;
+                hasValid.IsDefault.valid = true
+
+                values.id = id
+                values.BankName = BankName;
+                values.BranchName = BranchName;
+                values.IFSC = IFSC;
+                values.AccountNo = AccountNo;
+                values.IsSelfDepositoryBank = IsSelfDepositoryBank;
+                values. IsDefault = IsDefault
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.BankName))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+             dispatch(editBankAssignIDSuccess({ Status: false }))
+        }
+    }, [])
+
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -151,6 +199,26 @@ const BankAssign = (props) => {
             }));
         }
     }, [postMsg])
+
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            history.push({
+                pathname: url.BANK_ASSIGN,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateBankAssignIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
 
 
     useEffect(() => {
@@ -190,19 +258,19 @@ const BankAssign = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.BankName}
-                        // onChange={e => {
-                        //     setArr(ele => {
-                        //         let a = { ...ele };
-                        //         const newrr = [...ele].map(i => {
-                        //             if (row.BankName === i.BankName) {
-                        //                 i.bankCheck = !i.bankCheck;
-                        //             }
-                        //             return i
-                        //         });
-                        //         return newrr
-                        //     })
+                    // onChange={e => {
+                    //     setArr(ele => {
+                    //         let a = { ...ele };
+                    //         const newrr = [...ele].map(i => {
+                    //             if (row.BankName === i.BankName) {
+                    //                 i.bankCheck = !i.bankCheck;
+                    //             }
+                    //             return i
+                    //         });
+                    //         return newrr
+                    //     })
 
-                        // }}
+                    // }}
                     />
                 </span>
                 )
@@ -318,13 +386,14 @@ const BankAssign = (props) => {
                         Company: loginCompanyID()
                     }
                     arr1.push(arr)
-                }) 
-      
+                })
+
                 const jsonBody = JSON.stringify(
-                    arr1  
-              );
+                    arr1
+                );
 
                 if (pageMode === mode.edit) {
+                    dispatch(updateBankAssignID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
                     dispatch(saveBankAssign({ jsonBody, btnId }));
@@ -354,61 +423,61 @@ const BankAssign = (props) => {
                                 <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
-                                                <FormGroup>
-                                                    <Row>
-                                                        <PaginationProvider
-                                                            pagination={paginationFactory(pageOptions)}
-                                                        >
-                                                            {({ paginationProps, paginationTableProps }) => (
-                                                                <ToolkitProvider
-                                                                    keyField="id"
-                                                                    data={Data}
-                                                                    columns={pagesListColumns}
-                                                                    search
-                                                                >
-                                                                    {toolkitProps => (
-                                                                        <React.Fragment>
-                                                                            <div className="table">
-                                                                                <BootstrapTable
-                                                                                    keyField={"id"}
-                                                                                    bordered={true}
-                                                                                    striped={false}
-                                                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                                                    headerWrapperClasses={"thead-light"}
+                                            <FormGroup>
+                                                <Row>
+                                                    <PaginationProvider
+                                                        pagination={paginationFactory(pageOptions)}
+                                                    >
+                                                        {({ paginationProps, paginationTableProps }) => (
+                                                            <ToolkitProvider
+                                                                keyField="id"
+                                                                data={Data}
+                                                                columns={pagesListColumns}
+                                                                search
+                                                            >
+                                                                {toolkitProps => (
+                                                                    <React.Fragment>
+                                                                        <div className="table">
+                                                                            <BootstrapTable
+                                                                                keyField={"id"}
+                                                                                bordered={true}
+                                                                                striped={false}
+                                                                                noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                                                                classes={"table align-middle table-nowrap table-hover"}
+                                                                                headerWrapperClasses={"thead-light"}
 
-                                                                                    {...toolkitProps.baseProps}
-                                                                                    {...paginationTableProps}
+                                                                                {...toolkitProps.baseProps}
+                                                                                {...paginationTableProps}
+                                                                            />
+                                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                                        </div>
+
+                                                                        <Row className="align-items-md-center mt-30">
+                                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                                <PaginationListStandalone
+                                                                                    {...paginationProps}
                                                                                 />
-                                                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                                                {mySearchProps(toolkitProps.searchProps)}
-                                                                            </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </React.Fragment>
+                                                                )
+                                                                }
+                                                            </ToolkitProvider>
+                                                        )
+                                                        }
+                                                    </PaginationProvider>
 
-                                                                            <Row className="align-items-md-center mt-30">
-                                                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                                    <PaginationListStandalone
-                                                                                        {...paginationProps}
-                                                                                    />
-                                                                                </Col>
-                                                                            </Row>
-                                                                        </React.Fragment>
-                                                                    )
-                                                                    }
-                                                                </ToolkitProvider>
-                                                            )
-                                                            }
-                                                        </PaginationProvider>
-
-                                                        <Col sm={2}>
-                                                            <SaveButton pageMode={pageMode}
-                                                                onClick={saveHandeller}
-                                                                userAcc={userPageAccessState}
-                                                                editCreatedBy={editCreatedBy}
-                                                                module={"BankAssign"}
-                                                            />
-                                                        </Col>
-                                                    </Row>
-                                                </FormGroup>
+                                                    <Col sm={2}>
+                                                        <SaveButton pageMode={pageMode}
+                                                            onClick={saveHandeller}
+                                                            userAcc={userPageAccessState}
+                                                            editCreatedBy={editCreatedBy}
+                                                            module={"BankAssign"}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup>
                                         </Col>
                                     </Row>
                                 </form>
