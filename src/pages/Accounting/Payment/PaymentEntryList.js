@@ -45,9 +45,7 @@ const PaymentEntryList = () => {
         ToDate: currentDate,
         Customer: { value: "", label: "All" }
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const hasPagePath = history.location.pathname
 
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);

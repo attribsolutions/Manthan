@@ -31,7 +31,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { BankListAPI, DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 const Receipts = (props) => {
@@ -129,9 +129,6 @@ const Receipts = (props) => {
 
 
     useEffect(() => {
-        debugger
-        const editValue = history.location.editValue
-        const page_Mode = history.location.pageMode
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -140,7 +137,7 @@ const Receipts = (props) => {
             if (hasShowloction) {
                 insidePageMode = location.pageMode;
                 setPageMode(location.pageMode)
-                hasEditVal = location[mode.editValue]
+                hasEditVal = location.editValue
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
@@ -148,43 +145,41 @@ const Receipts = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-        }
 
-        if (hasShowloction) {
+            if (hasEditVal) {
 
-            // setItemselect(hasEditVal)
-            const { id, PartyID, Party, CustomerID, Customer, ReceiptDate,
-                FullReceiptNumber, NumberOfLot, Description, ReceiptMode, ReceiptModeName,
-                Bank, BankName, DepositorBank, DepositorBankName,
-                ReceiptType, AmountPaid, DocumentNo, ChequeDate } = editValue
-            // const { BatchesData = [] } = MaterialIssueItems
-            setState((i) => {
-                i.values.Customer = { value: CustomerID, label: Customer }
-                i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
-                i.values.BankName = { value: Bank, label: BankName }
-                i.values.Description = Description
-                i.values.ChequeNo = DocumentNo
-                i.values.AmountPaid = AmountPaid
+                const { id, PartyID, Party, CustomerID, Customer, ReceiptDate,
+                    Description, ReceiptMode, ReceiptModeName,
+                    Bank, BankName, ReceiptType, AmountPaid, DocumentNo, } = hasEditVal
 
-                i.hasValid.Customer.valid = true;
-                i.hasValid.AmountPaid.valid = true;
-                i.hasValid.BankName.valid = true;
-                i.hasValid.Description.valid = true;
-                i.hasValid.ReceiptModeName.valid = true;
-                return i
-            })
-            // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
+                setState((i) => {
+                    i.values.Customer = { value: CustomerID, label: Customer }
+                    i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
+                    i.values.BankName = { value: Bank, label: BankName }
+                    i.values.Description = Description
+                    i.values.ChequeNo = DocumentNo
+                    i.values.AmountPaid = "1000"
 
-            if (page_Mode === mode.modeSTPsave) {
-                const jsonBody = JSON.stringify({
-                    PartyID: editValue.PartyID,
-                    CustomerID: editValue.CustomerID,
-                    ReceiptDate: editValue.ReceiptDate
-                });
-                dispatch(ReceiptGoButtonMaster(jsonBody));
-                dispatch(GetOpeningBalance(jsonBody));
+                    i.hasValid.Customer.valid = true;
+                    i.hasValid.AmountPaid.valid = true;
+                    i.hasValid.BankName.valid = true;
+                    i.hasValid.Description.valid = true;
+                    i.hasValid.ReceiptModeName.valid = true;
+                    return i
+                })
+
+                if (insidePageMode === mode.modeSTPsave) {
+                    const jsonBody = JSON.stringify({
+                        PartyID: loginPartyID(),
+                        CustomerID: CustomerID,
+                        ReceiptDate: ReceiptDate
+                    });
+                    dispatch(ReceiptGoButtonMaster(jsonBody));
+                    dispatch(GetOpeningBalance(jsonBody));
+                }
+
+                AmountPaidDistribution("1000")
             }
-            AmountPaidDistribution(AmountPaid)
         }
     }, [])
 
@@ -299,8 +294,8 @@ const Receipts = (props) => {
         {
             text: "Calculate",
             dataField: "",
-            formatter: (cellContent, row, key, array) => {
-
+            formatter: (cellContent, row, key) => {
+                debugger
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Input
                         key={`Quantity${row.FullInvoiceNumber}`}
@@ -310,17 +305,7 @@ const Receipts = (props) => {
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
-                    // onChange={(e) => {
-                    //     
-                    //     const val = e.target.value
-                    //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                    //     if ((isnum) || (val === '')) {
-                    //         row["Calculate"] = val
-                    //     } else {
-                    //         document.getElementById(`Quantity${key}`).value = row.Calculate
-                    //     }
 
-                    // }}
                     />
                 </span>)
             },
@@ -380,9 +365,10 @@ const Receipts = (props) => {
         let CalculateAmount = ReceiptGoButton.map((index) => {
             return parseFloat(index.Calculate)
         })
+
         const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
 
-        // document.getElementById("AmountPaid").value = sum.toFixed(2)
+        // let sum1 = document.getElementById("AmountPaid").value = sum.toFixed(2)
 
         setState((i) => {
             let a = { ...i }
