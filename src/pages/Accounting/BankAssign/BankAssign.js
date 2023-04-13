@@ -228,6 +228,35 @@ const BankAssign = (props) => {
         }
     }, [pageField])
 
+    function handllerBranchName(event, row) {
+        let input = event.target.value;
+        row.NewBranchName = input
+    }
+    
+    function handllerIFSC(event, row) {
+        let input = event.target.value;
+        row.NewIFSC = input
+    }
+
+    function handllerAccountNo(event, row) {
+        let input = event.target.value;
+        row.NewAccountNo = input
+    }
+
+    function handllerIsDefault(event, row) {
+        let input = event.target.value;
+        row.NewIsDefault = input
+    }
+
+    function handllerIsSelfDepositoryBank(event, row) {
+        let input = event.target.value;
+        row.NewIsSelfDepositoryBank = input
+    }
+
+    function handllerCustomerBank(event, row) {
+        let input = event.target.value;
+        row.NewCustomerBank = input
+    }
 
     const pagesListColumns = [
         {
@@ -244,6 +273,7 @@ const BankAssign = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.CustomerBank}
+                        onChange={(event) => handllerCustomerBank(event, row)}
                     />
                 </span>
                 )
@@ -258,19 +288,7 @@ const BankAssign = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.BankName}
-                    // onChange={e => {
-                    //     setArr(ele => {
-                    //         let a = { ...ele };
-                    //         const newrr = [...ele].map(i => {
-                    //             if (row.BankName === i.BankName) {
-                    //                 i.bankCheck = !i.bankCheck;
-                    //             }
-                    //             return i
-                    //         });
-                    //         return newrr
-                    //     })
-
-                    // }}
+                        onChange={(event) => handllerIsSelfDepositoryBank(event, row)}
                     />
                 </span>
                 )
@@ -285,6 +303,7 @@ const BankAssign = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.BankName}
+                        onChange={(event) => handllerIsDefault(event, row)}
                     />
                 </span>
                 )
@@ -300,10 +319,9 @@ const BankAssign = (props) => {
                         <Input type="text"
                             id={`AccountNo${k}`}
                             key={`AccountNo${row.id}`}
-
                             defaultValue={row.AccountNo}
                             autoComplete="off"
-                            onChange={(e) => { row["AccountNo"] = e.target.value }}
+                            onChange={(event) => handllerAccountNo(event, row)}
                         />
                     </span>
                 )
@@ -325,7 +343,7 @@ const BankAssign = (props) => {
                             key={`IFSC${row.id}`}
                             defaultValue={row.IFSC}
                             autoComplete="off"
-                            onChange={(e) => { row["IFSC"] = e.target.value }}
+                            onChange={(event) => handllerIFSC(event, row)}
                         />
                     </span>
                 )
@@ -347,7 +365,8 @@ const BankAssign = (props) => {
                             key={`BranchName${row.id}`}
                             defaultValue={row.BranchName}
                             autoComplete="off"
-                            onChange={(e) => { row["BranchName"] = e.target.value }}
+                            // onChange={(e) => { row["BranchName"] = e.target.value }}
+                            onChange={(event) => handllerBranchName(event, row)}
                         />
                     </span>
                 )
@@ -375,11 +394,11 @@ const BankAssign = (props) => {
                 Data.forEach(i => {
                     const arr = {
                         Bank: i.Bank,
-                        BranchName: values.BranchName,
-                        IFSC: values.IFSC,
-                        AccountNo: values.AccountNo,
-                        IsSelfDepositoryBank: values.IsSelfDepositoryBank,
-                        IsDefault: values.IsDefault,
+                        BranchName: i.NewBranchName,
+                        IFSC: i.NewIFSC,
+                        AccountNo: i.NewAccountNo,
+                        IsSelfDepositoryBank: i.NewIsSelfDepositoryBank,
+                        IsDefault: i.NewIsDefault,
                         CreatedBy: loginUserID(),
                         UpdatedBy: loginUserID(),
                         Party: loginPartyID(),
