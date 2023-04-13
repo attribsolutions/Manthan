@@ -20,7 +20,7 @@ import {
     SAVE_BANK_MASTER,
     UPDATE_BANK_ID
 } from "./actionType";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
+import { CommonConsole, } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
@@ -32,10 +32,10 @@ function* Save_Method_ForBankMaster_GenFun({ config }) {             // Save API
 
 function* post_Bank_List_GenratorFunction({ jsonBody }) {  
                      // postList API
-    const filters = loginJsonBody();// required only PartyID and CompanyID
+    // const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
 
-        const response = yield call(post_Bank_List_Api, filters);
+        const response = yield call(post_Bank_List_Api, jsonBody);
         yield put(postBanklistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
