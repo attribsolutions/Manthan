@@ -52,12 +52,12 @@ const BankAssign = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        id: "",
-        Name: "",
-        IFSC: "",
+        BankName: "",
         BranchName: "",
+        IFSC: "",
         AccountNo: "",
-        IsSelfDepositoryBank: false
+        IsSelfDepositoryBank: false,
+        IsDefault: false,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -88,6 +88,7 @@ const BankAssign = (props) => {
         dispatch(PartyBankfilter())
     }, []);
 
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -115,7 +116,7 @@ const BankAssign = (props) => {
         };
     }, [userAccess])
 
-   
+
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -167,6 +168,20 @@ const BankAssign = (props) => {
             sort: true,
         },
         {
+            text: " Customer Bank",
+            dataField: "CustomerBank",
+            sort: true,
+            formatter: (cellContent, row, col, k) => {
+                return (<span >
+                    <Input type="checkbox"
+                        defaultChecked={cellContent}
+                        key={row.CustomerBank}
+                    />
+                </span>
+                )
+            },
+        },
+        {
             text: "Depository Bank",
             dataField: "IsSelfDepositoryBank",
             sort: true,
@@ -175,19 +190,19 @@ const BankAssign = (props) => {
                     <Input type="checkbox"
                         defaultChecked={cellContent}
                         key={row.BankName}
-                        onChange={e => {
-                            setArr(ele => {
-                                let a = { ...ele };
-                                const newrr = [...ele].map(i => {
-                                    if (row.BankName === i.BankName) {
-                                        i.bankCheck = !i.bankCheck;
-                                    }
-                                    return i
-                                });
-                                return newrr
-                            })
+                        // onChange={e => {
+                        //     setArr(ele => {
+                        //         let a = { ...ele };
+                        //         const newrr = [...ele].map(i => {
+                        //             if (row.BankName === i.BankName) {
+                        //                 i.bankCheck = !i.bankCheck;
+                        //             }
+                        //             return i
+                        //         });
+                        //         return newrr
+                        //     })
 
-                        }}
+                        // }}
                     />
                 </span>
                 )
@@ -240,7 +255,6 @@ const BankAssign = (props) => {
                         <Input type="text"
                             id={`IFSC${k}`}
                             key={`IFSC${row.id}`}
-
                             defaultValue={row.IFSC}
                             autoComplete="off"
                             onChange={(e) => { row["IFSC"] = e.target.value }}
@@ -263,7 +277,6 @@ const BankAssign = (props) => {
                         <Input type="text"
                             id={`BranchName${k}`}
                             key={`BranchName${row.id}`}
-
                             defaultValue={row.BranchName}
                             autoComplete="off"
                             onChange={(e) => { row["BranchName"] = e.target.value }}
@@ -279,32 +292,39 @@ const BankAssign = (props) => {
     ];
 
     const pageOptions = {
-         sizePerPage: 10,
-          custom: true,
+        sizePerPage: 10,
+        custom: true,
     };
 
 
     const saveHandeller = async (event) => {
+        const arr1 = []
         event.preventDefault();
-        const Find = Arr.filter((index) => {
-            return (index.bankCheck === true)
-        })
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                    var Data = Find.map((index) => ({
-                    BranchName: values.BranchName,
-                    IFSC: values.IFSC,
-                    AccountNo: values.AccountNo,
-                    IsSelfDepositoryBank: values.IsSelfDepositoryBank,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    Party: loginPartyID(),
-                    Company: loginCompanyID(),
-                }))
-                const jsonBody = JSON.stringify(Data)
-                if (pageMode === mode.edit) { 
+                Data.forEach(i => {
+                    const arr = {
+                        Bank: i.Bank,
+                        BranchName: values.BranchName,
+                        IFSC: values.IFSC,
+                        AccountNo: values.AccountNo,
+                        IsSelfDepositoryBank: values.IsSelfDepositoryBank,
+                        IsDefault: values.IsDefault,
+                        CreatedBy: loginUserID(),
+                        UpdatedBy: loginUserID(),
+                        Party: loginPartyID(),
+                        Company: loginCompanyID()
+                    }
+                    arr1.push(arr)
+                }) 
+      
+                const jsonBody = JSON.stringify(
+                    arr1  
+              );
+
+                if (pageMode === mode.edit) {
                 }
                 else {
                     dispatch(saveBankAssign({ jsonBody, btnId }));
@@ -334,65 +354,61 @@ const BankAssign = (props) => {
                                 <form noValidate>
                                     <Row className="">
                                         <Col md={12}>
-                                            
-                                                <CardBody className="c_card_body">
-                                                    <FormGroup>
-                                                        <Row>
-                                                            <PaginationProvider
-                                                                pagination={paginationFactory(pageOptions)}
-                                                            >
-                                                                {({ paginationProps, paginationTableProps }) => (
-                                                                    <ToolkitProvider
-                                                                        keyField="id"
-                                                                        data={Data}
-                                                                        columns={pagesListColumns}
-                                                                        search
-                                                                    >
-                                                                        {toolkitProps => (
-                                                                            <React.Fragment>
-                                                                                <div className="table">
-                                                                                    <BootstrapTable
-                                                                                        keyField={"id"}
-                                                                                        bordered={true}
-                                                                                        striped={false}
-                                                                                        noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                                                        classes={"table align-middle table-nowrap table-hover"}
-                                                                                        headerWrapperClasses={"thead-light"}
+                                                <FormGroup>
+                                                    <Row>
+                                                        <PaginationProvider
+                                                            pagination={paginationFactory(pageOptions)}
+                                                        >
+                                                            {({ paginationProps, paginationTableProps }) => (
+                                                                <ToolkitProvider
+                                                                    keyField="id"
+                                                                    data={Data}
+                                                                    columns={pagesListColumns}
+                                                                    search
+                                                                >
+                                                                    {toolkitProps => (
+                                                                        <React.Fragment>
+                                                                            <div className="table">
+                                                                                <BootstrapTable
+                                                                                    keyField={"id"}
+                                                                                    bordered={true}
+                                                                                    striped={false}
+                                                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                                                                    classes={"table align-middle table-nowrap table-hover"}
+                                                                                    headerWrapperClasses={"thead-light"}
 
-                                                                                        {...toolkitProps.baseProps}
-                                                                                        {...paginationTableProps}
+                                                                                    {...toolkitProps.baseProps}
+                                                                                    {...paginationTableProps}
+                                                                                />
+                                                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                                                {mySearchProps(toolkitProps.searchProps)}
+                                                                            </div>
+
+                                                                            <Row className="align-items-md-center mt-30">
+                                                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                                    <PaginationListStandalone
+                                                                                        {...paginationProps}
                                                                                     />
-                                                                                    {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                                                </div>
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </React.Fragment>
+                                                                    )
+                                                                    }
+                                                                </ToolkitProvider>
+                                                            )
+                                                            }
+                                                        </PaginationProvider>
 
-                                                                                <Row className="align-items-md-center mt-30">
-                                                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                                        <PaginationListStandalone
-                                                                                            {...paginationProps}
-                                                                                        />
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </React.Fragment>
-                                                                        )
-                                                                        }
-                                                                    </ToolkitProvider>
-                                                                )
-                                                                }
-                                                            </PaginationProvider>
-
-                                                            <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode}
-                                                                    onClick={saveHandeller}
-                                                                    userAcc={userPageAccessState}
-                                                                    editCreatedBy={editCreatedBy}
-                                                                    module={"BankAssign"}
-                                                                />
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </CardBody>
-                                           
+                                                        <Col sm={2}>
+                                                            <SaveButton pageMode={pageMode}
+                                                                onClick={saveHandeller}
+                                                                userAcc={userPageAccessState}
+                                                                editCreatedBy={editCreatedBy}
+                                                                module={"BankAssign"}
+                                                            />
+                                                        </Col>
+                                                    </Row>
+                                                </FormGroup>
                                         </Col>
                                     </Row>
                                 </form>

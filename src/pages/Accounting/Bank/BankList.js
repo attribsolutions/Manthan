@@ -14,6 +14,7 @@ import {
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
+import { loginCompanyID } from "../../../components/Common/CommonFunction";
 
 
 const BankList = () => {
@@ -46,16 +47,15 @@ const BankList = () => {
         const page_Id = pageId.BANK_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(postBanklist())
+        // dispatch(postBanklist())
     }, []);
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Party: loginPartyID(),
-    //         Company: loginCompanyID(),
-    //     });
-    //     dispatch(postBanklist(jsonBody));
-    // }, []);
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            CompanyID: loginCompanyID(),
+        });
+        dispatch(postBanklist(jsonBody));
+    }, []);
 
     const { pageField, userAccess = [] } = reducers;
 

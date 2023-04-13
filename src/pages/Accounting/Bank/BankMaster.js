@@ -37,7 +37,13 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { editBankIDSuccess, saveBankMaster, saveBankMaster_Success, updateBankID, updateBankIDSuccess } from "../../../store/Accounting/BankRedux/action";
+import {
+    editBankIDSuccess,
+    saveBankMaster,
+    saveBankMaster_Success,
+    updateBankID,
+    updateBankIDSuccess
+} from "../../../store/Accounting/BankRedux/action";
 
 
 const BankMaster = (props) => {
@@ -127,17 +133,17 @@ const BankMaster = (props) => {
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
-                hasValid.BranchName.valid = true;
-                hasValid.IFSC.valid = true;
-                hasValid.AccountNo.valid = true;
-                hasValid.IsSelfDepositoryBank.valid = true;
+                // hasValid.BranchName.valid = true;
+                // hasValid.IFSC.valid = true;
+                // hasValid.AccountNo.valid = true;
+                // hasValid.IsSelfDepositoryBank.valid = true;
 
                 values.id = id
                 values.Name = Name;
-                values.BranchName = BranchName;
-                values.IFSC = IFSC;
-                values.AccountNo = AccountNo;
-                values.IsSelfDepositoryBank = IsSelfDepositoryBank;
+                // values.BranchName = BranchName;
+                // values.IFSC = IFSC;
+                // values.AccountNo = AccountNo;
+                // values.IsSelfDepositoryBank = IsSelfDepositoryBank;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -219,7 +225,7 @@ const BankMaster = (props) => {
                     Name: values.Name,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    Party: loginPartyID(),
+                    // Party: loginPartyID(),
                     Company: loginCompanyID(),
                 });
 
