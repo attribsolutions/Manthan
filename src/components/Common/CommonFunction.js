@@ -250,13 +250,13 @@ export function CommonConsole(error) {
 export function groupBy(list, keyGetter) {
   const map = new Map();
   list.forEach((item) => {
-      const key = keyGetter(item);
-      const collection = map.get(key);
-      if (!collection) {
-          map.set(key, [item]);
-      } else {
-          collection.push(item);
-      }
+    const key = keyGetter(item);
+    const collection = map.get(key);
+    if (!collection) {
+      map.set(key, [item]);
+    } else {
+      collection.push(item);
+    }
   });
   return map;
 }
@@ -287,7 +287,7 @@ export async function CheckAPIResponse({
   response = {},
   body,
   btnId,
-  error = {},
+  error,
 }) {
   if (btnId) {
     // await new Promise(r => setTimeout(r, 0));
@@ -303,30 +303,13 @@ export async function CheckAPIResponse({
   const con6 = method === "post" || method === "put"; //for console body
   const con7 = data.StatusCode === 100;
 
-  if (!(error.data === undefined)) {
+  if (!(error === undefined)) {
     const { data = "" } = error;
     const err3 = data.StatusCode === 226; //reject
     const err4 = data.StatusCode === 400; //reject
     const err5 = data.StatusCode === 406; //reject);
-    if (err3) {
-      console.log(`${url}***${method} apiCall response:=>`, error.data);
-      await CustomAlert({
-        Type: 3,
-        Message: JSON.stringify(error.data.Message),
-      });
-      return Promise.reject(error.data);
-    } else if (err4) {
-      console.log(`${url}***${method} apiCall response:=>`, error.data);
-      await CustomAlert({
-        Type: 2,
-        Message: `${url}:This API ${method} Method Exception Error`,
-      });
-      return Promise.reject(error.data);
-    } else if (err5) {
-      console.log(`${url}***${method} apiCall response:=>`, error.data);
-      await CustomAlert({ Type: 3, Message: JSON.stringify(data.Message) });
-      return Promise.reject(error.data);
-    } else {
+
+    if (!err3 || err4 || err5) {
       console.log(`${url}***${method} apiCall response:=>`, error);
       await CustomAlert({
         Type: 2,
@@ -347,9 +330,27 @@ export async function CheckAPIResponse({
   } else if (con2) {
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     return response.data;
-  } else if (con3 || con4 || con5) {
-    return Promise.reject(response);
   }
+  if (con3) {
+    console.log(`${url}***${method} apiCall response:=>`, response.data);
+    await CustomAlert({
+      Type: 3,
+      Message: JSON.stringify(response.data.Message),
+    });
+    return Promise.reject(response.data);
+  } else if (con4) {
+    console.log(`${url}***${method} apiCall response:=>`, response.data);
+    await CustomAlert({
+      Type: 2,
+      Message: `${url}:This API ${method} Method Exception Error`,
+    });
+    return Promise.reject(response.data);
+  } else if (con5) {
+    console.log(`${url}***${method} apiCall response:=>`, response.data);
+    await CustomAlert({ Type: 3, Message: JSON.stringify(response.Message) });
+    return Promise.reject(response.data);
+  }
+
 
   return Promise.reject(response);
 }
