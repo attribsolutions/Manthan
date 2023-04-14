@@ -345,11 +345,11 @@ const Receipts = (props) => {
             let v2 = Number(input)
             if (v1 >= v2) { val1 = input }
             else { val1 = v1 };
-
         }
         else if (result === false) {
             val1 = row.Calculate
         }
+     
         else {
             val1 = 0
         }
@@ -364,11 +364,11 @@ const Receipts = (props) => {
 
         const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
 
-        // let sum1 = document.getElementById("AmountPaid").value = sum.toFixed(2)
+        let sum1 = document.getElementById("AmountPaid").value = sum.toFixed(2)
 
         setState((i) => {
             let a = { ...i }
-            a.values.AmountPaid = sum.toFixed(2)
+            a.values.AmountPaid = sum1
             a.hasValid.AmountPaid.valid = true;
             return a
         })
@@ -571,7 +571,7 @@ const Receipts = (props) => {
                                             <Flatpickr
                                                 name='ReceiptDate'
                                                 value={values.ReceiptDate}
-                                                disabled={page_Mode===mode.modeSTPsave ? true:false}
+                                                disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -777,8 +777,8 @@ const Receipts = (props) => {
 
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                // defaultValue={values.AmountPaid}
-                                                value={values.AmountPaid}
+                                                defaultValue={values.AmountPaid}
+                                                // value={values.AmountPaid}
                                                 disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
