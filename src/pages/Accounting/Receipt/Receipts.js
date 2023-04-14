@@ -35,7 +35,7 @@ import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoBut
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 const Receipts = (props) => {
-
+    debugger
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -83,6 +83,7 @@ const Receipts = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
+    const page_Mode = location.pageMode
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -94,12 +95,11 @@ const Receipts = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(BankListAPI())
-        // dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
     }, []);
 
-    // useEffect(() => {
-    //     dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} Count :${Data.length}`))
-    // }, [ReceiptGoButton]);
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Receipt Count :${Data.length}`))
+    }, [ReceiptGoButton]);
 
     // Customer dropdown Options
     useEffect(() => {
@@ -571,6 +571,7 @@ const Receipts = (props) => {
                                             <Flatpickr
                                                 name='ReceiptDate'
                                                 value={values.ReceiptDate}
+                                                disabled={page_Mode===mode.modeSTPsave ? true:false}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -594,6 +595,7 @@ const Receipts = (props) => {
                                         <Col sm="7">
                                             <Select
                                                 name="Customer"
+                                                isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
@@ -640,6 +642,7 @@ const Receipts = (props) => {
                                                 id="ReceiptModeName "
                                                 name="ReceiptModeName"
                                                 value={values.ReceiptModeName}
+                                                isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -667,6 +670,7 @@ const Receipts = (props) => {
                                                 <Select
                                                     name="BankName"
                                                     value={values.BankName}
+                                                    isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -691,6 +695,7 @@ const Receipts = (props) => {
                                                 <Select
                                                     name="DepositorBankName"
                                                     value={values.DepositorBankName}
+
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -721,6 +726,7 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Input
                                                     name="ChequeNo"
+                                                    disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     value={values.ChequeNo}
                                                     type="text"
                                                     className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
@@ -768,11 +774,12 @@ const Receipts = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.AmountPaid}</Label>
                                         <Col sm="7">
                                             <Input
+
                                                 name="AmountPaid"
                                                 id="AmountPaid"
                                                 // defaultValue={values.AmountPaid}
                                                 value={values.AmountPaid}
-                                                // type="text"
+                                                disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
@@ -795,6 +802,7 @@ const Receipts = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.Description}</Label>
                                         <Col sm="7">
                                             <Input
+                                                id="Description"
                                                 name="Description"
                                                 value={values.Description}
                                                 type="text"
