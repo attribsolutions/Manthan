@@ -394,7 +394,7 @@ const BankAssign = (props) => {
                 btnIsDissablefunc({ btnId, state: true })
               
                 Data.forEach(i => {
-                    if (i.NewBranchName || i.NewCustomerBank || i.NewIFSC || i.NewAccountNo || i.NewIsSelfDepositoryBank || i.NewIsDefaul) {
+                    if (i.NewBranchName || i.NewCustomerBank || i.NewIFSC || i.NewAccountNo || i.NewIsSelfDepositoryBank || i.NewIsDefault) {
                         const arr = {
                             Bank: i.Bank,
                             BranchName: i.NewBranchName,
