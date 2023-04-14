@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -35,14 +35,9 @@ import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoBut
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 const Receipts = (props) => {
-    debugger
+
     const history = useHistory()
     const dispatch = useDispatch();
-
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         ReceiptDate: currentDate,
@@ -56,8 +51,11 @@ const Receipts = (props) => {
         Description: "",
         ChequeDate: currentDate,
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -80,8 +78,15 @@ const Receipts = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const { Data = [] } = ReceiptGoButton
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const { Data = [] } = ReceiptGoButton
     const { OpeningBalanceAmount = '' } = OpeningBalance
 
     useEffect(() => {
@@ -89,10 +94,12 @@ const Receipts = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(BankListAPI())
-        // dispatch(ReceiptGoButtonMaster_Success([]))
-        // dispatch(GetOpeningBalance_Success([]))
-
+        // dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
     }, []);
+
+    // useEffect(() => {
+    //     dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} Count :${Data.length}`))
+    // }, [ReceiptGoButton]);
 
     // Customer dropdown Options
     useEffect(() => {
@@ -122,17 +129,8 @@ const Receipts = (props) => {
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-
     useEffect(() => {
-        debugger
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -142,7 +140,6 @@ const Receipts = (props) => {
                 insidePageMode = location.pageMode;
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
-                Data = location.Data
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
@@ -156,7 +153,6 @@ const Receipts = (props) => {
                 const { id, CustomerID, Customer,
                     Description, ReceiptMode, ReceiptModeName,
                     Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
-                // setAmountPaid(AmountPaid)
                 setState((i) => {
                     i.values.Customer = { value: CustomerID, label: Customer }
                     i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
@@ -173,12 +169,12 @@ const Receipts = (props) => {
                     return i
                 })
                 AmountPaidDistribution(AmountPaid);
-
-                // dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
-                // dispatch(GetOpeningBalance_Success({ Status: false }))
             }
         }
-
+        else {
+            dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
+            dispatch(GetOpeningBalance_Success(''))
+        }
     }, [])
 
     useEffect(() => {
@@ -411,13 +407,12 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-        debugger
         let value = Number(val1)
 
         let Amount = value
 
         Data.map((index) => {
-            debugger
+
             let amt = Number(index.BalanceAmount)
             if ((Amount > amt) && !(amt === 0)) {
 
@@ -845,6 +840,7 @@ const Receipts = (props) => {
                                             {...toolkitProps.baseProps}
                                         // {...paginationTableProps}
                                         />
+
                                         {/* {countlabelFunc(toolkitProps, "", dispatch, "Receipt")} */}
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
