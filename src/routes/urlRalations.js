@@ -186,11 +186,11 @@ export const Loading_Sheet_List = url.LOADING_SHEET
 export const Loading_Sheet = url.LOADING_SHEET_LIST
 
 //********************************Accounting ***********************************//
-export const Receipts = url.RECEIPTS
-export const ReceiptList = url.RECEIPTS_LIST
+export const Receipts = url.RECEIPTS_LIST
+export const ReceiptList = url.RECEIPTS
 export const ReceiptList_2 = url.RECEIPTS_LIST_2
 
-export const PaymentEntry = url.PAYMENT_ENTRY
-export const PaymentEntryList = url.PAYMENT_ENTRY_LIST
+export const PaymentEntry = url.PAYMENT_ENTRY_LIST
+export const PaymentEntryList = url.PAYMENT_ENTRY
 
 
