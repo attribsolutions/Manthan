@@ -12,12 +12,24 @@ import {
   GET_OPENING_BALANCE,
   GET_OPENING_BALANCE_SUCCESS,
   BANK_LIST_API,
-  BANK_LIST_API_SUCCESS
+  BANK_LIST_API_SUCCESS,
+  RECEIPT_LIST_FILTERS,
+  PAYMENT_ENTRY_LIST_FILTERS
 } from "./actionType";
 
-export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
+export const Receiptlistfilters = filter => ({                            //Material issue  Filter Action
+  type: RECEIPT_LIST_FILTERS,
+  payload: filter,
+})
+
+export const PaymentEntrylistfilters = filter => ({                            //Material issue  Filter Action
+  type: PAYMENT_ENTRY_LIST_FILTERS,
+  payload: filter,
+})
+
+export const ReceiptGoButtonMaster = (Data) => ({// save Action
   type: RECEIPT_GO_BUTTON_MASTER,
-  jsonBody,
+  Data
 });
 
 export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
