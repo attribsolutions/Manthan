@@ -34,8 +34,8 @@ import {
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
-function* supplierAddressGenFunc() {
-  const config = { editId: loginPartyID() }
+function* supplierAddressGenFunc({ editId }) {
+  const config = { editId: editId  }
   try {
     const response = yield call(Party_Master_Edit_API, config);
     let first = [], secd = [], newArr = []
@@ -91,8 +91,8 @@ function* getCustomerGenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-function* vendorSupplierCustomer_genFunc({ subPageMode,RoleID }) {
-  
+function* vendorSupplierCustomer_genFunc({ subPageMode, RoleID }) {
+
   let response;
 
   const isVender = (subPageMode === url.ORDER_1 //vendor mode 1
@@ -104,7 +104,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode,RoleID }) {
     || subPageMode === url.GRN_STP_3
     || subPageMode === url.GRN_LIST_3);
 
-  const isCustomer = ( subPageMode === url.ORDER_4                 //Customer mode 3
+  const isCustomer = (subPageMode === url.ORDER_4                 //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1);
@@ -156,7 +156,7 @@ function* Retailer_List_GenFunc({ data }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Party_Dropdown_List_GenFunc({loginEmployeeID}) {
+function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
 
   try {
     const response = yield call(Party_Dropdown_Get_API, loginEmployeeID);

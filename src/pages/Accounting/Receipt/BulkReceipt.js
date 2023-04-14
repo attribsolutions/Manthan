@@ -200,6 +200,7 @@ const BulkRecipt = (props) => {
 
 
     ];
+    
     function calculateOnChange(e, row, data = []) {
         row.Calculate = e.target.value
 
