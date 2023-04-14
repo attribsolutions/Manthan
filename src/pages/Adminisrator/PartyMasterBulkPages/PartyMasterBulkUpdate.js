@@ -54,6 +54,7 @@ import {
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
 import { GetDistrictOnState } from "../../../helpers/url_helper";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 
@@ -241,15 +242,10 @@ const PartyMasterBulkUpdate = (props) => {
     const goButtonHandler = () => {
 
         if (SelectFieldName.length === 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please Select SelectField",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
+            CustomAlert({
+                Type: 3,
+                Message: "Please select field",
+            })
             return;
         }
           
@@ -276,7 +272,6 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function handllerState(event, user) {
-
         user.Newvalue = event.value
         setState_DropDown_select(event)
         dispatch(getDistrictOnState(22))
@@ -306,12 +301,6 @@ const PartyMasterBulkUpdate = (props) => {
         })
     }
     
-    
-
-
-
-
-
 
     function handllerDistrictOnState(event, user) {
         user.NewDistrict = event.value
@@ -362,6 +351,21 @@ const PartyMasterBulkUpdate = (props) => {
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
+        validator: (newValue, user, column) => {
+            debugger
+            if (isNaN(newValue)) {
+                return {
+                  valid: false,
+                  message: 'Price should be numeric'
+                };
+              }
+               if (newValue < 2000) {
+                return {
+                  valid: false,
+                  message: 'Price should bigger than 2000'
+                };
+              }
+        },
         formatter: (cellContent, user) => (
             <>
                 {SelectFieldName.label === "State" ?
@@ -490,33 +494,42 @@ const PartyMasterBulkUpdate = (props) => {
                 Data.forEach(i => {
 
                     if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
-
                         const arr = {
                             SubPartyID: i.SubPartyID,
                             Value1: i.Newvalue,
                             Value2: i.NewFSSAIExipry,
                             Value2: i.NewDistrict
-
                         }
                         arr1.push(arr)
                     }
 
                 })
 
-                  
-                const jsonBody = JSON.stringify({
+                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
                     UpdateData: arr1
 
                 });
+                
+              
 
                 if (pageMode === mode.edit) {
                     dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
+                    if (arr1.length<=0) {
 
-                    dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
+                        CustomAlert({
+                            Type: 3,
+                            Message: "Update At least One Field",
+                        })
+                        
+                        btnIsDissablefunc({ btnId, state: false })  
+                    } else {
+                    dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));  
+                    }
+
                 }
             // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
