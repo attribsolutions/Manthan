@@ -118,6 +118,11 @@ const ReceiptList = () => {
         label: index.Name,
     }));
 
+    customerOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,

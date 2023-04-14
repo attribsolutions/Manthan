@@ -22,6 +22,8 @@ import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
 import { Progress } from "reactstrap";
+import "./loader.scss";
+
 
 const Layout = props => {
   const dispatch = useDispatch();
@@ -161,7 +163,8 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-      <div id="overlay" >
+
+      {/* <div id="overlay" > */}
         {/* <div className="cv-spinner">
           <span className="spinner"></span>
           <button className="btn btn-primary" type="button" disabled>
@@ -169,23 +172,22 @@ const Layout = props => {
             Loading...
           </button>
         </div> */}
-      </div>
-
+      {/* </div> */}
 
 
 
       <div className="pace pace-active" id="preloader">
-        <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
-          <Progress
+        <div className="pace-progress"  data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+       
+
+          {/* <Progress
             value={Count}
             color="primary"
             style={{ width: '100%', height: "4px" }}
             animated
-          ></Progress>
+          ></Progress> */}
         </div>
       </div>
-
-
 
 
 

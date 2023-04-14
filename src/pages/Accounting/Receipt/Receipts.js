@@ -35,7 +35,7 @@ import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoBut
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 const Receipts = (props) => {
-
+    debugger
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -80,15 +80,18 @@ const Receipts = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+    const { Data = [] } = ReceiptGoButton
+
     const { OpeningBalanceAmount = '' } = OpeningBalance
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(ReceiptGoButtonMaster_Success([]))
-        dispatch(GetOpeningBalance_Success([]))
         dispatch(BankListAPI())
+        // dispatch(ReceiptGoButtonMaster_Success([]))
+        // dispatch(GetOpeningBalance_Success([]))
+
     }, []);
 
     // Customer dropdown Options
@@ -129,15 +132,17 @@ const Receipts = (props) => {
 
 
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
             let insidePageMode = null
+            let Data = null
             if (hasShowloction) {
                 insidePageMode = location.pageMode;
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
+                Data = location.Data
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
@@ -148,17 +153,17 @@ const Receipts = (props) => {
 
             if (hasEditVal) {
 
-                const { id, PartyID, Party, CustomerID, Customer, ReceiptDate,
+                const { id, CustomerID, Customer,
                     Description, ReceiptMode, ReceiptModeName,
-                    Bank, BankName, ReceiptType, AmountPaid, DocumentNo, } = hasEditVal
-
+                    Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
+                // setAmountPaid(AmountPaid)
                 setState((i) => {
                     i.values.Customer = { value: CustomerID, label: Customer }
                     i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
                     i.values.ChequeNo = DocumentNo
-                    i.values.AmountPaid = "1000"
+                    i.values.AmountPaid = AmountPaid
 
                     i.hasValid.Customer.valid = true;
                     i.hasValid.AmountPaid.valid = true;
@@ -167,20 +172,13 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
+                AmountPaidDistribution(AmountPaid);
 
-                if (insidePageMode === mode.modeSTPsave) {
-                    const jsonBody = JSON.stringify({
-                        PartyID: loginPartyID(),
-                        CustomerID: CustomerID,
-                        ReceiptDate: ReceiptDate
-                    });
-                    dispatch(ReceiptGoButtonMaster(jsonBody));
-                    dispatch(GetOpeningBalance(jsonBody));
-                }
-
-                AmountPaidDistribution("1000")
+                // dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
+                // dispatch(GetOpeningBalance_Success({ Status: false }))
             }
         }
+
     }, [])
 
     useEffect(() => {
@@ -215,7 +213,7 @@ const Receipts = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
-            // dispatch(ReceiptGoButtonMaster_Success([]))
+            dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
             // dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
@@ -295,12 +293,13 @@ const Receipts = (props) => {
             text: "Calculate",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Input
-                        key={`Quantity${row.FullInvoiceNumber}`}
+                        key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
                         defaultValue={row.Calculate}
+                        // value={row.Calculate}
                         // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
@@ -316,13 +315,14 @@ const Receipts = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: 10,
-        totalSize: ReceiptGoButton.length,
+        // sizePerPage: 10,
+        totalSize: Data.length,
         custom: true,
     };
 
     // Customer dropdown function
     function CustomerOnChange(e) {
+        debugger
         setState((i) => {
             i.values.AmountPaid = 0
             i.hasValid.AmountPaid.valid = true;
@@ -333,8 +333,8 @@ const Receipts = (props) => {
             CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
-
-        dispatch(ReceiptGoButtonMaster(jsonBody));
+        const body = { jsonBody, pageMode }
+        dispatch(ReceiptGoButtonMaster(body));
         dispatch(GetOpeningBalance(jsonBody));
     }
 
@@ -362,7 +362,7 @@ const Receipts = (props) => {
 
         row.Calculate = event.target.value
 
-        let CalculateAmount = ReceiptGoButton.map((index) => {
+        let CalculateAmount = Data.map((index) => {
             return parseFloat(index.Calculate)
         })
 
@@ -385,7 +385,7 @@ const Receipts = (props) => {
 
         let result = /^\d*(\.\d{0,2})?$/.test(input);
 
-        let BalanceAmount = ReceiptGoButton.map((index) => {
+        let BalanceAmount = Data.map((index) => {
             return parseFloat(index.BalanceAmount)
         })
         const sum = BalanceAmount.reduce((partialSum, a) => partialSum + a, 0);
@@ -416,8 +416,8 @@ const Receipts = (props) => {
 
         let Amount = value
 
-        ReceiptGoButton.map((index) => {
-
+        Data.map((index) => {
+            debugger
             let amt = Number(index.BalanceAmount)
             if ((Amount > amt) && !(amt === 0)) {
 
@@ -505,7 +505,7 @@ const Receipts = (props) => {
             return index.Name === "Receipt"
         })
 
-        const ReceiptInvoices1 = ReceiptGoButton.map((index) => ({
+        const ReceiptInvoices1 = Data.map((index) => ({
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
             PaidAmount: index.Calculate,
@@ -520,7 +520,7 @@ const Receipts = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
-                const jsonBody = JSON.stringify({
+                var BulkData = [{
                     "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
@@ -538,6 +538,9 @@ const Receipts = (props) => {
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": FilterReceiptInvoices
+                }]
+                const jsonBody = JSON.stringify({
+                    BulkData: BulkData
                 })
 
                 if (pageMode === mode.edit) {
@@ -816,53 +819,53 @@ const Receipts = (props) => {
 
                         </div>
 
-                        <PaginationProvider
+                        {/* <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
                         >
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
+                            {({ paginationProps, paginationTableProps }) => ( */}
+                        <ToolkitProvider
 
-                                    keyField="id"
-                                    data={ReceiptGoButton}
-                                    columns={pagesListColumns}
+                            keyField="id"
+                            data={Data}
+                            columns={pagesListColumns}
 
-                                    search
-                                >
-                                    {toolkitProps => (
-                                        <React.Fragment>
-                                            <div className="table">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    bordered={true}
-                                                    striped={false}
-                                                    noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                    classes={"table align-middle table-nowrap table-hover"}
-                                                    headerWrapperClasses={"thead-light"}
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
 
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Receipt")}
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
+                                            {...toolkitProps.baseProps}
+                                        // {...paginationTableProps}
+                                        />
+                                        {/* {countlabelFunc(toolkitProps, "", dispatch, "Receipt")} */}
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
 
-                                            <Row className="align-items-md-center mt-30">
+                                    {/* <Row className="align-items-md-center mt-30">
                                                 <Col className="pagination pagination-rounded justify-content-end mb-2">
                                                     <PaginationListStandalone
                                                         {...paginationProps}
                                                     />
                                                 </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </ToolkitProvider>
+                                            </Row> */}
+                                </React.Fragment>
                             )
                             }
+                        </ToolkitProvider>
+                        {/* )
+                            }
 
-                        </PaginationProvider>
+                        </PaginationProvider> */}
 
-                        {ReceiptGoButton.length > 0 ?
+                        {Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
