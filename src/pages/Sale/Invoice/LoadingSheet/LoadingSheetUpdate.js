@@ -5,7 +5,8 @@ import {
     FormGroup,
     Label,
     Input,
-    Row
+    Row,
+    Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
@@ -37,13 +38,13 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
+import data from "./data.json";
+
 
 const LoadingSheetUpdate = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    debugger
-   const b = history
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -84,6 +85,9 @@ const LoadingSheetUpdate = (props) => {
         Driver: state.DriverReducer.DriverList,
     }));
 
+    debugger
+
+
     // const { fromdate, todate, Date } = orderlistFilter;
     const { Data = [] } = GoButton;
 
@@ -93,7 +97,7 @@ const LoadingSheetUpdate = (props) => {
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-    
+
     }, []);
 
     const location = { ...history.location }
@@ -142,7 +146,7 @@ const LoadingSheetUpdate = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-        
+
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -161,12 +165,12 @@ const LoadingSheetUpdate = (props) => {
     }, [pageField])
 
 
-   
 
-  
 
-  
-    
+
+
+
+
     function SelectAll(event, row, key) {
 
         const arr = []
@@ -183,19 +187,19 @@ const LoadingSheetUpdate = (props) => {
     const pagesListColumns = [
         {
             text: "Bill Date",
-            dataField: "InvoiceDate",
+            dataField: "BillDate",
         },
         {
             text: "Bill NO",
-            dataField: "FullInvoiceNumber",
+            dataField: "BillNO",
         },
         {
             text: "Customer Name",
-            dataField: "Customer",
+            dataField: "CustomerName",
         },
         {
             text: "Amount",
-            dataField: "GrandTotal",
+            dataField: "Amount",
         },
         {
             text: "Select All",
@@ -213,6 +217,20 @@ const LoadingSheetUpdate = (props) => {
                     />
                 </span>)
             }
+        },
+
+        {
+            text: "Action",
+            dataField: "Check",
+            formatter: () => {
+
+
+                < Button >
+                </Button>
+
+
+
+            }
         }
 
 
@@ -229,17 +247,17 @@ const LoadingSheetUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
 
-   
 
-    
+
+
 
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-              
+
 
                 const jsonBody = JSON.stringify({
-                  
+
                 });
 
                 if (pageMode === mode.edit) {
@@ -266,6 +284,8 @@ const LoadingSheetUpdate = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
+                 <div id="id1"></div>
+
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
@@ -276,7 +296,7 @@ const LoadingSheetUpdate = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>Loading NO</Label>
                                         <Col sm="7">
-                                           <Label></Label>
+                                            <Label></Label>
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -319,7 +339,7 @@ const LoadingSheetUpdate = (props) => {
                                 <ToolkitProvider
 
                                     keyField="id"
-                                    data={Data}
+                                    data={data}
                                     columns={pagesListColumns}
 
                                     search
