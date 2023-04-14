@@ -304,10 +304,17 @@ export async function CheckAPIResponse({
   const con7 = data.StatusCode === 100;
 
   if (!(error === undefined)) {
+
     const { data = "" } = error;
     const err3 = data.StatusCode === 226; //reject
     const err4 = data.StatusCode === 400; //reject
     const err5 = data.StatusCode === 406; //reject);
+
+     // **********************************************************************************
+    if (con6) { // print post and Put method body
+      console.log(`${url}***=> ${method} Body =>`, body);
+    }
+    // **********************************************************************************
 
     if (!err3 || err4 || err5) {
       console.log(`${url}***${method} apiCall response:=>`, error);
@@ -319,7 +326,7 @@ export async function CheckAPIResponse({
     }
   }
 
-  if (con6) {
+  if (con6) {// print post and Put method body
     console.log(`${url}***=> ${method} Body =>`, body);
   }
   // **********************************************************************************
@@ -346,6 +353,7 @@ export async function CheckAPIResponse({
     });
     return Promise.reject(response.data);
   } else if (con5) {
+    
     console.log(`${url}***${method} apiCall response:=>`, response.data);
     await CustomAlert({ Type: 3, Message: JSON.stringify(response.Message) });
     return Promise.reject(response.data);
