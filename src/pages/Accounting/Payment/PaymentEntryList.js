@@ -178,7 +178,7 @@ const PaymentEntryList = () => {
             ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody, subPageMode));
-        dispatch(GetOpeningBalance(jsonBody));
+        // dispatch(GetOpeningBalance(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
