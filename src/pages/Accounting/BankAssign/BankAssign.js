@@ -59,7 +59,7 @@ const BankAssign = (props) => {
         BranchName: "",
         IFSC: "",
         AccountNo: "",
-        CustomerBank:"",
+        CustomerBank: "",
         IsSelfDepositoryBank: false,
         IsDefault: false,
     }
@@ -233,7 +233,7 @@ const BankAssign = (props) => {
         let input = event.target.value;
         row.NewBranchName = input
     }
-    
+
     function handllerIFSC(event, row) {
         let input = event.target.value;
         row.NewIFSC = input
@@ -255,7 +255,7 @@ const BankAssign = (props) => {
     }
 
     function handllerCustomerBank(event, row) {
-        let input = event.target.checked;        ;
+        let input = event.target.checked;;
         row.NewCustomerBank = input
     }
 
@@ -270,7 +270,7 @@ const BankAssign = (props) => {
             dataField: "CustomerBank",
             sort: true,
             formatter: (cellContent, row, col, k) => {
-                
+
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={row.CustomerBank}
@@ -297,7 +297,7 @@ const BankAssign = (props) => {
             },
         },
         {
-            text: " Default",
+            text: " Invoice Show",
             dataField: "IsDefault",
             sort: true,
             formatter: (cellContent, row, col, k) => {
@@ -392,43 +392,25 @@ const BankAssign = (props) => {
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-
-                // const BankListOptions = Data.filter((i) => {
-
-                //     const arr = {
-                //                 Bank: i.Bank,
-                //                 BranchName: i.NewBranchName,
-                //                 CustomerBank:i.NewCustomerBank,
-                //                 IFSC: i.NewIFSC,
-                //                 AccountNo: i.NewAccountNo,
-                //                 IsSelfDepositoryBank:i.NewIsSelfDepositoryBank,
-                //                 IsDefault: i.NewIsDefault,
-                //                 CreatedBy: loginUserID(),
-                //                 UpdatedBy: loginUserID(),
-                //                 Party: loginPartyID(),
-                //                 Company: loginCompanyID()
-                //             }
-                           
-                  
-                // })
-
+              
                 Data.forEach(i => {
-                    const arr = {
-                        Bank: i.Bank,
-                        BranchName: i.NewBranchName,
-                        CustomerBank:i.NewCustomerBank,
-                        IFSC: i.NewIFSC,
-                        AccountNo: i.NewAccountNo,
-                        IsSelfDepositoryBank:i.NewIsSelfDepositoryBank,
-                        IsDefault: i.NewIsDefault,
-                        CreatedBy: loginUserID(),
-                        UpdatedBy: loginUserID(),
-                        Party: loginPartyID(),
-                        Company: loginCompanyID()
+                    if (i.NewBranchName || i.NewCustomerBank || i.NewIFSC || i.NewAccountNo || i.NewIsSelfDepositoryBank || i.NewIsDefaul) {
+                        const arr = {
+                            Bank: i.Bank,
+                            BranchName: i.NewBranchName,
+                            CustomerBank: i.NewCustomerBank,
+                            IFSC: i.NewIFSC,
+                            AccountNo: i.NewAccountNo,
+                            IsSelfDepositoryBank: i.NewIsSelfDepositoryBank,
+                            IsDefault: i.NewIsDefault,
+                            CreatedBy: loginUserID(),
+                            UpdatedBy: loginUserID(),
+                            Party: loginPartyID(),
+                            Company: loginCompanyID()
+                        }
+                        arr1.push(arr)
                     }
-                    arr1.push(arr)
                 })
-
                 const jsonBody = JSON.stringify(
                     arr1
                 );
