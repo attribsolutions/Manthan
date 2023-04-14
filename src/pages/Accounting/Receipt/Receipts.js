@@ -295,8 +295,9 @@ const Receipts = (props) => {
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
                         defaultValue={row.Calculate}
+                        disabled={page_Mode === mode.modeSTPsave ? true : false}
                         // value={row.Calculate}
-                        // type="text"
+                        // type="text"f
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -349,7 +350,7 @@ const Receipts = (props) => {
         else if (result === false) {
             val1 = row.Calculate
         }
-     
+
         else {
             val1 = 0
         }
