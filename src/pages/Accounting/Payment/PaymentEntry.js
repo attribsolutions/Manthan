@@ -260,7 +260,7 @@ const PaymentEntry = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
-                const jsonBody = JSON.stringify({
+                var BulkData = [{
                     "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
@@ -278,6 +278,10 @@ const PaymentEntry = (props) => {
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": []
+                }]
+
+                const jsonBody = JSON.stringify({
+                    BulkData: BulkData
                 })
 
                 if (pageMode === mode.edit) {
