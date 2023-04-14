@@ -31,7 +31,7 @@ import * as mode from "../../../../routes/PageMode";
 import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
 import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheetListAction, LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -39,6 +39,7 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import data from "./data.json";
+import {  makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 
 
 const LoadingSheetUpdate = (props) => {
@@ -72,11 +73,11 @@ const LoadingSheetUpdate = (props) => {
         userAccess,
         VehicleNumber,
         RoutesList,
-        GoButton,
+        List,
         Driver
     } = useSelector((state) => ({
         postMsg: state.LoadingSheetReducer.postMsg,
-        GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
+        List: state.LoadingSheetReducer.goBtnLoadingSheet,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -85,11 +86,12 @@ const LoadingSheetUpdate = (props) => {
         Driver: state.DriverReducer.DriverList,
     }));
 
+    
+
     debugger
-
-
     // const { fromdate, todate, Date } = orderlistFilter;
-    const { Data = [] } = GoButton;
+    const a = List.Data
+    // const { Data = [] } = GoButton;
 
 
     useEffect(() => {
@@ -97,6 +99,8 @@ const LoadingSheetUpdate = (props) => {
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+
+
 
     }, []);
 
@@ -165,41 +169,22 @@ const LoadingSheetUpdate = (props) => {
     }, [pageField])
 
 
-
-
-
-
-
-
-    function SelectAll(event, row, key) {
-
-        const arr = []
-        Data.forEach(ele => {
-            if (ele.id === row.id) {
-                ele.Check = event
-            }
-            arr.push(ele)
-        })
-        setArray(arr)
-
-    }
-
     const pagesListColumns = [
         {
             text: "Bill Date",
-            dataField: "BillDate",
+            dataField: "InvoiceDate",
         },
         {
             text: "Bill NO",
-            dataField: "BillNO",
+            dataField: "FullInvoiceNumber",
         },
         {
             text: "Customer Name",
-            dataField: "CustomerName",
+            dataField: "Customer",
         },
         {
             text: "Amount",
-            dataField: "Amount",
+            dataField: "GrandTotal",
         },
         {
             text: "Select All",
@@ -213,7 +198,7 @@ const LoadingSheetUpdate = (props) => {
                         defaultChecked={row.Check}
                         type="checkbox"
                         className="col col-sm text-center"
-                        onChange={e => { SelectAll(e.target.checked, row, key) }}
+                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
                     />
                 </span>)
             }
@@ -221,15 +206,21 @@ const LoadingSheetUpdate = (props) => {
 
         {
             text: "Action",
-            dataField: "Check",
-            formatter: () => {
-
-
-                < Button >
-                </Button>
-
-
-
+            dataField: "",
+            formatter: (cellContent, row) => {
+                return (<span style={{ justifyContent: 'center' }}>
+                        <Button
+                            type="button"
+                            id={`btn-makeBtn-${row.id}`}
+                            className={makeBtnCss}
+                            // title={makeBtnName}
+                            // onClick={() => {
+                            //     // const btnId = `btn-makeBtn-${rowData.id}`
+                            //     makeBtnHandler(rowData, btnId)
+                            // }}
+                        >
+                            <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className=" fas fa-file-invoice" ></span> </Button></span>)
             }
         }
 
@@ -238,7 +229,7 @@ const LoadingSheetUpdate = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: Data.length,
+        // totalSize: Data.length,
         custom: true,
     };
 
@@ -284,7 +275,7 @@ const LoadingSheetUpdate = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                 <div id="id1"></div>
+                    <div id="id1"></div>
 
 
                     <form noValidate>
@@ -378,19 +369,19 @@ const LoadingSheetUpdate = (props) => {
 
                         </PaginationProvider>
                         {
-                            Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            onClick={saveHandeller}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"LoadingSheet"}
-                                        />
+                            // Data.length > 0 ?
+                            <FormGroup>
+                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                    <SaveButton pageMode={pageMode}
+                                        onClick={saveHandeller}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                        module={"LoadingSheet"}
+                                    />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                                </Col>
+                            </FormGroup >
+                            // : null
                         }
 
                     </form >
@@ -406,39 +397,6 @@ const LoadingSheetUpdate = (props) => {
 };
 
 export default LoadingSheetUpdate
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

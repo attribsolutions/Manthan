@@ -1,8 +1,8 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { CommonConsole, convertDatefunc, convertTimefunc,  } from "../../../components/Common/CommonFunction";
-import { Loading_Sheet_get_API, Loading_Sheet_Go_Button_API, Loading_Sheet_Post_API } from "../../../helpers/backend_helper";
-import { LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess } from "./action";
-import { LOADING_SHEET_LIST_ACTION, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SHEET_MASTER } from "./actionType";
+import { Loading_Sheet_get_API, Loading_Sheet_Go_Button_API, Loading_Sheet_Post_API, LoadingSheet_API } from "../../../helpers/backend_helper";
+import { LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMasterSucccess, UpdateLoadingSheetSucccess } from "./action";
+import { LOADING_SHEET_LIST_ACTION, LOADING_SHEET_GO_BUTTON_API, SAVE_LOADING_SHEET_MASTER, LOADING_SHEET_UPDATE_API } from "./actionType";
 
 // GoButton Post API for Loading Sheet
 function* goBtn_Post_API_GenFun({ filters }) {
@@ -22,6 +22,18 @@ function* save_LoadingSheet_GenFun({ config }) {
     try {
         const response = yield call(Loading_Sheet_Post_API, config);
         yield put(SaveLoadingSheetMasterSucccess(response));
+    } catch (error) { CommonConsole(error) }
+}
+
+
+
+
+function* Update_LoadingSheet_GenFun(id) {
+    try {
+        debugger
+        const response = yield call(LoadingSheet_API, id);
+        debugger
+        yield put(UpdateLoadingSheetSucccess(response));
     } catch (error) { CommonConsole(error) }
 }
 
@@ -45,6 +57,8 @@ function* get_LoadingSheet_List_GenFun({filters}) {
 
 
 function* LoadingSheetSaga() {
+    
+    yield takeEvery(LOADING_SHEET_UPDATE_API, Update_LoadingSheet_GenFun)
     yield takeEvery(LOADING_SHEET_GO_BUTTON_API, goBtn_Post_API_GenFun)
     yield takeEvery(SAVE_LOADING_SHEET_MASTER, save_LoadingSheet_GenFun)
     yield takeEvery(LOADING_SHEET_LIST_ACTION, get_LoadingSheet_List_GenFun)

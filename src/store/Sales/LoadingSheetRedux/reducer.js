@@ -2,13 +2,15 @@
 import {
     LOADING_SHEET_LIST_ACTION_SUCCESS,
     LOADING_SHEET_GO_BUTTON_API_SUCCESS,
-    SAVE_LOADING_SHEET_MASTER_SUCCESS
+    SAVE_LOADING_SHEET_MASTER_SUCCESS,
+    LOADING_SHEET_UPDATE_API_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
     goBtnLoadingSheet: [],
     postMsg: { Status: false },
     LoadingSheetlist: [],
+    LoadingSheetUpdate:[]
 
 }
 
@@ -30,7 +32,11 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 ...state,
                 LoadingSheetlist: action.payload,
             }
-     
+        case LOADING_SHEET_UPDATE_API_ACTION_SUCCESS:
+            return {
+                ...state,
+                LoadingSheetUpdate: action.payload,
+            }
 
 
         default:

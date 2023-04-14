@@ -5,7 +5,9 @@ import {
     LOADING_SHEET_GO_BUTTON_API,
     LOADING_SHEET_GO_BUTTON_API_SUCCESS,
     SAVE_LOADING_SHEET_MASTER,
-    SAVE_LOADING_SHEET_MASTER_SUCCESS
+    SAVE_LOADING_SHEET_MASTER_SUCCESS,
+    LOADING_SHEET_UPDATE_API,
+    LOADING_SHEET_UPDATE_API_ACTION_SUCCESS
 } from "./actionType";
 
 
@@ -48,3 +50,16 @@ export const LoadingSheetListActionSuccess = (resp) => ({
     type: LOADING_SHEET_LIST_ACTION_SUCCESS,
     payload: resp,
 });
+
+
+export const UpdateLoadingSheet = (id) => ({  
+    type: LOADING_SHEET_UPDATE_API,
+    id,
+});
+
+export const UpdateLoadingSheetSucccess = (data) => ({
+    type: LOADING_SHEET_UPDATE_API_ACTION_SUCCESS,
+    payload: data,
+});
+
+
