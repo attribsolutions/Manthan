@@ -35,7 +35,7 @@ import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoBut
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 const Receipts = (props) => {
-    debugger
+
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -130,7 +130,7 @@ const Receipts = (props) => {
     }, []);
 
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -168,6 +168,7 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
+                document.getElementById("AmountPaid").value = AmountPaid
                 AmountPaidDistribution(AmountPaid);
             }
         }
@@ -297,7 +298,7 @@ const Receipts = (props) => {
                         defaultValue={row.Calculate}
                         disabled={page_Mode === mode.modeSTPsave ? true : false}
                         // value={row.Calculate}
-                        // type="text"f
+                        // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -377,7 +378,7 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event, state) {
-        debugger
+
         let input = event.target.value
 
         let result = /^\d*(\.\d{0,2})?$/.test(input);
@@ -572,7 +573,7 @@ const Receipts = (props) => {
                                             <Flatpickr
                                                 name='ReceiptDate'
                                                 value={values.ReceiptDate}
-                                                disabled={page_Mode === mode.modeSTPsave ? true : false}
+                                                // disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -727,7 +728,7 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Input
                                                     name="ChequeNo"
-                                                    // disabled={page_Mode === mode.modeSTPsave ? true : false}
+                                                    disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     value={values.ChequeNo}
                                                     type="text"
                                                     className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
@@ -752,6 +753,7 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Flatpickr
                                                     name='ChequeDate'
+                                                    disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     value={values.ChequeDate}
                                                     className="form-control d-block p-2 bg-white text-dark"
                                                     placeholder="Select..."
