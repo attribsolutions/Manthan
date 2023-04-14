@@ -7,7 +7,9 @@ import {
     SAVE_LOADING_SHEET_MASTER,
     SAVE_LOADING_SHEET_MASTER_SUCCESS,
     LOADING_SHEET_UPDATE_API,
-    LOADING_SHEET_UPDATE_API_ACTION_SUCCESS
+    LOADING_SHEET_UPDATE_API_ACTION_SUCCESS,
+    DELETE_LOADING_SHEET,
+    DELETE_LOADING_SHEET_SUCCESS
 } from "./actionType";
 
 
@@ -59,6 +61,17 @@ export const UpdateLoadingSheet = (id) => ({
 
 export const UpdateLoadingSheetSucccess = (data) => ({
     type: LOADING_SHEET_UPDATE_API_ACTION_SUCCESS,
+    payload: data,
+});
+
+
+export const DeleteLoadingSheet = (config = {}) => ({  
+    type: DELETE_LOADING_SHEET,
+    config,
+});
+
+export const DeleteLoadingSheetSucccess = (data) => ({
+    type: DELETE_LOADING_SHEET_SUCCESS,
     payload: data,
 });
 

@@ -39,7 +39,8 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import data from "./data.json";
-import {  makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
+import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
+
 
 
 const LoadingSheetUpdate = (props) => {
@@ -77,7 +78,7 @@ const LoadingSheetUpdate = (props) => {
         Driver
     } = useSelector((state) => ({
         postMsg: state.LoadingSheetReducer.postMsg,
-        List: state.LoadingSheetReducer.goBtnLoadingSheet,
+        List: state.LoadingSheetReducer.LoadingSheetUpdate,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -86,23 +87,7 @@ const LoadingSheetUpdate = (props) => {
         Driver: state.DriverReducer.DriverList,
     }));
 
-    
 
-    debugger
-    // const { fromdate, todate, Date } = orderlistFilter;
-    const a = List.Data
-    // const { Data = [] } = GoButton;
-
-
-    useEffect(() => {
-        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
-        const page_Id = pageId.LOADING_SHEET
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-
-
-
-    }, []);
 
     const location = { ...history.location }
     // const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -111,6 +96,17 @@ const LoadingSheetUpdate = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+const {InvoiceParent=[],PartyDetails}=List
+
+    // const { fromdate, todate, Date } = orderlistFilter;
+
+    useEffect(() => {
+        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
+        const page_Id = pageId.LOADING_SHEET
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -180,7 +176,7 @@ const LoadingSheetUpdate = (props) => {
         },
         {
             text: "Customer Name",
-            dataField: "Customer",
+            dataField: "CustomerName",
         },
         {
             text: "Amount",
@@ -209,18 +205,18 @@ const LoadingSheetUpdate = (props) => {
             dataField: "",
             formatter: (cellContent, row) => {
                 return (<span style={{ justifyContent: 'center' }}>
-                        <Button
-                            type="button"
-                            id={`btn-makeBtn-${row.id}`}
-                            className={makeBtnCss}
-                            // title={makeBtnName}
-                            // onClick={() => {
-                            //     // const btnId = `btn-makeBtn-${rowData.id}`
-                            //     makeBtnHandler(rowData, btnId)
-                            // }}
-                        >
-                            <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                className=" fas fa-file-invoice" ></span> </Button></span>)
+                    <Button
+                        type="button"
+                        id={`btn-makeBtn-${row.id}`}
+                        className={makeBtnCss}
+                    // title={makeBtnName}
+                    // onClick={() => {
+                    //     // const btnId = `btn-makeBtn-${rowData.id}`
+                    //     makeBtnHandler(rowData, btnId)
+                    // }}
+                    >
+                        <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                            className=" fas fa-file-invoice" ></span> </Button></span>)
             }
         }
 
@@ -237,9 +233,6 @@ const LoadingSheetUpdate = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
-
-
-
 
 
         try {
@@ -268,6 +261,7 @@ const LoadingSheetUpdate = (props) => {
             return a
         })
     }
+    //    console.log(List.Data.InvoiceParent)
 
     if (!(userPageAccessState === '')) {
         return (
@@ -323,6 +317,7 @@ const LoadingSheetUpdate = (props) => {
 
                         </div>
 
+
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
                         >
@@ -330,7 +325,7 @@ const LoadingSheetUpdate = (props) => {
                                 <ToolkitProvider
 
                                     keyField="id"
-                                    data={data}
+                                    data={InvoiceParent}
                                     columns={pagesListColumns}
 
                                     search
