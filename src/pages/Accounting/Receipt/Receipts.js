@@ -539,29 +539,9 @@ const Receipts = (props) => {
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": FilterReceiptInvoices
                 }]
-
-
                 const jsonBody = JSON.stringify({
-                    // "ReceiptDate": values.ReceiptDate,
-                    // "Description": values.Description,
-                    // "AmountPaid": values.AmountPaid,
-                    // "BalanceAmount": "",
-                    // "OpeningBalanceAdjusted": "",
-                    // "DocumentNo": values.ChequeNo,
-                    // "AdvancedAmountAjusted": "",
-                    // "Bank": values.BankName.value,
-                    // "Customer": values.Customer.value,
-                    // "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
-                    // "DepositorBank": values.DepositorBankName.value,
-                    // "Party": loginPartyID(),
-                    // "ReceiptMode": values.ReceiptModeName.value,
-                    // "ReceiptType": ReceiptTypeID.id,
-                    // "CreatedBy": loginUserID(),
-                    // "UpdatedBy": loginUserID(),
-                    // "ReceiptInvoices": FilterReceiptInvoices
                     BulkData: BulkData
                 })
-
 
                 if (pageMode === mode.edit) {
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
