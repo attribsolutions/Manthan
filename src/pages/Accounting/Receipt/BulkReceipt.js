@@ -113,7 +113,7 @@ const BulkRecipt = (props) => {
                         <div className="_heder">
                             <div className="div-1">
                                 <div>
-                                    <Label>{index1.PartyName}</Label>
+                                    <Label className="text-primary">{index1.PartyName}</Label>
                                 </div>
                             </div>
                             <div className="div-2">

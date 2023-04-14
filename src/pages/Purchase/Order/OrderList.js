@@ -8,6 +8,7 @@ import {
     deleteOrderIdSuccess,
     editOrderId,
     getOrderListPage,
+    getOrderListPageSuccess,
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -137,7 +138,7 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        dispatch(getOrderListPage(""))//for clear privious order list
+        dispatch(getOrderListPageSuccess([]))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -268,7 +269,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-
+        
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             let filtersBody = {}
