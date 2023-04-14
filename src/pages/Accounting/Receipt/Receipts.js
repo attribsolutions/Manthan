@@ -726,7 +726,7 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Input
                                                     name="ChequeNo"
-                                                    disabled={page_Mode === mode.modeSTPsave ? true : false}
+                                                    // disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     value={values.ChequeNo}
                                                     type="text"
                                                     className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
