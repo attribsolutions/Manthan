@@ -397,7 +397,7 @@ export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_B
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
 export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(url.LOADING_SHEET, deleteId, btnId)// Loading Sheet Post API For Master Page
-export const Loading_Sheet_Update_API = ( updateId) => del(url.LOADING_SHEET, updateId )// Loading Sheet Post API For Master Page
+export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/${updateId}`)// Loading Sheet Post API For Master Page
 
 
 // PartyMasterBulkUpdate
