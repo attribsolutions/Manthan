@@ -10,7 +10,7 @@ const INIT_STATE = {
     goButton: [],
     postMsg: { Status: false },
     updateMessage: { Status: false },
-    PartyName: [],
+    PartyName: [ ],
     SelectField: []
 }
 

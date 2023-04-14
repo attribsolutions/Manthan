@@ -35,7 +35,7 @@ import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRed
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import PaymentEntry from "./PaymentEntry";
-import { get_Group_List_Api } from "../../../helpers/backend_helper";
+import { Receipt_Print, get_Group_List_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
@@ -291,7 +291,7 @@ const PaymentEntryList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
+        dispatch(getpdfReportdata(Receipt_Print,ReportType, row.id))
     }
 
     const makeBtnFunc = (list = []) => {
