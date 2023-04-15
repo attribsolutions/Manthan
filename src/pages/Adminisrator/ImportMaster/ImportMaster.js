@@ -6,13 +6,13 @@ import {
     Label,
     Row
 } from "reactstrap";
+import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {  commonPageField, commonPageFieldSuccess,  } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import Select from "react-select";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
@@ -70,8 +70,6 @@ const ImportMaster = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const values = { ...state.values }
-    const { isError } = state;
     const { fieldLabel } = state;
 
     // userAccess useEffect
@@ -89,115 +87,6 @@ const ImportMaster = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
-    //     if ((hasShowloction || hasShowModal)) {
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             let ItemUnits = hasEditVal.ParentUnitDetails.map((data) => ({
-    //                 value: data.Unit,
-    //                 label: data.UnitName
-    //             }))
-    //             // setItemUnitOptions(ItemUnits)
-    //             setEditData(hasEditVal);
-    //             const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive, IsVDCItem } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-    //             hasValid.id.valid = true;
-    //             hasValid.BomDate.valid = true;
-    //             hasValid.ItemName.valid = true;
-    //             hasValid.UnitName.valid = true;
-    //             hasValid.EstimatedOutputQty.valid = true;
-    //             hasValid.Comment.valid = true;
-    //             hasValid.IsActive.valid = true;
-    //             hasValid.IsVDCItem.valid = true;
-
-    //             values.id = id
-    //             values.BomDate = BomDate;
-    //             values.EstimatedOutputQty = EstimatedOutputQty;
-    //             values.Comment = Comment;
-    //             values.IsActive = IsActive;
-    //             values.ItemName = { label: ItemName, value: Item };
-    //             values.UnitName = { label: UnitName, value: Unit };
-    //             values.IsVDCItem = IsVDCItem;
-    //             setItemTabDetails(hasEditVal.BOMItems)
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(editBOMListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         dispatch(saveBOMMasterSuccess({ Status: false }))
-    //         // setState(() => resetFunction(fileds, state))// Clear form values  
-    //         dispatch(Breadcrumb_inputName(''))
-
-    //         if (pageMode === mode.dropdownAdd) {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //             }))
-    //         }
-    //         else {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //                 RedirectPath: url.BIllOf_MATERIALS_LIST,
-    //             }))
-    //         }
-    //     }
-    //     else if (postMsg.Status === true) {
-    //         dispatch(saveBOMMasterSuccess({ Status: false }))
-    //         dispatch(AlertState({
-    //             Type: 4,
-    //             Status: true,
-    //             Message: JSON.stringify(postMessage.Message),
-    //             RedirectPath: false,
-    //             AfterResponseAction: false
-    //         }));
-    //     }
-    // }, [postMsg])
-
-    // useEffect(() => {
-    //     if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-    //         // setState(() => resetFunction(fileds, state))// Clear form values  
-    //         history.push({
-    //             pathname: url.BIllOf_MATERIALS_LIST,
-    //         })
-    //     } else if ((updateMsg.Status === true) && (updateMsg.StatusCode === 100) && !(modalCss)) {
-    //         dispatch(updateBOMListSuccess({ Status: false }));
-    //         dispatch(AlertState({
-    //             Type: 6, Status: true,
-    //             Message: JSON.stringify(updateMsg.Message),
-    //             PermissionFunction: PermissionFunction,
-
-    //         }));
-    //     }
-    //     else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateBOMListSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -262,24 +151,21 @@ const ImportMaster = (props) => {
                 </>
             ),
         },
-
         {
-            text: "Compulsory",
+            text: "Validate Key Field",
             dataField: "",
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="checkbox"
-                                    // disabled={true}
-                                    // defaultValue={cellContent.toPrecision(5)}
-                                    // defaultValue={parseFloat(cellContent).toFixed(3)}
-                                    className="col col-sm text-center"
-                                // onChange={(e) => QuantityHandler(e, user)}
-                                />
+                                    <Select
+                                    name="validaation"
+                                    class="Flatpickr"
+                                    classNamePrefix="dropdown"
+                                    options={[]}
+                                  
+                                  />
                             </FormGroup>
                         </Col>
                     </div>
@@ -287,6 +173,9 @@ const ImportMaster = (props) => {
                 </>
             ),
         },
+     
+
+        
     ];
 
     const pageOptions = {
