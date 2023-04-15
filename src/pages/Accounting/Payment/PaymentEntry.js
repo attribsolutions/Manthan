@@ -48,7 +48,6 @@ const PaymentEntry = (props) => {
         Description: "",
         BankName: "",
         ChequeNo: "",
-        // DepositorBankName: "",
         ChequeDate: currentDate,
     }
 
@@ -220,8 +219,8 @@ const PaymentEntry = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
-            CustomerID: e.value,
+            PartyID: e.value,
+            CustomerID: loginPartyID(),
             ReceiptDate: values.ReceiptDate
         });
 
@@ -261,7 +260,7 @@ const PaymentEntry = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
-                const jsonBody = JSON.stringify({
+                var BulkData = [{
                     "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
@@ -279,6 +278,10 @@ const PaymentEntry = (props) => {
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
                     "ReceiptInvoices": []
+                }]
+
+                const jsonBody = JSON.stringify({
+                    BulkData: BulkData
                 })
 
                 if (pageMode === mode.edit) {
@@ -422,31 +425,6 @@ const PaymentEntry = (props) => {
 
                                         </FormGroup>
                                     </Col >
-
-                                    {/* <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
-                                            <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DepositorBankName} </Label>
-                                            <Col sm="7">
-                                                <Select
-                                                    name="DepositorBankName"
-                                                    value={values.DepositorBankName}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={DepositorBankOptions}
-                                                    onChange={(hasSelect, evn) => {
-                                                        onChangeSelect({ hasSelect, evn, state, setState });
-                                                    }}
-                                                />
-                                                {isError.DepositorBankName.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.DepositorBankName}</span>
-                                                )}
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col > */}
-
 
                                 </Row>
                                 : null}

@@ -6,14 +6,21 @@ import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, log
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
-function* ReceiptGoButtonGenFunc({ jsonBody }) {
-
+function* ReceiptGoButtonGenFunc({ Data }) {
+  
+  const { ListData, jsonBody, path, pageMode } = Data
   try {
+
     const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
+
+    response["pageMode"] = pageMode;
+    response["ListData"] = ListData;
+    response["path"] = path;
     response.Data.map((index) => {
       return index["Calculate"] = 0
     });
-    yield put(action.ReceiptGoButtonMaster_Success(response.Data));
+
+    yield put(action.ReceiptGoButtonMaster_Success(response));
   } catch (error) { CommonConsole(error) }
 }
 
@@ -38,12 +45,12 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
       response = yield call(apiCall.Make_Receipt_to_Payment_API, jsonBody);
     }
 
-    const newList = yield response.Data.map((i) => {
-      i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
-      return i
-    })
+    // const newList = yield response.Data.map((i) => {
+    //   i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
+    //   return i
+    // })
 
-    yield put(action.ReceiptListAPISuccess(newList));
+    yield put(action.ReceiptListAPISuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 

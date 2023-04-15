@@ -54,11 +54,12 @@ import {
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
 import { GetDistrictOnState } from "../../../helpers/url_helper";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 
 const PartyMasterBulkUpdate = (props) => {
-    
+
     const count = useRef(0)
 
     const dispatch = useDispatch();
@@ -66,10 +67,8 @@ const PartyMasterBulkUpdate = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [RouteSelect, setRouteSelect] = useState([]);
-    const [Party, setParty] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
-    const [Date, setDate] = useState();
+
 
     const [state_DropDown_select, setState_DropDown_select] = useState();
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState();
@@ -80,10 +79,14 @@ const PartyMasterBulkUpdate = (props) => {
         RoutesName: "",
         PartyName: "",
         SelectField: "",
+        Party: { value: "", label: "All" },
+        Routes:{ value: "", label: "All" }
     }
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [val, setvalue] = useState()
-    const [FSSAIExipry, setFSSAIExipry] = useState()
+    // const [error, seterror] = useState({})
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -112,10 +115,11 @@ const PartyMasterBulkUpdate = (props) => {
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
+        
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+
 
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
@@ -150,7 +154,8 @@ const PartyMasterBulkUpdate = (props) => {
             TypeID: 2
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
-        dispatch(getDistrictOnState(22))
+
+        // dispatch(getDistrictOnState(22))
     }, []);
 
     useEffect(() => {
@@ -166,7 +171,6 @@ const PartyMasterBulkUpdate = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             // dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            setRouteSelect('')
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
@@ -238,38 +242,31 @@ const PartyMasterBulkUpdate = (props) => {
     const goButtonHandler = () => {
 
         if (SelectFieldName.length === 0) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please Select SelectField",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
+            CustomAlert({
+                Type: 3,
+                Message: "Please select field",
+            })
             return;
         }
-
+          
         const jsonBody = JSON.stringify({
+          
 
             PartyID: loginPartyID(),
-            Route: RouteSelect.length === 0 ? 0 : RouteSelect.value,
+            Route: values.Routes.value===""?0:values.Routes.value,
             Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
-            FilterPartyID: Party.length === 0 ? 0 : Party.value,
+            FilterPartyID:values.Party.value===""?0:values.Party.value
 
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
 
     function SelectFieldHandler(event) {
-
-
         setSelectFieldName(event)
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
     }
 
     function tableSelectHandler(event, user) {
-
         let input = event.target.value;
         user.Newvalue = input
     }
@@ -277,21 +274,36 @@ const PartyMasterBulkUpdate = (props) => {
     function handllerState(event, user) {
         user.Newvalue = event.value
         setState_DropDown_select(event)
+        dispatch(getDistrictOnState(22))
 
     }
 
-    function diisionhandler(event, user) {
-        
+    function divisionhandler(event, user) {
         user.Newvalue = event.target.checked
 
-
     }
 
+    function partyOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            a.hasValid.Party.valid = true
+            return a
+        })
+    }
 
+    function RoutesNameOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Routes = e;
+            a.hasValid.Routes.valid = true
+            return a
+        })
+    }
+    
 
     function handllerDistrictOnState(event, user) {
         user.NewDistrict = event.value
-        setDistrict_dropdown_Select(event)
     }
 
     function fromdateOnchange(event, user) {
@@ -311,6 +323,15 @@ const PartyMasterBulkUpdate = (props) => {
 
     ];
 
+    PartyDropdown_Options.unshift({
+        value: "",
+        label: " All"
+    });
+    RouteName_Options.unshift({
+        value: "",
+        label: " All"
+    });
+
     if (SelectFieldName.label === "FSSAINo") {
         let FSSAINo = {
             text: "FSSAIExipry",
@@ -326,9 +347,25 @@ const PartyMasterBulkUpdate = (props) => {
         }
         pagesListColumns.push(District)
     }
+
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
+        validator: (newValue, user, column) => {
+            debugger
+            if (isNaN(newValue)) {
+                return {
+                  valid: false,
+                  message: 'Price should be numeric'
+                };
+              }
+               if (newValue < 2000) {
+                return {
+                  valid: false,
+                  message: 'Price should bigger than 2000'
+                };
+              }
+        },
         formatter: (cellContent, user) => (
             <>
                 {SelectFieldName.label === "State" ?
@@ -344,13 +381,13 @@ const PartyMasterBulkUpdate = (props) => {
                             </FormGroup>
                         </Col>
                     </div> :
-                    SelectFieldName.label === "	IsDivision" ?
+                    SelectFieldName.label === "IsDivision" ?
 
                         <Col md={2} style={{ marginTop: '9px' }} >
                             <div className="form-check form-switch form-switch-md mb-3">
                                 <Input type="checkbox" className="form-check-input"
-                                    checked={values.IsActive}
-                                    onChange={(event) => diisionhandler(event, user)}
+                                    defaultChecked={user.IsDivision}
+                                    onChange={(event) => divisionhandler(event, user)}
                                     name="IsActive"
 
                                 />
@@ -365,9 +402,13 @@ const PartyMasterBulkUpdate = (props) => {
                                         type="text"
                                         placeholder="Enter New Value"
                                         defaultValue={user.Newvalue}
-                                        className="col col-sm text-center"
+                                        className="col col-sm "
                                         onChange={(event) => tableSelectHandler(event, user)}
                                     />
+                                    {0 > 0 && (
+                                        <span className="text-danger f-8"><small>{"fjb"}</small></span>
+                                    )}
+                                    
                                 </FormGroup>
                             </Col>
                         </div>
@@ -441,46 +482,56 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     const SaveHandler = (event) => {
+        debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
+            // if (formValid(state)) {
                 btnIsDissablefunc({ btnId, state: true })
 
 
                 Data.forEach(i => {
-                    
-                    if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
 
+                    if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
                         const arr = {
                             SubPartyID: i.SubPartyID,
                             Value1: i.Newvalue,
                             Value2: i.NewFSSAIExipry,
                             Value2: i.NewDistrict
-
                         }
                         arr1.push(arr)
                     }
 
                 })
-                
 
-                const jsonBody = JSON.stringify({
+                 const jsonBody = JSON.stringify({
                     PartyID: loginPartyID(),
                     Type: SelectFieldName.label,
                     UpdateData: arr1
-                    
+
                 });
+                
+              
 
                 if (pageMode === mode.edit) {
                     dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-                    
-                    dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
+                    if (arr1.length<=0) {
+
+                        CustomAlert({
+                            Type: 3,
+                            Message: "Update At least One Field",
+                        })
+                        
+                        btnIsDissablefunc({ btnId, state: false })  
+                    } else {
+                    dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));  
+                    }
+
                 }
-            }
+            // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
@@ -537,12 +588,14 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 <div className="col col-6 sm-1">
                                                                     <Select
                                                                         name="RoutesName"
-                                                                        value={RouteSelect}
+                                                                        value={values.Routes}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={RouteName_Options}
-                                                                        onChange={(e) => { setRouteSelect(e) }}
+                                                                        // onChange={(e) => { setRouteSelect(e) }}
+                                                                        onChange={RoutesNameOnchange}
+
                                                                     />
                                                                     {isError.RoutesName.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
@@ -558,12 +611,14 @@ const PartyMasterBulkUpdate = (props) => {
                                                                 <div className="col col-7 sm-1">
                                                                     <Select
                                                                         name="PartyName"
-                                                                        value={Party}
+                                                                        value={values.Party}
                                                                         isSearchable={true}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={PartyDropdown_Options}
-                                                                        onChange={(e) => { setParty(e) }}
+                                                                        // onChange={(e) => { setParty(e) }}
+                                                                        onChange={partyOnchange}
+
                                                                     />
                                                                 </div>
                                                                 {isError.PartyName.length > 0 && (

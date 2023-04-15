@@ -392,11 +392,13 @@ export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_PO
 export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
 export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPDATE, jsonBody, btnId)// Route Update Post API
 
-
 // Loading Sheet
 export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_BUTTON_API, data)//Loading Sheet go button API For Master Page
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
+export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(url.LOADING_SHEET, deleteId, btnId)// Loading Sheet Post API For Master Page
+export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/${updateId}`)// Loading Sheet Post API For Master Page
+
 
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api

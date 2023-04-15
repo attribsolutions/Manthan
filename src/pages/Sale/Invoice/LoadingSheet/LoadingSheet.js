@@ -220,7 +220,8 @@ const LoadingSheet = (props) => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             Party: loginPartyID(),
-            Route: ""
+            Route: "",
+            LoadingSheetID:""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }

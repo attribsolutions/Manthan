@@ -24,6 +24,10 @@ import { MetaTags } from "react-meta-tags";
 import {
     deleteReceiptList,
     deleteReceiptList_Success,
+    GetOpeningBalance,
+    GetOpeningBalance_Success,
+    ReceiptGoButtonMaster,
+    ReceiptGoButtonMaster_Success,
     ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
@@ -31,7 +35,7 @@ import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRed
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
 import PaymentEntry from "./PaymentEntry";
-import { get_Group_List_Api } from "../../../helpers/backend_helper";
+import { Receipt_Print, get_Group_List_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
@@ -62,11 +66,13 @@ const PaymentEntryList = () => {
             ReceiptType: state.ReceiptReducer.ReceiptType,
             editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+            makeReceipt: state.ReceiptReducer.ReceiptGoButton,
+            OpeningBalance: state.ReceiptReducer.OpeningBalance,
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType = [] } = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType = [], makeReceipt, OpeningBalance } = reducers;
 
     const values = { ...state.values }
 
@@ -115,7 +121,6 @@ const PaymentEntryList = () => {
             makeBtnName = "Make Payment"
         }
 
-
         dispatch(ReceiptListAPI(""))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName })
         setPageMode(page_Mode)
@@ -126,15 +131,18 @@ const PaymentEntryList = () => {
 
     }, []);
 
-    // Featch Modules List data  First Rendering
-    // useEffect(() => {
-    //     const page_Id = pageId.PAYMENT_ENTRY_LIST
-    //     setpageMode(hasPagePath)
-    //     dispatch(commonPageFieldListSuccess(null))
-    //     dispatch(commonPageFieldList(page_Id))
-    //     dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
-    //     dispatch(getSupplier())
-    // }, []);
+    useEffect(() => {
+        debugger
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
+
+            history.push({
+                pathname: makeReceipt.path,
+                pageMode: makeReceipt.pageMode,
+                editValue: makeReceipt.ListData,
+            })
+        }
+    }, [makeReceipt, OpeningBalance])
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY_LIST
@@ -150,6 +158,11 @@ const PaymentEntryList = () => {
         value: index.id,
         label: index.Name,
     }));
+
+    customerOptions.unshift({
+        value: "",
+        label: " All"
+    });
 
     function goButtonHandler() {
         const ReceiptTypeID = ReceiptType.find((index) => {
@@ -276,30 +289,24 @@ const PaymentEntryList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(get_Group_List_Api, ReportType, row.id))
+        dispatch(getpdfReportdata(Receipt_Print,ReportType, row.id))
     }
 
     const makeBtnFunc = (list = []) => {
+        debugger
+        var { CustomerID, ReceiptDate } = list[0]
 
-        // var { PartyID, CustomerID, CustomerID } = list[0]
-        history.push({
-            pathname: url.RECEIPTS,
-            pageMode: mode.modeSTPsave,
-            [mode.editValue]: list[0]
-        })
+        try {
+            const jsonBody = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                ReceiptDate: ReceiptDate
+            });
+            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }
+            dispatch(ReceiptGoButtonMaster(body));
+            dispatch(GetOpeningBalance(jsonBody));
 
-        // try {
-        //     const jsonBody = JSON.stringify({
-        //         WorkOrder: jsonData.id,
-        //         Item: jsonData.Item,
-        //         Company: loginCompanyID(),
-        //         Party: loginPartyID(),
-        //         Quantity: parseInt(jsonData.Quantity)
-        //     })
-        //     const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }
-        //     // dispatch(goButtonForMaterialIssue_Master_Action(body))
-
-        // } catch (e) { }
+        } catch (e) { }
     }
 
     return (
