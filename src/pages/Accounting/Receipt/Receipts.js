@@ -132,7 +132,7 @@ const Receipts = (props) => {
     }, []);
 
     useEffect(() => {
-        debugger
+       
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -322,7 +322,7 @@ const Receipts = (props) => {
 
     // Customer dropdown function
     function CustomerOnChange(e) {
-        debugger
+       
         setState((i) => {
             i.values.AmountPaid = 0
             i.hasValid.AmountPaid.valid = true;
@@ -347,7 +347,7 @@ const Receipts = (props) => {
 
     // Calculate Input box onChange Function
     function CalculateOnchange(event, row, key) {
-        debugger
+       
         let input = event.target.value
         let result = /^\d*(\.\d{0,2})?$/.test(input);
         let val1 = 0;
@@ -474,9 +474,21 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+       
         event.preventDefault();
         const btnId = event.target.id;
+
+        if (values.ReceiptModeName.value === undefined) {
+
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "ReceiptMode Is Required",
+                })
+            );
+            return;
+        }
 
         if (values.ReceiptModeName.label === "Cheque") {
             const invalidMsg1 = []
@@ -664,9 +676,10 @@ const Receipts = (props) => {
                                                     ReceiptModeOnchange(hasSelect)
                                                 }}
                                             />
-                                            {isError.ReceiptModeName.length > 0 && (
+
+                                            {(isError.ReceiptModeName.length > 0) && (values.ReceiptModeName.value === undefined) ? (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptModeName}</small></span>
-                                            )}
+                                            ) : <></>}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -866,7 +879,7 @@ const Receipts = (props) => {
                             )
                             }
                         </ToolkitProvider>
-                     
+
                         {Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>

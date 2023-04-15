@@ -162,7 +162,7 @@ const LoadingSheetUpdate = (props) => {
     }, [pageField])
 
     useEffect(() => {
-        debugger
+        
         if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
             dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
 
@@ -175,14 +175,14 @@ const LoadingSheetUpdate = (props) => {
     }, [makeReceipt, OpeningBalance])
 
     function makeBtnFunc(e, row) {
-        
+
         var { CustomerID, InvoiceNumber } = row
 
         try {
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
-                InvoiceID: InvoiceNumber
+                InvoiceID: (InvoiceNumber).toString()
             });
 
             const jsonBody1 = JSON.stringify({

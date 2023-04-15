@@ -132,7 +132,7 @@ const PaymentEntryList = () => {
     }, []);
 
     useEffect(() => {
-        debugger
+        
         if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
             dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
 
@@ -293,7 +293,7 @@ const PaymentEntryList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         var { CustomerID, ReceiptDate } = list[0]
 
         try {
