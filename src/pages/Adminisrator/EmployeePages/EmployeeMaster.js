@@ -3,12 +3,10 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getDesignationID,
   getState,
   saveEmployeeAction,
   updateEmployeeAction,
   PostEmployeeSuccess,
-  Get_CompanyName_By_EmployeeTypeID,
   editEmployeeSuccess,
   updateEmployeeIDSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
@@ -34,7 +32,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
 
 const AddEmployee = (props) => {
 
