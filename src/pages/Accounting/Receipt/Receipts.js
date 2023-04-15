@@ -527,8 +527,8 @@ const Receipts = (props) => {
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
             PaidAmount: index.Calculate,
-            flag: 0,
-            Payment: page_Mode === mode.modeSTPsave ? ID : ""
+            // flag: 0,
+            // Payment: page_Mode === mode.modeSTPsave ? ID : ""
         }))
 
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
