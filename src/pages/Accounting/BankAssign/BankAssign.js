@@ -41,7 +41,6 @@ import * as mode from "../../../routes/PageMode"
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import {
-    editBankAssignIDSuccess,
     PartyBankfilter,
     saveBankAssign,
     saveBankAssign_Success,
@@ -255,8 +254,9 @@ const BankAssign = (props) => {
     }
 
     function handllerCustomerBank(event, row) {
-        let input = event.target.checked;;
+        let input = event.target.checked;
         row.NewCustomerBank = input
+
     }
 
     const pagesListColumns = [
@@ -274,7 +274,7 @@ const BankAssign = (props) => {
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={row.CustomerBank}
-                        key={row.CustomerBank}
+                        key={row.BankName}
                         onChange={(event) => handllerCustomerBank(event, row)}
                     />
                 </span>
@@ -386,31 +386,32 @@ const BankAssign = (props) => {
 
 
     const saveHandeller = async (event) => {
+        debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-              
+
                 Data.forEach(i => {
-                    if (i.NewBranchName || i.NewCustomerBank || i.NewIFSC || i.NewAccountNo || i.NewIsSelfDepositoryBank || i.NewIsDefault) {
+                    if (i.NewBranchName ||i.NewCustomerBank || i.NewIFSC || i.NewAccountNo || i.NewIsSelfDepositoryBank || i.NewIsDefault) {
                         const arr = {
                             Bank: i.Bank,
                             BranchName: i.NewBranchName,
-                            CustomerBank: i.NewCustomerBank,
                             IFSC: i.NewIFSC,
                             AccountNo: i.NewAccountNo,
                             IsSelfDepositoryBank: i.NewIsSelfDepositoryBank,
                             IsDefault: i.NewIsDefault,
                             CreatedBy: loginUserID(),
                             UpdatedBy: loginUserID(),
-                            Party: loginPartyID(),
+                            Party: i.NewCustomerBank,
                             Company: loginCompanyID()
                         }
                         arr1.push(arr)
                     }
                 })
+
                 const jsonBody = JSON.stringify(
                     arr1
                 );
