@@ -10,9 +10,9 @@ function* ReceiptGoButtonGenFunc({ Data }) {
   
   const { ListData, jsonBody, path, pageMode } = Data
   try {
-
+debugger
     const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
-
+    debugger
     response["pageMode"] = pageMode;
     response["ListData"] = ListData;
     response["path"] = path;
