@@ -275,7 +275,7 @@ const Receipts = (props) => {
 
     const pagesListColumns = [
         {
-            text: "Receipt Date",
+            text: "InvoiceDate",
             dataField: "InvoiceDate",
         },
         {
