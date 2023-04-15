@@ -177,13 +177,13 @@ const LoadingSheetUpdate = (props) => {
 
     function makeBtnFunc(e, row) {
 
-        var { CustomerID, InvoiceNumber } = row
+        var { CustomerID, id } = row
 
         try {
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
-                InvoiceID: (InvoiceNumber).toString()
+                InvoiceID: (id).toString()
             });
 
             const jsonBody1 = JSON.stringify({
@@ -313,7 +313,7 @@ const LoadingSheetUpdate = (props) => {
             InvoiceID: LoadingNumber
         });
         const body = { jsonBody }
-debugger
+
         if (LoadingNumber === ",") {
             CustomAlert({
                 Type: 3,
