@@ -33,6 +33,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { setISODay } from "date-fns";
 
 const Receipts = (props) => {
 
@@ -53,6 +54,7 @@ const Receipts = (props) => {
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
+    const [ID, setID] = useState("");
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -153,6 +155,7 @@ const Receipts = (props) => {
                 const { id, CustomerID, Customer,
                     Description, ReceiptMode, ReceiptModeName,
                     Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
+                setID(id)
                 setState((i) => {
                     i.values.Customer = { value: CustomerID, label: Customer }
                     i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
@@ -168,7 +171,12 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
-                document.getElementById("AmountPaid").value = AmountPaid
+                if (AmountPaid === undefined) {
+                    document.getElementById("AmountPaid").value = 0
+                }
+                else {
+                    document.getElementById("AmountPaid").value = AmountPaid
+                }
                 AmountPaidDistribution(AmountPaid);
             }
         }
@@ -312,12 +320,6 @@ const Receipts = (props) => {
         },
     ];
 
-    const pageOptions = {
-        // sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
-
     // Customer dropdown function
     function CustomerOnChange(e) {
         debugger
@@ -329,11 +331,18 @@ const Receipts = (props) => {
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: e.value,
+            InvoiceID: ""
+        });
+
+        const jsonBody1 = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
+
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
-        dispatch(GetOpeningBalance(jsonBody));
+        dispatch(GetOpeningBalance(jsonBody1));
     }
 
     // Calculate Input box onChange Function
@@ -506,7 +515,8 @@ const Receipts = (props) => {
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
             PaidAmount: index.Calculate,
-            flag: 0
+            flag: 0,
+            Payment: page_Mode === mode.modeSTPsave ? ID : ""
         }))
 
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
@@ -825,10 +835,7 @@ const Receipts = (props) => {
 
                         </div>
 
-                        {/* <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => ( */}
+
                         <ToolkitProvider
 
                             keyField="id"
@@ -849,29 +856,17 @@ const Receipts = (props) => {
                                             headerWrapperClasses={"thead-light"}
 
                                             {...toolkitProps.baseProps}
-                                        // {...paginationTableProps}
+
                                         />
 
-                                        {/* {countlabelFunc(toolkitProps, "", dispatch, "Receipt")} */}
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
 
-                                    {/* <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row> */}
                                 </React.Fragment>
                             )
                             }
                         </ToolkitProvider>
-                        {/* )
-                            }
-
-                        </PaginationProvider> */}
-
+                     
                         {Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>

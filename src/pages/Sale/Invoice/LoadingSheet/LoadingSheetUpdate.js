@@ -40,6 +40,7 @@ import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import data from "./data.json";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
+import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
 
 
 
@@ -72,22 +73,18 @@ const LoadingSheetUpdate = (props) => {
         // updateMsg,
         pageField,
         userAccess,
-        VehicleNumber,
-        RoutesList,
         List,
-        Driver
+        makeReceipt,
+        OpeningBalance
     } = useSelector((state) => ({
         postMsg: state.LoadingSheetReducer.postMsg,
         List: state.LoadingSheetReducer.LoadingSheetUpdate,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        VehicleNumber: state.VehicleReducer.VehicleList,
-        RoutesList: state.RoutesReducer.RoutesList,
-        Driver: state.DriverReducer.DriverList,
+        makeReceipt: state.ReceiptReducer.ReceiptGoButton,
+        OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
-
-
 
     const location = { ...history.location }
     // const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -96,7 +93,7 @@ const LoadingSheetUpdate = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-const {InvoiceParent=[],PartyDetails}=List
+    const { InvoiceParent = [], PartyDetails } = List
 
     // const { fromdate, todate, Date } = orderlistFilter;
 
@@ -164,6 +161,41 @@ const {InvoiceParent=[],PartyDetails}=List
         }
     }, [pageField])
 
+    useEffect(() => {
+        debugger
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
+
+            history.push({
+                pathname: makeReceipt.path,
+                pageMode: makeReceipt.pageMode,
+                editValue: makeReceipt.ListData,
+            })
+        }
+    }, [makeReceipt, OpeningBalance])
+
+    function makeBtnFunc(e, row) {
+        
+        var { CustomerID, InvoiceNumber } = row
+
+        try {
+            const jsonBody = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                InvoiceID: InvoiceNumber
+            });
+
+            const jsonBody1 = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                ReceiptDate: currentDate
+            });
+            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: row }
+            dispatch(ReceiptGoButtonMaster(body));
+            dispatch(GetOpeningBalance(jsonBody1));
+
+        } catch (e) { }
+    }
 
     const pagesListColumns = [
         {
@@ -176,7 +208,7 @@ const {InvoiceParent=[],PartyDetails}=List
         },
         {
             text: "Customer Name",
-            dataField: "CustomerName",
+            dataField: "Customer",
         },
         {
             text: "Amount",
@@ -204,22 +236,20 @@ const {InvoiceParent=[],PartyDetails}=List
             text: "Action",
             dataField: "",
             formatter: (cellContent, row) => {
+
                 return (<span style={{ justifyContent: 'center' }}>
                     <Button
                         type="button"
                         id={`btn-makeBtn-${row.id}`}
                         className={makeBtnCss}
-                    // title={makeBtnName}
-                    // onClick={() => {
-                    //     // const btnId = `btn-makeBtn-${rowData.id}`
-                    //     makeBtnHandler(rowData, btnId)
-                    // }}
+                        onClick={(e) => {
+                            makeBtnFunc(e, row)
+                        }}
                     >
                         <span style={{ marginLeft: "6px", marginRight: "6px" }}
                             className=" fas fa-file-invoice" ></span> </Button></span>)
             }
         }
-
 
     ];
 

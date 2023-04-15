@@ -7,7 +7,7 @@ import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
 function* ReceiptGoButtonGenFunc({ Data }) {
-  
+  debugger
   const { ListData, jsonBody, path, pageMode } = Data
   try {
 

@@ -289,7 +289,7 @@ const PaymentEntryList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print,ReportType, row.id))
+        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
     }
 
     const makeBtnFunc = (list = []) => {
@@ -300,11 +300,18 @@ const PaymentEntryList = () => {
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
+                InvoiceID: ""
+            });
+
+            const jsonBody1 = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
                 ReceiptDate: ReceiptDate
             });
+
             const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }
             dispatch(ReceiptGoButtonMaster(body));
-            dispatch(GetOpeningBalance(jsonBody));
+            dispatch(GetOpeningBalance(jsonBody1));
 
         } catch (e) { }
     }
