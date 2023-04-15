@@ -18,7 +18,7 @@ const INIT_STATE = {
   postMsg: { Status: false },
   ReceiptType: [],
   deleteMsg: { Status: false },
-  OpeningBalance: [],
+  OpeningBalance: '',
   bankList: [],
   receiptlistFilters: { fromdate: currentDate, todate: currentDate, Customer: { value: '', label: "All" } },
   paymentEntrylistFilters: { fromdate: currentDate, todate: currentDate, Customer: { value: '', label: "All" } }

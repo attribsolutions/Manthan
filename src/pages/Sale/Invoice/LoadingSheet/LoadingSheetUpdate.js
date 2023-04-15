@@ -31,7 +31,7 @@ import * as mode from "../../../../routes/PageMode";
 import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
 import { invoiceListGoBtnfilter } from "../../../../store/Sales/Invoice/action";
 import { getVehicleList } from "../../../../store/Administrator/VehicleRedux/action";
-import { LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheetListAction, LoadingSheetListActionSuccess, LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -39,6 +39,9 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
 import data from "./data.json";
+import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
+import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
+
 
 
 const LoadingSheetUpdate = (props) => {
@@ -70,35 +73,18 @@ const LoadingSheetUpdate = (props) => {
         // updateMsg,
         pageField,
         userAccess,
-        VehicleNumber,
-        RoutesList,
-        GoButton,
-        Driver
+        List,
+        makeReceipt,
+        OpeningBalance
     } = useSelector((state) => ({
         postMsg: state.LoadingSheetReducer.postMsg,
-        GoButton: state.LoadingSheetReducer.goBtnLoadingSheet,
+        List: state.LoadingSheetReducer.LoadingSheetUpdate,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        VehicleNumber: state.VehicleReducer.VehicleList,
-        RoutesList: state.RoutesReducer.RoutesList,
-        Driver: state.DriverReducer.DriverList,
+        makeReceipt: state.ReceiptReducer.ReceiptGoButton,
+        OpeningBalance: state.ReceiptReducer.OpeningBalance,
     }));
-
-    debugger
-
-
-    // const { fromdate, todate, Date } = orderlistFilter;
-    const { Data = [] } = GoButton;
-
-
-    useEffect(() => {
-        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
-        const page_Id = pageId.LOADING_SHEET
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-
-    }, []);
 
     const location = { ...history.location }
     // const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -107,6 +93,17 @@ const LoadingSheetUpdate = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+    const { InvoiceParent = [], PartyDetails } = List
+
+    // const { fromdate, todate, Date } = orderlistFilter;
+
+    useEffect(() => {
+        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
+        const page_Id = pageId.LOADING_SHEET
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -164,42 +161,58 @@ const LoadingSheetUpdate = (props) => {
         }
     }, [pageField])
 
+    useEffect(() => {
+        
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
 
+            history.push({
+                pathname: makeReceipt.path,
+                pageMode: makeReceipt.pageMode,
+                editValue: makeReceipt.ListData,
+            })
+        }
+    }, [makeReceipt, OpeningBalance])
 
+    function makeBtnFunc(e, row) {
 
+        var { CustomerID, InvoiceNumber } = row
 
+        try {
+            const jsonBody = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                InvoiceID: (InvoiceNumber).toString()
+            });
 
+            const jsonBody1 = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                ReceiptDate: currentDate
+            });
+            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: row }
+            dispatch(ReceiptGoButtonMaster(body));
+            dispatch(GetOpeningBalance(jsonBody1));
 
-
-    function SelectAll(event, row, key) {
-
-        const arr = []
-        Data.forEach(ele => {
-            if (ele.id === row.id) {
-                ele.Check = event
-            }
-            arr.push(ele)
-        })
-        setArray(arr)
-
+        } catch (e) { }
     }
 
     const pagesListColumns = [
         {
             text: "Bill Date",
-            dataField: "BillDate",
+            dataField: "InvoiceDate",
         },
         {
             text: "Bill NO",
-            dataField: "BillNO",
+            dataField: "FullInvoiceNumber",
         },
         {
             text: "Customer Name",
-            dataField: "CustomerName",
+            dataField: "Customer",
         },
         {
             text: "Amount",
-            dataField: "Amount",
+            dataField: "GrandTotal",
         },
         {
             text: "Select All",
@@ -213,7 +226,7 @@ const LoadingSheetUpdate = (props) => {
                         defaultChecked={row.Check}
                         type="checkbox"
                         className="col col-sm text-center"
-                        onChange={e => { SelectAll(e.target.checked, row, key) }}
+                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
                     />
                 </span>)
             }
@@ -221,24 +234,28 @@ const LoadingSheetUpdate = (props) => {
 
         {
             text: "Action",
-            dataField: "Check",
-            formatter: () => {
+            dataField: "",
+            formatter: (cellContent, row) => {
 
-
-                < Button >
-                </Button>
-
-
-
+                return (<span style={{ justifyContent: 'center' }}>
+                    <Button
+                        type="button"
+                        id={`btn-makeBtn-${row.id}`}
+                        className={makeBtnCss}
+                        onClick={(e) => {
+                            makeBtnFunc(e, row)
+                        }}
+                    >
+                        <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                            className=" fas fa-file-invoice" ></span> </Button></span>)
             }
         }
-
 
     ];
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: Data.length,
+        // totalSize: Data.length,
         custom: true,
     };
 
@@ -246,9 +263,6 @@ const LoadingSheetUpdate = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id
-
-
-
 
 
         try {
@@ -277,6 +291,7 @@ const LoadingSheetUpdate = (props) => {
             return a
         })
     }
+    //    console.log(List.Data.InvoiceParent)
 
     if (!(userPageAccessState === '')) {
         return (
@@ -284,7 +299,7 @@ const LoadingSheetUpdate = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                 <div id="id1"></div>
+                    <div id="id1"></div>
 
 
                     <form noValidate>
@@ -332,6 +347,7 @@ const LoadingSheetUpdate = (props) => {
 
                         </div>
 
+
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
                         >
@@ -339,7 +355,7 @@ const LoadingSheetUpdate = (props) => {
                                 <ToolkitProvider
 
                                     keyField="id"
-                                    data={data}
+                                    data={InvoiceParent}
                                     columns={pagesListColumns}
 
                                     search
@@ -378,19 +394,19 @@ const LoadingSheetUpdate = (props) => {
 
                         </PaginationProvider>
                         {
-                            Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            onClick={saveHandeller}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"LoadingSheet"}
-                                        />
+                            // Data.length > 0 ?
+                            <FormGroup>
+                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                                    <SaveButton pageMode={pageMode}
+                                        onClick={saveHandeller}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                        module={"LoadingSheet"}
+                                    />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                                </Col>
+                            </FormGroup >
+                            // : null
                         }
 
                     </form >
@@ -406,39 +422,6 @@ const LoadingSheetUpdate = (props) => {
 };
 
 export default LoadingSheetUpdate
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

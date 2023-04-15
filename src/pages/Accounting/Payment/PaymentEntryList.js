@@ -72,8 +72,8 @@ const PaymentEntryList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType = [], makeReceipt } = reducers;
-  
+    const { userAccess, pageField, RetailerList, ReceiptType = [], makeReceipt, OpeningBalance } = reducers;
+
     const values = { ...state.values }
 
     const action = {
@@ -131,19 +131,18 @@ const PaymentEntryList = () => {
 
     }, []);
 
-    // Featch Modules List data  First Rendering
     useEffect(() => {
-        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200)) {
-            // dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
-            // dispatch(GetOpeningBalance_Success({ Status: false }))
+        
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+            dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
+
             history.push({
                 pathname: makeReceipt.path,
                 pageMode: makeReceipt.pageMode,
                 editValue: makeReceipt.ListData,
-                // Data: makeReceipt.Data
             })
         }
-    }, [makeReceipt])
+    }, [makeReceipt, OpeningBalance])
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY_LIST
@@ -178,7 +177,6 @@ const PaymentEntryList = () => {
             ReceiptType: ReceiptTypeID.id,
         });
         dispatch(ReceiptListAPI(jsonBody, subPageMode));
-        // dispatch(GetOpeningBalance(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
@@ -291,22 +289,29 @@ const PaymentEntryList = () => {
 
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print,ReportType, row.id))
+        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+        
         var { CustomerID, ReceiptDate } = list[0]
 
         try {
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
+                InvoiceID: ""
+            });
+
+            const jsonBody1 = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
                 ReceiptDate: ReceiptDate
             });
+
             const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }
             dispatch(ReceiptGoButtonMaster(body));
-            dispatch(GetOpeningBalance(jsonBody));
+            dispatch(GetOpeningBalance(jsonBody1));
 
         } catch (e) { }
     }

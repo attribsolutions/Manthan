@@ -133,17 +133,6 @@ const Order = (props) => {
         PartyList: state.PartyMasterReducer.partyList
     }));;
 
-    useEffect(() => {
-
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_id))
-        dispatch(GoButton_For_Order_AddSuccess(null))
-        dispatch(GetVenderSupplierCustomer(subPageMode,RoleID))
-        dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
-        dispatch(getOrderType())
-        dispatch(getPartyListAPI())
-    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
@@ -154,14 +143,27 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
+
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_id))
+        dispatch(GoButton_For_Order_AddSuccess(null))
+        dispatch(GetVenderSupplierCustomer(subPageMode, RoleID))
+        dispatch(getTermAndCondition())
+        dispatch(getOrderType())
+        dispatch(getPartyListAPI())
+        if (!subPageMode === url.ORDER_4) {
+            dispatch(getSupplierAddress(loginPartyID()))
+        }
+    }, []);
+
+    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-    // userAccess useEffect
-    useEffect(() => {
+    useEffect(() => {  // userAccess useEffect
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -183,7 +185,7 @@ const Order = (props) => {
         };
     }, [userAccess]);
 
-    useEffect(() => {
+    useEffect(() => { // hasEditVal useEffect
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -307,29 +309,6 @@ const Order = (props) => {
             })
         }
     }, [updateMsg, modalCss]);
-
-    function val_onChange(val, row, type) {
-
-        if (type === "qty") {
-            row["Quantity"] = val;
-        }
-        else {
-            row["Rate"] = val
-        }
-
-        row["Amount"] = Amount(row)
-
-        let sum = 0
-        orderItemTable.forEach(ind => {
-            if (ind.Amount === null) {
-                ind.Amount = 0
-            }
-            var amt = parseFloat(ind.Amount)
-            sum = sum + amt
-        });
-        setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
-    };
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
@@ -551,6 +530,29 @@ const Order = (props) => {
         custom: true,
     };
 
+    function val_onChange(val, row, type) {
+
+        if (type === "qty") {
+            row["Quantity"] = val;
+        }
+        else {
+            row["Rate"] = val
+        }
+
+        row["Amount"] = Amount(row)
+
+        let sum = 0
+        orderItemTable.forEach(ind => {
+            if (ind.Amount === null) {
+                ind.Amount = 0
+            }
+            var amt = parseFloat(ind.Amount)
+            sum = sum + amt
+        });
+        setOrderAmount(sum.toFixed(2))
+        dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :${sum.toFixed(2)}`))
+    };
+
     const goButtonHandler = async () => {
 
         if (!supplierSelect > 0) {
@@ -562,6 +564,9 @@ const Order = (props) => {
         }
         dispatch(BreadcrumbShowCountlabel(`${"Order Amount"} :0:00`))
 
+        if (subPageMode === url.ORDER_4) {
+            dispatch(getSupplierAddress(supplierSelect.value))
+        }
         const jsonBody = JSON.stringify({
             Party: supplierSelect.value,
             Customer: loginPartyID(),
@@ -584,7 +589,7 @@ const Order = (props) => {
         setCard(true)
         setPartySelect(e)
         // if(RoleID === 2 && !partySelect.length === 0){
-            
+
         // }
     };
 
@@ -861,224 +866,224 @@ const Order = (props) => {
                         </div>
                         : null}
 
-                  
-                        <div>
-                            <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-                                <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
-                                    <Col sm="6">                                              {/* Order Date*/}
-                                        <FormGroup className=" row mt-3 " >
-                                            <Label className="col-sm-5 p-2"
-                                                style={{ width: "115px" }}>Order Date</Label>
-                                            <Col sm="6">
-                                                <Flatpickr
-                                                    style={{ userselect: "all" }}
-                                                    id="orderdate"
-                                                    name="orderdate"
-                                                    value={orderdate}
-                                                    disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                    className="form-control d-block p-2 bg-white text-dark"
-                                                    placeholder="Select..."
-                                                    options={{
-                                                        // altInput: true,
-                                                        altFormat: "d-m-Y",
-                                                        dateFormat: "Y-m-d",
-                                                    }}
-                                                    onChange={orderdateOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
 
-
-                                    <Col sm="6">                                              {/*Supplier Name And Go_Button*/}                                <FormGroup className="mb-1 row mt-3 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
+                    <div>
+                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
+                            <div className=" mt-1 row ">                                  {/* Order Date And Supplier Name,Go_Button*/}
+                                <Col sm="6">                                              {/* Order Date*/}
+                                    <FormGroup className=" row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "115px" }}>Order Date</Label>
                                         <Col sm="6">
-                                            <Select
-                                                value={supplierSelect}
-                                                classNamePrefix="select2-Customer"
-                                                isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                options={supplierOptions}
-                                                onChange={supplierOnchange}
+                                            <Flatpickr
+                                                style={{ userselect: "all" }}
+                                                id="orderdate"
+                                                name="orderdate"
+                                                value={orderdate}
+                                                disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    // altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                                onChange={orderdateOnchange}
                                             />
                                         </Col>
-                                        <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
-                                            {pageMode === mode.defaultsave ?
-                                                (orderItemTable.length === 0) ?
-                                                    < Go_Button onClick={(e) => goButtonHandler()} />
-                                                    :
-                                                    <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
-                                                : null
-                                            }
-                                        </Col>
                                     </FormGroup>
-                                    </Col >
-
-                                </div>
-                            </div>
-
-                            <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
-                                <div className="row">                                         {/*  Description and Delivery Date  field */}
-                                    <div className="col col-6">                               {/*  Description field */}
-                                        <FormGroup className=" row  mt-3" >
-                                            <Label className="   p-2"
-                                                style={{ width: "115px" }}>Description</Label>
-                                            <div className="col-6">
-                                                <Input type="text"
-                                                    value={description}
-                                                    placeholder='Enter Order Description'
-                                                    onChange={e => setDescription(e.target.value)}
-                                                />
-
-                                            </div>
-
-                                        </FormGroup>
-                                    </div >
-
-                                    {!(subPageMode === url.IB_ORDER) ?
-                                        <div className="col col-6" >                            {/*  Delivery Date field */}
-                                            <FormGroup className=" row mt-3 " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "130px" }}>Delivery Date</Label>
-                                                <div className="col col-6 sm-1">
-                                                    <Flatpickr
-                                                        id="deliverydate"
-                                                        name="deliverydate"
-                                                        value={deliverydate}
-                                                        disabled={pageMode === "edit" ? true : false}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="Select..."
-                                                        options={{
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
-                                                        onChange={(e, date) => { setdeliverydate(date) }}
-                                                    />
-                                                </div>
-
-                                            </FormGroup>
-                                        </div > : null}
-
-                                </div>
-
-                                {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
-                                    <div className="row  ">
-
-                                        <div className="col col-6">                             {/* Billing Address */}
-                                            <FormGroup className="row  " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "115px" }}>Billing Address</Label>
-                                                <div className="col col-6">
-                                                    <Select
-                                                        value={billAddr}
-                                                        classNamePrefix="select2-Customer"
-
-                                                        options={supplierAddress}
-                                                        styles={{
-                                                            control: base => ({
-                                                                ...base,
-                                                                border: 'non',
-                                                            })
-                                                        }}
-                                                        onChange={(e) => { setbillAddr(e) }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-
-                                        <div className="col col-6">                               {/*  Billing Shipping Address */}
-                                            <FormGroup className=" row " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "130px" }}>Shipping Address</Label>
-                                                <div className="col col-6">
-                                                    <Select
-                                                        value={shippAddr}
-                                                        classNamePrefix="select2-Customer"
-                                                        styles={{
-                                                            control: base => ({
-                                                                ...base,
-                                                                border: 'non',
-                                                            })
-                                                        }}
-                                                        options={supplierAddress}
-                                                        onChange={(e) => { setshippAddr(e) }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-                                    </div>
-
-                                    <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
-                                        <div className="col col-6" >                              {/**PO Type */}
-                                            <FormGroup className=" row  " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "115px" }}>PO Type</Label>
-                                                <div className="col col-6 ">
-                                                    <Select
-                                                        value={orderTypeSelect}
-                                                        classNamePrefix="select2-Customer"
-                                                        options={orderTypeOptions}
-                                                        onChange={(e) => { setorderTypeSelect(e) }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-                                    </div>
+                                </Col>
 
 
-                                    {(orderTypeSelect.label === 'Open PO') ?
-                                        <div className="row" >                                    {/*PO From Date */}
-                                            <div className="col col-6" >
-                                                <FormGroup className=" row " >
-                                                    <Label className=" p-2"
-                                                        style={{ width: "115px" }}>PO From Date</Label>
-                                                    <div className="col col-6 ">
-                                                        <Flatpickr
-                                                            id="pofromdate"
-                                                            name="pofromdate"
-                                                            value={poFromDate}
-                                                            className="form-control d-block p-2 bg-white text-dark"
-                                                            placeholder="Select..."
-                                                            options={{
-                                                                altInput: true,
-                                                                altFormat: "d-m-Y",
-                                                                dateFormat: "Y-m-d",
-                                                            }}
-                                                            onChange={(e, date) => { setpoFromDate(date) }}
-                                                        />
-                                                    </div>
-                                                </FormGroup>
-                                            </div >
-
-                                            <div className="col col-6" >                        {/*PO To Date */}
-                                                <FormGroup className=" row  " >
-                                                    <Label className=" p-2"
-                                                        style={{ width: "130px" }}>PO To Date</Label>
-                                                    <div className="col col-6 ">
-                                                        <Flatpickr
-                                                            id="potodate"
-                                                            name="potodate"
-                                                            value={poToDate}
-                                                            className="form-control d-block p-2 bg-white text-dark"
-                                                            placeholder="Select..."
-                                                            options={{
-                                                                altInput: true,
-                                                                altFormat: "d-m-Y",
-                                                                dateFormat: "Y-m-d",
-                                                            }}
-                                                            onChange={(e, date) => { setpoToDate(date) }}
-                                                        />
-                                                    </div>
-                                                </FormGroup>
-                                            </div >
-                                        </div> : null}
-                                </div>
-                                    : null}
+                                <Col sm="6">                                              {/*Supplier Name And Go_Button*/}                                <FormGroup className="mb-1 row mt-3 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Supplier}</Label>
+                                    <Col sm="6">
+                                        <Select
+                                            value={supplierSelect}
+                                            classNamePrefix="select2-Customer"
+                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
+                                            options={supplierOptions}
+                                            onChange={supplierOnchange}
+                                        />
+                                    </Col>
+                                    <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
+                                        {pageMode === mode.defaultsave ?
+                                            (orderItemTable.length === 0) ?
+                                                < Go_Button onClick={(e) => goButtonHandler()} />
+                                                :
+                                                <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
+                                            : null
+                                        }
+                                    </Col>
+                                </FormGroup>
+                                </Col >
 
                             </div>
                         </div>
 
-                      
+                        <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
+                            <div className="row">                                         {/*  Description and Delivery Date  field */}
+                                <div className="col col-6">                               {/*  Description field */}
+                                    <FormGroup className=" row  mt-3" >
+                                        <Label className="   p-2"
+                                            style={{ width: "115px" }}>Description</Label>
+                                        <div className="col-6">
+                                            <Input type="text"
+                                                value={description}
+                                                placeholder='Enter Order Description'
+                                                onChange={e => setDescription(e.target.value)}
+                                            />
+
+                                        </div>
+
+                                    </FormGroup>
+                                </div >
+
+                                {!(subPageMode === url.IB_ORDER) ?
+                                    <div className="col col-6" >                            {/*  Delivery Date field */}
+                                        <FormGroup className=" row mt-3 " >
+                                            <Label className=" p-2"
+                                                style={{ width: "130px" }}>Delivery Date</Label>
+                                            <div className="col col-6 sm-1">
+                                                <Flatpickr
+                                                    id="deliverydate"
+                                                    name="deliverydate"
+                                                    value={deliverydate}
+                                                    disabled={pageMode === "edit" ? true : false}
+                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                    placeholder="Select..."
+                                                    options={{
+                                                        altFormat: "d-m-Y",
+                                                        dateFormat: "Y-m-d",
+                                                    }}
+                                                    onChange={(e, date) => { setdeliverydate(date) }}
+                                                />
+                                            </div>
+
+                                        </FormGroup>
+                                    </div > : null}
+
+                            </div>
+
+                            {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
+                                <div className="row  ">
+
+                                    <div className="col col-6">                             {/* Billing Address */}
+                                        <FormGroup className="row  " >
+                                            <Label className=" p-2"
+                                                style={{ width: "115px" }}>Billing Address</Label>
+                                            <div className="col col-6">
+                                                <Select
+                                                    value={billAddr}
+                                                    classNamePrefix="select2-Customer"
+
+                                                    options={supplierAddress}
+                                                    styles={{
+                                                        control: base => ({
+                                                            ...base,
+                                                            border: 'non',
+                                                        })
+                                                    }}
+                                                    onChange={(e) => { setbillAddr(e) }}
+                                                />
+                                            </div>
+                                        </FormGroup>
+                                    </div >
+
+                                    <div className="col col-6">                               {/*  Billing Shipping Address */}
+                                        <FormGroup className=" row " >
+                                            <Label className=" p-2"
+                                                style={{ width: "130px" }}>Shipping Address</Label>
+                                            <div className="col col-6">
+                                                <Select
+                                                    value={shippAddr}
+                                                    classNamePrefix="select2-Customer"
+                                                    styles={{
+                                                        control: base => ({
+                                                            ...base,
+                                                            border: 'non',
+                                                        })
+                                                    }}
+                                                    options={supplierAddress}
+                                                    onChange={(e) => { setshippAddr(e) }}
+                                                />
+                                            </div>
+                                        </FormGroup>
+                                    </div >
+                                </div>
+
+                                <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
+                                    <div className="col col-6" >                              {/**PO Type */}
+                                        <FormGroup className=" row  " >
+                                            <Label className=" p-2"
+                                                style={{ width: "115px" }}>PO Type</Label>
+                                            <div className="col col-6 ">
+                                                <Select
+                                                    value={orderTypeSelect}
+                                                    classNamePrefix="select2-Customer"
+                                                    options={orderTypeOptions}
+                                                    onChange={(e) => { setorderTypeSelect(e) }}
+                                                />
+                                            </div>
+                                        </FormGroup>
+                                    </div >
+                                </div>
+
+
+                                {(orderTypeSelect.label === 'Open PO') ?
+                                    <div className="row" >                                    {/*PO From Date */}
+                                        <div className="col col-6" >
+                                            <FormGroup className=" row " >
+                                                <Label className=" p-2"
+                                                    style={{ width: "115px" }}>PO From Date</Label>
+                                                <div className="col col-6 ">
+                                                    <Flatpickr
+                                                        id="pofromdate"
+                                                        name="pofromdate"
+                                                        value={poFromDate}
+                                                        className="form-control d-block p-2 bg-white text-dark"
+                                                        placeholder="Select..."
+                                                        options={{
+                                                            altInput: true,
+                                                            altFormat: "d-m-Y",
+                                                            dateFormat: "Y-m-d",
+                                                        }}
+                                                        onChange={(e, date) => { setpoFromDate(date) }}
+                                                    />
+                                                </div>
+                                            </FormGroup>
+                                        </div >
+
+                                        <div className="col col-6" >                        {/*PO To Date */}
+                                            <FormGroup className=" row  " >
+                                                <Label className=" p-2"
+                                                    style={{ width: "130px" }}>PO To Date</Label>
+                                                <div className="col col-6 ">
+                                                    <Flatpickr
+                                                        id="potodate"
+                                                        name="potodate"
+                                                        value={poToDate}
+                                                        className="form-control d-block p-2 bg-white text-dark"
+                                                        placeholder="Select..."
+                                                        options={{
+                                                            altInput: true,
+                                                            altFormat: "d-m-Y",
+                                                            dateFormat: "Y-m-d",
+                                                        }}
+                                                        onChange={(e, date) => { setpoToDate(date) }}
+                                                    />
+                                                </div>
+                                            </FormGroup>
+                                        </div >
+                                    </div> : null}
+                            </div>
+                                : null}
+
+                        </div>
+                    </div>
+
+
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider

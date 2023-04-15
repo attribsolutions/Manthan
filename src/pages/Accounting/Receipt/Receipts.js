@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import Flatpickr from "react-flatpickr"
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { AlertState, BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -33,16 +33,12 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { setISODay } from "date-fns";
 
 const Receipts = (props) => {
-    debugger
+
     const history = useHistory()
     const dispatch = useDispatch();
-
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         ReceiptDate: currentDate,
@@ -56,8 +52,12 @@ const Receipts = (props) => {
         Description: "",
         ChequeDate: currentDate,
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [modalCss, setModalCss] = useState(false);
+    const [ID, setID] = useState("");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -80,8 +80,16 @@ const Receipts = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const { Data = [] } = ReceiptGoButton
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
+    const location = { ...history.location }
+    const page_Mode = location.pageMode
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const { Data = [] } = ReceiptGoButton
     const { OpeningBalanceAmount = '' } = OpeningBalance
 
     useEffect(() => {
@@ -89,10 +97,11 @@ const Receipts = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(BankListAPI())
-        // dispatch(ReceiptGoButtonMaster_Success([]))
-        // dispatch(GetOpeningBalance_Success([]))
-
     }, []);
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Receipt Count :${Data.length}`))
+    }, [ReceiptGoButton]);
 
     // Customer dropdown Options
     useEffect(() => {
@@ -122,17 +131,8 @@ const Receipts = (props) => {
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-
     useEffect(() => {
-        debugger
+       
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -142,7 +142,6 @@ const Receipts = (props) => {
                 insidePageMode = location.pageMode;
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
-                Data = location.Data
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
@@ -156,7 +155,7 @@ const Receipts = (props) => {
                 const { id, CustomerID, Customer,
                     Description, ReceiptMode, ReceiptModeName,
                     Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
-                // setAmountPaid(AmountPaid)
+                setID(id)
                 setState((i) => {
                     i.values.Customer = { value: CustomerID, label: Customer }
                     i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
@@ -172,13 +171,19 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
+                if (AmountPaid === undefined) {
+                    document.getElementById("AmountPaid").value = 0
+                }
+                else {
+                    document.getElementById("AmountPaid").value = AmountPaid
+                }
                 AmountPaidDistribution(AmountPaid);
-
-                // dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
-                // dispatch(GetOpeningBalance_Success({ Status: false }))
             }
         }
-
+        else {
+            dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
+            dispatch(GetOpeningBalance_Success(''))
+        }
     }, [])
 
     useEffect(() => {
@@ -299,6 +304,7 @@ const Receipts = (props) => {
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
                         defaultValue={row.Calculate}
+                        disabled={page_Mode === mode.modeSTPsave ? true : false}
                         // value={row.Calculate}
                         // type="text"
                         autoComplete="off"
@@ -314,15 +320,9 @@ const Receipts = (props) => {
         },
     ];
 
-    const pageOptions = {
-        // sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
-
     // Customer dropdown function
     function CustomerOnChange(e) {
-        debugger
+       
         setState((i) => {
             i.values.AmountPaid = 0
             i.hasValid.AmountPaid.valid = true;
@@ -331,16 +331,23 @@ const Receipts = (props) => {
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: e.value,
+            InvoiceID: ""
+        });
+
+        const jsonBody1 = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
+
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
-        dispatch(GetOpeningBalance(jsonBody));
+        dispatch(GetOpeningBalance(jsonBody1));
     }
 
     // Calculate Input box onChange Function
     function CalculateOnchange(event, row, key) {
-        debugger
+       
         let input = event.target.value
         let result = /^\d*(\.\d{0,2})?$/.test(input);
         let val1 = 0;
@@ -349,11 +356,11 @@ const Receipts = (props) => {
             let v2 = Number(input)
             if (v1 >= v2) { val1 = input }
             else { val1 = v1 };
-
         }
         else if (result === false) {
             val1 = row.Calculate
         }
+
         else {
             val1 = 0
         }
@@ -368,11 +375,11 @@ const Receipts = (props) => {
 
         const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
 
-        // let sum1 = document.getElementById("AmountPaid").value = sum.toFixed(2)
+        let sum1 = document.getElementById("AmountPaid").value = sum.toFixed(2)
 
         setState((i) => {
             let a = { ...i }
-            a.values.AmountPaid = sum.toFixed(2)
+            a.values.AmountPaid = sum1
             a.hasValid.AmountPaid.valid = true;
             return a
         })
@@ -380,7 +387,7 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event, state) {
-        debugger
+
         let input = event.target.value
 
         let result = /^\d*(\.\d{0,2})?$/.test(input);
@@ -411,13 +418,12 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-        debugger
         let value = Number(val1)
 
         let Amount = value
 
         Data.map((index) => {
-            debugger
+
             let amt = Number(index.BalanceAmount)
             if ((Amount > amt) && !(amt === 0)) {
 
@@ -468,9 +474,21 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+       
         event.preventDefault();
         const btnId = event.target.id;
+
+        if (values.ReceiptModeName.value === undefined) {
+
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "ReceiptMode Is Required",
+                })
+            );
+            return;
+        }
 
         if (values.ReceiptModeName.label === "Cheque") {
             const invalidMsg1 = []
@@ -509,7 +527,8 @@ const Receipts = (props) => {
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
             PaidAmount: index.Calculate,
-            flag: 0
+            flag: 0,
+            Payment: page_Mode === mode.modeSTPsave ? ID : ""
         }))
 
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
@@ -576,6 +595,7 @@ const Receipts = (props) => {
                                             <Flatpickr
                                                 name='ReceiptDate'
                                                 value={values.ReceiptDate}
+                                                // disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -599,6 +619,7 @@ const Receipts = (props) => {
                                         <Col sm="7">
                                             <Select
                                                 name="Customer"
+                                                isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
@@ -645,6 +666,7 @@ const Receipts = (props) => {
                                                 id="ReceiptModeName "
                                                 name="ReceiptModeName"
                                                 value={values.ReceiptModeName}
+                                                isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -654,9 +676,10 @@ const Receipts = (props) => {
                                                     ReceiptModeOnchange(hasSelect)
                                                 }}
                                             />
-                                            {isError.ReceiptModeName.length > 0 && (
+
+                                            {(isError.ReceiptModeName.length > 0) && (values.ReceiptModeName.value === undefined) ? (
                                                 <span className="text-danger f-8"><small>{isError.ReceiptModeName}</small></span>
-                                            )}
+                                            ) : <></>}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -672,6 +695,7 @@ const Receipts = (props) => {
                                                 <Select
                                                     name="BankName"
                                                     value={values.BankName}
+                                                    isDisabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -696,6 +720,7 @@ const Receipts = (props) => {
                                                 <Select
                                                     name="DepositorBankName"
                                                     value={values.DepositorBankName}
+
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
@@ -726,6 +751,7 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Input
                                                     name="ChequeNo"
+                                                    disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     value={values.ChequeNo}
                                                     type="text"
                                                     className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
@@ -750,6 +776,7 @@ const Receipts = (props) => {
                                             <Col sm="7">
                                                 <Flatpickr
                                                     name='ChequeDate'
+                                                    disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                     value={values.ChequeDate}
                                                     className="form-control d-block p-2 bg-white text-dark"
                                                     placeholder="Select..."
@@ -773,11 +800,12 @@ const Receipts = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.AmountPaid}</Label>
                                         <Col sm="7">
                                             <Input
+
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                // defaultValue={values.AmountPaid}
-                                                value={values.AmountPaid}
-                                                // type="text"
+                                                defaultValue={values.AmountPaid}
+                                                // value={values.AmountPaid}
+                                                disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
@@ -800,6 +828,7 @@ const Receipts = (props) => {
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.Description}</Label>
                                         <Col sm="7">
                                             <Input
+                                                id="Description"
                                                 name="Description"
                                                 value={values.Description}
                                                 type="text"
@@ -819,10 +848,7 @@ const Receipts = (props) => {
 
                         </div>
 
-                        {/* <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
-                        >
-                            {({ paginationProps, paginationTableProps }) => ( */}
+
                         <ToolkitProvider
 
                             keyField="id"
@@ -843,27 +869,16 @@ const Receipts = (props) => {
                                             headerWrapperClasses={"thead-light"}
 
                                             {...toolkitProps.baseProps}
-                                        // {...paginationTableProps}
+
                                         />
-                                        {/* {countlabelFunc(toolkitProps, "", dispatch, "Receipt")} */}
+
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
 
-                                    {/* <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone
-                                                        {...paginationProps}
-                                                    />
-                                                </Col>
-                                            </Row> */}
                                 </React.Fragment>
                             )
                             }
                         </ToolkitProvider>
-                        {/* )
-                            }
-
-                        </PaginationProvider> */}
 
                         {Data.length > 0 ?
                             <FormGroup>

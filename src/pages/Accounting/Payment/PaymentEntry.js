@@ -219,8 +219,8 @@ const PaymentEntry = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: e.value,
-            CustomerID: loginPartyID(),
+            PartyID: loginPartyID(),
+            CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
 

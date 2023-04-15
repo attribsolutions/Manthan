@@ -14,7 +14,7 @@ import {
 import * as pageId from "../../../../routes//allPageID";
 import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { LoadingSheetListAction } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheetListAction,  UpdateLoadingSheet } from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
@@ -117,32 +117,12 @@ const LoadingSheetList = () => {
         }
     }
 
-
-
     const updateBtnFunc = (list) => {
-        
-debugger
-        
-        
+        debugger
+        dispatch(UpdateLoadingSheet(list.id));
         history.push(url.LOADING_SHEET_LIST_UPDATE,list);
 
-
-        // const jsonBody = JSON.stringify({
-        //     OrderIDs: list[0].id.toString(),
-        //     Mode: 2 // mode when challan to make GRN
-        // })
-        // dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, grnRef, path: url.GRN_ADD_1, challanNo }))
     };
-
-
-
-
-
-
-
-
-
-
 
     return (
         <React.Fragment>
