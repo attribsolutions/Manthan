@@ -168,7 +168,7 @@ const UploadExcel = (props) => {
         // },
         {
             FieldLabel: 'ID',
-            RelatedKeyField: "ID",
+            RelatedKeyField: "DistributorID",
             ValidationRegX: /^[0-9]*$/
         }
 
