@@ -9,6 +9,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr";
 import {
+    BreadcrumbShowCountlabel,
     commonPageFieldSuccess,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,6 +92,10 @@ const BulkRecipt = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         }
     }, [userAccess]);
+
+    useEffect(() => {
+        totalAmtCalculateFunc(demoData)
+    }, [demoData])
 
     const pagesListColumns = [
         {
@@ -200,23 +205,31 @@ const BulkRecipt = (props) => {
 
 
     ];
-    
-    function calculateOnChange(e, row, data = []) {
-        row.Calculate = e.target.value
 
+    function calculateOnChange(e, row, data = []) {
+
+        row.Calculate = e.target.value
         const grouped = groupBy(data, p => p.Party)
         const collection = grouped.get(row.Party)
         let addition = 0
         collection.forEach(index1 => {
             addition = addition + Number(index1.Calculate)
         })
-        collection.forEach(index1 => {
+        totalAmtCalculateFunc(data, addition, row)
+
+    }
+    function totalAmtCalculateFunc(data = [], addition = 0, row = '') {
+        let totalAmt = 0
+        data.forEach(index1 => {
+            if (!(index1.header === true)) {
+                totalAmt = Number(index1.Calculate) + totalAmt
+            }
             if (row.Party === index1.Party && index1.header === true) {
                 index1.AmountPaid = addition.toFixed(3)
                 document.getElementById(`paidAmt-${index1.id}-${index1.Party}`).innerText = index1.AmountPaid
             }
         })
-
+        dispatch(BreadcrumbShowCountlabel(`ToTal Amount :${totalAmt}`))
     }
     function SaveHandler() {
 

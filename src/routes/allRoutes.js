@@ -143,6 +143,7 @@ import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 
 import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
+import UploadExcel from "../pages/Adminisrator/ImportMaster/UploadExcel";
 
 
 const userRoutes = [
@@ -250,6 +251,7 @@ const userRoutes = [
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
   { path: path.IMPORT_MASTER, component: ImportMaster },
+  { path: path.UPLOAD_EXCEL, component: UploadExcel },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
