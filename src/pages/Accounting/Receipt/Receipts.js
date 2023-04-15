@@ -132,7 +132,7 @@ const Receipts = (props) => {
     }, []);
 
     useEffect(() => {
-       
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -322,7 +322,7 @@ const Receipts = (props) => {
 
     // Customer dropdown function
     function CustomerOnChange(e) {
-       
+
         setState((i) => {
             i.values.AmountPaid = 0
             i.hasValid.AmountPaid.valid = true;
@@ -347,7 +347,7 @@ const Receipts = (props) => {
 
     // Calculate Input box onChange Function
     function CalculateOnchange(event, row, key) {
-       
+
         let input = event.target.value
         let result = /^\d*(\.\d{0,2})?$/.test(input);
         let val1 = 0;
@@ -474,7 +474,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-       
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -535,6 +535,8 @@ const Receipts = (props) => {
             return index.PaidAmount > 0
         })
 
+        const PaymentReceipt = [{ Payment: ID }]
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
@@ -556,8 +558,10 @@ const Receipts = (props) => {
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": FilterReceiptInvoices
+                    "ReceiptInvoices": FilterReceiptInvoices,
+                    "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
                 }]
+
                 const jsonBody = JSON.stringify({
                     BulkData: BulkData
                 })

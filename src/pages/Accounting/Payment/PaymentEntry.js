@@ -277,7 +277,8 @@ const PaymentEntry = (props) => {
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": []
+                    "ReceiptInvoices": [],
+                    "PaymentReceipt": []
                 }]
 
                 const jsonBody = JSON.stringify({
