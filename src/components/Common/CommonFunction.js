@@ -1,5 +1,9 @@
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
 import { CommonBreadcrumbDetails } from "../../store/actions";
+import { createBrowserHistory } from 'history';
+
+
+export const history = createBrowserHistory();
 
 export const commonListPageDelete_UpdateMsgFunction = (props) => {
   const dispatch = props.dispatch;
@@ -277,7 +281,7 @@ export async function CheckAPIResponse({
     btnIsDissablefunc({ btnId, state: false });
   }
 
-  const { data = "" } = response;
+  const { data = "", code } = response;
   const con1 = data.StatusCode === 200;
   const con2 = data.StatusCode === 204;
   const con3 = data.StatusCode === 226; //reject
@@ -287,26 +291,30 @@ export async function CheckAPIResponse({
   const con7 = data.StatusCode === 100;
 
   if (!(error === undefined)) {
+    const { data = "", response } = error;
+    const tokenXp = response.data.code === "token_not_valid";
 
-    const { data = "" } = error;
     const err3 = data.StatusCode === 226; //reject
     const err4 = data.StatusCode === 400; //reject
     const err5 = data.StatusCode === 406; //reject);
 
     // **********************************************************************************
-    if (con6) { // print post and Put method body
+    if (con6) {                             // print post and Put method body
       console.log(`${url}***=> ${method} Body =>`, body);
     }
-    // **********************************************************************************
-
-    if (!err3 || err4 || err5) {
-      console.log(`${url}***${method} apiCall response:=>`, error);
-      await CustomAlert({
-        Type: 2,
-        Message: `${url}:This API ${method} Method Execution Error`,
-      });
-      return Promise.reject(error);
+    if (tokenXp) {
+      localStorage.clear();
+      history.go(0)
     }
+    console.log(`${url}***${method} apiCall response:=>`, error);
+    CustomAlert({
+      Type: 2,
+      Message: `${url}:This API ${method} Method Execution Error`,
+    });
+  
+   
+    return Promise.reject(error);
+    // }
   }
 
   if (con6) {// print post and Put method body
@@ -341,6 +349,13 @@ export async function CheckAPIResponse({
     await CustomAlert({ Type: 3, Message: JSON.stringify(response.Message) });
     return Promise.reject(response.data);
   }
+  // else if (con8) {
+  //   console.log(`${url}***${method} apiCall response:=>`, response.data);
+  //   window.history.push("/login")
+
+  //   return Promise.reject(response.data);
+  // }
+
 
 
   return Promise.reject(response);
