@@ -196,6 +196,5 @@ export const RECEIPTS_LIST_2 = "/Receipt_List_2"
 
 export const BULK_RECIPT = "/BulkRecipt"
 
-
 export const PAYMENT_ENTRY = "/PaymentEntry"
 export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
