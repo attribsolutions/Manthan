@@ -420,7 +420,7 @@ const BulkRecipt = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-    
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -515,57 +515,15 @@ const BulkRecipt = (props) => {
         }
     }, [postMsg])
 
+    // function CalculateOnchange(event, row, key) {
+    //     event.target.value = val1;
+    //     row.Calculate = event.target.value
 
-    // useEffect(() => {
+    // };
 
-    //     if ((hasShowloction || hasShowModal)) {
-
-    //         let hasEditVal = null
-    //         let insidePageMode = null
-    //         let Data = null
-    //         if (hasShowloction) {
-    //             insidePageMode = location.pageMode;
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props[mode.editValue]
-    //             insidePageMode = props.pageMode;
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-
-    //             const { id, CustomerID, Customer,
-    //                 Description, ReceiptMode, ReceiptModeName,
-    //                 Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
-    //             setID(id)
-    //             setState((i) => {
-    //                 i.values.Customer = { value: CustomerID, label: Customer }
-    //                 i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
-    //                 i.values.BankName = { value: Bank, label: BankName }
-    //                 i.values.Description = Description
-    //                 i.values.ChequeNo = DocumentNo
-    //                 i.values.AmountPaid = AmountPaid
-
-    //                 i.hasValid.Customer.valid = true;
-    //                 i.hasValid.AmountPaid.valid = true;
-    //                 i.hasValid.BankName.valid = true;
-    //                 i.hasValid.Description.valid = true;
-    //                 i.hasValid.ReceiptModeName.valid = true;
-    //                 return i
-    //             })
-
-    //         }
-    //     }
-    //     else {
-    //         dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
-    //         dispatch(GetOpeningBalance_Success(''))
-    //     }
-    // }, [])
 
     // userAccess useEffect
+
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
@@ -591,7 +549,7 @@ const BulkRecipt = (props) => {
             dataField: "CustomerName",
         },
         {
-            text: "Receipt Date",
+            text: "Invoice Date",
             dataField: "InvoiceDate",
         },
         {
@@ -615,27 +573,28 @@ const BulkRecipt = (props) => {
             dataField: "",
 
             formatter: (cellContent, row, key) => {
-                
+
                 return (<span style={{ justifyContent: 'center' }}>
                     <Input
                         id=""
-                        key={row.id}
+                        key={row.Invoice}
+                        disabled={true}
                         defaultValue={row.BalanceAmount}
                         className="col col-sm"
-                    // onChange={e => { checkLoading(e, row, key) }}
+                    // onChange={e => { CalculateOnchange(e, row, key) }}
                     />
                 </span>)
             }
         }
 
     ];
-    
-   
+
+
 
     const ReceiptInvoices1 = Data.map((index) => ({
         Invoice: index.Invoice,
         GrandTotal: index.GrandTotal,
-        PaidAmount: index.Calculate,
+        PaidAmount: index.BalanceAmount,
     }))
 
     const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
@@ -643,7 +602,7 @@ const BulkRecipt = (props) => {
     })
 
     const SaveHandler = (event) => {
-        
+
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -652,26 +611,26 @@ const BulkRecipt = (props) => {
             btnIsDissablefunc({ btnId, state: true })
 
             Data.forEach(i => {
-                    const arr = 
-                      {
-                        ReceiptDate: i.InvoiceDate,
-                        Description: "",
-                        AmountPaid: i.PaidAmount,
-                        BalanceAmount: i.BalanceAmount,
-                        OpeningBalanceAdjusted: "",
-                        DocumentNo: "",
-                        AdvancedAmountAjusted: "",
-                        Customer: i.Customer,
-                        ChequeDate: "",
-                        Party: loginPartyID(),
-                        ReceiptMode: 31,
-                        ReceiptType: 29,
-                        CreatedBy: loginUserID(),
-                        UpdatedBy:  loginUserID(),
-                        ReceiptInvoices:FilterReceiptInvoices,
-                        PaymentReceipt: []
-                      }
-                    
+                const arr =
+                {
+                    ReceiptDate: i.InvoiceDate,
+                    Description: "",
+                    AmountPaid: i.PaidAmount,
+                    BalanceAmount: i.BalanceAmount,
+                    OpeningBalanceAdjusted: "",
+                    DocumentNo: "",
+                    AdvancedAmountAjusted: "",
+                    Customer: i.Customer,
+                    ChequeDate: "",
+                    Party: loginPartyID(),
+                    ReceiptMode: 31,
+                    ReceiptType: 29,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    ReceiptInvoices: FilterReceiptInvoices,
+                    PaymentReceipt: []
+                }
+
                 // const arr = {
                 //     Customer: i.CustomerName,
                 //     ReceiptDate: i.InvoiceDate,
@@ -692,6 +651,7 @@ const BulkRecipt = (props) => {
                 // }
                 arr1.push(arr)
             })
+            debugger
             const jsonBody = JSON.stringify({
                 BulkData: arr1
             })
@@ -700,16 +660,13 @@ const BulkRecipt = (props) => {
                 // dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
             }
             else {
-               
-                    dispatch(saveReceiptMaster({ jsonBody, btnId }));
+
+                dispatch(saveReceiptMaster({ jsonBody, btnId }));
 
             }
             // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
-
-
 
 
 
@@ -778,11 +735,12 @@ const BulkRecipt = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>Date</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>Receipt Date</Label>
                                         <Col sm="7">
                                             <Flatpickr
                                                 name='Date'
                                                 value={values.CurrentDate}
+                                                disabled={true}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 options={{
                                                     altInput: true,
@@ -793,6 +751,15 @@ const BulkRecipt = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+                                <Col sm="3" className="">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "120px" }}>Recepiet Mode :</Label>
+                                        <Col sm="3">
+                                            <Label className=" mt-2">Cash</Label>
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
                             </div>
                         </div>
 

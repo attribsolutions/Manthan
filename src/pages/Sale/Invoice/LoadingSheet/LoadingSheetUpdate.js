@@ -313,8 +313,8 @@ const LoadingSheetUpdate = (props) => {
             InvoiceID: LoadingNumber
         });
         const body = { jsonBody }
-
-        if (LoadingNumber === ",") {
+debugger
+        if (LoadingNumber === "") {
             CustomAlert({
                 Type: 3,
                 Message: "Select At Least One Field",
