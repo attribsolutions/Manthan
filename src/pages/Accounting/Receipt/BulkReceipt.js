@@ -393,6 +393,7 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { setISODay } from "date-fns";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const BulkRecipt = (props) => {
 
@@ -443,34 +444,6 @@ const BulkRecipt = (props) => {
         dispatch(BreadcrumbShowCountlabel(`BulkReceipt Count :${Data.length}`))
     }, [ReceiptGoButton]);
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Type: 4,
-    //         PartyID: loginPartyID(),
-    //         CompanyID: loginCompanyID()
-    //     });
-    //     dispatch(Retailer_List(jsonBody));
-    // }, []);
-
-
-
-
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Company: loginCompanyID(),
-    //         TypeID: 4
-    //     });
-    //     dispatch(postSelect_Field_for_dropdown(jsonBody));
-    // }, []);
-
-
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Company: loginCompanyID(),
-    //         TypeID: 3
-    //     });
-    //     dispatch(ReceiptTypeAPI(jsonBody));
-    // }, []);
 
     useEffect(() => {
 
@@ -481,48 +454,41 @@ const BulkRecipt = (props) => {
     }, [pageField])
 
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
-            setState(() => resetFunction(fileds, state))// Clear form values 
+            setState(() => resetFunction(fileds, state))//Clear form values
+            
+
             if (pageMode === "other") {
-                dispatch(AlertState({
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    // RedirectPath: url.RECEIPTS_LIST,
-                }))
+                })
+                if (promise) {
+                    history.push({
+                        pathname: url.LOADING_SHEET_LIST,
+                    })
+                }
             }
         }
         else if (postMsg.Status === true) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            CustomAlert({
                 Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+                Message: JSON.stringify(postMessage.Message),
+            })
         }
     }, [postMsg])
 
-    // function CalculateOnchange(event, row, key) {
-    //     event.target.value = val1;
-    //     row.Calculate = event.target.value
-
-    // };
-
-
-    // userAccess useEffect
 
     useEffect(() => {
         let userAcc = null;
