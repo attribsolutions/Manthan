@@ -94,7 +94,7 @@ const LoadingSheetUpdate = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    const { InvoiceParent = [], PartyDetails } = List
+    const { InvoiceParent = [], PartyDetails={} } = List
 
     // const { fromdate, todate, Date } = orderlistFilter;
 
@@ -344,9 +344,9 @@ const LoadingSheetUpdate = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>Loading NO</Label>
+                                            style={{ width: "115px" }}>Loading NO :</Label>
                                         <Col sm="7">
-                                            <Label></Label>
+                                            <Label className=" mt-2">{PartyDetails.LoadingSheetNo}</Label>
                                         </Col>
                                     </FormGroup>
                                 </Col >
