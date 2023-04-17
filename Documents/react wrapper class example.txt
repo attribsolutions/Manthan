@@ -1,0 +1,99 @@
+const QnAContext = React.createContext({
+    answer: {
+      value: ""
+    },
+    doSomething: () => {}
+  });
+  
+  const QnAProvider = ({ children }) => {
+    
+    const answer = {
+      value: ""
+    };
+  
+    const doSomething = () => {
+      console.log(answer.value);
+      console.log("Ready!");
+    };
+  
+    return (
+      <QnAContext.Provider value={{ answer, doSomething }}>
+        {children}
+      </QnAContext.Provider>
+    );
+  };
+  
+  const withQnAContext = (Component) => (props) => (
+    <QnAContext.Consumer>
+      {(value) => <Component {...props} {...value} />}
+    </QnAContext.Consumer>
+  );
+  
+  class SomeComponent extends React.Component {
+    getAnswer = () => {
+      const { doSomething, answer } = this.props;
+  
+      answer.value = "Some text";
+  
+      doSomething();
+    };
+  
+    render() {
+      return (
+        <button type="button" onClick={this.getAnswer}>
+          {this.props.children}
+        </button>
+      );
+    }
+  }
+  
+  const DecoratedSomeComponent = withQnAContext(SomeComponent);
+  
+
+
+  class Body extends React.Component {
+    render() {
+      return (
+        <div>
+          <div>
+            <QnAContext.Consumer>
+              {({ answer, doSomething }) => (
+                <SomeComponent doSomething={doSomething} answer={answer}>
+                  We can?
+                </SomeComponent>
+              )}
+            </QnAContext.Consumer>
+          </div>
+          <div>
+            <DecoratedSomeComponent>We can with HOC?</DecoratedSomeComponent>
+          </div>
+        </div>
+      );
+    }
+  }
+  
+  class Page extends React.Component {
+    render() {
+      return (
+        <div>
+          <div>
+            <Body />
+          </div>
+        </div>
+      );
+    }
+  }
+  
+  export  function App() {
+    return (
+      <div className="App">
+        <h1>Hello CodeSandbox</h1>
+        <h2>Start editing to see some magic happen!</h2>
+  
+        <QnAProvider>
+          <Page />
+        </QnAProvider>
+      </div>
+    );
+  }
+  

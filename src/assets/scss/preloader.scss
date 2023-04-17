@@ -8,9 +8,9 @@
 @import "variables";
 
 // pace
-$spinner-zIndex:100002;
+$spinner-zIndex: 100002;
 
-#preloader{
+#preloader {
   display: none;
   z-index: $spinner-zIndex;
   background: #0511ec !important;
@@ -24,21 +24,21 @@ $spinner-zIndex:100002;
   user-select: none;
 
   .pace-progress {
-    background: linear-gradient(
-      to right,
-      $warning 20%,
-      $warning 40%,
-      $danger 60%,
-      $danger 80%,
-      $danger 100%
-    );
+    background: linear-gradient(to right,
+        $warning 20%,
+        $warning 40%,
+        $danger 60%,
+        $danger 80%,
+        $danger 100%);
 
     position: fixed;
     z-index: $spinner-zIndex;
     top: 0;
     right: 100%;
-    width: 100%;
+    width: 96%;
     height: 3px;
+    animation-name: pace-running;
+    animation-duration: 3s;
   }
 }
 
@@ -56,7 +56,8 @@ $spinner-zIndex:100002;
   right: 0;
   width: 150px;
   height: 150px;
-  background:#e7eb08;
+
+  background: #e7eb08;
   -webkit-transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
   -webkit-transform: translateX(100%) translateY(-100%) rotate(45deg);
@@ -86,8 +87,14 @@ $spinner-zIndex:100002;
   -webkit-animation: pace-spinner 400ms linear infinite;
   -moz-animation: pace-spinner 400ms linear infinite;
   -ms-animation: pace-spinner 400ms linear infinite;
-  -o-animation: pace-spinner 400ms linear infinite;
+  -o-animation: pace-spinner 1400ms linear infinite;
   animation: pace-spinner 400ms linear infinite;
+}
+
+@keyframes pace-running {
+  0% {
+    width: 0%;
+  }
 }
 
 @-webkit-keyframes pace-spinner {
@@ -95,46 +102,55 @@ $spinner-zIndex:100002;
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @-moz-keyframes pace-spinner {
   0% {
     -moz-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -moz-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @-o-keyframes pace-spinner {
   0% {
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @-ms-keyframes pace-spinner {
   0% {
     -ms-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -ms-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @keyframes pace-spinner {
   0% {
     transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
     transform: rotate(360deg);
