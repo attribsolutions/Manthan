@@ -411,16 +411,16 @@ const BulkRecipt = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
+        postMsg,
         ReceiptGoButton,
         pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
-
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-debugger
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -440,35 +440,37 @@ debugger
     }, []);
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Receipt Count :${Data.length}`))
+        dispatch(BreadcrumbShowCountlabel(`BulkReceipt Count :${Data.length}`))
     }, [ReceiptGoButton]);
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Type: 4,
+    //         PartyID: loginPartyID(),
+    //         CompanyID: loginCompanyID()
+    //     });
+    //     dispatch(Retailer_List(jsonBody));
+    // }, []);
 
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
-            TypeID: 4
-        });
-        dispatch(postSelect_Field_for_dropdown(jsonBody));
-    }, []);
 
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
-            TypeID: 3
-        });
-        dispatch(ReceiptTypeAPI(jsonBody));
-    }, []);
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Company: loginCompanyID(),
+    //         TypeID: 4
+    //     });
+    //     dispatch(postSelect_Field_for_dropdown(jsonBody));
+    // }, []);
+
+
+    // useEffect(() => {
+    //     const jsonBody = JSON.stringify({
+    //         Company: loginCompanyID(),
+    //         TypeID: 3
+    //     });
+    //     dispatch(ReceiptTypeAPI(jsonBody));
+    // }, []);
 
     useEffect(() => {
 
@@ -477,6 +479,91 @@ debugger
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+
+    useEffect(() => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveReceiptMaster_Success({ Status: false }))
+            dispatch(ReceiptGoButtonMaster_Success([]))
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            if (pageMode === "other") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                    // RedirectPath: url.RECEIPTS_LIST,
+                }))
+            }
+        }
+        else if (postMsg.Status === true) {
+            dispatch(saveReceiptMaster_Success({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(postMsg.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [postMsg])
+
+
+    // useEffect(() => {
+
+    //     if ((hasShowloction || hasShowModal)) {
+
+    //         let hasEditVal = null
+    //         let insidePageMode = null
+    //         let Data = null
+    //         if (hasShowloction) {
+    //             insidePageMode = location.pageMode;
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props[mode.editValue]
+    //             insidePageMode = props.pageMode;
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
+
+    //         if (hasEditVal) {
+
+    //             const { id, CustomerID, Customer,
+    //                 Description, ReceiptMode, ReceiptModeName,
+    //                 Bank, BankName, AmountPaid, DocumentNo, } = hasEditVal
+    //             setID(id)
+    //             setState((i) => {
+    //                 i.values.Customer = { value: CustomerID, label: Customer }
+    //                 i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
+    //                 i.values.BankName = { value: Bank, label: BankName }
+    //                 i.values.Description = Description
+    //                 i.values.ChequeNo = DocumentNo
+    //                 i.values.AmountPaid = AmountPaid
+
+    //                 i.hasValid.Customer.valid = true;
+    //                 i.hasValid.AmountPaid.valid = true;
+    //                 i.hasValid.BankName.valid = true;
+    //                 i.hasValid.Description.valid = true;
+    //                 i.hasValid.ReceiptModeName.valid = true;
+    //                 return i
+    //             })
+
+    //         }
+    //     }
+    //     else {
+    //         dispatch(ReceiptGoButtonMaster_Success({ Status: false }))
+    //         dispatch(GetOpeningBalance_Success(''))
+    //     }
+    // }, [])
 
     // userAccess useEffect
     useEffect(() => {
@@ -528,12 +615,12 @@ debugger
             dataField: "",
 
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 return (<span style={{ justifyContent: 'center' }}>
                     <Input
                         id=""
                         key={row.id}
-                        defaultValue={row.Calculate}
+                        defaultValue={row.BalanceAmount}
                         className="col col-sm"
                     // onChange={e => { checkLoading(e, row, key) }}
                     />
@@ -542,11 +629,138 @@ debugger
         }
 
     ];
+    
+   
 
-    const saveHandeller = async (event) => {
+    const ReceiptInvoices1 = Data.map((index) => ({
+        Invoice: index.Invoice,
+        GrandTotal: index.GrandTotal,
+        PaidAmount: index.Calculate,
+    }))
 
+    const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
+        return index.PaidAmount > 0
+    })
+
+    const SaveHandler = (event) => {
+        
+        const arr1 = []
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            // if (formValid(state)) {
+            btnIsDissablefunc({ btnId, state: true })
+
+            Data.forEach(i => {
+                    const arr = 
+                      {
+                        ReceiptDate: i.InvoiceDate,
+                        Description: "",
+                        AmountPaid: i.PaidAmount,
+                        BalanceAmount: i.BalanceAmount,
+                        OpeningBalanceAdjusted: "",
+                        DocumentNo: "",
+                        AdvancedAmountAjusted: "",
+                        Customer: i.Customer,
+                        ChequeDate: "",
+                        Party: loginPartyID(),
+                        ReceiptMode: 31,
+                        ReceiptType: 29,
+                        CreatedBy: loginUserID(),
+                        UpdatedBy:  loginUserID(),
+                        ReceiptInvoices:FilterReceiptInvoices,
+                        PaymentReceipt: []
+                      }
+                    
+                // const arr = {
+                //     Customer: i.CustomerName,
+                //     ReceiptDate: i.InvoiceDate,
+                //     BillNo: i.FullInvoiceNumber,
+                //     BalanceAmount: "",
+                //     Grandtotal: i.Grandtotal,
+                //     // DocumentNo: i.ChequeNo,
+                //     // AdvancedAmountAjusted: "",
+                //     // Bank: i.BankName.value,
+                //     // // ChequeDate: i.ReceiptModeName.label === "Cheque" ? i.ChequeDate : "",
+                //     // DepositorBank: i.DepositorBankName.value,
+                //     Party: loginPartyID(),
+                //     // ReceiptMode: i.ReceiptModeName.value,
+                //     CreatedBy: loginUserID(),
+                //     UpdatedBy: loginUserID(),
+                //     // "ReceiptInvoices": FilterReceiptInvoices,
+                //     // "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
+                // }
+                arr1.push(arr)
+            })
+            const jsonBody = JSON.stringify({
+                BulkData: arr1
+            })
+
+            if (pageMode === mode.edit) {
+                // dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
+            }
+            else {
+               
+                    dispatch(saveReceiptMaster({ jsonBody, btnId }));
+
+            }
+            // }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+
+
+
+
+
+
+
+
+
+
+
+    // const saveHandeller = async (event) => {
+    //     const arr1 = []
+
+    //     event.preventDefault();
+    //     const btnId = event.target.id;
+    //     try {
+    //         btnIsDissablefunc({ btnId, state: true })
+    //         Data.forEach(i => {
+    //             
+    //             const arr = {
+    //                 Customer: i.CustomerName,
+    //                 ReceiptDate: i.InvoiceDate,
+    //                 BillNo: i.FullInvoiceNumber,
+    //                 BalanceAmount: "",
+    //                 Grandtotal: i.Grandtotal,
+    //                 DocumentNo: i.ChequeNo,
+    //                 AdvancedAmountAjusted: "",
+    //                 Bank: i.BankName.value,
+    //                 // ChequeDate: i.ReceiptModeName.label === "Cheque" ? i.ChequeDate : "",
+    //                 DepositorBank: i.DepositorBankName.value,
+    //                 Party: loginPartyID(),
+    //                 ReceiptMode: i.ReceiptModeName.value,
+    //                 CreatedBy: loginUserID(),
+    //                 UpdatedBy: loginUserID(),
+    //                 // "ReceiptInvoices": FilterReceiptInvoices,
+    //                 // "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
+    //             }
+    //             arr1.push(arr)
+    //         })
+    //         const jsonBody = JSON.stringify({
+    //             BulkData: arr1
+    //         })
+
+    //         if (pageMode === mode.edit) {
+    //             // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
+    //         }
+    //         else {
+    //             dispatch(saveReceiptMaster({ jsonBody, btnId }));
+    //         }
+
+    //     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    // };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -560,13 +774,13 @@ debugger
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
-                        <div className=" row ">
+                            <div className=" row ">
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>Date</Label>
                                         <Col sm="7">
-                                        <Flatpickr
+                                            <Flatpickr
                                                 name='Date'
                                                 value={values.CurrentDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
@@ -618,7 +832,7 @@ debugger
                             <FormGroup>
                                 <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                     <SaveButton pageMode={pageMode}
-                                        onClick={saveHandeller}
+                                        onClick={SaveHandler}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
                                         module={"Receipts"}
