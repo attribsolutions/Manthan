@@ -94,7 +94,7 @@ const LoadingSheetUpdate = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    const { InvoiceParent = [], PartyDetails={} } = List
+    const { InvoiceParent = [], PartyDetails = {} } = List
 
     // const { fromdate, todate, Date } = orderlistFilter;
 
@@ -191,7 +191,7 @@ const LoadingSheetUpdate = (props) => {
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate
             });
-            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: row }
+            const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }
             dispatch(ReceiptGoButtonMaster(body));
             dispatch(GetOpeningBalance(jsonBody1));
 
@@ -432,7 +432,7 @@ const LoadingSheetUpdate = (props) => {
                             // Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} className={"row save1"}>
-                                    <button type="button" style={{width:"120px"}} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
+                                    <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
                                 </Col>
                             </FormGroup >
                             // : null

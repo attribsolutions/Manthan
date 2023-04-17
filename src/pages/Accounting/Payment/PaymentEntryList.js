@@ -62,7 +62,8 @@ const PaymentEntryList = () => {
             deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.supplier,
+            RetailerListForPayment: state.CommonAPI_Reducer.supplier,
+            RetailerListForReceipt: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -72,7 +73,7 @@ const PaymentEntryList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType = [], makeReceipt, OpeningBalance } = reducers;
+    const { userAccess, pageField, ReceiptType, RetailerListForPayment = [], RetailerListForReceipt = [], makeReceipt, OpeningBalance } = reducers;
 
     const values = { ...state.values }
 
@@ -94,6 +95,17 @@ const PaymentEntryList = () => {
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
 
+    // Customer dropdown List
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
+
+    // onLoad Go_Button useEffect
     useEffect(() => {
         if (ReceiptType.length > 0) {
             goButtonHandler(true)
@@ -118,7 +130,7 @@ const PaymentEntryList = () => {
             page_Id = pageId.RECEIPTS_LIST_2
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
-            makeBtnName = "Make Payment"
+            makeBtnName = "Make Receipt"
         }
 
         dispatch(ReceiptListAPI(""))//for clear privious order list
@@ -132,7 +144,7 @@ const PaymentEntryList = () => {
     }, []);
 
     useEffect(() => {
-        
+
         if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
             dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
 
@@ -154,12 +166,22 @@ const PaymentEntryList = () => {
         }
     }, [userAccess])
 
-    const customerOptions = RetailerList.map((index) => ({
+    const customerOptionsForPayment = RetailerListForPayment.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
-    customerOptions.unshift({
+    customerOptionsForPayment.unshift({
+        value: "",
+        label: " All"
+    });
+
+    const customerOptionsForReceipt = RetailerListForReceipt.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
+    customerOptionsForReceipt.unshift({
         value: "",
         label: " All"
     });
@@ -197,15 +219,6 @@ const PaymentEntryList = () => {
         })
     }
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
     function CustomerOnChange(e) {
 
         setState((i) => {
@@ -217,6 +230,36 @@ const PaymentEntryList = () => {
 
     }
 
+
+
+    function downBtnFunc(row) {
+        var ReportType = report.Receipt;
+        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+    }
+
+    const makeBtnFunc = (list = []) => {
+
+        var { CustomerID, ReceiptDate } = list[0]
+
+        try {
+            const jsonBody = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                InvoiceID: ""
+            });
+
+            const jsonBody1 = JSON.stringify({
+                PartyID: loginPartyID(),
+                CustomerID: CustomerID,
+                ReceiptDate: currentDate
+            });
+
+            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }
+            dispatch(ReceiptGoButtonMaster(body));
+            dispatch(GetOpeningBalance(jsonBody1));
+
+        } catch (e) { }
+    }
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -272,7 +315,7 @@ const PaymentEntryList = () => {
                                     name="Customer"
                                     classNamePrefix="select2-Customer"
                                     value={values.Customer}
-                                    options={customerOptions}
+                                    options={(subPageMode === url.RECEIPTS_LIST_2) ? customerOptionsForReceipt : customerOptionsForPayment}
                                     onChange={CustomerOnChange}
                                 />
                             </Col>
@@ -286,58 +329,10 @@ const PaymentEntryList = () => {
             </div>
         )
     }
-
-    function downBtnFunc(row) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
-    }
-
-    const makeBtnFunc = (list = []) => {
-        
-        var { CustomerID, ReceiptDate } = list[0]
-
-        try {
-            const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
-                CustomerID: CustomerID,
-                InvoiceID: ""
-            });
-
-            const jsonBody1 = JSON.stringify({
-                PartyID: loginPartyID(),
-                CustomerID: CustomerID,
-                ReceiptDate: ReceiptDate
-            });
-
-            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: list[0] }
-            dispatch(ReceiptGoButtonMaster(body));
-            dispatch(GetOpeningBalance(jsonBody1));
-
-        } catch (e) { }
-    }
-
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <div className="page-content">
-                {/* {
-                    (pageField) ?
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            MasterModal={PaymentEntry}
-                            masterPath={url.PAYMENT_ENTRY}
-                            newBtnPath={url.PAYMENT_ENTRY}
-                            pageMode={pageMode}
-                            HeaderContent={HeaderContent}
-                            goButnFunc={goButtonHandler}
-                            ButtonMsgLable={"PaymentEntry"}
-                            deleteName={"FullReceiptNumber"}
-
-                        />
-                        : null
-                } */}
                 {
                     (pageField) ?
                         <CommonPurchaseList
