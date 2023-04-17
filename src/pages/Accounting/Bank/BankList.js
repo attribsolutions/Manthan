@@ -20,7 +20,7 @@ import { loginCompanyID } from "../../../components/Common/CommonFunction";
 const BankList = () => {
 
     const dispatch = useDispatch();
-    
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.BankReducer.BankList,
@@ -39,7 +39,7 @@ const BankList = () => {
         deleteId: delete_Bank_ID,
         postSucc: saveBankMaster_Success,
         updateSucc: updateBankIDSuccess,
-        deleteSucc: deleteBankIDSuccess,
+        deleteSucc: deleteBankIDSuccess
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
@@ -47,35 +47,34 @@ const BankList = () => {
         const page_Id = pageId.BANK_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(postBanklist())
+        dispatch(postBanklist(getlistBody()));
     }, []);
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
+
+    function getlistBody() {
+        return JSON.stringify({
             CompanyID: loginCompanyID(),
         });
-        dispatch(postBanklist(jsonBody));
-    }, []);
+    }
 
     const { pageField, userAccess = [] } = reducers;
 
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
                         MasterModal={BankMaster}
+                        getListbodyFunc={getlistBody}
                         masterPath={url.BANK}
                         ButtonMsgLable={"Bank"}
                         deleteName={"Name"}
                     />
                     : null
             }
-
         </React.Fragment>
     )
 }

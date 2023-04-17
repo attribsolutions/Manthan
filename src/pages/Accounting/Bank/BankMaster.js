@@ -8,7 +8,7 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import {
@@ -24,14 +24,13 @@ import {
     formValid,
     initialFiledFunc,
     onChangeText,
-    resetFunction,
+    resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
@@ -53,11 +52,7 @@ const BankMaster = (props) => {
 
     const fileds = {
         id: "",
-        Name: "",
-        IFSC: "",
-        BranchName: "",
-        AccountNo: "",
-        IsSelfDepositoryBank: false
+        Name: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -130,21 +125,13 @@ const BankMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, BranchName, IFSC, AccountNo, IsSelfDepositoryBank } = hasEditVal
+                const { id, Name} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
-                // hasValid.BranchName.valid = true;
-                // hasValid.IFSC.valid = true;
-                // hasValid.AccountNo.valid = true;
-                // hasValid.IsSelfDepositoryBank.valid = true;
 
                 values.id = id
                 values.Name = Name;
-                // values.BranchName = BranchName;
-                // values.IFSC = IFSC;
-                // values.AccountNo = AccountNo;
-                // values.IsSelfDepositoryBank = IsSelfDepositoryBank;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -226,7 +213,6 @@ const BankMaster = (props) => {
                     Name: values.Name,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    // Party: loginPartyID(),
                     Company: loginCompanyID(),
                 });
 
@@ -307,7 +293,7 @@ const BankMaster = (props) => {
                         </Card>
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else {
