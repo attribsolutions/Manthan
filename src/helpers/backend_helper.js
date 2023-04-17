@@ -375,7 +375,7 @@ export const post_Bank_List_Api = (jsonBody) => post(url.BANK_LIST, jsonBody)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
-export const detelet_Bank_List_Api = ({ deleteId, btnId }) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
+export const detelet_Bank_List_Api = ({ deleteId, btnId}) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
 
 //Bank Assign Api
 export const PartyBankfilter_API = (filters) => post(url.PARTY_BANK_FILTER, filters)
