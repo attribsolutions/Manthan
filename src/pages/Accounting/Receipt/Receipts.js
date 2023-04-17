@@ -25,18 +25,16 @@ import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate, loginCompanyID, l
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { setISODay } from "date-fns";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const Receipts = (props) => {
-
+    
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -131,6 +129,35 @@ const Receipts = (props) => {
         dispatch(ReceiptTypeAPI(jsonBody));
     }, []);
 
+    // pageField useEffect
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
+            setUserAccState(userAcc)
+            breadcrumbReturnFunc({ dispatch, userAcc });
+        };
+    }, [userAccess])
+
+    // loction useEffect
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
@@ -140,13 +167,13 @@ const Receipts = (props) => {
             let Data = null
             if (hasShowloction) {
                 insidePageMode = location.pageMode;
-                setPageMode(location.pageMode)
+                // setPageMode(location.pageMode)
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
                 insidePageMode = props.pageMode;
-                setPageMode(props.pageMode)
+                // setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
@@ -185,33 +212,6 @@ const Receipts = (props) => {
             dispatch(GetOpeningBalance_Success(''))
         }
     }, [])
-
-    useEffect(() => {
-
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
-
-        if (hasShowModal) {
-            locationPath = props.masterPath;
-        };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
-        };
-    }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -474,24 +474,28 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        
         event.preventDefault();
         const btnId = event.target.id;
 
         if (values.ReceiptModeName.value === undefined) {
-
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "ReceiptMode Is Required",
-                })
-            );
-            return;
+            CustomAlert({
+                Type: 4,
+                Message: "ReceiptMode Is Required",
+            })
+            return btnIsDissablefunc({ btnId, state: false })
         }
 
+        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN")) {
+            CustomAlert({
+                Type: 4,
+                Message: `AmountPaid value can not be ${values.AmountPaid}`,
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+        }
+
+        const invalidMsg1 = []
         if (values.ReceiptModeName.label === "Cheque") {
-            const invalidMsg1 = []
 
             if (values.BankName === "") {
                 invalidMsg1.push(`BankName Is Required`)
@@ -503,19 +507,12 @@ const Receipts = (props) => {
                 invalidMsg1.push(`ChequeNo Is Required`)
             };
 
-            if ((values.BankName === "")
-                || (values.DepositorBankName === "")
-                || (values.ChequeNo === "")
-                || (values.ChequeDate === "")) {
-
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: JSON.stringify(invalidMsg1),
-                    })
-                );
-                return;
+            if (invalidMsg1.length > 0) {
+                CustomAlert({
+                    Type: 4,
+                    Message: JSON.stringify(invalidMsg1)
+                })
+                return btnIsDissablefunc({ btnId, state: false })
             }
         }
 
@@ -527,8 +524,6 @@ const Receipts = (props) => {
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
             PaidAmount: index.Calculate,
-            // flag: 0,
-            // Payment: page_Mode === mode.modeSTPsave ? ID : ""
         }))
 
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
@@ -623,7 +618,7 @@ const Receipts = (props) => {
                                         <Col sm="7">
                                             <Select
                                                 name="Customer"
-                                                isDisabled={page_Mode === mode.modeSTPsave ? true : false}
+                                                isDisabled={(page_Mode === mode.modeSTPsave) || (page_Mode === mode.modeSTPList) ? true : false}
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"

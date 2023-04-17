@@ -94,13 +94,13 @@ const LoadingSheetUpdate = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    const { InvoiceParent = [], PartyDetails } = List
+    const { InvoiceParent = [], PartyDetails = {} } = List
 
     // const { fromdate, todate, Date } = orderlistFilter;
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
-        const page_Id = pageId.LOADING_SHEET
+        const page_Id = pageId.LOADING_SHEET_LIST_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -191,7 +191,7 @@ const LoadingSheetUpdate = (props) => {
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate
             });
-            const body = { jsonBody, pageMode, path: url.RECEIPTS, ListData: row }
+            const body = { jsonBody, pageMode: mode.modeSTPList, path: url.RECEIPTS, ListData: row }
             dispatch(ReceiptGoButtonMaster(body));
             dispatch(GetOpeningBalance(jsonBody1));
 
@@ -344,9 +344,9 @@ const LoadingSheetUpdate = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>Loading NO</Label>
+                                            style={{ width: "115px" }}>Loading NO :</Label>
                                         <Col sm="7">
-                                            <Label></Label>
+                                            <Label className=" mt-2">{PartyDetails.LoadingSheetNo}</Label>
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -432,7 +432,7 @@ const LoadingSheetUpdate = (props) => {
                             // Data.length > 0 ?
                             <FormGroup>
                                 <Col sm={2} className={"row save1"}>
-                                    <button type="button" style={{width:"120px"}} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
+                                    <button type="button" style={{ width: "120px" }} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
                                 </Col>
                             </FormGroup >
                             // : null

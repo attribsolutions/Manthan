@@ -7,12 +7,12 @@ import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
 function* ReceiptGoButtonGenFunc({ Data }) {
-  
+
   const { ListData, jsonBody, path, pageMode } = Data
   try {
-debugger
+
     const response = yield call(apiCall.Receipt_Go_Button_API, jsonBody);
-    debugger
+
     response["pageMode"] = pageMode;
     response["ListData"] = ListData;
     response["path"] = path;
@@ -45,12 +45,12 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
       response = yield call(apiCall.Make_Receipt_to_Payment_API, jsonBody);
     }
 
-    // const newList = yield response.Data.map((i) => {
-    //   i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
-    //   return i
-    // })
+    const newList = yield response.Data.map((i) => {
+      i.ReceiptDate = concatDateAndTime(i.ReceiptDate, i.CreatedOn)
+      return i
+    })
 
-    yield put(action.ReceiptListAPISuccess(response.Data));
+    yield put(action.ReceiptListAPISuccess(newList));
   } catch (error) { CommonConsole(error) }
 }
 

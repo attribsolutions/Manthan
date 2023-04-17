@@ -82,7 +82,8 @@ const PaymentEntry = (props) => {
         dispatch(getSupplier())
         dispatch(GetOpeningBalance_Success([]))
     }, []);
-
+    
+    // Receipt Mode dropdown Values
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -228,7 +229,6 @@ const PaymentEntry = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        debugger
         event.preventDefault();
         const btnId = event.target.id
         if (values.ReceiptModeName.label === "Cheque") {
@@ -271,7 +271,6 @@ const PaymentEntry = (props) => {
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
-                    // "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,

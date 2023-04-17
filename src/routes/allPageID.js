@@ -113,7 +113,7 @@ export const MANAGEMENT_PARTIES = 172
 export const BANK = 175
 export const BANK_LIST = 176
 
-export const BANK_ASSIGN = 179
+export const BANK_ASSIGN = 182
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -178,6 +178,7 @@ export const CHALLAN_LIST = 138
 export const LOADING_SHEET = 155
 export const LOADING_SHEET_LIST = 156
 
+export const LOADING_SHEET_LIST_UPDATE = 179
 //**************************** Accounting ***********************************//
 
 export const RECEIPTS = 173

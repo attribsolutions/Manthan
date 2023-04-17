@@ -8,27 +8,19 @@ import {
 } from "../../../store/actions";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
-import { useMemo } from "react";
+import { currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import Receipts from "./Receipts";
 import * as report from '../../../Reports/ReportIndex'
-import {
-    deleteBOMId,
-    deleteBOMIdSuccess,
-    editBOMList,
-    updateBOMListSuccess
-} from "../../../store/Production/BOMRedux/action";
+import { editBOMList, updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
-    deleteReceiptList,
-    deleteReceiptList_Success,
-    ReceiptListAPI, ReceiptTypeAPI,
+    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
-import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
@@ -113,6 +105,15 @@ const ReceiptList = () => {
         }
     }, [ReceiptType]);
 
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
+
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -123,16 +124,8 @@ const ReceiptList = () => {
         label: " All"
     });
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
     function goButtonHandler() {
+
         const ReceiptTypeID = ReceiptType.find((index) => {
             return index.Name === "Receipt"
         })
