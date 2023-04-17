@@ -508,6 +508,13 @@ const BulkRecipt = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+        debugger
+        return () => {
+        
+        }
+    }, [])
+
 
     const pagesListColumns = [
         {
@@ -545,7 +552,7 @@ const BulkRecipt = (props) => {
                         id=""
                         key={row.Invoice}
                         disabled={true}
-                        defaultValue={row.BalanceAmount}
+                        defaultValue={row.GrandTotal}
                         className="col col-sm"
                     // onChange={e => { CalculateOnchange(e, row, key) }}
                     />
@@ -560,7 +567,7 @@ const BulkRecipt = (props) => {
     const ReceiptInvoices1 = Data.map((index) => ({
         Invoice: index.Invoice,
         GrandTotal: index.GrandTotal,
-        PaidAmount: index.BalanceAmount,
+        PaidAmount: index.GrandTotal,
     }))
 
     const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
@@ -581,7 +588,7 @@ const BulkRecipt = (props) => {
                 {
                     ReceiptDate: i.InvoiceDate,
                     Description: "",
-                    AmountPaid: i.PaidAmount,
+                    AmountPaid: i.GrandTotal,
                     BalanceAmount: i.BalanceAmount,
                     OpeningBalanceAdjusted: "",
                     DocumentNo: "",
@@ -617,7 +624,7 @@ const BulkRecipt = (props) => {
                 // }
                 arr1.push(arr)
             })
-            debugger
+            
             const jsonBody = JSON.stringify({
                 BulkData: arr1
             })
