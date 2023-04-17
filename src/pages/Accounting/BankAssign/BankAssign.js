@@ -21,12 +21,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import {
-    comAddPageFieldFunc,
-    formValid,
-    initialFiledFunc,
-    resetFunction,
-} from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
@@ -44,46 +38,28 @@ import {
     PartyBankfilter,
     saveBankAssign,
     saveBankAssign_Success,
-    updateBankAssignID,
-    updateBankAssignIDSuccess
 } from "../../../store/Accounting/BankAssignRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const BankAssign = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const fileds = {
-        BankName: "",
-        BranchName: "",
-        IFSC: "",
-        AccountNo: "",
-        CustomerBank: "",
-        IsSelfDepositoryBank: false,
-        IsDefault: false,
-    }
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-
     const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    // const [Arr, setArr] = useState([]);
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        pageField,
-        updateMsg,
         Data,
         userAccess } = useSelector((state) => ({
             postMsg: state.BankAssignReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             updateMsg: state.BankAssignReducer.updateMessage,
             Data: state.BankAssignReducer.Data,
-            pageField: state.CommonPageFieldReducer.pageField
         }));
 
     useEffect(() => {
@@ -93,19 +69,14 @@ const BankAssign = (props) => {
         dispatch(PartyBankfilter())
     }, []);
 
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath = history.location.pathname;
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -122,54 +93,9 @@ const BankAssign = (props) => {
     }, [userAccess])
 
 
-    // // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             const { id, BankName, BranchName, IFSC, AccountNo, IsSelfDepositoryBank,IsDefault } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
-    //             hasValid.BankName.valid = true;
-    //             hasValid.BranchName.valid = true;
-    //             hasValid.IFSC.valid = true;
-    //             hasValid.AccountNo.valid = true;
-    //             hasValid.IsSelfDepositoryBank.valid = true;
-    //             hasValid.IsDefault.valid = true
-
-    //             values.id = id
-    //             values.BankName = BankName;
-    //             values.BranchName = BranchName;
-    //             values.IFSC = IFSC;
-    //             values.AccountNo = AccountNo;
-    //             values.IsSelfDepositoryBank = IsSelfDepositoryBank;
-    //             values. IsDefault = IsDefault
-
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(Breadcrumb_inputName(hasEditVal.BankName))
-    //             seteditCreatedBy(hasEditVal.CreatedBy)
-    //         }
-    //          dispatch(editBankAssignIDSuccess({ Status: false }))
-    //     }
-    // }, [])
-
     useEffect(() => {
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveBankAssign_Success({ Status: false }))
-            setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
@@ -201,81 +127,43 @@ const BankAssign = (props) => {
     }, [postMsg])
 
 
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            setState(() => resetFunction(fileds, state)) // Clear form values 
-            history.push({
-                pathname: url.BANK_ASSIGN,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateBankAssignIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
+    function handllerIsSelfDepositoryBank(event, row, key) {
+       
+        row.IsSelfDepositoryBank = event
+
+        if (event) {
+            document.getElementById(`IsDefault${key}`).disabled = false;
+            document.getElementById(`AccountNo${key}`).disabled = false;
+            document.getElementById(`IFSC${key}`).disabled = false;
+            document.getElementById(`BranchName${key}`).disabled = false;
         }
-    }, [updateMsg, modalCss]);
-
-
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
+        else {
+            document.getElementById(`IsDefault${key}`).checked = false;
+            document.getElementById(`AccountNo${key}`).value = "";
+            document.getElementById(`IFSC${key}`).value = "";
+            document.getElementById(`BranchName${key}`).value = "";
+            document.getElementById(`IsDefault${key}`).disabled = true;
+            document.getElementById(`AccountNo${key}`).disabled = true;
+            document.getElementById(`IFSC${key}`).disabled = true;
+            document.getElementById(`BranchName${key}`).disabled = true;
         }
-    }, [pageField])
-
-    function handllerBranchName(event, row) {
-        let input = event.target.value;
-        row.NewBranchName = input
-    }
-
-    function handllerIFSC(event, row) {
-        let input = event.target.value;
-        row.NewIFSC = input
-    }
-
-    function handllerAccountNo(event, row) {
-        let input = event.target.value;
-        row.NewAccountNo = input
-    }
-
-    function handllerIsDefault(event, row) {
-        let input = event.target.checked;
-        row.NewIsDefault = input
-    }
-
-    function handllerIsSelfDepositoryBank(event, row) {
-        let input = event.target.checked;
-        row.NewIsSelfDepositoryBank = input
-    }
-
-    function handllerCustomerBank(event, row) {
-        let input = event.target.checked;
-        row.NewCustomerBank = input
-
     }
 
     const pagesListColumns = [
         {
             text: "Name",
             dataField: "BankName",
-            sort: true,
+            // sort: true,
         },
         {
             text: " Customer Bank",
             dataField: "CustomerBank",
-            sort: true,
-            formatter: (cellContent, row, col, k) => {
-
+            formatter: (cellContent, row, key) => {
+                
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={row.CustomerBank}
-                        key={row.BankName}
-                        onChange={(event) => handllerCustomerBank(event, row)}
+                        onChange={(event) => { row.CustomerBank = event.target.checked; }}
                     />
                 </span>
                 )
@@ -284,13 +172,12 @@ const BankAssign = (props) => {
         {
             text: "Depository Bank",
             dataField: "IsSelfDepositoryBank",
-            sort: true,
-            formatter: (cellContent, row, col, k) => {
+            formatter: (cellContent, row, key) => {
+
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={row.IsSelfDepositoryBank}
-                        key={row.BankName}
-                        onChange={(event) => handllerIsSelfDepositoryBank(event, row)}
+                        onChange={(event) => handllerIsSelfDepositoryBank(event.target.checked, row, key)}
                     />
                 </span>
                 )
@@ -299,13 +186,14 @@ const BankAssign = (props) => {
         {
             text: " Invoice Show",
             dataField: "IsDefault",
-            sort: true,
-            formatter: (cellContent, row, col, k) => {
+
+            formatter: (cellContent, row, key) => {
                 return (<span >
                     <Input type="checkbox"
+                        disabled={row.IsSelfDepositoryBank ? false : true}
+                        id={`IsDefault${key}`}
                         defaultChecked={row.IsDefault}
-                        key={row.BankName}
-                        onChange={(event) => handllerIsDefault(event, row)}
+                        onChange={(event) => { row.IsDefault = event.target.checked; }}
                     />
                 </span>
                 )
@@ -314,16 +202,15 @@ const BankAssign = (props) => {
         {
             text: "Account No",
             dataField: "AccountNo",
-            sort: true,
-            formatter: (value, row, k) => {
+            formatter: (value, row, key) => {
                 return (
                     <span >
                         <Input type="text"
-                            id={`AccountNo${k}`}
-                            key={`AccountNo${row.id}`}
+                            disabled={true}
+                            id={`AccountNo${key}`}
                             defaultValue={row.AccountNo}
                             autoComplete="off"
-                            onChange={(event) => handllerAccountNo(event, row)}
+                            onChange={(event) => { row.AccountNo = event.target.value }}
                         />
                     </span>
                 )
@@ -336,16 +223,16 @@ const BankAssign = (props) => {
         {
             text: "IFSC",
             dataField: "IFSC",
-            sort: true,
-            formatter: (value, row, k) => {
+            // sort: true,
+            formatter: (value, row, key) => {
                 return (
                     <span >
                         <Input type="text"
-                            id={`IFSC${k}`}
-                            key={`IFSC${row.id}`}
+                            id={`IFSC${key}`}
+                            disabled={true}
                             defaultValue={row.IFSC}
                             autoComplete="off"
-                            onChange={(event) => handllerIFSC(event, row)}
+                            onChange={(event) => { row.IFSC = event.target.value }}
                         />
                     </span>
                 )
@@ -358,16 +245,15 @@ const BankAssign = (props) => {
         {
             text: "Branch ",
             dataField: "BranchName",
-            sort: true,
-            formatter: (value, row, k) => {
+            formatter: (value, row, key) => {
                 return (
                     <span >
                         <Input type="text"
-                            id={`BranchName${k}`}
-                            key={`BranchName${row.id}`}
+                            id={`BranchName${key}`}
+                            disabled={true}
                             defaultValue={row.BranchName}
                             autoComplete="off"
-                            onChange={(event) => handllerBranchName(event, row)}
+                            onChange={(e) => { row.BranchName = e.target.value }}
                         />
                     </span>
                 )
@@ -384,45 +270,62 @@ const BankAssign = (props) => {
         custom: true,
     };
 
-
     const saveHandeller = async (event) => {
-        debugger
-        const arr1 = []
+        
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+            btnIsDissablefunc({ btnId, state: true })
+            const postJson = Data.map((i) => ({
+                Bank: i.Bank,
+                CustomerBank: i.CustomerBank === null ? false : i.CustomerBank,
+                Party: loginPartyID(),
+                IsSelfDepositoryBank: i.IsSelfDepositoryBank === null ? false : i.IsSelfDepositoryBank,
+                IsDefault: i.IsDefault === null ? false : i.IsDefault,
+                AccountNo: i.AccountNo === null ? "" : i.AccountNo,
+                IFSC: i.IFSC === null ? "" : i.IFSC,
+                BranchName: i.BranchName === null ? "" : i.BranchName,
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                Company: loginCompanyID()
+            }))
 
-                Data.forEach(i => {
-                    if (i.NewBranchName ||i.NewCustomerBank || i.NewIFSC || i.NewAccountNo || i.NewIsSelfDepositoryBank || i.NewIsDefault) {
-                        const arr = {
-                            Bank: i.Bank,
-                            BranchName: i.NewBranchName,
-                            IFSC: i.NewIFSC,
-                            AccountNo: i.NewAccountNo,
-                            IsSelfDepositoryBank: i.NewIsSelfDepositoryBank,
-                            IsDefault: i.NewIsDefault,
-                            CreatedBy: loginUserID(),
-                            UpdatedBy: loginUserID(),
-                            Party: i.NewCustomerBank,
-                            Company: loginCompanyID()
-                        }
-                        arr1.push(arr)
+
+            const data = postJson.filter((i) => {
+                return (i.IsSelfDepositoryBank === true) || ((i.CustomerBank === true))
+            })
+
+            const invalidMsg1 = []
+
+            data.forEach((i) => {
+
+                if ((i.IsSelfDepositoryBank === true)) {
+
+                    if ((i.AccountNo === "")) {
+                        invalidMsg1.push(`AccountNo Is Required`)
                     }
+                    if ((i.BranchName === "")) {
+                        invalidMsg1.push(`BranchName Is Required`)
+                    };
+                    if ((i.IFSC === "")) {
+                        invalidMsg1.push(`IFSC Is Required`)
+                    };
+                    if ((i.IsDefault === "")) {
+                        invalidMsg1.push(`IsDefault Is Required`)
+                    };
+                }
+            })
+            if (invalidMsg1.length > 0) {
+                CustomAlert({
+                    Type: 4,
+                    Message: JSON.stringify(invalidMsg1)
                 })
-
-                const jsonBody = JSON.stringify(
-                    arr1
-                );
-
-                if (pageMode === mode.edit) {
-                    dispatch(updateBankAssignID({ jsonBody, updateId: values.id, btnId }));
-                }
-                else {
-                    dispatch(saveBankAssign({ jsonBody, btnId }));
-                }
+                return btnIsDissablefunc({ btnId, state: false })
             }
+
+            const jsonBody = JSON.stringify(data);
+            dispatch(saveBankAssign({ jsonBody, btnId }));
+
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
@@ -454,7 +357,7 @@ const BankAssign = (props) => {
                                                     >
                                                         {({ paginationProps, paginationTableProps }) => (
                                                             <ToolkitProvider
-                                                                keyField="id"
+                                                                keyField="Bank"
                                                                 data={Data}
                                                                 columns={pagesListColumns}
                                                                 search
@@ -463,7 +366,7 @@ const BankAssign = (props) => {
                                                                     <React.Fragment>
                                                                         <div className="table">
                                                                             <BootstrapTable
-                                                                                keyField={"id"}
+                                                                                keyField={"Bank"}
                                                                                 bordered={true}
                                                                                 striped={false}
                                                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
