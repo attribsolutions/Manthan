@@ -100,32 +100,39 @@ const ImportMaster = (props) => {
         label: index.Name,
     }));
 
-    const VehicleNumber_Options = VehicleNumber.map((index) => ({
-        value: index.id,
-        label: index.VehicleNumber,
-    }));
-    
+      
     const data = [{
         id: 1,
-        fieldLabel: "asas",
+        fieldLabel: "Invoice No",
+        DataType:"Numner"
     },
     {
         id: 2,
-        fieldLabel: "asxdasd",
+        fieldLabel: "ItemName",
+        DataType:"String"
+
     },
     {
         id: 3,
-        fieldLabel: "asdasdasas",
+        fieldLabel: "Unit",
+        DataType:"String"
+
     },
     {
         id: 4,
-        fieldLabel: "sdasd",
+        fieldLabel: "Amount",
+        DataType:"Numner"
+
     },
     ]
     const pagesListColumns = [
         {
             text: "FieldLabel",
             dataField: "fieldLabel",
+        },
+        {
+            text: "Data Type",
+            dataField: "DataType",
         },
         {
             text: "Related Key Field",
@@ -151,28 +158,7 @@ const ImportMaster = (props) => {
                 </>
             ),
         },
-        {
-            text: "Validate Key Field",
-            dataField: "",
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                    <Select
-                                    name="validaation"
-                                    class="Flatpickr"
-                                    classNamePrefix="dropdown"
-                                    options={[]}
-                                  
-                                  />
-                            </FormGroup>
-                        </Col>
-                    </div>
-
-                </>
-            ),
-        },
+        
      
 
         
