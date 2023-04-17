@@ -219,8 +219,8 @@ const PaymentEntry = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
-            CustomerID: e.value,
+            PartyID: e.value,
+            CustomerID: loginPartyID(),
             ReceiptDate: values.ReceiptDate
         });
 
@@ -228,7 +228,7 @@ const PaymentEntry = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         if (values.ReceiptModeName.label === "Cheque") {
@@ -270,14 +270,15 @@ const PaymentEntry = (props) => {
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
-                    "ChequeDate": values.ChequeDate,
+                    "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     // "DepositorBank": values.DepositorBankName.value,
                     "Party": loginPartyID(),
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": []
+                    "ReceiptInvoices": [],
+                    "PaymentReceipt": []
                 }]
 
                 const jsonBody = JSON.stringify({

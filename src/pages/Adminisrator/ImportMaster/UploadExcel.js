@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from "react";
 import {
+    Button,
     Col,
     FormGroup,
     Input,
     Label,
-    Row
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess,  } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import Select from "react-select";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-const ImportMaster = (props) => {
+
+const UploadExcel = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const XLSX = require('xlsx');
 
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -60,7 +57,7 @@ const ImportMaster = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_MASTER
+        const page_Id = pageId.UPLOAD_EXCEL
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
@@ -70,6 +67,8 @@ const ImportMaster = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+    const values = { ...state.values }
+    const { isError } = state;
     const { fieldLabel } = state;
 
     // userAccess useEffect
@@ -88,6 +87,7 @@ const ImportMaster = (props) => {
         };
     }, [userAccess])
 
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -100,11 +100,8 @@ const ImportMaster = (props) => {
         label: index.Name,
     }));
 
-    const VehicleNumber_Options = VehicleNumber.map((index) => ({
-        value: index.id,
-        label: index.VehicleNumber,
-    }));
-    
+
+
     const data = [{
         id: 1,
         fieldLabel: "asas",
@@ -122,67 +119,7 @@ const ImportMaster = (props) => {
         fieldLabel: "sdasd",
     },
     ]
-    const pagesListColumns = [
-        {
-            text: "FieldLabel",
-            dataField: "fieldLabel",
-        },
-        {
-            text: "Related Key Field",
-            dataField: "",
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    // disabled={true}
-                                    // defaultValue={cellContent.toPrecision(5)}
-                                    // defaultValue={parseFloat(cellContent).toFixed(3)}
-                                    className="col col-sm text-center"
-                                // onChange={(e) => QuantityHandler(e, user)}
-                                />
-                            </FormGroup>
-                        </Col>
-                    </div>
 
-                </>
-            ),
-        },
-        {
-            text: "Validate Key Field",
-            dataField: "",
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                    <Select
-                                    name="validaation"
-                                    class="Flatpickr"
-                                    classNamePrefix="dropdown"
-                                    options={[]}
-                                  
-                                  />
-                            </FormGroup>
-                        </Col>
-                    </div>
-
-                </>
-            ),
-        },
-     
-
-        
-    ];
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: data.length,
-        custom: true,
-    };
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -223,6 +160,73 @@ const ImportMaster = (props) => {
         }
     };
 
+    const compair = [
+        // {
+        //     FieldLabel: 'First Name',
+        //     RelatedKeyField: "FirstName1",
+        //     ValidationRegX: /^[0-9]*$/
+        // },
+        {
+            FieldLabel: 'ID',
+            RelatedKeyField: "DistributorID",
+            ValidationRegX: /^[0-9]*$/
+        }
+
+    ]
+
+
+  
+    const readUploadFile = (file) => {
+
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = (e) => {
+
+            const data = e.target.result;
+            const workbook = XLSX.read(data, { type: "array" });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const result = XLSX.utils.sheet_to_json(worksheet);
+
+            let invalidMsg = []
+            result.forEach((r1) => {
+                compair.forEach((c1) => {
+                    const regExp = RegExp(c1.ValidationRegX)
+                    if (!(regExp.test(r1[c1.RelatedKeyField]))) {
+                        invalidMsg.push(`${c1.RelatedKeyField} :${r1[c1.RelatedKeyField]} is invalid Format`)
+                    }
+                })
+            })
+            if (invalidMsg.length > 0) {
+                alert(JSON.stringify(invalidMsg))
+            }
+
+            console.log('Upload data', result)
+
+            //    //displaying the json result
+            //    var resultEle = document.getElementById("json-result");
+            //    resultEle.value = JSON.stringify(result, null, 4);
+            //    resultEle.style.display = 'block';
+        }
+    }
+
+    function upload() {
+
+        var files = document.getElementById('file_upload').files;
+        if (files.length == 0) {
+            alert("Please choose any file...");
+            return;
+        }
+        var filename = files[0].name;
+        var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
+        if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
+            // excelFileToJSON(files[0]);
+            readUploadFile(files[0])
+        } else {
+            alert("Please select a valid excel file.");
+        }
+    }
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -230,6 +234,7 @@ const ImportMaster = (props) => {
 
                 <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <div className="page-content">
+
 
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
@@ -288,96 +293,26 @@ const ImportMaster = (props) => {
                                         />
                                     </Col>
                                 </div>
-                               
+
                             </div>
 
                         </div>
 
                         <div className="mt-1">
-                        <PaginationProvider
-                                    pagination={paginationFactory(pageOptions)}
-                                >
-                                    {({ paginationProps, paginationTableProps }) => (
-                                        <ToolkitProvider
 
-                                            keyField="id"
-                                            data={data}
-                                            columns={pagesListColumns}
+                            <Input
+                                type="file"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                id="file_upload" />
+                            <Button className="btn btn-success" onClick={upload}>Upload</Button>
 
-                                            search
-                                        >
-                                            {toolkitProps => (
-                                                <React.Fragment>
-                                                    <div className="table">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            bordered={true}
-                                                            striped={false}
-                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            classes={"table align-middle table-nowrap table-hover"}
-                                                            headerWrapperClasses={"thead-light"}
+                            <br></br>
+                            <br></br>
 
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                        {mySearchProps(toolkitProps.searchProps)}
-                                                    </div>
+                            <textarea id="json-result" style={{ display: "none", height: "500px", width: "350px" }}></textarea>
 
-                                                    <Row className="align-items-md-center mt-30">
-                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                            <PaginationListStandalone
-                                                                {...paginationProps}
-                                                            />
-                                                        </Col>
-                                                    </Row>
-                                                </React.Fragment>
-                                            )
-                                            }
-                                        </ToolkitProvider>
-                                    )
-                                    }
-
-                                </PaginationProvider>
-                            {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
-                                        keyField={"id"}
-                                        data={data}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                {...toolkitProps.baseProps}
-                                                                {...paginationTableProps}
-                                                                noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
-                                                            />
-                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone {...paginationProps} />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                )}
-                            </PaginationProvider> */}
                         </div>
+
                     </div>
 
                     <FormGroup>
@@ -400,4 +335,4 @@ const ImportMaster = (props) => {
     }
 };
 
-export default ImportMaster
+export default UploadExcel

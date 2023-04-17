@@ -102,6 +102,9 @@ export const CREDITLIMIT_LIST = 154
 export const IMPORT_MASTER = 157
 export const IMPORT_MASTER_LIST = 158
 
+export const UPLOAD_EXCEL = 184
+
+
 export const ROUTE_UPDATE = 159
 export const PARTY_MASTER_BULK_UPDATE = 161
 

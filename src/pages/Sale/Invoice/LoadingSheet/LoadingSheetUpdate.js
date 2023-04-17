@@ -41,6 +41,7 @@ import { getDriverList } from "../../../../store/Administrator/DriverRedux/actio
 import data from "./data.json";
 import { makeBtnCss } from "./../../../../components/Common/ListActionsButtons";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../../store/Accounting/Receipt/action";
+import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 
 
@@ -162,7 +163,7 @@ const LoadingSheetUpdate = (props) => {
     }, [pageField])
 
     useEffect(() => {
-        
+
         if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
             dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
 
@@ -176,13 +177,13 @@ const LoadingSheetUpdate = (props) => {
 
     function makeBtnFunc(e, row) {
 
-        var { CustomerID, InvoiceNumber } = row
+        var { CustomerID, id } = row
 
         try {
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 CustomerID: CustomerID,
-                InvoiceID: (InvoiceNumber).toString()
+                InvoiceID: (id).toString()
             });
 
             const jsonBody1 = JSON.stringify({
@@ -195,6 +196,13 @@ const LoadingSheetUpdate = (props) => {
             dispatch(GetOpeningBalance(jsonBody1));
 
         } catch (e) { }
+    }
+
+
+    function checkLoading(e, row, key) {
+
+        let checkedValue = e.target.checked
+        row.idChecked = checkedValue
     }
 
     const pagesListColumns = [
@@ -226,7 +234,7 @@ const LoadingSheetUpdate = (props) => {
                         defaultChecked={row.Check}
                         type="checkbox"
                         className="col col-sm text-center"
-                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                        onChange={e => { checkLoading(e, row, key) }}
                     />
                 </span>)
             }
@@ -291,7 +299,34 @@ const LoadingSheetUpdate = (props) => {
             return a
         })
     }
-    //    console.log(List.Data.InvoiceParent)
+
+    function MakeReceiptForAll() {
+        let result = InvoiceParent.map(a => {
+            if (a.idChecked === true) {
+                return a.id
+            }
+        })
+        const LoadingNumber = result.toString()
+        const jsonBody = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: "",
+            InvoiceID: LoadingNumber
+        });
+        const body = { jsonBody }
+
+        if (LoadingNumber === ",") {
+            CustomAlert({
+                Type: 3,
+                Message: "Select At Least One Field",
+            })
+        } else {
+            dispatch(ReceiptGoButtonMaster(body))
+            history.push(url.BULK_RECIPT);
+        }
+
+
+
+    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -396,14 +431,8 @@ const LoadingSheetUpdate = (props) => {
                         {
                             // Data.length > 0 ?
                             <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                    <SaveButton pageMode={pageMode}
-                                        onClick={saveHandeller}
-                                        userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"LoadingSheet"}
-                                    />
-
+                                <Col sm={2} className={"row save1"}>
+                                    <button type="button" style={{width:"120px"}} onClick={MakeReceiptForAll} className="btn btn-primary  waves-effect waves-light">Make Receipt</button>
                                 </Col>
                             </FormGroup >
                             // : null

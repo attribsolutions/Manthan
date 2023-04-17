@@ -102,6 +102,8 @@ export const CREDITLIMIT = "/CreditLimit"
 export const CREDITLIMIT_LIST = "/CreditLimitList"
 
 export const IMPORT_MASTER = "/Import_Master"
+export const UPLOAD_EXCEL = "/Upload_Excel"
+
 export const IMPORT_MASTER_LIST = "/Import_Type_List"
 
 export const ROUTE_UPDATE = "/RouteUpdate"
