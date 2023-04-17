@@ -115,7 +115,7 @@ export const MANAGEMENT_PARTIES = "/ManagementParties"
 export const BANK = "/BankMaster"
 export const BANK_LIST = "/BankList"
 
-export const BANK_ASSIGN = "/BankAssign"
+
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
@@ -172,7 +172,6 @@ export const LOADING_SHEET = "/Loading_Sheet"
 export const LOADING_SHEET_LIST = "/Loading_Sheet_List"
 export const LOADING_SHEET_LIST_UPDATE = "/Loading_Sheet_List_Update"
 
-
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
@@ -198,3 +197,5 @@ export const BULK_RECIPT = "/BulkRecipt"
 
 export const PAYMENT_ENTRY = "/PaymentEntry"
 export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
+
+export const BANK_ASSIGN = "/BankAssign"
