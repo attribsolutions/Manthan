@@ -100,7 +100,7 @@ const LoadingSheetUpdate = (props) => {
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
-        const page_Id = pageId.LOADING_SHEET
+        const page_Id = pageId.LOADING_SHEET_LIST_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);

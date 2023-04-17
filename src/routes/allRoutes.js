@@ -261,8 +261,6 @@ const userRoutes = [
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
 
-  { path: path.BANK_ASSIGN, component: BankAssign },
-
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
   { path: path.CHALLAN, component: Challan },
@@ -341,9 +339,11 @@ const userRoutes = [
 
   { path: path.BULK_RECIPT, component: BulkRecipt },
 
+  { path: path.BANK_ASSIGN, component: BankAssign },
 
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
+
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

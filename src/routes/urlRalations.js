@@ -117,8 +117,6 @@ export const ManagementParties = url.MANAGEMENT_PARTIES
 export const BankMaster = url.BANK_LIST
 export const BankList = url.BANK
 
-export const BankAssign = url.BANK_ASSIGN
-
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1
@@ -184,6 +182,7 @@ export const Invoice = url.INVOICE_LIST_1
 
 export const Loading_Sheet_List = url.LOADING_SHEET
 export const Loading_Sheet = url.LOADING_SHEET_LIST
+export const LoadingSheetUpdate =url.LOADING_SHEET_LIST
 
 //********************************Accounting ***********************************//
 export const Receipts = url.RECEIPTS_LIST
@@ -192,5 +191,7 @@ export const ReceiptList_2 = url.RECEIPTS_LIST_2
 
 export const PaymentEntry = url.PAYMENT_ENTRY_LIST
 export const PaymentEntryList = url.PAYMENT_ENTRY
+
+export const BankAssign = url.BANK_ASSIGN
 
 
