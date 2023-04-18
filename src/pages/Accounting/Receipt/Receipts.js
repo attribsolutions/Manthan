@@ -45,7 +45,7 @@ const Receipts = (props) => {
         ReceiptModeName: "",
         AmountPaid: 0,
         BankName: "",
-        ChequeNo: "",
+        DocumentNo: "",
         DepositorBankName: "",
         Description: "",
         ChequeDate: currentDate,
@@ -188,7 +188,7 @@ const Receipts = (props) => {
                     i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
-                    i.values.ChequeNo = DocumentNo
+                    i.values.DocumentNo = DocumentNo
                     i.values.AmountPaid = AmountPaid
 
                     i.hasValid.Customer.valid = true;
@@ -447,10 +447,10 @@ const Receipts = (props) => {
         setState((i) => {
             i.values.BankName = '';
             i.values.DepositorBankName = '';
-            i.values.ChequeNo = '';
+            i.values.DocumentNo = '';
             i.hasValid.BankName.valid = true;
             i.hasValid.DepositorBankName.valid = true;
-            i.hasValid.ChequeNo.valid = true;
+            i.hasValid.DocumentNo.valid = true;
             return i
         })
     }
@@ -481,7 +481,7 @@ const Receipts = (props) => {
         if (values.ReceiptModeName.value === undefined) {
             CustomAlert({
                 Type: 4,
-                Message: "ReceiptMode Is Required",
+                Message: "Receipt Mode Is Required",
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -489,7 +489,7 @@ const Receipts = (props) => {
         if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN")) {
             CustomAlert({
                 Type: 4,
-                Message: `AmountPaid value can not be ${values.AmountPaid}`,
+                Message: `Amount Paid value can not be ${values.AmountPaid}`,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -498,13 +498,13 @@ const Receipts = (props) => {
         if (values.ReceiptModeName.label === "Cheque") {
 
             if (values.BankName === "") {
-                invalidMsg1.push(`BankName Is Required`)
+                invalidMsg1.push(`Bank Name Is Required`)
             }
             if (values.DepositorBankName === "") {
-                invalidMsg1.push(`DepositorBankName Is Required`)
+                invalidMsg1.push(`Depositor Bank Name Is Required`)
             };
-            if (values.ChequeNo === "") {
-                invalidMsg1.push(`ChequeNo Is Required`)
+            if (values.DocumentNo === "") {
+                invalidMsg1.push(`Cheque Number Is Required`)
             };
 
             if (invalidMsg1.length > 0) {
@@ -542,7 +542,7 @@ const Receipts = (props) => {
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
                     "OpeningBalanceAdjusted": "",
-                    "DocumentNo": values.ChequeNo,
+                    "DocumentNo": values.DocumentNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
@@ -746,14 +746,14 @@ const Receipts = (props) => {
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
                                             <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeNo}</Label>
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DocumentNo}</Label>
                                             <Col sm="7">
                                                 <Input
-                                                    name="ChequeNo"
+                                                    name="DocumentNo"
                                                     disabled={page_Mode === mode.modeSTPsave ? true : false}
-                                                    value={values.ChequeNo}
+                                                    value={values.DocumentNo}
                                                     type="text"
-                                                    className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    className={isError.DocumentNo.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Cheque Number"
                                                     autoComplete='off'
                                                     autoFocus={true}
@@ -761,8 +761,8 @@ const Receipts = (props) => {
                                                         onChangeText({ event, state, setState })
                                                     }}
                                                 />
-                                                {isError.ChequeNo.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ChequeNo}</span>
+                                                {isError.DocumentNo.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.DocumentNo}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>

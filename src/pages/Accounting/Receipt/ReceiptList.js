@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Flatpickr from "react-flatpickr";
 import {
@@ -18,7 +18,7 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
-    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptTypeAPI,
+    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -57,7 +57,7 @@ const ReceiptList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-
+    debugger
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
     const values = { ...state.values }
 
@@ -69,6 +69,10 @@ const ReceiptList = () => {
         updateSucc: updateBOMListSuccess,
         deleteSucc: deleteReceiptList_Success
     }
+
+    useEffect(() => {
+        dispatch(ReceiptListAPISuccess([]))
+    }, [])
 
     // Featch Modules List data  First Rendering
     useEffect(() => {

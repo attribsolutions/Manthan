@@ -144,6 +144,7 @@ import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 
 import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
 import UploadExcel from "../pages/Adminisrator/ImportMaster/UploadExcel";
+import SalesReturn from "../pages/Sale/Invoice/SalesReturn/SalesReturn";
 
 
 const userRoutes = [
@@ -317,6 +318,8 @@ const userRoutes = [
   { path: path.LOADING_SHEET, component: LoadingSheet },
   { path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
   { path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
+
+  { path: path.SALES_RETURN, component: SalesReturn },
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },

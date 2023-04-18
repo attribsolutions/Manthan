@@ -460,7 +460,7 @@ const BulkRecipt = (props) => {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))//Clear form values
-            
+
 
             if (pageMode === "other") {
                 CustomAlert({
@@ -508,12 +508,18 @@ const BulkRecipt = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
+
+
+    function CalculateOnchange(e, row, key) {
         debugger
-        return () => {
-        
+        let Calculate = e.target.value
+        if (Calculate <= 0) {
+            row.Calculate = row.BalanceAmount
+
+        } else {
+            row.Calculate = Calculate
         }
-    }, [])
+    }
 
 
     const pagesListColumns = [
@@ -551,10 +557,9 @@ const BulkRecipt = (props) => {
                     <Input
                         id=""
                         key={row.Invoice}
-                        disabled={true}
-                        defaultValue={row.GrandTotal}
+                        defaultValue={row.BalanceAmount}
                         className="col col-sm"
-                    // onChange={e => { CalculateOnchange(e, row, key) }}
+                        onChange={e => { CalculateOnchange(e, row, key) }}
                     />
                 </span>)
             }
@@ -563,19 +568,8 @@ const BulkRecipt = (props) => {
     ];
 
 
-
-    const ReceiptInvoices1 = Data.map((index) => ({
-        Invoice: index.Invoice,
-        GrandTotal: index.GrandTotal,
-        PaidAmount: index.GrandTotal,
-    }))
-
-    const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
-        return index.PaidAmount > 0
-    })
-
     const SaveHandler = (event) => {
-
+        debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
@@ -600,31 +594,17 @@ const BulkRecipt = (props) => {
                     ReceiptType: 29,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    ReceiptInvoices: FilterReceiptInvoices,
+                    ReceiptInvoices: [
+                        {
+                            Invoice: i.Invoice,
+                            GrandTotal: i.GrandTotal,
+                            PaidAmount: i.Calculate <= 0 ? i.GrandTotal : i.Calculate.toFixed(2),
+                        }],
                     PaymentReceipt: []
                 }
-
-                // const arr = {
-                //     Customer: i.CustomerName,
-                //     ReceiptDate: i.InvoiceDate,
-                //     BillNo: i.FullInvoiceNumber,
-                //     BalanceAmount: "",
-                //     Grandtotal: i.Grandtotal,
-                //     // DocumentNo: i.ChequeNo,
-                //     // AdvancedAmountAjusted: "",
-                //     // Bank: i.BankName.value,
-                //     // // ChequeDate: i.ReceiptModeName.label === "Cheque" ? i.ChequeDate : "",
-                //     // DepositorBank: i.DepositorBankName.value,
-                //     Party: loginPartyID(),
-                //     // ReceiptMode: i.ReceiptModeName.value,
-                //     CreatedBy: loginUserID(),
-                //     UpdatedBy: loginUserID(),
-                //     // "ReceiptInvoices": FilterReceiptInvoices,
-                //     // "PaymentReceipt": page_Mode === mode.modeSTPsave ? PaymentReceipt : []
-                // }
                 arr1.push(arr)
             })
-            
+
             const jsonBody = JSON.stringify({
                 BulkData: arr1
             })

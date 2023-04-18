@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Flatpickr from "react-flatpickr";
 import {
@@ -28,7 +28,7 @@ import {
     GetOpeningBalance_Success,
     ReceiptGoButtonMaster,
     ReceiptGoButtonMaster_Success,
-    ReceiptListAPI, ReceiptTypeAPI,
+    ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
 import { getSupplier, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
@@ -85,6 +85,10 @@ const PaymentEntryList = () => {
         updateSucc: updateBOMListSuccess,
         deleteSucc: deleteReceiptList_Success
     }
+
+    useEffect(() => {
+        dispatch(ReceiptListAPISuccess([]))
+    }, [])
 
     // Receipt Type API Values **** only Post Json Body
     useEffect(() => {
@@ -230,8 +234,6 @@ const PaymentEntryList = () => {
 
     }
 
-
-
     function downBtnFunc(row) {
         var ReportType = report.Receipt;
         dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
@@ -260,6 +262,7 @@ const PaymentEntryList = () => {
 
         } catch (e) { }
     }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -329,6 +332,7 @@ const PaymentEntryList = () => {
             </div>
         )
     }
+    
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
