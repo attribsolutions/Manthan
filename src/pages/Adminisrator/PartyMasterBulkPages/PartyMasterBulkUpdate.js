@@ -55,6 +55,7 @@ import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/acti
 import { GetDistrictOnState } from "../../../helpers/url_helper";
 import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { useLayoutEffect } from "react";
 
 
 
@@ -85,6 +86,9 @@ const PartyMasterBulkUpdate = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [val, setvalue] = useState()
+    const [key, setKey] = useState()
+
+
     // const [error, seterror] = useState({})
 
 
@@ -128,7 +132,8 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(GetRoutesList());
         dispatch(getState())
-        // dispatch(GetDistrictOnState())
+
+
     }, []);
 
     // userAccess useEffect
@@ -270,14 +275,16 @@ const PartyMasterBulkUpdate = (props) => {
         user.Newvalue = input
     }
 
-    function handllerState(event, user) {
+    function handllerState(event, user, key) {
+
         user.Newvalue = event.value
         setState_DropDown_select(event)
+        setKey(key)
+
         // dispatch(getDistrictOnState(22))
-
     }
-
-
+    debugger
+  
 
 
     function divisionhandler(event, user) {
@@ -302,7 +309,6 @@ const PartyMasterBulkUpdate = (props) => {
             return a
         })
     }
-
 
     function handllerDistrictOnState(event, user) {
         user.NewDistrict = event.value
@@ -365,7 +371,7 @@ const PartyMasterBulkUpdate = (props) => {
                                     value={state_DropDown_select}
                                     // defaultValue={user.Newvalue}
                                     options={StateValues}
-                                    onChange={(event) => handllerState(event, user)}
+                                    onChange={(event) => handllerState(event, user, key)}
                                 />
                             </FormGroup>
                         </Col>
@@ -412,7 +418,7 @@ const PartyMasterBulkUpdate = (props) => {
                     <Col>
                         <FormGroup >
                             <Select
-                                id={key}
+                                id={`id${key}`}
                                 value={district_dropdown_Select}
                                 options={DistrictOnStateValues}
                                 onChange={(event) => handllerDistrictOnState(event, user)}
@@ -505,7 +511,7 @@ const PartyMasterBulkUpdate = (props) => {
                 dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
             }
             else {
-                debugger
+
                 if (arr1.length <= 0) {
                     CustomAlert({
                         Type: 3,
@@ -513,11 +519,11 @@ const PartyMasterBulkUpdate = (props) => {
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
-                    debugger
+
 
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
-                        debugger
+
                         if ((SelectFieldName.label === "MobileNo")) {
                             const regexExp1 = /^[6-9]\d{9}$/gi;
                             const IsMobile = regexExp1.test(i.Value1)
@@ -692,6 +698,7 @@ const PartyMasterBulkUpdate = (props) => {
                                         {toolkitProps => (
                                             <React.Fragment>
                                                 <div className="table">
+
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         bordered={true}

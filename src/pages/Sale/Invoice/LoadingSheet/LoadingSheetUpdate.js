@@ -377,16 +377,8 @@ const LoadingSheetUpdate = (props) => {
 
                                     </FormGroup>
                                 </Col >
-
-
-
                             </div>
-
-
-
-
                         </div>
-
 
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
