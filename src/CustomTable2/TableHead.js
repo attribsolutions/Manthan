@@ -43,7 +43,7 @@ const TableHead = ({ columns, handleSorting }) => {
     return isArray
   }, [columns])
 
-debugger
+
   return (
     <thead>
       <tr>
