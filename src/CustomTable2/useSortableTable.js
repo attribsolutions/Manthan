@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mySearchProps } from "../components/Common/SearchBox/MySearch";
 
 function getDefaultSorting(defaultTableData, columns) {
+
+
   const sorted = [...defaultTableData].sort((a, b) => {
     const filterColumn = columns.filter((column) => column.sortbyOrder);
 
@@ -23,11 +25,16 @@ function getDefaultSorting(defaultTableData, columns) {
 
     return sortbyOrder === "asc" ? ascending : -ascending;
   });
+
   return sorted;
 }
 
 export const useSortableTable = ({ data, columns, customSearch }) => {
   const [tableData, setTableData] = useState(getDefaultSorting(data, columns));
+
+  useEffect(() => {
+    setTableData(getDefaultSorting(data, columns))
+  }, [data])
 
   const handleSorting = (sortField, sortOrder) => {
     if (sortField) {
