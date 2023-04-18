@@ -514,7 +514,7 @@ const BulkRecipt = (props) => {
         debugger
         let Calculate = e.target.value
         if (Calculate <= 0) {
-            row.Calculate = row.GrandTotal
+            row.Calculate = row.BalanceAmount
 
         } else {
             row.Calculate = Calculate
@@ -557,7 +557,7 @@ const BulkRecipt = (props) => {
                     <Input
                         id=""
                         key={row.Invoice}
-                        defaultValue={row.GrandTotal}
+                        defaultValue={row.BalanceAmount}
                         className="col col-sm"
                         onChange={e => { CalculateOnchange(e, row, key) }}
                     />
