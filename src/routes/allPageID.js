@@ -179,6 +179,10 @@ export const LOADING_SHEET = 155
 export const LOADING_SHEET_LIST = 156
 
 export const LOADING_SHEET_LIST_UPDATE = 179
+
+export const SALES_RETURN = 186
+export const SALES_RETURN_LIST = 187
+
 //**************************** Accounting ***********************************//
 
 export const RECEIPTS = 173

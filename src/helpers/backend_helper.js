@@ -546,6 +546,11 @@ export const Receipt_Delete_API = ({ deleteId, btnId }) => del(`${url.RECEIPT_PO
 export const Bank_List_API = (jsonBody) => post(url.BANK_LIST_API, jsonBody)//  postapi
 export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_TO_PAYMENT, jsonBody)// Get subModule For H_pages
 
+// Sales Return
+export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//  postapi
+
+
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

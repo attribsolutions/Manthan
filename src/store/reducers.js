@@ -72,6 +72,7 @@ import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 //  *********************** Sale ***********************
 import InvoiceReducer from "./Sales/Invoice/reducer"
 import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
+import SalesReturnReducer from "./Sales/SalesReturnRedux/reducer"
 //  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
@@ -140,5 +141,6 @@ const rootReducer = combineReducers({
   LoadingSheetReducer,
   ManagementPartiesReducer,
   ReceiptReducer,
+  SalesReturnReducer
 })
 export default rootReducer

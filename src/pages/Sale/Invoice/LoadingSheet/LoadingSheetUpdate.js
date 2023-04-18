@@ -122,38 +122,38 @@ const LoadingSheetUpdate = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            // dispatch(Breadcrumb_inputName(''))
+    // useEffect(() => {
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    //         setState(() => resetFunction(fileds, state))// Clear form values  
+    //         // dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: url.LOADING_SHEET_LIST,
-                }))
-            }
-        }
-        else if (postMsg.Status === true) {
+    //         if (pageMode === mode.dropdownAdd) {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //             }))
+    //         }
+    //         else {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //                 RedirectPath: url.LOADING_SHEET_LIST,
+    //             }))
+    //         }
+    //     }
+    //     else if (postMsg.Status === true) {
 
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [postMsg])
+    //         dispatch(AlertState({
+    //             Type: 4,
+    //             Status: true,
+    //             Message: JSON.stringify(postMessage.Message),
+    //             RedirectPath: false,
+    //             AfterResponseAction: false
+    //         }));
+    //     }
+    // }, [postMsg])
 
     useEffect(() => {
         if (pageField) {
@@ -200,6 +200,7 @@ const LoadingSheetUpdate = (props) => {
 
 
     function checkLoading(e, row, key) {
+        debugger
 
         let checkedValue = e.target.checked
         row.idChecked = checkedValue
@@ -301,6 +302,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
+        debugger
         let result = InvoiceParent.map(a => {
             if (a.idChecked === true) {
                 return a.id
@@ -313,7 +315,8 @@ const LoadingSheetUpdate = (props) => {
             InvoiceID: LoadingNumber
         });
         const body = { jsonBody }
-debugger
+
+    
         if (LoadingNumber === "") {
             CustomAlert({
                 Type: 3,
@@ -323,6 +326,8 @@ debugger
             dispatch(ReceiptGoButtonMaster(body))
             history.push(url.BULK_RECIPT);
         }
+
+       
 
 
 
