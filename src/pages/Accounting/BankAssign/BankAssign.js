@@ -184,7 +184,7 @@ const BankAssign = (props) => {
             },
         },
         {
-            text: " Invoice Show",
+            text: "Show On Invoice",
             dataField: "IsDefault",
 
             formatter: (cellContent, row, key) => {

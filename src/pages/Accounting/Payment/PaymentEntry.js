@@ -47,7 +47,7 @@ const PaymentEntry = (props) => {
         AmountPaid: "",
         Description: "",
         BankName: "",
-        ChequeNo: "",
+        DocumentNo: "",
         ChequeDate: currentDate,
     }
 
@@ -237,13 +237,13 @@ const PaymentEntry = (props) => {
             if (values.BankName === "") {
                 invalidMsg1.push(`BankName Is Required`)
             }
-            if (values.ChequeNo === "") {
-                invalidMsg1.push(`ChequeNo Is Required`)
+            if (values.DocumentNo === "") {
+                invalidMsg1.push(`DocumentNo Is Required`)
             };
 
             if ((values.BankName === "")
                 || (values.DepositorBankName === "")
-                || (values.ChequeNo === "")
+                || (values.DocumentNo === "")
             ) {
                 dispatch(
                     AlertState({
@@ -266,7 +266,7 @@ const PaymentEntry = (props) => {
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
                     "OpeningBalanceAdjusted": "",
-                    "DocumentNo": values.ChequeNo,
+                    "DocumentNo": values.DocumentNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
@@ -435,14 +435,14 @@ const PaymentEntry = (props) => {
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
                                             <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeNo}</Label>
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DocumentNo}</Label>
                                             <Col sm="7">
                                                 <Input
-                                                    name="ChequeNo"
+                                                    name="DocumentNo"
                                                     id="txtName"
-                                                    value={values.ChequeNo}
+                                                    value={values.DocumentNo}
                                                     type="text"
-                                                    className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    className={isError.DocumentNo.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Cheque Number"
                                                     autoComplete='off'
                                                     autoFocus={true}
@@ -450,8 +450,8 @@ const PaymentEntry = (props) => {
                                                         onChangeText({ event, state, setState })
                                                     }}
                                                 />
-                                                {isError.ChequeNo.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ChequeNo}</span>
+                                                {isError.DocumentNo.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.DocumentNo}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>
