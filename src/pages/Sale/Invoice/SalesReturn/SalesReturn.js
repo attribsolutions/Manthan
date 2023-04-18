@@ -37,6 +37,9 @@ import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList
 import { GetCustomer } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { InvoiceNumber, InvoiceNumberSuccess } from "../../../../store/Sales/SalesReturnRedux/action";
+import CustomTable2 from "../../../../CustomTable2/Table";
+import "./salesReturn.scss";
 
 const SalesReturn = (props) => {
 
@@ -45,17 +48,22 @@ const SalesReturn = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         ReturnDate: currentDate,
         Retailer: "",
         ItemName: "",
         InvoiceNumber: "",
-        ReturnReason: ""
+        ReturnReason: "",
+        Comment: ""
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
+
     const [TableArr, setTableArr] = useState([]);
+
+    const [returnMode, setrRturnMode] = useState(0);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -63,6 +71,7 @@ const SalesReturn = (props) => {
         RetailerList,
         ItemList,
         ReturnReasonList,
+        InvoiceNo,
         pageField,
         userAccess,
     } = useSelector((state) => ({
@@ -70,12 +79,14 @@ const SalesReturn = (props) => {
         RetailerList: state.CommonAPI_Reducer.customer,
         ItemList: state.ItemMastersReducer.pages,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
+        InvoiceNo: state.SalesReturnReducer.InvoiceNo,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
+        dispatch(InvoiceNumberSuccess([]))
         const page_Id = pageId.SALES_RETURN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -107,7 +118,7 @@ const SalesReturn = (props) => {
         };
     }, [userAccess])
 
-    // Receipt Mode dropdown Values
+    // Return Reason dropdown Values
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -181,59 +192,249 @@ const SalesReturn = (props) => {
         label: index.Name,
     }));
 
-    const pagesListColumns = [
-        {
-            text: "ReturnDate",
-            dataField: "ReturnDate",
-        },
-        {
-            text: "Retailer",
-            dataField: "Retailer",
-        },
-        {
-            text: "InvoiceNumber",
-            dataField: "InvoiceNumber",
-        },
+    const InvoiceNo_Options = InvoiceNo.map((index) => ({
+        value: index.Invoice,
+        label: index.FullInvoiceNumber,
+    }));
+
+    function deleteButtonAction(row) {
+        const newArr = TableArr.filter((index) => !(index.id === row.id))
+        setTableArr(newArr)
+    }
+
+      const pagesListColumns = [
+        // {
+        //     text: "ReturnDate",
+        //     dataField: "ReturnDate",
+        //     classes: () => "sales-return-row",
+        // },
+        // {
+        //     text: "Retailer",
+        //     dataField: "Retailer",
+        //     classes: () => "sales-return-row",
+        // },
+        // {
+        //     text: "InvoiceNumber",
+        //     dataField: "InvoiceNumber",
+        // },
         {
             text: "ItemName",
             dataField: "ItemName",
         },
         {
+            text: "Quantity",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Input
+                        id={`Quantity${key}`}
+                        key={`Quantity${row.id}`}
+                        defaultValue={row.Quantity}
+                        autoComplete="off"
+                        type="text"
+                        className="col col-sm text-center"
+                        // onChange={(event) => { Calculate(event, row, key) }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "Unit",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.Calculate}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={ItemOptions}
+                        onChange={(event) => { row.MRP = event.value }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "MRP",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`MRP${key}`}
+                        name="MRP"
+                        defaultValue={row.Calculate}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={ItemOptions}
+                        onChange={(event) => { row.MRP = event.value }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "Rate",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Input
+                        id=""
+                        key={row.id}
+                        defaultChecked={row.BatchCode}
+                        type="text"
+                        className="col col-sm text-center"
+                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "BatchCode",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Input
+                        id=""
+                        key={row.id}
+                        defaultChecked={row.BatchCode}
+                        type="text"
+                        className="col col-sm text-center"
+                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "BatchDate",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Flatpickr
+                        name='ReturnDate'
+                        value={values.ReturnDate}
+                        className="form-control d-block p-2 bg-white text-dark"
+                        placeholder="Select..."
+                        options={{
+                            altInput: true,
+                            altFormat: "d-m-Y",
+                            dateFormat: "Y-m-d",
+                        }}
+                    // onChange={ReturnDate_Onchange}
+                    />
+                </span>)
+            }
+        },
+        {
             text: "ReturnReason",
             dataField: "ReturnReason",
+        },
+        {
+            text: "ItemComment",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
 
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Flatpickr
+                        name='ReturnDate'
+                        value={values.ReturnDate}
+                        className="form-control d-block p-2 bg-white text-dark"
+                        placeholder="Select..."
+                        options={{
+                            altInput: true,
+                            altFormat: "d-m-Y",
+                            dateFormat: "Y-m-d",
+                        }}
+                    // onChange={ReturnDate_Onchange}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "Image",
+            dataField: "",
+            classes: () => "sales-return-Image-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Input type="file"
+                        className="form-control "
+                        // value={FileName}
+                        name="image"
+                        id="file"
+                        accept=".jpg, .jpeg, .png ,.pdf"
+                    // onChange={(event) => { onchangeHandler(event) }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "Action ",
+            dataField: "",
+            formatter: (cellContent, row, key) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Button
+                                    id={"deleteid"}
+                                    type="button"
+                                    className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                    onClick={(e) => { deleteButtonAction(row) }}
+                                >
+                                    <i className="mdi mdi-delete font-size-18"></i>
+                                </Button>
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: TableArr.length,
-        custom: true,
-    };
+    function AddPartyHandler(e) {
 
-    function AddPartyHandler(e, a, k) {
-
-        debugger
-        // if (values.ItemName === '') {
-        //     CustomAlert({
-        //         Type: 3,
-        //         Message: "Select Item",
-        //     })
-        // }
+        setState(() => resetFunction(fileds, state))// Clear form values 
 
         setTableArr([...TableArr, {
             id: TableArr.length + 1,
             ReturnDate: values.ReturnDate,
             Retailer: values.Retailer.label,
-            InvoiceNumber: values.InvoiceNumber,
+            InvoiceNumber: values.InvoiceNumber.label,
             ItemName: values.ItemName.label,
             ReturnReason: values.ReturnReason.label
         }]);
-
     }
 
+    function RetailerHandler(event) {
 
+        const jsonBody = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: event.value
+        });
 
+        dispatch(InvoiceNumber(jsonBody));
+    }
+
+    const saveHandeller = async (event) => {
+        event.preventDefault();
+        const btnId = event.target.id
+    };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -264,12 +465,9 @@ const SalesReturn = (props) => {
                                                 onChange={ReturnDate_Onchange}
                                             />
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
-                            </Row>
 
-                            <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -285,6 +483,7 @@ const SalesReturn = (props) => {
                                                 options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    RetailerHandler(hasSelect)
                                                 }}
                                             />
                                             {isError.Retailer.length > 0 && (
@@ -294,7 +493,9 @@ const SalesReturn = (props) => {
 
                                     </FormGroup>
                                 </Col >
+                            </Row>
 
+                            <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -320,6 +521,31 @@ const SalesReturn = (props) => {
                                     </FormGroup>
                                 </Col >
 
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="Comment"
+                                                id="Comment"
+                                                value={values.Comment}
+                                                type="text"
+                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter Comment"
+                                                autoComplete='off'
+                                                autoFocus={true}
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Comment.length > 0 && (
+                                                <span className="invalid-feedback">{isError.Comment}</span>
+                                            )}
+                                        </Col>
+
+                                    </FormGroup>
+                                </Col >
                             </Row>
 
                             <Row>
@@ -332,15 +558,26 @@ const SalesReturn = (props) => {
                                                 id="ItemName "
                                                 name="ItemName"
                                                 value={values.ItemName}
+                                                isDisabled={(returnMode === 1) ? true : false}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ItemOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    setrRturnMode(2)
+                                                }}
                                             />
                                             {isError.ItemName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
                                             )}
+                                        </Col>
+
+                                        <Col sm="1" className="mx-4 mt-1 ">
+                                            <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginLeft: "0.5cm", color: " rgb(125 74 157)" }}>
+                                                OR </Label>
+
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -353,11 +590,15 @@ const SalesReturn = (props) => {
                                                 id="InvoiceNumber "
                                                 name="InvoiceNumber"
                                                 value={values.InvoiceNumber}
+                                                isDisabled={(returnMode === 2) ? true : false}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={ItemOptions}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                options={InvoiceNo_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                    setrRturnMode(1)
+                                                }}
                                             />
                                             {isError.InvoiceNumber.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.InvoiceNumber}</small></span>
@@ -376,7 +617,7 @@ const SalesReturn = (props) => {
                             </Row>
                         </div>
 
-                        <PaginationProvider
+                        {/* <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
                         >
                             {({ paginationProps, paginationTableProps }) => (
@@ -420,23 +661,36 @@ const SalesReturn = (props) => {
                             )
                             }
 
-                        </PaginationProvider>
+                        </PaginationProvider> */}
 
-                        {/* {
-                            Data.length > 0 ?
+                        <CustomTable2
+                            data={TableArr}
+                            columns={pagesListColumns}
+                            // customSearch={bulkSearch}
+                            classes={" table table-responsive table-bordered table-hover"}
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Record Not available
+                                </div>
+                            }
+                        >
+                        </CustomTable2>
+
+                        {
+                            TableArr.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
                                             onClick={saveHandeller}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
-                                            module={"LoadingSheet"}
+                                            module={"SalesReturn"}
                                         />
 
                                     </Col>
                                 </FormGroup >
                                 : null
-                        } */}
+                        }
 
                     </form >
                 </div >

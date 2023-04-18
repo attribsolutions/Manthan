@@ -6,6 +6,7 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
+    debugger
     try {
         const response = yield call(apiCall.Invoice_No_list_API, jsonBody);
         yield put(action.InvoiceNumberSuccess(response.Data));

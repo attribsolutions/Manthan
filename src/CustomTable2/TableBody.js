@@ -16,7 +16,7 @@ const TableBody = ({ tableData, columns }) => {
               attrs = () => ({}),
               classes = () => ({}) },
               colIndex) => {
-              let tData = row[dataField] ? row[dataField] : "——";
+              let tData = row[dataField] ? row[dataField] : "";
 
               return <td key={dataField}
                 {...attrs(dataField, row, rowIndex, colIndex)}
