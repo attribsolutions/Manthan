@@ -73,6 +73,7 @@ import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
 import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
 import ReceiptSaga from "./Accounting/Receipt/saga"
+import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -134,5 +135,6 @@ export default function* rootSaga() {
     fork(PartyMasterBulkUpdateSaga),
     fork(ManagementPartiesSaga),
     fork(ReceiptSaga),
+    fork(SalesReturnSaga),
   ])
 }
