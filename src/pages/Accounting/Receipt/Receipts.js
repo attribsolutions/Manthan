@@ -33,7 +33,7 @@ import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoBut
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import CInput from "../../../CustomValidateForm/CInput";
-import { floatRegx } from "../../../CustomValidateForm/RegexPattern";
+import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 
 const Receipts = (props) => {
 
@@ -187,7 +187,9 @@ const Receipts = (props) => {
                 setID(id)
                 setState((i) => {
                     i.values.Customer = { value: CustomerID, label: Customer }
-                    i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
+                    i.values.ReceiptModeName = ReceiptModeName === undefined ?
+                        { value: '', label: "Select..." }
+                        : { value: ReceiptMode, label: ReceiptModeName }
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
                     i.values.DocumentNo = DocumentNo
@@ -200,7 +202,7 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
-               
+
                 AmountPaidDistribution(AmountPaid);
             }
         }
@@ -297,9 +299,10 @@ const Receipts = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
+                    <CInput
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
+                        pattern={decimalRegx}
                         defaultValue={row.Calculate}
                         // disabled={page_Mode === mode.modeSTPsave ? true : false}
                         // value={row.Calculate}
@@ -317,7 +320,6 @@ const Receipts = (props) => {
         },
     ];
 
-    
     function CustomerOnChange(e) { // Customer dropdown function
 
         setState((i) => {
@@ -352,7 +354,7 @@ const Receipts = (props) => {
             event.target.value = v1;
         }
 
-        row.Calculate = input
+        row.Calculate = event.target.value
 
         let calSum = 0
         Data.forEach(element => {
@@ -365,7 +367,6 @@ const Receipts = (props) => {
             a.hasValid.AmountPaid.valid = true;
             return a
         })
-
     };
 
     function AmountPaid_onChange(event) {
@@ -382,7 +383,7 @@ const Receipts = (props) => {
             event.target.value = v1;
         }
         onChangeText({ event, state, setState })
-        AmountPaidDistribution(input)
+        AmountPaidDistribution(event.target.value)
 
     }
 
@@ -772,7 +773,7 @@ const Receipts = (props) => {
 
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                pattern={floatRegx}
+                                                pattern={decimalRegx}
                                                 // defaultValue={values.AmountPaid}
                                                 value={values.AmountPaid}
                                                 disabled={page_Mode === mode.modeSTPsave ? true : false}
