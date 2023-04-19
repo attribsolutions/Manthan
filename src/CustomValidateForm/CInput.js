@@ -2,7 +2,7 @@ import React from 'react'
 import { Input } from 'reactstrap';
 
 const CInput = (prop) => {
-    const { onChange=()=>{}, pattern = '' } = prop
+    const { onChange = () => { }, pattern = '' } = prop
 
     function on_Change(e) {
         let val = e.target.value
@@ -11,6 +11,10 @@ const CInput = (prop) => {
             onChange(e)
         }
         else {
+            if ((val === '')) {
+                onChange(e)
+                return
+            }
             e.target.value = val.slice(0, -1);
         }
     }
