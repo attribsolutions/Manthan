@@ -182,12 +182,19 @@ export const Invoice = url.INVOICE_LIST_1
 
 export const Loading_Sheet_List = url.LOADING_SHEET
 export const Loading_Sheet = url.LOADING_SHEET_LIST
+export const LoadingSheetUpdate = url.LOADING_SHEET_LIST
+
+export const SalesReturn = url.SALES_RETURN_LIST
+export const SalesReturnList = url.SALES_RETURN
 
 //********************************Accounting ***********************************//
-export const Receipts = url.RECEIPTS
-export const ReceiptList = url.RECEIPTS_LIST
+export const Receipts = url.RECEIPTS_LIST
+export const ReceiptList = url.RECEIPTS
+export const ReceiptList_2 = url.RECEIPTS_LIST_2
 
-export const PaymentEntry = url.PAYMENT_ENTRY
-export const PaymentEntryList = url.PAYMENT_ENTRY_LIST
+export const PaymentEntry = url.PAYMENT_ENTRY_LIST
+export const PaymentEntryList = url.PAYMENT_ENTRY
+
+export const BankAssign = url.BANK_ASSIGN
 
 

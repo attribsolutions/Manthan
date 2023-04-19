@@ -14,7 +14,7 @@ import {
 import * as pageId from "../../../../routes//allPageID";
 import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { LoadingSheetListAction } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { LoadingSheetListAction,  UpdateLoadingSheet } from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
@@ -24,6 +24,7 @@ import { currentDate, loginPartyID } from "../../../../components/Common/CommonF
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList";
 import * as url from "../../../../routes/route_url"
 import * as mode from "../../../../routes/PageMode"
+
 
 import { useHistory } from "react-router-dom";
 
@@ -116,6 +117,13 @@ const LoadingSheetList = () => {
         }
     }
 
+    const updateBtnFunc = (list) => {
+        
+        dispatch(UpdateLoadingSheet(list.id));
+        history.push(url.LOADING_SHEET_LIST_UPDATE,list);
+
+    };
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
@@ -184,6 +192,7 @@ const LoadingSheetList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
+                            updateBtnFunc={updateBtnFunc}
                             ButtonMsgLable={"LoadingSheet"}
                             deleteName={"FullGRNNumber"}
                             MasterModal={LoadingSheet}

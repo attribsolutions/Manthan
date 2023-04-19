@@ -21,8 +21,9 @@ import {
 
 
 
-export const getSupplierAddress = () => ({
+export const getSupplierAddress = (editId) => ({
   type: GET_SUPPLIER_ADDRESS,
+  editId,
 });
 
 export const getSupplierAddressSuccess = address => ({

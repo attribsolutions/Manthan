@@ -134,15 +134,23 @@ import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/Pa
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
 import Receipts from "../pages/Accounting/Receipt/Receipts";
 import ReceiptList from "../pages/Accounting/Receipt/ReceiptList";
-import BankMaster from "../pages/Account/BankMaster";
-import BankList from "../pages/Account/BankList";
+import BankMaster from "../pages/Accounting/Bank/BankMaster";
+import BankList from "../pages/Accounting/Bank/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
+import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
+
+import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
+
+import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
+import UploadExcel from "../pages/Adminisrator/ImportMaster/UploadExcel";
+import SalesReturn from "../pages/Sale/Invoice/SalesReturn/SalesReturn";
+
 
 const userRoutes = [
   // *************************** DashBord *******************************//
-  
-  
+
+
   { path: path.DASHBORD, component: Dashboard },
 
   // *************************** Administration *******************************//
@@ -244,6 +252,7 @@ const userRoutes = [
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
   { path: path.IMPORT_MASTER, component: ImportMaster },
+  { path: path.UPLOAD_EXCEL, component: UploadExcel },
 
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
@@ -252,7 +261,6 @@ const userRoutes = [
 
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
-
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
@@ -309,6 +317,9 @@ const userRoutes = [
 
   { path: path.LOADING_SHEET, component: LoadingSheet },
   { path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
+  { path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
+
+  { path: path.SALES_RETURN, component: SalesReturn },
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },
@@ -327,8 +338,15 @@ const userRoutes = [
   { path: path.RECEIPTS, component: Receipts },
   { path: path.RECEIPTS_LIST, component: ReceiptList },
 
+  { path: path.RECEIPTS_LIST_2, component: PaymentEntryList },
+
+  { path: path.BULK_RECIPT, component: BulkRecipt },
+
+  { path: path.BANK_ASSIGN, component: BankAssign },
+
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
+
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

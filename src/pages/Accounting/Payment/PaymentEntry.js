@@ -26,9 +26,8 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { DepositorBankFilter, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { postBanklist } from "../../../store/Account/BankRedux/action";
 
 const PaymentEntry = (props) => {
 
@@ -44,12 +43,11 @@ const PaymentEntry = (props) => {
         ReceiptDate: currentDate,
         OpeningBalanceAmt: "",
         Customer: "",
-        ReceiptMode: "",
+        ReceiptModeName: "",
         AmountPaid: "",
         Description: "",
         BankName: "",
-        ChequeNo: "",
-        DepositorBankName: "",
+        DocumentNo: "",
         ChequeDate: currentDate,
     }
 
@@ -63,14 +61,12 @@ const PaymentEntry = (props) => {
         BankList,
         ReceiptModeList,
         ReceiptType,
-        DepositorBank,
         userAccess } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.supplier,
             OpeningBalance: state.ReceiptReducer.OpeningBalance,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
-            BankList: state.BankReducer.BankList,
-            DepositorBank: state.ReceiptReducer.DepositorBank,
+            BankList: state.ReceiptReducer.bankList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -82,12 +78,12 @@ const PaymentEntry = (props) => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(postBanklist())
-        dispatch(DepositorBankFilter())
+        dispatch(BankListAPI())
         dispatch(getSupplier())
         dispatch(GetOpeningBalance_Success([]))
     }, []);
-
+    
+    // Receipt Mode dropdown Values
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -141,7 +137,7 @@ const PaymentEntry = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
@@ -189,15 +185,15 @@ const PaymentEntry = (props) => {
         label: index.Name,
     }));
 
-    const BankListOptions = BankList.map((index) => ({
-        value: index.id,
-        label: index.Name,
+    const bankList = BankList.map((index) => ({
+        value: index.Bank,
+        label: index.BankName,
+        IsSelfDepositoryBank: index.IsSelfDepositoryBank
     }));
 
-    const DepositorBankOptions = DepositorBank.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+    const BankListOptions = bankList.filter((index) => {
+        return index.IsSelfDepositoryBank === false
+    })
 
     function ReceiptDate_Onchange(e, date) {
         setState((i) => {
@@ -224,8 +220,8 @@ const PaymentEntry = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
-            CustomerID: e.value,
+            PartyID: e.value,
+            CustomerID: loginPartyID(),
             ReceiptDate: values.ReceiptDate
         });
 
@@ -233,27 +229,22 @@ const PaymentEntry = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
         event.preventDefault();
         const btnId = event.target.id
-        if (values.ReceiptMode.label === "Cheque") {
+        if (values.ReceiptModeName.label === "Cheque") {
             const invalidMsg1 = []
 
             if (values.BankName === "") {
                 invalidMsg1.push(`BankName Is Required`)
             }
-            if (values.DepositorBankName === "") {
-                invalidMsg1.push(`DepositorBankName Is Required`)
-            };
-            if (values.ChequeNo === "") {
-                invalidMsg1.push(`ChequeNo Is Required`)
+            if (values.DocumentNo === "") {
+                invalidMsg1.push(`DocumentNo Is Required`)
             };
 
             if ((values.BankName === "")
                 || (values.DepositorBankName === "")
-                || (values.ChequeNo === "")
+                || (values.DocumentNo === "")
             ) {
-
                 dispatch(
                     AlertState({
                         Type: 4,
@@ -269,24 +260,28 @@ const PaymentEntry = (props) => {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
-                const jsonBody = JSON.stringify({
+                var BulkData = [{
                     "ReceiptDate": values.ReceiptDate,
                     "Description": values.Description,
                     "AmountPaid": values.AmountPaid,
                     "BalanceAmount": "",
-                    "OpeningBalanceAdjusted":"",
-                    "DocumentNo": values.ChequeNo,
+                    "OpeningBalanceAdjusted": "",
+                    "DocumentNo": values.DocumentNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
                     "Customer": values.Customer.value,
-                    "ChequeDate": values.ChequeDate,
-                    "DepositorBank": values.DepositorBankName.value,
+                    "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     "Party": loginPartyID(),
-                    "ReceiptMode": values.ReceiptMode.value,
+                    "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
                     "UpdatedBy": loginUserID(),
-                    "ReceiptInvoices": []
+                    "ReceiptInvoices": [],
+                    "PaymentReceipt": []
+                }]
+
+                const jsonBody = JSON.stringify({
+                    BulkData: BulkData
                 })
 
                 if (pageMode === mode.edit) {
@@ -385,27 +380,27 @@ const PaymentEntry = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptMode} </Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptModeName} </Label>
                                         <Col sm="7">
                                             <Select
-                                                id="ReceiptMode "
-                                                name="ReceiptMode"
-                                                value={values.ReceiptMode}
+                                                id="ReceiptModeName "
+                                                name="ReceiptModeName"
+                                                value={values.ReceiptModeName}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
-                                            {isError.ReceiptMode.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.ReceiptMode}</small></span>
+                                            {isError.ReceiptModeName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ReceiptModeName}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
                             </Row>
 
-                            {(values.ReceiptMode.label === "Cheque") || (values.ReceiptMode.label === "RTGS") ?
+                            {(values.ReceiptModeName.label === "Cheque") || (values.ReceiptModeName.label === "RTGS") ?
                                 < Row >
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
@@ -431,48 +426,23 @@ const PaymentEntry = (props) => {
                                         </FormGroup>
                                     </Col >
 
-                                    <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
-                                            <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DepositorBankName} </Label>
-                                            <Col sm="7">
-                                                <Select
-                                                    name="DepositorBankName"
-                                                    value={values.DepositorBankName}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={DepositorBankOptions}
-                                                    onChange={(hasSelect, evn) => {
-                                                        onChangeSelect({ hasSelect, evn, state, setState });
-                                                    }}
-                                                />
-                                                {isError.DepositorBankName.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.DepositorBankName}</span>
-                                                )}
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col >
-
-
                                 </Row>
                                 : null}
 
-                            {(values.ReceiptMode.label === "Cheque") &&
+                            {(values.ReceiptModeName.label === "Cheque") &&
                                 <Row>
 
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
                                             <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.ChequeNo}</Label>
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DocumentNo}</Label>
                                             <Col sm="7">
                                                 <Input
-                                                    name="ChequeNo"
+                                                    name="DocumentNo"
                                                     id="txtName"
-                                                    value={values.ChequeNo}
+                                                    value={values.DocumentNo}
                                                     type="text"
-                                                    className={isError.ChequeNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    className={isError.DocumentNo.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Cheque Number"
                                                     autoComplete='off'
                                                     autoFocus={true}
@@ -480,8 +450,8 @@ const PaymentEntry = (props) => {
                                                         onChangeText({ event, state, setState })
                                                     }}
                                                 />
-                                                {isError.ChequeNo.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ChequeNo}</span>
+                                                {isError.DocumentNo.length > 0 && (
+                                                    <span className="invalid-feedback">{isError.DocumentNo}</span>
                                                 )}
                                             </Col>
                                         </FormGroup>

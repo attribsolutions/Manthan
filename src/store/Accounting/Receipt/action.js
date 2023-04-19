@@ -1,6 +1,4 @@
 import {
-  DEPOSITOR_BANK_FILTER,
-  DEPOSITOR_BANK_FILTER_SUCCESS,
   RECEIPT_LIST_API,
   RECEIPT_LIST_API_SUCCESS,
   RECEIPT_GO_BUTTON_MASTER,
@@ -12,12 +10,26 @@ import {
   DELETE_RECEIPT_LIST,
   DELETE_RECEIPT_LIST_SUCCESS,
   GET_OPENING_BALANCE,
-  GET_OPENING_BALANCE_SUCCESS
+  GET_OPENING_BALANCE_SUCCESS,
+  BANK_LIST_API,
+  BANK_LIST_API_SUCCESS,
+  RECEIPT_LIST_FILTERS,
+  PAYMENT_ENTRY_LIST_FILTERS
 } from "./actionType";
 
-export const ReceiptGoButtonMaster = (jsonBody) => ({// save Action
+export const Receiptlistfilters = filter => ({                            //Material issue  Filter Action
+  type: RECEIPT_LIST_FILTERS,
+  payload: filter,
+})
+
+export const PaymentEntrylistfilters = filter => ({                            //Material issue  Filter Action
+  type: PAYMENT_ENTRY_LIST_FILTERS,
+  payload: filter,
+})
+
+export const ReceiptGoButtonMaster = (Data) => ({// save Action
   type: RECEIPT_GO_BUTTON_MASTER,
-  jsonBody,
+  Data
 });
 
 export const ReceiptGoButtonMaster_Success = (resp) => ({// Save  success
@@ -36,16 +48,6 @@ export const GetOpeningBalance_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const DepositorBankFilter = (jsonBody) => ({// save Action
-  type: DEPOSITOR_BANK_FILTER,
-  jsonBody,
-});
-
-export const DepositorBankFilter_Success = (resp) => ({// Save  success
-  type: DEPOSITOR_BANK_FILTER_SUCCESS,
-  payload: resp,
-});
-
 // save API
 export const saveReceiptMaster = (config = {}) => ({// save Action
   type: SAVE_RECEIPT_MASTER,
@@ -57,9 +59,9 @@ export const saveReceiptMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const ReceiptListAPI = (jsonBody) => ({
+export const ReceiptListAPI = (jsonBody, subPageMode) => ({
   type: RECEIPT_LIST_API,
-  jsonBody,
+  jsonBody, subPageMode,
 });
 
 export const ReceiptListAPISuccess = (resp) => ({
@@ -86,5 +88,16 @@ export const deleteReceiptList = (config = {}) => ({// save Action
 
 export const deleteReceiptList_Success = (resp) => ({// Save  success
   type: DELETE_RECEIPT_LIST_SUCCESS,
+  payload: resp,
+});
+
+// Party Wise Bank list
+export const BankListAPI = (jsonBody) => ({
+  type: BANK_LIST_API,
+  jsonBody,
+});
+
+export const BankListAPISuccess = (resp) => ({
+  type: BANK_LIST_API_SUCCESS,
   payload: resp,
 });

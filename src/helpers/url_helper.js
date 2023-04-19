@@ -208,6 +208,10 @@ export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
 export const BANK = '/Bank'
 export const BANK_LIST = '/BankFilter'
 
+// BankAssign
+export const BANK_ASSIGN = '/PartyBankSave'
+export const PARTY_BANK_FILTER = '/PartyBanksFilter'
+
 //******** purchase modal *********************************************************************************************************************** */
 
 export const GET_SUPPLIER_VENDOR_CUSTOMER = "/GetVendorSupplierCustomer"
@@ -294,10 +298,15 @@ export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
 export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'
 export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
 
-
 // Receipt
 export const RECEIPT_GO_BUTTON_API = '/ReceiptInvoices'
 export const RECEIPT_POST_API = '/Receipt'
 export const DEPOSITOR_BANK_FILTER = '/DepositorBankFilter'
 export const RECEIPT_FILTERS ='/ReceiptFilter'
 export const OPENING_BALANCE ='/GetOpeningBalance'
+export const BANK_LIST_API = '/PartyBankList'
+export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
+
+
+// Sales Return
+export const INVOICE_NUMBER_LIST ='/InvoiceNoList'

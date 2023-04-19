@@ -52,7 +52,8 @@ import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
 import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
 import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
-import BankReducer from "./Account/BankRedux/reducer"
+import BankReducer from "./Accounting/BankRedux/reducer"
+import BankAssignReducer from "./Accounting/BankAssignRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -71,6 +72,7 @@ import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 //  *********************** Sale ***********************
 import InvoiceReducer from "./Sales/Invoice/reducer"
 import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
+import SalesReturnReducer from "./Sales/SalesReturnRedux/reducer"
 //  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
@@ -130,6 +132,7 @@ const rootReducer = combineReducers({
   MaterialIssueReducer,
   ProductionReducer,
   BankReducer,
+  BankAssignReducer,
   ProductionReIssueReducer,
   InvoiceReducer,
   InwardReducer,
@@ -138,5 +141,6 @@ const rootReducer = combineReducers({
   LoadingSheetReducer,
   ManagementPartiesReducer,
   ReceiptReducer,
+  SalesReturnReducer
 })
 export default rootReducer

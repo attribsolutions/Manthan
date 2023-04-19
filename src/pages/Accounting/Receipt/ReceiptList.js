@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Flatpickr from "react-flatpickr";
 import {
@@ -8,29 +8,24 @@ import {
 } from "../../../store/actions";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
-import { useMemo } from "react";
+import { currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import Receipts from "./Receipts";
-import {
-    deleteBOMId,
-    deleteBOMIdSuccess,
-    editBOMList,
-    updateBOMListSuccess
-} from "../../../store/Production/BOMRedux/action";
+import * as report from '../../../Reports/ReportIndex'
+import { editBOMList, updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
-    deleteReceiptList,
-    deleteReceiptList_Success,
-    ReceiptListAPI, ReceiptTypeAPI,
+    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
 } from "../../../store/Accounting/Receipt/action";
-import { initialFiledFunc, onChangeSelect } from "../../../components/Common/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode"
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
+import { Receipt_Print } from "../../../helpers/backend_helper";
 
 const ReceiptList = () => {
 
@@ -62,7 +57,7 @@ const ReceiptList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-
+    
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
     const values = { ...state.values }
 
@@ -74,6 +69,10 @@ const ReceiptList = () => {
         updateSucc: updateBOMListSuccess,
         deleteSucc: deleteReceiptList_Success
     }
+
+    useEffect(() => {
+        dispatch(ReceiptListAPISuccess([]))
+    }, [])
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -110,11 +109,6 @@ const ReceiptList = () => {
         }
     }, [ReceiptType]);
 
-    const customerOptions = RetailerList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
@@ -124,7 +118,18 @@ const ReceiptList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
+    const customerOptions = RetailerList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
+    customerOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
     function goButtonHandler() {
+
         const ReceiptTypeID = ReceiptType.find((index) => {
             return index.Name === "Receipt"
         })
@@ -136,9 +141,13 @@ const ReceiptList = () => {
             PartyID: loginPartyID(),
             ReceiptType: ReceiptTypeID.id,
         });
-        dispatch(ReceiptListAPI(jsonBody));
+        dispatch(ReceiptListAPI(jsonBody, hasPagePath));
     }
 
+    function downBtnFunc(row) {
+        var ReportType = report.Receipt;
+        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+    }
 
     function fromdateOnchange(e, date) {
         setState((i) => {
@@ -264,6 +273,7 @@ const ReceiptList = () => {
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
+                            downBtnFunc={downBtnFunc}
                             ButtonMsgLable={"Receipt"}
                             deleteName={"FullReceiptNumber"}
 

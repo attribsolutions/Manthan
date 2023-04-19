@@ -1,3 +1,4 @@
+import { currentDate } from "../../../components/Common/CommonFunction"
 import {
   DEPOSITOR_BANK_FILTER_SUCCESS,
   RECEIPT_LIST_API_SUCCESS,
@@ -6,21 +7,36 @@ import {
   RECEIPT_TYPE_API_SUCCESS,
   DELETE_RECEIPT_LIST_SUCCESS,
   GET_OPENING_BALANCE_SUCCESS,
+  BANK_LIST_API_SUCCESS,
+  RECEIPT_LIST_FILTERS,
+  PAYMENT_ENTRY_LIST_FILTERS,
 } from "./actionType"
 
 const INIT_STATE = {
   ReceiptGoButton: [],
-  DepositorBank: [],
   ReceiptList: [],
   postMsg: { Status: false },
   ReceiptType: [],
   deleteMsg: { Status: false },
-  OpeningBalance: []
+  OpeningBalance: '',
+  bankList: [],
+  receiptlistFilters: { fromdate: currentDate, todate: currentDate, Customer: { value: '', label: "All" } },
+  paymentEntrylistFilters: { fromdate: currentDate, todate: currentDate, Customer: { value: '', label: "All" } }
 }
 
 const ReceiptReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
+    case RECEIPT_LIST_FILTERS:
+      return {
+        ...state,
+        receiptlistFilters: action.payload,
+      }
+    case PAYMENT_ENTRY_LIST_FILTERS:
+      return {
+        ...state,
+        paymentEntrylistFilters: action.payload,
+      }
     case RECEIPT_GO_BUTTON_MASTER_SUCCESS:
       return {
         ...state,
@@ -31,12 +47,6 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         OpeningBalance: action.payload,
-      }
-
-    case DEPOSITOR_BANK_FILTER_SUCCESS:
-      return {
-        ...state,
-        DepositorBank: action.payload,
       }
 
     case SAVE_RECEIPT_MASTER_SUCCESS:
@@ -63,6 +73,11 @@ const ReceiptReducer = (state = INIT_STATE, action) => {
         deleteMsg: action.payload,
       }
 
+    case BANK_LIST_API_SUCCESS:
+      return {
+        ...state,
+        bankList: action.payload,
+      }
     default:
       return state
   }

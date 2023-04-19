@@ -1,0 +1,20 @@
+*****************for server start Commands**************
+
+//nvm instller:==> nvm helps us to install all dependancy pacages in linux server
+
+1=>  install nvm::$ git clone git://github.com/creationix/nvm.git ~/.nvm
+2=>  activate nvm:: source ~/.nvm/nvm.sh
+
+3=> // install node 16.00 version
+
+4=>//(install PM2 -tartup Script Generator)
+  $npm install pm2 -g
+
+5=> cd manthan  
+// npm uninstall node-sass
+
+
+****************==========Start Build file*****************************
+
+/// start serve build file
+ $ pm2 serve build 3000 --spa

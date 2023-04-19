@@ -483,7 +483,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
-        debugger
+        
         let input = event.target.value
         let result = /^\d*(\.\d{0,3})?$/.test(input);
         let val1 = 0;

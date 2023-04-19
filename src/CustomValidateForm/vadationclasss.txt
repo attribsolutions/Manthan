@@ -1,0 +1,85 @@
+
+class FormValidate extends React.Component {
+    state = {
+        username: ''
+    };
+
+    handleUsernameChange = e => {
+        console.log('handleUsernameChange()');
+        this.setState({
+            username: e.target.value
+        });
+    }
+
+    handleSubmit = e => {
+        console.log('handleSubmit() Submit form with state:', this.state);
+        e.preventDefault();
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="username1">Name</label>
+                    <input
+                        id="username1"
+                        name="username"
+                        value={this.state.username}
+                        onChange={this.handleUsernameChange}
+                        placeholder="Name"
+                        pattern="[A-Za-z]{3}"
+                        className="form-control" />
+                </div>
+
+                <button className="btn btn-primary">Submit11</button>
+            </form>
+        );
+    }
+}
+
+class FormNoValidate extends React.Component {
+    state = {
+        username: '',
+        error: ''
+    };
+    handleUsernameChange = e => {
+        console.log('handleUsernameChange()');
+        const target = e.target;
+        this.setState({
+            username: target.value,
+            error: target.validationMessage
+        });
+
+    }
+
+    handleSubmit = e => {
+        console.log('handleSubmit() Submit form with state:', this.state);
+        e.preventDefault();
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit} noValidate>
+                <div className="form-group">
+                    <label htmlFor="username2">Name</label>
+                    <input
+                        id="username2"
+                        name="username"
+                        value={this.state.username}
+                        onChange={this.handleUsernameChange}
+                        placeholder="Name"
+                        pattern="[A-Za-z]{3}"
+                        className="form-control" />
+                    <div className="invalid-feedback d-block">
+                        {this.state.error}
+                    </div>
+                </div>
+
+                <button className="btn btn-primary">Submit</button>
+            </form>
+        );
+    }
+
+
+
+}

@@ -22,6 +22,8 @@ import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 
 import { useHistory } from "react-router-dom";
 import { Progress } from "reactstrap";
+import "./loader.scss";
+
 
 const Layout = props => {
   const dispatch = useDispatch();
@@ -73,22 +75,12 @@ const Layout = props => {
     try {
       if (isPreloader === true) {
         document.getElementById("preloader").style.display = "block";
-        // document.getElementById("status").style.display = "block";
 
-        // setTimeout(function () {
-        //   
-        //   document.getElementById("preloader").style.display = "none";
+        setTimeout(function () {
+          document.getElementById("preloader").style.display = "none";
 
-        //   // document.getElementById("status").style.display = "none";
-        // }, 1000);
-        const timer = ms => new Promise(res => setTimeout(res, ms))
-        async function load() { // We need to wrap the loop into an async function for this to work
-          for (let i = 0; i < 101; i++) {
-            setCount(i);
-            await timer();
-          }
-        }
-        load();
+        }, 4000);
+       
       } else {
         document.getElementById("preloader").style.display = "none";
       }
@@ -99,11 +91,11 @@ const Layout = props => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    if (Count === 100) {
-      document.getElementById("preloader").style.display = "none";
-    }
-  });
+  // useEffect(() => {
+  //   if (Count === 100) {
+  //     document.getElementById("preloader").style.display = "none";
+  //   }
+  // });
 
 
 
@@ -161,7 +153,8 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-      <div id="overlay" >
+
+      {/* <div id="overlay" > */}
         {/* <div className="cv-spinner">
           <span className="spinner"></span>
           <button className="btn btn-primary" type="button" disabled>
@@ -169,36 +162,17 @@ const Layout = props => {
             Loading...
           </button>
         </div> */}
-      </div>
-
+      {/* </div> */}
 
 
 
       <div className="pace pace-active" id="preloader">
-        <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
-          <Progress
-            value={Count}
-            color="primary"
-            style={{ width: '100%', height: "4px" }}
-            animated
-          ></Progress>
+        <div className="pace-progress"  data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
         </div>
       </div>
 
-
-
-
-
-
-      {/* <div className="pace pace-active" id="preloader">
-          <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
-            <div className="pace-progress-inner"></div>
-          </div>
-          <div className="pace-activity"></div></div> */}
-
       <div id="layout-wrapper">
         <CustomAlert />
-        {/* <Spinner /> */}
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <BreadcrumbNew />
         <Sidebar

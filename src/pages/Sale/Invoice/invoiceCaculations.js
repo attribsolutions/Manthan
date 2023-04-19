@@ -1,3 +1,5 @@
+import { groupBy } from "../../../components/Common/CommonFunction"
+
 export const discountCalculate = (row,index) => {
     
     let rate = 0
@@ -36,3 +38,42 @@ export const discountCalculate = (row,index) => {
 
     return { discountBaseAmt, disCountAmt, gstAmt, tAmount, CGST, SGST }
 }
+
+export function bulkSearch(text, data, columns) {
+    
+    let search = text.toLowerCase()
+  
+    const filter = data.filter((item) => {
+        let found = false
+  
+        if (item.header) { return true }
+  
+        for (let i = 0; i < columns.length; i++) {
+  
+            let isCell = item[columns[i].dataField]
+            if (!(isCell === null)
+                && !(isCell === undefined)
+                && typeof isCell !== 'object'
+                && !Array.isArray(isCell)
+            ) {
+                if (!found) {
+                    isCell = JSON.stringify(isCell)
+                    isCell = isCell.toLowerCase(isCell)
+                    found = isCell.includes(search)
+                }
+            }
+        }
+        return found
+  
+    })
+    let hasHedRow1 = []
+    const grouped = groupBy(filter, pet => pet.Party);
+    grouped.forEach(i => {
+        if (i.length > 1) {
+            i.forEach(k => {
+                hasHedRow1.push(k)
+            })
+        }
+    })
+    return hasHedRow1
+  }

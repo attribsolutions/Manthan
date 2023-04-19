@@ -102,6 +102,9 @@ export const CREDITLIMIT_LIST = 154
 export const IMPORT_MASTER = 157
 export const IMPORT_MASTER_LIST = 158
 
+export const UPLOAD_EXCEL = 184
+
+
 export const ROUTE_UPDATE = 159
 export const PARTY_MASTER_BULK_UPDATE = 161
 
@@ -109,6 +112,8 @@ export const MANAGEMENT_PARTIES = 172
 
 export const BANK = 175
 export const BANK_LIST = 176
+
+export const BANK_ASSIGN = 182
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -173,10 +178,20 @@ export const CHALLAN_LIST = 138
 export const LOADING_SHEET = 155
 export const LOADING_SHEET_LIST = 156
 
+export const LOADING_SHEET_LIST_UPDATE = 179
+
+export const SALES_RETURN = 186
+export const SALES_RETURN_LIST = 187
+
 //**************************** Accounting ***********************************//
 
 export const RECEIPTS = 173
 export const RECEIPTS_LIST = 174
+
+export const RECEIPTS_LIST_2 = 180
+
+export const BULK_RECIPT = 181
+
 
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178

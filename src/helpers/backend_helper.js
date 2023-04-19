@@ -371,11 +371,18 @@ export const SalesMan_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url
 export const SalesMan_Delete_API = ({ deleteId, btnId }) => del(`${url.SALESMAN_FOR_MASTER}/${deleteId}`, btnId) // delete api
 
 //Bank Api
-export const post_Bank_List_Api = (filters) => post(url.BANK_LIST, filters)
+export const post_Bank_List_Api = (jsonBody) => post(url.BANK_LIST, jsonBody)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
-export const detelet_Bank_List_Api = ({ deleteId, btnId }) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
+export const detelet_Bank_List_Api = ({ deleteId, btnId}) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
+
+//Bank Assign Api
+export const PartyBankfilter_API = (filters) => post(url.PARTY_BANK_FILTER, filters)
+export const Post_Bank_Assign_API = ({ jsonBody, btnId }) => post(url.BANK_ASSIGN, jsonBody, btnId)// post api
+export const edit_Bank_Assign_Api = ({ editId, btnId }) => get(`${url.BANK_ASSIGN}/${editId}`, btnId) // edit api
+export const update_Bank_Assign_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK_ASSIGN}/${updateId}`, jsonBody, btnId)// update
+
 
 //Credit Limit
 export const Post_CreditLimit_Master_API = ({ jsonBody, btnId }) => post(url.CREDIT_LIMIT, jsonBody, btnId)// post api
@@ -385,11 +392,13 @@ export const CreditLimit_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_PO
 export const Route_Update_List_API = (data) => post(url.ROUTE_UPDATE_LIST, data)// Route Update List API For get Party List
 export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPDATE, jsonBody, btnId)// Route Update Post API
 
-
 // Loading Sheet
 export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_BUTTON_API, data)//Loading Sheet go button API For Master Page
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
+export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(url.LOADING_SHEET, deleteId, btnId)// Loading Sheet Post API For Master Page
+export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/${updateId}`)// Loading Sheet Post API For Master Page
+
 
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
@@ -526,6 +535,7 @@ export const Employee_drodown_Post_API = (jsonBody) => post(url.EMPLOYEE_DROPDOW
 
 //*********************************Accounting Module ************************************ */
 // Receipt and Payment Entry
+export const Receipt_Print = (id) => get(`${url.RECEIPT_POST_API}/${id}`)//dropdown api
 export const Receipt_Go_Button_API = (jsonBody) => post(url.RECEIPT_GO_BUTTON_API, jsonBody)//  postapi
 export const Opening_balance_API = (jsonBody) => post(url.OPENING_BALANCE, jsonBody)//  postapi
 export const Depositor_Bank_Filter_API = (jsonBody) => post(url.DEPOSITOR_BANK_FILTER, jsonBody)//  postapi
@@ -533,6 +543,13 @@ export const Receipt_Post_API = ({ jsonBody, btnId }) => post(url.RECEIPT_POST_A
 export const Receipt_Filter_API = (jsonBody) => post(url.RECEIPT_FILTERS, jsonBody)// Get subModule For H_pages
 export const Receipt_Type_API = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
 export const Receipt_Delete_API = ({ deleteId, btnId }) => del(`${url.RECEIPT_POST_API}/${deleteId}`, btnId)// delete api
+export const Bank_List_API = (jsonBody) => post(url.BANK_LIST_API, jsonBody)//  postapi
+export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_TO_PAYMENT, jsonBody)// Get subModule For H_pages
+
+// Sales Return
+export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//  postapi
+
+
 
 export {
   getLoggedInUser,
