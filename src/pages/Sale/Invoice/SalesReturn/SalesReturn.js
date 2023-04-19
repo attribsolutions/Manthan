@@ -60,6 +60,8 @@ const SalesReturn = (props) => {
     const [TableArr, setTableArr] = useState([]);
 
     const [returnMode, setrRturnMode] = useState(0);
+    const [imageTable, setImageTable] = useState([]);
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -373,14 +375,33 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input type="file"
+                    {/* <Input type="file"
                         className="form-control "
                         // value={FileName}
                         name="image"
                         id="file"
                         accept=".jpg, .jpeg, .png ,.pdf"
                     // onChange={(event) => { onchangeHandler(event) }}
-                    />
+                    /> */}
+                    <div>
+                        <div className="btn-group btn-group-example mb-3" role="group">
+                            <Input
+                                type="file"
+                                className="form-control "
+                                // value={FileName}
+                                name="image"
+                                id="file"
+                                accept=".jpg, .jpeg, .png ,.pdf"
+                                onChange={(event) => { onchangeHandler(event, row) }}
+                            />
+                            <button name="image"
+                                accept=".jpg, .jpeg, .png ,.pdf"
+                                onClick={() => { myFunction(row) }}
+                                id="ImageId" type="button" className="btn btn-primary ">Show</button>
+                        </div>
+                    </div>
+
+
                 </span>)
             }
         },
@@ -451,6 +472,51 @@ const SalesReturn = (props) => {
 
     }
 
+
+
+    const onchangeHandler = async (event, row) => {
+        debugger
+        const file = event.target.files[0]
+        const base64 = await convertBase64(file);
+        let ImageUpload = base64
+        row.Image = ImageUpload
+        setImageTable(ImageUpload)
+    }
+
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader()
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result)
+            };
+            fileReader.onerror = (error) => {
+                reject(error)
+            }
+        })
+    }
+
+    function myFunction(row) {
+
+        debugger
+        var x = document.getElementById("add-img");
+        if (x.style.display === "none") {
+            x.src = imageTable
+            if (imageTable != "") {
+                x.style.display = "block";
+
+            }
+
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+
+
+
+
     function RetailerHandler(event) {
 
         const jsonBody = JSON.stringify({
@@ -475,6 +541,7 @@ const SalesReturn = (props) => {
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
+                            < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} />
 
                             <Row>
                                 <Col sm="6">
