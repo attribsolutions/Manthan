@@ -11,7 +11,7 @@ import {
   updateEmployeeIDSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getDistrictOnState, getDistrictOnStateSuccess, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -95,6 +95,7 @@ const AddEmployee = (props) => {
   const hasShowModal = props.hasOwnProperty(mode.editValue)
 
   useEffect(() => {
+    dispatch(getDistrictOnStateSuccess([]))
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.EMPLOYEE))
     dispatch(getEmployeeTypelist());
