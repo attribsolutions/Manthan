@@ -504,19 +504,10 @@ const UploadExcel = (props) => {
 
 
                     </div>
-                    <div style={{ width: "20%" }}>
-                        <CInput
-                            type="text"
-                            pattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
-                            onChange={(e) => {
-                                const aa = e.target.value
-                                debugger
-                            }}
-                        ></CInput>
-                    </div>
+
                 </form>
 
-
+                
             </React.Fragment >
         );
     }
@@ -528,7 +519,6 @@ const UploadExcel = (props) => {
 };
 
 export default UploadExcel
-
 
 
 

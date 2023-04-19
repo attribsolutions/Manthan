@@ -440,11 +440,8 @@ const AddEmployee = (props) => {
                             placeholder="YYYY-MM-DD"
                             autoComplete="0,''"
                             options={{
-                              altInput: true,
-                              altFormat: "F j, Y",
+                              altFormat: "d-m-Y",
                               dateFormat: "Y-m-d",
-                              minDate: new Date().fp_incr("n"),
-                              maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                             }}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })

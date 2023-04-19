@@ -19,13 +19,8 @@ const CInput = (prop) => {
         }
     }
     const param = Object.assign({}, prop, { onChange: on_Change });
-    return (
-        <div>
-            <Input
-                {...param}
-            />
-        </div>
-    )
+
+    return (<Input {...param} />)
 }
 
 export default CInput
