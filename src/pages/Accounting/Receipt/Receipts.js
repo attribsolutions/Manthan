@@ -200,12 +200,7 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
-                if (AmountPaid === undefined) {
-                    document.getElementById("AmountPaid").value = 0
-                }
-                else {
-                    document.getElementById("AmountPaid").value = AmountPaid
-                }
+               
                 AmountPaidDistribution(AmountPaid);
             }
         }
