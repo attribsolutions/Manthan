@@ -28,18 +28,14 @@ import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, log
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { LoadingSheet_GoBtn_API, LoadingSheet_GoBtn_API_Succcess, SaveLoadingSheetMaster, SaveLoadingSheetMasterSucccess } from "../../../../store/Sales/LoadingSheetRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
-import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { GetCustomer } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../../store/Sales/SalesReturnRedux/action";
 import CustomTable2 from "../../../../CustomTable2/Table";
 import "./salesReturn.scss";
+import CInput from "../../../../CustomValidateForm/CInput";
+import { floatRegx } from "../../../../CustomValidateForm/RegexPattern";
 
 const SalesReturn = (props) => {
 
@@ -85,7 +81,6 @@ const SalesReturn = (props) => {
     }));
 
     useEffect(() => {
-        dispatch(LoadingSheet_GoBtn_API_Succcess([]))
         dispatch(InvoiceNumberSuccess([]))
         const page_Id = pageId.SALES_RETURN
         dispatch(commonPageFieldSuccess(null));
@@ -128,45 +123,45 @@ const SalesReturn = (props) => {
     }, []);
 
     useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(Breadcrumb_inputName(''))
-
-            if (pageMode === mode.dropdownAdd) {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: url.LOADING_SHEET_LIST,
-                }))
-            }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [postMsg])
-
-    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+    // useEffect(() => {
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    //         dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
+    //         setState(() => resetFunction(fileds, state))// Clear form values  
+    //         dispatch(Breadcrumb_inputName(''))
+
+    //         if (pageMode === mode.dropdownAdd) {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //             }))
+    //         }
+    //         else {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //                 RedirectPath: url.LOADING_SHEET_LIST,
+    //             }))
+    //         }
+    //     }
+    //     else if (postMsg.Status === true) {
+    //         dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
+    //         dispatch(AlertState({
+    //             Type: 4,
+    //             Status: true,
+    //             Message: JSON.stringify(postMessage.Message),
+    //             RedirectPath: false,
+    //             AfterResponseAction: false
+    //         }));
+    //     }
+    // }, [postMsg])
 
     function ReturnDate_Onchange(e, date) {
         setState((i) => {
@@ -202,7 +197,7 @@ const SalesReturn = (props) => {
         setTableArr(newArr)
     }
 
-      const pagesListColumns = [
+    const pagesListColumns = [
         // {
         //     text: "ReturnDate",
         //     dataField: "ReturnDate",
@@ -228,14 +223,17 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
+                    <CInput
                         id={`Quantity${key}`}
                         key={`Quantity${row.id}`}
                         defaultValue={row.Quantity}
                         autoComplete="off"
                         type="text"
-                        className="col col-sm text-center"
-                        // onChange={(event) => { Calculate(event, row, key) }}
+                        pattern={floatRegx}
+                        className="col col-sm text-end"
+                        onChange={(event) => {
+                            const data = event.target.value
+                        }}
                     />
                 </span>)
             }
@@ -287,13 +285,17 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
+                    <CInput
                         id=""
                         key={row.id}
                         defaultChecked={row.BatchCode}
                         type="text"
-                        className="col col-sm text-center"
-                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                        pattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
+                        className="col col-sm text-end"
+                        onChange={(event) => {
+                            const data = event.target.value
+                        }}
+
                     />
                 </span>)
             }
@@ -338,10 +340,10 @@ const SalesReturn = (props) => {
                 </span>)
             }
         },
-        {
-            text: "ReturnReason",
-            dataField: "ReturnReason",
-        },
+        // {
+        //     text: "ReturnReason",
+        //     dataField: "ReturnReason",
+        // },
         {
             text: "ItemComment",
             dataField: "",
@@ -408,8 +410,25 @@ const SalesReturn = (props) => {
     ];
 
     function AddPartyHandler(e) {
+        debugger
+        const invalidMsg1 = []
+        if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
+            invalidMsg1.push(`Select a value from both Item & Invoice No.`)
+        }
+        if ((returnMode === 2) && (values.ItemName === '')) {
+            invalidMsg1.push(`Item is Required`)
+        };
+        if ((returnMode === 1) && (values.InvoiceNumber === '')) {
+            invalidMsg1.push(`Invoice No. is Required`)
+        };
 
-        setState(() => resetFunction(fileds, state))// Clear form values 
+        if (invalidMsg1.length > 0) {
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(invalidMsg1)
+            })
+            return
+        }
 
         setTableArr([...TableArr, {
             id: TableArr.length + 1,
@@ -419,6 +438,17 @@ const SalesReturn = (props) => {
             ItemName: values.ItemName.label,
             ReturnReason: values.ReturnReason.label
         }]);
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.ItemName = ""
+            a.values.InvoiceNumber = ""
+            a.hasValid.ItemName.valid = true;
+            a.hasValid.InvoiceNumber.valid = true;
+            return a
+        })
+
+
     }
 
     function RetailerHandler(event) {
