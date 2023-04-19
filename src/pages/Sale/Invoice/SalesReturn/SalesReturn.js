@@ -431,7 +431,7 @@ const SalesReturn = (props) => {
     ];
 
     function AddPartyHandler(e) {
-        debugger
+        
         const invalidMsg1 = []
         if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
             invalidMsg1.push(`Select a value from both Item & Invoice No.`)
@@ -475,7 +475,7 @@ const SalesReturn = (props) => {
 
 
     const onchangeHandler = async (event, row) => {
-        debugger
+        
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
         let ImageUpload = base64
@@ -499,7 +499,7 @@ const SalesReturn = (props) => {
 
     function myFunction(row) {
 
-        debugger
+        
         var x = document.getElementById("add-img");
         if (x.style.display === "none") {
             x.src = imageTable

@@ -34,7 +34,7 @@ function* post_Bank_List_GenratorFunction({ jsonBody} ) {
               // postList API
     // const filters = loginJsonBody();// required only PartyID and CompanyID
     try {
-        debugger
+        
         const response = yield call(post_Bank_List_Api, jsonBody);
         yield put(postBanklistSuccess(response.Data));
     } catch (error) { CommonConsole(error) }

@@ -263,7 +263,7 @@ const UploadExcel = (props) => {
     //                 t = t + 5
 
     //                 let b = document.getElementById("pace-progress1")
-    //                 debugger
+    //                 
     //                 // let c = document.getElementById("sr-only")
 
     //                 b.style.width = `${t}%`
@@ -292,7 +292,7 @@ const UploadExcel = (props) => {
     //             a.style.cssText = `${t}%`
 
     //             function myTimer() {
-    //                 debugger
+    //                 
     //                 console.log("myInterval")
     //                 t = t + 10
 

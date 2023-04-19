@@ -118,7 +118,7 @@ const LoadingSheetList = () => {
     }
 
     const updateBtnFunc = (list) => {
-        debugger
+        
         dispatch(UpdateLoadingSheet(list.id));
         history.push(url.LOADING_SHEET_LIST_UPDATE,list);
 

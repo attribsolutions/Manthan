@@ -57,7 +57,7 @@ const ReceiptList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    debugger
+    
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
     const values = { ...state.values }
 

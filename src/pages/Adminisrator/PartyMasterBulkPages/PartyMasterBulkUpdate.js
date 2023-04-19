@@ -283,7 +283,7 @@ const PartyMasterBulkUpdate = (props) => {
 
         // dispatch(getDistrictOnState(22))
     }
-    debugger
+    
   
 
 

@@ -48,7 +48,7 @@ const AddEmployee = (props) => {
     PAN: "",
     AadharNo: "",
     // working_hours: "8",
-    CompanyName: "",
+    // CompanyName: "",
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
@@ -151,6 +151,7 @@ const AddEmployee = (props) => {
           State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
+        hasValid.id.valid = id
         hasValid.Name.valid = true;
         hasValid.Address.valid = true;
         hasValid.Mobile.valid = true;
@@ -358,7 +359,7 @@ const AddEmployee = (props) => {
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
-        
+
             <Card className="text-black">
               <CardHeader className="card-header   text-dark c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

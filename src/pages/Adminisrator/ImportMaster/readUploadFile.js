@@ -17,7 +17,7 @@ const readUploadFile = async ({ dispatch, useState, useEffect, file, compairFiel
       progLabe.innerText = `${t}%`
     }
 
-    debugger
+    
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
 
@@ -38,7 +38,7 @@ const readUploadFile = async ({ dispatch, useState, useEffect, file, compairFiel
 
     });
 
-    debugger
+    
 
     processing(10)
 
@@ -60,7 +60,7 @@ const readUploadFile = async ({ dispatch, useState, useEffect, file, compairFiel
     groupBy(jsonResult,(party)=>(party))
     console.log('Upload data', jsonResult)
     const aad = await commonPageFiled_API(184)
-    debugger
+    
   } catch (e) { }
 }
 
