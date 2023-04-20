@@ -12,8 +12,12 @@ import { history } from "../../../components/Common/CommonFunction";
 
 function* commonPageFiled_GenFunc({ pageId }) {
   try {
+    debugger
     const response = yield call(commonPageFiled_API, pageId);
-    if ((response.Data.length > 0)) {
+ 
+   const  {PageFieldMaster}=response.Data  
+   
+    if ((PageFieldMaster.length > 0)) {
       yield put(commonPageFieldSuccess(response.Data));
     }
     else {
@@ -32,8 +36,10 @@ function* commonPageFiled_GenFunc({ pageId }) {
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
   try {
+    debugger
     const response = yield call(commonPageFiled_API, pageId);
-    if ((response.Data.length > 0)) {
+    const  {PageFieldMaster}=response.Data 
+    if ((PageFieldMaster.length > 0)) { 
       yield put(commonPageFieldListSuccess(response.Data));
     }
     else {
