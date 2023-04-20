@@ -4,7 +4,6 @@ import {
     CardBody,
     CardHeader,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -31,6 +30,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
+    currentDate,
     loginCompanyID,
     loginUserID
 } from "../../../components/Common/CommonFunction";
@@ -54,7 +54,7 @@ const Credit = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        DebitDate: "",
+        DebitDate:currentDate,
         PartyName: "",
         Comment: "",
         Amount: "",
@@ -87,7 +87,7 @@ const Credit = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-    debugger
+     
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -259,7 +259,7 @@ const Credit = (props) => {
                                                 <Col sm="7">
                                                     <Flatpickr
                                                         name='DebitDate'
-                                                        // value={values.ReturnDate}
+                                                        value={values.DebitDate}
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="Select..."
                                                         options={{
