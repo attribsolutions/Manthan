@@ -375,7 +375,7 @@ export const post_Bank_List_Api = (jsonBody) => post(url.BANK_LIST, jsonBody)
 export const Post_Bank_Master_API = ({ jsonBody, btnId }) => post(url.BANK, jsonBody, btnId)// post api
 export const edit_Bank_List_Api = ({ editId, btnId }) => get(`${url.BANK}/${editId}`, btnId) // edit api
 export const update_Bank_List_Api = ({ jsonBody, updateId, btnId }) => put(`${url.BANK}/${updateId}`, jsonBody, btnId)// update
-export const detelet_Bank_List_Api = ({ deleteId, btnId}) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
+export const detelet_Bank_List_Api = ({ deleteId, btnId }) => del(`${url.BANK}/${deleteId}`, btnId) // delete api
 
 //Bank Assign Api
 export const PartyBankfilter_API = (filters) => post(url.PARTY_BANK_FILTER, filters)
@@ -547,7 +547,8 @@ export const Bank_List_API = (jsonBody) => post(url.BANK_LIST_API, jsonBody)//  
 export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_TO_PAYMENT, jsonBody)// Get subModule For H_pages
 
 // Sales Return
-export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//  postapi
+export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
+export const SalesReturn_add_button_api = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_SALES_RETURN}/${ItemID}`)//add button get api api
 
 
 
