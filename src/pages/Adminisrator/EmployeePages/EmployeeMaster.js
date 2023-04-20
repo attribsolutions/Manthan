@@ -518,7 +518,7 @@ const AddEmployee = (props) => {
                             <Select
                             styles={{
                             control: (baseStyles, state) => {
-                              debugger
+                               
                               return({
                               ...baseStyles,
                               borderColor: state.isFocused ? 'grey' : 'red',
