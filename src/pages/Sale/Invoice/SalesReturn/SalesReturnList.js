@@ -57,7 +57,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
+    const { userAccess, pageField, RetailerList,  } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -75,8 +75,9 @@ const SalesReturnList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+        dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
         dispatch(GetCustomer())
+        goButtonHandler(true)
     }, []);
 
     useEffect(() => {

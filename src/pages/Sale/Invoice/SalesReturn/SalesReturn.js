@@ -65,7 +65,6 @@ const SalesReturn = (props) => {
     const [returnMode, setrRturnMode] = useState(0);
     const [imageTable, setImageTable] = useState([]);
 
-    console.log(TableArr)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -75,7 +74,6 @@ const SalesReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
-        addButton,
     } = useSelector((state) => ({
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.customer,
@@ -138,6 +136,7 @@ const SalesReturn = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            setTableArr([])
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
@@ -153,7 +152,7 @@ const SalesReturn = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.SALES_RETURN,
+                    RedirectPath: url.SALES_RETURN_LIST,
                 }))
             }
         }
@@ -241,7 +240,7 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key, a, b) => {
-                debugger
+               
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`Unit${key}`}
@@ -549,6 +548,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
+       debugger 
         event.preventDefault();
 
         const btnId = event.target.id
@@ -586,7 +586,7 @@ const SalesReturn = (props) => {
         }
         )
         try {
-            // if (formValid(state, setState)) {
+            if (formValid(state, setState)) {
             btnIsDissablefunc({ btnId, state: true })
 
             const jsonBody = JSON.stringify({
@@ -607,8 +607,8 @@ const SalesReturn = (props) => {
             // }
             // else {
             dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
-            console.log(jsonBody)
-            // }
+          
+            }
             // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
