@@ -307,6 +307,6 @@ export const OPENING_BALANCE ='/GetOpeningBalance'
 export const BANK_LIST_API = '/PartyBankList'
 export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
 
-
 // Sales Return
 export const INVOICE_NUMBER_LIST ='/InvoiceNoList'
+export const ADD_BUTTON_API_FOR_SALES_RETURN ='/ReturnItemAdd'

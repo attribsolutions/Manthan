@@ -31,11 +31,13 @@ import * as mode from "../../../../routes/PageMode";
 import { GetCustomer } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { InvoiceNumber, InvoiceNumberSuccess } from "../../../../store/Sales/SalesReturnRedux/action";
+import { addButton_for_SalesReturn, InvoiceNumber, InvoiceNumberSuccess } from "../../../../store/Sales/SalesReturnRedux/action";
 import CustomTable2 from "../../../../CustomTable2/Table";
 import "./salesReturn.scss";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { floatRegx } from "../../../../CustomValidateForm/RegexPattern";
+import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
+import { SalesReturn_add_button_api } from "../../../../helpers/backend_helper";
 
 const SalesReturn = (props) => {
 
@@ -72,15 +74,19 @@ const SalesReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
+        addButton,
     } = useSelector((state) => ({
         postMsg: state.LoadingSheetReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.customer,
-        ItemList: state.ItemMastersReducer.pages,
+        ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
+        addButton: state.SalesReturnReducer.addButton,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
+
+    const { ItemUnitDetails = [] } = addButton
 
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
@@ -88,7 +94,7 @@ const SalesReturn = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(GetCustomer())
-        dispatch(getItemList())
+        dispatch(getpartyItemList(loginPartyID()))
     }, []);
 
     const location = { ...history.location }
@@ -179,10 +185,15 @@ const SalesReturn = (props) => {
         label: index.Name,
     }));
 
-    const ItemOptions = ItemList.map((index) => ({
-        value: index.id,
-        label: index.Name,
+    const itemList = ItemList.map((index) => ({
+        value: index.Item,
+        label: index.ItemName,
+        itemCheck: index.itemCheck
     }));
+
+    const ItemList_Options = itemList.filter((index) => {
+        return index.itemCheck === true
+    });
 
     const ReturnReasonOptions = ReturnReasonList.map((index) => ({
         value: index.id,
@@ -244,18 +255,19 @@ const SalesReturn = (props) => {
             text: "Unit",
             dataField: "",
             classes: () => "sales-return-row",
-            formatter: (cellContent, row, key) => {
+            formatter: (cellContent, row, key, a, b) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
-                        id={`MRP${key}`}
-                        name="MRP"
-                        defaultValue={row.Calculate}
+                        id={`Unit${key}`}
+                        name="Unit"
+                        // defaultValue={row.Calculate}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
-                        options={ItemOptions}
-                        onChange={(event) => { row.MRP = event.value }}
+                        // options={ItemList_Options}
+                        options={row.ItemUnitDetails}
+                        onChange={(event) => { row.Unit = event.value }}
                     />
                 </span>)
             }
@@ -270,11 +282,31 @@ const SalesReturn = (props) => {
                     <Select
                         id={`MRP${key}`}
                         name="MRP"
-                        defaultValue={row.Calculate}
+                        // defaultValue={row.Calculate}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
-                        options={ItemOptions}
+                        options={row.ItemMRPDetails}
+                        onChange={(event) => { row.MRP = event.value }}
+                    />
+                </span>)
+            }
+        },
+        {
+            text: "GST",
+            dataField: "",
+            classes: () => "sales-return-row",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <Select
+                        id={`GST${key}`}
+                        name="GST"
+                        // defaultValue={row.Calculate}
+                        isSearchable={true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={row.ItemGSTHSNDetails}
                         onChange={(event) => { row.MRP = event.value }}
                     />
                 </span>)
@@ -430,8 +462,12 @@ const SalesReturn = (props) => {
         },
     ];
 
-    function AddPartyHandler(e) {
-        debugger
+    useEffect(() => {
+
+    }, [])
+
+    async function AddPartyHandler(e) {
+
         const invalidMsg1 = []
         if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
             invalidMsg1.push(`Select a value from both Item & Invoice No.`)
@@ -451,13 +487,20 @@ const SalesReturn = (props) => {
             return
         }
 
+        const resp = await SalesReturn_add_button_api(values.ItemName.value)
+        const { ItemUnitDetails = [], ItemMRPDetails = [], ItemGSTHSNDetails = [] } = resp.Data
+
+        const unitOps = ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.id }));
+        const MRPOps = ItemMRPDetails.map(i => ({ label: i.MRP, value: i.id }));
+        const GSTOps = ItemGSTHSNDetails.map(i => ({ label: i.GSTPercentage, value: i.id }));
+
         setTableArr([...TableArr, {
             id: TableArr.length + 1,
-            ReturnDate: values.ReturnDate,
-            Retailer: values.Retailer.label,
+            ItemUnitDetails: unitOps,
+            ItemMRPDetails: MRPOps,
+            ItemGSTHSNDetails: GSTOps,
             InvoiceNumber: values.InvoiceNumber.label,
             ItemName: values.ItemName.label,
-            ReturnReason: values.ReturnReason.label
         }]);
 
         setState((i) => {
@@ -469,13 +512,22 @@ const SalesReturn = (props) => {
             return a
         })
 
+        // dispatch(addButton_for_SalesReturn(values.ItemName.value))
 
     }
 
+    function RetailerHandler(event) {
 
+        const jsonBody = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: event.value
+        });
+
+        dispatch(InvoiceNumber(jsonBody));
+    }
 
     const onchangeHandler = async (event, row) => {
-        debugger
+
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
         let ImageUpload = base64
@@ -499,7 +551,6 @@ const SalesReturn = (props) => {
 
     function myFunction(row) {
 
-        debugger
         var x = document.getElementById("add-img");
         if (x.style.display === "none") {
             x.src = imageTable
@@ -513,19 +564,6 @@ const SalesReturn = (props) => {
         }
     }
 
-
-
-
-
-    function RetailerHandler(event) {
-
-        const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
-            CustomerID: event.value
-        });
-
-        dispatch(InvoiceNumber(jsonBody));
-    }
 
     const saveHandeller = async (event) => {
         event.preventDefault();
@@ -659,7 +697,7 @@ const SalesReturn = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                options={ItemOptions}
+                                                options={ItemList_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     setrRturnMode(2)
