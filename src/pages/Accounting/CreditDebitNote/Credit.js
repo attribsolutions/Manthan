@@ -53,6 +53,7 @@ import CInput from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
 import { ReceiptGoButtonMaster, ReceiptTypeAPI } from "../../../store/Accounting/Receipt/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
 
 
@@ -228,10 +229,10 @@ const Credit = (props) => {
     }, [pageField])
 
     useEffect(() => {
-        debugger
+        
          
         const jsonBody = JSON.stringify({
-            Type: 6,
+            Type: 1,
             PartyID: loginPartyID(),
             CompanyID: loginCompanyID()
         });
@@ -243,8 +244,9 @@ const Credit = (props) => {
             Company: loginCompanyID(),
             TypeID: 6
         });
-        dispatch(ReceiptTypeAPI(jsonBody));
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
+   
 
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -373,7 +375,7 @@ const Credit = (props) => {
         return (
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
+                <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <form noValidate>
                         {/* <Card> */}
                         {/* <CardHeader className="card-header   text-black c_card_header" >
@@ -497,7 +499,7 @@ const Credit = (props) => {
                                                     value={values.CreditNoteReason}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    // options={ItemOptions}
+                                                    options={ReceiptModeOptions}
                                                     onChange={(hasSelect, evn) => { onChangeSelect({ hasSelect, evn, state, setState, }) }}
                                                 />
                                                 {isError.CreditNoteReason.length > 0 && (
