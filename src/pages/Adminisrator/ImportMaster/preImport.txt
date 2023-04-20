@@ -60,7 +60,7 @@ const ImportMaster = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_MASTER
+        const page_Id = pageId.IMPORT_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());

@@ -144,7 +144,7 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-
+debugger
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
         const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
@@ -159,7 +159,6 @@ const AddEmployee = (props) => {
         hasValid.DOB.valid = true;
         hasValid.PAN.valid = true;
         hasValid.AadharNo.valid = true;
-        hasValid.CompanyName.valid = true;
         hasValid.EmployeeTypeName.valid = true;
         hasValid.StateName.valid = true;
         hasValid.DistrictName.valid = true;
@@ -173,7 +172,6 @@ const AddEmployee = (props) => {
         values.PAN = PAN;
         values.AadharNo = AadharNo
         values.Name = Name;
-        values.CompanyName = { label: CompanyName, value: Company_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
@@ -438,11 +436,11 @@ const AddEmployee = (props) => {
                             name="DOB"
                             value={values.DOB}
                             className="form-control d-block p-2 bg-white text-dark"
-                            placeholder="YYYY-MM-DD"
+                            placeholder="DD-MM-YYYY"
                             autoComplete="0,''"
                             options={{
                               altFormat: "d-m-Y",
-                              dateFormat: "Y-m-d",
+                              dateFormat: "d-m-Y",
                             }}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
@@ -518,7 +516,6 @@ const AddEmployee = (props) => {
                             <Select
                               name="StateName"
                               id="state"
-                              class="Flatpickr"
                               value={values.StateName}
                               isSearchable={true}
                               classNamePrefix="dropdown"
@@ -589,7 +586,6 @@ const AddEmployee = (props) => {
                             <Select
                               name="EmployeeParties"
                               value={values.EmployeeParties}
-                              isSearchable={true}
                               isMulti={true}
                               className="react-dropdown"
                               options={Party_DropdownOptions}

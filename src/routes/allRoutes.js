@@ -128,7 +128,6 @@ import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
 import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
 import Report from "../Reports/AllReportPage";
-import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
@@ -139,12 +138,17 @@ import BankList from "../pages/Accounting/Bank/BankList";
 import PaymentEntry from "../pages/Accounting/Payment/PaymentEntry";
 import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
 import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
-
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
-
 import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
 import UploadExcel from "../pages/Adminisrator/ImportMaster/UploadExcel";
 import SalesReturn from "../pages/Sale/Invoice/SalesReturn/SalesReturn";
+import Credit from "../pages/Accounting/CreditDebitNote/Credit";
+import Debit from "../pages/Accounting/CreditDebitNote/Debit";
+import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
+import DebitList from "../pages/Accounting/CreditDebitNote/DebitList";
+import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/ImportFieldAdd";
+import ImportFieldMap from "../pages/Adminisrator/ImportMaster/ImportFieldMap";
+
 
 
 const userRoutes = [
@@ -251,9 +255,10 @@ const userRoutes = [
   { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
-  { path: path.IMPORT_MASTER, component: ImportMaster },
+  { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
   { path: path.UPLOAD_EXCEL, component: UploadExcel },
-
+  { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd},
+  
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
@@ -261,6 +266,8 @@ const userRoutes = [
 
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
+
+
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
@@ -346,6 +353,17 @@ const userRoutes = [
 
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
+
+
+
+  { path: path.CREDIT_LIST, component: CreditList},
+  { path: path.DEBIT_LIST, component: DebitList},
+
+  { path: path.CREDIT, component: Credit },
+  { path: path.DEBIT, component: Debit },
+
+
+
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

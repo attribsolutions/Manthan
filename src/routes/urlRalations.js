@@ -105,8 +105,11 @@ export const GeneralMaster = url.GENERAL_LIST
 export const CreditLimitMaster = url.CREDITLIMIT_LIST
 export const CreditLimitList = url.CREDITLIMIT
 
-export const ImportMaster = url.IMPORT_MASTER_LIST
-export const ImportTypeList = url.IMPORT_MASTER
+export const ImportFieldMap = url.IMPORT_FIELD_MAP
+export const ImportFieldMapList = url.IMPORT_FIELD_MAP
+
+export const ImportFieldAdd = url.IMPORT_FIELD_ADD_LIST
+export const ImportFieldAddList = url.IMPORT_FIELD_ADD
 
 export const RouteUpdate = url.ROUTE_UPDATE
 
@@ -116,6 +119,8 @@ export const ManagementParties = url.MANAGEMENT_PARTIES
 
 export const BankMaster = url.BANK_LIST
 export const BankList = url.BANK
+
+
 
 //******************************* Purchase Module ************************************//
 
@@ -196,5 +201,11 @@ export const PaymentEntry = url.PAYMENT_ENTRY_LIST
 export const PaymentEntryList = url.PAYMENT_ENTRY
 
 export const BankAssign = url.BANK_ASSIGN
+
+export const Credit = url.CREDIT_LIST
+export const CreditList = url.CREDIT
+
+export const Debit = url.DEBIT_LIST
+export const DebitList = url.DEBIT
 
 

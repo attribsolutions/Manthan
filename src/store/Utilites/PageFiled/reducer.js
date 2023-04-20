@@ -6,6 +6,7 @@ import { COMMON_PAGE_FILED_lIST_SUCCESS, COMMON_PAGE_FILED_SUCCESS } from "./act
  }
 
 const CommonPageFieldReducer = (state = INIT_STATE, action) => {
+   
   switch (action.type) {
 
     case COMMON_PAGE_FILED_SUCCESS:
