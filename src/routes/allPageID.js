@@ -115,6 +115,8 @@ export const BANK_LIST = 176
 
 export const BANK_ASSIGN = 182
 
+export const IMPORT_FIELD_MASTER = 185
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
