@@ -200,7 +200,7 @@ const LoadingSheetUpdate = (props) => {
 
 
     function checkLoading(e, row, key) {
-        debugger
+        
 
         let checkedValue = e.target.checked
         row.idChecked = checkedValue
@@ -302,7 +302,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-        debugger
+        
         let result = InvoiceParent.map(a => {
             if (a.idChecked === true) {
                 return a.id
@@ -377,16 +377,8 @@ const LoadingSheetUpdate = (props) => {
 
                                     </FormGroup>
                                 </Col >
-
-
-
                             </div>
-
-
-
-
                         </div>
-
 
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}

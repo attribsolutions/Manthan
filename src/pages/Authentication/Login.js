@@ -30,40 +30,29 @@ import axios from "axios";
 
 const Login = props => {
   const dispatch = useDispatch()
- 
+
 
   const { loginError } = useSelector(state => ({
     loginError: state.Login.loginError,
   }))
 
-  console.log("loginError", loginError)
   useEffect(() => {
-
-    localStorage.clear();
-    document.getElementById("UserName").focus();
+    try {
+      localStorage.clear();
+      document.getElementById("UserName").focus();
+    } catch (e) { }
   }, [])
-  // handleValidSubmit
-  const handleValidSubmit = (event,values) => {
+
+  
+
+  const handleValidSubmit = (event, values) => {
     dispatch(loginUser(values, props.history))
-
-
   }
 
 
   function createSuperAdminHandler() {
-    //     
-    //     alert("call super admin API SuccessFully")
-    //     let token = JSON.parse(sessionStorage.getItem('token'));
-    // if (token==null)token=''
-    //     const baseURL = "http://192.168.1.114:8001/SuperAdmin";
-    //     axios.get(baseURL, { headers: { "Authorization": `Bearer${token}` } }).then((response) => {
-    //       // setPost(response.data);
-    //       console.log(response)
-    //     });
     const jsonBody = JSON.stringify([]);
     dispatch(postSuperAdmin(jsonBody))
-
-    console.log("jsonBody", jsonBody)
   }
 
   return (
@@ -104,7 +93,6 @@ const Login = props => {
                           <AvField
                             name="UserName"
                             label="UseName"
-                            // value="Pradnya11122"
                             className="form-control"
                             placeholder="Enter User Name"
                             type="text"
@@ -116,17 +104,11 @@ const Login = props => {
                             <div className="flex-grow-1">
                               <label className="form-label">Password</label>
                             </div>
-                            {/* <div className="flex-shrink-0">
-                              <div className="">
-                                <Link to="/forgot-password" className="text-muted">Forgot password?</Link>
-                              </div>
-                            </div> */}
                           </div>
 
                           <div className="mb-3">
                             <AvField
                               name="Password"
-                              // value="123456"
                               type="password"
                               className="form-control"
                               required

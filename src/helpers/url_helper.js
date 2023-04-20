@@ -147,6 +147,10 @@ export const MARGIN_MASTER_LIST = '/Margins'
 export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
 export const DELETE_API_FOR_LIST_MARGIN_PAGE = '/DeleteMarginOnList'
 
+//Import Master 
+export const EXCEL_IMPORT_MASTER = '/PartyImportFieldFilter'    //gobutton
+export const EXCEL_IMPORT_MASTER_SAVE = '/PartyImportFieldSave'    //SAVE
+
 //TermsAndCondtions API
 export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
 
@@ -307,6 +311,6 @@ export const OPENING_BALANCE ='/GetOpeningBalance'
 export const BANK_LIST_API = '/PartyBankList'
 export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
 
-
 // Sales Return
 export const INVOICE_NUMBER_LIST ='/InvoiceNoList'
+export const ADD_BUTTON_API_FOR_SALES_RETURN ='/ReturnItemAdd'

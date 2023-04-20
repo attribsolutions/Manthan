@@ -511,7 +511,7 @@ const BulkRecipt = (props) => {
 
 
     function CalculateOnchange(e, row, key) {
-        debugger
+        
         let Calculate = e.target.value
         if (Calculate <= 0) {
             row.Calculate = row.BalanceAmount
@@ -569,7 +569,7 @@ const BulkRecipt = (props) => {
 
 
     const SaveHandler = (event) => {
-        debugger
+        
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id

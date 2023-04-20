@@ -11,7 +11,7 @@ import {
   updateEmployeeIDSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getDistrictOnState, getDistrictOnStateSuccess, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -48,7 +48,7 @@ const AddEmployee = (props) => {
     PAN: "",
     AadharNo: "",
     // working_hours: "8",
-    CompanyName: "",
+    // CompanyName: "",
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
@@ -95,6 +95,7 @@ const AddEmployee = (props) => {
   const hasShowModal = props.hasOwnProperty(mode.editValue)
 
   useEffect(() => {
+    dispatch(getDistrictOnStateSuccess([]))
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.EMPLOYEE))
     dispatch(getEmployeeTypelist());
@@ -150,6 +151,7 @@ const AddEmployee = (props) => {
           State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
+        hasValid.id.valid = id
         hasValid.Name.valid = true;
         hasValid.Address.valid = true;
         hasValid.Mobile.valid = true;
@@ -357,7 +359,7 @@ const AddEmployee = (props) => {
 
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
-        
+
             <Card className="text-black">
               <CardHeader className="card-header   text-dark c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -436,14 +438,11 @@ const AddEmployee = (props) => {
                             name="DOB"
                             value={values.DOB}
                             className="form-control d-block p-2 bg-white text-dark"
-                            placeholder="YYYY-MM-DD"
+                            placeholder="DD-MM-YYYY"
                             autoComplete="0,''"
                             options={{
-                              altInput: true,
-                              altFormat: "F j, Y",
-                              dateFormat: "Y-m-d",
-                              minDate: new Date().fp_incr("n"),
-                              maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                              altFormat: "d-m-Y",
+                              dateFormat: "d-m-Y",
                             }}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
@@ -517,9 +516,16 @@ const AddEmployee = (props) => {
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
                             <Select
+                            styles={{
+                            control: (baseStyles, state) => {
+                              debugger
+                              return({
+                              ...baseStyles,
+                              borderColor: state.isFocused ? 'grey' : 'red',
+                            })},
+                            }}
                               name="StateName"
                               id="state"
-                              class="Flatpickr"
                               value={values.StateName}
                               isSearchable={true}
                               classNamePrefix="dropdown"
@@ -590,7 +596,6 @@ const AddEmployee = (props) => {
                             <Select
                               name="EmployeeParties"
                               value={values.EmployeeParties}
-                              isSearchable={true}
                               isMulti={true}
                               className="react-dropdown"
                               options={Party_DropdownOptions}

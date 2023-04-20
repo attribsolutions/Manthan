@@ -32,9 +32,11 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import CInput from "../../../CustomValidateForm/CInput";
+import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 
 const Receipts = (props) => {
-    
+
     const history = useHistory()
     const dispatch = useDispatch();
 
@@ -185,7 +187,9 @@ const Receipts = (props) => {
                 setID(id)
                 setState((i) => {
                     i.values.Customer = { value: CustomerID, label: Customer }
-                    i.values.ReceiptModeName = { value: ReceiptMode, label: ReceiptModeName }
+                    i.values.ReceiptModeName = ReceiptModeName === undefined ?
+                        { value: '', label: "Select..." }
+                        : { value: ReceiptMode, label: ReceiptModeName }
                     i.values.BankName = { value: Bank, label: BankName }
                     i.values.Description = Description
                     i.values.DocumentNo = DocumentNo
@@ -198,12 +202,7 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
-                if (AmountPaid === undefined) {
-                    document.getElementById("AmountPaid").value = 0
-                }
-                else {
-                    document.getElementById("AmountPaid").value = AmountPaid
-                }
+
                 AmountPaidDistribution(AmountPaid);
             }
         }
@@ -300,11 +299,12 @@ const Receipts = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Input
+                    <CInput
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
+                        pattern={decimalRegx}
                         defaultValue={row.Calculate}
-                        disabled={page_Mode === mode.modeSTPsave ? true : false}
+                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
                         // value={row.Calculate}
                         // type="text"
                         autoComplete="off"
@@ -320,8 +320,7 @@ const Receipts = (props) => {
         },
     ];
 
-    // Customer dropdown function
-    function CustomerOnChange(e) {
+    function CustomerOnChange(e) { // Customer dropdown function
 
         setState((i) => {
             i.values.AmountPaid = 0
@@ -345,79 +344,51 @@ const Receipts = (props) => {
         dispatch(GetOpeningBalance(jsonBody1));
     }
 
-    // Calculate Input box onChange Function
-    function CalculateOnchange(event, row, key) {
+    function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
 
         let input = event.target.value
-        let result = /^\d*(\.\d{0,2})?$/.test(input);
-        let val1 = 0;
-        if (result) {
-            let v1 = Number(row.BalanceAmount);
-            let v2 = Number(input)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 };
-        }
-        else if (result === false) {
-            val1 = row.Calculate
-        }
 
-        else {
-            val1 = 0
+        let v1 = Number(row.BalanceAmount);
+        let v2 = Number(input)
+        if (!(v1 >= v2)) {
+            event.target.value = v1;
         }
-
-        event.target.value = val1;
 
         row.Calculate = event.target.value
 
-        let CalculateAmount = Data.map((index) => {
-            return parseFloat(index.Calculate)
-        })
-
-        const sum = CalculateAmount.reduce((partialSum, a) => partialSum + a, 0);
-
-        let sum1 = document.getElementById("AmountPaid").value = sum.toFixed(2)
+        let calSum = 0
+        Data.forEach(element => {
+            calSum = calSum + Number(element.Calculate)
+        });
 
         setState((i) => {
             let a = { ...i }
-            a.values.AmountPaid = sum1
+            a.values.AmountPaid = calSum
             a.hasValid.AmountPaid.valid = true;
             return a
         })
-
     };
 
-    function AmountPaid_onChange(event, state) {
-
+    function AmountPaid_onChange(event) {
         let input = event.target.value
+        // let result = /^\d*(\.\d{0,2})?$/.test(input);
+        let sum = 0
+        Data.forEach(element => {
+            sum = sum + Number(element.BalanceAmount)
+        });
 
-        let result = /^\d*(\.\d{0,2})?$/.test(input);
-
-        let BalanceAmount = Data.map((index) => {
-            return parseFloat(index.BalanceAmount)
-        })
-        const sum = BalanceAmount.reduce((partialSum, a) => partialSum + a, 0);
-
-        let val1 = 0;
-        if (result) {
-            let v1 = Number(sum);
-            let v2 = Number(input)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 };
-
+        let v1 = Number(sum);
+        let v2 = Number(input)
+        if (!(v1 >= v2)) {
+            event.target.value = v1;
         }
-        else if (result === false) {
-            val1 = input.slice(0, -1);
-        }
-        else {
-            val1 = 0
-        }
-        event.target.value = val1;
-
-        AmountPaidDistribution(val1)
+        onChangeText({ event, state, setState })
+        AmountPaidDistribution(event.target.value)
 
     }
 
     function AmountPaidDistribution(val1) {
+
         let value = Number(val1)
 
         let Amount = value
@@ -474,7 +445,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -798,21 +769,20 @@ const Receipts = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.AmountPaid}</Label>
                                         <Col sm="7">
-                                            <Input
+                                            <CInput
 
                                                 name="AmountPaid"
                                                 id="AmountPaid"
-                                                defaultValue={values.AmountPaid}
-                                                // value={values.AmountPaid}
+                                                pattern={decimalRegx}
+                                                // defaultValue={values.AmountPaid}
+                                                value={values.AmountPaid}
                                                 disabled={page_Mode === mode.modeSTPsave ? true : false}
                                                 className={isError.AmountPaid.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                    AmountPaid_onChange(event, state)
-                                                }}
+                                                onChange={AmountPaid_onChange}
+
                                             />
                                             {isError.AmountPaid.length > 0 && (
                                                 <span className="invalid-feedback">{isError.AmountPaid}</span>

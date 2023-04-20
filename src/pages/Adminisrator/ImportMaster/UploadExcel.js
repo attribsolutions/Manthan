@@ -25,12 +25,14 @@ import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction"
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
+import readUploadFile from "./readUploadFile";
+import CInput from "../../../CustomValidateForm/CInput";
 
 const UploadExcel = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const XLSX = require('xlsx');
+
 
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -129,7 +131,21 @@ const UploadExcel = (props) => {
         fieldLabel: "sdasd",
     },
     ]
+    const compairField = [
+        {
+            FieldLabel: 'ItemID',
+            RelatedKeyField: "ItemID",
+            ValidationRegX: '',
+            CheckApiID: true
+        },
+        {
+            FieldLabel: 'ID',
+            RelatedKeyField: "DistributorID",
+            ValidationRegX: /^[0-9]*$/,
+            CheckApiID: false
+        }
 
+    ]
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -170,61 +186,22 @@ const UploadExcel = (props) => {
         }
     };
 
-    const compair = [
-        // {
-        //     FieldLabel: 'First Name',
-        //     RelatedKeyField: "FirstName1",
-        //     ValidationRegX: /^[0-9]*$/
-        // },
-        {
-            FieldLabel: 'ID',
-            RelatedKeyField: "DistributorID",
-            ValidationRegX: /^[0-9]*$/
-        }
-
-    ]
 
 
 
-    const readUploadFile = (file) => {
+    // const readUploadFile = (file) => {
 
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onload = (e) => {
 
-            const data = e.target.result;
-            const workbook = XLSX.read(data, { type: "array" });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            const result = XLSX.utils.sheet_to_json(worksheet);
-
-            let invalidMsg = []
-            result.forEach((r1) => {
-                compair.forEach((c1) => {
-                    const regExp = RegExp(c1.ValidationRegX)
-                    if (!(regExp.test(r1[c1.RelatedKeyField]))) {
-                        invalidMsg.push(`${c1.RelatedKeyField} :${r1[c1.RelatedKeyField]} is invalid Format`)
-                    }
-                })
-            })
-            if (invalidMsg.length > 0) {
-                alert(JSON.stringify(invalidMsg))
-            }
-
-            console.log('Upload data', result)
-
-            //    //displaying the json result
-            //    var resultEle = document.getElementById("json-result");
-            //    resultEle.value = JSON.stringify(result, null, 4);
-            //    resultEle.style.display = 'block';
-        }
-    }
+    //         //    //displaying the json result
+    //         //    var resultEle = document.getElementById("json-result");
+    //         //    resultEle.value = JSON.stringify(result, null, 4);
+    //         //    resultEle.style.display = 'block';
+    //     }
+    // }
 
     function upload() {
 
         var files = selectedFiles;
-        // var files = document.getElementById('file_upload').files;
-        debugger
         if (files.length == 0) {
             alert("Please choose any file...");
             return;
@@ -232,8 +209,9 @@ const UploadExcel = (props) => {
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-            // excelFileToJSON(files[0]);
-            readUploadFile(files[0])
+            readUploadFile({
+                file: files[0], compairField, dispatch, useState,
+            })
         } else {
             alert("Please select a valid excel file.");
         }
@@ -285,7 +263,7 @@ const UploadExcel = (props) => {
     //                 t = t + 5
 
     //                 let b = document.getElementById("pace-progress1")
-    //                 debugger
+    //                 
     //                 // let c = document.getElementById("sr-only")
 
     //                 b.style.width = `${t}%`
@@ -314,7 +292,7 @@ const UploadExcel = (props) => {
     //             a.style.cssText = `${t}%`
 
     //             function myTimer() {
-    //                 debugger
+    //                 
     //                 console.log("myInterval")
     //                 t = t + 10
 
@@ -463,40 +441,45 @@ const UploadExcel = (props) => {
                                             key={i + "-file"}
                                         >
                                             <div className="p-2 d-flex justify-containt-space-between">
-                                                
-                                                    <Row className="align-items-center">
-                                                        <Col className="col-auto">
-                                                            <img
-                                                                data-dz-thumbnail=""
-                                                                height="80"
-                                                                className="avatar-sm rounded bg-light"
-                                                                alt={f.name}
-                                                                src={f.preview}
-                                                            />
-                                                        </Col>
-                                                        <Col>
-                                                            <Link
-                                                                to="#"
-                                                                className="text-muted font-weight-bold"
-                                                            >
-                                                                {f.name}
-                                                            </Link>
-                                                            <p className="mb-0">
-                                                                <strong>{f.formattedSize}</strong>
-                                                            </p>
-                                                        </Col>
-                                                    </Row>
+
+                                                <Row className="align-items-center">
+                                                    <Col className="col-auto">
+                                                        <img
+                                                            data-dz-thumbnail=""
+                                                            height="80"
+                                                            className="avatar-sm rounded bg-light"
+                                                            alt={f.name}
+                                                            src={f.preview}
+                                                        />
+                                                    </Col>
+                                                    <Col>
+                                                        <Link
+                                                            to="#"
+                                                            className="text-muted font-weight-bold"
+                                                        >
+                                                            {f.name}
+                                                        </Link>
+                                                        <p className="mb-0">
+                                                            <strong>{f.formattedSize}</strong>
+                                                        </p>
+                                                    </Col>
+                                                </Row>
                                             </div>
-                                            <div style={{ width: "80%", paddingRight: "40%", marginBottom: "10px" }}>
+                                            <div id="file-proccess" style={{
+                                                width: "80%",
+                                                paddingRight: "40%",
+                                                marginBottom: "10px",
+                                                display: "none"
+                                            }}>
                                                 <div className='progress'>
                                                     <div className='progress-bar progress-bar-animated bg-primary progress-bar-striped'
-                                                        id="d111"
+                                                        id="_progressbar"
                                                         role='progressbar'
                                                         aria-valuenow={10}
                                                         aria-valuemin={0}
                                                         aria-valuemax={100}
-                                                        style={{ width: '50%' }}>
-                                                        <span id='sr-only'>0% </span>
+                                                        style={{ width: '0%' }}>
+                                                        <span id='file-proccess-lable'>0% </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -509,6 +492,7 @@ const UploadExcel = (props) => {
                         <div className="text-center mt-4">
                             <button
                                 type="button"
+                                id='btn-verify'
                                 className="btn btn-primary "
                                 onClick={upload}
                             >
@@ -521,25 +505,9 @@ const UploadExcel = (props) => {
 
                     </div>
 
-                    <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            <SaveButton pageMode={pageMode}
-                                //   onClick={onsave}
-                                userAcc={userPageAccessState}
-                                module={"LoadingSheet"}
-                            />
-                        </Col>
-                    </FormGroup >
                 </form>
 
-                <Card1 header={<h2>Heading</h2>} footer="Footer text">
-                    {(aa) => {
-                        debugger
-                        return <div>
-                            <p>Content with a heading and a footer</p>
-                        </div>
-                    }}
-                </Card1>
+                
             </React.Fragment >
         );
     }
@@ -552,19 +520,8 @@ const UploadExcel = (props) => {
 
 export default UploadExcel
 
-export function Card1(props) {
-    debugger
-    // const { children, header, footer }=props
-    const a = "dddd"
 
-    return (
-        <>
-            {/* {header && <header>{header}</header>}
-           {children(props)}
-            {footer && <footer>{footer}</footer>} */}
-        </>
-    );
-}
+
 
 
 
