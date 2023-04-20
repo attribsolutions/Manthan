@@ -115,6 +115,7 @@ export const MANAGEMENT_PARTIES = "/ManagementParties"
 export const BANK = "/BankMaster"
 export const BANK_LIST = "/BankList"
 
+export const IMPORT_FIELD_MASTER = "/ImportFieldMaster"
 
 
 //******************************* Purchase Module ************************************//

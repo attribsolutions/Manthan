@@ -147,6 +147,8 @@ import Credit from "../pages/Accounting/CreditDebitNote/Credit";
 import Debit from "../pages/Accounting/CreditDebitNote/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 import DebitList from "../pages/Accounting/CreditDebitNote/DebitList";
+import ImportFieldMaster from "../pages/Adminisrator/ImportMaster/ImportFieldMaster";
+
 
 
 const userRoutes = [
@@ -263,6 +265,8 @@ const userRoutes = [
 
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
+
+  { path: path.IMPORT_FIELD_MASTER, component: ImportFieldMaster},
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },
