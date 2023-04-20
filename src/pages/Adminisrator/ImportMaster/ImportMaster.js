@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess,  } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
@@ -16,12 +16,13 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID } from "../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+import { GoButton_Excel_ImportAdd, saveExcel_ImportMaster } from "../../../store/Administrator/ImportMasterRedux/action";
 const ImportMaster = (props) => {
 
     const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const ImportMaster = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
-    const [partySelect, SetPartySelect] = useState([])
+    const [partySelect, SetPartySelect] = useState("")
 
     const fileds = {
         id: "",
@@ -48,14 +49,14 @@ const ImportMaster = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        VehicleNumber,
+        goButtonItem,
         partyList
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        VehicleNumber: state.VehicleReducer.VehicleList,
+        goButtonItem: state.ImportMasterReducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
@@ -100,43 +101,43 @@ const ImportMaster = (props) => {
         label: index.Name,
     }));
 
-      
+
     const data = [{
         id: 1,
-        fieldLabel: "Invoice No",
-        DataType:"Numner"
+        fieldLabel: "FieldName",
+        DataType: "Numner"
     },
     {
         id: 2,
         fieldLabel: "ItemName",
-        DataType:"String"
+        DataType: "String"
 
     },
     {
         id: 3,
         fieldLabel: "Unit",
-        DataType:"String"
+        DataType: "String"
 
     },
     {
         id: 4,
         fieldLabel: "Amount",
-        DataType:"Numner"
+        DataType: "Numner"
 
     },
     ]
     const pagesListColumns = [
         {
-            text: "FieldLabel",
-            dataField: "fieldLabel",
+            text: "Field Name",
+            dataField: "FieldName",
         },
         {
             text: "Data Type",
-            dataField: "DataType",
+            dataField: "ControlTypeName",
         },
         {
             text: "Related Key Field",
-            dataField: "",
+            dataField: "Value",
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -145,11 +146,12 @@ const ImportMaster = (props) => {
                                 <Input
                                     id=""
                                     type="text"
+                                    defaultValue={cellContent}
                                     // disabled={true}
                                     // defaultValue={cellContent.toPrecision(5)}
                                     // defaultValue={parseFloat(cellContent).toFixed(3)}
                                     className="col col-sm text-center"
-                                // onChange={(e) => QuantityHandler(e, user)}
+                                    onChange={(e) => user.Value = e.target.value}
                                 />
                             </FormGroup>
                         </Col>
@@ -158,57 +160,39 @@ const ImportMaster = (props) => {
                 </>
             ),
         },
-        
-     
-
-        
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: data.length,
-        custom: true,
+    const goButtonHandler = async () => {
+
+        const jsonBody = JSON.stringify({
+            PartyID: partySelect.value,
+            CompanyID: loginCompanyID()
+        })
+        dispatch(GoButton_Excel_ImportAdd({ jsonBody }))
     };
 
-    const SaveHandler = (event) => {
+    function SaveHandler(event) {
         event.preventDefault();
-        const BOMItems = ItemTabDetails.map((index) => ({
-            Item: index.Item,
-            Quantity: index.Quantity,
-            Unit: index.Unit
-        }))
-        if (formValid(state, setState)) {
 
-            let BOMrefID = 0
-            if ((pageMode === mode.edit)) {
-                BOMrefID = EditData.id
-            };
+        let jsonArr = []
 
-            const jsonBody = JSON.stringify({
-                // BomDate: values.BomDate,
-                // EstimatedOutputQty: values.EstimatedOutputQty,
-                // Comment: values.Comment,
-                // IsActive: values.IsActive,
-                // Item: values.ItemName.value,
-                // Unit: values.UnitName.value,
-                // CreatedBy: loginUserID(),
-                // Company: loginCompanyID(),
-                // BOMItems: BOMItems,
-                // IsVDCItem: values.IsVDCItem,
-                // ReferenceBom: BOMrefID
-            });
+        goButtonItem.forEach(i => {
+            if ((!(i.Value === '') && !(i.Value === null))) {
+                const obj = {
+                    Value: i.Value,
+                    ImportField: i.id,
+                    Party: partySelect.value,
+                    Company: loginCompanyID(),
+                }
+                jsonArr.push(obj)
+            }
+        })
 
+        const jsonBody = JSON.stringify(jsonArr);
+        dispatch(saveExcel_ImportMaster({ jsonBody }));
 
-
-            // if (pageMode === mode.edit) {
-            //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-            // }
-            // else {
-            //     dispatch(saveBOMMaster(jsonBody));
-            // }
-        }
     };
-
+    console.log("goButtonItem", goButtonItem)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -220,12 +204,12 @@ const ImportMaster = (props) => {
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
                                 <div className="row" >
-                                    <Col sm="3">
+                                    <Col sm="10">
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
 
-                                                style={{ width: "115px" }}>{fieldLabel.Party}</Label>
-                                            <Col >
+                                                style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
+                                            <Col style={{ maxWidth: "300px" }} >
                                                 <Select
                                                     classNamePrefix="select2-Customer"
                                                     value={partySelect}
@@ -236,133 +220,51 @@ const ImportMaster = (props) => {
                                         </FormGroup>
                                     </Col >
 
-                                    <Col sm="3">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
 
-                                                style={{ width: "115px" }}>{fieldLabel.ImportType}</Label>
-                                            <Col >
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                // value={SupplierSelect}
-                                                // options={SupplierOptions}
-                                                // onChange={SupplierOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
 
-                                    <Col sm="3">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
-
-                                                style={{ width: "115px" }}>{fieldLabel.PatternType}</Label>
-                                            <Col >
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                // value={SupplierSelect}
-                                                // options={SupplierOptions}
-                                                // onChange={SupplierOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-                                    <Col md="1"></Col>
                                     <Col sm="2" className="mt-3 ">
                                         <Go_Button
-                                        //  onClick={goButtonHandler} 
+                                            onClick={goButtonHandler}
                                         />
                                     </Col>
                                 </div>
-                               
+
                             </div>
 
                         </div>
 
                         <div className="mt-1">
-                        <PaginationProvider
-                                    pagination={paginationFactory(pageOptions)}
-                                >
-                                    {({ paginationProps, paginationTableProps }) => (
-                                        <ToolkitProvider
 
-                                            keyField="id"
-                                            data={data}
-                                            columns={pagesListColumns}
+                            <ToolkitProvider
+                                keyField="id"
+                                data={goButtonItem}
+                                columns={pagesListColumns}
 
-                                            search
-                                        >
-                                            {toolkitProps => (
-                                                <React.Fragment>
-                                                    <div className="table">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            bordered={true}
-                                                            striped={false}
-                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            classes={"table align-middle table-nowrap table-hover"}
-                                                            headerWrapperClasses={"thead-light"}
+                                search
+                            >
+                                {toolkitProps => (
+                                    <React.Fragment>
+                                        <div className="table">
+                                            <BootstrapTable
+                                                keyField={"id"}
+                                                bordered={true}
+                                                striped={false}
+                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                classes={"table align-middle table-nowrap table-hover"}
+                                                headerWrapperClasses={"thead-light"}
 
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                        {mySearchProps(toolkitProps.searchProps)}
-                                                    </div>
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
 
-                                                    <Row className="align-items-md-center mt-30">
-                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                            <PaginationListStandalone
-                                                                {...paginationProps}
-                                                            />
-                                                        </Col>
-                                                    </Row>
-                                                </React.Fragment>
-                                            )
-                                            }
-                                        </ToolkitProvider>
-                                    )
-                                    }
 
-                                </PaginationProvider>
-                            {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
-                                        keyField={"id"}
-                                        data={data}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                {...toolkitProps.baseProps}
-                                                                {...paginationTableProps}
-                                                                noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
-                                                            />
-                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone {...paginationProps} />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                )}
-                            </PaginationProvider> */}
+                                    </React.Fragment>
+                                )
+                                }
+                            </ToolkitProvider>
+
+
                         </div>
                     </div>
 

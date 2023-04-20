@@ -438,11 +438,11 @@ const AddEmployee = (props) => {
                             name="DOB"
                             value={values.DOB}
                             className="form-control d-block p-2 bg-white text-dark"
-                            placeholder="YYYY-MM-DD"
+                            placeholder="DD-MM-YYYY"
                             autoComplete="0,''"
                             options={{
                               altFormat: "d-m-Y",
-                              dateFormat: "Y-m-d",
+                              dateFormat: "d-m-Y",
                             }}
                             onChange={(y, v, e) => {
                               onChangeDate({ e, v, state, setState })
@@ -516,9 +516,16 @@ const AddEmployee = (props) => {
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
                             <Select
+                            styles={{
+                            control: (baseStyles, state) => {
+                              debugger
+                              return({
+                              ...baseStyles,
+                              borderColor: state.isFocused ? 'grey' : 'red',
+                            })},
+                            }}
                               name="StateName"
                               id="state"
-                              class="Flatpickr"
                               value={values.StateName}
                               isSearchable={true}
                               classNamePrefix="dropdown"
@@ -589,7 +596,6 @@ const AddEmployee = (props) => {
                             <Select
                               name="EmployeeParties"
                               value={values.EmployeeParties}
-                              isSearchable={true}
                               isMulti={true}
                               className="react-dropdown"
                               options={Party_DropdownOptions}
