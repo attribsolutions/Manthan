@@ -54,6 +54,7 @@ import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateR
 import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
 import BankReducer from "./Accounting/BankRedux/reducer"
 import BankAssignReducer from "./Accounting/BankAssignRedux/reducer"
+import ImportMasterReducer from "./Administrator/ImportMasterRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -93,6 +94,7 @@ const rootReducer = combineReducers({
   BreadcrumbReducer,
   CommonPageFieldReducer,
   PdfReportReducers,
+  ImportMasterReducer,
   Modules,
   Company,
   H_Pages,

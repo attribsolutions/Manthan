@@ -18,7 +18,7 @@ export const pageBorder = (doc) => {
 }
 
 export const Receipts = (doc, data) => {
-    debugger
+    
     doc.setLineDash([7, 3, 1, 3], 10)
     doc.setFont(undefined, 'bold')
     doc.setFontSize(19)
@@ -223,7 +223,7 @@ export const Receipts = (doc, data) => {
 
     doc.line(570, 340, 30, 340); // RECEIPT NO LINE 
 
-    debugger
+    
 
 
 

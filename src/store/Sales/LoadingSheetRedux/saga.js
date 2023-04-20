@@ -30,9 +30,9 @@ function* save_LoadingSheet_GenFun({ config }) {
 
 function* Update_LoadingSheet_GenFun(id) {
     try {
-        debugger
+        
         const response = yield call(Loading_Sheet_Update_API,id.id);
-        debugger
+        
         yield put(UpdateLoadingSheetSucccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }

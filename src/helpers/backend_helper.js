@@ -341,6 +341,14 @@ export const SSDD_List_under_Company_API = (jsonBody) => post(url.RETAILER_SSDD_
 export const Retailer_List_under_Company_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${id}`)// Party dropdown Api
 
+
+// Import Master API
+export const ImportMaster_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.EXCEL_IMPORT_MASTER, jsonBody)//get api
+export const ImportMaster_Add_Save_API = ({ jsonBody, btnId }) => post(url.EXCEL_IMPORT_MASTER_SAVE, jsonBody, btnId)// post api
+// export const get_Party_Item_List = (SupplierID) => get(`${url.PARTYITEM_FOR_MASTER}/${SupplierID}`)//get api
+// export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
+// export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
+
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
 export const Post_SubGroupList_API = ({ jsonBody, btnId }) => post(url.SUBGROUP_API, jsonBody, btnId)// post api

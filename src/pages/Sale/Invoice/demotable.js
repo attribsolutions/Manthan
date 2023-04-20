@@ -879,7 +879,7 @@ const Invoice = (props) => {
                 }));
                 return returnFunc()
             }
-            debugger
+            
             const forInvoice_1_json = () => ( {  // Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 InvoiceDate: values.InvoiceDate,
                 InvoiceItems: invoiceItems,
