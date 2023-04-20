@@ -557,6 +557,7 @@ export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_T
 // Sales Return
 export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
 export const SalesReturn_add_button_api = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_SALES_RETURN}/${ItemID}`)//add button get api api
+export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN_POST_API, jsonBody, btnId)//  postapi
 
 
 
