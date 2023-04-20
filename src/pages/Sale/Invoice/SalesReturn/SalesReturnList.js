@@ -45,7 +45,7 @@ const SalesReturnList = () => {
 
     const reducers = useSelector(
         (state) => ({
-            tableList: state.ReceiptReducer.ReceiptList,
+            tableList: state.SalesReturnReducer.salesReturnList,
             deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -56,7 +56,7 @@ const SalesReturnList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-
+debugger
     const { userAccess, pageField, RetailerList,  } = reducers;
     const values = { ...state.values }
 
