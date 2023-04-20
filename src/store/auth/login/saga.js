@@ -21,10 +21,12 @@ import {
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
 import { AlertState } from "../../actions"
+import { history } from "../../../components/Common/CommonFunction"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 
 
 function* loginUser({ payload: { user, history } }) {
-  
+
   try {
     const response =
       yield call(Python_FoodERP_postJwtLogin, {
@@ -142,10 +144,13 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error : RoleAccess get Api",
-    }));
+
+    const aa = yield CustomAlert({
+      Type: 2,
+      Message: `RoleAccess get Api Error `
+    })
+    history.go(0)
+
   }
 }
 

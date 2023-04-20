@@ -128,7 +128,6 @@ import LoadingSheet from "../pages/Sale/Invoice/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetList";
 import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
 import Report from "../Reports/AllReportPage";
-import ImportMaster from "../pages/Adminisrator/ImportMaster/ImportMaster"
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
@@ -147,7 +146,8 @@ import Credit from "../pages/Accounting/CreditDebitNote/Credit";
 import Debit from "../pages/Accounting/CreditDebitNote/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 import DebitList from "../pages/Accounting/CreditDebitNote/DebitList";
-import ImportFieldMaster from "../pages/Adminisrator/ImportMaster/ImportFieldMaster";
+import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/ImportFieldAdd";
+import ImportFieldMap from "../pages/Adminisrator/ImportMaster/ImportFieldMap";
 
 
 
@@ -255,9 +255,10 @@ const userRoutes = [
   { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
-  { path: path.IMPORT_MASTER, component: ImportMaster },
+  { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
   { path: path.UPLOAD_EXCEL, component: UploadExcel },
-
+  { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd},
+  
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
@@ -266,7 +267,7 @@ const userRoutes = [
   { path: path.BANK, component: BankMaster },
   { path: path.BANK_LIST, component: BankList },
 
-  { path: path.IMPORT_FIELD_MASTER, component: ImportFieldMaster},
+
 
   //******************************* Inventory Module ************************************//
   { path: path.CHALLAN_LIST, component: ChallanList },

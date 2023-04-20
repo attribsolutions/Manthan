@@ -343,11 +343,16 @@ export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${i
 
 
 // Import Master API
-export const ImportMaster_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.EXCEL_IMPORT_MASTER, jsonBody)//get api
-export const ImportMaster_Add_Save_API = ({ jsonBody, btnId }) => post(url.EXCEL_IMPORT_MASTER_SAVE, jsonBody, btnId)// post api
-// export const get_Party_Item_List = (SupplierID) => get(`${url.PARTYITEM_FOR_MASTER}/${SupplierID}`)//get api
-// export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
-// export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
+export const ImportMaster_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody)//get api
+export const ImportMaster_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
+
+
+
+export const ImportFieldAdd_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody, btnId)// post api
+export const ImportFieldAdd_Get_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody, btnId)
+export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
+export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
+export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api

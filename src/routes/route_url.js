@@ -101,10 +101,14 @@ export const GENERAL_LIST = "/GeneralList"
 export const CREDITLIMIT = "/CreditLimit"
 export const CREDITLIMIT_LIST = "/CreditLimitList"
 
-export const IMPORT_MASTER = "/Import_Master"
+export const IMPORT_FIELD_MAP = "/ImportFieldMap"
+export const IMPORT_FIELD_MAP_LIST = "/ImportFieldMapList"
+
 export const UPLOAD_EXCEL = "/Upload_Excel"
 
-export const IMPORT_MASTER_LIST = "/Import_Type_List"
+export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
+export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
+
 
 export const ROUTE_UPDATE = "/RouteUpdate"
 
@@ -115,7 +119,7 @@ export const MANAGEMENT_PARTIES = "/ManagementParties"
 export const BANK = "/BankMaster"
 export const BANK_LIST = "/BankList"
 
-export const IMPORT_FIELD_MASTER = "/ImportFieldMaster"
+
 
 
 //******************************* Purchase Module ************************************//

@@ -6,33 +6,48 @@ import {
   commonPageFieldSuccess,
   commonPageFieldListSuccess
 } from "../../actions"
-import { hasError500 } from "../CommonError/actions";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { history } from "../../../components/Common/CommonFunction";
 
 
 function* commonPageFiled_GenFunc({ pageId }) {
-
   try {
     const response = yield call(commonPageFiled_API, pageId);
-
-    yield put(commonPageFieldSuccess(response.Data));
-   
+    if ((response.Data.length > 0)) {
+      yield put(commonPageFieldSuccess(response.Data));
+    }
+    else {
+    CustomAlert({
+        Type: 2,
+        Message: `PageMaster API Error : Page-Id=${pageId}`
+      })
+    }
   } catch (error) {
-   
-    yield put(hasError500(`PageMaster API Error : Page-Id=${pageId}`))
-
+     CustomAlert({
+      Type: 2,
+      Message: `PageMaster API Error : Page-Id=${pageId}`
+    })
+ 
   }
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
-
-
   try {
     const response = yield call(commonPageFiled_API, pageId);
-    yield put(commonPageFieldListSuccess(response.Data));
-   
+    if ((response.Data.length > 0)) {
+      yield put(commonPageFieldListSuccess(response.Data));
+    }
+    else {
+      yield CustomAlert({
+        Type: 2,
+        Message: `PageMaster API Error : Page-Id=${pageId}`
+      })
+     
+    }
   } catch (error) {
-
-    yield put(hasError500(`PageMaster API Error : Page-Id=${pageId}`))
-   
+    yield CustomAlert({
+      Type: 2,
+      Message: `PageMaster API Error : Page-Id=${pageId}`
+    })
   }
 }
 

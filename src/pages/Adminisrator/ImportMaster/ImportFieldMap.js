@@ -4,34 +4,32 @@ import {
     FormGroup,
     Input,
     Label,
-    Row
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID } from "../../../components/Common/CommonFunction";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { breadcrumbReturnFunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
+import { comAddPageFieldFunc, initialFiledFunc, } from "../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { GoButton_Excel_ImportAdd, saveExcel_ImportMaster } from "../../../store/Administrator/ImportMasterRedux/action";
-const ImportMaster = (props) => {
+import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../store/Administrator/ImportFieldMapRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+
+
+const ImportFieldMap = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [ItemTabDetails, setItemTabDetails] = useState([])
     const [partySelect, SetPartySelect] = useState("")
 
     const fileds = {
@@ -52,19 +50,21 @@ const ImportMaster = (props) => {
         goButtonItem,
         partyList
     } = useSelector((state) => ({
-        postMsg: state.BOMReducer.PostData,
+        postMsg: state.ImportFieldMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goButtonItem: state.ImportMasterReducer.addGoButton,
+        goButtonItem: state.ImportFieldMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_MASTER
+        const page_Id = pageId.IMPORT_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
+        dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+
     }, []);
 
     const location = { ...history.location }
@@ -96,36 +96,32 @@ const ImportMaster = (props) => {
         }
     }, [pageField])
 
+    useEffect(async () => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(save_ImportFiledMap_Success({ Status: false }))
+            CustomAlert({
+                Type: 1,
+                Message: postMsg.Message,
+            })
+
+
+        }
+        else if (postMsg.Status === true) {
+            dispatch(save_ImportFiledMap_Success({ Status: false }))
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(postMessage.Message),
+            })
+        }
+    }, [postMsg])
     const PartyDropdown_Options = partyList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
 
-    const data = [{
-        id: 1,
-        fieldLabel: "FieldName",
-        DataType: "Numner"
-    },
-    {
-        id: 2,
-        fieldLabel: "ItemName",
-        DataType: "String"
 
-    },
-    {
-        id: 3,
-        fieldLabel: "Unit",
-        DataType: "String"
-
-    },
-    {
-        id: 4,
-        fieldLabel: "Amount",
-        DataType: "Numner"
-
-    },
-    ]
     const pagesListColumns = [
         {
             text: "Field Name",
@@ -138,20 +134,16 @@ const ImportMaster = (props) => {
         {
             text: "Related Key Field",
             dataField: "Value",
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, row) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
-                                    id=""
                                     type="text"
+                                    key={`Value-${row.id}`}
                                     defaultValue={cellContent}
-                                    // disabled={true}
-                                    // defaultValue={cellContent.toPrecision(5)}
-                                    // defaultValue={parseFloat(cellContent).toFixed(3)}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => user.Value = e.target.value}
+                                    onChange={(e) => row.Value = e.target.value}
                                 />
                             </FormGroup>
                         </Col>
@@ -160,16 +152,20 @@ const ImportMaster = (props) => {
                 </>
             ),
         },
+
     ];
 
-    const goButtonHandler = async () => {
-
+    async function goButtonHandler() {
         const jsonBody = JSON.stringify({
             PartyID: partySelect.value,
             CompanyID: loginCompanyID()
         })
-        dispatch(GoButton_Excel_ImportAdd({ jsonBody }))
+        dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
+
+    function change_ButtonHandler(e) {
+        dispatch(GoButton_ImportFiledMap_AddSuccess([]))
+    }
 
     function SaveHandler(event) {
         event.preventDefault();
@@ -183,16 +179,18 @@ const ImportMaster = (props) => {
                     ImportField: i.id,
                     Party: partySelect.value,
                     Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
                 }
                 jsonArr.push(obj)
             }
         })
 
         const jsonBody = JSON.stringify(jsonArr);
-        dispatch(saveExcel_ImportMaster({ jsonBody }));
+        dispatch(save_ImportFiledMap({ jsonBody }));
 
     };
-    console.log("goButtonItem", goButtonItem)
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -212,6 +210,7 @@ const ImportMaster = (props) => {
                                             <Col style={{ maxWidth: "300px" }} >
                                                 <Select
                                                     classNamePrefix="select2-Customer"
+                                                    isDisabled={!(goButtonItem.length === 0) && true}
                                                     value={partySelect}
                                                     options={PartyDropdown_Options}
                                                     onChange={(e) => { SetPartySelect(e) }}
@@ -223,9 +222,12 @@ const ImportMaster = (props) => {
 
 
                                     <Col sm="2" className="mt-3 ">
-                                        <Go_Button
-                                            onClick={goButtonHandler}
-                                        />
+                                        {(goButtonItem.length === 0) ?
+                                            < Go_Button onClick={goButtonHandler} />
+                                            :
+                                            <Change_Button onClick={change_ButtonHandler} />
+                                        }
+
                                     </Col>
                                 </div>
 
@@ -246,11 +248,10 @@ const ImportMaster = (props) => {
                                     <React.Fragment>
                                         <div className="table">
                                             <BootstrapTable
-                                                keyField={"id"}
                                                 bordered={true}
                                                 striped={false}
                                                 noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                classes={"table align-middle table-nowrap table-hover"}
+                                                classes={"table align-middle  table-hover"}
                                                 headerWrapperClasses={"thead-light"}
 
                                                 {...toolkitProps.baseProps}
@@ -270,11 +271,10 @@ const ImportMaster = (props) => {
 
                     <FormGroup>
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            <SaveButton pageMode={pageMode}
-                                //   onClick={onsave}
+                            {(goButtonItem.length > 0) && <SaveButton pageMode={pageMode}
                                 userAcc={userPageAccessState}
                                 module={"LoadingSheet"}
-                            />
+                            />}
                         </Col>
                     </FormGroup >
                 </form>
@@ -288,4 +288,4 @@ const ImportMaster = (props) => {
     }
 };
 
-export default ImportMaster
+export default ImportFieldMap

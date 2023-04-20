@@ -148,8 +148,13 @@ export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
 export const DELETE_API_FOR_LIST_MARGIN_PAGE = '/DeleteMarginOnList'
 
 //Import Master 
-export const EXCEL_IMPORT_MASTER = '/PartyImportFieldFilter'    //gobutton
-export const EXCEL_IMPORT_MASTER_SAVE = '/PartyImportFieldSave'    //SAVE
+export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
+export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'    //SAVE
+
+
+export const IMPORT_FIELD_ADD_SAVE = '/ImportField'    //SAVE
+export const IMPORT_FIELD_ADD_FILTER = '/ImportField'    //SAVE
+
 
 //TermsAndCondtions API
 export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
