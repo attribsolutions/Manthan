@@ -38,7 +38,6 @@ import CInput from "../../../../CustomValidateForm/CInput";
 import { floatRegx } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
 import { SalesReturn_add_button_api } from "../../../../helpers/backend_helper";
-import { discountCalculate } from "../invoiceCaculations";
 import { salesReturnCalculate } from "./SalesCalculation";
 
 const SalesReturn = (props) => {

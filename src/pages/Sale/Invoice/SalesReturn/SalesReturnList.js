@@ -1,31 +1,30 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Flatpickr from "react-flatpickr";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
-} from "../../../store/actions";
+} from "../../../../store/actions";
 import Select from "react-select";
-import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
+import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
-import Receipts from "./Receipts";
-import * as report from '../../../Reports/ReportIndex'
-import { editBOMList, updateBOMListSuccess } from "../../../store/Production/BOMRedux/action";
-import * as pageId from "../../../routes//allPageID";
-import * as url from "../../../routes/route_url";
+import { currentDate, loginPartyID } from "../../../../components/Common/CommonFunction";
+import { editBOMList, updateBOMListSuccess } from "../../../../store/Production/BOMRedux/action";
+import * as pageId from "../../../../routes//allPageID";
+import * as url from "../../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
-    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
-} from "../../../store/Accounting/Receipt/action";
-import { initialFiledFunc } from "../../../components/Common/validationFunction";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button } from "../../../components/Common/CommonButton";
-import * as mode from "../../../routes/PageMode"
-import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Receipt_Print } from "../../../helpers/backend_helper";
+    deleteReceiptList,
+    deleteReceiptList_Success,
+} from "../../../../store/Accounting/Receipt/action";
+import { initialFiledFunc } from "../../../../components/Common/validationFunction";
+import { GetCustomer, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { Go_Button } from "../../../../components/Common/CommonButton";
+import * as mode from "../../../../routes/PageMode"
+import SalesReturn from "./SalesReturn";
+import { salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
 
 const SalesReturnList = () => {
 
@@ -50,19 +49,19 @@ const SalesReturnList = () => {
             deleteMsg: state.ReceiptReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.RetailerList,
+            RetailerList: state.CommonAPI_Reducer.customer,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    debugger
+
     const { userAccess, pageField, RetailerList, ReceiptType } = reducers;
     const values = { ...state.values }
 
     const action = {
-        getList: ReceiptListAPI,
+        getList: salesReturnListAPI,
         editId: editBOMList,
         deleteId: deleteReceiptList,
         postSucc: postMessage,
@@ -70,21 +69,18 @@ const SalesReturnList = () => {
         deleteSucc: deleteReceiptList_Success
     }
 
-    useEffect(() => {
-        dispatch(ReceiptListAPISuccess([]))
-    }, [])
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.RECEIPTS_LIST
+        const page_Id = pageId.SALES_RETURN_LIST
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`))
+        dispatch(GetCustomer())
     }, []);
 
     useEffect(() => {
-        const page_Id = pageId.RECEIPTS_LIST
+        const page_Id = pageId.SALES_RETURN_LIST
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
         })
@@ -92,31 +88,6 @@ const SalesReturnList = () => {
             setUserAccState(userAcc)
         }
     }, [userAccess])
-
-    // Receipt Type API Values **** only Post Json Body
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
-            TypeID: 3
-        });
-        dispatch(ReceiptTypeAPI(jsonBody));
-
-    }, []);
-
-    useEffect(() => {
-        if (ReceiptType.length > 0) {
-            goButtonHandler(true)
-        }
-    }, [ReceiptType]);
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -130,23 +101,13 @@ const SalesReturnList = () => {
 
     function goButtonHandler() {
 
-        const ReceiptTypeID = ReceiptType.find((index) => {
-            return index.Name === "Receipt"
-        })
-
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            ReceiptType: ReceiptTypeID.id,
         });
-        dispatch(ReceiptListAPI(jsonBody, hasPagePath));
-    }
-
-    function downBtnFunc(row) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+        dispatch(salesReturnListAPI(jsonBody));
     }
 
     function fromdateOnchange(e, date) {
@@ -166,15 +127,6 @@ const SalesReturnList = () => {
             return a
         })
     }
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
 
     function CustomerOnChange(e) {
 
@@ -267,14 +219,13 @@ const SalesReturnList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={Receipts}
-                            masterPath={url.RECEIPTS}
-                            newBtnPath={url.RECEIPTS}
+                            MasterModal={SalesReturn}
+                            masterPath={url.SALES_RETURN}
+                            newBtnPath={url.SALES_RETURN}
                             pageMode={pageMode}
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
-                            downBtnFunc={downBtnFunc}
-                            ButtonMsgLable={"Receipt"}
+                            ButtonMsgLable={"SalesReturn"}
                             deleteName={"FullReceiptNumber"}
 
                         />

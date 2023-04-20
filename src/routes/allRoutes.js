@@ -148,6 +148,7 @@ import Debit from "../pages/Accounting/CreditDebitNote/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 import DebitList from "../pages/Accounting/CreditDebitNote/DebitList";
 import ImportFieldMaster from "../pages/Adminisrator/ImportMaster/ImportFieldMaster";
+import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 
 
 
@@ -326,6 +327,7 @@ const userRoutes = [
   { path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
 
   { path: path.SALES_RETURN, component: SalesReturn },
+  { path: path.SALES_RETURN_LIST, component: SalesReturnList },
   //************************************** Inter Branch ********************************//
   { path: path.IB_ORDER, component: Order },
   { path: path.IB_ORDER_PO_LIST, component: OrderList },
