@@ -72,7 +72,9 @@ function* Receipt_Type_GenFunc({ jsonBody }) {
   } catch (error) { CommonConsole(error) }
 }
 
-function* Delete_Receipt_ID_GenFunc({ config }) {          // delete API
+  // delete API
+function* Delete_Receipt_ID_GenFunc({ config }) { 
+  debugger       
   try {
     const response = yield call(apiCall.Receipt_Delete_API, config);
     yield put(action.deleteReceiptList_Success(response))

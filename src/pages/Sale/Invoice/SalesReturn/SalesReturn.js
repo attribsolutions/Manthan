@@ -51,7 +51,7 @@ const SalesReturn = (props) => {
 
     const fileds = {
         ReturnDate: currentDate,
-        Retailer: "",
+        Customer: "",
         ItemName: "",
         InvoiceNumber: "",
         ReturnReason: "",
@@ -592,7 +592,7 @@ const SalesReturn = (props) => {
             const jsonBody = JSON.stringify({
                 ReturnDate: values.ReturnDate,
                 ReturnReason: values.ReturnReason.value,
-                Customer: values.Retailer.value,
+                Customer: values.Customer.value,
                 Comment:values.Comment,
                 GrandTotal: grand_total,
                 Party: loginPartyID(),
@@ -649,12 +649,12 @@ const SalesReturn = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Retailer} </Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
                                             <Select
-                                                id="Retailer "
-                                                name="Retailer"
-                                                value={values.Retailer}
+                                                id="Customer "
+                                                name="Customer"
+                                                value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -664,8 +664,8 @@ const SalesReturn = (props) => {
                                                     RetailerHandler(hasSelect)
                                                 }}
                                             />
-                                            {isError.Retailer.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Retailer}</small></span>
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
                                             )}
                                         </Col>
 
