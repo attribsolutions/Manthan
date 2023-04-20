@@ -77,12 +77,15 @@ const Layout = props => {
         document.getElementById("preloader").style.display = "block";
 
         setTimeout(function () {
+          try {
           document.getElementById("preloader").style.display = "none";
-
+          }catch(e){}
         }, 4000);
        
       } else {
+        try {
         document.getElementById("preloader").style.display = "none";
+      }catch(e){}
       }
     } catch (e) { }
   }, [isPreloader]);

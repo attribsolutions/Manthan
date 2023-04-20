@@ -51,7 +51,8 @@ import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedu
 import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
 import BankSaga from "./Accounting/BankRedux/saga"
 import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
-import ImportMaster_Saga from "./Administrator/ImportMasterRedux/saga"
+import ImportFieldMap_Saga from "./Administrator/ImportFieldMapRedux/saga"
+import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 
 
 //    *********************** Purchase ***********************
@@ -81,7 +82,8 @@ import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
-    fork(ImportMaster_Saga),
+    fork(ImportFieldMap_Saga),
+    fork(ImportFieldAdd_Saga),
     
     fork(AuthSaga),
     fork(ForgetSaga),

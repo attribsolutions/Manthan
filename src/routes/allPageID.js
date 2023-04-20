@@ -99,8 +99,11 @@ export const SALESMAN_LIST = 152
 export const CREDITLIMIT = 160
 export const CREDITLIMIT_LIST = 154
 
-export const IMPORT_MASTER = 157
-export const IMPORT_MASTER_LIST = 158
+export const IMPORT_FIELD_MAP = 157
+export const IMPORT_FIELD_MAP_LIST = 158
+
+export const IMPORT_FIELD_ADD = 188
+export const IMPORT_FIELD_ADD_LIST = 189
 
 export const UPLOAD_EXCEL = 184
 
@@ -115,7 +118,7 @@ export const BANK_LIST = 176
 
 export const BANK_ASSIGN = 182
 
-export const IMPORT_FIELD_MASTER = 185
+
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
