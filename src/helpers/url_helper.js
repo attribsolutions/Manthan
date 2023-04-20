@@ -314,5 +314,5 @@ export const MAKE_RECEIPT_TO_PAYMENT = '/MakeReceiptofPayment'
 // Sales Return
 export const INVOICE_NUMBER_LIST = '/InvoiceNoList'
 export const ADD_BUTTON_API_FOR_SALES_RETURN = '/ReturnItemAdd'
-export const SALES_RETURN_POST_API = '/PurchaseReturn'
+export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'

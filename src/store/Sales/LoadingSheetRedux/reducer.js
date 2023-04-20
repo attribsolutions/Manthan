@@ -45,7 +45,6 @@ const LoadingSheetReducer = (state = INIT_STATE, action) => {
                 deleteMsg: action.payload,
             };
 
-
         default:
             return state
     }

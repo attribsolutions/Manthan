@@ -24,7 +24,7 @@ import { GetCustomer, Retailer_List } from "../../../../store/CommonAPI/Supplier
 import { Go_Button } from "../../../../components/Common/CommonButton";
 import * as mode from "../../../../routes/PageMode"
 import SalesReturn from "./SalesReturn";
-import { salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
+import { delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, salesReturnListAPI } from "../../../../store/Sales/SalesReturnRedux/action";
 
 const SalesReturnList = () => {
 
@@ -46,7 +46,7 @@ const SalesReturnList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.SalesReturnReducer.salesReturnList,
-            deleteMsg: state.ReceiptReducer.deleteMsg,
+            deleteMsg: state.SalesReturnReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.customer,
@@ -56,17 +56,17 @@ const SalesReturnList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-debugger
+
     const { userAccess, pageField, RetailerList,  } = reducers;
     const values = { ...state.values }
 
     const action = {
         getList: salesReturnListAPI,
         editId: editBOMList,
-        deleteId: deleteReceiptList,
+        deleteId: delete_SalesReturn_Id,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteReceiptList_Success
+        deleteSucc: delete_SalesReturn_Id_Succcess
     }
 
     // Featch Modules List data  First Rendering
@@ -227,7 +227,7 @@ debugger
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
                             ButtonMsgLable={"SalesReturn"}
-                            deleteName={"FullReceiptNumber"}
+                            deleteName={"FullReturnNumber"}
 
                         />
                         : null
