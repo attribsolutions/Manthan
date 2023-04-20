@@ -6,7 +6,7 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
-   
+
     try {
         const response = yield call(apiCall.Invoice_No_list_API, jsonBody);
         yield put(action.InvoiceNumberSuccess(response.Data));
@@ -14,17 +14,17 @@ function* Invoice_No_List_GenFunc({ jsonBody }) {
 }
 
 // add button api for sales return
-function*  addButton_for_SalesReturn_GenFunc({ ItemID }) {
+function* save_SalesReturn_GenFunc({ config }) {
 
     try {
-        const response = yield call(apiCall.SalesReturn_add_button_api, ItemID);
-        yield put(action.addButton_for_SalesReturn_Success(response.Data));
+        const response = yield call(apiCall.SalesReturn_post_API, config);
+        yield put(action.saveSalesReturnMaster_Success(response));
     } catch (error) { CommonConsole(error) }
 }
 
 function* SalesReturnSaga() {
     yield takeEvery(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
-    yield takeEvery(actionType.ADD_BUTTON_FOR_SALES_RETURN, addButton_for_SalesReturn_GenFunc)
+    yield takeEvery(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
 
 }
 export default SalesReturnSaga;  

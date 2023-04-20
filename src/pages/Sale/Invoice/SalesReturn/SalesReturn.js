@@ -24,20 +24,22 @@ import {
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, loginCompanyID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, loginUserID, loginCompanyID, convertDatefunc, invertDatefunc } from "../../../../components/Common/CommonFunction";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
 import { GetCustomer } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { addButton_for_SalesReturn, InvoiceNumber, InvoiceNumberSuccess } from "../../../../store/Sales/SalesReturnRedux/action";
+import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success } from "../../../../store/Sales/SalesReturnRedux/action";
 import CustomTable2 from "../../../../CustomTable2/Table";
 import "./salesReturn.scss";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { floatRegx } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
 import { SalesReturn_add_button_api } from "../../../../helpers/backend_helper";
+import { discountCalculate } from "../invoiceCaculations";
+import { salesReturnCalculate } from "./SalesCalculation";
 
 const SalesReturn = (props) => {
 
@@ -64,7 +66,7 @@ const SalesReturn = (props) => {
     const [returnMode, setrRturnMode] = useState(0);
     const [imageTable, setImageTable] = useState([]);
 
-
+    console.log(TableArr)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -76,17 +78,14 @@ const SalesReturn = (props) => {
         userAccess,
         addButton,
     } = useSelector((state) => ({
-        postMsg: state.LoadingSheetReducer.postMsg,
+        postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.customer,
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
-        addButton: state.SalesReturnReducer.addButton,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
-
-    const { ItemUnitDetails = [] } = addButton
 
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
@@ -137,39 +136,39 @@ const SalesReturn = (props) => {
         }
     }, [pageField])
 
-    // useEffect(() => {
-    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-    //         dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-    //         setState(() => resetFunction(fileds, state))// Clear form values  
-    //         dispatch(Breadcrumb_inputName(''))
+    useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            dispatch(Breadcrumb_inputName(''))
 
-    //         if (pageMode === mode.dropdownAdd) {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //             }))
-    //         }
-    //         else {
-    //             dispatch(AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: postMsg.Message,
-    //                 RedirectPath: url.LOADING_SHEET_LIST,
-    //             }))
-    //         }
-    //     }
-    //     else if (postMsg.Status === true) {
-    //         dispatch(SaveLoadingSheetMasterSucccess({ Status: false }))
-    //         dispatch(AlertState({
-    //             Type: 4,
-    //             Status: true,
-    //             Message: JSON.stringify(postMessage.Message),
-    //             RedirectPath: false,
-    //             AfterResponseAction: false
-    //         }));
-    //     }
-    // }, [postMsg])
+            if (pageMode === mode.dropdownAdd) {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                    RedirectPath: url.SALES_RETURN,
+                }))
+            }
+        }
+        else if (postMsg.Status === true) {
+            dispatch(saveSalesReturnMaster_Success({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(postMessage.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [postMsg])
 
     function ReturnDate_Onchange(e, date) {
         setState((i) => {
@@ -211,20 +210,6 @@ const SalesReturn = (props) => {
     }
 
     const pagesListColumns = [
-        // {
-        //     text: "ReturnDate",
-        //     dataField: "ReturnDate",
-        //     classes: () => "sales-return-row",
-        // },
-        // {
-        //     text: "Retailer",
-        //     dataField: "Retailer",
-        //     classes: () => "sales-return-row",
-        // },
-        // {
-        //     text: "InvoiceNumber",
-        //     dataField: "InvoiceNumber",
-        // },
         {
             text: "ItemName",
             dataField: "ItemName",
@@ -237,16 +222,17 @@ const SalesReturn = (props) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <CInput
-                        id={`Quantity${key}`}
-                        key={`Quantity${row.id}`}
-                        defaultValue={row.Quantity}
+                        id={`Qty${key}`}
+                        key={`Qty${row.id}`}
+                        defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
                         pattern={floatRegx}
                         className="col col-sm text-end"
-                        onChange={(event) => {
-                            const data = event.target.value
-                        }}
+                        // onChange={(event) => {
+                        //     const data = event.target.value
+                        // }}
+                        onChange={(event) => { row.Qty = event.target.value }}
                     />
                 </span>)
             }
@@ -256,7 +242,7 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key, a, b) => {
-
+                debugger
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`Unit${key}`}
@@ -267,7 +253,10 @@ const SalesReturn = (props) => {
                         classNamePrefix="dropdown"
                         // options={ItemList_Options}
                         options={row.ItemUnitDetails}
-                        onChange={(event) => { row.Unit = event.value }}
+                        onChange={(event) => {
+                            row.Unit = event.value
+                            row.BaseUnitQuantity = event.BaseUnitQuantity
+                        }}
                     />
                 </span>)
             }
@@ -307,7 +296,10 @@ const SalesReturn = (props) => {
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.ItemGSTHSNDetails}
-                        onChange={(event) => { row.MRP = event.value }}
+                        onChange={(event) => {
+                            row.GST_ID = event.value
+                            row.GST = event.label
+                        }}
                     />
                 </span>)
             }
@@ -322,14 +314,14 @@ const SalesReturn = (props) => {
                     <CInput
                         id=""
                         key={row.id}
-                        defaultChecked={row.BatchCode}
+                        defaultChecked={row.Rate}
                         type="text"
                         pattern={/^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/}
                         className="col col-sm text-end"
-                        onChange={(event) => {
-                            const data = event.target.value
-                        }}
-
+                        // onChange={(event) => {
+                        //     const data = event.target.value
+                        // }}
+                        onChange={(event) => { row.Rate = event.target.value }}
                     />
                 </span>)
             }
@@ -347,7 +339,8 @@ const SalesReturn = (props) => {
                         defaultChecked={row.BatchCode}
                         type="text"
                         className="col col-sm text-center"
-                    // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                        // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                        onChange={(event) => { row.BatchCode = event.target.value }}
                     />
                 </span>)
             }
@@ -361,7 +354,7 @@ const SalesReturn = (props) => {
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Flatpickr
                         name='ReturnDate'
-                        value={values.ReturnDate}
+                        value={currentDate}
                         className="form-control d-block p-2 bg-white text-dark"
                         placeholder="Select..."
                         options={{
@@ -369,15 +362,13 @@ const SalesReturn = (props) => {
                             altFormat: "d-m-Y",
                             dateFormat: "Y-m-d",
                         }}
-                    // onChange={ReturnDate_Onchange}
+                        onChange={(event) => {
+                            row.BatchDate = invertDatefunc(event)
+                        }}
                     />
                 </span>)
             }
         },
-        // {
-        //     text: "ReturnReason",
-        //     dataField: "ReturnReason",
-        // },
         {
             text: "ItemComment",
             dataField: "",
@@ -385,17 +376,14 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Flatpickr
-                        name='ReturnDate'
-                        value={values.ReturnDate}
-                        className="form-control d-block p-2 bg-white text-dark"
-                        placeholder="Select..."
-                        options={{
-                            altInput: true,
-                            altFormat: "d-m-Y",
-                            dateFormat: "Y-m-d",
-                        }}
-                    // onChange={ReturnDate_Onchange}
+                    <Input
+                        id=""
+                        key={row.id}
+                        defaultChecked={row.ItemComment}
+                        type="text"
+                        className="col col-sm text-center"
+                        // onChange={e => { SelectAll(e.target.checked, row, key) }}
+                        onChange={(event) => { row.ItemComment = event.target.value }}
                     />
                 </span>)
             }
@@ -462,10 +450,6 @@ const SalesReturn = (props) => {
         },
     ];
 
-    useEffect(() => {
-
-    }, [])
-
     async function AddPartyHandler(e) {
 
         const invalidMsg1 = []
@@ -488,14 +472,15 @@ const SalesReturn = (props) => {
         }
 
         const resp = await SalesReturn_add_button_api(values.ItemName.value)
-        const { ItemUnitDetails = [], ItemMRPDetails = [], ItemGSTHSNDetails = [] } = resp.Data
+        const { ItemUnitDetails = [], ItemMRPDetails = [], ItemGSTHSNDetails = [], id } = resp.Data
 
-        const unitOps = ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.id }));
+        const unitOps = ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.id, BaseUnitQuantity: i.BaseUnitQuantity }));
         const MRPOps = ItemMRPDetails.map(i => ({ label: i.MRP, value: i.id }));
         const GSTOps = ItemGSTHSNDetails.map(i => ({ label: i.GSTPercentage, value: i.id }));
 
         setTableArr([...TableArr, {
             id: TableArr.length + 1,
+            ItemID: id,
             ItemUnitDetails: unitOps,
             ItemMRPDetails: MRPOps,
             ItemGSTHSNDetails: GSTOps,
@@ -512,7 +497,7 @@ const SalesReturn = (props) => {
             return a
         })
 
-        // dispatch(addButton_for_SalesReturn(values.ItemName.value))
+        // dispatch(saveSalesReturnMaster(values.ItemName.value))
 
     }
 
@@ -564,10 +549,69 @@ const SalesReturn = (props) => {
         }
     }
 
-
-    const saveHandeller = async (event) => {
+    const SaveHandler = async (event) => {
         event.preventDefault();
+
         const btnId = event.target.id
+
+        let grand_total = 0;
+        const ReturnItems = TableArr.map((i) => {
+
+            const calculate = salesReturnCalculate(i)
+
+            grand_total = grand_total + Number(calculate.tAmount)
+
+            return ({
+                Item: i.ItemID,
+                Quantity: i.Qty,
+                Unit: i.Unit,
+                BaseUnitQuantity: i.BaseUnitQuantity,
+                BatchCode: i.BatchCode,
+                BatchDate: i.BatchDate,
+                Amount: calculate.tAmount,
+                MRP: i.MRP,
+                Rate: i.Rate,
+                BasicAmount: calculate.baseAmt,
+                GSTAmount: calculate.gstAmt,
+                GST: i.GST_ID,
+                CGST: calculate.CGST,
+                SGST: calculate.SGST,
+                IGST: 0,
+                GSTPercentage: i.GST,
+                CGSTPercentage: (i.GST / 2),
+                SGSTPercentage: (i.GST / 2),
+                IGSTPercentage: 0,
+                TaxType: "GST",
+                ReturnItemImages: []
+            })
+        }
+        )
+        try {
+            // if (formValid(state, setState)) {
+            btnIsDissablefunc({ btnId, state: true })
+
+            const jsonBody = JSON.stringify({
+                ReturnDate: values.ReturnDate,
+                ReturnReason: values.ReturnReason.value,
+                Customer: values.Retailer.value,
+                Comment:values.Comment,
+                GrandTotal: grand_total,
+                Party: loginPartyID(),
+                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                CreatedBy: loginUserID(),
+                UpdatedBy: loginUserID(),
+                ReturnItems: ReturnItems,
+            });
+
+            // if (pageMode === mode.edit) {
+            //     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
+            // }
+            // else {
+            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+            console.log(jsonBody)
+            // }
+            // }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     if (!(userPageAccessState === '')) {
@@ -703,9 +747,9 @@ const SalesReturn = (props) => {
                                                     setrRturnMode(2)
                                                 }}
                                             />
-                                            {isError.ItemName.length > 0 && (
+                                            {/* {isError.ItemName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
 
                                         <Col sm="1" className="mx-4 mt-1 ">
@@ -735,9 +779,9 @@ const SalesReturn = (props) => {
                                                     setrRturnMode(1)
                                                 }}
                                             />
-                                            {isError.InvoiceNumber.length > 0 && (
+                                            {/* {isError.InvoiceNumber.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.InvoiceNumber}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
                                         <Col sm="1" className="mx-4 mt-1 ">{/*Go_Button  */}
 
@@ -816,7 +860,7 @@ const SalesReturn = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
-                                            onClick={saveHandeller}
+                                            onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                             module={"SalesReturn"}
