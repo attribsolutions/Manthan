@@ -22,9 +22,17 @@ function* save_SalesReturn_GenFunc({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
+// GoButton Post API for Sales Return List
+function* SalesReturn_List_GenFun({ filters }) {
+     
+    try {
+        const response = yield call(apiCall.SalesReturn_list_API, filters);
+        yield put(action.salesReturnListAPISuccess(response.Data));
+    } catch (error) { CommonConsole(error) }
+}
 function* SalesReturnSaga() {
     yield takeEvery(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
     yield takeEvery(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
-
+    yield takeEvery(actionType.SALES_RETURN_LIST_API, SalesReturn_List_GenFun)
 }
 export default SalesReturnSaga;  
