@@ -144,7 +144,7 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-
+debugger
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
         const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
@@ -159,7 +159,6 @@ const AddEmployee = (props) => {
         hasValid.DOB.valid = true;
         hasValid.PAN.valid = true;
         hasValid.AadharNo.valid = true;
-        hasValid.CompanyName.valid = true;
         hasValid.EmployeeTypeName.valid = true;
         hasValid.StateName.valid = true;
         hasValid.DistrictName.valid = true;
@@ -173,7 +172,6 @@ const AddEmployee = (props) => {
         values.PAN = PAN;
         values.AadharNo = AadharNo
         values.Name = Name;
-        values.CompanyName = { label: CompanyName, value: Company_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
@@ -516,14 +514,6 @@ const AddEmployee = (props) => {
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
                             <Select
-                            styles={{
-                            control: (baseStyles, state) => {
-                               
-                              return({
-                              ...baseStyles,
-                              borderColor: state.isFocused ? 'grey' : 'red',
-                            })},
-                            }}
                               name="StateName"
                               id="state"
                               value={values.StateName}
