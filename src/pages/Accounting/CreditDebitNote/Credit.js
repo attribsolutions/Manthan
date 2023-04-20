@@ -279,7 +279,7 @@ const Credit = (props) => {
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID:e.value,
-            InvoiceID: ""
+            InvoiceID: "" 
         });
 
         // const jsonBody1 = JSON.stringify({
