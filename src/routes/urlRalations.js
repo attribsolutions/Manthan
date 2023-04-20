@@ -197,4 +197,10 @@ export const PaymentEntryList = url.PAYMENT_ENTRY
 
 export const BankAssign = url.BANK_ASSIGN
 
+export const Credit = url.CREDIT_LIST
+export const CreditList = url.CREDIT
+
+export const Debit = url.DEBIT_LIST
+export const DebitList = url.DEBIT
+
 

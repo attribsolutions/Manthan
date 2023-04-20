@@ -184,6 +184,13 @@ export const SALES_RETURN = 186
 export const SALES_RETURN_LIST = 187
 
 //**************************** Accounting ***********************************//
+export const CREDIT_LIST = 191
+export const CREDIT = 190
+
+export const DEBIT = 192
+export const DEBIT_LIST = 193
+
+
 
 export const RECEIPTS = 173
 export const RECEIPTS_LIST = 174

@@ -191,6 +191,7 @@ export const IB_GRN_LIST = "/IB_GRN_List" // IB GRN List
 export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
 
 //********************************Accounting ***********************************//
+
 export const RECEIPTS = "/Receipts"
 export const RECEIPTS_LIST = "/ReceiptList"
 
@@ -202,3 +203,10 @@ export const PAYMENT_ENTRY = "/PaymentEntry"
 export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 
 export const BANK_ASSIGN = "/BankAssign"
+
+export const CREDIT_LIST ="/Credit_List"
+export const CREDIT ="/Credit"
+
+
+export const DEBIT_LIST ="/Debit_List"
+export const DEBIT ="/Debit"
