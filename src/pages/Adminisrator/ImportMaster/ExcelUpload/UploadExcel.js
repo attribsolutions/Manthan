@@ -21,12 +21,13 @@ import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID } from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import readUploadFile from "./readUploadFile";
 import CInput from "../../../../CustomValidateForm/CInput";
+import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
 
 const UploadExcel = (props) => {
 
@@ -51,14 +52,14 @@ const UploadExcel = (props) => {
     const [selectedFiles, setselectedFiles] = useState([])
 
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         updateMsg,
         pageField,
         userAccess,
         VehicleNumber,
-        partyList
+        partyList,
+        compareParam=[]
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
@@ -66,6 +67,7 @@ const UploadExcel = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         VehicleNumber: state.VehicleReducer.VehicleList,
         partyList: state.PartyMasterReducer.partyList,
+        compareParam: state.ImportFieldMap_Reducer.addGoButton,
     }));
 
     useEffect(() => {
@@ -73,6 +75,7 @@ const UploadExcel = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
+        dispatch(GoButton_ImportFiledMap_AddSuccess([]));
     }, []);
 
     const location = { ...history.location }
@@ -113,39 +116,15 @@ const UploadExcel = (props) => {
     }));
 
 
+ 
+    function goButtonHandler() {
+        const jsonBody = JSON.stringify({
+            PartyID: partySelect.value,
+            CompanyID: loginCompanyID()
+        })
+        dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
+    };
 
-    const data = [{
-        id: 1,
-        fieldLabel: "asas",
-    },
-    {
-        id: 2,
-        fieldLabel: "asxdasd",
-    },
-    {
-        id: 3,
-        fieldLabel: "asdasdasas",
-    },
-    {
-        id: 4,
-        fieldLabel: "sdasd",
-    },
-    ]
-    const compairField = [
-        {
-            FieldLabel: 'ItemID',
-            RelatedKeyField: "ItemID",
-            ValidationRegX: '',
-            CheckApiID: true
-        },
-        {
-            FieldLabel: 'ID',
-            RelatedKeyField: "DistributorID",
-            ValidationRegX: /^[0-9]*$/,
-            CheckApiID: false
-        }
-
-    ]
 
     const SaveHandler = (event) => {
         event.preventDefault();
@@ -187,18 +166,6 @@ const UploadExcel = (props) => {
     };
 
 
-
-
-    // const readUploadFile = (file) => {
-
-
-    //         //    //displaying the json result
-    //         //    var resultEle = document.getElementById("json-result");
-    //         //    resultEle.value = JSON.stringify(result, null, 4);
-    //         //    resultEle.style.display = 'block';
-    //     }
-    // }
-
     function upload() {
 
         var files = selectedFiles;
@@ -210,7 +177,7 @@ const UploadExcel = (props) => {
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
             readUploadFile({
-                file: files[0], compairField, dispatch, useState,
+                file: files[0], compareParam, dispatch, useState,
             })
         } else {
             alert("Please select a valid excel file.");
@@ -280,39 +247,7 @@ const UploadExcel = (props) => {
     //     } catch (e) { }
 
     // })
-    // useEffect(() => {
-    //     try {
 
-
-    //         let a = document.getElementById("d111")
-
-    //         if (a) {
-    //             const myInterval = setInterval(myTimer, 1000);
-    //             let t = 10
-    //             a.style.cssText = `${t}%`
-
-    //             function myTimer() {
-    //                 
-    //                 console.log("myInterval")
-    //                 t = t + 10
-
-    //                 let b = document.getElementById("d111")
-    //                 let c = document.getElementById("sr-only")
-
-    //                 b.style.cssText = `width:${t}%`
-    //                 c.innerText = `${t}%`
-    //                 if (t === 100) {
-    //                     clearInterval(myInterval)
-    //                 }
-
-    //             }
-
-
-    //         }
-
-    //     } catch (e) { }
-
-    // })
 
     if (!(userPageAccessState === '')) {
         return (
@@ -341,41 +276,12 @@ const UploadExcel = (props) => {
                                         </FormGroup>
                                     </Col >
 
-                                    <Col sm="3">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
 
-                                                style={{ width: "115px" }}>{fieldLabel.ImportType}</Label>
-                                            <Col >
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                // value={SupplierSelect}
-                                                // options={SupplierOptions}
-                                                // onChange={SupplierOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
 
-                                    <Col sm="3">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
-
-                                                style={{ width: "115px" }}>{fieldLabel.PatternType}</Label>
-                                            <Col >
-                                                <Select
-                                                    classNamePrefix="select2-Customer"
-                                                // value={SupplierSelect}
-                                                // options={SupplierOptions}
-                                                // onChange={SupplierOnchange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
                                     <Col md="1"></Col>
                                     <Col sm="2" className="mt-3 ">
                                         <Go_Button
-                                        //  onClick={goButtonHandler} 
+                                            onClick={goButtonHandler}
                                         />
                                     </Col>
                                 </div>
@@ -384,34 +290,13 @@ const UploadExcel = (props) => {
 
                         </div>
 
-                        {/* <div className="mt-1">
 
-                            <Input
-                                type="file"
-                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                id="file_upload" />
-                            <Button className="btn btn-success" onClick={upload}>Upload</Button>
-
-                            <br></br>
-                            <br></br>
-
-                            <textarea id="json-result" style={{ display: "none", height: "500px", width: "350px" }}></textarea>
-
-                        </div> */}
 
                         <div className="mb-3 mt-3">
                             <Container className='p-4'>
 
                             </Container >
-                            {/*  */}
-                            {/* <div class="alert alert-danger d-flex align-items-center" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
-                                <div>
-                                    An example danger alert with an icon
-                                </div>
-                            </div> */}
 
-                            {/*  */}
                             <Dropzone
                                 onDrop={acceptedFiles => {
                                     handleAcceptedFiles(acceptedFiles)
@@ -507,7 +392,7 @@ const UploadExcel = (props) => {
 
                 </form>
 
-                
+
             </React.Fragment >
         );
     }

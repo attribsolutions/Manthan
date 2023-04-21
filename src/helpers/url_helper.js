@@ -321,3 +321,9 @@ export const ADD_BUTTON_API_FOR_SALES_RETURN = '/ReturnItemAdd'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 
+
+
+export const CREDIT_DEBIT ='/CreditDebitNote'
+export const CREDIT_DEBIT_FILTER ='/CreditDebitNoteFilter'
+
+
