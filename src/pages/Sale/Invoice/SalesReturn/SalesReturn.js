@@ -28,7 +28,7 @@ import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, log
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { GetCustomer } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVender, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success } from "../../../../store/Sales/SalesReturnRedux/action";
@@ -76,7 +76,7 @@ const SalesReturn = (props) => {
         userAccess,
     } = useSelector((state) => ({
         postMsg: state.SalesReturnReducer.postMsg,
-        RetailerList: state.CommonAPI_Reducer.customer,
+        RetailerList: state.CommonAPI_Reducer.RetailerList,
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
@@ -89,8 +89,16 @@ const SalesReturn = (props) => {
         const page_Id = pageId.SALES_RETURN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetCustomer())
         dispatch(getpartyItemList(loginPartyID()))
+    }, []);
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
     }, []);
 
     const location = { ...history.location }
@@ -240,7 +248,7 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key, a, b) => {
-               
+
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`Unit${key}`}
@@ -452,7 +460,7 @@ const SalesReturn = (props) => {
 
         const invalidMsg1 = []
         if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
-            invalidMsg1.push(`Select a value from both Item & Invoice No.`)
+            invalidMsg1.push(`  Select a value from Item Or Invoice No.`)
         }
         if ((returnMode === 2) && (values.ItemName === '')) {
             invalidMsg1.push(`Item is Required`)
@@ -548,7 +556,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-       debugger 
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -585,29 +593,61 @@ const SalesReturn = (props) => {
             })
         }
         )
+
+        const invalidMsg1 = []
+
+        ReturnItems.forEach((i) => {
+            if ((i.Quantity ===undefined)) {
+                invalidMsg1.push(`Quantity Is Required`)
+            }
+            if ((i.Rate ===undefined)) {
+                invalidMsg1.push(`Rate Is Required`)
+            };
+            if ((i.MRP === undefined)) {
+                invalidMsg1.push(`MRP Is Required`)
+            };
+            if ((i.Unit === undefined)) {
+                invalidMsg1.push(`Unit Is Required`)
+            };
+            if ((i.GST === undefined)) {
+                invalidMsg1.push(`GST Is Required`)
+            };
+            if ((i.BatchCode === undefined)) {
+                invalidMsg1.push(`BatchCode Is Required`)
+            };
+        })
+        
+        if (invalidMsg1.length > 0) {
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(invalidMsg1)
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+        }
+
         try {
             if (formValid(state, setState)) {
-            btnIsDissablefunc({ btnId, state: true })
+                btnIsDissablefunc({ btnId, state: true })
 
-            const jsonBody = JSON.stringify({
-                ReturnDate: values.ReturnDate,
-                ReturnReason: values.ReturnReason.value,
-                Customer: values.Customer.value,
-                Comment:values.Comment,
-                GrandTotal: grand_total,
-                Party: loginPartyID(),
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-                ReturnItems: ReturnItems,
-            });
+                const jsonBody = JSON.stringify({
+                    ReturnDate: values.ReturnDate,
+                    ReturnReason: values.ReturnReason.value,
+                    Customer: values.Customer.value,
+                    Comment: values.Comment,
+                    GrandTotal: grand_total,
+                    Party: loginPartyID(),
+                    RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    ReturnItems: ReturnItems,
+                });
 
-            // if (pageMode === mode.edit) {
-            //     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
-            // }
-            // else {
-            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
-          
+                // if (pageMode === mode.edit) {
+                //     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
+                // }
+                // else {
+                dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+
             }
             // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
