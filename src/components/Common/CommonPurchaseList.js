@@ -61,7 +61,7 @@ const CommonPurchaseList = (props) => {
     const [modal_edit, setmodal_edit] = useState(false);
     // const [tableList, settableList] = useState([]);
     const {
-        editData,
+        editData={Data:''},
         updateMsg = { Status: false },
         deleteMsg= { Status: false },
         userAccess=[],
@@ -72,7 +72,7 @@ const CommonPurchaseList = (props) => {
 
     const {
         getList,
-        editId,
+        editId ,
         deleteId,
         postSucc,
         updateSucc,
