@@ -140,14 +140,17 @@ import PaymentEntryList from "../pages/Accounting/Payment/PaymentEntryList";
 import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 import LoadingSheetUpdate from "../pages/Sale/Invoice/LoadingSheet/LoadingSheetUpdate";
-import UploadExcel from "../pages/Adminisrator/ImportMaster/UploadExcel";
 import SalesReturn from "../pages/Sale/Invoice/SalesReturn/SalesReturn";
 import Credit from "../pages/Accounting/CreditDebitNote/Credit";
 import Debit from "../pages/Accounting/CreditDebitNote/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 import DebitList from "../pages/Accounting/CreditDebitNote/DebitList";
-import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/ImportFieldAdd";
-import ImportFieldMap from "../pages/Adminisrator/ImportMaster/ImportFieldMap";
+
+import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
+import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
+import ImportFieldMap from "../pages/Adminisrator/ImportMaster/ImportFieldMap/ImportFieldMap";
+import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadExcel";
+
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 
 
@@ -259,6 +262,8 @@ const userRoutes = [
   { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
   { path: path.UPLOAD_EXCEL, component: UploadExcel },
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd},
+  { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList},
+  
   
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
