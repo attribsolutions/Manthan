@@ -47,15 +47,15 @@ const ImportFieldAddList = () => {
     const page_Id = pageId.IMPORT_FIELD_ADD_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(post_ImportFiledAdd(getlistBody()));
+     dispatch(post_ImportFiledAdd(getlistBody()));
   }, []);
 
   function getlistBody() {
     return JSON.stringify({
-        CompanyID: loginCompanyID(),
+      CompanyID: loginCompanyID(),
     });
-}
-
+  }
+ 
 
   const { pageField, userAccess = [] } = reducers
   return (
@@ -67,10 +67,10 @@ const ImportFieldAddList = () => {
             action={action}
             reducers={reducers}
             MasterModal={ImportFieldAdd}
-            getListbodyFunc={getlistBody}
+             getListbodyFunc={getlistBody}
             masterPath={url.IMPORT_FIELD_ADD}
             ButtonMsgLable={"ImportField"}
-            deleteName={"Name"}
+            deleteName={"FieldName"}
           />
           : null
       }

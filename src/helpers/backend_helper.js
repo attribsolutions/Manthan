@@ -349,7 +349,7 @@ export const ImportMaster_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPOR
 
 
 export const ImportFieldAdd_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody, btnId)// post api
-export const ImportFieldAdd_Post_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody, btnId)
+export const ImportFieldAdd_Post_API = ( jsonBody) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody)
 export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
 export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
 export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
@@ -548,8 +548,8 @@ export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_T
 
 // Sales Return
 export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
-export const SalesReturn_add_button_api = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_SALES_RETURN}/${ItemID}`)//add button get api api
-
+export const SalesReturn_add_button_api_For_Item = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_SALES_RETURN}/${ItemID}`)//add button get api for item
+export const SalesReturn_add_button_api_For_Invoice = (InvoiceID) => get(`${url.INVOICE_1_SAVE}/${InvoiceID}`)//add button get api for invoice
 export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN, jsonBody, btnId)//  postapi
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
 export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_RETURN}/${deleteId}`, btnId)// Sales Return Delete API
@@ -558,7 +558,7 @@ export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_
 export const Credit_Debit_Type = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)//  postapi
 export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody,btnId )//post api
-
+export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`, btnId)// delete api
 
 export {
   getLoggedInUser,

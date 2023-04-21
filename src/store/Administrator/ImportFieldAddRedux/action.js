@@ -12,7 +12,6 @@ import {
 } from "./actionType";
 
 
-
 export const save_ImportFiledAdd = (config = {}) => ({// save Action
   type: SAVE_IMPORT_FIELD_ADD,
   config,
@@ -24,7 +23,7 @@ export const save_ImportFiledAdd_Success = (resp) => ({// Save  success
 });
 
 export const post_ImportFiledAdd = (jsonBody) => ({// get List Action
-  type: POST_IMPORT_FIELD_ADD,
+   type: POST_IMPORT_FIELD_ADD,
   jsonBody,
 });
 

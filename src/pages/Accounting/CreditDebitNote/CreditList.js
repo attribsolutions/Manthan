@@ -25,7 +25,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
-import { CredietDebitType, GetCreditList } from "../../../store/Accounting/CreditRedux/action";
+import { CredietDebitType, GetCreditList, deleteCreditlistSuccess, delete_CreditList_ID } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const CreditList = () => {
@@ -48,7 +48,7 @@ const CreditList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.CredietDebitReducer.CreditList,
-            deleteMsg: state.ReceiptReducer.deleteMsg,
+            deleteMsg: state.CredietDebitReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -65,10 +65,10 @@ const CreditList = () => {
     const action = {
         getList: GetCreditList,
         editId: editBOMList,
-        deleteId: deleteReceiptList,
+        deleteId: delete_CreditList_ID,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteReceiptList_Success
+        deleteSucc: deleteCreditlistSuccess
     }
 
     // Featch Modules List data  First Rendering
@@ -260,7 +260,7 @@ const CreditList = () => {
                             HeaderContent={HeaderContent}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
-                            // ButtonMsgLable={"Receipt"}
+                            ButtonMsgLable={"Credit"}
                             deleteName={"Credit"}
 
                         />

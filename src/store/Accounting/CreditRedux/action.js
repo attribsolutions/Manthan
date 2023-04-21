@@ -1,6 +1,8 @@
 import {
   CREDITDEBIT_TYPE,
   CREDITDEBIT_TYPE_SUCCESS,
+  DELETE_CREDIT_LIST_ID,
+  DELETE_CREDIT_LIST_ID_SUCCESS,
   DELETE_GROUP_LIST_ID,
   DELETE_GROUP_LIST_ID_SUCCESS,
   EDIT_GROUPMASTER_ID,
@@ -58,15 +60,15 @@ export const CredietDebitTypeSuccess = (resp) => ({// Edit  Success
 //   payload: resp,
 // })
 
-// export const delete_GroupList_ID = (config={}) => ({// Delete  Action
-//   type: DELETE_GROUP_LIST_ID,
-//   config,
-// });
+export const delete_CreditList_ID = (config={}) => ({// Delete  Action
+  type: DELETE_CREDIT_LIST_ID,
+  config,
+});
 
-// export const deleteGrouplistSuccess = (resp) => ({// Delete Success
-//   type: DELETE_GROUP_LIST_ID_SUCCESS,
-//   payload: resp
-// });
+export const deleteCreditlistSuccess = (resp) => ({// Delete Success
+  type: DELETE_CREDIT_LIST_ID_SUCCESS,
+  payload: resp
+});
 
 
 
