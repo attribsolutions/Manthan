@@ -12,7 +12,7 @@ import { history } from "../../../components/Common/CommonFunction";
 
 function* commonPageFiled_GenFunc({ pageId }) {
   try {
-    debugger
+    
     const response = yield call(commonPageFiled_API, pageId);
  
    const  {PageFieldMaster}=response.Data  
@@ -36,7 +36,7 @@ function* commonPageFiled_GenFunc({ pageId }) {
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
   try {
-    debugger
+    
     const response = yield call(commonPageFiled_API, pageId);
     const  {PageFieldMaster}=response.Data 
     if ((PageFieldMaster.length > 0)) { 

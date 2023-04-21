@@ -349,7 +349,7 @@ export const ImportMaster_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPOR
 
 
 export const ImportFieldAdd_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody, btnId)// post api
-export const ImportFieldAdd_Post_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody, btnId)
+export const ImportFieldAdd_Post_API = ( jsonBody) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody)
 export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
 export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
 export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
