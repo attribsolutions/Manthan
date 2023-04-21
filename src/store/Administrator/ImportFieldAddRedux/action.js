@@ -3,8 +3,8 @@ import {
   DELETE_IMPORT_FIELD_ADD_SUCCESS,
   EDIT_IMPORT_FIELD_ADD,
   EDIT_IMPORT_FIELD_ADD_SUCCESS,
-  GET_IMPORT_FIELD_ADD,
-  GET_IMPORT_FIELD_ADD_SUCCESS,
+  POST_IMPORT_FIELD_ADD,
+  POST_IMPORT_FIELD_ADD_SUCCESS,
   SAVE_IMPORT_FIELD_ADD,
   SAVE_IMPORT_FIELD_ADD_SUCCESS,
   UPDATE_IMPORT_FIELD_ADD,
@@ -23,13 +23,14 @@ export const save_ImportFiledAdd_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
-export const get_ImportFiledAdd = () => ({// get List Action
-  type: GET_IMPORT_FIELD_ADD,
+export const post_ImportFiledAdd = (jsonBody) => ({// get List Action
+  type: POST_IMPORT_FIELD_ADD,
+  jsonBody,
 });
 
-export const get_ImportFiledAdd_Success = (pages) => ({// get List success
-  type: GET_IMPORT_FIELD_ADD_SUCCESS,
-  payload: pages,
+export const post_ImportFiledAdd_Success = (resp) => ({// get List success
+  type: POST_IMPORT_FIELD_ADD_SUCCESS,
+  payload: resp,
 });
 
 export const edit_ImportFiledAdd = (config = {}) => ({ // Edit Action

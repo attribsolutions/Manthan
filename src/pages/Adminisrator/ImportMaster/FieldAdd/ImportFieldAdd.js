@@ -12,9 +12,9 @@ import {
     Input,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-
 import { MetaTags } from "react-meta-tags";
 import {
+    AlertState,
     commonPageField,
     commonPageFieldSuccess,
     getControlTypes,
@@ -35,7 +35,6 @@ import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc, loginCompanyID } 
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
-
 import {
     edit_ImportFiledAdd_Success,
     save_ImportFiledAdd,
@@ -133,18 +132,18 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name, DisplayIndex, isActive, Icon } = hasEditVal
+                const { id, FieldName, ControlType, IsCompulsory, ValidationType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.Name.valid = true;
-                hasValid.DisplayIndex.valid = true;
-                hasValid.isActive.valid = true;
-                hasValid.Icon.valid = true;
+                hasValid.FieldName.valid = true;
+                hasValid.ControlType.valid = true;
+                hasValid.IsCompulsory.valid = true;
+                hasValid.ValidationType.valid = true;
 
-                values.Name = Name;
-                values.DisplayIndex = DisplayIndex;
-                values.isActive = isActive;
-                values.Icon = Icon;
+                values.FieldName = FieldName;
+                values.ControlType = ControlType;
+                values.IsCompulsory = IsCompulsory;
+                values.ValidationType = ValidationType;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Modules))
@@ -157,21 +156,36 @@ const ImportFieldAdd = (props) => {
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(save_ImportFiledAdd_Success({ Status: false }))
-            dispatch(Breadcrumb_inputName(''))
             setState(() => resetFunction(fileds, state)) //Clear form values 
-            CustomAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            })
+            dispatch(Breadcrumb_inputName(''))
 
-        } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            dispatch(update_ImportFiledAdd_Success({ Status: false }))
-            CustomAlert({
+            if (pageMode === "other") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                    RedirectPath: url.IMPORT_FIELD_ADD_LIST,
+                }))
+            }
+        }
+        else if (postMsg.Status === true) {
+            dispatch(save_ImportFiledAdd_Success({ Status: false }))
+            dispatch(AlertState({
                 Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            })
+                Status: true,
+                Message: JSON.stringify(postMessage.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
         }
     }, [postMsg])
 
@@ -346,7 +360,7 @@ const ImportFieldAdd = (props) => {
                                                                     onClick={SaveHandler}
                                                                     userAcc={userPageAccessState}
                                                                     editCreatedBy={editCreatedBy}
-                                                                    module={"Modules"}
+                                                                    module={"ImportFieldAdd"}
                                                                 />
                                                             </Col>
                                                         </Row>
