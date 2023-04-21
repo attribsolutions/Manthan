@@ -10,17 +10,13 @@ import Select from "react-select";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { currentDate, loginPartyID } from "../../../../components/Common/CommonFunction";
+import { currentDate, loginCompanyID, loginPartyID } from "../../../../components/Common/CommonFunction";
 import { editBOMList, updateBOMListSuccess } from "../../../../store/Production/BOMRedux/action";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
-import {
-    deleteReceiptList,
-    deleteReceiptList_Success,
-} from "../../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../../components/Common/validationFunction";
-import { GetCustomer, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVender, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../../components/Common/CommonButton";
 import * as mode from "../../../../routes/PageMode"
 import SalesReturn from "./SalesReturn";
@@ -49,7 +45,7 @@ const SalesReturnList = () => {
             deleteMsg: state.SalesReturnReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.customer,
+            RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             editData: state.BOMReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -57,7 +53,7 @@ const SalesReturnList = () => {
         })
     );
 
-    const { userAccess, pageField, RetailerList,  } = reducers;
+    const { userAccess, pageField, RetailerList, } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -76,8 +72,16 @@ const SalesReturnList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbShowCountlabel(`${"Sales Return Count"} :0`))
-        dispatch(GetCustomer())
         goButtonHandler(true)
+    }, []);
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
     }, []);
 
     useEffect(() => {

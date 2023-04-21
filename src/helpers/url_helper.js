@@ -208,7 +208,6 @@ export const LOADING_SHEET = '/LoadingSheet'
 export const LOADING_SHEET_LIST = '/LoadingSheetList'
 
 //PartyMasterBulkUpdate
-export const PARTY_DROPDOWN = '/RetailerandSSDD'
 export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/PartyWiseUpdate' // for go button
 export const PARTY_MASTER_BULK_UPDATE = '/PartyWiseSave'
 export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
@@ -296,7 +295,6 @@ export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage 
 export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List filter Api
 export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
 export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOICE addpage GoButton Api 
-
 
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api

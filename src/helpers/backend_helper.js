@@ -415,7 +415,7 @@ export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
 export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE, jsonBody)// Go Button post api
-export const post_PartyAPI = (jsonBody) => post(url.PARTY_DROPDOWN, jsonBody)// post api
+export const post_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)// post api
 export const post_SelectFieldAPI = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)// post api
 export const Update_Party_Bulk = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_BULK_UPDATE}/${updateId}`, jsonBody, btnId)// update api
 
