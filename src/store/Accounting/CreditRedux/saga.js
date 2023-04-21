@@ -30,19 +30,17 @@ import {
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
-function* Save_Method_ForCredit_GenFun({ config }) {  
-  debugger            // Save API
+function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
   try {
-    debugger
+
     const response = yield call(Credit_Debit_Save_API, config);
     yield put(saveCredit_Success(response));
   } catch (error) { CommonConsole(error) }
 }
-debugger
+
 function* Get_Credit_List_GenFunc(data) {                                // getList API
   try {
-    debugger
-    const response = yield call(Go_Button_Credit_Debit_Post_API,data.data);
+    const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     yield put(GetCreditListSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
@@ -54,7 +52,7 @@ function* Get_Credit_List_GenFunc(data) {                                // getL
 //   } catch (error) { CommonConsole(error) }
 // }
 function* CreditDeitType_ID_GenFunc(data) {                     // edit API 
-  
+
   try {
     const response = yield call(Credit_Debit_Type, data.data);
     yield put(CredietDebitTypeSuccess(response.Data));

@@ -41,24 +41,17 @@ const LoadingSheetList = () => {
         (state) => ({
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
             deleteMsg: state.LoadingSheetReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
-            editData: state.BOMReducer.editData,
-            bomlistFilters: state.BOMReducer.bomlistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
     const { fromdate = currentDate, todate = currentDate } = headerFilters;
-    const { userAccess, pageField, LoadingSheetlistfilters } = reducers;
+    const { userAccess, pageField } = reducers;
 
     const action = {
         getList: LoadingSheetListAction,
-        editId: editBOMList,
         deleteId: DeleteLoadingSheet,
-        postSucc: postMessage,
-        updateSucc: updateBOMListSuccess,
         deleteSucc: DeleteLoadingSheetSucccess
     }
 
@@ -95,13 +88,13 @@ const LoadingSheetList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        let newObj = { ...LoadingSheetlistfilters }
+        let newObj = { ...headerFilters }
         newObj.fromdate = date
         setHeaderFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        let newObj = { ...LoadingSheetlistfilters }
+        let newObj = { ...headerFilters }
         newObj.todate = date
         setHeaderFilters(newObj)
     }
