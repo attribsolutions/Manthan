@@ -473,7 +473,7 @@ const ItemsMaster = (props) => {
     };
 
     const SaveHandler = (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id;
         btnIsDissablefunc({ btnId, state: true })
@@ -492,15 +492,15 @@ const ItemsMaster = (props) => {
                 isvalid = false
                 inValidMsg.push("ShortName: Is Requried")
             }
-            // if (formValue.Company.length < 1) {
-            //     setInValidDrop(i => {
-            //         const a = { ...i }
-            //         a.Company = true
-            //         return a
-            //     })
-            //     isvalid = false
-            //     inValidMsg.push("Company: Is Requried")
-            // }
+            if (formValue.Company.length < 1) {
+                setInValidDrop(i => {
+                    const a = { ...i }
+                    a.Company = true
+                    return a
+                })
+                isvalid = false
+                inValidMsg.push("Company: Is Requried")
+            }
             if (formValue.BaseUnit.length < 1) {
                 setInValidDrop(i => {
                     const a = { ...i }
@@ -638,6 +638,7 @@ const ItemsMaster = (props) => {
 
                     if ((index.ImageType === '') || (index.ImageUpload === '')) {
 
+
                         return imageTabTable.length = []
                     }
                     else {
@@ -657,7 +658,7 @@ const ItemsMaster = (props) => {
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
-                debugger
+
                 const jsonBody = JSON.stringify({
                     Name: formValue.Name,
                     ShortName: formValue.ShortName,
@@ -698,7 +699,6 @@ const ItemsMaster = (props) => {
                 }
                 else {
                     dispatch(saveItemMasterAction({ jsonBody, btnId }));
-                    console.log(jsonBody)
                 }
             }                                                            // ************* is valid if start 
             else {                                                       // ************* is valid esle start 

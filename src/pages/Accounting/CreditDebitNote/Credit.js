@@ -51,7 +51,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import CInput from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
-import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success, ReceiptTypeAPI } from "../../../store/Accounting/Receipt/action";
+import { ReceiptGoButtonMaster, ReceiptTypeAPI } from "../../../store/Accounting/Receipt/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 
@@ -69,7 +69,6 @@ const Credit = (props) => {
         servicesItem: "",
         Narration: "",
         Amount: "",
-        AmountPaid: 0,
 
     }
 
@@ -104,7 +103,6 @@ const Credit = (props) => {
         const page_Id = pageId.CREDIT//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(ReceiptGoButtonMaster_Success([]))
     }, []);
 
     
@@ -275,11 +273,10 @@ const Credit = (props) => {
             i.hasValid.AmountPaid.valid = true;
             return i
         })
-        debugger
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
-            CustomerID:e.value,
-            InvoiceID: "" 
+            CustomerID: e.value,
+            InvoiceID: ""
         });
 
         // const jsonBody1 = JSON.stringify({
@@ -291,45 +288,6 @@ const Credit = (props) => {
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
         // dispatch(GetOpeningBalance(jsonBody1));
-    }
-    function AmountPaid_onChange(event) {
-        let input = event.target.value
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
-        let sum = 0
-        Data.forEach(element => {
-            sum = sum + Number(element.BalanceAmount)
-        });
-
-        let v1 = Number(sum);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = v1;
-        }
-        onChangeText({ event, state, setState })
-        AmountPaidDistribution(event.target.value)
-
-    }
-
-    function AmountPaidDistribution(val1) {
-        let value = Number(val1)
-        let Amount = value
-        Data.map((index) => {
-            let amt = Number(index.BalanceAmount)
-            if ((Amount > amt) && !(amt === 0)) {
-                Amount = Amount - amt
-                index.Calculate = amt.toFixed(2)
-            }
-            else if ((Amount <= amt) && (Amount > 0)) {
-                index.Calculate = Amount.toFixed(2)
-                Amount = 0
-            }
-            else {
-                index.Calculate = 0;
-            }
-            try {
-                document.getElementById(`Quantity${index.FullInvoiceNumber}`).value = index.Calculate
-            } catch (e) { }
-        })
     }
 
     const pagesListColumns = [
@@ -506,6 +464,33 @@ const Credit = (props) => {
                                     <Col sm="6">
                                         <FormGroup className=" row mt-2 " >
                                             <Label className="col-sm-1 p-2"
+                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Amount}</Label>
+                                            <Col sm="7">
+                                                <Input
+                                                    name="Amount"
+                                                    id="Amount"
+                                                    value={values.Amount}
+                                                    type="text"
+                                                    className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                    placeholder="Please Enter Comment"
+                                                    autoComplete='off'
+                                                    autoFocus={true}
+                                                    onChange={(event) => { onChangeText({ event, state, setState }) }}
+                                                />
+                                                {isError.Amount.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Amount}</small></span>
+
+                                                )}
+                                            </Col>
+
+                                        </FormGroup>
+                                    </Col >
+                                </Row>
+
+                                <Row>
+                                    <Col sm="6">
+                                        <FormGroup className=" row mt-2 " >
+                                            <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CreditNoteReason}</Label>
                                             <Col sm="7">
                                                 <Select
@@ -523,34 +508,7 @@ const Credit = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
-                                </Row>
 
-                                <Row>
-                                <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
-                                            <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Amount}</Label>
-                                            <Col sm="7">
-                                                <Input
-                                                    name="Amount"
-                                                    id="Amount"
-                                                    value={values.Amount}
-                                                    type="text"
-                                                    className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                    placeholder="Please Enter Amount"
-                                                    autoComplete='off'
-                                                    autoFocus={true}
-                                                    // onChange={(event) => { onChangeText({ event, state, setState }) }}
-                                                    onChange={AmountPaid_onChange}
-                                                />
-                                                {isError.Amount.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Amount}</small></span>
-
-                                                )}
-                                            </Col>
-
-                                        </FormGroup>
-                                    </Col >
                                 </Row>
                             {/* </CardBody> */}
                         </div>
