@@ -652,7 +652,7 @@ const Credit = (props) => {
         NoteReason: "",
         servicesItem: "",
         Narration: "",
-        GrandTotal: 0, 
+        GrandTotal: 0,  
         
 
     }
