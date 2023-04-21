@@ -2,7 +2,7 @@ import { groupBy } from '../../../../components/Common/CommonFunction';
 import { commonPageFiled_API } from '../../../../helpers/backend_helper';
 const XLSX = require('xlsx');
 
-const readUploadFile = async ({ dispatch, useState, useEffect, file, compairField }) => {
+const readUploadFile = async ({ dispatch, useState, useEffect, file, compareParam }) => {
 
 
   try {
@@ -38,14 +38,12 @@ const readUploadFile = async ({ dispatch, useState, useEffect, file, compairFiel
 
     });
 
-    
-
     processing(10)
 
     let invalidMsg = []
     let count = 0
     jsonResult.forEach((r1, k) => {
-      compairField.forEach((c1) => {
+      compareParam.forEach((c1) => {
         const regExp = RegExp(c1.ValidationRegX)
         if (!(regExp.test(r1[c1.RelatedKeyField]))) {
           invalidMsg.push(`${c1.RelatedKeyField} :${r1[c1.RelatedKeyField]} is invalid Format`)

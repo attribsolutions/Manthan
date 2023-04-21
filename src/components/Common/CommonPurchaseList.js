@@ -62,10 +62,10 @@ const CommonPurchaseList = (props) => {
     // const [tableList, settableList] = useState([]);
     const {
         editData,
-        updateMsg,
-        deleteMsg,
-        userAccess,
-        postMsg,
+        updateMsg = { Status: false },
+        deleteMsg= { Status: false },
+        userAccess=[],
+        postMsg= { Status: false },
         pageField = { id: '' },
         tableList = []
     } = props.reducers;
@@ -98,7 +98,7 @@ const CommonPurchaseList = (props) => {
         newBtnPath,
         HeaderContent = () => { return null }
     } = props;
-    
+
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
@@ -193,7 +193,7 @@ const CommonPurchaseList = (props) => {
             }
             else {
                 setmodal_edit(true)
-              }
+            }
         }
     }, [editData]);
 
@@ -214,10 +214,10 @@ const CommonPurchaseList = (props) => {
 
     function tog_center() {
         if (modal_edit) {
-          breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+            breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
         }
         setmodal_edit(false)
-      }
+    }
 
     // ****** columns sort by sequnce
     PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
@@ -277,7 +277,7 @@ const CommonPurchaseList = (props) => {
             })
         }
 
-        
+
 
 
 
