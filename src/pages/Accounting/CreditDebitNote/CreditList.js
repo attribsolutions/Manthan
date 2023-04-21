@@ -14,7 +14,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import {
-    deleteReceiptList, deleteReceiptList_Success, ReceiptListAPI, ReceiptListAPISuccess, ReceiptTypeAPI,
+    deleteReceiptList, deleteReceiptList_Success,
 } from "../../../store/Accounting/Receipt/action";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as mode from "../../../routes/PageMode"
@@ -26,7 +26,6 @@ import Select from "react-select";
 import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
 import { CredietDebitType, GetCreditList } from "../../../store/Accounting/CreditRedux/action";
-import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const CreditList = () => {
@@ -72,28 +71,13 @@ const CreditList = () => {
         deleteSucc: deleteReceiptList_Success
     }
 
-    useEffect(() => {
-        dispatch(ReceiptListAPISuccess([]))
-    }, [])
-
-
-
-
-    /// 
-
-    ////
-
-    ///
-
-
-    
     // Featch Modules List data  First Rendering
     useEffect(() => {
         const page_Id = pageId.CREDIT_LIST
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(BreadcrumbShowCountlabel(`${"Credit Count"} :0`))
+        // dispatch(BreadcrumbShowCountlabel(`${"Credit Count"} :0`))
     }, []);
 
     useEffect(() => {
@@ -106,12 +90,10 @@ const CreditList = () => {
         }
     }, [userAccess])
 
-    // Receipt Type API Values **** only Post Json Body
 
-
-
+    //   Note Type Api for Type identify
     useEffect(() => {
-        
+
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
             TypeID: 5
@@ -119,8 +101,8 @@ const CreditList = () => {
         dispatch(CredietDebitType(jsonBody));
     }, []);
 
+    // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
-       
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: loginPartyID(),
@@ -129,20 +111,17 @@ const CreditList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-    // useEffect(() => {
-    //     const jsonBody = JSON.stringify({
-    //         Company: loginCompanyID(),
-    //         TypeID: 6
-    //     });
-    //     dispatch(postSelect_Field_for_dropdown(jsonBody));
-    // }, []);
-
-
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
+
+    useEffect(() => {
+        if (CreditDebitType.length > 0) {
+            goButtonHandler(true)
+        }
+    }, [CreditDebitType]);
 
     function goButtonHandler() {
 
@@ -155,7 +134,7 @@ const CreditList = () => {
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            NoteType:CreditDebitTypeId.id
+            NoteType: CreditDebitTypeId.id
         });
         dispatch(GetCreditList(jsonBody, hasPagePath));
     }
