@@ -558,7 +558,7 @@ export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_
 export const Credit_Debit_Type = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)//  postapi
 export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody,btnId )//post api
-
+export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`, btnId)// delete api
 
 export {
   getLoggedInUser,
