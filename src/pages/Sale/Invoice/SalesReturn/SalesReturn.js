@@ -37,7 +37,7 @@ import "./salesReturn.scss";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { floatRegx } from "../../../../CustomValidateForm/RegexPattern";
 import { getpartyItemList } from "../../../../store/Administrator/PartyItemsRedux/action";
-import { SalesReturn_add_button_api } from "../../../../helpers/backend_helper";
+import { SalesReturn_add_button_api, SalesReturn_add_button_api_For_Invoice, SalesReturn_add_button_api_For_Item } from "../../../../helpers/backend_helper";
 import { salesReturnCalculate } from "./SalesCalculation";
 
 const SalesReturn = (props) => {
@@ -477,22 +477,43 @@ const SalesReturn = (props) => {
             return
         }
 
-        const resp = await SalesReturn_add_button_api(values.ItemName.value)
-        const { ItemUnitDetails = [], ItemMRPDetails = [], ItemGSTHSNDetails = [], id } = resp.Data
+        let resp;
+        try {
 
-        const unitOps = ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.id, BaseUnitQuantity: i.BaseUnitQuantity }));
-        const MRPOps = ItemMRPDetails.map(i => ({ label: i.MRP, value: i.id }));
-        const GSTOps = ItemGSTHSNDetails.map(i => ({ label: i.GSTPercentage, value: i.id }));
+            if (returnMode === 2) {
+                resp = await SalesReturn_add_button_api_For_Item(values.ItemName.value)
+            }
+            else {
+                resp = await SalesReturn_add_button_api_For_Invoice(values.InvoiceNumber.value)
+            }
+            const { ItemUnitDetails = [], ItemMRPDetails = [], ItemGSTHSNDetails = [], id } = resp.Data
+            const unitOps = ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.id, BaseUnitQuantity: i.BaseUnitQuantity }));
+            const MRPOps = ItemMRPDetails.map(i => ({ label: i.MRP, value: i.id }));
+            const GSTOps = ItemGSTHSNDetails.map(i => ({ label: i.GSTPercentage, value: i.id }));
 
-        setTableArr([...TableArr, {
-            id: TableArr.length + 1,
-            ItemID: id,
-            ItemUnitDetails: unitOps,
-            ItemMRPDetails: MRPOps,
-            ItemGSTHSNDetails: GSTOps,
-            InvoiceNumber: values.InvoiceNumber.label,
-            ItemName: values.ItemName.label,
-        }]);
+            setTableArr([...TableArr, {
+                id: TableArr.length + 1,
+                ItemID: id,
+                ItemUnitDetails: unitOps,
+                ItemMRPDetails: MRPOps,
+                ItemGSTHSNDetails: GSTOps,
+                InvoiceNumber: values.InvoiceNumber.label,
+                ItemName: values.ItemName.label,
+            }]);
+
+            setState((i) => {
+                let a = { ...i }
+                a.values.ItemName = ""
+                a.values.InvoiceNumber = ""
+                a.hasValid.ItemName.valid = true;
+                a.hasValid.InvoiceNumber.valid = true;
+                return a
+            })
+        } catch (w) { }
+
+    }
+
+    function RetailerHandler(event) {
 
         setState((i) => {
             let a = { ...i }
@@ -502,12 +523,7 @@ const SalesReturn = (props) => {
             a.hasValid.InvoiceNumber.valid = true;
             return a
         })
-
-        // dispatch(saveSalesReturnMaster(values.ItemName.value))
-
-    }
-
-    function RetailerHandler(event) {
+        setTableArr([])
 
         const jsonBody = JSON.stringify({
             PartyID: loginPartyID(),
@@ -517,6 +533,7 @@ const SalesReturn = (props) => {
         dispatch(InvoiceNumber(jsonBody));
     }
 
+    // image onchange handler
     const onchangeHandler = async (event, row) => {
 
         const file = event.target.files[0]
@@ -526,6 +543,7 @@ const SalesReturn = (props) => {
         setImageTable(ImageUpload)
     }
 
+    // image convert in string
     const convertBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
@@ -591,16 +609,15 @@ const SalesReturn = (props) => {
                 TaxType: "GST",
                 ReturnItemImages: []
             })
-        }
-        )
+        })
 
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
-            if ((i.Quantity ===undefined)) {
+            if ((i.Quantity === undefined)) {
                 invalidMsg1.push(`Quantity Is Required`)
             }
-            if ((i.Rate ===undefined)) {
+            if ((i.Rate === undefined)) {
                 invalidMsg1.push(`Rate Is Required`)
             };
             if ((i.MRP === undefined)) {
@@ -616,7 +633,7 @@ const SalesReturn = (props) => {
                 invalidMsg1.push(`BatchCode Is Required`)
             };
         })
-        
+
         if (invalidMsg1.length > 0) {
             CustomAlert({
                 Type: 4,
