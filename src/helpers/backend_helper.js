@@ -554,6 +554,11 @@ export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETU
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
 export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_RETURN}/${deleteId}`, btnId)// Sales Return Delete API
 
+// Credit Debit 
+export const Credit_Debit_Type = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
+export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)//  postapi
+export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody,btnId )//post api
+
 
 export {
   getLoggedInUser,

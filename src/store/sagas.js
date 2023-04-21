@@ -55,6 +55,7 @@ import ImportFieldMap_Saga from "./Administrator/ImportFieldMapRedux/saga"
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
 
 
+
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -77,6 +78,7 @@ import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
 import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
 import ReceiptSaga from "./Accounting/Receipt/saga"
 import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
+import CreditDebitSaga from "./Accounting/CreditRedux/saga"
 
 
 export default function* rootSaga() {
@@ -143,5 +145,6 @@ export default function* rootSaga() {
     fork(ManagementPartiesSaga),
     fork(ReceiptSaga),
     fork(SalesReturnSaga),
+    fork(CreditDebitSaga),
   ])
 }

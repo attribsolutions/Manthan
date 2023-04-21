@@ -46,6 +46,11 @@ import {
     updateBankID,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import CInput from "../../../CustomValidateForm/CInput";
+import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 
 
 const Credit = (props) => {
@@ -54,7 +59,7 @@ const Credit = (props) => {
     const dispatch = useDispatch();
 
     const fileds = {
-        DebitDate:currentDate,
+        DebitDate: currentDate,
         PartyName: "",
         Comment: "",
         Amount: "",
@@ -73,10 +78,12 @@ const Credit = (props) => {
     const {
         postMsg,
         pageField,
+        ReceiptGoButton,
         updateMsg,
         userAccess } = useSelector((state) => ({
             postMsg: state.BankReducer.postMsg,
             updateMsg: state.BankReducer.updateMessage,
+            ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -87,10 +94,12 @@ const Credit = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-     
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+    // const { Data = [] } = ReceiptGoButton
+
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
@@ -208,6 +217,54 @@ const Credit = (props) => {
         }
     }, [pageField])
 
+    const pagesListColumns = [
+        {
+            text: "InvoiceDate",
+            dataField: "InvoiceDate",
+        },
+        {
+            text: "Bill No",
+            dataField: "FullInvoiceNumber",
+        },
+        {
+            text: "Bill Amount",
+            dataField: "GrandTotal",
+        },
+        {
+            text: "Paid",
+            dataField: "PaidAmount",
+        },
+        {
+            text: "Bal Amt",
+            dataField: "BalanceAmount",
+        },
+        {
+            text: "Calculate",
+            dataField: "",
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <CInput
+                        key={`Quantity${row.FullInvoiceNumber}${key}`}
+                        id={`Quantity${row.FullInvoiceNumber}`}
+                        pattern={decimalRegx}
+                        defaultValue={row.Calculate}
+                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
+                        // value={row.Calculate}
+                        // type="text"
+                        autoComplete="off"
+                        className="col col-sm text-center"
+                    // onChange={(e) => CalculateOnchange(e, row, key)}
+
+                    />
+                </span>)
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            },
+        },
+    ];
+
 
     const saveHandeller = async (event) => {
         event.preventDefault();
@@ -243,186 +300,209 @@ const Credit = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <form noValidate>
-                        <Card>
-                            <CardHeader className="card-header   text-black c_card_header" >
+                        {/* <Card> */}
+                        {/* <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader>
-                            {/* <div className="px-2 c_card_filter header text-black mb-2" > */}
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <CardBody className="c_card_body">
-                                    <Row>
-                                        <Col sm="6">
-                                            <FormGroup className="row mt-2" >
-                                                <Label className="col-sm-1 p-2"
-                                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DebitDate}</Label>
-                                                <Col sm="7">
-                                                    <Flatpickr
-                                                        name='DebitDate'
-                                                        value={values.DebitDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="Select..."
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
-                                                    // onChange={ReturnDate_Onchange}
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col >
+                            </CardHeader> */}
+                        {/* <div className="px-2 c_card_filter header text-black mb-2" > */}
+                        {/* <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                                <CardBody className="c_card_body"> */}
+                        <div className="px-2 c_card_filter header text-black mb-2" >
 
-                                        <Col sm="6">
-                                            <FormGroup className=" row mt-2 " >
-                                                <Label className="col-sm-1 p-2"
-                                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Narration}</Label>
-                                                <Col sm="7">
-                                                    <Input
-                                                        name="Narration"
-                                                        id="Narration"
-                                                        value={values.Narration}
-                                                        type="text"
-                                                        className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter Comment"
-                                                        autoComplete='off'
-                                                        autoFocus={true}
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                        }}
-                                                    />
-                                                    {isError.Narration.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.Narration}</small></span>
-                                                    )}
-                                                </Col>
+                            <Row>
+                                <Col sm="6">
+                                    <FormGroup className="row mt-2" >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.DebitDate}</Label>
+                                        <Col sm="7">
+                                            <Flatpickr
+                                                name='DebitDate'
+                                                value={values.DebitDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                            // onChange={ReturnDate_Onchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
 
-                                            </FormGroup>
-                                        </Col >
-                                    </Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Narration}</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="Narration"
+                                                id="Narration"
+                                                value={values.Narration}
+                                                type="text"
+                                                className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter Comment"
+                                                autoComplete='off'
+                                                autoFocus={true}
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Narration.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Narration}</small></span>
+                                            )}
+                                        </Col>
 
-                                    <Row>
-                                        <Col sm="6">
-                                            <FormGroup className=" row mt-2 " >
-                                                <Label className="col-sm-1 p-2"
-                                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.PartyName}</Label>
-                                                <Col sm="7">
-                                                    <Select
-                                                        id="PartyName "
-                                                        name="PartyName"
-                                                        value={values.PartyName}
-                                                        isSearchable={true}
-                                                        className="react-dropdown"
-                                                        classNamePrefix="dropdown"
-                                                        // options={ReturnReasonOptions}
-                                                        onChange={(hasSelect, evn) => {
-                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                        }}
-                                                    />
-                                                    {isError.PartyName.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                    )}
-                                                </Col>
+                                    </FormGroup>
+                                </Col >
+                            </Row>
 
-                                            </FormGroup>
-                                        </Col >
+                            <Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.PartyName}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                id="PartyName "
+                                                name="PartyName"
+                                                value={values.PartyName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                // options={ReturnReasonOptions}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                }}
+                                            />
+                                            {isError.PartyName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                            )}
+                                        </Col>
 
-                                        <Col sm="6">
-                                            <FormGroup className=" row mt-2 " >
-                                                <Label className="col-sm-1 p-2"
-                                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment}</Label>
-                                                <Col sm="7">
-                                                    <Input
-                                                        name="Comment"
-                                                        id="Comment"
-                                                        value={values.Comment}
-                                                        type="text"
-                                                        className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter Comment"
-                                                        autoComplete='off'
-                                                        autoFocus={true}
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                        }}
-                                                    />
-                                                    {isError.Comment.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.Comment}</small></span>
-                                                    )}
-                                                </Col>
+                                    </FormGroup>
+                                </Col >
 
-                                            </FormGroup>
-                                        </Col >
-                                    </Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment}</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="Comment"
+                                                id="Comment"
+                                                value={values.Comment}
+                                                type="text"
+                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter Comment"
+                                                autoComplete='off'
+                                                autoFocus={true}
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Comment.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Comment}</small></span>
+                                            )}
+                                        </Col>
 
-                                    <Row>
-                                        <Col sm="6">
-                                            <FormGroup className=" row mt-2 " >
-                                                <Label className="col-sm-1 p-2"
-                                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ServiceItems}</Label>
-                                                <Col sm="7">
-                                                    <Select
-                                                        id="ServiceItems "
-                                                        name="ServiceItems"
-                                                        value={values.ServiceItems}
-                                                        isSearchable={true}
-                                                        className="react-dropdown"
-                                                        classNamePrefix="dropdown"
-                                                        // options={ItemOptions}
-                                                        onChange={(hasSelect, evn) => {
-                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                        }}
-                                                    />
-                                                    {isError.ServiceItems.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.ServiceItems}</small></span>
-                                                    )}
-                                                </Col>
+                                    </FormGroup>
+                                </Col >
+                            </Row>
+
+                            <Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ServiceItems}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                id="ServiceItems "
+                                                name="ServiceItems"
+                                                value={values.ServiceItems}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                // options={ItemOptions}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                }}
+                                            />
+                                            {isError.ServiceItems.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ServiceItems}</small></span>
+                                            )}
+                                        </Col>
 
 
-                                            </FormGroup>
-                                        </Col >
-                                        <Col sm="6">
-                                            <FormGroup className=" row mt-2 " >
-                                                <Label className="col-sm-1 p-2"
-                                                    style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Amount}</Label>
-                                                <Col sm="7">
-                                                    <Input
-                                                        name="Amount"
-                                                        id="Amount"
-                                                        value={values.Amount}
-                                                        type="text"
-                                                        className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter Comment"
-                                                        autoComplete='off'
-                                                        autoFocus={true}
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                        }}
-                                                    />
-                                                    {isError.Amount.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.Amount}</small></span>
-                                                    )}
-                                                </Col>
+                                    </FormGroup>
+                                </Col >
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Amount}</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="Amount"
+                                                id="Amount"
+                                                value={values.Amount}
+                                                type="text"
+                                                className={isError.Amount.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter Comment"
+                                                autoComplete='off'
+                                                autoFocus={true}
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Amount.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Amount}</small></span>
+                                            )}
+                                        </Col>
 
-                                            </FormGroup>
-                                        </Col >
+                                    </FormGroup>
+                                </Col >
 
-                                    </Row>
-                                </CardBody>
-                            </CardBody>
+                            </Row>
+                            {/* </CardBody> */}
+                            {/* </CardBody> */}
 
                             {/* </div> */}
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "15px", marginBottom: "10px" }}>
 
-                                    <SaveButton pageMode={pageMode}
-                                        onClick={saveHandeller}
-                                        userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"SalesReturn"}
-                                    />
+                        </div>
+                        {/* </Card> */}
+{/* 
+                        <ToolkitProvider
 
-                                </Col>
-                            </FormGroup >
-                        </Card>
+                            keyField="id"
+                            data={Data}
+                            columns={pagesListColumns}
+
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
+
+                                            {...toolkitProps.baseProps}
+
+                                        />
+
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+
+                                </React.Fragment>
+                            )
+                            }
+                        </ToolkitProvider> */}
 
                     </form >
                 </div>
