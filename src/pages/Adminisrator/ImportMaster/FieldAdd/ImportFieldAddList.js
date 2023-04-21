@@ -70,7 +70,7 @@ const ImportFieldAddList = () => {
              getListbodyFunc={getlistBody}
             masterPath={url.IMPORT_FIELD_ADD}
             ButtonMsgLable={"ImportField"}
-            deleteName={"Name"}
+            deleteName={"FieldName"}
           />
           : null
       }
