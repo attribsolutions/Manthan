@@ -95,6 +95,7 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
+   
     let downList = [];
     let listObj = {};
 
@@ -180,7 +181,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-
+debugger
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
@@ -245,7 +246,7 @@ const CommonListPage = (props) => {
       order: sortType, // desc or asc
     },
   ];
-
+  
   const pageOptions = {
     sizePerPage: 15,
     // totalSize: tableList.length,

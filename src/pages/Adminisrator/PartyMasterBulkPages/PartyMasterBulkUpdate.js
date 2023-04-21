@@ -9,6 +9,7 @@ import {
     Label,
     Row
 } from "reactstrap";
+import Flatpickr from "react-flatpickr";
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +27,8 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
+    currentDate,
+    invertDatefunc,
     loginCompanyID,
     loginPartyID
 } from "../../../components/Common/CommonFunction";
@@ -37,40 +40,57 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     GoButton_For_Party_Master_Bulk_Update_Add,
     GoButton_For_Party_Master_Bulk_Update_AddSuccess,
+    postPartyName_for_dropdown,
     postParty_Master_Bulk_Update,
     postParty_Master_Bulk_Update_Success,
     postSelect_Field_for_dropdown,
+    updatePartyMasterBulkID,
 } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
+import { GetDistrictOnState } from "../../../helpers/url_helper";
+import { getState } from "../../../store/Administrator/EmployeeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { map, Map } from "leaflet";
+import { useLayoutEffect } from "react";
 
 
-const PartyMasterBulkUpdate= (props) => {
+
+const PartyMasterBulkUpdate = (props) => {
+
+    const count = useRef(0)
 
     const dispatch = useDispatch();
     const history = useHistory()
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [RouteSelect, setRouteSelect] = useState([]);
     const [SelectFieldName, setSelectFieldName] = useState([]);
 
-    
+
+    const [state_DropDown_select, setState_DropDown_select] = useState();
+    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState();
+
+
     const fileds = {
         id: "",
         RoutesName: "",
         PartyName: "",
-        SelectField: ""
+        SelectField: "",
+        Party: { value: "", label: "All" },
+        Routes: { value: "", label: "All" }
     }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [val, setvalue] = useState()
+    const [key, setKey] = useState()
+
+
+    // const [error, seterror] = useState({})
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -80,34 +100,40 @@ const PartyMasterBulkUpdate= (props) => {
         userAccess,
         RoutesList,
         SelectField,
-        SSDD_List,
-        Data
+        PartyName,
+        Data,
+        DistrictOnState,
+        State
     } = useSelector((state) => ({
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
+        State: state.EmployeesReducer.State,
+        DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Data: state.PartyMasterBulkUpdateReducer.goButton,
         RoutesList: state.RoutesReducer.RoutesList,
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
-        SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+        PartyName: state.PartyMasterBulkUpdateReducer.PartyName,
     }));
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
+
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(SSDD_List_under_Company());
         dispatch(GetRoutesList());
+        dispatch(getState())
+
+
     }, []);
 
     // userAccess useEffect
@@ -126,58 +152,30 @@ const PartyMasterBulkUpdate= (props) => {
         };
     }, [userAccess])
 
-    // useEffect(() => {
-
-    //     if ((hasShowloction || hasShowModal)) {
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
-
-    //         if (hasEditVal) {
-    //             const { id, Route, RouteName } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
-    //             hasValid.RouteName.valid = true;
-
-    //             values.id = id
-    //             values.RouteName = { label: RouteName, value: Route };
-
-    //             const jsonBody = JSON.stringify({
-    //                 // Item: Item,
-    //                 // Bom: Bom,
-    //                 // Quantity: parseFloat(Quantity),
-    //                 // Party: Party
-    //             });
-    //             // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             // dispatch(editWorkOrderListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
-
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
-            TypeID: 5
+            TypeID: 2
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
+
+        // dispatch(getDistrictOnState(22))
     }, []);
 
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            CompanyID: loginCompanyID(),
+            PartyID: loginPartyID(),
+            Type: 1
+        });
+        dispatch(postPartyName_for_dropdown(jsonBody));
+    }, []);
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            setRouteSelect('')
+            // dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
@@ -194,14 +192,13 @@ const PartyMasterBulkUpdate= (props) => {
                     Status: true,
                     Message: postMsg.Message,
                     RedirectPath: url.PARTY_MASTER_BULK_UPDATE,
-
                 }))
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             dispatch(AlertState({
-                Type: 4,
+                Type: 1,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
@@ -232,73 +229,95 @@ const PartyMasterBulkUpdate= (props) => {
         label: index.Name,
     }));
 
+    const DistrictOnStateValues = DistrictOnState.map((index) => ({
+        value: index.id,
+        label: index.Name
+    }));
 
-    const PartyDropdown_Options = SSDD_List.map(i => ({
+    const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
+    const StateValues = State.map((index) => ({
+        value: index.id,
+        label: index.Name
+    }));
+
     const goButtonHandler = () => {
-        
+
+        if (SelectFieldName.length === 0) {
+            CustomAlert({
+                Type: 3,
+                Message: "Please select field",
+            })
+            return;
+        }
+
         const jsonBody = JSON.stringify({
+
             PartyID: loginPartyID(),
-            Route: RouteSelect.value,
-            Type: SelectFieldName.label
+            Route: values.Routes.value === "" ? 0 : values.Routes.value,
+            Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
+            FilterPartyID: values.Party.value === "" ? 0 : values.Party.value
+
         });
         dispatch(GoButton_For_Party_Master_Bulk_Update_Add(jsonBody));
     }
 
-    useEffect(async () => {
-       
-        if ((Data.Status === true) && (Data.StatusCode === 200)) {
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            if (pageMode === "other") {
-                CustomAlert({
-                    Type: 1,
-                    Message: Data.Message,
-                })
-            }
-        }
-    }, [Data])
-
     function SelectFieldHandler(event) {
-
-        let val = event.label;
-        setvalue(val)
-        setSelectFieldName(val)
-
+        setSelectFieldName(event)
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
     }
-  
-  const data = Data
-  
 
-
-
-    const columns = []
-    // Data.forEach(i, k => {
-    //     // columns.push({
-    //     //     text: .key,
-    //     //     dataField: .key,
-    //     // })
-    // });
-
-
-   
-
-    
     function tableSelectHandler(event, user) {
-
-        //     let val = event.target.value;
-        //     setvalue(val)
-
-        //    if (val === "") {
-        //         user.SelectFieldName = event.target.value;
-        //     }
-        //     else {
-        //         event.target.value = user.SelectFieldName
-        //     }
+        let input = event.target.value;
+        user.Newvalue = input
     }
 
+    function handllerState(event, user, key) {
+
+        user.Newvalue = event.value
+        setState_DropDown_select(event)
+        setKey(key)
+
+        // dispatch(getDistrictOnState(22))
+    }
+    
+  
+
+
+    function divisionhandler(event, user) {
+        user.Newvalue = event.target.checked
+
+    }
+
+    function partyOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            a.hasValid.Party.valid = true
+            return a
+        })
+    }
+
+    function RoutesNameOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Routes = e;
+            a.hasValid.Routes.valid = true
+            return a
+        })
+    }
+
+    function handllerDistrictOnState(event, user) {
+        user.NewDistrict = event.value
+    }
+
+    function fromdateOnchange(event, user) {
+        const Date = invertDatefunc(event[0])
+        user.NewFSSAIExipry = Date
+    }
 
     const pagesListColumns = [
         {
@@ -306,32 +325,149 @@ const PartyMasterBulkUpdate= (props) => {
             dataField: "PartyName",
         },
         {
-            text: val,
-            dataField: val,
-
+            text: SelectFieldName.label,
+            dataField: SelectFieldName.label,
         },
-        {
-            text: "Newvalue",
-            dataField: "Newvalue",
-            formatter: (cellContent, user) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
+
+    ];
+
+    PartyDropdown_Options.unshift({
+        value: "",
+        label: " All"
+    });
+    RouteName_Options.unshift({
+        value: "",
+        label: " All"
+    });
+
+    if (SelectFieldName.label === "FSSAINo") {
+        let FSSAINo = {
+            text: "FSSAIExipry",
+            dataField: "FSSAIExipry",
+        }
+        pagesListColumns.push(FSSAINo)
+    }
+
+    if (SelectFieldName.label === "State") {
+        let District = {
+            text: "District",
+            dataField: "District",
+        }
+        pagesListColumns.push(District)
+    }
+
+    const Newvalue = {
+        text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
+        dataField: "Newvalue",
+
+        formatter: (cellContent, user, key) => (
+            <>
+                {SelectFieldName.label === "State" ?
+                    <div style={{ width: "180px" }}>
                         <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    defaultValue={user.SelectFieldName}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => tableSelectHandler(e, user)}
+                            <FormGroup >
+                                <Select
+                                    id={key}
+                                    value={state_DropDown_select}
+                                    // defaultValue={user.Newvalue}
+                                    options={StateValues}
+                                    onChange={(event) => handllerState(event, user, key)}
                                 />
                             </FormGroup>
                         </Col>
-                    </div>
-                </>
-            ),
-        },
-    ];
+                    </div> :
+                    SelectFieldName.label === "IsDivision" ?
+
+                        <Col md={2} style={{ marginTop: '9px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3">
+                                <Input type="checkbox" className="form-check-input"
+                                    id={key}
+                                    defaultChecked={user.IsDivision}
+                                    onChange={(event) => divisionhandler(event, user)}
+                                    name="IsActive"
+
+                                />
+                            </div>
+                        </Col> :
+
+                        <div style={{ width: "180px" }}>
+                            <Col>
+                                <FormGroup >
+                                    <Input
+                                        id={key}
+                                        type="text"
+                                        placeholder="Enter New Value"
+                                        defaultValue={user.Newvalue}
+                                        className="col col-sm "
+                                        onChange={(event) => tableSelectHandler(event, user)}
+                                    />
+                                </FormGroup>
+                            </Col>
+                        </div>
+                }
+            </>
+        ),
+    }
+
+    const DistrictColumn = {
+        text: " New District",
+        dataField: "",
+        formatter: (cellContent, user, key) => (
+            <>
+                <div style={{ width: "180px" }}>
+                    <Col>
+                        <FormGroup >
+                            <Select
+                                id={`id${key}`}
+                                value={district_dropdown_Select}
+                                options={DistrictOnStateValues}
+                                onChange={(event) => handllerDistrictOnState(event, user)}
+                            />
+                        </FormGroup>
+                    </Col>
+                </div>
+            </>
+        ),
+    }
+
+
+    pagesListColumns.push(Newvalue)
+    const dateColumn = {
+        text: " New FSSAIExipry",
+        dataField: "",
+        formatter: (cellContent, user, key) => (
+            <>
+                <div style={{ width: "180px" }} >
+                    <Col sm={12}>
+                        <FormGroup sm={6}>
+                            <Flatpickr
+                                id={key}
+                                name='fromdate'
+                                className="form-control d-block p-2 bg-white text-dark"
+                                placeholder="Select..."
+                                // value={fromdate}
+                                options={{
+                                    altInput: true,
+                                    altFormat: "d-m-Y",
+                                    dateFormat: "Y-m-d",
+                                }}
+                                onChange={(event) => fromdateOnchange(event, user)}
+                            />
+                        </FormGroup>
+                    </Col>
+                </div>
+
+            </>
+        ),
+    }
+    if (SelectFieldName.label === "FSSAINo") {
+        pagesListColumns.push(dateColumn)
+    }
+    if (SelectFieldName.label === "State") {
+        pagesListColumns.push(DistrictColumn)
+    }
+
+
 
     const pageOptions = {
         sizePerPage: 10,
@@ -341,25 +477,107 @@ const PartyMasterBulkUpdate= (props) => {
 
     const SaveHandler = (event) => {
 
+        const arr1 = []
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-                const jsonBody = JSON.stringify({
+            // if (formValid(state)) {
+            btnIsDissablefunc({ btnId, state: true })
 
-                    Party: loginPartyID(),
-                    Route: RouteSelect.value,
-                    SelectField: SelectFieldName.value
-                });
-                if (pageMode === mode.edit) {
-                    // dispatch(updateGeneralID({ jsonBody, updateId: values.id, btnId }));
+
+            Data.forEach(i => {
+
+                if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
+                    const arr = {
+                        SubPartyID: i.SubPartyID,
+                        Value1: i.Newvalue,
+                        Value2: i.NewFSSAIExipry,
+                        Value2: i.NewDistrict,
+                        party: i.PartyName
+                    }
+                    arr1.push(arr)
                 }
-                else {
+
+            })
+
+            const jsonBody = JSON.stringify({
+                PartyID: loginPartyID(),
+                Type: SelectFieldName.label,
+                UpdateData: arr1
+
+            });
+
+            if (pageMode === mode.edit) {
+                dispatch(updatePartyMasterBulkID({ jsonBody, updateId: values.id, btnId }));
+            }
+            else {
+
+                if (arr1.length <= 0) {
+                    CustomAlert({
+                        Type: 3,
+                        Message: "Update At least One Field",
+                    })
+                    btnIsDissablefunc({ btnId, state: false })
+                } else {
+
+
+                    const invalidMsg1 = []
+                    arr1.forEach((i) => {
+
+                        if ((SelectFieldName.label === "MobileNo")) {
+                            const regexExp1 = /^[6-9]\d{9}$/gi;
+                            const IsMobile = regexExp1.test(i.Value1)
+                            if (!IsMobile) {
+
+                                invalidMsg1.push(`InValid Mobile No ${i.party}`)
+                            }
+                        };
+                        if ((SelectFieldName.label === "Email")) {
+                            const regexExp2 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+                            const IsEmail = regexExp2.test(i.Value1)
+                            if (!IsEmail) {
+                                invalidMsg1.push(`InValid Email ${i.party} `)
+                            }
+                        };
+
+                        if ((SelectFieldName.label === "PAN")) {
+                            const regexExp3 = /[A-Z]{5}[0-9]{4}[A-Z]{1}/
+                            const IsPan = regexExp3.test(i.Value1)
+                            if (!IsPan) {
+                                invalidMsg1.push(`InValid Pan No ${i.party}`)
+                            }
+                        };
+
+                        if ((SelectFieldName.label === "GSTIN")) {
+                            const regexExp4 = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/
+                            const IsGSTIN = regexExp4.test(i.Value1)
+                            if (!IsGSTIN) {
+                                invalidMsg1.push(`InValid GSTIN No ${i.party}`)
+                            }
+                        };
+
+                        if ((SelectFieldName.label === "Name")) {
+                            const regexExp5 = /^[A-Za-z]+$/
+                            const IsName = regexExp5.test(i.Value1)
+                            if (!IsName) {
+                                invalidMsg1.push(`InValid Name ${i.party}`)
+                            }
+                        };
+
+                    })
+                    if (invalidMsg1.length > 0) {
+                        CustomAlert({
+                            Type: 3,
+                            Message: invalidMsg1.toString()
+                        })
+                        return btnIsDissablefunc({ btnId, state: false })
+                    }
+
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
 
             }
+            // }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
@@ -373,162 +591,160 @@ const PartyMasterBulkUpdate= (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <Container fluid>
-                        <Card className="text-black">
-                            <CardHeader className="card-header   text-black c_card_header" >
+                        {/* <Card className="text-black"> */}
+                        {/* <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader>
+                            </CardHeader> */}
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={SaveHandler} noValidate>
-                                    <Row >
-                                        <Col md={12}>
-                                            <Card>
-                                                <CardBody className="c_card_body">
-
-                                                    <Row>
-                                                        <Col md="4" >
-                                                            <FormGroup className=" row  mt-2" >
-                                                                <Label className="mt-1"
-                                                                    style={{ width: "110px" }}>SelectField </Label>
-                                                                <div className="col col-6 sm-1">
-                                                                    <Select
-                                                                        name="SelectField"
-                                                                        value={SelectFieldName}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={SelectFieldDropdown_options}
-                                                                        onChange={(e, v) => {
-                                                                            SelectFieldHandler(e, v)
-                                                                            setSelectFieldName(e, v)
-                                                                        }
-                                                                        }
-                                                                    />
-                                                                    {isError.SelectField.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
-                                                                    )}
-                                                                </div>
-                                                            </FormGroup>
-                                                        </Col>
-
-                                                        <Col md="4" >
-                                                            <FormGroup className=" row  mt-2" >
-                                                                <Label className="mt-1"
-                                                                    style={{ width: "110px" }}>RoutesName </Label>
-                                                                <div className="col col-6 sm-1">
-                                                                    <Select
-                                                                        name="RoutesName"
-                                                                        value={RouteSelect}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={RouteName_Options}
-                                                                        onChange={(e) => { setRouteSelect(e) }}
-                                                                    />
-                                                                    {isError.RoutesName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
-                                                                    )}
-                                                                </div>
-                                                            </FormGroup>
-                                                        </Col>
-
-                                                        <Col md="3" >
-                                                            <FormGroup className=" row  mt-2" >
-                                                                <Label htmlFor="validationCustom01" className="mt-1"
-                                                                    style={{ width: "100px" }}>{fieldLabel.PartyName} </Label>
-                                                                <div className="col col-6 sm-1">
-                                                                    <Select
-                                                                        name="PartyName"
-                                                                        value={values.PartyName}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={PartyDropdown_Options}
-                                                                        onChange={(hasSelect, evn) => {
-                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                {/* {isError.PartyName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                                        )} */}
-                                                            </FormGroup>
-                                                        </Col>
-
-                                                        <Col sm={1}>
-                                                            <div className="col col-1 mt-2">
-                                                                < Go_Button onClick={(e) => goButtonHandler()} />
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-
-                                                </CardBody>
-                                            </Card>
-                                        </Col>
-                                    </Row>
-
-                                    <PaginationProvider
-                                        pagination={paginationFactory(pageOptions)}
-                                    >
-                                        {({ paginationProps, paginationTableProps }) => (
-                                            <ToolkitProvider
-                                                keyField="id"
-                                                data={Data}
-                                                columns={pagesListColumns}
-                                                search
-                                            >
-                                                {toolkitProps => (
-                                                    <React.Fragment>
-                                                        <div className="table">
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                bordered={true}
-                                                                striped={false}
-                                                                noDataIndication={<div className="text-danger text-center ">PartyMasterbulk Not available</div>}
-                                                                classes={"table align-middle table-nowrap table-hover"}
-                                                                headerWrapperClasses={"thead-light"}
-
-                                                                {...toolkitProps.baseProps}
-                                                                {...paginationTableProps}
+                        {/* <CardBody className=" vh-10 0 text-black c_card_header" > */}
+                        <form noValidate>
+                            <Row>
+                                <Col md={12}>
+                                    <Card style={{ marginBottom: "6px" }}>
+                                        <CardBody className="c_card_header text-black">
+                                            <Row>
+                                                <Col sm={4} >
+                                                    <FormGroup className=" row  " >
+                                                        <Label className="mt-1"
+                                                            style={{ width: "95px" }}>SelectField </Label>
+                                                        <div className="col col-6 sm-1">
+                                                            <Select
+                                                                name="SelectField"
+                                                                value={val}
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={SelectFieldDropdown_options}
+                                                                onChange={(event) => SelectFieldHandler(event)}
                                                             />
-                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                            {isError.SelectField.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
+                                                            )}
                                                         </div>
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col sm={4} >
+                                                    <FormGroup className=" row " >
+                                                        <Label className="mt-1"
+                                                            style={{ width: "110px" }}>RoutesName </Label>
+                                                        <div className="col col-6 sm-1">
+                                                            <Select
+                                                                name="RoutesName"
+                                                                value={values.Routes}
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={RouteName_Options}
+                                                                // onChange={(e) => { setRouteSelect(e) }}
+                                                                onChange={RoutesNameOnchange}
 
-                                                        <Row className="align-items-md-center mt-30">
-                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                <PaginationListStandalone
-                                                                    {...paginationProps}
-                                                                />
-                                                            </Col>
-                                                        </Row>
-                                                    </React.Fragment>
-                                                )
-                                                }
-                                            </ToolkitProvider>
+                                                            />
+                                                            {isError.RoutesName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
+                                                            )}
+                                                        </div>
+                                                    </FormGroup>
+                                                </Col>
+
+                                                <Col sm={3} >
+                                                    <FormGroup className=" row " >
+                                                        <Label htmlFor="validationCustom01" className="mt-1"
+                                                            style={{ width: "100px" }}>PartyName </Label>
+                                                        <div className="col col-7 sm-1">
+                                                            <Select
+                                                                name="PartyName"
+                                                                value={values.Party}
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={PartyDropdown_Options}
+                                                                // onChange={(e) => { setParty(e) }}
+                                                                onChange={partyOnchange}
+
+                                                            />
+                                                        </div>
+                                                        {isError.PartyName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                        )}
+                                                    </FormGroup>
+                                                </Col>
+
+                                                <Col sm={1}>
+                                                    <div className="col col-1 ">
+                                                        < Go_Button onClick={(e) => goButtonHandler()} />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            </Row>
+
+                            <PaginationProvider
+                                pagination={paginationFactory(pageOptions)}
+                            >
+                                {({ paginationProps, paginationTableProps }) => (
+                                    <ToolkitProvider
+                                        keyField="id"
+                                        data={Data}
+                                        columns={pagesListColumns}
+                                        search
+
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                <div className="table">
+
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        bordered={true}
+                                                        striped={false}
+                                                        noDataIndication={<div className="text-danger text-center ">PartyMasterbulk Not available</div>}
+                                                        classes={"table align-middle table-nowrap table-hover"}
+                                                        headerWrapperClasses={"thead-light"}
+
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+                                                    {/* {countlabelFunc(toolkitProps, paginationProps,)} */}
+                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                </div>
+
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone
+                                                            {...paginationProps}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </React.Fragment>
                                         )
                                         }
-                                    </PaginationProvider>
+                                    </ToolkitProvider>
+                                )
+                                }
+                            </PaginationProvider>
 
-                                    {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                                        <Row >
-                                            <Col sm={2} className="mt-n4">
-                                                <SaveButton pageMode={pageMode}
-                                                    onClick={SaveHandler}
-                                                    userAcc={userPageAccessState}
-                                                    module={"PartyMasterBulkUpdate"}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </FormGroup >
-                                        : null
-                                    }
-                                </form>
-                            </CardBody>
-                        </Card>
+                            {Data.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
+                                <Row >
+                                    <Col sm={2} className="mt-n4">
+                                        <SaveButton pageMode={pageMode}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            module={"PartyMasterBulkUpdate"}
+                                        />
+                                    </Col>
+                                </Row>
+                            </FormGroup >
+                                : null
+                            }
+                        </form>
+                        {/* </CardBody> */}
+                        {/* </Card> */}
                     </Container>
                 </div>
             </React.Fragment >
@@ -540,7 +756,6 @@ const PartyMasterBulkUpdate= (props) => {
         )
     }
 };
-
 
 
 export default PartyMasterBulkUpdate

@@ -15,8 +15,8 @@ import {
     grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Inventory/GRNRedux/actions";
-import {   GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { btnIsDissablefunc,  loginPartyID } from "../../../components/Common/CommonFunction";
+import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { btnIsDissablefunc, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url"
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
@@ -34,7 +34,10 @@ const GRNList = () => {
 
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '' });
+    const [otherState, setOtherState] = useState({
+        masterPath: '',
+        makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
+    });
 
     const reducers = useSelector(
         (state) => ({
@@ -86,7 +89,7 @@ const GRNList = () => {
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
-        debugger
+        setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -118,7 +121,7 @@ const GRNList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-   
+
         const id = list[0].id
         const makeBody = JSON.stringify({
             GRN: id,
@@ -135,7 +138,7 @@ const GRNList = () => {
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
                 Party: loginPartyID(),
-                OrderType: order_Type.SaleOrder
+                // OrderType: (subPageMode === url.GRN_LIST_1) ? order_Type.PurchaseOrder : order_Type.SaleOrder
             });
             dispatch(getGRNListPage({ filtersBody, btnId }));
         } catch (error) { }

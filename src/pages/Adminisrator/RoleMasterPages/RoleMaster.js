@@ -37,7 +37,7 @@ import {
   resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID} from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginIsSCMCompany, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -53,7 +53,7 @@ const RoleMaster = (props) => {
     Dashboard: "",
     RoleEmployeeTypes: "",
     isActive: true,
-    isSCMRole: false,
+    isSCMRole: loginIsSCMCompany() > 0 ? true : false,
     IsPartyConnection: false
   }
 
@@ -109,7 +109,6 @@ const RoleMaster = (props) => {
       setUserAccState(userAcc)
       breadcrumbReturnFunc({ dispatch, userAcc });
       dispatch(CommonBreadcrumbDetails({
-        // bredcrumbItemName: '',
         pageHeading: userAcc.PageHeading,
         userAccess: {},
         newBtnView: false,
@@ -275,7 +274,7 @@ const RoleMaster = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" >
+        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <Card className="text-black">
@@ -310,6 +309,7 @@ const RoleMaster = (props) => {
                                 <span className="invalid-feedback">{isError.Name}</span>
                               )}
                             </FormGroup>
+
                             <Col md={1} className="mx-n1"> </Col>
                             <FormGroup className="mb-2 col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
@@ -326,6 +326,7 @@ const RoleMaster = (props) => {
                                 <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
                               )}
                             </FormGroup>
+                            
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
@@ -369,6 +370,7 @@ const RoleMaster = (props) => {
                                       <Input type="checkbox" className="form-check-input"
                                         checked={values.isSCMRole}
                                         name="isSCMRole"
+                                        disabled={loginIsSCMCompany() > 0 ? true : false}
                                         onChange={(e) => {
                                           setState((i) => {
                                             const a = { ...i }

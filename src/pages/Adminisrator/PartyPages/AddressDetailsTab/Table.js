@@ -42,9 +42,7 @@ function AddressDetailsTable(props) {
 
     function myFunction(row) {
 
-
         var x = document.getElementById("add-img");
-
 
         if (x.style.display === "none") {
             x.src = row.fssaidocument

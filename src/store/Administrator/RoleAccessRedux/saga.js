@@ -42,14 +42,18 @@ function* GetRoleAccessListForRoleAccessList_GenFunc({ id1, id2 }) {
 
 function* PageDropdownForRoleAccessList_GenFunc({ id1, id2 }) {
   try {
+    
     const response = yield call(RoleAccessAdd_PageDropdown_Api, id1, id2);
     yield put(PageDropdownForRoleAccessList_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
+  
   try {
+    
     const response = yield call(RoleAccessAdd_GO_Button_Api, id1, id2, id3);
+    
     const newArray = response.Data.map((i, k) => {
       i.id = k + 1;
       return i
@@ -59,8 +63,9 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
 }
 
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
-     
+
   try {
+    
     const response = yield call(RoleAccessAdd_AddPage_Button_Api, id);
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableList = yield select(getState);
@@ -132,10 +137,10 @@ function* deleteRoleAccessMaster_GenFun({ config }) {
 }
 function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
   try {
-       
+
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
-    const tableList = yield select(getState);
-    const newList = tableList.map((index) => {
+    const tableDataRedux = yield select(getState);
+    const newList = tableDataRedux.map((index) => {
 
       if (index.id === id) { index[`${cell}`] = check ? 1 : 0 }
       return index
@@ -150,7 +155,7 @@ function* isCheckRoleAccessMaster_GenFun({ id, cell, check }) {
 
 
 
-function* RoleAccessSaga() {
+export default function* RoleAccessSaga() {
   yield takeEvery(DELETE_ROLE_ACCESS_lIST, Delete_RoleAccessList_GenFunc);
   yield takeEvery(PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST, PageDropdownForRoleAccessList_GenFunc);
   yield takeEvery(GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE, GetRoleAccessListForRoleAccessList_GenFunc);
@@ -165,4 +170,95 @@ function* RoleAccessSaga() {
 
 }
 
-export default RoleAccessSaga;
+
+
+// function input_checkBoxHandler(cell, index,) {
+
+//   if (cell === "IsEdit") {
+
+//     if (index[`${cell}`] = check ) {
+//       index.RoleAccess_IsView = 1;
+//       index.RoleAccess_IsViewDisabled = 1;
+//       index.RoleAccess_IsEditSelf = 1;
+//       index.RoleAccess_IsEditSelfDisabled = 1;
+
+//     }
+//     else {
+//       index.RoleAccess_IsEditSelf = 0;
+//       index.RoleAccess_IsEditSelfDisabled = 0;
+//     }
+//     return
+//   }
+//   if (cell === "IsEditSelf") {
+//     let = document.getElementById(`IsView${v}`)
+//     let isEditSelf = document.getElementById(`IsEditSelf${v}`)
+//     let isEdit = document.getElementById(`IsEdit${v}`)
+
+//     if ((index.RoleAccessIsEdit>0) && (e === "IsEditSelf")) {
+//       isEditSelf.checked = true;
+//       isEditSelf.disabled = true
+//     }
+//     else if (isEditSelf.checked) {
+//       isView.checked = true;
+//       isView.disabled = true;
+//     }
+//     else {
+//       isView.disabled = false;
+//     }
+//     return
+//   }
+//   if ((e === "IsView")) {
+//     let isEdit = document.getElementById(`IsEdit${v}`)
+//     if ((isEdit.checked)) {
+//       let isView = document.getElementById(`IsView${v}`)
+//       isView.checked = true;
+//       isView.disabled = true
+//     }
+
+//     return
+//   }
+
+//   if (e === "IsDelete") {
+//     let isDelete = document.getElementById(`IsDelete${v}`)
+//     let isDeleteSelf = document.getElementById(`IsDeleteSelf${v}`)
+//     if (isDelete.checked) {
+//       isDeleteSelf.checked = true;
+//       isDeleteSelf.disabled = true;
+//     }
+//     else {
+//       isDeleteSelf.disabled = false;
+//     }
+//     return
+//   }
+//   if ((e === "IsDeleteSelf")) {
+//     let isDelete = document.getElementById(`IsDelete${v}`)
+//     if ((isDelete.checked)) {
+//       let isDeleteSelf = document.getElementById(`IsDeleteSelf${v}`)
+//       isDeleteSelf.checked = true;
+//       isDeleteSelf.disabled = true
+//     }
+//     return
+//   }
+
+//   if (e === "addIsShowOnMenu") {
+//     let isShowOnMenu = document.getElementById(`addIsShowOnMenu${v}`)
+//     let save = document.getElementById(`IsSave${v}`)
+//     if (isShowOnMenu.checked) {
+//       save.checked = true;
+//       save.disabled = true;
+//     }
+//     else {
+//       save.disabled = false;
+//     }
+//     return
+//   }
+//   if ((e === "IsSave")) {
+//     let isShowOnMenu = document.getElementById(`addIsShowOnMenu${v}`)
+//     if ((isShowOnMenu.checked)) {
+//       let isSave = document.getElementById(`IsSave${v}`)
+//       isSave.checked = true;
+//       isSave.disabled = true
+//     }
+//     return
+//   }
+// }

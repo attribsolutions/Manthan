@@ -1,6 +1,5 @@
 
 
-
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useCallback } from "react";
 
@@ -21,13 +20,12 @@ import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { roleAceessAction } from "../../store/actions";
-// import { useSelector } from "react-redux";
 import { loginCompanyID, loginUserDetails, loginEmployeeID, loginPartyID } from "../Common/CommonFunction";
 import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const SidebarContent = (props) => {
+
   const dispatch = useDispatch();
   const ref = useRef();
 
@@ -40,6 +38,7 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
+    
     if (RoleAccessUpdateData.length <= 0) {
       let role = loginUserDetails()
       if (role) {
@@ -51,11 +50,12 @@ const SidebarContent = (props) => {
     }
   }, [])
 
+
   const activateParentDropdown = useCallback(item => {
     item.classList.add("active");
     const parent = item.parentElement;
     const parent2El = parent.childNodes[1];
-    if (parent2El && parent2El.id !== "side-menu") {
+    if (parent2El && parent2El.id !== "side-menu ") {
       parent2El.classList.add("mm-show");
     }
 
@@ -78,6 +78,7 @@ const SidebarContent = (props) => {
             if (parent5) {
               parent5.classList.add("mm-show"); // li
               parent5.childNodes[0].classList.add("mm-active"); // a tag
+
             }
           }
         }
@@ -87,16 +88,9 @@ const SidebarContent = (props) => {
     }
     scrollElement(item);
     return false;
-  }, []);
+  }, [RoleAccessUpdateData.length <= 0]);
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
-
-
-
-
-
-
-
 
   useEffect(() => {
     // const pathName = props.location.pathname;
@@ -108,12 +102,13 @@ const SidebarContent = (props) => {
     if (userAcc === undefined) { }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
       pathName = urlRel[`${userAcc.ActualPagePath}`]
-
     }
+
     const initMenu = () => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
+
       const items = ul.getElementsByTagName("a");
       for (let i = 0; i < items.length; ++i) {
         if (pathName === items[i].pathname) {
@@ -126,10 +121,9 @@ const SidebarContent = (props) => {
       }
     };
     initMenu();
-  }, [activateParentDropdown]);
+  }, [activateParentDropdown, RoleAccessUpdateData.length <= 0]);
 
 
-  
   useEffect(() => {
     ref.current.recalculate();
   });
@@ -146,20 +140,23 @@ const SidebarContent = (props) => {
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
-          <ul className="metismenu list-unstyled" id="side-menu">
-            <li>
-              <Link to="/#" className="has-arrow">
-                <FeatherIcon icon="home" />
-                <span>{props.t("Menu")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/Dashboard">{props.t("Dashboard")}</Link>
-                </li>
-              </ul>
-            </li>
+          <ul className="metismenu list-unstyled " id="side-menu">
+
             {RoleAccessData.map((item) => {
-              return (
+
+              if (item.ModuleName === "Dashboard") {
+                let isdashboard = ''
+                if (item.ModuleData.length > 0) { isdashboard = item.ModuleData[0] }
+                return (
+                  <li >
+                    <Link to={`/${isdashboard.ActualPagePath}`} >
+                      <FeatherIcon icon={item.ModuleIcon} />
+                      <span>{props.t(isdashboard.ModuleName)}</span>
+                    </Link>
+                  </li >
+                )
+              }
+              else return (
                 <li >
                   <Link to="/#" className="has-arrow">
                     <FeatherIcon icon={item.ModuleIcon} />
@@ -170,7 +167,9 @@ const SidebarContent = (props) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
                         return (
                           <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}` }}>{props.t(index.Name)}</Link>
+                            <Link to={{ pathname: `/${index.ActualPagePath}` }}>
+                              {props.t(index.Name)}
+                            </Link>
                           </li>
                         )
                       }

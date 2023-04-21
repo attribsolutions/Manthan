@@ -17,10 +17,12 @@ import {
   get_Division_ForDropDown,
   get_Party_ForDropDown,
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import { loginUserID, loginCompanyID } from "../../../../../components/Common/CommonFunction";
+import { loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
 
 function MRPTab(props) {
   const dispatch = useDispatch();
+  const IsSCMCompany = loginIsSCMCompany()
+
   const [division, setDivision] = useState("");
   const [partyName, setPartyName] = useState("");
   const [effectiveDate, setEffectiveDate] = useState("");
@@ -63,7 +65,7 @@ function MRPTab(props) {
   };
 
   const addRowsHandler = (e) => {
-   
+
     const val = {
       Division: division === "" ? "" : division.value,
       DivisionName: division.label,
@@ -71,12 +73,12 @@ function MRPTab(props) {
       Party: partyName === "" ? "" : partyName.value,
       EffectiveDate: effectiveDate,
       MRP: MRP,
-      CreatedBy:loginUserID(),
-      UpdatedBy:loginUserID(),
+      CreatedBy: loginUserID(),
+      UpdatedBy: loginUserID(),
       Company: loginCompanyID(),
-      IsDeleted:0,
-      CommonID:0,
-      IsAdd:true
+      IsDeleted: 0,
+      CommonID: 0,
+      IsAdd: true
     };
 
     if (!(effectiveDate === "") && !(MRP === "")) {
@@ -90,6 +92,7 @@ function MRPTab(props) {
       alert("Please Enter value");
     }
   };
+
   const clearState = () => {
     setDivision("");
     setPartyName("");
@@ -104,28 +107,31 @@ function MRPTab(props) {
           <CardBody className="c_card_body">
             <Row className="mt-3">
               <Col className=" col col-11 ">
+
                 <Row>
-                  <FormGroup className=" col col-sm-3 ">
-                    <Label>Division</Label>
-                    <Select
-                      id={`dropDivision-${0}`}
-                      value={division}
-                      options={Division_DropdownOptions}
-                      onChange={DivisiontHandler}
-                    />
-                  </FormGroup>
+                  {!(IsSCMCompany === 1) &&
+                    <> <div className=" col col-sm-3 ">
+                      <Label>Division</Label>
+                      <Select
+                        id={`dropDivision-${0}`}
+                        value={division}
+                        options={Division_DropdownOptions}
+                        onChange={DivisiontHandler}
+                      />
+                    </div>
+                      <div className="mb-3 col col-sm-3 ">
+                        <Label>Party Name</Label>
+                        <Select
+                          id={`dropPartyName-${0}`}
+                          value={partyName}
+                          options={Party_DropdownOptions}
+                          onChange={PartyNameHandler}
+                        />
+                      </div>
+                    </>
+                  }
 
-                  <FormGroup className="mb-3 col col-sm-3 ">
-                    <Label>Party Name</Label>
-                    <Select
-                      id={`dropPartyName-${0}`}
-                      value={partyName}
-                      options={Party_DropdownOptions}
-                      onChange={PartyNameHandler}
-                    />
-                  </FormGroup>
-
-                  <FormGroup className="mb-3 col col-sm-3 ">
+                  <div className="mb-3 col col-sm-3 ">
                     <Label>Effective Date</Label>
                     <div id={`txtEffectiveDate${0}`}>
                       <Flatpickr
@@ -142,9 +148,9 @@ function MRPTab(props) {
                         onChange={EffectiveDateHandler}
                       />
                     </div>
-                  </FormGroup>
+                  </div>
 
-                  <FormGroup className="mb-3 col col-sm-3 ">
+                  <div className="mb-3 col col-sm-3 ">
                     <Label>MRP</Label>
                     <Input
                       type="text"
@@ -153,17 +159,18 @@ function MRPTab(props) {
                       placeholder="Please Enter Margin"
                       onChange={MRPHandler}
                     />
-                  </FormGroup>
+                  </div>
+
                 </Row>
               </Col>
               <Col sm={1}>
                 <Row className=" mt-3">
                   <Col >
                     <Button
-                  
-                    //  className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
-                    className=" button_add"
-                    color="btn btn-outline-primary border-2 font-size-12"
+
+                      //  className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                      className=" button_add"
+                      color="btn btn-outline-primary border-2 font-size-12"
                       type="button"
                       onClick={addRowsHandler} >
                       <i className="dripicons-plus"></i>

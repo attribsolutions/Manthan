@@ -11,7 +11,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
             setState({ isError, hasValid, required, fieldLabel, values })
         }
     });
-
     return isValid
 };
 
@@ -174,10 +173,10 @@ export const onChangeDate = ({ v, e, state, setState }) => {
     const event = { change: { name: e.input.name, value: v }, type: "date" }
     formValChange({ event, state, setState })
 }
+
 export const onChangeText = ({ event, state, setState }) => {
     formValChange({ event, state, setState })
 }
-
 
 export const initialFiledFunc = (field) => {
 

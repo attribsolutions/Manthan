@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-    
+
     CardBody,
     Col,
     Container,
@@ -34,7 +34,6 @@ import {
 } from "../../../store/actions";
 import { getModuleList } from "../../../store/actions";
 import { useHistory, } from "react-router-dom";
-import "./table-fixed.scss"
 import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
@@ -47,7 +46,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
-
 
 const RoleAccessAdd1 = () => {
     const dispatch = useDispatch();
@@ -1180,6 +1178,7 @@ const RoleAccessAdd = () => {
             division = 0
         }
         if (role > 0) {
+            
             dispatch(GO_Button_RoleAccess_AddPage_Action(role, division, company));
             setShowTableOnUI(true)
         }
@@ -1248,6 +1247,7 @@ const RoleAccessAdd = () => {
     };
 
     const saveHandeller = (event) => {
+        
 
         event.preventDefault();
         const btnId = event.target.id
@@ -1316,6 +1316,7 @@ const RoleAccessAdd = () => {
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
+            
             dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
@@ -1325,6 +1326,10 @@ const RoleAccessAdd = () => {
 
     const RoleAccTable = () => {
 
+        // return <CustomTable
+        //     data={tableDataRedux}
+        //     columns={tableHederList}
+        // />
         return (
             <div className='sticky-div1'>
                 <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -1368,6 +1373,7 @@ const RoleAccessAdd = () => {
                 </PaginationProvider>
             </div>
         )
+
     }
     let IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1537,4 +1543,7 @@ const RoleAccessAdd = () => {
         </div>
     </React.Fragment>
 }
+
+
+
 export default RoleAccessAdd

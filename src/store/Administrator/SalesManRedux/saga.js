@@ -29,8 +29,8 @@ function* save_SalesMan_Master_GenFun({ config = {} }) {
     } catch (error) { CommonConsole(error) }
 }
 
-function* Post_SalesMan_List_GenratorFunction() {
-    const filters = loginJsonBody();// required only PartyID and CompanyID
+function* Post_SalesMan_List_GenratorFunction({jsonBody}) {
+    const filters = (jsonBody === undefined || null ? loginJsonBody() : jsonBody);// required only PartyID and CompanyID
     try {
         const response = yield call(SalesMan_Get_API, filters);
         yield put(getSalesManlistSuccess(response.Data));

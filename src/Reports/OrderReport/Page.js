@@ -27,7 +27,8 @@ const ordeRreport = (data) => {
     doc.setProperties({
         title: `POReport/${data.OrderDate}-${data.CustomerName} `
     });
-    window.open(doc.output('dataurlnewwindow'));
+    // window.open(doc.output('dataurlnewwindow'));
+    doc.output('dataurlnewwindow');
 
 }
 export default ordeRreport;

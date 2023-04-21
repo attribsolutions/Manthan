@@ -28,7 +28,10 @@ function pageFooter(doc,data) {
      doc.setProperties({
           title: "Report"
       });
-    window.open(doc.output('dataurlnewwindow'));
-    return(<></>);
+    // window.open('dataurlnewwindow');
+    
+    doc.output('dataurlnewwindow');
+
+    // return(<></>);
 }
 export default InvioceReport;

@@ -3,6 +3,7 @@ import reportHederPng from "../../assets/images/reportHeder.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
 import { convertDatefunc } from "../../components/Common/CommonFunction";
+let initial_y = 0
 
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
@@ -41,9 +42,49 @@ export const reportHeder1 = (doc, data) => {
 
     //Header Table Style 
 
-    var options3 = {
+    // var options3 = {
+    //     margin: {
+    //         top: 45, left: 35, right: 35,// bottom:100 
+    //     },
+    //     showHead: 'always',
+    //     theme: 'plain',
+    //     styles: {
+    //         overflow: 'linebreak',
+    //         fontSize: 8,
+    //         height: 0,
+    //     },
+    //     bodyStyles: {
+    //         columnWidth: 'wrap',
+    //         textColor: [30, 30, 30],
+    //         cellPadding: 2,
+    //         fontSize: 8,
+    //         fontStyle: 'bold',
+    //         lineColor: [0, 0, 0]
+    //     },
+    //     columnStyles: {
+    //         0: {
+    //             valign: "top",
+    //             columnWidth: 185,
+    //             halign: 'left',
+    //         },
+    //         1: {
+    //             columnWidth: 189,
+    //             halign: 'left',
+    //         },
+    //         2: {
+    //             columnWidth: 160,
+    //             halign: 'left',
+    //         },
+
+    //     },
+    //     startY: 85
+
+    // };
+    // doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
+
+    var BilledByStyle = {
         margin: {
-            top: 45, left: 35, right: 35,// bottom:100 
+            top: 45, left: 30, right: 35,
         },
         showHead: 'always',
         theme: 'plain',
@@ -63,23 +104,102 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 185,
-                halign: 'left',
+                columnWidth: 190,
+                halign: 'lfet',
+            }
+
+        },
+        tableLineColor: "black",
+
+        startY: 80,
+
+    };
+    var BilledToStyle = {
+        margin: {
+            top: 45, left: 220, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 188,
+                halign: 'lfet',
             },
-            1: {
-                columnWidth: 189,
-                halign: 'left',
-            },
-            2: {
-                columnWidth: 160,
-                halign: 'left',
+        },
+        tableLineColor: "black",
+        startY: 80,
+        // endY: doc.previousAutoTable.finalY+3
+
+    };
+    var DetailsOfTransportStyle = {
+        margin: {
+            top: 45, left: 408, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 162,
+                halign: 'lfet',
             },
 
         },
-        startY: 85
+        tableLineColor: "black",
+
+        startY: 80,
 
     };
-    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
+
+    // let initial_y = 0
+    const priLength = () => {
+        
+        let final_y = doc.previousAutoTable.finalY
+
+        if (final_y > initial_y) {
+            initial_y = final_y
+        }
+
+    }
+
+    doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
+    console.log("first",doc.previousAutoTable.finalY)
+    priLength()
+
+    doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
+    console.log("Second",doc.previousAutoTable.finalY)
+    priLength()
+
+    doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
+    console.log("third",doc.previousAutoTable.finalY)
+    priLength()
 }
 
 
@@ -109,7 +229,7 @@ export const reportHeder3 = (doc, data) => {
 export const reportFooter = (doc, data) => {
     var options1 = {
         didParseCell: (data1) => {
-            debugger
+              
             if (data1.row.cells[0].raw === "Terms And Condition") {
                 data1.row.cells[0].styles.fontSize = 10
                 data1.row.cells[0].styles.fontStyle = "bold"
@@ -196,7 +316,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',
+            halign: 'center',
             fillColor: "white",
             textColor: [0, 0, 0],
             fontSize: 8,
@@ -206,7 +326,7 @@ export const tableBody = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 3,
+            cellPadding: 2,
             fontSize: 7,
             // fontStyle: 'bold',
             lineColor: [6, 3, 1]
@@ -214,10 +334,10 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 120,
+                columnWidth: 140,
             },
             1: {
-                columnWidth: 70,
+                columnWidth: 50,
                 halign: 'right',
 
             },
@@ -254,7 +374,7 @@ export const tableBody = (doc, data) => {
         },
 
         tableLineColor: "black",
-        startY: doc.autoTableEndPosY(45),// 45,
+        startY: initial_y,// 45,
 
     };
 

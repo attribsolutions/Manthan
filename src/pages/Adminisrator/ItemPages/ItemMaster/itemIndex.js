@@ -232,7 +232,7 @@ const ItemsMaster = (props) => {
                     Division: editDivision,
                     BaseUnit: { label: hasEditVal.BaseUnitName, value: hasEditVal.BaseUnitID },
                     isActive: hasEditVal.isActive,
-                    IsSCM:hasEditVal.IsSCM,
+                    IsSCM: hasEditVal.IsSCM,
                     BrandName: editBrandName
                 }
                 // ====================== Images tab ======================
@@ -540,15 +540,15 @@ const ItemsMaster = (props) => {
                 isvalid = false
                 inValidMsg.push("Division:Is Requried")
             }
-            if (formValue.BrandName.length < 1) {
-                setInValidDrop(i => {
-                    const a = { ...i }
-                    a.BrandName = true
-                    return a
-                })
-                isvalid = false
-                inValidMsg.push("Brand Name:Is Requried")
-            }
+            // if (formValue.BrandName.length < 1) {
+            //     setInValidDrop(i => {
+            //         const a = { ...i }
+            //         a.BrandName = true
+            //         return a
+            //     })
+            //     isvalid = false
+            //     inValidMsg.push("Brand Name:Is Requried")
+            // }
             if (!Group_Tab_TableData.length > 0) {
                 isvalid = false
                 inValidMsg.push(" GroupType Primary:Is Requried")
@@ -665,8 +665,8 @@ const ItemsMaster = (props) => {
                     Sequence: formValue.Sequence,
                     BarCode: formValue.BarCode,
                     isActive: formValue.isActive,
-                    IsSCM:formValue.IsSCM,
-                    Company: formValue.Company.value,
+                    IsSCM: formValue.IsSCM,
+                    Company: loginCompanyID(),
                     BaseUnitID: formValue.BaseUnit.value,
                     BrandName: ItemBrandName.toString(),
                     Tag: formValue.Tag,
@@ -1003,7 +1003,7 @@ const ItemsMaster = (props) => {
                                                                         />
                                                                     </FormGroup>
 
-                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                    {/* <FormGroup className=" col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom21">Company</Label>
                                                                         <Select
                                                                             id='dropCompany-0'
@@ -1016,6 +1016,18 @@ const ItemsMaster = (props) => {
                                                                                 })
                                                                             }}
                                                                             onChange={(event) => dropDownValidation(event, "Company")}
+                                                                        />
+                                                                    </FormGroup> */}
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">Shelf Life<samp className="text-secondary">/Day</samp></Label>
+                                                                        <Input
+                                                                            type="text"
+                                                                            rows="1"
+                                                                            id='txtShelfLife0'
+                                                                            defaultValue={pageMode === 'edit' ? shelfLife[0] : ''}
+                                                                            placeholder=" Please Enter Days "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}
                                                                         />
                                                                     </FormGroup>
                                                                 </Row>
@@ -1155,18 +1167,7 @@ const ItemsMaster = (props) => {
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Tag") }}
                                                                         />
                                                                     </FormGroup>
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Shelf Life<samp className="text-secondary">/Day</samp></Label>
-                                                                        <Input
-                                                                            type="text"
-                                                                            rows="1"
-                                                                            id='txtShelfLife0'
-                                                                            defaultValue={pageMode === 'edit' ? shelfLife[0] : ''}
-                                                                            placeholder=" Please Enter Days "
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShelfLife") }}
-                                                                        />
-                                                                    </FormGroup>
+
 
                                                                 </Row>
                                                                 <Row >

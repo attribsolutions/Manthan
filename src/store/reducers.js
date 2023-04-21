@@ -51,6 +51,11 @@ import RoutesReducer from "./Administrator/RoutesRedux/reducer"
 import SalesManReducer from "./Administrator/SalesManRedux/reducer"
 import CreditLimitReducer from "./Administrator/CreditLimitRedux/reducer"
 import PartyMasterBulkUpdateReducer from "./Administrator/PartyMasterBulkUpdateRedux/reducer"
+import ManagementPartiesReducer from "./Administrator/ManagementPartiesRedux/reducer"
+import BankReducer from "./Accounting/BankRedux/reducer"
+import BankAssignReducer from "./Accounting/BankAssignRedux/reducer"
+import ImportFieldMap_Reducer from "./Administrator/ImportFieldMapRedux/reducer"
+import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -68,11 +73,15 @@ import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 
 //  *********************** Sale ***********************
 import InvoiceReducer from "./Sales/Invoice/reducer"
-
+import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
+import SalesReturnReducer from "./Sales/SalesReturnRedux/reducer"
 //  *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
-import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
+import CredietDebitReducer from "./Accounting/CreditRedux/reducer"
+
+//***************************Accounting ************************** */
+import ReceiptReducer from "./Accounting/Receipt/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -87,6 +96,8 @@ const rootReducer = combineReducers({
   BreadcrumbReducer,
   CommonPageFieldReducer,
   PdfReportReducers,
+  ImportFieldMap_Reducer,
+  ImportFieldAdd_Reducer,
   Modules,
   Company,
   H_Pages,
@@ -125,11 +136,17 @@ const rootReducer = combineReducers({
   WorkOrderReducer,
   MaterialIssueReducer,
   ProductionReducer,
+  BankReducer,
+  BankAssignReducer,
   ProductionReIssueReducer,
   InvoiceReducer,
   InwardReducer,
   ChallanReducer,
   RouteUpdateReducer,
   LoadingSheetReducer,
+  ManagementPartiesReducer,
+  ReceiptReducer,
+  SalesReturnReducer,
+  CredietDebitReducer,
 })
 export default rootReducer

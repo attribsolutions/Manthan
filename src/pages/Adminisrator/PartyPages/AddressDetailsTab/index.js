@@ -15,7 +15,8 @@ function AddressDetails_Tab(props) {
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(true);
-    const [imageTable, setImageTable] = useState('');
+    const [imageTable, setImageTable] = useState([]);
+
 
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
@@ -29,16 +30,12 @@ function AddressDetails_Tab(props) {
         setAddress(event.target.value)
     }
 
-    const PINHandler = (event) => {
-        setPIN(event.target.value)
-    }
-
     const IsDefaultHandler = (event) => {
         setIsDefault(event.target.checked)
     }
 
     const addRowsHandler = (data) => {
-    
+
         const invalidMsg1 = []
 
         if ((address === "")) {
@@ -53,18 +50,18 @@ function AddressDetails_Tab(props) {
         if ((PIN === "")) {
             invalidMsg1.push(`PIN Is Required`)
         };
-        if ((address === "") || (FSSAINo === "") || (FSSAIExipry === "") || (PIN === "")) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: JSON.stringify(invalidMsg1),
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
-            return;
-        }
+        // if ((address === "") || (FSSAINo === "") || (FSSAIExipry === "") || (PIN === "")) {
+        //     dispatch(
+        //         AlertState({
+        //             Type: 4,
+        //             Status: true,
+        //             Message: JSON.stringify(invalidMsg1),
+        //             RedirectPath: false,
+        //             PermissionAction: false,
+        //         })
+        //     );
+        //     return;
+        // }
 
         const val = {
             Address: address,
@@ -88,15 +85,17 @@ function AddressDetails_Tab(props) {
     }
 
     const clearState = () => {
+        
         setAddress('');
         setFSSAIExipry('');
         setFSSAINo('');
         setIsDefault(false);
         setPIN('');
-        setImageTable('');
+        setImageTable('')
     };
 
     const onchangeHandler = async (event) => {
+        
         const file = event.target.files[0]
         const base64 = await convertBase64(file);
         let ImageUpload = base64
@@ -104,7 +103,7 @@ function AddressDetails_Tab(props) {
     }
 
     const convertBase64 = (file) => {
-
+        
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file);
@@ -117,6 +116,20 @@ function AddressDetails_Tab(props) {
             }
         })
     }
+
+    const handleChange = event => {
+        let val = event.target.value
+        const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
+        if (result) {
+            setPIN(val);
+        }
+        else if (val === "") {
+            setPIN(val)
+        }
+        else {
+            event.target.value = ""
+        }
+    };
 
     return (
         <Row>
@@ -213,7 +226,7 @@ function AddressDetails_Tab(props) {
                                 <Col md="4">
                                     <FormGroup >
                                         <Label> PIN </Label>
-                                        <AvField name="PIN" type="text"
+                                        <Input name="PIN" type="text"
                                             value={PIN}
                                             placeholder=" PIN No. "
                                             autoComplete='off'
@@ -225,12 +238,14 @@ function AddressDetails_Tab(props) {
                                             //     }
                                             // }
                                             // }
-                                            onChange={PINHandler}
+                                            onChange={handleChange}
                                         />
                                     </FormGroup>
                                 </Col>
+
                                 <Col md="1">  </Col>
-                                <Col md="4" style={{ width: "8cm" }}>
+
+                                <Col md="4" >
                                     <FormGroup >
                                         <Label >FSSI Document</Label>
                                         <Input type="file"
@@ -243,6 +258,7 @@ function AddressDetails_Tab(props) {
                                         />
                                     </FormGroup>
                                 </Col>
+
                                 <Col md="1">  </Col>
                                 <FormGroup className="col col-sm-4 mt-4">
                                     <Row className="justify-content-md-left">

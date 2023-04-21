@@ -22,9 +22,9 @@ export const saveSalesManMasterSuccess = (resp) => ({
   payload: resp,
 });
 
-export const getSalesManlist = (config = {}) => ({
+export const getSalesManlist = (jsonBody) => ({
   type: GET_SALESMAN_LIST,
-  config,
+  jsonBody,
 });
 
 export const getSalesManlistSuccess = (resp) => ({

@@ -1,7 +1,7 @@
 
 // original
 export const columns = [
-    "HSNCode Item Name",
+    "HSN Item Name",
     "Quantity",
     "Rate",
     "BasicAmt ",
@@ -19,6 +19,16 @@ export const PageHedercolumns = [
 ]
 export const Footercolumn = [
     "",
+]
+
+export const BilledBy = [
+    "Billed by",
+]
+export const BilledTo = [
+    "Billed by",
+]
+export const DetailsOfTransport = [
+    "Billed by",
 ]
 
 
@@ -123,7 +133,6 @@ export const Footercolumn = [
 // }
 
 
-
 export const Rows = (data) => {
     const { OrderItem = [] } = data
     OrderItem.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
@@ -141,7 +150,7 @@ export const Rows = (data) => {
         const tableitemRow = [
             `${element.ItemName} (${element.HSNCode})      
              ${element.Comment === null ? "" : element.Comment}`,
-            `${element.Quantity} ${element.UnitName}`,
+            `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
             `${element.CGSTPercentage}%`,
@@ -168,7 +177,7 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
-                `Total Quantity :${parseFloat(totalQuantity).toFixed(2)}`,
+                `Total Quantity :${parseFloat(totalQuantity).toFixed(2)}${element.UnitName}`,
                 " ",
                 `TotalBasic:${parseFloat(totalBasicAmount).toFixed(2)}`,
                 "",
@@ -215,21 +224,7 @@ export const ReportFotterColumns = [
     "TaxbleAmt.", "IGST", "Total Amt"
 ];
 
-export const ReportFooterRow = (element) => {
-    // data.InvoiceServiceItems.forEach(element => {
-    var a = [[
-        'first', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ], [
-        '1211', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ], [
-        '1211', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ], [
-        'last', '121457', '1245445', '83565', '2451422', '54646', '64641'
-    ],
-    ]
-    return a
-    // })
-}
+
 export const ReportFotterColumns2 = [
     "SGST",
 ];
@@ -237,14 +232,14 @@ export const ReportFotterColumns2 = [
 
 
 export const ReportRows = (data, doc) => {
-    debugger
+
     const terms = data.OrderTermsAndCondition
     const slicedArray = terms.slice(0, 2);
     var TableArray = [["Terms And Condition"],
-        [`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`,
-        ],
-        [`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`,
-        ],
+    [`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`,
+    ],
+    [`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`,
+    ],
         // [`${slicedArray[2] === undefined ? "" : slicedArray[2].TermsAndCondition}`
         // ],
         // [`${slicedArray[3] === undefined ? "" : slicedArray[3].TermsAndCondition}`
@@ -253,14 +248,42 @@ export const ReportRows = (data, doc) => {
     ]
     return TableArray
 }
-export const ReportHederRows = (data) => {
+// export const ReportHederRows = (data) => {
+//     var reportArray = [
+//         [`${data.SupplierName}`, `${data.CustomerName}`, `${data.POTypeName}`],
+//         [`${data.ShippingAddress}`, `${data.BillingAddress}`, `${data.CustomerName}`],
+//         [`FSSAI:${data.ShippingFssai}`, `FSSAI :ui3dfxxxxxwe55`, `${data.BillingAddress}`,],
+//     ]
+//     return reportArray;
+// }
 
-    var reportArray = [
-        [`${data.SupplierName}`, `${data.CustomerName}`, `${data.POTypeName}`],
-        [`${data.ShippingAddress}`, `${data.BillingAddress}`, `${data.CustomerName}`],
-        [`FSSAI:${data.ShippingFssai}`, `FSSAI :ui3dfxxxxxwe55`, `${data.BillingAddress}`,],
+export const BilledByRow = (data) => {
+    var BilledByArray = [
+        [`${data.SupplierName}`],
+        [`${data.ShippingAddress}`],
+        [`FSSAI:${data.ShippingFssai}`],
     ]
-    return reportArray;
+    return BilledByArray;
+}
+export const BilledToRow = (data) => {
+
+    var BilledToArray = [
+        [`${data.CustomerName}`],
+        [`${data.BillingAddress}`],
+        [`FSSAI:${data.BillingFssai}`],
+    ]
+
+    return BilledToArray;
+}
+export const DetailsOfTransportRow = (data) => {
+
+    var DetailsOfTransportArray = [
+        [`${data.POTypeName}`],
+        [`${data.CustomerName}`],
+        [`${data.BillingAddress}`],
+    ]
+
+    return DetailsOfTransportArray;
 }
 
 

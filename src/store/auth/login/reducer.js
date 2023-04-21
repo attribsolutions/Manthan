@@ -24,6 +24,7 @@ const initialState = {
 }
 
 const Login = (state = initialState, action) => {
+
   switch (action.type) {
     case LOGIN_USER:
       state = { ...state, loading: true, }
@@ -51,6 +52,7 @@ const Login = (state = initialState, action) => {
       }
 
     case ROLE_ACCESS_API_CALL_SUCCESS:
+      
       return {
         ...state,
         roleAccessSidbarData: action.payload,

@@ -1,14 +1,16 @@
 import {
     GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE_SUCCESS,
     POST_PARTY_MASTER_BULK_UPDATE_PAGE_SUCCESS,
-    POST_PARTY_DROPDOWN_SUCCESS,
-    POST_SELECT_FIELD_SUCCESS
+    POST_PARTY_NAME_SUCCESS,
+    POST_SELECT_FIELD_SUCCESS,
+    UPDATE_PARTY_MASTER_BULK_SUCCESS
 } from "./actionTypes"
 
 const INIT_STATE = {
     goButton: [],
     postMsg: { Status: false },
-    Party: [],
+    updateMessage: { Status: false },
+    PartyName: [ ],
     SelectField: []
 }
 
@@ -27,17 +29,23 @@ const PartyMasterBulkUpdateReducer = (state = INIT_STATE, action) => {
                 goButton: action.payload,
             };
 
-        case POST_PARTY_DROPDOWN_SUCCESS:
+        case POST_PARTY_NAME_SUCCESS:
             return {
                 ...state,
-                Party: action.payload,
+                PartyName: action.payload,
             };
 
         case POST_SELECT_FIELD_SUCCESS:
             return {
                 ...state,
                 SelectField: action.payload,
-            }
+            };
+
+        case UPDATE_PARTY_MASTER_BULK_SUCCESS:
+            return {
+                ...state,
+                updateMessage: action.payload,
+            };
 
         default:
             return state

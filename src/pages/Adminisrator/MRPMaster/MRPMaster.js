@@ -39,6 +39,7 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
 import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import * as mode from "../../../routes/PageMode"
 
 const MRPMaster = (props) => {
 
@@ -47,7 +48,7 @@ const MRPMaster = (props) => {
     const formRef = useRef(null);
     let editMode = history.location.pageMode;
 
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
 
     const [party_dropdown_Select, setParty_dropdown_Select] = useState("");
@@ -72,8 +73,7 @@ const MRPMaster = (props) => {
     }));
 
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty("editValue")
-
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -95,9 +95,9 @@ const MRPMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(postGoButtonForMRP_MasterSuccess([]));
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
-        dispatch(postGoButtonForMRP_MasterSuccess([]));
     }, [dispatch]);
 
     useEffect(() => {
@@ -140,7 +140,7 @@ const MRPMaster = (props) => {
             setEffectiveDate('')
             setParty_dropdown_Select('')
 
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === mode.dropdownAdd) {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -395,7 +395,7 @@ const MRPMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode ===mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>

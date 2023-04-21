@@ -99,11 +99,27 @@ export const SALESMAN_LIST = 152
 export const CREDITLIMIT = 160
 export const CREDITLIMIT_LIST = 154
 
-export const IMPORT_MASTER = 157
-export const IMPORT_MASTER_LIST = 158
+export const IMPORT_FIELD_MAP = 157
+export const IMPORT_FIELD_MAP_LIST = 158
+
+export const IMPORT_FIELD_ADD = 188
+export const IMPORT_FIELD_ADD_LIST = 189
+
+export const UPLOAD_EXCEL = 184
+
 
 export const ROUTE_UPDATE = 159
 export const PARTY_MASTER_BULK_UPDATE = 161
+
+export const MANAGEMENT_PARTIES = 172
+
+export const BANK = 175
+export const BANK_LIST = 176
+
+export const BANK_ASSIGN = 182
+
+
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
@@ -118,14 +134,13 @@ export const IB_ORDER_SO_LIST = 147
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
-export const GRN_ADD_1= 55
+export const GRN_ADD_1 = 55
 export const GRN_LIST_1 = 56
 export const GRN_STP_1 = 124
 
 export const GRN_ADD_3 = 165
 export const GRN_LIST_3 = 166
 export const GRN_STP_3 = 164
-
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
@@ -167,3 +182,30 @@ export const CHALLAN_LIST = 138
 
 export const LOADING_SHEET = 155
 export const LOADING_SHEET_LIST = 156
+
+export const LOADING_SHEET_LIST_UPDATE = 179
+
+export const SALES_RETURN = 186
+export const SALES_RETURN_LIST = 187
+
+//**************************** Accounting ***********************************//
+export const CREDIT_LIST = 191
+export const CREDIT = 190
+
+export const DEBIT = 192
+export const DEBIT_LIST = 193
+
+
+
+export const RECEIPTS = 173
+export const RECEIPTS_LIST = 174
+
+export const RECEIPTS_LIST_2 = 180
+
+export const BULK_RECIPT = 181
+
+
+export const PAYMENT_ENTRY = 177
+export const PAYMENT_ENTRY_LIST = 178
+
+

@@ -1,8 +1,7 @@
 
 import reportHederPng from "../../assets/images/reportHeder.png"
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { convertDatefunc } from "../../components/Common/CommonFunction";
-import { VanLoadingSheetSKU } from "../ReportIndex";
+import { convertDatefunc, convertOnlyTimefunc } from "../../components/Common/CommonFunction";
 import * as table from './TableData'
 
 export const pageBorder = (doc) => {
@@ -12,29 +11,29 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
 }
 export const pageHeder = (doc, data) => {
-    
+
     // doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    
-        doc.text('Van Loading Sheet SKU Wise Summary', 100, 40,) 
+
+    doc.text('Van Loading Sheet SKU Wise Summary', 100, 40,)
 }
 export const pageHeder1 = (doc, data) => {
-    
+
     // doc.addImage(reportHederPng, 'PNG', 35, 10, 80, 45)
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-        doc.text('Van Loading Party Wise Invoice List', 100, 40,)
+    doc.text('Van Loading Party Wise Invoice List', 100, 40,)
 }
 export const reportHeder1 = (doc, data) => {
-     
+
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    const Party =data.PartyDetails.Party
-    doc.text(`*** ${Party} ***`, 300, 75,'center')  //bill by 
+    const Party = data.PartyDetails.Party
+    doc.text(`*** ${Party} ***`, 300, 75, 'center')  //bill by 
     doc.line(570, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(570, 10, 30, 10);//horizontal line 2
     doc.line(570, 80, 30, 80);//horizontal line 3
@@ -45,7 +44,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 789, 570, 10);//vertical left 2
     doc.line(408, 60, 408, 10);//vertical right 1
     // doc.line(250, 134, 250, 80);//vertical right 2
-    doc.line(570,134, 30,134);//horizontal line table 
+    doc.line(570, 134, 30, 134);//horizontal line table 
 
 
     // doc.line(250, 100, 408, 100) //horizontal line Current date upper
@@ -57,21 +56,15 @@ export const reportHeder1 = (doc, data) => {
     var options3 = {
         didParseCell: (data1) => {
 
-            if (data1.row.cells[0].raw === "Address:")
-             {
+            if (data1.row.cells[0].raw === "Address:") {
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[1].colSpan = 5
-               
-
-
-
             }
-            if (data1.row.cells[0].raw === "Routes:")
-            {
-               data1.row.cells[0].styles.fontStyle = "bold"
-               data1.row.cells[2].styles.fontStyle = "bold"
-               data1.row.cells[4].styles.fontStyle = "bold"
-           }
+            if (data1.row.cells[0].raw === "Routes:") {
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+            }
         },
 
         margin: {
@@ -83,7 +76,7 @@ export const reportHeder1 = (doc, data) => {
             overflow: 'linebreak',
             fontSize: 8,
         },
-        
+
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
@@ -97,7 +90,7 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 45,
                 halign: 'lfet',
             },
-           
+
             1: {
                 columnWidth: 100,
                 halign: 'left',
@@ -110,7 +103,7 @@ export const reportHeder1 = (doc, data) => {
             3: {
                 columnWidth: 140,
                 halign: 'left',
-            }, 
+            },
             4: {
                 columnWidth: 60,
                 halign: 'left',
@@ -121,13 +114,13 @@ export const reportHeder1 = (doc, data) => {
             },
 
 
-           
-           
+
+
         },
         tableLineColor: "black",
-        startY:85
+        startY: 85
     };
-    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(doc,data), options3);
+    doc.autoTable(table.PageHedercolumns, table.ReportHederRows(doc, data), options3);
 }
 
 export const reportHeder2 = (doc, data) => {
@@ -138,14 +131,15 @@ export const reportHeder2 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-      
+
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.line(570, 35, 408, 35) //horizontal line 1 billby upper
     doc.setFont(undefined, 'bold')
     doc.text(`Loading No:${data.PartyDetails.LoadingSheetNo}`, 415, 30) //Invoice Id
     var date = convertDatefunc(data.PartyDetails.Date)
-    doc.text(`Loading Date: ${date}`, 415, 50) //Invoice date
+    var time = convertOnlyTimefunc(data.CreatedOn)
+    doc.text(`Loading Date:${date} `, 415, 50) //Invoice date
     doc.setFontSize(11)
 }
 // original
@@ -154,22 +148,21 @@ export const tableBody = (doc, data) => {
     console.log(tableRow)
     var options = {
         didParseCell: (data1) => {
-    
-                if (data1.row.cells[1].raw === "Total")
-                 {
-                    data1.row.cells[1].styles.fontStyle = "bold"
-                    data1.row.cells[3].styles.fontStyle = "bold"
-                    data1.row.cells[4].styles.fontStyle = "bold"
-                    data1.row.cells[6].styles.fontStyle = "bold"
-                    data1.row.cells[7].styles.fontStyle = "bold"
 
-                    data1.row.cells[1].styles.fontSize = 9
-                    data1.row.cells[3].styles.fontSize = 9
-                    data1.row.cells[4].styles.fontSize = 9
-                    data1.row.cells[6].styles.fontSize = 9
-                    data1.row.cells[7].styles.fontSize = 9
-                }  
-            },
+            if (data1.row.cells[1].raw === "Total") {
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+
+                data1.row.cells[1].styles.fontSize = 9
+                data1.row.cells[3].styles.fontSize = 9
+                data1.row.cells[4].styles.fontSize = 9
+                data1.row.cells[6].styles.fontSize = 9
+                data1.row.cells[7].styles.fontSize = 9
+            }
+        },
 
         margin: {
             left: 30, right: 25,//200 bottom
@@ -180,7 +173,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'center',
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
             fontSize: 8,
@@ -201,7 +194,7 @@ export const tableBody = (doc, data) => {
             },
             1: {
                 columnWidth: 140,
-                halign: 'right',
+                // halign: 'right',
 
             },
             2: {
@@ -231,29 +224,28 @@ export const tableBody = (doc, data) => {
             8: {
                 columnWidth: 60,
                 halign: 'right',
-            }, 
+            },
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
     };
     var options1 = {
         didParseCell: (data1) => {
-    
-                if (data1.row.cells[1].raw === "Total")
-                 {
-                    data1.row.cells[1].styles.fontStyle = "bold"
-                    data1.row.cells[3].styles.fontStyle = "bold"
-                    data1.row.cells[4].styles.fontStyle = "bold"
-                    data1.row.cells[6].styles.fontStyle = "bold"
-                    data1.row.cells[7].styles.fontStyle = "bold"
 
-                    data1.row.cells[1].styles.fontSize = 9
-                    data1.row.cells[3].styles.fontSize = 9
-                    data1.row.cells[4].styles.fontSize = 9
-                    data1.row.cells[6].styles.fontSize = 9
-                    data1.row.cells[7].styles.fontSize = 9
-                }  
-            },
+            if (data1.row.cells[1].raw === "Total") {
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+
+                data1.row.cells[1].styles.fontSize = 9
+                data1.row.cells[3].styles.fontSize = 9
+                data1.row.cells[4].styles.fontSize = 9
+                data1.row.cells[6].styles.fontSize = 9
+                data1.row.cells[7].styles.fontSize = 9
+            }
+        },
 
         margin: {
             left: 30, right: 25,//200 bottom
@@ -264,7 +256,7 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'left',    //'center' or 'right'
+            halign: 'center',
             fillColor: "white",
             textColor: [0, 0, 0], //Black     
             fontSize: 8,
@@ -285,7 +277,7 @@ export const tableBody = (doc, data) => {
             },
             1: {
                 columnWidth: 80,
-                halign: 'right',
+                // halign: 'right',
 
             },
             2: {
@@ -294,7 +286,7 @@ export const tableBody = (doc, data) => {
             },
             3: {
                 columnWidth: 120,
-                halign: 'right',
+                // halign: 'right',
             },
             4: {
                 columnWidth: 50,
@@ -315,20 +307,20 @@ export const tableBody = (doc, data) => {
             8: {
                 columnWidth: 50,
                 halign: 'right',
-            }, 
+            },
         },
         tableLineColor: "black",
         startY: doc.autoTableEndPosY(45),// 45,
     };
 
-    doc.autoTable(table.columns,table.Rows(data), options); 
+    doc.autoTable(table.columns, table.Rows(data), options);
     doc.addPage();
-    pageBorder(doc,data);
-    pageHeder1(doc,data);     //Title
-    reportHeder1(doc,data);
-    reportHeder2(doc,data);
-    reportHeder3(doc,data); 
-    doc.autoTable(table.columns1,table.Rows1(data), options1); 
+    pageBorder(doc, data);
+    pageHeder1(doc, data);     //Title
+    reportHeder1(doc, data);
+    reportHeder2(doc, data);
+    reportHeder3(doc, data);
+    doc.autoTable(table.columns1, table.Rows1(data), options1);
 
     // Auto table for footer
     const optionsTable4 = {

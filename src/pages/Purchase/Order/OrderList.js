@@ -8,6 +8,7 @@ import {
     deleteOrderIdSuccess,
     editOrderId,
     getOrderListPage,
+    getOrderListPageSuccess,
     updateOrderIdSuccess,
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -137,7 +138,7 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
-        dispatch(getOrderListPage(""))//for clear privious order list
+        dispatch(getOrderListPageSuccess([]))//for clear privious order list
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -165,12 +166,6 @@ const OrderList = () => {
         label: " All"
     });
 
-    const downList = useMemo(() => {
-        let PageFieldMaster = []
-        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
-        return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
-
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
@@ -183,7 +178,6 @@ const OrderList = () => {
     useEffect(() => {
 
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
-
             history.push({
                 pathname: makeIBInvoice.path,
                 page_Mode: makeIBInvoice.page_Mode,
@@ -192,6 +186,7 @@ const OrderList = () => {
     }, [makeIBInvoice])
 
     const makeBtnFunc = (list = []) => {
+        
         const obj = list[0]
         if (subPageMode === url.IB_INVOICE_STP) {
             const jsonBody = JSON.stringify({
@@ -217,7 +212,7 @@ const OrderList = () => {
                             Invoice: null,
                             Order: ele.POType === "Challan" ? '' : ele.id,
                             ChallanNo: ele.FullOrderNumber,
-                            Inward: false,
+                            Inward: url.GRN_STP_3 ? true : false,
                             Challan: ele.POType === "Challan" ? ele.id : ''
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
@@ -260,7 +255,9 @@ const OrderList = () => {
                 Party: rowData.SupplierID,
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.preOrderDate,
-                OrderID: rowData.id
+                OrderID: rowData.id,
+                RateParty: rowData.SupplierID
+
             })
             dispatch(editOrderId({ jsonBody, ...config }));
         } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
@@ -272,7 +269,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-
+        
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             let filtersBody = {}

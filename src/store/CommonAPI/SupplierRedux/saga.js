@@ -6,11 +6,13 @@ import {
   getSupplierSuccess,
   GetVenderSuccess,
   GetVenderSupplierCustomerSuccess,
+  Party_Dropdown_List_Success,
   Retailer_List_Success,
   SSDD_List_under_Company_Success,
 } from "./actions";
 import {
   get_OrderType_Api,
+  Party_Dropdown_Get_API,
   Party_Master_Edit_API,
   Retailer_List_under_Company_PartyAPI,
   SSDD_List_under_Company_API,
@@ -24,6 +26,7 @@ import {
   GET_SUPPLIER_ADDRESS,
   GET_VENDER,
   GET_VENDER_SUPPLIER_CUSTOMER,
+  PARTY_DROPDOWN_LIST,
   RETAILER_LIST,
   SSDD_LIST_UNDER_COMPANY,
 } from "./actionType";
@@ -31,8 +34,8 @@ import {
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
-function* supplierAddressGenFunc() {
-  const config = { editId: loginPartyID() }
+function* supplierAddressGenFunc({ editId }) {
+  const config = { editId: editId  }
   try {
     const response = yield call(Party_Master_Edit_API, config);
     let first = [], secd = [], newArr = []
@@ -88,8 +91,8 @@ function* getCustomerGenFunc() {
   } catch (error) { CommonConsole(error) }
 }
 
-function* vendorSupplierCustomer_genFunc({ subPageMode }) {
-  
+function* vendorSupplierCustomer_genFunc({ subPageMode, RoleID }) {
+
   let response;
 
   const isVender = (subPageMode === url.ORDER_1 //vendor mode 1
@@ -101,7 +104,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     || subPageMode === url.GRN_STP_3
     || subPageMode === url.GRN_LIST_3);
 
-  const isCustomer = ( subPageMode === url.ORDER_4                 //Customer mode 3
+  const isCustomer = (subPageMode === url.ORDER_4                 //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1);
@@ -113,6 +116,7 @@ function* vendorSupplierCustomer_genFunc({ subPageMode }) {
     || subPageMode === url.IB_INVOICE_LIST
     || subPageMode === url.INWARD_LIST
   );
+
   const json = { "PartyID": loginPartyID(), "Company": loginCompanyID() }
 
   try {
@@ -152,6 +156,13 @@ function* Retailer_List_GenFunc({ data }) {
   } catch (error) { CommonConsole(error) }
 }
 
+function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
+
+  try {
+    const response = yield call(Party_Dropdown_Get_API, loginEmployeeID);
+    yield put(Party_Dropdown_List_Success(response.Data));
+  } catch (error) { CommonConsole(error) }
+}
 
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
@@ -162,6 +173,8 @@ function* SupplierSaga() {
   yield takeEvery(GET_CUSTOMER, getCustomerGenFunc);
   yield takeEvery(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
   yield takeEvery(RETAILER_LIST, Retailer_List_GenFunc);
+  yield takeEvery(PARTY_DROPDOWN_LIST, Party_Dropdown_List_GenFunc);
+
 
 }
 

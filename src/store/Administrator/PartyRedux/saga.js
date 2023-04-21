@@ -36,7 +36,7 @@ import {
   UPDATE_PARTY_ID,
 } from "./actionTypes";
 
-function* Get_Party_GenratorFunction() {
+function* Get_Party_GenratorFunction() {   // Only CompanyID is Required
   try {
     const response = yield call(Party_Master_Get_API, loginJsonBody());
     function address(arr) {
@@ -56,6 +56,7 @@ function* Get_Party_GenratorFunction() {
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceListName"] = index.PriceList.Name; }
       index["PartyAddress"] = address(index);
+      index["Check"] = false
       return index;
     });
     yield put(getPartyListAPISuccess(data1))

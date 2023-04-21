@@ -57,7 +57,7 @@ const PartySubParty = (props) => {
     const fileds = {
         id: "",
         PartyName: "",
-        SubParty: "",
+        Subparty: "",
         IsRetailerTransfer: false,
         SSDD: "",
         Retailer: ""
@@ -247,9 +247,9 @@ const PartySubParty = (props) => {
         setState((i) => {
             const a = { ...i }
             a.PartyName = e
-            a.values.SubParty = '';
+            a.values.Subparty = '';
             a.values.SSDD = '';
-            a.hasValid.SubParty.valid = true
+            a.hasValid.Subparty.valid = true
             a.hasValid.SSDD.valid = true
             return a
         })
@@ -259,17 +259,17 @@ const PartySubParty = (props) => {
         setState((i) => {
             const a = { ...i }
             a.values.IsRetailerTransfer = e.target.checked;
-            a.values.SubParty = '';
-            a.hasValid.SubParty.valid = true
+            a.values.Subparty = '';
+            a.hasValid.Subparty.valid = true
             a.hasValid.IsRetailerTransfer.valid = true
             return a
         })
         if (values.IsRetailerTransfer) {
             setState((i) => {
                 const a = { ...i }
-                a.values.SubParty = '';
+                a.values.Subparty = '';
                 a.values.SSDD = '';
-                a.hasValid.SubParty.valid = true
+                a.hasValid.Subparty.valid = true
                 a.hasValid.SSDD.valid = true
                 return a
             })
@@ -279,8 +279,8 @@ const PartySubParty = (props) => {
     function handllerSub_Party(e) {
         setState((i) => {
             const a = { ...i }
-            a.values.SubParty = e;
-            a.hasValid.SubParty.valid = true
+            a.values.Subparty = e;
+            a.hasValid.Subparty.valid = true
             return a
         })
     }
@@ -298,16 +298,16 @@ const PartySubParty = (props) => {
     function AddPartyHandler() {
 
         const find = partyTableArr.find((element) => {
-            return element.value === values.SubParty.value
+            return element.value === values.Subparty.value
         });
-        
+
         if (values.PartyName === '') {
             CustomAlert({
                 Type: 3,
                 Message: "Select Party",
             })
         }
-        else if ((values.SubParty === '')) {
+        else if ((values.Subparty === '')) {
             const msg = (values.IsRetailerTransfer) ? "Select Retailer" : "Select Sub-Party"
             CustomAlert({
                 Type: 3,
@@ -315,7 +315,7 @@ const PartySubParty = (props) => {
             })
         }
         else if (find === undefined) {
-            setPartyTableArr([...partyTableArr, values.SubParty]);
+            setPartyTableArr([...partyTableArr, values.Subparty]);
         }
         else {
             CustomAlert({
@@ -340,7 +340,7 @@ const PartySubParty = (props) => {
         {
             text: "Action ",
             dataField: "",
-            formatter: (cellContent, Party,k) => (
+            formatter: (cellContent, Party, k) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -369,7 +369,7 @@ const PartySubParty = (props) => {
     };
 
     const SaveHandler = async (event) => {
-          
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -458,9 +458,9 @@ const PartySubParty = (props) => {
                                                                             handllerParty(hasSelect)
                                                                         }}
                                                                     />
-                                                                    {/* {isError.PartyName.length > 0 && (
-                                                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                                            )} */}
+                                                                    {isError.PartyName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                                    )}
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
@@ -512,10 +512,10 @@ const PartySubParty = (props) => {
                                                     <Row className="">
                                                         <Col sm="4">
                                                             <FormGroup>
-                                                                <Label >{(values.IsRetailerTransfer) ? fieldLabel.Retailer : fieldLabel.SubParty}</Label>
+                                                                <Label >{(values.IsRetailerTransfer) ? fieldLabel.Retailer : fieldLabel.Subparty}</Label>
                                                                 <Select
-                                                                    name="SubParty"
-                                                                    value={values.SubParty}
+                                                                    name="Subparty"
+                                                                    value={values.Subparty}
                                                                     isSearchable={true}
                                                                     className="react-dropdown"
                                                                     classNamePrefix="dropdown"

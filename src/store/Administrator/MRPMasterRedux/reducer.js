@@ -8,7 +8,6 @@ import {
     POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
     DELETE_ID_IN_MASTERPAGE_SUCCESS,
     POST_GO_BUTTON_FOR_MRP_MASTER,
-
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -58,14 +57,11 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
                 deleteMsg: action.payload,
             };
 
-
-
         case EDIT_MRP_LIST_PAGE_SUCCESS:
             return {
                 ...state,
                 editData: action.payload,
             };
-
 
         case UPDATE_MRP_LIST_PAGE_SUCCESS:
             return {

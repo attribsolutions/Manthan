@@ -13,9 +13,7 @@ import {
     POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
     DELETE_ID_IN_MASTERPAGE,
     DELETE_ID_IN_MASTERPAGE_SUCCESS,
-
 } from "./actionTypes";
-
 
 // MRP Post API
 export const postMRPMasterData = (Data,) => ({
@@ -27,7 +25,6 @@ export const postMRPMasterDataSuccess = (data) => ({
     type: POST_MRP_MASTER_DATA_SUCCESS,
     payload: data,
 });
-
 
 // Go Button Post API
 export const postGoButtonForMRP_Master = (data,) => ({
@@ -43,7 +40,6 @@ export const postGoButtonForMRP_MasterSuccess = (data) => ({
 //get listpage api
 export const getMRPListPage = () => ({
     type: GET_MRP_LIST_PAGE,
-
 });
 
 export const getMRPListPageSuccess = (data) => ({
@@ -69,7 +65,6 @@ export const editMRPList = (id, pageMode) => ({
 })
 export const editMRPListSuccess = (editData) => ({
     type: EDIT_MRP_LIST_PAGE_SUCCESS,
-
     payload: editData,
 })
 
@@ -78,11 +73,11 @@ export const updateMRPList = (updateData, ID) => ({
     type: UPDATE_MRP_LIST_PAGE,
     updateData, ID,
 })
+
 export const updateMRPListSuccess = (updateMessage) => ({
     type: UPDATE_MRP_LIST_PAGE_SUCCESS,
     payload: updateMessage,
 })
-
 
 // delete api MRP Master Page
 export const deleteID_In_MasterPage = (id) => ({

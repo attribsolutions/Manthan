@@ -62,10 +62,10 @@ const CommonPurchaseList = (props) => {
     // const [tableList, settableList] = useState([]);
     const {
         editData,
-        updateMsg,
-        deleteMsg,
-        userAccess,
-        postMsg,
+        updateMsg = { Status: false },
+        deleteMsg= { Status: false },
+        userAccess=[],
+        postMsg= { Status: false },
         pageField = { id: '' },
         tableList = []
     } = props.reducers;
@@ -91,13 +91,14 @@ const CommonPurchaseList = (props) => {
         goButnFunc = () => { },
         makeBtnFunc = () => { },
         makeBtnShow,
+        updateBtnFunc,
         makeBtnName,
         downBtnFunc = () => { },
         pageMode,
         newBtnPath,
         HeaderContent = () => { return null }
     } = props;
-    
+
     const { PageFieldMaster = [] } = { ...pageField };
 
     useEffect(() => {
@@ -139,6 +140,7 @@ const CommonPurchaseList = (props) => {
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+            breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
             dispatch(updateSucc({ Status: false }));
             goButnFunc();
             isAlertFunc(1, updateMsg);
@@ -190,7 +192,7 @@ const CommonPurchaseList = (props) => {
                 })
             }
             else {
-                tog_center();
+                setmodal_edit(true)
             }
         }
     }, [editData]);
@@ -205,8 +207,16 @@ const CommonPurchaseList = (props) => {
     }
 
 
+    // function tog_center() {
+    //     
+    //     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
+    // }
+
     function tog_center() {
-        setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
+        if (modal_edit) {
+            breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+        }
+        setmodal_edit(false)
     }
 
     // ****** columns sort by sequnce
@@ -267,6 +277,11 @@ const CommonPurchaseList = (props) => {
             })
         }
 
+
+
+
+
+
         // ======================== for List Page Action Button ================================
 
         else if ((PageFieldMaster.length - 1 === k)) {
@@ -280,6 +295,7 @@ const CommonPurchaseList = (props) => {
                     editActionFun: editId,
                     deleteActionFun: deleteId,
                     downBtnFunc: downBtnFunc,
+                    updateBtnFunc: updateBtnFunc,
                     makeBtnShow: makeBtnShow,
                     makeBtnName: makeBtnName,
                     editBodyfunc: editBodyfunc,

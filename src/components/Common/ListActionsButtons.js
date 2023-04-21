@@ -2,6 +2,9 @@ import { Button } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { CustomAlert } from "../../CustomAlert/ConfirmDialog";
 import { btnIsDissablefunc } from "./CommonFunction"
+import '../../assets/searchBox/searchBox.scss'
+
+
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
@@ -27,6 +30,7 @@ export const listPageActionsButtonFunc = (props) => {
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
+        updateBtnFunc,
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
@@ -60,6 +64,7 @@ export const listPageActionsButtonFunc = (props) => {
         downBtnFunc(rowData, downbtnType);
     };
 
+    
 
     async function deleteHandler(rowData, btnId) {
         if (deleteBodyfunc) {
@@ -95,70 +100,18 @@ export const listPageActionsButtonFunc = (props) => {
                 && !(userAccState.RoleAccess_IsMultipleInvoicePrint)
                 && !(userAccState.RoleAccess_IsView)
                 && !(userAccState.RoleAccess_IsDelete)
+                && !(userAccState.RoleAccess_IsDeleteSelf)
                 && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => {
-               
+
 
             const forceEdit = rowData.forceEdit;
             rowData["hasSelect"] = false
             return (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                // <div className="d-flex gap-3" style={{ display:'', justifyContent: 'right'}} >
+                <div id="ActionBtn" className="center gap-3" >
 
-
-                    {
-                        ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?
-                            < Button
-                                type="button"
-                                id={`btn-makeBtn-${rowData.id}`}
-                                className={makeBtnCss}
-                                title={makeBtnName}
-                                onClick={() => {
-                                    const btnId = `btn-makeBtn-${rowData.id}`
-                                    makeBtnHandler(rowData, btnId)
-                                }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-invoice" ></span> </Button>
-                            : <div></div>
-                    }
-                       
-
-                    {
-                        ((userAccState.RoleAccess_IsPrint)) ?
-                            <Button
-                                type="button"
-                                id={`btn-dounload-${rowData.id}`}
-                                className={downBtnCss}
-                                title={` ${ButtonMsgLable}`}
-                                onClick={() => {
-                                    const btnId = `btn-dounload-${rowData.id}`
-                                    downHandler(rowData, btnId)
-                                }}
-                            >
-                                <i className="bx bx-printer font-size-18"></i>
-                            </Button>
-                            : null
-                    }
-                    {
-                        (userAccState.RoleAccess_IsMultipleInvoicePrint) ?
-                            < Button
-                                type="button"
-                                id={`btn-MultiInvoice-${rowData.id}`}
-                                className={printBtnCss}
-                                title={`s MultipleInvoices`}
-                                onClick={() => {
-                                    const btnId = `btn-MultiInvoice-${rowData.id}`
-                                    const downbtnType = "IsMultipleInvoicePrint"
-                                    downHandler(rowData, downbtnType)
-
-
-                                }}
-                            >
-                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
-                                    className=" fas fa-file-download" ></span> </Button>
-                            : <div></div>
-                    }
                     {
                         //** if condition start
 
@@ -215,6 +168,76 @@ export const listPageActionsButtonFunc = (props) => {
 
                     }
 
+                    {
+                        ((pageMode === mode.modeSTPList) && makeBtnShow && rowData.POType === 3) ?
+                            < Button
+                                type="button"
+                                id={`btn-makeBtn-${rowData.id}`}
+                                className={makeBtnCss}
+                                title={makeBtnName}
+                                onClick={() => {
+                                    const btnId = `btn-makeBtn-${rowData.id}`
+                                    makeBtnHandler(rowData, btnId)
+                                }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span> </Button>
+                            : null
+                    }
+
+
+                    {
+                        ((userAccState.RoleAccess_IsPrint)) ?
+                            <Button
+                                type="button"
+                                id={`btn-dounload-${rowData.id}`}
+                                className={downBtnCss}
+                                title={` ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnId = `btn-dounload-${rowData.id}`
+                                    downHandler(rowData, btnId)
+                                }}
+                            >
+                                <i className="bx bx-printer font-size-18"></i>
+                            </Button>
+                            : null
+                    }
+                    {
+                        (userAccState.RoleAccess_IsMultipleInvoicePrint) ?
+                            < Button
+                                type="button"
+                                id={`btn-MultiInvoice-${rowData.id}`}
+                                className={printBtnCss}
+                                title={`MultipleInvoices`}
+                                onClick={() => {
+                                    const btnId = `btn-MultiInvoice-${rowData.id}`
+                                    const downbtnType = "IsMultipleInvoicePrint"
+                                    downHandler(rowData, downbtnType)
+
+
+                                }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-download" ></span> </Button>
+                            : null
+                    }
+                    
+                    {
+                        (updateBtnFunc) ?
+                            <Button style={{width:"30px"}}
+                                type="button"
+                                id={`btn-delete-${rowData.id}`}
+                                className={editSelfBtnCss}
+                                title={`Update ${ButtonMsgLable}`}
+                                onClick={() => {
+                                    const btnId = `btn-delete-${rowData.id}`
+                                    updateBtnFunc(rowData, mode.copy, btnId)
+                                }}
+                            >
+                                <i  className="dripicons-document-edit "></i>
+                            </Button>
+                            : null
+                    }
 
                     {
                         (userAccState.RoleAccess_IsDelete)

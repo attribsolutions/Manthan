@@ -8,7 +8,7 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess, 
+  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
   roleAceessActionSuccess
@@ -21,6 +21,8 @@ import {
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List,
 } from "../../../helpers/backend_helper"
 import { AlertState } from "../../actions"
+import { history } from "../../../components/Common/CommonFunction"
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog"
 
 
 function* loginUser({ payload: { user, history } }) {
@@ -61,6 +63,7 @@ function* afterLoginUserDetails_genFun({ id }) {
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
+    localStorage.setItem("CompanyName", response.Data.CompanyName)
     localStorage.setItem("CompanyGroup", response.Data.CompanyGroup)
     if (response.Data.IsSCMCompany) {
       localStorage.setItem("IsSCMCompany", 1)
@@ -125,6 +128,7 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
         arrayMain.push(objMain)
         arrayChild = []
         objMain = {}
+
       })
 
       arrayMain.forEach((i) => {
@@ -140,10 +144,13 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
     }
 
   } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error : RoleAccess get Api",
-    }));
+
+    const aa = yield CustomAlert({
+      Type: 2,
+      Message: `RoleAccess get Api Error `
+    })
+    history.go(0)
+
   }
 }
 

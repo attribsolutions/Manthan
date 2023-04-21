@@ -33,21 +33,25 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID, loginPartyID, loginUserID, btnIsDissablefunc, loginRoleID, loginEmployeeID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
+import PartyDropdownMaster from "../../../components/Common/PartyDropdownComp/PartyDropdown";
+import { getPartyTableList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 
 const DriverMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const RoleID = loginRoleID()
 
     const fileds = {
         id: "",
         Name: "",
         Address: "",
-        DOB: ''
+        DOB: '',
+        Party: ''
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -62,6 +66,7 @@ const DriverMaster = (props) => {
         updateMsg,
         pageField,
         userAccess,
+
     } = useSelector((state) => ({
         postMsg: state.DriverReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -120,17 +125,19 @@ const DriverMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, DOB, Address } = hasEditVal
+                const { id, Name, DOB, Address, Party, PartyName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 hasValid.DOB.valid = true;
                 hasValid.Address.valid = true;
+                hasValid.Party.valid = true;
 
                 values.Name = Name;
                 values.DOB = DOB;
                 values.Address = Address;
                 values.id = id
+                values.Party = { value: Party, label: PartyName }
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
@@ -139,6 +146,7 @@ const DriverMaster = (props) => {
             dispatch(editDriverID_Success({ Status: false }))
         }
     }, [])
+
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -209,7 +217,7 @@ const DriverMaster = (props) => {
                     Name: values.Name,
                     Address: values.Address,
                     DOB: values.DOB,
-                    Party: loginPartyID(),
+                    Party: RoleID === 2 ? values.Party.value : loginPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -239,7 +247,13 @@ const DriverMaster = (props) => {
 
                         <MetaTags> <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title></MetaTags>
 
-                        <Card className="text-black">
+                        {RoleID === 2 ?
+                            <PartyDropdownMaster
+                                state={state}
+                                setState={setState} />
+                            : null}
+
+                        <Card className="text-black ">
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
@@ -274,62 +288,64 @@ const DriverMaster = (props) => {
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
+                                                    </Row>
 
+                                                    <Row>
+                                                        <Col md="4">
+                                                            <FormGroup className="mb-3">
+                                                                <Label>{fieldLabel.DOB} </Label>
+                                                                <Flatpickr
+                                                                    name="DOB"
+                                                                    value={values.DOB}
+                                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                                    placeholder="YYYY-MM-DD"
+                                                                    autoComplete="0,''"
+                                                                    options={{
+                                                                        altInput: true,
+                                                                        altFormat: "F j, Y",
+                                                                        dateFormat: "Y-m-d",
+                                                                        minDate: new Date().fp_incr("n"),
+                                                                        maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                                                                    }}
+                                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
+                                                    </Row>
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
+                                                            <Input
+                                                                name="Address"
+                                                                value={values.Address}
+                                                                type="text"
+                                                                className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Address"
+                                                                autoComplete='off'
+                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                            />
+                                                            {isError.Address.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Address}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+
+
+
+                                                    <FormGroup className="mt-2">
                                                         <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label>{fieldLabel.DOB} </Label>
-                                                                    <Flatpickr
-                                                                        name="DOB"
-                                                                        value={values.DOB}
-                                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                                        placeholder="YYYY-MM-DD"
-                                                                        autoComplete="0,''"
-                                                                        options={{
-                                                                            altInput: true,
-                                                                            altFormat: "F j, Y",
-                                                                            dateFormat: "Y-m-d",
-                                                                            minDate: new Date().fp_incr("n"),
-                                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
-                                                                        }}
-                                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                                    />
-                                                                </FormGroup>
+                                                            <Col sm={2}>
+                                                                <SaveButton
+                                                                    pageMode={pageMode}
+                                                                    onClick={SaveHandler}
+                                                                    userAcc={userPageAccessState}
+                                                                    editCreatedBy={editCreatedBy}
+                                                                    module={"DriverMaster"}
+                                                                />
                                                             </Col>
                                                         </Row>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
-                                                                <Input
-                                                                    name="Address"
-                                                                    value={values.Address}
-                                                                    type="text"
-                                                                    className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter Address"
-                                                                    autoComplete='off'
-                                                                    onChange={(event) => onChangeText({ event, state, setState })}
-                                                                />
-                                                                {isError.Address.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.Address}</span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <FormGroup className="mt-2">
-                                                            <Row>
-                                                                <Col sm={2}>
-                                                                    <SaveButton
-                                                                        pageMode={pageMode}
-                                                                        onClick={SaveHandler}
-                                                                        userAcc={userPageAccessState}
-                                                                        editCreatedBy={editCreatedBy}
-                                                                        module={"DriverMaster"}
-                                                                    />
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup >
-                                                    </Row>
+                                                    </FormGroup >
 
                                                 </CardBody>
                                             </Card>

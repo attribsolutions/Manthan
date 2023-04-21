@@ -47,6 +47,15 @@ import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 import RoutesSaga from "./Administrator/RoutesRedux/saga"
 import SalesManSaga from "./Administrator/SalesManRedux/saga"
+import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
+import ManagementPartiesSaga from "./Administrator/ManagementPartiesRedux/saga"
+import BankSaga from "./Accounting/BankRedux/saga"
+import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
+import ImportFieldMap_Saga from "./Administrator/ImportFieldMapRedux/saga"
+import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
+
+
+
 //    *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -66,14 +75,18 @@ import InvoiceSaga from "./Sales/Invoice/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
 import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
-
 import LoadingSheetSaga from "./Sales/LoadingSheetRedux/saga"
-import PartyMasterBulkUpdateSaga from "./Administrator/PartyMasterBulkUpdateRedux/saga"
+import ReceiptSaga from "./Accounting/Receipt/saga"
+import SalesReturnSaga from "./Sales/SalesReturnRedux/saga"
+import CreditDebitSaga from "./Accounting/CreditRedux/saga"
 
 
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
+    fork(ImportFieldMap_Saga),
+    fork(ImportFieldAdd_Saga),
+    
     fork(AuthSaga),
     fork(ForgetSaga),
     fork(ProfileSaga),
@@ -111,6 +124,8 @@ export default function* rootSaga() {
     fork(CreditLimitSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
+    fork(BankSaga),
+    fork(BankAssignSaga),
     fork(SubGroupSaga),
     fork(GeneralSaga),
     fork(GSTSaga),
@@ -127,6 +142,9 @@ export default function* rootSaga() {
     fork(RouteUpdateSaga),
     fork(LoadingSheetSaga),
     fork(PartyMasterBulkUpdateSaga),
-  
+    fork(ManagementPartiesSaga),
+    fork(ReceiptSaga),
+    fork(SalesReturnSaga),
+    fork(CreditDebitSaga),
   ])
 }

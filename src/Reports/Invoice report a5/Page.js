@@ -35,8 +35,6 @@ const InvioceReporta5 = (data) => {
 
         if (!(array.length - 1 === islast)) {
 
-
-
             doc.addPage();
 
         }
@@ -46,7 +44,8 @@ const InvioceReporta5 = (data) => {
     doc.setProperties({
         title: "Report"
     });
-    window.open(doc.output('dataurlnewwindow'));
+    // window.open(doc.output('dataurlnewwindow'));
+    doc.output('dataurlnewwindow');
     return (<></>);
 }
 export default InvioceReporta5;

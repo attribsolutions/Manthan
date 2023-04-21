@@ -258,58 +258,7 @@ const BOMMaster = (props) => {
             return i
         })
     }
-
-    // const SaveHandler = (event) => {
-    //     event.preventDefault();
-    //     const BOMItems = ItemTabDetails.map((index) => ({
-    //         Item: index.Item,
-    //         Quantity: index.Quantity,
-    //         Unit: index.Unit
-    //     }))
-    //     if (formValid(state, setState)) {
-
-    //         let BOMrefID = 0
-    //         if ((pageMode === mode.edit)) {
-    //             BOMrefID = EditData.id
-    //         };
-
-    //         const jsonBody = JSON.stringify({
-    //             BomDate: values.BomDate,
-    //             EstimatedOutputQty: values.EstimatedOutputQty,
-    //             Comment: values.Comment,
-    //             IsActive: values.IsActive,
-    //             Item: values.ItemName.value,
-    //             Unit: values.UnitName.value,
-    //             CreatedBy: loginUserID(),
-    //             Company: loginCompanyID(),
-    //             BOMItems: BOMItems,
-    //             IsVDCItem: values.IsVDCItem,
-    //             ReferenceBom: BOMrefID
-    //         });
-    //         if (BOMItems.length === 0) {
-    //             dispatch(
-    //                 AlertState({
-    //                     Type: 4,
-    //                     Status: true,
-    //                     Message: "At Least One Matrial data Add in the table",
-    //                     RedirectPath: false,
-    //                     PermissionAction: false,
-    //                 })
-    //             );
-    //             return;
-    //         }
-
-
-    //         if (pageMode === mode.edit) {
-    //             dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-    //         }
-    //         else {
-    //             dispatch(saveBOMMaster(jsonBody));
-    //         }
-    //     }
-    // };
-
-    
+  
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id

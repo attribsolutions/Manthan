@@ -44,15 +44,15 @@ const LoadingSheet = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, Date: currentDate });
+    // const [orderlistFilter, setorderlistFilter] = useState({ todate: currentDate, fromdate: currentDate, Date: currentDate });
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [array, setArray] = useState([]);
 
     const fileds = {
         id: "",
-        Date: "",
-        FromDate: "",
-        ToDate: "",
+        Date: currentDate,
+        FromDate: currentDate,
+        ToDate: currentDate,
         RouteName: "",
         VehicleNumber: "",
         DriverName: ""
@@ -81,8 +81,9 @@ const LoadingSheet = (props) => {
         Driver: state.DriverReducer.DriverList,
     }));
 
-    const { fromdate, todate, Date } = orderlistFilter;
+    // const { fromdate, todate, Date } = orderlistFilter;
     const { Data = [] } = GoButton;
+
     // const Data = [
     //     {
     //         id: 7,
@@ -216,10 +217,11 @@ const LoadingSheet = (props) => {
 
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
-            Party:loginPartyID(),
-            Route: ""
+            FromDate: values.FromDate,
+            ToDate: values.ToDate,
+            Party: loginPartyID(),
+            Route: "",
+            LoadingSheetID:""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }
@@ -282,7 +284,7 @@ const LoadingSheet = (props) => {
     };
 
     const saveHandeller = async (event) => {
-         
+
         event.preventDefault();
         const btnId = event.target.id
 
@@ -322,7 +324,7 @@ const LoadingSheet = (props) => {
                 }
 
                 const jsonBody = JSON.stringify({
-                    Date: Date,
+                    Date: values.Date,
                     Party: loginPartyID(),
                     Route: values.RouteName.value,
                     Vehicle: values.VehicleNumber.value,
@@ -344,6 +346,33 @@ const LoadingSheet = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function DateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Date = date;
+            a.hasValid.Date.valid = true
+            return a
+        })
+    }
+
+    function FromDateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.FromDate = date;
+            a.hasValid.FromDate.valid = true
+            return a
+        })
+    }
+
+    function ToDateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = date;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
+    }
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -354,38 +383,31 @@ const LoadingSheet = (props) => {
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 
-                            <div className=" mt-1 row ">
+                            <div className=" row ">
                                 <Col sm="6">
-                                    <FormGroup className="mb-1 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="Date"
-                                                value={Date}
+                                                name='Date'
+                                                value={values.Date}
                                                 className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                disabled={pageMode === mode.edit ? true : false}
+                                                placeholder="Select..."
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: (pageMode === mode.edit) ? values.Date : "today"
                                                 }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onChange={DateOnchange}
                                             />
-                                            {isError.Date.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Date}</span>
-                                            )}
                                         </Col>
 
                                     </FormGroup>
                                 </Col >
 
                                 <Col sm="6">{/*Supplier Name */}
-                                    <FormGroup className="mb-1 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DriverName}</Label>
                                         <Col sm="7">
@@ -409,69 +431,55 @@ const LoadingSheet = (props) => {
                                 </Col >
                             </div>
 
-                            <div className=" mt-1 row ">
+                            <div className="  row ">
                                 <Col sm="6">
-                                    <FormGroup className="mb-1 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.FromDate} </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="FromDate"
-                                                value={fromdate}
+                                                name='FromDate'
+                                                value={values.FromDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                disabled={pageMode === mode.edit ? true : false}
+                                                placeholder="Select..."
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: (pageMode === mode.edit) ? values.FromDate : "today"
                                                 }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onChange={FromDateOnchange}
                                             />
-                                            {isError.FromDate.length > 0 && (
-                                                <span className="invalid-feedback">{isError.FromDate}</span>
-                                            )}
                                         </Col>
 
                                     </FormGroup>
                                 </Col >
 
                                 <Col sm="6">{/*Supplier Name */}
-                                    <FormGroup className="mb-1 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.ToDate}</Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="FromDate"
-                                                value={fromdate}
+                                                name='ToDate'
+                                                value={values.ToDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
-                                                placeholder="YYYY-MM-DD"
-                                                autoComplete="0,''"
-                                                disabled={pageMode === mode.edit ? true : false}
+                                                placeholder="Select..."
                                                 options={{
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    defaultDate: (pageMode === mode.edit) ? values.FromDate : "today"
                                                 }}
-                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onChange={ToDateOnchange}
                                             />
-                                            {isError.FromDate.length > 0 && (
-                                                <span className="invalid-feedback">{isError.FromDate}</span>
-                                            )}
                                         </Col>
                                     </FormGroup>
                                 </Col >
 
                             </div>
 
-                            <div className=" mt-1 row ">
+                            <div className="row ">
                                 <Col sm="6">
-                                    <FormGroup className="mb-1 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.RouteName} </Label>
                                         <Col sm="7">
@@ -493,7 +501,7 @@ const LoadingSheet = (props) => {
                                 </Col >
 
                                 <Col sm="6">{/*Supplier Name */}
-                                    <FormGroup className="mb-1 row mt-3 " >
+                                    <FormGroup className=" row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.VehicleNumber}</Label>
                                         <Col sm="7">
@@ -521,9 +529,7 @@ const LoadingSheet = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-
                             </div>
-
                         </div>
 
                         <PaginationProvider
