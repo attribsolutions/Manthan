@@ -1,11 +1,13 @@
 import {
   DELETE_IMPORT_FIELD_ADD_SUCCESS,
   EDIT_IMPORT_FIELD_ADD_SUCCESS,
-  GET_IMPORT_FIELD_ADD_SUCCESS,
-  SAVE_IMPORT_FIELD_ADD_SUCCESS, UPDATE_IMPORT_FIELD_ADD_SUCCESS,
+  POST_IMPORT_FIELD_ADD_SUCCESS,
+  SAVE_IMPORT_FIELD_ADD_SUCCESS,
+   UPDATE_IMPORT_FIELD_ADD_SUCCESS,
 } from "./actionType";
 
 const INIT_STATE = {
+  getList:[],
   postMsg: { Status: false },
   deleteMsg: { Status: false },
   editData: { Status: false },
@@ -26,7 +28,7 @@ const ImportFieldAdd_Reducer = (state = INIT_STATE, action) => {
       }
 
     // get 
-    case GET_IMPORT_FIELD_ADD_SUCCESS:
+    case POST_IMPORT_FIELD_ADD_SUCCESS:
       return {
         ...state,
        getList: action.payload,
