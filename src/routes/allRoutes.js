@@ -152,6 +152,7 @@ import ImportFieldMap from "../pages/Adminisrator/ImportMaster/ImportFieldMap/Im
 import UploadExcel from "../pages/Adminisrator/ImportMaster/ExcelUpload/UploadExcel";
 
 import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
+import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
 
 
 
@@ -259,11 +260,13 @@ const userRoutes = [
   { path: path.CREDITLIMIT, component: CreditLimitMaster },
   // { path: path.CREDITLIMIT_LIST, component: CreditLimitList },
 
-  { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
   { path: path.UPLOAD_EXCEL, component: UploadExcel },
+
+  { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
   { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd},
   { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList},
-  
+
+    { path: path.IMPORT_FIELD_MASTER, component: ImportMasterMap},
   
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },

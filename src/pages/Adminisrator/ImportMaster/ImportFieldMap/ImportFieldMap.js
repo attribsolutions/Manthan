@@ -115,7 +115,8 @@ const ImportFieldMap = (props) => {
             })
         }
     }, [postMsg])
-    const PartyDropdown_Options = partyList.map((index) => ({
+
+    const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
@@ -212,7 +213,7 @@ const ImportFieldMap = (props) => {
                                                     classNamePrefix="select2-Customer"
                                                     isDisabled={!(goButtonItem.length === 0) && true}
                                                     value={partySelect}
-                                                    options={PartyDropdown_Options}
+                                                    options={partyDropdown_Options}
                                                     onChange={(e) => { SetPartySelect(e) }}
                                                 />
                                             </Col>
