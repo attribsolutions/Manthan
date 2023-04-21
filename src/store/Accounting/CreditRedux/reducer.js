@@ -1,4 +1,4 @@
-import { DELETE_CREDIT_LIST_ID_SUCCESS, DELETE_GROUP_LIST_ID_SUCCESS, 
+import { CREDITDEBIT_TYPE_SUCCESS, DELETE_CREDIT_LIST_ID_SUCCESS, DELETE_GROUP_LIST_ID_SUCCESS, 
   EDIT_GROUPMASTER_ID_SUCCESS, 
   GET_CREDIT_LIST_SUCCESS, 
   GET_GROUP_LIST_SUCCESS, 
@@ -12,9 +12,10 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
+  CreditDebitType:[]
 }
 
-const GroupReducer = (state = INIT_STATE, action) => {
+const CredietDebitReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     // post
     case SAVE_CREDIT_SUCCESS:
@@ -35,12 +36,12 @@ const GroupReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       };
-      // edit
-    // case EDIT_GROUPMASTER_ID_SUCCESS :
-    //   return {
-    //     ...state,
-    //     editData: action.payload,
-    //   };
+      //  CredietDebit Type
+    case CREDITDEBIT_TYPE_SUCCESS :
+      return {
+        ...state,
+        CreditDebitType: action.payload,
+      };
 
     // update api
     // case UPDATE_GROUPMASTER_ID_SUCCESS:
@@ -54,4 +55,4 @@ const GroupReducer = (state = INIT_STATE, action) => {
   }
 }
 
-export default GroupReducer
+export default CredietDebitReducer;
