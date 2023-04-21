@@ -52,8 +52,8 @@ const ImportFieldAdd = (props) => {
     const fileds = {
         id: "",
         FieldName: "",
-        FieldValidationName: "",
         ControlTypeName: "",
+        FieldValidationName: "",
         IsCompulsory: false
     }
 
@@ -116,7 +116,7 @@ const ImportFieldAdd = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -132,7 +132,7 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlTypeName, IsCompulsory, FieldValidationName } = hasEditVal
+                const { id, FieldName, ControlTypeName,ControlTypeID, IsCompulsory, FieldValidationName,FieldValidationID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
@@ -141,12 +141,12 @@ const ImportFieldAdd = (props) => {
                 hasValid.FieldValidationName.valid = true;
 
                 values.FieldName = FieldName;
-                values.ControlTypeName = ControlTypeName;
+                values.ControlTypeName = { label: ControlTypeName, value: ControlTypeID };
                 values.IsCompulsory = IsCompulsory;
-                values.FieldValidationName = FieldValidationName;
+                values.FieldValidationName = { label: FieldValidationName, value: FieldValidationID };
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Modules))
+                dispatch(Breadcrumb_inputName(hasEditVal.FieldName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(edit_ImportFiledAdd_Success({ Status: false }))
@@ -307,7 +307,7 @@ const ImportFieldAdd = (props) => {
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={controlType_Options}
-                                                                onChange={controlTypeHandler}
+                                                                 onChange={controlTypeHandler}
                                                             />
                                                             {isError.ControlTypeName.length > 0 && (
                                                                 <span className="text-danger f-8"><small>{isError.ControlTypeName}</small></span>
