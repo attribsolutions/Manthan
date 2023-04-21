@@ -669,7 +669,7 @@ const Credit = (props) => {
         postMsg,
         pageField,
         ReceiptGoButton,
-        updateMsg, 
+        updateMsg,  
         RetailerList,
         ReceiptType,
         CreditDebitType,
