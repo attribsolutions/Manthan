@@ -409,14 +409,13 @@ export const Post_Route_Update_API = ({ jsonBody, btnId }) => post(url.ROUTE_UPD
 export const Loading_Sheet_Go_Button_API = (data) => post(url.LOADING_SHEET_GO_BUTTON_API, data)//Loading Sheet go button API For Master Page
 export const Loading_Sheet_Post_API = ({ jsonBody, btnId }) => post(url.LOADING_SHEET, jsonBody, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_get_API = (filters) => post(url.LOADING_SHEET_LIST, filters)// Post API For Loading Sheet List
-export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(url.LOADING_SHEET, deleteId, btnId)// Loading Sheet Post API For Master Page
+export const Loading_Sheet_Del_API = ({ deleteId, btnId }) => del(`${url.LOADING_SHEET}/${deleteId}`, btnId)// Loading Sheet Post API For Master Page
 export const Loading_Sheet_Update_API = (updateId) => get(`${url.LOADING_SHEET}/${updateId}`)// Loading Sheet Post API For Master Page
-
 
 // PartyMasterBulkUpdate
 export const Post_PartyMasterBulkUpdateAPI = ({ jsonBody, btnId }) => post(url.PARTY_MASTER_BULK_UPDATE, jsonBody, btnId)// post api
 export const PartyMasterBulkUpdate_GoButton_Post_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE, jsonBody)// Go Button post api
-export const post_PartyAPI = (jsonBody) => post(url.PARTY_DROPDOWN, jsonBody)// post api
+export const post_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)// post api
 export const post_SelectFieldAPI = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)// post api
 export const Update_Party_Bulk = ({ jsonBody, updateId, btnId }) => put(`${url.PARTY_MASTER_BULK_UPDATE}/${updateId}`, jsonBody, btnId)// update api
 
@@ -524,18 +523,6 @@ export const Inward_List_API = (filters) => post(url.INWARD_LIST_API, filters)//
 export const Inward_Delete_API = (id) => del(`${url.POST_API_FOR_INWARD}/${id}`)// delete api
 export const Make_Inward_Post_API = ({ makeInwardId, btnId }) => get(`${url.MAKE_INWARD_BUTTON_API}/${makeInwardId}`, btnId)// Inward post api
 
-// IB Invoice
-// export const IB_InvoiceList_API = (filters) => post(url.IB_InvoiceList_API, filters)// List Api
-// export const Inward_Button_API = (id) => get(`${url.INWARD_BUTTON_API}/${id}`)// edit api
-// export const Make_IB_Invoice_API = (data) => post(url.MAKE_IB_INVOICE, data)// Make IBInvoice api
-// export const Post_IB_Invoice_API = (data) => post(url.IB_INVOICE_SAVE, data)// Make IBInvoice api
-
-// export const SalesMan_Get_API = (data) => post(url.SALESMAN_FOR_LIST,data) // post api
-// export const salesMan_Delete_API = (id) => del(`${url.SALESMAN_FOR_MASTER}/${id}`) // delete api
-// export const salesMan_Edit_API = (id) => get(`${url.SALESMAN_FOR_MASTER}/${id}`) // edit api
-// export const salesMan_Update_API = (data, id) => put(`${url.SALESMAN_FOR_MASTER}/${id}`, data)// update
-
-
 //Report API
 export const MultipleInvoice_API = (id) => get(`${url.MULTIPLEINVOICE_API}/${id}`)//dropdown api
 export const LoadingSheet_API = (id) => get(`${url.LOADINGSHEET_PARTY_WISE_INVOICE}/${id}`)//dropdown api
@@ -563,6 +550,9 @@ export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_T
 export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
 export const SalesReturn_add_button_api = (ItemID) => get(`${url.ADD_BUTTON_API_FOR_SALES_RETURN}/${ItemID}`)//add button get api api
 
+export const SalesReturn_post_API = ({ jsonBody, btnId }) => post(url.SALES_RETURN, jsonBody, btnId)//  postapi
+export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
+export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_RETURN}/${deleteId}`, btnId)// Sales Return Delete API
 
 
 export {

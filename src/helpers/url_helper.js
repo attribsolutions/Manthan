@@ -208,7 +208,6 @@ export const LOADING_SHEET = '/LoadingSheet'
 export const LOADING_SHEET_LIST = '/LoadingSheetList'
 
 //PartyMasterBulkUpdate
-export const PARTY_DROPDOWN = '/RetailerandSSDD'
 export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/PartyWiseUpdate' // for go button
 export const PARTY_MASTER_BULK_UPDATE = '/PartyWiseSave'
 export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
@@ -297,7 +296,6 @@ export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List fi
 export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
 export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOICE addpage GoButton Api 
 
-
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api
 export const LOADINGSHEET_PARTY_WISE_INVOICE = '/LoadingSheetPrint'// Loading sheet Print Api
@@ -317,5 +315,9 @@ export const BANK_LIST_API = '/PartyBankList'
 export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
 
 // Sales Return
-export const INVOICE_NUMBER_LIST ='/InvoiceNoList'
-export const ADD_BUTTON_API_FOR_SALES_RETURN ='/ReturnItemAdd'
+
+export const INVOICE_NUMBER_LIST = '/InvoiceNoList'
+export const ADD_BUTTON_API_FOR_SALES_RETURN = '/ReturnItemAdd'
+export const SALES_RETURN = '/PurchaseReturn'
+export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
+

@@ -14,7 +14,7 @@ import {
 import * as pageId from "../../../../routes//allPageID";
 import { MetaTags } from "react-meta-tags";
 import LoadingSheet from "./LoadingSheet";
-import { LoadingSheetListAction,  UpdateLoadingSheet } from "../../../../store/Sales/LoadingSheetRedux/action";
+import { DeleteLoadingSheet, DeleteLoadingSheetSucccess, LoadingSheetListAction, UpdateLoadingSheet } from "../../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../../helpers/backend_helper";
 import * as report from '../../../../Reports/ReportIndex'
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
@@ -40,7 +40,7 @@ const LoadingSheetList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.LoadingSheetReducer.LoadingSheetlist,
-            deleteMsg: state.BOMReducer.deleteMsg,
+            deleteMsg: state.LoadingSheetReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
@@ -56,10 +56,10 @@ const LoadingSheetList = () => {
     const action = {
         getList: LoadingSheetListAction,
         editId: editBOMList,
-        deleteId: deleteBOMId,
+        deleteId: DeleteLoadingSheet,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteBOMIdSuccess
+        deleteSucc: DeleteLoadingSheetSucccess
     }
 
     // Featch Modules List data  First Rendering
@@ -118,9 +118,9 @@ const LoadingSheetList = () => {
     }
 
     const updateBtnFunc = (list) => {
-        
+
         dispatch(UpdateLoadingSheet(list.id));
-        history.push(url.LOADING_SHEET_LIST_UPDATE,list);
+        history.push(url.LOADING_SHEET_LIST_UPDATE, list);
 
     };
 
@@ -194,7 +194,7 @@ const LoadingSheetList = () => {
                             downBtnFunc={downBtnFunc}
                             updateBtnFunc={updateBtnFunc}
                             ButtonMsgLable={"LoadingSheet"}
-                            deleteName={"FullGRNNumber"}
+                            deleteName={"LoadingSheetNo"}
                             MasterModal={LoadingSheet}
                         />
 

@@ -7,20 +7,20 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import * as pageId from "../../../routes/allPageID";
-import * as mode from "../../../routes/PageMode";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginUserID } from "../../../components/Common/CommonFunction";
-import { comAddPageFieldFunc, initialFiledFunc, } from "../../../components/Common/validationFunction";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
+import * as pageId from "../../../../routes/allPageID";
+import * as mode from "../../../../routes/PageMode";
+import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { breadcrumbReturnFunc, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
+import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
+import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../store/Administrator/ImportFieldMapRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../../store/Administrator/ImportFieldMapRedux/action";
+import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 
 const ImportFieldMap = (props) => {

@@ -14,19 +14,19 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import Select from "react-select";
-import * as pageId from "../../../routes/allPageID";
-import * as mode from "../../../routes/PageMode";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc } from "../../../components/Common/CommonFunction";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../components/Common/validationFunction";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import * as pageId from "../../../../routes/allPageID";
+import * as mode from "../../../../routes/PageMode";
+import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { breadcrumbReturnFunc } from "../../../../components/Common/CommonFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
+import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import readUploadFile from "./readUploadFile";
-import CInput from "../../../CustomValidateForm/CInput";
+import CInput from "../../../../CustomValidateForm/CInput";
 
 const UploadExcel = (props) => {
 

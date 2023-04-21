@@ -28,7 +28,7 @@ import { breadcrumbReturnFunc, loginPartyID, currentDate, btnIsDissablefunc, log
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { GetCustomer } from "../../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVender, Retailer_List } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { addButton_for_SalesReturn, InvoiceNumber, InvoiceNumberSuccess } from "../../../../store/Sales/SalesReturnRedux/action";
@@ -50,7 +50,7 @@ const SalesReturn = (props) => {
 
     const fileds = {
         ReturnDate: currentDate,
-        Retailer: "",
+        Customer: "",
         ItemName: "",
         InvoiceNumber: "",
         ReturnReason: "",
@@ -76,8 +76,13 @@ const SalesReturn = (props) => {
         userAccess,
         addButton,
     } = useSelector((state) => ({
+<<<<<<< HEAD
         postMsg: state.LoadingSheetReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.customer,
+=======
+        postMsg: state.SalesReturnReducer.postMsg,
+        RetailerList: state.CommonAPI_Reducer.RetailerList,
+>>>>>>> NewCommon
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonList: state.PartyMasterBulkUpdateReducer.SelectField,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
@@ -93,8 +98,16 @@ const SalesReturn = (props) => {
         const page_Id = pageId.SALES_RETURN
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetCustomer())
         dispatch(getpartyItemList(loginPartyID()))
+    }, []);
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
     }, []);
 
     const location = { ...history.location }
@@ -470,7 +483,7 @@ const SalesReturn = (props) => {
 
         const invalidMsg1 = []
         if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
-            invalidMsg1.push(`Select a value from both Item & Invoice No.`)
+            invalidMsg1.push(`  Select a value from Item Or Invoice No.`)
         }
         if ((returnMode === 2) && (values.ItemName === '')) {
             invalidMsg1.push(`Item is Required`)
@@ -564,10 +577,77 @@ const SalesReturn = (props) => {
         }
     }
 
+<<<<<<< HEAD
 
     const saveHandeller = async (event) => {
+=======
+    const SaveHandler = async (event) => {
+        debugger
+>>>>>>> NewCommon
         event.preventDefault();
         const btnId = event.target.id
+<<<<<<< HEAD
+=======
+
+        let grand_total = 0;
+        const ReturnItems = TableArr.map((i) => {
+
+            const calculate = salesReturnCalculate(i)
+
+            grand_total = grand_total + Number(calculate.tAmount)
+
+            return ({
+                Item: i.ItemID,
+                Quantity: i.Qty,
+                Unit: i.Unit,
+                BaseUnitQuantity: i.BaseUnitQuantity,
+                BatchCode: i.BatchCode,
+                BatchDate: i.BatchDate,
+                Amount: calculate.tAmount,
+                MRP: i.MRP,
+                Rate: i.Rate,
+                BasicAmount: calculate.baseAmt,
+                GSTAmount: calculate.gstAmt,
+                GST: i.GST_ID,
+                CGST: calculate.CGST,
+                SGST: calculate.SGST,
+                IGST: 0,
+                GSTPercentage: i.GST,
+                CGSTPercentage: (i.GST / 2),
+                SGSTPercentage: (i.GST / 2),
+                IGSTPercentage: 0,
+                TaxType: "GST",
+                ReturnItemImages: []
+            })
+        }
+        )
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+
+                const jsonBody = JSON.stringify({
+                    ReturnDate: values.ReturnDate,
+                    ReturnReason: values.ReturnReason.value,
+                    Customer: values.Customer.value,
+                    Comment: values.Comment,
+                    GrandTotal: grand_total,
+                    Party: loginPartyID(),
+                    RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    ReturnItems: ReturnItems,
+                });
+
+                // if (pageMode === mode.edit) {
+                //     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
+                // }
+                // else {
+                dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+
+            }
+            // }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+>>>>>>> NewCommon
     };
 
     if (!(userPageAccessState === '')) {
@@ -606,12 +686,12 @@ const SalesReturn = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Retailer} </Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
                                             <Select
-                                                id="Retailer "
-                                                name="Retailer"
-                                                value={values.Retailer}
+                                                id="Customer "
+                                                name="Customer"
+                                                value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -621,8 +701,8 @@ const SalesReturn = (props) => {
                                                     RetailerHandler(hasSelect)
                                                 }}
                                             />
-                                            {isError.Retailer.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Retailer}</small></span>
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
                                             )}
                                         </Col>
 

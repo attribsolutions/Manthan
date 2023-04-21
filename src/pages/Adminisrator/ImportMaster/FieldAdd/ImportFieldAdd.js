@@ -19,8 +19,8 @@ import {
     commonPageFieldSuccess,
     getControlTypes,
     getFieldValidations
-} from "../../../store/actions";
-import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
+} from "../../../../store/actions";
+import { Breadcrumb_inputName } from "../../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -29,12 +29,12 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction,
-} from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc, loginCompanyID } from "../../../components/Common/CommonFunction";
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
+} from "../../../../components/Common/validationFunction";
+import { SaveButton } from "../../../../components/Common/CommonButton";
+import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc, loginCompanyID } from "../../../../components/Common/CommonFunction";
+import * as url from "../../../../routes/route_url";
+import * as pageId from "../../../../routes/allPageID"
+import * as mode from "../../../../routes/PageMode"
 
 import {
     edit_ImportFiledAdd_Success,
@@ -42,8 +42,8 @@ import {
     save_ImportFiledAdd_Success,
     update_ImportFiledAdd,
     update_ImportFiledAdd_Success
-} from "../../../store/Administrator/ImportFieldAddRedux/action";
-import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+} from "../../../../store/Administrator/ImportFieldAddRedux/action";
+import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 
 const ImportFieldAdd = (props) => {
 

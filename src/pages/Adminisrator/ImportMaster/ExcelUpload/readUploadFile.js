@@ -1,5 +1,5 @@
-import { groupBy } from '../../../components/Common/CommonFunction';
-import { commonPageFiled_API } from '../../../helpers/backend_helper';
+import { groupBy } from '../../../../components/Common/CommonFunction';
+import { commonPageFiled_API } from '../../../../helpers/backend_helper';
 const XLSX = require('xlsx');
 
 const readUploadFile = async ({ dispatch, useState, useEffect, file, compairField }) => {
