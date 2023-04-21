@@ -148,8 +148,13 @@ export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
 export const DELETE_API_FOR_LIST_MARGIN_PAGE = '/DeleteMarginOnList'
 
 //Import Master 
-export const EXCEL_IMPORT_MASTER = '/PartyImportFieldFilter'    //gobutton
-export const EXCEL_IMPORT_MASTER_SAVE = '/PartyImportFieldSave'    //SAVE
+export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
+export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'    //SAVE
+
+
+export const IMPORT_FIELD_ADD_SAVE = '/ImportField'    //SAVE
+export const IMPORT_FIELD_ADD_FILTER = '/ImportField'    //SAVE
+
 
 //TermsAndCondtions API
 export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
@@ -306,11 +311,13 @@ export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
 export const RECEIPT_GO_BUTTON_API = '/ReceiptInvoices'
 export const RECEIPT_POST_API = '/Receipt'
 export const DEPOSITOR_BANK_FILTER = '/DepositorBankFilter'
-export const RECEIPT_FILTERS ='/ReceiptFilter'
-export const OPENING_BALANCE ='/GetOpeningBalance'
+export const RECEIPT_FILTERS = '/ReceiptFilter'
+export const OPENING_BALANCE = '/GetOpeningBalance'
 export const BANK_LIST_API = '/PartyBankList'
-export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
+export const MAKE_RECEIPT_TO_PAYMENT = '/MakeReceiptofPayment'
 
 // Sales Return
-export const INVOICE_NUMBER_LIST ='/InvoiceNoList'
-export const ADD_BUTTON_API_FOR_SALES_RETURN ='/ReturnItemAdd'
+export const INVOICE_NUMBER_LIST = '/InvoiceNoList'
+export const ADD_BUTTON_API_FOR_SALES_RETURN = '/ReturnItemAdd'
+export const SALES_RETURN = '/PurchaseReturn'
+export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'

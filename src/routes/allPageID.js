@@ -99,8 +99,11 @@ export const SALESMAN_LIST = 152
 export const CREDITLIMIT = 160
 export const CREDITLIMIT_LIST = 154
 
-export const IMPORT_MASTER = 157
-export const IMPORT_MASTER_LIST = 158
+export const IMPORT_FIELD_MAP = 157
+export const IMPORT_FIELD_MAP_LIST = 158
+
+export const IMPORT_FIELD_ADD = 188
+export const IMPORT_FIELD_ADD_LIST = 189
 
 export const UPLOAD_EXCEL = 184
 
@@ -115,7 +118,7 @@ export const BANK_LIST = 176
 
 export const BANK_ASSIGN = 182
 
-export const IMPORT_FIELD_MASTER = 185
+
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -192,15 +195,12 @@ export const CREDIT = 190
 export const DEBIT = 192
 export const DEBIT_LIST = 193
 
-
-
 export const RECEIPTS = 173
 export const RECEIPTS_LIST = 174
 
 export const RECEIPTS_LIST_2 = 180
 
 export const BULK_RECIPT = 181
-
 
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178

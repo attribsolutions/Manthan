@@ -167,15 +167,6 @@ const ReceiptList = () => {
         })
     }
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
     function CustomerOnChange(e) {
 
         setState((i) => {
