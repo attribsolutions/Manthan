@@ -593,6 +593,38 @@ const SalesReturn = (props) => {
             })
         }
         )
+
+        const invalidMsg1 = []
+
+        ReturnItems.forEach((i) => {
+            if ((i.Quantity ===undefined)) {
+                invalidMsg1.push(`Quantity Is Required`)
+            }
+            if ((i.Rate ===undefined)) {
+                invalidMsg1.push(`Rate Is Required`)
+            };
+            if ((i.MRP === undefined)) {
+                invalidMsg1.push(`MRP Is Required`)
+            };
+            if ((i.Unit === undefined)) {
+                invalidMsg1.push(`Unit Is Required`)
+            };
+            if ((i.GST === undefined)) {
+                invalidMsg1.push(`GST Is Required`)
+            };
+            if ((i.BatchCode === undefined)) {
+                invalidMsg1.push(`BatchCode Is Required`)
+            };
+        })
+        
+        if (invalidMsg1.length > 0) {
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(invalidMsg1)
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+        }
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
