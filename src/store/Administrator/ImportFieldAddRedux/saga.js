@@ -30,9 +30,11 @@ function* Save_ImportFieldAdd_GenFun({ config }) {              // Save API
   } catch (error) { CommonConsole(error) }
 }
 
-function* Post_ImportFieldAdd_GenFun({ config }) {                                   // getList API
+function* Post_ImportFieldAdd_GenFun(jsonBody) { // getList API
+  debugger
   try {
-    const response = yield call(ImportFieldAdd_Post_API, config);
+    debugger
+    const response = yield call(ImportFieldAdd_Post_API, jsonBody.jsonBody);
     yield put(post_ImportFiledAdd_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }

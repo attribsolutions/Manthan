@@ -153,7 +153,7 @@ export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'    //SAVE
 
 
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'    //SAVE
-export const IMPORT_FIELD_ADD_FILTER = '/ImportField'    //SAVE
+export const IMPORT_FIELD_ADD_FILTER = '/ImportFieldList'    //SAVE
 
 
 //TermsAndCondtions API

@@ -52,8 +52,8 @@ const ImportFieldAdd = (props) => {
     const fileds = {
         id: "",
         FieldName: "",
-        ControlType: "",
-        ValidationType: "",
+        FieldValidationName: "",
+        ControlTypeName: "",
         IsCompulsory: false
     }
 
@@ -132,18 +132,18 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlType, IsCompulsory, ValidationType } = hasEditVal
+                const { id, FieldName, ControlTypeName, IsCompulsory, FieldValidationName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
-                hasValid.ControlType.valid = true;
+                hasValid.ControlTypeName.valid = true;
                 hasValid.IsCompulsory.valid = true;
-                hasValid.ValidationType.valid = true;
+                hasValid.FieldValidationName.valid = true;
 
                 values.FieldName = FieldName;
-                values.ControlType = ControlType;
+                values.ControlTypeName = ControlTypeName;
                 values.IsCompulsory = IsCompulsory;
-                values.ValidationType = ValidationType;
+                values.FieldValidationName = FieldValidationName;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Modules))
@@ -236,8 +236,8 @@ const ImportFieldAdd = (props) => {
                 const jsonBody = JSON.stringify({
                     FieldName: values.FieldName,
                     IsCompulsory: values.IsCompulsory,
-                    ControlType: values.ControlType.value,
-                    FieldValidation: values.ValidationType.value,
+                    ControlType: values.ControlTypeName.value,
+                    FieldValidation: values.FieldValidationName.value,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -300,34 +300,34 @@ const ImportFieldAdd = (props) => {
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.ControlType} </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.ControlTypeName} </Label>
                                                             <Select
-                                                                name="ControlType"
-                                                                value={values.ControlType}
+                                                                name="ControlTypeName"
+                                                                value={values.ControlTypeName}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={controlType_Options}
                                                                 onChange={controlTypeHandler}
                                                             />
-                                                            {isError.ControlType.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.ControlType}</small></span>
+                                                            {isError.ControlTypeName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.ControlTypeName}</small></span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.ValidationType} </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.FieldValidationName} </Label>
                                                             <Select
-                                                                name="ValidationType"
-                                                                value={values.ValidationType}
+                                                                name="FieldValidationName"
+                                                                value={values.FieldValidationName}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={validationType_Options}
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                                                             />
-                                                            {isError.ValidationType.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.ValidationType}</small></span>
+                                                            {isError.FieldValidationName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.FieldValidationName}</small></span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
