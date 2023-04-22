@@ -380,7 +380,7 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   { path: "/", exact: true, component: () => <Redirect to="/login" /> },
-  { component:() => <Redirect to="/login" /> },
+  // { component:() => <Redirect to="/login" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
 
@@ -396,7 +396,7 @@ const authRoutes = [
   { path: "/EnterOTP", component: EnterOTP },
   { path: "/division", component: SelectDivisionPage },
   { path: "/pages-404", component: Error404 },
-  { component:() => <Redirect to="/login" /> },
+  // { component:() => <Redirect to="/login" /> },
   { path: "/pages-500", component: Error500 },
 ]
 
