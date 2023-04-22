@@ -170,13 +170,13 @@ const Receipts = (props) => {
             let Data = null
             if (hasShowloction) {
                 insidePageMode = location.pageMode;
-                setPageMode(location.pageMode)
+                // setPageMode(location.pageMode)
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
                 insidePageMode = props.pageMode;
-                setPageMode(props.pageMode)
+                // setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
@@ -345,7 +345,7 @@ const Receipts = (props) => {
     }
 
     function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
-        debugger
+
         let input = event.target.value
 
         let v1 = Number(row.BalanceAmount);
@@ -356,7 +356,7 @@ const Receipts = (props) => {
 
         row.Calculate = event.target.value
 
-        if ((page_Mode === "") || (page_Mode === undefined)) {
+        if ((page_Mode === "") || (page_Mode === undefined) || (page_Mode === mode.modeSTPList)) {
             let calSum = 0
             Data.forEach(element => {
                 calSum = calSum + Number(element.Calculate)
@@ -448,7 +448,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -475,7 +475,7 @@ const Receipts = (props) => {
 
         }
 
-        if (values.ReceiptModeName.value === undefined) {
+        if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
             CustomAlert({
                 Type: 4,
                 Message: "Receipt Mode Is Required",
@@ -483,10 +483,10 @@ const Receipts = (props) => {
             return btnIsDissablefunc({ btnId, state: false })
         }
 
-        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN")) {
+        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN") || (values.AmountPaid === undefined)) {
             CustomAlert({
                 Type: 4,
-                Message: `Amount Paid value can not be ${values.AmountPaid}`,
+                Message: `Amount Paid value can not be 0`,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
