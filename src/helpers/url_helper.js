@@ -328,5 +328,5 @@ export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 
 export const CREDIT_DEBIT ='/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER ='/CreditDebitNoteFilter'
-
+export const INVOICE_RETURN ='/InvoiceReturnCRDR'
 

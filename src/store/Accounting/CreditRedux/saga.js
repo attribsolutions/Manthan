@@ -73,11 +73,9 @@ function* CreditDeitType_ID_GenFunc(data) {                     // edit API
 //   } catch (error) { CommonConsole(error) }
 // }
 
-function* Edit_Creditlist_ID_GenFunc({ config }) {         //edit  Api
-  debugger               
+function* Edit_Creditlist_ID_GenFunc({ config }) {         //edit  Api              
   const { btnmode } = config;
   try {
-    debugger
     const response = yield call(Edit_Credit_List_API, config);
     response.pageMode = btnmode;
     yield put(EditCreditlistSuccess(response));
@@ -88,8 +86,8 @@ function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
   debugger                
   try {
     debugger
-    const response = yield call(InvoiceReturn_API, id);
-    yield put(Invoice_Return_ID_Success(response));
+    const response = yield call(InvoiceReturn_API, id.id);
+    yield put(Invoice_Return_ID_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
