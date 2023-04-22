@@ -396,7 +396,7 @@ const authRoutes = [
   { path: "/EnterOTP", component: EnterOTP },
   { path: "/division", component: SelectDivisionPage },
   { path: "/pages-404", component: Error404 },
-
+  { component:() => <Redirect to="/login" /> },
   { path: "/pages-500", component: Error500 },
 ]
 
