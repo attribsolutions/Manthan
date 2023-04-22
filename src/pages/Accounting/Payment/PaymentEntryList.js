@@ -149,7 +149,7 @@ const PaymentEntryList = () => {
 
     useEffect(() => {
 
-        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200) && !(OpeningBalance === '')) {
+        if ((makeReceipt.Status === true) && (makeReceipt.StatusCode === 200)) {
             dispatch(ReceiptGoButtonMaster_Success({ ...makeReceipt, Status: false }))
 
             history.push({
@@ -158,7 +158,7 @@ const PaymentEntryList = () => {
                 editValue: makeReceipt.ListData,
             })
         }
-    }, [makeReceipt, OpeningBalance])
+    }, [makeReceipt])
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY_LIST
@@ -332,7 +332,7 @@ const PaymentEntryList = () => {
             </div>
         )
     }
-    
+
     return (
         <React.Fragment>
             <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
