@@ -346,7 +346,7 @@ export async function CheckAPIResponse({
   } else if (con5) {
 
     console.log(`${url}***${method} apiCall response:=>`, response.data);
-    await CustomAlert({ Type: 3, Message: JSON.stringify(response.Message) });
+    await CustomAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     return Promise.reject(response.data);
   }
   // else if (con8) {

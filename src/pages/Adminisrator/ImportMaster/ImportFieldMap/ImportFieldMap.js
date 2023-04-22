@@ -133,6 +133,10 @@ const ImportFieldMap = (props) => {
             dataField: "ControlTypeName",
         },
         {
+            text: "Field Validation",
+            dataField: "FieldValidationName",
+        },
+        {
             text: "Related Key Field",
             dataField: "Value",
             formatter: (cellContent, row) => (
