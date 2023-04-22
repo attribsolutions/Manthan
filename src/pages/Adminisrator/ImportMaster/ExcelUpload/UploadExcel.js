@@ -25,7 +25,7 @@ import { breadcrumbReturnFunc, loginCompanyID } from "../../../../components/Com
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import readUploadFile from "./readUploadFile";
+import { readExcelFile } from "./readFile";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
 
@@ -38,7 +38,7 @@ const UploadExcel = (props) => {
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [ItemTabDetails, setItemTabDetails] = useState([])
+    const [preUploadjson, setPreUploadjson] = useState([])
     const [partySelect, SetPartySelect] = useState([])
 
     const fileds = {
@@ -59,7 +59,7 @@ const UploadExcel = (props) => {
         userAccess,
         VehicleNumber,
         partyList,
-        compareParam=[]
+        compareParam = []
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
@@ -116,7 +116,7 @@ const UploadExcel = (props) => {
     }));
 
 
- 
+
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
             PartyID: partySelect.value,
@@ -128,41 +128,41 @@ const UploadExcel = (props) => {
 
     const SaveHandler = (event) => {
         event.preventDefault();
-        const BOMItems = ItemTabDetails.map((index) => ({
-            Item: index.Item,
-            Quantity: index.Quantity,
-            Unit: index.Unit
-        }))
-        if (formValid(state, setState)) {
+        // const BOMItems = ItemTabDetails.map((index) => ({
+        //     Item: index.Item,
+        //     Quantity: index.Quantity,
+        //     Unit: index.Unit
+        // }))
+        // if (formValid(state, setState)) {
 
-            let BOMrefID = 0
-            if ((pageMode === mode.edit)) {
-                BOMrefID = EditData.id
-            };
+        //     let BOMrefID = 0
+        //     if ((pageMode === mode.edit)) {
+        //         BOMrefID = EditData.id
+        //     };
 
-            const jsonBody = JSON.stringify({
-                // BomDate: values.BomDate,
-                // EstimatedOutputQty: values.EstimatedOutputQty,
-                // Comment: values.Comment,
-                // IsActive: values.IsActive,
-                // Item: values.ItemName.value,
-                // Unit: values.UnitName.value,
-                // CreatedBy: loginUserID(),
-                // Company: loginCompanyID(),
-                // BOMItems: BOMItems,
-                // IsVDCItem: values.IsVDCItem,
-                // ReferenceBom: BOMrefID
-            });
+        //     const jsonBody = JSON.stringify({
+        //         // BomDate: values.BomDate,
+        //         // EstimatedOutputQty: values.EstimatedOutputQty,
+        //         // Comment: values.Comment,
+        //         // IsActive: values.IsActive,
+        //         // Item: values.ItemName.value,
+        //         // Unit: values.UnitName.value,
+        //         // CreatedBy: loginUserID(),
+        //         // Company: loginCompanyID(),
+        //         // BOMItems: BOMItems,
+        //         // IsVDCItem: values.IsVDCItem,
+        //         // ReferenceBom: BOMrefID
+        //     });
 
 
 
-            // if (pageMode === mode.edit) {
-            //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-            // }
-            // else {
-            //     dispatch(saveBOMMaster(jsonBody));
-            // }
-        }
+        //     // if (pageMode === mode.edit) {
+        //     //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
+        //     // }
+        //     // else {
+        //     //     dispatch(saveBOMMaster(jsonBody));
+        //     // }
+        // }
     };
 
 
@@ -176,9 +176,17 @@ const UploadExcel = (props) => {
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-            readUploadFile({
-                file: files[0], compareParam, dispatch, useState,
-            })
+            const exjson = readExcelFile({ file: files[0], compareParam, })
+
+            const btnerify = document.getElementById("btn-verify")
+            const btnupload = document.getElementById('btn-upload')
+
+            if (exjson) {
+                setPreUploadjson(exjson)
+                btnerify.style.display = "none"
+                btnupload.style.display = "block"
+            }
+
         } else {
             alert("Please select a valid excel file.");
         }
@@ -374,7 +382,17 @@ const UploadExcel = (props) => {
                             </div>
 
                         </div>
-                        <div className="text-center mt-4">
+                        <div className="text-center mt-4" >
+                          
+                            <button
+                                type="button"
+                                style={{ display: "none" }}
+                                id='btn-upload'
+                                className="btn btn-success "
+                                onClick={upload}
+                            >
+                                Upload Files
+                            </button>
                             <button
                                 type="button"
                                 id='btn-verify'
