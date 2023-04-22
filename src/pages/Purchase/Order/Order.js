@@ -116,7 +116,7 @@ const Order = (props) => {
         userAccess,
         orderType,
         updateMsg,
-        supplierAddress = [],
+        supplierAddress,
         pageField,
         PartyList,
         assingItemData = ''
@@ -133,7 +133,7 @@ const Order = (props) => {
         PartyList: state.PartyMasterReducer.partyList
     }));;
 
-
+    console.log()
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -151,7 +151,7 @@ const Order = (props) => {
         dispatch(getTermAndCondition())
         dispatch(getOrderType())
         dispatch(getPartyListAPI())
-        if (!subPageMode === url.ORDER_4) {
+        if (!(subPageMode === url.ORDER_4)) {
             dispatch(getSupplierAddress(loginPartyID()))
         }
     }, []);

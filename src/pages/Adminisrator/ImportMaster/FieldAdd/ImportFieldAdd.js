@@ -9,7 +9,7 @@ import {
     Label,
     CardHeader,
     FormGroup,
-    Input,
+    Input
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { MetaTags } from "react-meta-tags";
@@ -28,7 +28,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
-    resetFunction,
+    resetFunction
 } from "../../../../components/Common/validationFunction";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc, loginCompanyID } from "../../../../components/Common/CommonFunction";
@@ -131,7 +131,7 @@ const ImportFieldAdd = (props) => {
             }
 
             if (hasEditVal) {
-debugger
+
                 const { id, FieldName, ControlTypeName,ControlTypeID, IsCompulsory, FieldValidationName,FieldValidationID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -223,7 +223,6 @@ debugger
     }));
 
     function controlTypeHandler(hasSelect, evn) {
-        debugger
         dispatch(getFieldValidations(hasSelect.value))
         onChangeSelect({ hasSelect, evn, state, setState })
     }
@@ -244,7 +243,6 @@ debugger
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                 });
-
                 if (pageMode === mode.edit) {
                     dispatch(update_ImportFiledAdd({ jsonBody, updateId: values.id, btnId }));
                 }
@@ -275,7 +273,7 @@ debugger
                                 <form noValidate>
 
                                     <Row className="">
-                                        <Col md={12}  >
+                                        <Col md={12} >
                                             <Card >
                                                 <CardBody className="c_card_body">
                                                     <Row>

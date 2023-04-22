@@ -564,7 +564,7 @@ export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEB
 export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody,btnId )//post api
 export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`, btnId)// delete api
 export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEBIT}/${editId}`, btnId)// Edit api
-export const InvoiceReturn_API = (id) => get(`${url.CREDIT_DEBIT}/${id}`)// Invoice Return api
+export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 
 export {
   getLoggedInUser,
