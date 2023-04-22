@@ -56,6 +56,7 @@ const Receipts = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [ID, setID] = useState("");
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+    console.log(pageMode)
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -169,13 +170,13 @@ const Receipts = (props) => {
             let Data = null
             if (hasShowloction) {
                 insidePageMode = location.pageMode;
-                // setPageMode(location.pageMode)
+                setPageMode(location.pageMode)
                 hasEditVal = location.editValue
             }
             else if (hasShowModal) {
                 hasEditVal = props[mode.editValue]
                 insidePageMode = props.pageMode;
-                // setPageMode(props.pageMode)
+                setPageMode(props.pageMode)
                 setModalCss(true)
             }
 
@@ -202,7 +203,6 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
-
                 AmountPaidDistribution(AmountPaid);
             }
         }
@@ -345,7 +345,7 @@ const Receipts = (props) => {
     }
 
     function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
-
+        debugger
         let input = event.target.value
 
         let v1 = Number(row.BalanceAmount);
@@ -356,17 +356,20 @@ const Receipts = (props) => {
 
         row.Calculate = event.target.value
 
-        let calSum = 0
-        Data.forEach(element => {
-            calSum = calSum + Number(element.Calculate)
-        });
+        if ((page_Mode === "") || (page_Mode === undefined)) {
+            let calSum = 0
+            Data.forEach(element => {
+                calSum = calSum + Number(element.Calculate)
+            });
 
-        setState((i) => {
-            let a = { ...i }
-            a.values.AmountPaid = calSum
-            a.hasValid.AmountPaid.valid = true;
-            return a
-        })
+            setState((i) => {
+                let a = { ...i }
+                a.values.AmountPaid = calSum
+                a.hasValid.AmountPaid.valid = true;
+                return a
+            })
+        }
+
     };
 
     function AmountPaid_onChange(event) {
@@ -448,6 +451,29 @@ const Receipts = (props) => {
 
         event.preventDefault();
         const btnId = event.target.id;
+
+        let calSum = 0
+        Data.forEach(element => {
+            calSum = calSum + Number(element.Calculate)
+        });
+
+        let diffrence = Math.abs(calSum - values.AmountPaid);
+        if (Number(values.AmountPaid) < calSum) {
+            CustomAlert({
+                Type: 4,
+                Message: `Amount Paid value is Excess ${diffrence}`,
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+
+        }
+        else if (Number(values.AmountPaid) > calSum) {
+            CustomAlert({
+                Type: 4,
+                Message: `Amount Paid value is Short ${diffrence}`,
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+
+        }
 
         if (values.ReceiptModeName.value === undefined) {
             CustomAlert({
