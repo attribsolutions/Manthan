@@ -364,7 +364,7 @@ const ImportFieldAdd = (props) => {
                                                                 />
                                                             </Col>
                                                         </Row>
-                                                    </FormGroup >
+                                                    </FormGroup>
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -372,7 +372,6 @@ const ImportFieldAdd = (props) => {
                                 </form>
                             </CardBody>
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>
