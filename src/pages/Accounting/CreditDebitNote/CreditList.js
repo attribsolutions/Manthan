@@ -25,7 +25,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import Flatpickr from "react-flatpickr"
 import { Go_Button } from "../../../components/Common/CommonButton";
-import { CredietDebitType, GetCreditList, deleteCreditlistSuccess, delete_CreditList_ID } from "../../../store/Accounting/CreditRedux/action";
+import { CredietDebitType, Edit_CreditList_ID, GetCreditList, deleteCreditlistSuccess, delete_CreditList_ID } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 const CreditList = () => {
@@ -53,7 +53,7 @@ const CreditList = () => {
             postMsg: state.OrderReducer.postMsg,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
-            editData: state.BOMReducer.editData,
+            editData: state.CredietDebitReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -64,7 +64,7 @@ const CreditList = () => {
 
     const action = {
         getList: GetCreditList,
-        editId: editBOMList,
+        editId: Edit_CreditList_ID,
         deleteId: delete_CreditList_ID,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,

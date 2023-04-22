@@ -50,7 +50,8 @@ import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../s
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CredietDebitType, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
+import { CredietDebitType, EditCreditlistSuccess, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
+import { InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
 
 
 const Credit = (props) => {
@@ -64,6 +65,7 @@ const Credit = (props) => {
         servicesItem: "",
         Narration: "",
         GrandTotal: 0,
+        InvoiceNO: ""
 
     }
 
@@ -81,6 +83,7 @@ const Credit = (props) => {
         ReceiptGoButton,
         updateMsg,
         RetailerList,
+        InvoiceNo,
         CreditDebitType,
         ReceiptModeList,
         userAccess } = useSelector((state) => ({
@@ -89,6 +92,7 @@ const Credit = (props) => {
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
+            InvoiceNo: state.SalesReturnReducer.InvoiceNo,
             updateMsg: state.BankReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -101,12 +105,12 @@ const Credit = (props) => {
         dispatch(ReceiptGoButtonMaster_Success([]))
     }, []);
 
-
+debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
-    const { Data = [] } = ReceiptGoButton
+    let { Data = [] } = ReceiptGoButton
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
@@ -136,37 +140,44 @@ const Credit = (props) => {
 
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
+    useEffect(() => {
+        debugger
+        if ((hasShowloction || hasShowModal)) {
 
-    //     if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
+            if (hasEditVal) {
+                const { NoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-    //         if (hasEditVal) {
-    //             const { id, Name } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                // hasValid.Name.valid = true;
 
-    //             hasValid.Name.valid = true;
+                values.NoteDate = NoteDate;
+                values.Customer = Customer;
+                values.NoteReason = NoteReason;
+                values.servicesItem = servicesItem;
+                values.Narration = Narration;
+                values.GrandTotal = GrandTotal;
 
-    //             values.id = id
-    //             values.Name = Name;
 
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(Breadcrumb_inputName(hasEditVal.Name))
-    //             seteditCreatedBy(hasEditVal.CreatedBy)
-    //         }
-    //         dispatch(editBankIDSuccess({ Status: false }))
-    //     }
-    // }, [])
+
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+            dispatch(EditCreditlistSuccess({ Status: false }))
+        }
+    }, [])
 
     useEffect(() => {
 
@@ -203,23 +214,23 @@ const Credit = (props) => {
         }
     }, [postMsg])
 
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            setState(() => resetFunction(fileds, state)) // Clear form values 
-            history.push({
-                pathname: url.BANK_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateBankIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
+    // useEffect(() => {
+    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+    //         setState(() => resetFunction(fileds, state)) // Clear form values 
+    //         history.push({
+    //             pathname: url.BANK_LIST,
+    //         })
+    //     } else if (updateMsg.Status === true && !modalCss) {
+    //         dispatch(updateBankIDSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 3,
+    //                 Status: true,
+    //                 Message: JSON.stringify(updateMsg.Message),
+    //             })
+    //         );
+    //     }
+    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -227,6 +238,9 @@ const Credit = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
+
+
 
 
 
@@ -273,6 +287,11 @@ const Credit = (props) => {
         label: index.Name,
     }));
 
+    const InvoiceNo_Options = InvoiceNo.map((index) => ({
+        value: index.Invoice,
+        label: index.FullInvoiceNumber,
+    }));
+
     function DateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
@@ -296,10 +315,17 @@ const Credit = (props) => {
         });
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
+
+        const jsonBody1 = JSON.stringify({
+            PartyID: loginPartyID(),
+            CustomerID: e.value
+        });
+
+        dispatch(InvoiceNumber(jsonBody1));
     }
 
     function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
-        
+
 
         let input = event.target.value
         let v1 = Number(row.BalanceAmount);
@@ -417,7 +443,7 @@ const Credit = (props) => {
     })
 
     const saveHandeller = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -441,7 +467,7 @@ const Credit = (props) => {
         })
 
         try {
-            
+
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
                 const jsonBody = JSON.stringify({
@@ -603,6 +629,27 @@ const Credit = (props) => {
                                             )}
                                         </Col>
 
+
+                                    </FormGroup>
+                                </Col >
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.InvoiceNO}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                id="InvoiceNO "
+                                                name="InvoiceNO"
+                                                value={values.InvoiceNO}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={InvoiceNo_Options}
+                                                onChange={(hasSelect, evn) => { onChangeSelect({ hasSelect, evn, state, setState, }) }}
+                                            />
+                                            {isError.InvoiceNO.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.InvoiceNO}</small></span>
+                                            )}
+                                        </Col>
                                     </FormGroup>
                                 </Col >
                             </Row>
