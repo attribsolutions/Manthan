@@ -116,7 +116,7 @@ const ImportFieldAdd = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-debugger
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -131,7 +131,7 @@ debugger
             }
 
             if (hasEditVal) {
-
+debugger
                 const { id, FieldName, ControlTypeName,ControlTypeID, IsCompulsory, FieldValidationName,FieldValidationID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -147,6 +147,7 @@ debugger
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.FieldName))
+                dispatch(getFieldValidations(hasEditVal.ControlTypeID))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(edit_ImportFiledAdd_Success({ Status: false }))
@@ -222,6 +223,7 @@ debugger
     }));
 
     function controlTypeHandler(hasSelect, evn) {
+        debugger
         dispatch(getFieldValidations(hasSelect.value))
         onChangeSelect({ hasSelect, evn, state, setState })
     }
