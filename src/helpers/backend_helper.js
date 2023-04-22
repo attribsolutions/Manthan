@@ -342,9 +342,13 @@ export const Retailer_List_under_Company_PartyAPI = (jsonBody) => post(url.RETAI
 export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${id}`)// Party dropdown Api
 
 
-// Import Master API
-export const ImportMaster_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody)//get api
-export const ImportMaster_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
+// ImportField_Add
+export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody,btnId)//get api
+export const ImportField_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
+
+// ImportMaster_Map API
+export const ImportMaster_Map_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_FILTER, jsonBody,btnId)//get api
+export const ImportMaster_Map_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_SAVE, jsonBody, btnId)// post api
 
 
 

@@ -30,6 +30,7 @@ const ImportMasterMap = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+    const [mapTypeSelect, SetMapTypeSelect] = useState("")
     const [partySelect, SetPartySelect] = useState("")
 
     const fileds = {
@@ -47,14 +48,14 @@ const ImportMasterMap = (props) => {
         updateMsg,
         pageField,
         userAccess,
-        goButtonItem,
+        goButtonArr,
         partyList
     } = useSelector((state) => ({
         postMsg: state.ImportFieldMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goButtonItem: state.ImportFieldMap_Reducer.addGoButton,
+        goButtonArr: state.ImportFieldMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
@@ -115,10 +116,24 @@ const ImportMasterMap = (props) => {
             })
         }
     }, [postMsg])
-    const PartyDropdown_Options = partyList.map((index) => ({
+
+    const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
+
+    const mapTypeDropdown_Options = [{
+        value: 1,
+        label: "Item",
+    },
+    {
+        value: 2,
+        label: "Party",
+    },
+    {
+        value: 3,
+        label: "Customer",
+    }]
 
 
 
@@ -172,7 +187,7 @@ const ImportMasterMap = (props) => {
 
         let jsonArr = []
 
-        goButtonItem.forEach(i => {
+        goButtonArr.forEach(i => {
             if ((!(i.Value === '') && !(i.Value === null))) {
                 const obj = {
                     Value: i.Value,
@@ -202,7 +217,7 @@ const ImportMasterMap = (props) => {
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
                                 <div className="row" >
-                                    <Col sm="10">
+                                <Col sm="5">
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
 
@@ -210,10 +225,26 @@ const ImportMasterMap = (props) => {
                                             <Col style={{ maxWidth: "300px" }} >
                                                 <Select
                                                     classNamePrefix="select2-Customer"
-                                                    isDisabled={!(goButtonItem.length === 0) && true}
+                                                    isDisabled={!(goButtonArr.length === 0) && true}
                                                     value={partySelect}
-                                                    options={PartyDropdown_Options}
+                                                    options={partyDropdown_Options}
                                                     onChange={(e) => { SetPartySelect(e) }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col >
+                                    <Col sm="5">
+                                        <FormGroup className="mb-2 row mt-3 " >
+                                            <Label className=" p-2"
+
+                                                style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
+                                            <Col style={{ maxWidth: "300px" }} >
+                                                <Select
+                                                    classNamePrefix="select2-Customer"
+                                                    isDisabled={!(goButtonArr.length === 0) && true}
+                                                    value={mapTypeSelect}
+                                                    options={mapTypeDropdown_Options}
+                                                    onChange={(e) => { SetMapTypeSelect(e) }}
                                                 />
                                             </Col>
                                         </FormGroup>
@@ -222,7 +253,7 @@ const ImportMasterMap = (props) => {
 
 
                                     <Col sm="2" className="mt-3 ">
-                                        {(goButtonItem.length === 0) ?
+                                        {(goButtonArr.length === 0) ?
                                             < Go_Button onClick={goButtonHandler} />
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
@@ -239,7 +270,7 @@ const ImportMasterMap = (props) => {
 
                             <ToolkitProvider
                                 keyField="id"
-                                data={goButtonItem}
+                                data={goButtonArr}
                                 columns={pagesListColumns}
 
                                 search
@@ -271,7 +302,7 @@ const ImportMasterMap = (props) => {
 
                     <FormGroup>
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            {(goButtonItem.length > 0) && <SaveButton pageMode={pageMode}
+                            {(goButtonArr.length > 0) && <SaveButton pageMode={pageMode}
                                 userAcc={userPageAccessState}
                                 module={"LoadingSheet"}
                             />}

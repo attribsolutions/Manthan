@@ -53,7 +53,7 @@ import BankSaga from "./Accounting/BankRedux/saga"
 import BankAssignSaga from "./Accounting/BankAssignRedux/saga"
 import ImportFieldMap_Saga from "./Administrator/ImportFieldMapRedux/saga"
 import ImportFieldAdd_Saga from "./Administrator/ImportFieldAddRedux/saga"
-
+import ImportMasterMap_Saga from "./Administrator/ImportMasterMapRedux/saga"
 
 
 //    *********************** Purchase ***********************
@@ -86,6 +86,7 @@ export default function* rootSaga() {
     fork(AccountSaga),
     fork(ImportFieldMap_Saga),
     fork(ImportFieldAdd_Saga),
+    fork(ImportMasterMap_Saga),
     
     fork(AuthSaga),
     fork(ForgetSaga),

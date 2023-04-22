@@ -4,8 +4,8 @@ import {
   save_ImportFiledMap_Success
 } from "./action";
 import {
-  ImportMaster_Add_GoButton_API,
-  ImportMaster_Add_Save_API,
+  ImportField_Add_GoButton_API,
+  ImportField_Add_Save_API,
 } from "../../../helpers/backend_helper";
 import {
   GO_BUTTON_IMPORT_FIELD_MAP_ADD,
@@ -19,14 +19,14 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buuton add Page API
   try {
-    const response = yield call(ImportMaster_Add_GoButton_API, config);
+    const response = yield call(ImportField_Add_GoButton_API, config);
     yield put(GoButton_ImportFiledMap_AddSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 
 function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {              // Save API
   try {
-    const response = yield call(ImportMaster_Add_Save_API, config);
+    const response = yield call(ImportField_Add_Save_API, config);
     yield put(save_ImportFiledMap_Success(response));
   } catch (error) { CommonConsole(error) }
 }

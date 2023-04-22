@@ -56,6 +56,7 @@ import BankReducer from "./Accounting/BankRedux/reducer"
 import BankAssignReducer from "./Accounting/BankAssignRedux/reducer"
 import ImportFieldMap_Reducer from "./Administrator/ImportFieldMapRedux/reducer"
 import ImportFieldAdd_Reducer from "./Administrator/ImportFieldAddRedux/reducer"
+import ImportMasterMap_Reducer from "./Administrator/ImportMasterMapRedux/reducer"
 
 //  *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -99,6 +100,7 @@ const rootReducer = combineReducers({
   PdfReportReducers,
   ImportFieldMap_Reducer,
   ImportFieldAdd_Reducer,
+  ImportMasterMap_Reducer,
   Modules,
   Company,
   H_Pages,
