@@ -448,7 +448,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-        debugger
+         
         event.preventDefault();
         const btnId = event.target.id;
 

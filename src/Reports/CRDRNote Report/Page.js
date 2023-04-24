@@ -16,10 +16,8 @@ function reportBody(doc, data) {
     style.tableBody(doc, data);                              //table Body
     }
 
-
     // style.pageBorder(doc, data);                           // Page Border
     // style.pageFooter(doc, data, islast, array);              //page Footer
-
 }
 function pageFooter(doc, data, islast, array) {
     style.reportFooter(doc, data);                           //Report Footer
@@ -27,7 +25,7 @@ function pageFooter(doc, data, islast, array) {
 }
 
 const CreditNote = (data) => {
-    debugger
+     
     //    const data =  dataGenrator()
     var doc = new jsPDF('l', 'pt', 'a5');
     // const array = dataGenrator()
