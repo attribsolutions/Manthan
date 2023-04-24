@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
-  GoButton_ImportMasterMap_AddSuccess,
+  GoButton_ImportMasterMap_Success,
   save_ImportMasterMap_Success
 } from "./action";
 import {
@@ -17,7 +17,7 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buuton add Page API
   try {
     const response = yield call(ImportMaster_Map_GoButton_API, config);
-    yield put(GoButton_ImportMasterMap_AddSuccess(response.Data));
+    yield put(GoButton_ImportMasterMap_Success(response.Data));
   } catch (error) { CommonConsole(error) }
 }
 

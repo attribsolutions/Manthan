@@ -216,46 +216,56 @@ const UploadExcel = (props) => {
         const invoiceGroup = groupBy(preUploadjson, (party) => (party[c_invoice.Value]))
 
         invoiceGroup.forEach(inv => {
-            let InvoiceDate = ''
+            let parentObj;
             let invoiceItems = []
             inv.forEach(ele => {
-                InvoiceDate = ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : ''
+                parentObj = {
+                    "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
+                    "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
+                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : '',
+                    "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
+                    "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                    "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
+                    "Party": ele[parArr.Party] ? ele[parArr.Party] : '',
+                    "CreatedBy": ele[parArr.CreatedBy] ? ele[parArr.CreatedBy] : '',
+                    "UpdatedBy": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                    "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
+                }
+
+
 
                 invoiceItems.push({
-                    Item: ele[parArr.ItemID] ? ele[parArr.ItemID] : '',
-                    Unit: ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                    BatchCode: ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
-                    Quantity: ele[parArr.Quantity] ? ele[parArr.Quantity] : '',
-                    BatchDate: ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
-                    BatchID: '',
-                    BaseUnitQuantity: ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
-                    LiveBatch: ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                    MRP: ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                    Rate: ele[parArr.Rate] ? ele[parArr.Rate] : '',
-                    BasicAmount: ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                    GSTAmount: ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                    GST: ele[parArr.GST] ? ele[parArr.GST] : '',
-                    CGST: ele[parArr.CGST] ? ele[parArr.CGST] : '',
-                    SGST: ele[parArr.CGST] ? ele[parArr.CGST] : '',
-                    IGST: ele[parArr.IGST] ? ele[parArr.IGST] : '',
-                    GSTPercentage: ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : '',
-                    CGSTPercentage: ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : '',
-                    SGSTPercentage: ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : '',
-                    IGSTPercentage: ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : '',
-                    Amount: ele[parArr.TotalAmount] ? ele[parArr.TotalAmount] : 0,
-                    TaxType: "GST",
-                    DiscountType: ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
-                    Discount: ele[parArr.Discount] ? ele[parArr.Discount] : '',
-                    DiscountAmount: ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : '',
+                    "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
+                    "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
+                    "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
+                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : '',
+                    "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
+                    "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
+                    "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
+                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                    "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
+                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                    "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
+                    "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
+                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
+                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : '',
+                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : '',
+                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : '',
+                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : '',
+                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : '',
+                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : '',
+                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : '',
+                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : '',
+                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : '',
+                    "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
+                    "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
+                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : '',
+                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : '',
+
                 })
             })
-            let psrent = {                   // Json Body Generate For Invoice  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                InvoiceDate: InvoiceDate,
-                InvoiceItems: invoiceItems,
-                // InvoicesReferences: OrderIDs.map(i => ({ Order: i }))
-            }
-            outerArr.push(psrent)
 
+            outerArr.push({ ...parentObj, ...invoiceItems })
         });
         console.log('Upload data', outerArr)
     };

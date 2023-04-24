@@ -6,12 +6,12 @@ import {
 } from "./actionType";
 
 
-export const GoButton_ImportMasterMap_Add = (config) => ({// Add page GO-Buuton Action
+export const GoButton_ImportMasterMap = (config) => ({// Add page GO-Buuton Action
   type: GO_BUTTON_IMPORT_MASTER_MAP_ADD,
   config
 });
 
-export const GoButton_ImportMasterMap_AddSuccess = (list) => ({// get List success
+export const GoButton_ImportMasterMap_Success = (list) => ({// get List success
   type: GO_BUTTON_IMPORT_MASTER_MAP_ADD_SUCCESS,
   payload: list,
 });
