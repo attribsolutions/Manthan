@@ -122,7 +122,7 @@ const CreditList = () => {
   
     const NoteType= []
     CreditDebitType.forEach(index => {
-        if (index.Name === "Credit" || index.Name === "Goods CreditNote") {
+        if (index.Name === "CreditNote" || index.Name === "Goods CreditNote") {
             const arr = {
                 value: index.id,
                 label: index.Name,
@@ -140,7 +140,7 @@ const CreditList = () => {
     function goButtonHandler() {
 
         const CreditDebitTypeId = CreditDebitType.find((index) => {
-            return index.Name === "Credit"
+            return index.Name === "CreditNote"
         })
 
         const GoodsCreditType = CreditDebitType.find((index) => {
