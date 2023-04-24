@@ -294,8 +294,7 @@ const Credit = (props) => {
     }));
 
     const CreditDebitTypeId = CreditDebitType.find((index) => {
-        return index.Name === "Credit"  
-              
+        return index.Name === "CreditNote"          
     })
 debugger
     const GoodsCreditType = CreditDebitType.find((index) => {
@@ -558,6 +557,7 @@ debugger
 
 
     const saveHandeller = async (event) => {
+        debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
@@ -616,7 +616,7 @@ debugger
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-
+                debugger
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
@@ -634,7 +634,7 @@ debugger
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-
+debugger
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
             }
