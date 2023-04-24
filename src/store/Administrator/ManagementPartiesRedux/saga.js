@@ -16,9 +16,9 @@ function* getPartyListGenFunc({ jsonBody }) {                                   
   try {
     const response = yield call(apiCall.Go_Button_Post_API, jsonBody);
     response.Data.map((party) => {
-      party["Check"] = false
+      party["selectCheck"] = false
       if (party.Party > 0) {
-        { party["Check"] = true }
+        { party["selectCheck"] = true }
       }
       return party
     });

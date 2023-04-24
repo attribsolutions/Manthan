@@ -35,13 +35,13 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
 import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
 import { getEmployeedropdownList, getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
 const ManagementEmpParties = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [array, setArray] = useState([]);
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
@@ -160,62 +160,9 @@ const ManagementEmpParties = (props) => {
         }
     }
 
-    // function SelectAll(event, row, key) {
-
-    //     const arr = []
-    //     partyList.forEach(ele => {
-    //         if (ele.id === row.id) {
-    //             ele.Check = event
-    //         }
-    //         arr.push(ele)
-    //     })
-    //     setArray(arr)
-    // }
-
-    const onSelectAll = (event, allarray, a, c, v) => {
-        debugger
-        const arr = allarray
-        if (event) {
-            allarray.forEach(ele => {
-                return ele.Check = event
-            })
-            setArray(arr)
-        } else {
-            return [];
-        }
-    }
-
-    const selectRow = (row, event) => {
-        const arr = []
-        partyList.forEach(ele => {
-            if (ele.id === row.id) {
-                ele.Check = event
-            }
-            arr.push(ele)
-        })
-        setArray(arr)
-    }
-
-    const checkbox = {
-      
-        mode: "checkbox",
-        onSelectAll: onSelectAll,
-        onSelect: selectRow,
-        selected: partyList.map((index) => { return (index.Check) && index.id }),
-        selectColumnPosition: "right",
-
-        selectionHeaderRenderer: (head) => {
-            return <div className="">
-                <Input type="checkbox" checked={head.checked} />
-                <label style={{paddingLeft:"7px"}}>SelectAll</label>
-            </div>
-        },
-        selectionRenderer: (head) => {
-            return <div className="">
-                 <Input type="checkbox" checked={head.checked} />
-            </div>
-        }
-       
+   
+    function rowSelected() {
+        return partyList.map((index) => { return (index.selectCheck) && index.id })
     }
 
     const pagesListColumns = [
@@ -268,8 +215,9 @@ const ManagementEmpParties = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
-        const CheckArray = array.filter((index) => {
-            return (index.Check === true)
+
+        const CheckArray = partyList.filter((index) => {
+            return (index.selectCheck === true)
         })
 
         const PartiesJson = CheckArray.map((index) => ({
@@ -277,8 +225,8 @@ const ManagementEmpParties = (props) => {
             Party: index.id,
         }))
 
-        const trueValues = array.map((index) => {
-            return (index.Check === true)
+        const trueValues = partyList.map((index) => {
+            return (index.selectCheck === true)
         })
 
         const totalTrueValues = trueValues.reduce((count, value) => {
@@ -385,7 +333,7 @@ const ManagementEmpParties = (props) => {
                                                     keyField={"id"}
                                                     bordered={true}
                                                     striped={false}
-                                                    selectRow={checkbox}
+                                                    selectRow={selectAllCheck(rowSelected())}
                                                     noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                                     classes={"table align-middle table-nowrap table-hover"}
                                                     headerWrapperClasses={"thead-light"}
