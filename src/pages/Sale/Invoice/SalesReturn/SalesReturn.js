@@ -222,7 +222,7 @@ const SalesReturn = (props) => {
     }
 
     function quantityHandler(event, row) {
-        debugger
+       
         row["Qty"] = event.target.value
         let input = event.target.value
 
@@ -520,7 +520,7 @@ const SalesReturn = (props) => {
             })
             return
         }
-        debugger
+       
         let resp;
         try {
 
@@ -629,7 +629,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+       
         event.preventDefault();
 
         const btnId = event.target.id
@@ -637,7 +637,8 @@ const SalesReturn = (props) => {
         let grand_total = 0;
         const ReturnItems = TableArr.map((i) => {
 
-            const calculate = salesReturnCalculate({ Rate: i.Rate, Qty: i.Qty, gstPercentage: returnMode === 1 ? i.gstPercentage : i.GST })
+            var gstPercentage = returnMode === 1 ? i.gstPercentage : i.GST
+            const calculate = salesReturnCalculate({ Rate: i.Rate, Qty: i.Qty, gstPercentage: gstPercentage })
 
             grand_total = grand_total + Number(calculate.tAmount)
 
@@ -645,7 +646,7 @@ const SalesReturn = (props) => {
                 Item: i.ItemName.value,
                 Quantity: i.Qty,
                 Unit: returnMode === 1 ? i.RowData.Unit : i.Unit,
-                BaseUnitQuantity: i.BaseUnitQuantity,
+                BaseUnitQuantity: returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
                 BatchCode: returnMode === 1 ? i.RowData.BatchCode : i.BatchCode,
                 BatchDate: i.BatchDate,
                 Amount: calculate.tAmount,
@@ -657,9 +658,9 @@ const SalesReturn = (props) => {
                 CGST: calculate.CGST,
                 SGST: calculate.SGST,
                 IGST: 0,
-                GSTPercentage: i.GST,
-                CGSTPercentage: (i.GST / 2),
-                SGSTPercentage: (i.GST / 2),
+                GSTPercentage: gstPercentage,
+                CGSTPercentage: (gstPercentage / 2),
+                SGSTPercentage: (gstPercentage / 2),
                 IGSTPercentage: 0,
                 TaxType: "GST",
                 ReturnItemImages: []
