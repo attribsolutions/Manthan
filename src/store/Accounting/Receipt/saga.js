@@ -74,7 +74,7 @@ function* Receipt_Type_GenFunc({ jsonBody }) {
 
   // delete API
 function* Delete_Receipt_ID_GenFunc({ config }) { 
-  debugger       
+          
   try {
     const response = yield call(apiCall.Receipt_Delete_API, config);
     yield put(action.deleteReceiptList_Success(response))

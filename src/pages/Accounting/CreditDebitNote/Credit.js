@@ -153,7 +153,7 @@ const Credit = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -167,17 +167,19 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, } = hasEditVal
+                 
+                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal,CRDRInvoices,CustomerID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 // hasValid.Name.valid = true;
 
                 values.CRDRNoteDate = CRDRNoteDate;
-                values.Customer = Customer;
-                values.NoteReason = NoteReason;
+                values.Customer = { label: Customer, value: CustomerID };
+                values.NoteReason = { label: Customer, value: CustomerID };
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
+                ReceiptGoButton.Data = CRDRInvoices;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -296,7 +298,7 @@ const Credit = (props) => {
     const CreditDebitTypeId = CreditDebitType.find((index) => {
         return index.Name === "CreditNote"          
     })
-debugger
+
     const GoodsCreditType = CreditDebitType.find((index) => {
         return index.Name === "Goods CreditNote"  
               
@@ -334,9 +336,8 @@ debugger
             CustomerID: e.value,
             InvoiceID: ""
         });
-        const body = { jsonBody, pageMode }
+        const body = {jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
-
         const jsonBody1 = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: e.value
@@ -408,7 +409,7 @@ debugger
     }
 
     function val_onChange(event, row, val) {
-        debugger
+        
         let input = event.target.value;
         // let result = /^\d*(\.\d{0,2})?$/.test(input);
         row.Qty = event.target.value
@@ -453,6 +454,15 @@ debugger
             dataField: "BaseUnitQuantity",
         },
         {
+            text: "Unit Name",
+            dataField: "UnitName",
+            headerStyle: (colum, colIndex) => {
+                return { width: '60px', textAlign: 'center' };
+            },
+            
+        },
+
+        {
             text: "Quantity ",
             dataField: "Quantity",
             formatter: (cellContent, row, key) => {
@@ -466,8 +476,9 @@ debugger
                         // disabled={page_Mode === mode.modeSTPsave ? true : false}
                         // value={row.Calculate}
                         // type="text"
+                        placeholder="Enter Quantity"
                         autoComplete="off"
-                        className="col col-sm text-center"
+                        className="col col-sm"
                         onChange={(event) => val_onChange(event, row, key)}
 
                     />
@@ -557,7 +568,7 @@ debugger
 
 
     const saveHandeller = async (event) => {
-        debugger
+        
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
@@ -616,7 +627,7 @@ debugger
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                debugger
+                
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
@@ -634,7 +645,7 @@ debugger
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-debugger
+
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
             }

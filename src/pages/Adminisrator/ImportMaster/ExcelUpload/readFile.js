@@ -40,7 +40,7 @@ export const readExcelFile = async ({ file, compareParam }) => {
       }
 
     });
-debugger
+ 
     processing(10)
 
     let invalidMsg = []
@@ -70,7 +70,7 @@ debugger
     // groupBy(jsonResult, (party) => (party))
     // console.log('Upload data', jsonResult)
     // const aad = await commonPageFiled_API(184)
-    debugger
+     
     return jsonResult
 
   } catch (e) { }
