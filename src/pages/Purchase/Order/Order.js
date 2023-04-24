@@ -767,7 +767,9 @@ const Order = (props) => {
                 })
                 return returnFunc();
             }
-            if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
+            if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
+                && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
+            ) {
                 CustomAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",

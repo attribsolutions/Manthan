@@ -155,10 +155,8 @@ import SalesReturnList from "../pages/Sale/Invoice/SalesReturn/SalesReturnList";
 import ImportMasterMap from "../pages/Adminisrator/ImportMaster/ImportMasterMap/ImportMasterMap";
 
 
-
 const userRoutes = [
   // *************************** DashBord *******************************//
-
 
   { path: path.DASHBORD, component: Dashboard },
 
@@ -263,11 +261,11 @@ const userRoutes = [
   { path: path.UPLOAD_EXCEL, component: UploadExcel },
 
   { path: path.IMPORT_FIELD_MAP, component: ImportFieldMap },
-  { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd},
-  { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList},
+  { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
+  { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
 
-    { path: path.IMPORT_FIELD_MASTER, component: ImportMasterMap},
-  
+  { path: path.IMPORT_FIELD_MASTER, component: ImportMasterMap },
+
   { path: path.ROUTE_UPDATE, component: RouteUpdate },
   { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
@@ -366,8 +364,8 @@ const userRoutes = [
 
 
 
-  { path: path.CREDIT_LIST, component: CreditList},
-  { path: path.DEBIT_LIST, component: DebitList},
+  { path: path.CREDIT_LIST, component: CreditList },
+  { path: path.DEBIT_LIST, component: DebitList },
 
   { path: path.CREDIT, component: Credit },
   { path: path.DEBIT, component: Debit },
@@ -381,7 +379,8 @@ const userRoutes = [
 
   { path: "/dashboard", component: Dashboard },
 
-  { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
+  // { component:() => <Redirect to="/login" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
 
@@ -397,7 +396,7 @@ const authRoutes = [
   { path: "/EnterOTP", component: EnterOTP },
   { path: "/division", component: SelectDivisionPage },
   { path: "/pages-404", component: Error404 },
-
+  // { component:() => <Redirect to="/login" /> },
   { path: "/pages-500", component: Error500 },
 ]
 
