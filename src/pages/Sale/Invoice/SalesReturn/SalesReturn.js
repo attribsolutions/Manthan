@@ -222,8 +222,9 @@ const SalesReturn = (props) => {
     }
 
     function quantityHandler(event, row) {
-       
+
         row["Qty"] = event.target.value
+
         let input = event.target.value
 
         if (returnMode === 1) {
@@ -520,7 +521,7 @@ const SalesReturn = (props) => {
             })
             return
         }
-       
+
         let resp;
         try {
 
@@ -629,7 +630,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-       
+
         event.preventDefault();
 
         const btnId = event.target.id
