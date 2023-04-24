@@ -218,7 +218,14 @@ const SalesReturn = (props) => {
     const pagesListColumns = [
         {
             text: "ItemName",
-            dataField: "ItemName",
+            dataField: "",
+            formatter: (cellContent, row, key) => {
+                debugger
+                return (
+                    <Label>{row.ItemName.label}</Label>
+
+                )
+            }
         },
         {
             text: "Quantity",
@@ -476,7 +483,7 @@ const SalesReturn = (props) => {
             })
             return
         }
-
+       
         let resp;
         try {
 
@@ -486,20 +493,34 @@ const SalesReturn = (props) => {
             else {
                 resp = await SalesReturn_add_button_api_For_Invoice(values.InvoiceNumber.value)
             }
-            const { ItemUnitDetails = [], ItemMRPDetails = [], ItemGSTHSNDetails = [], id } = resp.Data
-            const unitOps = ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.id, BaseUnitQuantity: i.BaseUnitQuantity }));
-            const MRPOps = ItemMRPDetails.map(i => ({ label: i.MRP, value: i.id }));
-            const GSTOps = ItemGSTHSNDetails.map(i => ({ label: i.GSTPercentage, value: i.id }));
 
-            setTableArr([...TableArr, {
-                id: TableArr.length + 1,
-                ItemID: id,
-                ItemUnitDetails: unitOps,
-                ItemMRPDetails: MRPOps,
-                ItemGSTHSNDetails: GSTOps,
-                InvoiceNumber: values.InvoiceNumber.label,
-                ItemName: values.ItemName.label,
-            }]);
+            const data = resp.Data.InvoiceItems.map((i) => ({
+                unitOps: i.ItemUnitDetails.map(i => ({ label: i.UnitName, value: i.Unit, BaseUnitQuantity: i.BaseUnitQuantity })),
+                MRPOps: i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP })),
+                GSTOps: i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST })),
+                ItemName: { label: i.ItemName, value: i.Item }
+            }))
+
+            const itemArr = [...TableArr]
+
+            data.forEach((i) => {
+                itemArr.push({
+                    id: itemArr.length + 1,
+                    ItemUnitDetails: i.unitOps,
+                    ItemMRPDetails: i.MRPOps,
+                    ItemGSTHSNDetails: i.GSTOps,
+                    ItemName: i.ItemName,
+                })
+            })
+            setTableArr(itemArr)
+
+            // i.push(setTableArr([...TableArr, {
+            //     id: TableArr.length + 1,
+            //     ItemUnitDetails: i.unitOps,
+            //     ItemMRPDetails: i.MRPOps,
+            //     ItemGSTHSNDetails: i.GSTOps,
+            //     ItemName: i.ItemName,
+            // }]))
 
             setState((i) => {
                 let a = { ...i }
@@ -510,7 +531,6 @@ const SalesReturn = (props) => {
                 return a
             })
         } catch (w) { }
-
     }
 
     function RetailerHandler(event) {
@@ -587,7 +607,7 @@ const SalesReturn = (props) => {
             grand_total = grand_total + Number(calculate.tAmount)
 
             return ({
-                Item: i.ItemID,
+                Item: i.ItemName.value,
                 Quantity: i.Qty,
                 Unit: i.Unit,
                 BaseUnitQuantity: i.BaseUnitQuantity,

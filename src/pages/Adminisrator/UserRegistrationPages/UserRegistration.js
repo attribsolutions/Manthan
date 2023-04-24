@@ -47,7 +47,7 @@ const AddUser = (props) => {
     LoginName: '',
     Password: '',
     EmployeeName: '',
-    isActive: false,
+    isActive: true,
     isLoginUsingEmail: false,
     isLoginUsingMobile: false,
     isSendOTP: false,

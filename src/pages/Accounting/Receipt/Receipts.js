@@ -56,6 +56,7 @@ const Receipts = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [ID, setID] = useState("");
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+    console.log(pageMode)
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -202,7 +203,6 @@ const Receipts = (props) => {
                     i.hasValid.ReceiptModeName.valid = true;
                     return i
                 })
-
                 AmountPaidDistribution(AmountPaid);
             }
         }
@@ -356,17 +356,20 @@ const Receipts = (props) => {
 
         row.Calculate = event.target.value
 
-        let calSum = 0
-        Data.forEach(element => {
-            calSum = calSum + Number(element.Calculate)
-        });
+        if ((page_Mode === "") || (page_Mode === undefined) || (page_Mode === mode.modeSTPList)) {
+            let calSum = 0
+            Data.forEach(element => {
+                calSum = calSum + Number(element.Calculate)
+            });
 
-        setState((i) => {
-            let a = { ...i }
-            a.values.AmountPaid = calSum
-            a.hasValid.AmountPaid.valid = true;
-            return a
-        })
+            setState((i) => {
+                let a = { ...i }
+                a.values.AmountPaid = calSum
+                a.hasValid.AmountPaid.valid = true;
+                return a
+            })
+        }
+
     };
 
     function AmountPaid_onChange(event) {
@@ -445,11 +448,34 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
 
-        if (values.ReceiptModeName.value === undefined) {
+        let calSum = 0
+        Data.forEach(element => {
+            calSum = calSum + Number(element.Calculate)
+        });
+
+        let diffrence = Math.abs(calSum - values.AmountPaid);
+        if (Number(values.AmountPaid) < calSum) {
+            CustomAlert({
+                Type: 4,
+                Message: `Amount Paid value is Excess ${diffrence}`,
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+
+        }
+        else if (Number(values.AmountPaid) > calSum) {
+            CustomAlert({
+                Type: 4,
+                Message: `Amount Paid value is Short ${diffrence}`,
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+
+        }
+
+        if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
             CustomAlert({
                 Type: 4,
                 Message: "Receipt Mode Is Required",
@@ -457,10 +483,10 @@ const Receipts = (props) => {
             return btnIsDissablefunc({ btnId, state: false })
         }
 
-        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN")) {
+        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN") || (values.AmountPaid === undefined)) {
             CustomAlert({
                 Type: 4,
-                Message: `Amount Paid value can not be ${values.AmountPaid}`,
+                Message: `Amount Paid value can not be 0`,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }

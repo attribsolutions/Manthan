@@ -321,13 +321,12 @@ export const MAKE_RECEIPT_TO_PAYMENT ='/MakeReceiptofPayment'
 // Sales Return
 
 export const INVOICE_NUMBER_LIST = '/InvoiceNoList'
-export const ADD_BUTTON_API_FOR_SALES_RETURN = '/ReturnItemAdd'
+export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemAdd'
+export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 
-
-
 export const CREDIT_DEBIT ='/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER ='/CreditDebitNoteFilter'
-
+export const INVOICE_RETURN ='/InvoiceReturnCRDR'
 
