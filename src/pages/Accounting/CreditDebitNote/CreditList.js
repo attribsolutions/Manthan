@@ -147,7 +147,7 @@ const CreditList = () => {
             return index.Name === "Goods CreditNote"
 
         })
-        debugger
+        
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
