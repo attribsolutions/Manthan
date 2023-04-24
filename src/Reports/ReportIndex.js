@@ -5,6 +5,7 @@ import MaterialReport from "./MaterialReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import InvioceReporta5 from "./Invoice report a5/Page";
 import Receipts from "./Receipts/Page";
+import CreditNote from "./CRDRNote Report/Page";
 
 
 
@@ -17,6 +18,8 @@ export const VanLoadingSheetSKU = "VanLoadingSheetSKU"
 export const VanLoadingPartyWiseInvoice = "VanLoadingPartyWiseInvoice"
 export const invoiceA5 = "invoiceA5"
 export const Receipt = "Receipt"
+export const Credit = "Credit"
+
 
 
 
@@ -45,6 +48,9 @@ const generateReport = (resp) => {
             break;
         case Receipt:
             Receipts(resp.Data)
+            break;
+        case Credit:
+            CreditNote(resp.Data)
             break;
 
 

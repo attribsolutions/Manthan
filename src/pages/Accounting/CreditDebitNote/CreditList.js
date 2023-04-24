@@ -19,7 +19,7 @@ import {
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Receipt_Print } from "../../../helpers/backend_helper";
+import { Edit_Credit_List_API, Receipt_Print } from "../../../helpers/backend_helper";
 import Credit from "./Credit";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
@@ -141,8 +141,8 @@ const CreditList = () => {
 
 
     function downBtnFunc(row) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+        var ReportType = report.Credit;
+        dispatch(getpdfReportdata(Edit_Credit_List_API, ReportType, {editId: row.id}))
     }
 
     function fromdateOnchange(e, date) {
