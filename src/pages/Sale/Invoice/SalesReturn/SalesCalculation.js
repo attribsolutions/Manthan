@@ -1,5 +1,5 @@
 export const salesReturnCalculate = (row) => {
-    
+   
     let rate = 0
     let qty = 0
     let gstPercentage = 0
@@ -21,8 +21,8 @@ export const salesReturnCalculate = (row) => {
     //     disCountAmt = (parseFloat(qty) * index.Discount)
     // }
 
-    if (!(row.GST == '')) {
-        gstPercentage = row.GST;
+    if (!(row.gstPercentage == '')) {
+        gstPercentage = row.gstPercentage;
     };
 
 
