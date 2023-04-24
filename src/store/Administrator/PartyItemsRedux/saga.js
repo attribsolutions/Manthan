@@ -13,13 +13,13 @@ function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
 }
 
 
-function* getPartyItemGenFunc({ SupplierID }) {                                   // getList API
+function* getPartyItemGenFunc({ SupplierID }) {                       // getList API
   try {
     const response = yield call(get_Party_Item_List, SupplierID);
     response.Data.map((item) => {
-      item["itemCheck"] = false
+      item["selectCheck"] = false
       if (item.Party > 0) {
-        { item["itemCheck"] = true }
+        { item["selectCheck"] = true }
       }
       return item
     });
