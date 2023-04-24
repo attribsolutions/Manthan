@@ -318,6 +318,7 @@ const SalesReturn = (props) => {
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
+                                defaultValue={returnMode === 1 && { value: row.RowData.MRP, label: row.RowData.MRPValue }}
                                 isSearchable={true}
                                 isDisabled={returnMode === 1 && true}
                                 className="react-dropdown"
@@ -405,7 +406,7 @@ const SalesReturn = (props) => {
                     <Flatpickr
                         name='ReturnDate'
                         defaultValue={returnMode === 1 ? invertDatefunc(row.RowData.BatchDate) : currentDate}
-                        isDisabled={returnMode === 1 ? true : false}
+                        disabled={returnMode === 1 ? true : false}
                         className="form-control d-block p-2 bg-white text-dark"
                         placeholder="Select..."
                         options={{
@@ -501,11 +502,14 @@ const SalesReturn = (props) => {
         },
     ];
 
-    async function AddPartyHandler(e) {
+    async function AddPartyHandler(e, type) {
 
         const invalidMsg1 = []
-        if ((returnMode === 0) && (values.ItemName === '') && (values.InvoiceNumber === '')) {
-            invalidMsg1.push(`  Select a value from Item Or Invoice No.`)
+        if ((returnMode === 0) && (values.ItemName === '') && (type === 'add')) {
+            invalidMsg1.push(`  Select Item Name`)
+        }
+        if ((returnMode === 0) && (values.InvoiceNumber === '') && (type === 'Select')) {
+            invalidMsg1.push(`  Select Invoice No.`)
         }
         if ((returnMode === 2) && (values.ItemName === '')) {
             invalidMsg1.push(`Item is Required`)
@@ -645,6 +649,7 @@ const SalesReturn = (props) => {
 
             return ({
                 Item: i.ItemName.value,
+                ItemName: i.ItemName.label,
                 Quantity: i.Qty,
                 Unit: returnMode === 1 ? i.RowData.Unit : i.Unit,
                 BaseUnitQuantity: returnMode === 1 ? i.RowData.BaseUnitQuantity : i.BaseUnitQuantity,
@@ -668,26 +673,27 @@ const SalesReturn = (props) => {
             })
         })
 
-        const invalidMsg1 = []
 
+        const invalidMsg1 = []
+        debugger
         ReturnItems.forEach((i) => {
             if ((i.Quantity === undefined)) {
-                invalidMsg1.push(`Quantity Is Required`)
+                invalidMsg1.push(`${i.ItemName} : Quantity Is Required`)
             }
             if ((i.Rate === undefined)) {
-                invalidMsg1.push(`Rate Is Required`)
+                invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
             };
             if ((i.MRP === undefined)) {
-                invalidMsg1.push(`MRP Is Required`)
+                invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
             };
             if ((i.Unit === undefined)) {
-                invalidMsg1.push(`Unit Is Required`)
+                invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
             };
             if ((i.GST === undefined)) {
-                invalidMsg1.push(`GST Is Required`)
+                invalidMsg1.push(`${i.ItemName} : GST Is Required`)
             };
             if ((i.BatchCode === undefined)) {
-                invalidMsg1.push(`BatchCode Is Required`)
+                invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
             };
         })
 
@@ -865,6 +871,15 @@ const SalesReturn = (props) => {
 
                                         </Col>
 
+                                        <Col sm="1" className="mx-6 mt-1">
+                                            {
+                                                (!(returnMode === 1)) &&
+                                                < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
+                                                    onClick={(e,) => AddPartyHandler(e, "add")}
+                                                > Add</Button>
+                                            }
+
+                                        </Col>
                                         {/* <Col sm="1" className="mx-6 mt-1 ">
 
                                             <Col sm="1" className="mx-6 ">                   
@@ -917,7 +932,27 @@ const SalesReturn = (props) => {
                                             />
 
                                         </Col>
+                                        <Col sm="1" className="mx-6 mt-1 ">
+                                            {((TableArr.length > 0)) ?
+                                                <Change_Button onClick={(e) => {
+                                                    setTableArr([])
+                                                    setState((i) => {
+                                                        let a = { ...i }
+                                                        a.values.InvoiceNumber = ""
+                                                        a.hasValid.InvoiceNumber.valid = true;
+                                                        return a
+                                                    })
+                                                }} />
+                                                :
+                                                (!(returnMode === 2)) &&
+                                                <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
+                                                    onClick={(e,) => AddPartyHandler(e, "Select")}
+                                                >        <i > </i>Select</Button>
 
+                                            }
+
+
+                                        </Col>
                                     </FormGroup>
                                 </Col >
 
