@@ -32,8 +32,6 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { Post_RouteUpdateSuccess } from "../../../store/Administrator/RouteUpdateRedux/action";
-import { getEmployeelist } from "../../../store/Administrator/EmployeeRedux/action";
 import { getEmployeedropdownList, getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
@@ -79,7 +77,6 @@ const ManagementEmpParties = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
 
     useEffect(() => {
 
@@ -159,7 +156,6 @@ const ManagementEmpParties = (props) => {
             dispatch(getPartyTableList(jsonBody));
         }
     }
-
    
     function rowSelected() {
         return partyList.map((index) => { return (index.selectCheck) && index.id })
@@ -250,8 +246,6 @@ const ManagementEmpParties = (props) => {
         // console.log(jsonBody)
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
-
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
