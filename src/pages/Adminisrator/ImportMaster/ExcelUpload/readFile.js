@@ -1,28 +1,26 @@
-import {  invertDatefunc } from '../../../../components/Common/CommonFunction';
+import { invertDatefunc } from '../../../../components/Common/CommonFunction';
+import { CustomAlert } from '../../../../CustomAlert/ConfirmDialog';
 
 const XLSX = require('xlsx');
 
 
- export const readExcelFile = async ({file, compareParam }) => {
+export const readExcelFile = async ({ file, compareParam }) => {
 
-let JsonReturn=[]
+
   try {
-    const progDiv = document.getElementById("file-proccess")
-    const progBar = document.getElementById("_progressbar")
-    const progLabe = document.getElementById("file-proccess-lable")
-   
-   
-    progDiv.style.display = 'block'
-
+    // const progDiv = document.getElementById("file-proccess")
+    // const progBar = document.getElementById("_progressbar")
+    // const progLabe = document.getElementById("file-proccess-lable")
+    // progDiv.style.display = 'block'
     processing(5)
+
     function processing(t) {
-      progBar.style.width = `${t}%`
-      progLabe.innerText = `${t}%`
+      // progBar.style.width = `${t}%`
+      // progLabe.innerText = `${t}%`
     }
 
 
     const reader = new FileReader();
-    // reader.readAsArrayBuffer(file);
     reader.readAsBinaryString(file);
 
     const jsonResult = await new Promise(function (myResolve, myReject) {
@@ -42,13 +40,13 @@ let JsonReturn=[]
       }
 
     });
-
+debugger
     processing(10)
 
     let invalidMsg = []
     let count = 0
     const comparefilter = compareParam.filter(f => (f.Value !== null))
-    debugger
+
     jsonResult.forEach((r1, k) => {
       comparefilter.forEach((c1) => {
         if (c1.ControlTypeName === "Date") { r1[c1.Value] = invertDatefunc(r1[c1.Value]) }
@@ -61,17 +59,22 @@ let JsonReturn=[]
       processing(count)
     })
     if (invalidMsg.length > 0) {
-      alert(JSON.stringify(invalidMsg))
+      CustomAlert({
+        Type: 3,
+        Message: JSON.stringify(invalidMsg),
+    })
+      return []
     }
 
-    
+
     // groupBy(jsonResult, (party) => (party))
     // console.log('Upload data', jsonResult)
     // const aad = await commonPageFiled_API(184)
-    return JsonReturn
+    debugger
+    return jsonResult
 
   } catch (e) { }
- 
+
 }
 
 
@@ -113,11 +116,11 @@ let JsonReturn=[]
 // function valDate(date) {
 //   let dateformat = /^(0?[1-9]|[1-2][0-9]|3[01])[\/](0?[1-9]|1[0-2])/;
 
-//   // Matching the date through regular expression      
+//   // Matching the date through regular expression
 //   if (date.match(dateformat)) {
 //       let operator = date.split('-');
 
-//       // Extract the string into month, date and year      
+//       // Extract the string into month, date and year
 //       let datepart = [];
 //       if (operator.length > 1) {
 //           datepart = date.split('-');
@@ -126,12 +129,12 @@ let JsonReturn=[]
 //       let month = parseInt(datepart[1]);
 //       let year = parseInt(datepart[2]);
 
-//       // Create a list of days of a month      
+//       // Create a list of days of a month
 //       let ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 //       if (month == 1 || month > 2) {
 //           if (day > ListofDays[month - 1]) {
 //               //to check if the date is out of range
-//               console.log("Invalid date")     
+//               console.log("Invalid date")
 //               return false;
 //           }
 //       } else if (month == 2) {
