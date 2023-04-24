@@ -409,10 +409,11 @@ debugger
     }
 
     function val_onChange(event, row, val) {
-        
+        debugger
         let input = event.target.value;
         // let result = /^\d*(\.\d{0,2})?$/.test(input);
         row.Qty = event.target.value
+        row.gstPercentage = row.GSTPercentage
         const calculate = salesReturnCalculate(row)
         Setcalculation(calculate)
         let v1 = Number(row.BaseUnitQuantity);
