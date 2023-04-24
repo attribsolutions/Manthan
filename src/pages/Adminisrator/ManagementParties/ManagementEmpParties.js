@@ -160,8 +160,32 @@ const ManagementEmpParties = (props) => {
         }
     }
 
-    function SelectAll(event, row, key) {
+    // function SelectAll(event, row, key) {
 
+    //     const arr = []
+    //     partyList.forEach(ele => {
+    //         if (ele.id === row.id) {
+    //             ele.Check = event
+    //         }
+    //         arr.push(ele)
+    //     })
+    //     setArray(arr)
+    // }
+
+    const onSelectAll = (event, allarray, a, c, v) => {
+        debugger
+        const arr = allarray
+        if (event) {
+            allarray.forEach(ele => {
+                return ele.Check = event
+            })
+            setArray(arr)
+        } else {
+            return [];
+        }
+    }
+
+    const selectRow = (row, event) => {
         const arr = []
         partyList.forEach(ele => {
             if (ele.id === row.id) {
@@ -170,6 +194,28 @@ const ManagementEmpParties = (props) => {
             arr.push(ele)
         })
         setArray(arr)
+    }
+
+    const checkbox = {
+      
+        mode: "checkbox",
+        onSelectAll: onSelectAll,
+        onSelect: selectRow,
+        selected: partyList.map((index) => { return (index.Check) && index.id }),
+        selectColumnPosition: "right",
+
+        selectionHeaderRenderer: (head) => {
+            return <div className="">
+                <Input type="checkbox" checked={head.checked} />
+                <label style={{paddingLeft:"7px"}}>SelectAll</label>
+            </div>
+        },
+        selectionRenderer: (head) => {
+            return <div className="">
+                 <Input type="checkbox" checked={head.checked} />
+            </div>
+        }
+       
     }
 
     const pagesListColumns = [
@@ -257,49 +303,6 @@ const ManagementEmpParties = (props) => {
         dispatch(saveManagementParties({ jsonBody, btnId }));
     };
 
-    const onSelectAll = (event, allarray) => {
-        const arr = allarray
-        if (event) {
-            allarray.forEach(ele => {
-                return ele.Check = event
-            })
-            setArray(arr)
-        } else {
-            return [];
-        }
-    }
-
-    const selectRow = (row, event) => {
-        const arr = []
-        partyList.forEach(ele => {
-            if (ele.id === row.id) {
-                ele.Check = event
-            }
-            arr.push(ele)
-        })
-        setArray(arr)
-    }
-
-    const checkbox = {
-        headerFormatter: (value, row, k) => {
-            
-            return (
-                // <div className="d-flex justify-content-between" key={row.id}>
-                    <div>
-                     SelectAll
-                    </div>
-
-                // </div>
-            )
-        },
-        mode: "checkbox",
-        onSelectAll: onSelectAll,
-        onSelect: selectRow,
-        selected: partyList.map((index) => { return (index.Check) && index.id}),
-        selectColumnPosition: "right",
-
-        // style: { backgroundColor: '#c8e6c9' }
-    }
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
