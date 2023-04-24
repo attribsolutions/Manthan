@@ -199,7 +199,7 @@ const SalesReturn = (props) => {
     const itemList = ItemList.map((index) => ({
         value: index.Item,
         label: index.ItemName,
-        itemCheck: index.itemCheck
+        itemCheck: index.selectCheck
     }));
 
     const ItemList_Options = itemList.filter((index) => {

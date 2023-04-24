@@ -36,6 +36,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../../components/Common/CommonPurchaseList";
 import { getDriverList } from "../../../../store/Administrator/DriverRedux/action";
+import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
 
 const LoadingSheet = (props) => {
 
@@ -81,44 +82,8 @@ const LoadingSheet = (props) => {
         Driver: state.DriverReducer.DriverList,
     }));
 
-    // const { fromdate, todate, Date } = orderlistFilter;
     const { Data = [] } = GoButton;
 
-    // const Data = [
-    //     {
-    //         id: 7,
-    //         InvoiceDate: "2023-03-15",
-    //         FullInvoiceNumber: "1",
-    //         Customer: "Krupa Traders",
-    //         CustomerID: 4,
-    //         PartyID: 5,
-    //         GrandTotal: "2000.2400",
-    //         CreatedOn: "2023-03-15 15:08:53.388361",
-    //         Check: false
-    //     },
-    //     {
-    //         id: 8,
-    //         InvoiceDate: "2023-03-15",
-    //         FullInvoiceNumber: "2",
-    //         Customer: "Katraj Division",
-    //         CustomerID: 4,
-    //         PartyID: 5,
-    //         GrandTotal: "3000.2080",
-    //         CreatedOn: "2023-03-15 15:08:53.388361",
-    //         Check: false
-    //     },
-    //     {
-    //         id: 9,
-    //         InvoiceDate: "2023-03-15",
-    //         FullInvoiceNumber: "3",
-    //         Customer: "Ranade",
-    //         CustomerID: 4,
-    //         PartyID: 5,
-    //         GrandTotal: "4000.10",
-    //         CreatedOn: "2023-03-15 15:08:53.388361",
-    //         Check: false
-    //     }
-    // ]
     useEffect(() => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
         const page_Id = pageId.LOADING_SHEET
@@ -221,23 +186,23 @@ const LoadingSheet = (props) => {
             ToDate: values.ToDate,
             Party: loginPartyID(),
             Route: "",
-            LoadingSheetID:""
+            LoadingSheetID: ""
         });
         dispatch(LoadingSheet_GoBtn_API(jsonBody));
     }
 
-    function SelectAll(event, row, key) {
+    // function SelectAll(event, row, key) {
 
-        const arr = []
-        Data.forEach(ele => {
-            if (ele.id === row.id) {
-                ele.Check = event
-            }
-            arr.push(ele)
-        })
-        setArray(arr)
+    //     const arr = []
+    //     Data.forEach(ele => {
+    //         if (ele.id === row.id) {
+    //             ele.Check = event
+    //         }
+    //         arr.push(ele)
+    //     })
+    //     setArray(arr)
 
-    }
+    // }
 
     const pagesListColumns = [
         {
@@ -256,25 +221,23 @@ const LoadingSheet = (props) => {
             text: "GrandTotal",
             dataField: "GrandTotal",
         },
-        {
-            text: "Select All",
-            dataField: "Check",
-            formatter: (cellContent, row, key) => {
+        // {
+        //     text: "Select All",
+        //     dataField: "Check",
+        //     formatter: (cellContent, row, key) => {
 
-                return (<span style={{ justifyContent: 'center' }}>
-                    <Input
-                        id=""
-                        key={row.id}
-                        defaultChecked={row.Check}
-                        type="checkbox"
-                        className="col col-sm text-center"
-                        onChange={e => { SelectAll(e.target.checked, row, key) }}
-                    />
-                </span>)
-            }
-        }
-
-
+        //         return (<span style={{ justifyContent: 'center' }}>
+        //             <Input
+        //                 id=""
+        //                 key={row.id}
+        //                 defaultChecked={row.Check}
+        //                 type="checkbox"
+        //                 className="col col-sm text-center"
+        //                 onChange={e => { SelectAll(e.target.checked, row, key) }}
+        //             />
+        //         </span>)
+        //     }
+        // }
     ];
 
     const pageOptions = {
@@ -288,12 +251,12 @@ const LoadingSheet = (props) => {
         event.preventDefault();
         const btnId = event.target.id
 
-        const CheckArray = array.filter((index) => {
-            return (index.Check === true)
+        const CheckArray = Data.filter((index) => {
+            return (index.selectCheck === true)
         })
 
-        const trueValues = array.map((index) => {
-            return (index.Check === true)
+        const trueValues = Data.map((index) => {
+            return (index.selectCheck === true)
         })
 
         const totalInvoices = trueValues.reduce((count, value) => {
@@ -519,13 +482,7 @@ const LoadingSheet = (props) => {
                                             />
                                         </Col>
                                         <Col sm="1" className="mx-4 ">{/*Go_Button  */}
-                                            {/* {pageMode === mode.defaultsave ?
-                                            (orderItemTable.length === 0) ? */}
                                             < Go_Button onClick={(e) => goButtonHandler()} />
-                                            {/* : */}
-                                            {/* <Change_Button onClick={(e) => dispatch(GoButton_For_Order_AddSuccess([]))} />
-                                            : null
-                                        } */}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -551,6 +508,7 @@ const LoadingSheet = (props) => {
                                                     keyField={"id"}
                                                     bordered={true}
                                                     striped={false}
+                                                    selectRow={selectAllCheck()}
                                                     noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                     classes={"table align-middle table-nowrap table-hover"}
                                                     headerWrapperClasses={"thead-light"}

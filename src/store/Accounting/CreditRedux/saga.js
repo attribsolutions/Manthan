@@ -30,7 +30,7 @@ import {
   SAVE_CREDIT,
   UPDATE_CREDIT_ID
 } from "./actionType";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, convertDatefunc, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 
 function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
@@ -43,8 +43,16 @@ function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
 
 function* Get_Credit_List_GenFunc(data) {                                // getList API
   try {
+    debugger
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
-    yield put(GetCreditListSuccess(response.Data));
+    const newList = yield response.Data.map((i) => {
+      debugger
+      var date = convertDatefunc(i.CRDRNoteDate)
+      var time = convertTimefunc(i.CreatedOn)
+      i.CRDRNoteDate = (`${date} ${time}`)
+      return i
+  })
+    yield put(GetCreditListSuccess(newList));
   } catch (error) { CommonConsole(error) }
 }
 

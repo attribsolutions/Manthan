@@ -35,9 +35,7 @@ export const BilledBy = [
 export const BilledTo = [
     "Billed by",
 ]
-export const DetailsOfTransport = [
-    "Billed by",
-]
+
 
 export const Rows = (data) => {
     const { CRDRNoteItems = [] } = data
@@ -117,42 +115,29 @@ export const Rows = (data) => {
 }
 
 export const BilledByRow = (data) => {
-    let DefaultAddress = data.PartyAddress.filter( IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
-    var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
+   
     var BilledByArray = [
-        [`${data.Party}`],
+        [],
         // [`${data.PartyState}`],
-        [`${DefaultAddress[0].Address}`],
-        [`GSTIN:${data.PartyGSTIN}`],
-        [`FSSAI NO${DefaultAddress[0].FSSAINo} (Exp:${date})`],
+        [],
+        [],
+        [],
     ]
     return BilledByArray;
 }
 export const BilledToRow = (data) => {
-    let DefaultAddress = data.CustomerAddress.filter(IsDefaultAddress => IsDefaultAddress['IsDefault'] === true )
-    var date = convertDatefunc(DefaultAddress[0].FSSAIExipry)
+
     var BilledToArray = [
-        [`${data.Customer}`],
-        [`${data.CustomerState}`],
-        [`${DefaultAddress[0].Address}`],
-        [`GSTIN:${data.CustomerGSTIN}`,],
-        [`FSSAI NO:${DefaultAddress[0].FSSAINo} (Exp:${date})`],
+        [],
+        [],
+        [],
+        [],
+        [],
     ]
 
     return BilledToArray;
 }
-export const DetailsOfTransportRow = (data) => {
 
-    var DetailsOfTransportArray = [
-        ['Driver Name : Sameer'],
-        [`vehical No :MH34566`],
-        [`State:Maharashtra `],
-        [`E-way Bill :24654364633`],
-        [`INR NO :${data.FullInvoiceNumber}`]
-    ]
-
-    return DetailsOfTransportArray;
-}
 
 
 
