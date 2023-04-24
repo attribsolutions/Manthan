@@ -1,22 +1,18 @@
 import { Input } from "reactstrap"
 
 const onSelectAll = (event, allarray, a, c, v) => {
-    debugger
-    // const arr = allarray
+
     if (event) {
         allarray.forEach(ele => {
             ele.selectCheck = event
         })
-        // setArray(arr)
     } else {
         return [];
     }
 }
 
 const selectRow = (row, event) => {
-    const arr = []
     row.selectCheck = event
-    // setArray(arr)
 }
 
 export const selectAllCheck = (selected) => ({
@@ -34,7 +30,7 @@ export const selectAllCheck = (selected) => ({
         </div>
     },
     selectionRenderer: (head) => {
-        debugger
+
         return <div className="">
             <Input type="checkbox" checked={head.checked} />
         </div>
