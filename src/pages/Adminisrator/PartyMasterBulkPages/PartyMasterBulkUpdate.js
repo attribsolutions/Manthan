@@ -283,8 +283,8 @@ const PartyMasterBulkUpdate = (props) => {
 
         // dispatch(getDistrictOnState(22))
     }
-    
-  
+
+
 
 
     function divisionhandler(event, user) {
@@ -606,11 +606,11 @@ const PartyMasterBulkUpdate = (props) => {
                                     <Card style={{ marginBottom: "6px" }}>
                                         <CardBody className="c_card_header text-black">
                                             <Row>
-                                                <Col sm={4} >
-                                                    <FormGroup className=" row  " >
+                                                <Col sm={3} >
+                                                    <FormGroup className=" row" >
                                                         <Label className="mt-1"
                                                             style={{ width: "95px" }}>SelectField </Label>
-                                                        <div className="col col-6 sm-1">
+                                                        <div className="col col-7 sm-1">
                                                             <Select
                                                                 name="SelectField"
                                                                 value={val}
@@ -626,11 +626,11 @@ const PartyMasterBulkUpdate = (props) => {
                                                         </div>
                                                     </FormGroup>
                                                 </Col>
-                                                <Col sm={4} >
-                                                    <FormGroup className=" row " >
+                                                <Col sm={3} >
+                                                    <FormGroup className=" row ">
                                                         <Label className="mt-1"
-                                                            style={{ width: "110px" }}>RoutesName </Label>
-                                                        <div className="col col-6 sm-1">
+                                                            style={{ width: "104px" }}>RoutesName </Label>
+                                                        <div className="col col-7 sm-1">
                                                             <Select
                                                                 name="RoutesName"
                                                                 value={values.Routes}
@@ -649,7 +649,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                     </FormGroup>
                                                 </Col>
 
-                                                <Col sm={3} >
+                                                <Col sm={4} >
                                                     <FormGroup className=" row " >
                                                         <Label htmlFor="validationCustom01" className="mt-1"
                                                             style={{ width: "100px" }}>PartyName </Label>
@@ -671,9 +671,9 @@ const PartyMasterBulkUpdate = (props) => {
                                                         )}
                                                     </FormGroup>
                                                 </Col>
-
+                                                
                                                 <Col sm={1}>
-                                                    <div className="col col-1 ">
+                                                    <div className="col col-1 px-5">
                                                         < Go_Button onClick={(e) => goButtonHandler()} />
                                                     </div>
                                                 </Col>
