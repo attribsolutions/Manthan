@@ -250,7 +250,7 @@ const SalesReturn = (props) => {
             }
         }, ,
         {
-            text: "previous Quantity",
+            text: "Invoice Qty",
             dataField: "",
             hidden: returnMode === 2 && true,
             formatter: (cellContent, row, key) => {
@@ -768,6 +768,8 @@ const SalesReturn = (props) => {
                                             <Select
                                                 id="Customer "
                                                 name="Customer"
+                                                // closeMenuOnSelect={false}
+                                                // menuIsOpen={menuIsOpen}
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 className="react-dropdown"
@@ -826,7 +828,7 @@ const SalesReturn = (props) => {
                                                 className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Comment"
                                                 autoComplete='off'
-                                                autoFocus={true}
+                                                // autoFocus={true}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
@@ -863,12 +865,35 @@ const SalesReturn = (props) => {
 
                                         </Col>
 
-                                        <Col sm="1" className="mx-4 mt-1 ">
+                                        {/* <Col sm="1" className="mx-6 mt-1 ">
+
+                                            <Col sm="1" className="mx-6 ">                   
+                                                {(pageMode === mode.defaultsave) ?
+                                                    (TableArr.length === 0) || (returnMode === 2) ?
+                                                        <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
+                                                            onClick={(e,) => AddPartyHandler(e, "1")}
+                                                        >        <i > </i>Add</Button>
+                                                        :
+                                                        <Change_Button onClick={(e) => {
+                                                            setTableArr([])
+                                                            setState((i) => {
+                                                                let a = { ...i }
+                                                                a.values.InvoiceNumber = ""
+                                                                a.hasValid.InvoiceNumber.valid = true;
+                                                                return a
+                                                            })
+                                                        }} />
+                                                    : null
+                                                }
+
+                                            </Col>
+                                        </Col> */}
+                                        {/* <Col sm="1" className="mx-4 mt-1 ">
                                             <Label className="col-sm-1 p-2"
                                                 style={{ width: "115px", marginLeft: "0.5cm", color: " rgb(125 74 157)" }}>
                                                 OR </Label>
 
-                                        </Col>
+                                        </Col> */}
                                     </FormGroup>
                                 </Col >
                                 <Col sm="6">
@@ -892,29 +917,7 @@ const SalesReturn = (props) => {
                                             />
 
                                         </Col>
-                                        <Col sm="1" className="mx-4 mt-1 ">{/*Go_Button  */}
 
-                                            <Col sm="1" className="mx-4 ">                      {/*Go_Button  */}
-                                                {(pageMode === mode.defaultsave) ?
-                                                    (TableArr.length === 0) || (returnMode === 2) ?
-                                                        <Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
-                                                            onClick={(e,) => AddPartyHandler(e, "1")}
-                                                        >        <i > </i>Add</Button>
-                                                        :
-                                                        <Change_Button onClick={(e) => {
-                                                            setTableArr([])
-                                                            setState((i) => {
-                                                                let a = { ...i }
-                                                                a.values.InvoiceNumber = ""
-                                                                a.hasValid.InvoiceNumber.valid = true;
-                                                                return a
-                                                            })
-                                                        }} />
-                                                    : null
-                                                }
-
-                                            </Col>
-                                        </Col>
                                     </FormGroup>
                                 </Col >
 
