@@ -144,7 +144,7 @@ const UploadExcel = (props) => {
             const btnerify = document.getElementById("btn-verify")
             const btnupload = document.getElementById('btn-upload')
 
-            debugger
+             
             if (exjson.length > 0) {
                 setPreUploadjson(exjson)
                 btnerify.style.display = "none"
@@ -202,7 +202,7 @@ const UploadExcel = (props) => {
 
     const SaveHandler = (event) => {
         event.preventDefault();
-        debugger
+         
         const parArr = {}
         const outerArr = []
 
