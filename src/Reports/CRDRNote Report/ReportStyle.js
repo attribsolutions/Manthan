@@ -20,7 +20,7 @@ export const pageHeder = (doc, data) => {
     doc.setFont('Arial')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
-    doc.text('TAX INVOICE', 180, 34,)
+    doc.text('CREDIT NOTE', 180, 34,)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
 }
@@ -29,9 +29,8 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 52)  //bill by 
-    doc.text('Billed to', 280, 52) //billed to
-    doc.text('Details of Transport', 440, 52)
+    doc.text("Customer", 80, 52)  //bill by 
+    doc.text('Party', 280, 52) //billed to
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
@@ -44,47 +43,6 @@ export const reportHeder1 = (doc, data) => {
     doc.line(220, 145, 220, 43);//vertical right 2
 
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
-
-    // var options3 = {
-    //     margin: {
-    //         top: 45, left: 35, right: 35, //bottom:100 
-    //     },
-    //     showHead: 'always',
-    //     theme: 'plain',
-    //     styles: {
-    //         overflow: 'linebreak',
-    //         fontSize: 8,
-    //         height: 0,
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 8,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //             columnWidth: 185,
-    //             halign: 'lfet',
-    //         },
-    //         1: {
-    //             columnWidth: 188,
-    //             halign: 'left'
-    //         },
-    //         2: {
-    //             columnWidth: 162,
-    //             halign: 'left',
-    //         },
-
-    //     },
-    //     tableLineColor: "black",
-
-    //     startY: 55,
-
-    // };
 
     var BilledByStyle = {
         margin: {
@@ -199,9 +157,6 @@ export const reportHeder1 = (doc, data) => {
     console.log("Second",doc.previousAutoTable.finalY)
     priLength()
 
-    doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    console.log("third",doc.previousAutoTable.finalY)
-    priLength()
 
 
 }
@@ -228,16 +183,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 }
-export const reportHeder4 = (doc, data) => {
 
-    doc.setFont('Tahoma')
-    doc.setFontSize(8)
-    doc.setFont(undefined, 'bold')
-    // var time = convertTimefunc(i.CreatedOn)
-    //   i.GRNDate = (`${date} ${time}`)
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 30, 23) //Invoice Id
-    doc.text(`Invoice Date: ${data.InvoiceDate}`, 415, 35) //Invoice date
-}
 
 export const reportFooter = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
@@ -250,45 +196,45 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
+debugger
+    // const a = data.InvoiceItems.map((data) => ({
+    //     CGST: Number(data.CGST),
+    //     SGST: Number(data.SGST),
+    //     BasicAmount: Number(data.BasicAmount),
+    // }));
+    // var totalCGST = 0;
+    // var totalSGST = 0;
+    // var TotalBasicAmount = 0;
+    // a.forEach(arg => {
+    //     totalCGST += arg.CGST;
+    //     totalSGST += arg.SGST;
+    //     TotalBasicAmount += arg.BasicAmount
 
-    const a = data.InvoiceItems.map((data) => ({
-        CGST: Number(data.CGST),
-        SGST: Number(data.SGST),
-        BasicAmount: Number(data.BasicAmount),
-    }));
-    var totalCGST = 0;
-    var totalSGST = 0;
-    var TotalBasicAmount = 0;
-    a.forEach(arg => {
-        totalCGST += arg.CGST;
-        totalSGST += arg.SGST;
-        TotalBasicAmount += arg.BasicAmount
+    // });
 
-    });
-
-    const TotalGST = totalCGST + totalSGST;
+    // const TotalGST = totalCGST + totalSGST;
 
     doc.setFontSize(8)
 
     doc.text(`CGST:`, 440, 310,)
-    doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
+    // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
     doc.text(`SGST:`, 440, 322,)
-    doc.text(`${totalSGST.toFixed(2)}`, 560, 322, 'right')
+    // doc.text(`${totalSGST.toFixed(2)}`, 560, 322, 'right')
 
     doc.text(`TotalGST:`, 440, 334,)
-    doc.text(` ${TotalGST.toFixed(2)}`, 560, 334, 'right')
+    // doc.text(` ${TotalGST.toFixed(2)}`, 560, 334, 'right')/
 
     doc.text(`BasicAmount:`, 440, 346,)
-    doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 346, 'right')
+    // doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 346, 'right')/
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount :`, 439, 365,)
-    const GrandTotal = Math.round(data.GrandTotal)
-    const Total = numberWithCommas((GrandTotal).toFixed(2))
-    doc.text(`${Total}`, 560, 365, 'right')
+    // const GrandTotal = Math.round(data.GrandTotal)
+    // const Total = numberWithCommas((GrandTotal).toFixed(2))
+    // doc.text(`${Total}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -297,9 +243,9 @@ export const reportFooter = (doc, data) => {
     doc.text(`Prepared by `, 35, 785,)
     doc.text(`Received By `, 180, 785,)
     doc.setFontSize(10)
-    doc.text(`${data.PartyName} `, 390, 785,)
+    // doc.text(`${data.PartyName} `, 390, 785,)
     doc.setFontSize(10)
-    doc.text(`${data.CustomerName} `, 140, 811,)
+    // doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
@@ -310,8 +256,7 @@ export const reportFooter = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 305,)
     doc.addFont("Arial", 'Normal')
-    doc.text(`${stringNumber}`, 65, 305,)
-
+    // doc.text(`${stringNumber}`, 65, 305,)
     // const optionsTable4 = {
     //     margin: {
     //         top: 100, left: 50, right: 30,
@@ -362,8 +307,6 @@ export const reportFooter = (doc, data) => {
     // doc.autoTable(optionsTable4,);
 }
 export const tableBody = (doc, data) => {
-      
-      
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[4].raw === "isaddition") {
@@ -385,9 +328,7 @@ export const tableBody = (doc, data) => {
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
                 data1.row.cells[5].colSpan = 2
-                data1.row.cells[7].colSpan = 2
-
-                
+                data1.row.cells[7].colSpan = 2   
             }
         },
         margin: {
@@ -456,14 +397,10 @@ export const tableBody = (doc, data) => {
                 fontStyle: 'bold',
                 halign: 'right',
             },
-
-
         },
         tableLineColor: "black",
 
         startY: initial_y,// 45,
-
-
         // startY:60
     };
 
@@ -488,6 +425,13 @@ export const tableBody = (doc, data) => {
     })
 }
 
+
+
+
+
+
+
+
 export const pageFooter = (doc, data, islast = 0, array = []) => {
 
     let finalY = doc.previousAutoTable.finalY;
@@ -495,12 +439,12 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
         pageBorder(doc)
         reportFooter(doc, data)
         pageHeder(doc, data)
-        reportHeder3(doc, data)
+     
     } else {
         pageBorder(doc)
         reportFooter(doc, data)
         pageHeder(doc, data)
-        reportHeder3(doc, data)
+    
     }
 
     const pageCount = doc.internal.getNumberOfPages()

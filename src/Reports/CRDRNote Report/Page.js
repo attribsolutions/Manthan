@@ -8,11 +8,15 @@ var pageHeder = function (doc, data) {
     style.pageHeder(doc, data);                            // Report Title 
     style.reportHeder1(doc, data);
     style.reportHeder2(doc, data);
-    style.reportHeder3(doc, data);                          //Invoice ID , Date 
+    // style.reportHeder3(doc, data);                          //Invoice ID , Date 
 };
 
 function reportBody(doc, data) {
+    if (data.NoteType==="Goods CreditNote") {
     style.tableBody(doc, data);                              //table Body
+    }
+
+
     // style.pageBorder(doc, data);                           // Page Border
     // style.pageFooter(doc, data, islast, array);              //page Footer
 
