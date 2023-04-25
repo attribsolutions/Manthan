@@ -14,14 +14,14 @@ export const columns1 = [
     "HSN Item Name",
     "Quantity",
     "Rate",
-    "Basic Amount",
+    "Basic Amt",
     "CGST %",
-    "CGST Amount",
+    "CGST Amt",
     "SGST %",
-    "SGST Amount",
+    "SGST Amt",
     "Debit note",
     "Credit note",
-    "Total Amt"
+    "Total Amt" 
 ];
 
 
@@ -36,9 +36,9 @@ export const Details = [
 ]
 
 export const Rows1 = (data) => {
-    debugger
-    const { InvoiceItems = [] } = data
-    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    
+    const { CRDRNoteItems = [] } = data
+    CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
     let totalBasicAmount = 0
@@ -47,7 +47,7 @@ export const Rows1 = (data) => {
     let totalAmount = 0
     let totalQuantity = 0
 
-    InvoiceItems.forEach((element, key) => {
+    CRDRNoteItems.forEach((element, key) => {
         const tableitemRow = [
             element.ItemName,
             element.MRP,
@@ -106,7 +106,7 @@ export const Rows1 = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (key === InvoiceItems.length - 1) {
+        if (key === CRDRNoteItems.length - 1) {
             returnArr.push(totalrow());
         }
     })
@@ -116,7 +116,7 @@ export const Rows1 = (data) => {
 
 
 export const Rows = (data) => {
-    
+    debugger
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -132,9 +132,9 @@ export const Rows = (data) => {
         const tableitemRow = [
             date,
             element.FullInvoiceNumber,
-            element.GrandTotal,
-            element.PaidAmount,
-            BalanceAmount,
+            Number(element.GrandTotal).toFixed(2),
+            Number(element.PaidAmount).toFixed(2),
+            Number (BalanceAmount).toFixed(2),
         ];
      
         function totalLots() {
@@ -147,12 +147,12 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
-                "",
+                "Total Amoumt Paid",
                 "",
                 "",
                 // `Total:${parseFloat(Total).toFixed(2)}`,
-                `PaidAmt:${parseFloat(TotalPaidAmount).toFixed(2)}`,
-                `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
+                `${parseFloat(TotalPaidAmount).toFixed(2)}`,
+                // `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
              
               
               
@@ -186,10 +186,10 @@ export const BilledByRow = (data) => {
 
     var BilledToArray = [
         [`Party Name :${data.Party}`],
-        [`Party GSTIN:${data.PartyGSTIN}`],
+        [`Party GSTIN :${data.PartyGSTIN}`],
         [`State :${data.PartyState}`],
-        [`Address:${data.PartyAddress}`],
-        [`PartyFSSAINo:${data.PartyFSSAINo}`],
+        [`Address :${data.PartyAddress}`],
+        [`PartyFSSAINo :${data.PartyFSSAINo}`],
 
     ]
 
@@ -206,10 +206,10 @@ export const BilledByRow = (data) => {
 }
 export const BilledToRow = (data) => {
     var BilledByArray = [
-        [`Customer Name: ${data.Customer}`],
-        [`Customer GSTIN: ${data.CustomerGSTIN}`],
+        [`Customer Name :${data.Customer}`],
+        [`Customer GSTIN:${data.CustomerGSTIN}`],
         [`State :${data.CustomerState}`],
-        [`Address:${data.CustomerAddress}`],
+        [`Address :${data.CustomerAddress}`],
         [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
     ]
     return BilledByArray;
@@ -230,10 +230,10 @@ export const DetailsRow = (data) => {
 
     const Date = concatDateAndTime(data.CRDRNoteDate, data.CreatedOn)
     var DetailsArray = [
-        [`Note Date: ${Date}`],
-        [`Note NO: ${data.NoteNo}`],
-        [`Note Reason : ${data.NoteReason}`],
-        [`Note Type: ${data.NoteType}`],
+        [`Note Date :${Date}`],
+        [`Note NO :${data.NoteNo}`],
+        [`Note Reason :${data.NoteReason}`],
+        [`Note Type ${data.NoteType}`],
         // [`Narration : ${data.Narration}`],
 
     ]
