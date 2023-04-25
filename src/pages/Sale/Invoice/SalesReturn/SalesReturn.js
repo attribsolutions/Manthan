@@ -670,19 +670,20 @@ const SalesReturn = (props) => {
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
-            if ((i.Rate === undefined)) {
-                invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
-            };
-            if ((i.MRP === undefined)) {
-                invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
-            };
+
             if ((i.Unit === undefined)) {
                 invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
-            };
-            if ((i.GST === undefined)) {
+            }
+            else if ((i.MRP === undefined)) {
+                invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
+            }
+            else if ((i.GST === undefined)) {
                 invalidMsg1.push(`${i.ItemName} : GST Is Required`)
-            };
-            if ((i.BatchCode === undefined)) {
+            }
+            else if ((i.Rate === undefined)) {
+                invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
+            }
+            else if ((i.BatchCode === undefined)) {
                 invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
             };
         })
