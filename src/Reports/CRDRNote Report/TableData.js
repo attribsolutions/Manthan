@@ -147,7 +147,7 @@ export const Rows = (data) => {
 
         function totalrow() {
             return [
-                "Total Amoumt Paid",
+                "Total Amount Paid",
                 "",
                 "",
                 // `Total:${parseFloat(Total).toFixed(2)}`,
@@ -185,11 +185,11 @@ export const Rows = (data) => {
 export const BilledByRow = (data) => {
 
     var BilledToArray = [
-        [`Party Name :${data.Party}`],
-        [`Party GSTIN :${data.PartyGSTIN}`],
+        [`Name :${data.Party}`],
+        [`GSTIN :${data.PartyGSTIN}`],
         [`State :${data.PartyState}`],
         [`Address :${data.PartyAddress}`],
-        [`PartyFSSAINo :${data.PartyFSSAINo}`],
+        [`FSSAINo :${data.PartyFSSAINo}`],
 
     ]
 
@@ -206,11 +206,11 @@ export const BilledByRow = (data) => {
 }
 export const BilledToRow = (data) => {
     var BilledByArray = [
-        [`Customer Name :${data.Customer}`],
-        [`Customer GSTIN:${data.CustomerGSTIN}`],
+        [`Name :${data.Customer}`],
+        [`GSTIN:${data.CustomerGSTIN}`],
         [`State :${data.CustomerState}`],
         [`Address :${data.CustomerAddress}`],
-        [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
+        [`FSSAINo :${data.CustomerFSSAINo}`],
     ]
     return BilledByArray;
 
@@ -233,7 +233,7 @@ export const DetailsRow = (data) => {
         [`Note Date :${Date}`],
         [`Note NO :${data.NoteNo}`],
         [`Note Reason :${data.NoteReason}`],
-        [`Note Type ${data.NoteType}`],
+        [`Note Type :${data.NoteType}`],
         // [`Narration : ${data.Narration}`],
 
     ]
