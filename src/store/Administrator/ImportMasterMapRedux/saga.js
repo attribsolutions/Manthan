@@ -7,7 +7,9 @@ import {
   ImportMaster_Map_Customer_GoButton_API,
   ImportMaster_Map_Customer_Save_API,
   ImportMaster_Map_Item_GoButton_API,
+  ImportMaster_Map_Item_Save_API,
   ImportMaster_Map_Unit_GoButton_API,
+  ImportMaster_Map_Unit_Save_API,
 } from "../../../helpers/backend_helper";
 import {
   GO_BUTTON_IMPORT_MASTER_MAP,
@@ -20,24 +22,59 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
 
   const { mapType } = config
 
-  let response = []
   try {
+    let newResp = []
     if (mapType === 1) {
-      response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
+      const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
+      newResp = response.Data.map(i => ({
+        "id": i.id,
+        "party": i.Party_id,
+        "fieldName": i.CustomerName,
+        "fieldId": i.Customer,
+        "mapValue": i.MapCustomer,
+      }))
+
     } else if (mapType === 2) {
-      response = yield call(ImportMaster_Map_Item_GoButton_API, config);
+      const response = yield call(ImportMaster_Map_Item_GoButton_API, config);
+      newResp = response.Data.map(i => ({
+        "id": i.id,
+        "party": i.Party_id,
+        "fieldName": i.Name,
+        "fieldId": i.Item_id,
+        "mapValue": i.MapItem,
+      }))
     } else {
-      response = yield call(ImportMaster_Map_Unit_GoButton_API, config);
+      const response = yield call(ImportMaster_Map_Unit_GoButton_API, config);
+      newResp = response.Data.map(i => ({
+        "id": i.id,
+        "party": i.Party_id,
+        "fieldName": i.Name,
+        "fieldId": i.Name,
+        "mapValue": i.MapUnit,
+      }))
     }
-    yield put(GoButton_ImportMasterMap_Success(response.Data));
+
+    yield put(GoButton_ImportMasterMap_Success(newResp));
 
   } catch (error) { CommonConsole(error) }
 }
 
-function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {              // Save API
+function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
+  const { mapType } = config
   try {
-    const response = yield call(ImportMaster_Map_Customer_Save_API, config);
-    yield put(save_ImportMasterMap_Success(response));
+    if (mapType === 1) {
+      const response = yield call(ImportMaster_Map_Customer_Save_API, config);
+      yield put(save_ImportMasterMap_Success(response));
+    }
+    else if (mapType === 1) {
+      const response = yield call(ImportMaster_Map_Item_Save_API, config);
+      yield put(save_ImportMasterMap_Success(response));
+    }
+    else {
+      const response = yield call(ImportMaster_Map_Unit_Save_API, config);
+      yield put(save_ImportMasterMap_Success(response));
+    }
+
   } catch (error) { CommonConsole(error) }
 }
 

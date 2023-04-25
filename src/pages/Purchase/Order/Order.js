@@ -1137,7 +1137,7 @@ const Order = (props) => {
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                module={"Order"} onClick={saveHandeller}
+                                onClick={saveHandeller}
                             />
                         </div>
                             : <div className="row save1"></div>

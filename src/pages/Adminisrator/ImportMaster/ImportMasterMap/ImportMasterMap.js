@@ -14,8 +14,8 @@ import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch"
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
-import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -39,10 +39,8 @@ const ImportMasterMap = (props) => {
     const [partySelect, SetPartySelect] = useState("")
 
     const fileds = {
-        id: "",
         Party: "",
-        ImportType: "",
-        PatternType: ""
+        MapType: "",
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -63,9 +61,8 @@ const ImportMasterMap = (props) => {
         goButtonArr: state.ImportMasterMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
-
     useEffect(() => {
-        const page_Id = pageId.IMPORT_FIELD_MAP
+        const page_Id = pageId.IMPORT_MASTER_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
@@ -77,8 +74,9 @@ const ImportMasterMap = (props) => {
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+    const values = { ...state.values }
+    const { isError } = state;
     const { fieldLabel } = state;
-
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -129,15 +127,15 @@ const ImportMasterMap = (props) => {
 
     const mapTypeDropdown_Options = [{
         value: 1,
-        label: "Item",
-    },
-    {
-        value: 2,
         label: "Party",
     },
     {
+        value: 2,
+        label: "Item",
+    },
+    {
         value: 3,
-        label: "Customer",
+        label: "Unit",
     }]
 
 
@@ -145,15 +143,11 @@ const ImportMasterMap = (props) => {
     const pagesListColumns = [
         {
             text: "Field Name",
-            dataField: "Party_id",
-        },
-        {
-            text: "Data Type",
-            dataField: "CustomerName",
+            dataField: "fieldName",
         },
         {
             text: "Related Key Field",
-            dataField: "Value",
+            dataField: "mapValue",
             formatter: (cellContent, row) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -175,14 +169,18 @@ const ImportMasterMap = (props) => {
 
     ];
 
-    async function goButtonHandler() {
-        // const jsonBody = JSON.stringify({
-           let  partyId= partySelect.value;
-           let  mapType= mapTypeSelect.value;
-           
-        //     CompanyID: loginCompanyID()
-        // })
-        dispatch(GoButton_ImportMasterMap({ partyId,mapType }))
+    async function goButtonHandler(event) {
+        event.preventDefault();
+        const btnId = event.target.id
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
+                let partyId = values.Party.value;
+                let mapType = values.MapType.value;
+
+                dispatch(GoButton_ImportMasterMap({ partyId, mapType }))
+            }
+        } catch (error) { }
     };
 
     function change_ButtonHandler(e) {
@@ -192,24 +190,63 @@ const ImportMasterMap = (props) => {
     function SaveHandler(event) {
         event.preventDefault();
 
-        let jsonArr = []
 
-        goButtonArr.forEach(i => {
-            if ((!(i.Value === '') && !(i.Value === null))) {
-                const obj = {
-                    Value: i.Value,
-                    ImportField: i.id,
-                    Party: partySelect.value,
-                    Company: loginCompanyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
+        function funcForParty() {
+            let jsonArr = []
+            goButtonArr.forEach(i => {
+                if ((!(i.mapValue === '') && !(i.mapValue === null))) {
+                    jsonArr.push({
+                        "Party": i.party,
+                        "Customer": i.fieldId,
+                        "MapCustomer": i.mapValue,
+                        "CreatedBy": loginUserID(),
+                        "UpdatedBy": loginUserID()
+
+                    })
                 }
-                jsonArr.push(obj)
-            }
-        })
+            })
+            return jsonArr
+        }
 
-        const jsonBody = JSON.stringify(jsonArr);
-        dispatch(save_ImportMasterMap({ jsonBody }));
+        function funcForItem() {
+            let jsonArr = []
+            goButtonArr.forEach(i => {
+                if ((!(i.mapValue === '') && !(i.mapValue === null))) {
+                    jsonArr.push({
+                        "Party": i.party,
+                        "Item": i.fieldId,
+                        "MapItem": i.mapValue,
+                        "CreatedBy": loginUserID(),
+                        "UpdatedBy": loginUserID()
+                    })
+                }
+            })
+            return jsonArr
+
+        }
+
+
+        function funcForUnit() {
+            let jsonArr = []
+            goButtonArr.forEach(i => {
+                if ((!(i.mapValue === '') && !(i.mapValue === null))) {
+                    jsonArr.push({
+                        "Party": i.party,
+                        "Unit": i.fieldName,
+                        "MapUnit": i.mapValue,
+                        "CreatedBy": loginUserID(),
+                        "UpdatedBy": loginUserID()
+                    })
+                }
+            })
+            return jsonArr
+        }
+        let mapType = values.MapType.value;
+        const jsonBody = JSON.stringify(
+            (mapType === 1) ? funcForParty() :
+                (mapType === 2) ? funcForItem() : funcForUnit());
+
+        dispatch(save_ImportMasterMap({ jsonBody, mapType, }));
 
     };
 
@@ -218,11 +255,12 @@ const ImportMasterMap = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
 
-                <form onSubmit={(event) => SaveHandler(event)} noValidate>
-                    <div className="page-content">
 
-                        <div className="px-2 c_card_header text-black" >
-                            <div className="px-2   c_card_filter text-black" >
+                <div className="page-content">
+
+                    <div className="px-2 c_card_header text-black" >
+                        <div className="px-2   c_card_filter text-black" >
+                            <form onSubmit={(event) => goButtonHandler(event)} noValidate>
                                 <div className="row" >
                                     <Col sm="5">
                                         <FormGroup className="mb-2 row mt-3 " >
@@ -231,12 +269,19 @@ const ImportMasterMap = (props) => {
                                                 style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
                                             <Col style={{ maxWidth: "300px" }} >
                                                 <Select
-                                                    classNamePrefix="select2-Customer"
+                                                    name="Party"
+                                                    value={values.Party}
+                                                    isSearchable={true}
                                                     isDisabled={!(goButtonArr.length === 0) && true}
-                                                    value={partySelect}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
                                                     options={partyDropdown_Options}
-                                                    onChange={(e) => { SetPartySelect(e) }}
+                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                 />
+                                                {isError.Party.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.Party}</small></span>
+                                                )}
+
                                             </Col>
                                         </FormGroup>
                                     </Col >
@@ -244,15 +289,22 @@ const ImportMasterMap = (props) => {
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
 
-                                                style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
+                                                style={{ maxWidth: "115px" }}>{fieldLabel.MapType}</Label>
                                             <Col style={{ maxWidth: "300px" }} >
                                                 <Select
-                                                    classNamePrefix="select2-Customer"
+                                                    name="MapType"
+                                                    value={values.MapType}
+                                                    isSearchable={true}
                                                     isDisabled={!(goButtonArr.length === 0) && true}
-                                                    value={mapTypeSelect}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
                                                     options={mapTypeDropdown_Options}
-                                                    onChange={(e) => { SetMapTypeSelect(e) }}
+                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                 />
+                                                {isError.MapType.length > 0 && (
+                                                    <span className="text-danger f-8"><small>{isError.MapType}</small></span>
+                                                )}
+
                                             </Col>
                                         </FormGroup>
                                     </Col >
@@ -261,61 +313,63 @@ const ImportMasterMap = (props) => {
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonArr.length === 0) ?
-                                            < Go_Button onClick={goButtonHandler} />
+                                            < Go_Button onClick={goButtonHandler} type="submit" />
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }
 
                                     </Col>
                                 </div>
-
-                            </div>
-
+                            </form>
                         </div>
 
-                        <div className="mt-1">
-
-                            <ToolkitProvider
-                                keyField="id"
-                                data={goButtonArr}
-                                columns={pagesListColumns}
-
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <div className="table">
-                                            <BootstrapTable
-                                                bordered={true}
-                                                striped={false}
-                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                classes={"table align-middle  table-hover"}
-                                                headerWrapperClasses={"thead-light"}
-
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-
-
-                                    </React.Fragment>
-                                )
-                                }
-                            </ToolkitProvider>
-
-
-                        </div>
                     </div>
 
+                    <div className="mt-1">
+
+                        <ToolkitProvider
+                            keyField="id"
+                            data={goButtonArr}
+                            columns={pagesListColumns}
+
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <div className="table">
+                                        <BootstrapTable
+                                            bordered={true}
+                                            striped={false}
+                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                            classes={"table align-middle  table-hover"}
+                                            headerWrapperClasses={"thead-light"}
+
+                                            {...toolkitProps.baseProps}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+
+
+                                </React.Fragment>
+                            )
+                            }
+                        </ToolkitProvider>
+
+
+                    </div>
+                </div>
+                <form onSubmit={(event) => SaveHandler(event)} noValidate>
                     <FormGroup>
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                            {(goButtonArr.length > 0) && <SaveButton pageMode={pageMode}
-                                userAcc={userPageAccessState}
-                                module={"LoadingSheet"}
-                            />}
+                            {(goButtonArr.length > 0) &&
+                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                    // module={"Import Master Map"} 
+                                    />
+                            }
                         </Col>
                     </FormGroup >
                 </form>
+
             </React.Fragment>
         );
     }
