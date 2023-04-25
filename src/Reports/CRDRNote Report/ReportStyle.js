@@ -478,7 +478,7 @@ export const tableBodyforCredit = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
             
-            if (data1.row.cells[0].raw === "Total Amoumt Paid") {
+            if (data1.row.cells[0].raw === "Total Amount Paid") {
               
                 data1.row.cells[0].colSpan = 3
                  
