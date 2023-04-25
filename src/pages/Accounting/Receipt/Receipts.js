@@ -56,7 +56,7 @@ const Receipts = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [ID, setID] = useState("");
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    console.log(pageMode)
+
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -300,8 +300,8 @@ const Receipts = (props) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <CInput
-                        key={`Quantity${row.FullInvoiceNumber}${key}`}
-                        id={`Quantity${row.FullInvoiceNumber}`}
+                        key={`Quantity-${row.Invoice}`}
+                        id={`Quantity-${row.Invoice}`}
                         pattern={decimalRegx}
                         defaultValue={row.Calculate}
                         autoComplete="off"
@@ -342,7 +342,7 @@ const Receipts = (props) => {
     }
 
     function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
-
+        debugger
         let input = event.target.value
 
         let v1 = Number(row.BalanceAmount);
@@ -370,8 +370,8 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event) {
+        debugger
         let input = event.target.value
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
         let sum = 0
         Data.forEach(element => {
             sum = sum + Number(element.BalanceAmount)
@@ -388,13 +388,13 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-
+        debugger
         let value = Number(val1)
 
         let Amount = value
 
         Data.map((index) => {
-
+            debugger
             let amt = Number(index.BalanceAmount)
             if ((Amount > amt) && !(amt === 0)) {
 
@@ -409,7 +409,7 @@ const Receipts = (props) => {
                 index.Calculate = 0;
             }
             try {
-                document.getElementById(`Quantity${index.FullInvoiceNumber}`).value = index.Calculate
+                document.getElementById(`Quantity-${index.Invoice}`).value = index.Calculate
             } catch (e) { }
         })
     }
@@ -843,7 +843,7 @@ const Receipts = (props) => {
 
                         <ToolkitProvider
 
-                            keyField="id"
+                            keyField="Invoice"
                             data={Data}
                             columns={pagesListColumns}
 
@@ -853,7 +853,7 @@ const Receipts = (props) => {
                                 <React.Fragment>
                                     <div className="table">
                                         <BootstrapTable
-                                            keyField={"id"}
+                                            keyField={"Invoice"}
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
@@ -879,7 +879,6 @@ const Receipts = (props) => {
                                         onClick={saveHandeller}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
-                                        module={"Receipts"}
                                     />
 
                                 </Col>
