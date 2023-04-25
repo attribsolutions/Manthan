@@ -35,10 +35,10 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text("Customer", 80, 52)  //bill by 
-    doc.text('Party', 280, 52) //billed to
+    doc.text("Party", 80, 52)  //bill by 
+    doc.text('Customer', 280, 52) //billed to
     doc.text('Details of Note', 440, 52)
-
+    
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
@@ -351,14 +351,14 @@ export const reportFooterForCredit = (doc, data) => {
     // doc.text(`CGST:`, 440, 310,)
     // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
-    doc.text(`Paid Amount:`, 440, 322,)
-    doc.text(`${PaidAmount.toFixed(2)}`, 560, 322, 'right')
+    // doc.text(`Paid Amount:`, 440, 322,)
+    // doc.text(`${PaidAmount.toFixed(2)}`, 560, 322, 'right')
 
-    doc.text(`Balance Amount:`, 440, 334,)
-    doc.text(` ${BalAmt.toFixed(2)}`, 560, 334, 'right')
+    // doc.text(`Balance Amount:`, 440, 334,)
+    // doc.text(` ${BalAmt.toFixed(2)}`, 560, 334, 'right')
 
-    doc.text(`Total Amount:`, 440, 346,)
-    doc.text(`${GrandTotal.toFixed(2)}`, 560, 346, 'right')
+    // doc.text(`Total Amount:`, 440, 346,)
+    // doc.text(`${GrandTotal.toFixed(2)}`, 560, 346, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
