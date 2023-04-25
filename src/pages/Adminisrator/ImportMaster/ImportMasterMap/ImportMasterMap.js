@@ -19,8 +19,13 @@ import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/C
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess, save_ImportFiledMap, save_ImportFiledMap_Success } from "../../../../store/Administrator/ImportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import {
+    GoButton_ImportMasterMap,
+    GoButton_ImportMasterMap_Success,
+    save_ImportMasterMap,
+    save_ImportMasterMap_Success
+} from "../../../../store/Administrator/ImportMasterMapRedux/action";
 
 
 const ImportMasterMap = (props) => {
@@ -51,11 +56,11 @@ const ImportMasterMap = (props) => {
         goButtonArr,
         partyList
     } = useSelector((state) => ({
-        postMsg: state.ImportFieldMap_Reducer.postMsg,
+        postMsg: state.ImportMasterMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goButtonArr: state.ImportFieldMap_Reducer.addGoButton,
+        goButtonArr: state.ImportMasterMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
@@ -64,7 +69,7 @@ const ImportMasterMap = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyListAPI());
-        dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+        dispatch(GoButton_ImportMasterMap_Success([]));
 
     }, []);
 
@@ -100,7 +105,7 @@ const ImportMasterMap = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(save_ImportFiledMap_Success({ Status: false }))
+            dispatch(save_ImportMasterMap_Success({ Status: false }))
             CustomAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -109,7 +114,7 @@ const ImportMasterMap = (props) => {
 
         }
         else if (postMsg.Status === true) {
-            dispatch(save_ImportFiledMap_Success({ Status: false }))
+            dispatch(save_ImportMasterMap_Success({ Status: false }))
             CustomAlert({
                 Type: 4,
                 Message: JSON.stringify(postMessage.Message),
@@ -140,11 +145,11 @@ const ImportMasterMap = (props) => {
     const pagesListColumns = [
         {
             text: "Field Name",
-            dataField: "FieldName",
+            dataField: "Party_id",
         },
         {
             text: "Data Type",
-            dataField: "ControlTypeName",
+            dataField: "CustomerName",
         },
         {
             text: "Related Key Field",
@@ -171,15 +176,17 @@ const ImportMasterMap = (props) => {
     ];
 
     async function goButtonHandler() {
-        const jsonBody = JSON.stringify({
-            PartyID: partySelect.value,
-            CompanyID: loginCompanyID()
-        })
-        dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
+        // const jsonBody = JSON.stringify({
+           let  partyId= partySelect.value;
+           let  mapType= mapTypeSelect.value;
+           
+        //     CompanyID: loginCompanyID()
+        // })
+        dispatch(GoButton_ImportMasterMap({ partyId,mapType }))
     };
 
     function change_ButtonHandler(e) {
-        dispatch(GoButton_ImportFiledMap_AddSuccess([]))
+        dispatch(GoButton_ImportMasterMap_Success([]))
     }
 
     function SaveHandler(event) {
@@ -202,7 +209,7 @@ const ImportMasterMap = (props) => {
         })
 
         const jsonBody = JSON.stringify(jsonArr);
-        dispatch(save_ImportFiledMap({ jsonBody }));
+        dispatch(save_ImportMasterMap({ jsonBody }));
 
     };
 
@@ -217,7 +224,7 @@ const ImportMasterMap = (props) => {
                         <div className="px-2 c_card_header text-black" >
                             <div className="px-2   c_card_filter text-black" >
                                 <div className="row" >
-                                <Col sm="5">
+                                    <Col sm="5">
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
 
