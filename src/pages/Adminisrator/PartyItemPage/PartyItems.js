@@ -227,12 +227,12 @@ const PartyItems = (props) => {
 
     const tableColumns = [
         {
-            text: "ItemID",
+            text: "Item ID",
             dataField: "Item",
             sort: true,
         },
         {
-            text: "ItemName",
+            text: "Item Name",
             dataField: "ItemName",
             sort: true,
         },

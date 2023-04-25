@@ -219,7 +219,7 @@ const Receipts = (props) => {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            // dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -304,9 +304,6 @@ const Receipts = (props) => {
                         id={`Quantity${row.FullInvoiceNumber}`}
                         pattern={decimalRegx}
                         defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -448,7 +445,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-         
+
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -830,7 +827,7 @@ const Receipts = (props) => {
                                                 className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Description"
                                                 autoComplete='off'
-                                                autoFocus={true}
+                                                // autoFocus={true}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
                                             />
                                             {isError.Description.length > 0 && (

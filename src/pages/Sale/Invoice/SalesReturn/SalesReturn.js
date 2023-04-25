@@ -240,12 +240,11 @@ const SalesReturn = (props) => {
 
     const pagesListColumns = [
         {
-            text: "ItemName",
+            text: "Item Name",
             dataField: "",
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.ItemName.label}</Label>
-
                 )
             }
         }, ,
@@ -256,7 +255,6 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
                 return (
                     <Label>{row.Quantity}</Label>
-
                 )
             }
         },
@@ -312,9 +310,6 @@ const SalesReturn = (props) => {
                 return (
                     <>
                         <span style={{ justifyContent: 'center', width: "100px" }}>
-                            {/* {(returnMode === 1) ?
-                                <Label>{row.RowData.MRPValue}</Label>
-                                : */}
                             <Select
                                 id={`MRP${key}`}
                                 name="MRP"
@@ -326,7 +321,6 @@ const SalesReturn = (props) => {
                                 options={row.ItemMRPDetails}
                                 onChange={(event) => { row.MRP = event.value }}
                             />
-                            {/* } */}
                         </span></>)
             }
         },
@@ -336,9 +330,6 @@ const SalesReturn = (props) => {
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
-                // if(row.GSTChange===undefined){
-                //     row.GSTChange={}
-                // }
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <Select
                         id={`GST${key}`}
@@ -422,7 +413,7 @@ const SalesReturn = (props) => {
             }
         },
         {
-            text: "ItemComment",
+            text: "Item Comment",
             dataField: "",
             classes: () => "sales-return-row",
             formatter: (cellContent, row, key) => {
@@ -434,7 +425,6 @@ const SalesReturn = (props) => {
                         defaultChecked={row.ItemComment}
                         type="text"
                         className="col col-sm text-center"
-                        // onChange={e => { SelectAll(e.target.checked, row, key) }}
                         onChange={(event) => { row.ItemComment = event.target.value }}
                     />
                 </span>)
@@ -447,14 +437,6 @@ const SalesReturn = (props) => {
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    {/* <Input type="file"
-                        className="form-control "
-                        // value={FileName}
-                        name="image"
-                        id="file"
-                        accept=".jpg, .jpeg, .png ,.pdf"
-                    // onChange={(event) => { onchangeHandler(event) }}
-                    /> */}
                     <div>
                         <div className="btn-group btn-group-example mb-3" role="group">
                             <Input
@@ -480,6 +462,7 @@ const SalesReturn = (props) => {
         {
             text: "Action ",
             dataField: "",
+            hidden: (returnMode === 1) && true,
             formatter: (cellContent, row, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -505,18 +488,15 @@ const SalesReturn = (props) => {
     async function AddPartyHandler(e, type) {
 
         const invalidMsg1 = []
-        if ((returnMode === 0) && (values.ItemName === '') && (type === 'add')) {
-            invalidMsg1.push(`  Select Item Name`)
+        if ((values.ItemName === '') && (type === 'add')) {
+            invalidMsg1.push(`Select Item Name`)
         }
-        if ((returnMode === 0) && (values.InvoiceNumber === '') && (type === 'Select')) {
-            invalidMsg1.push(`  Select Invoice No.`)
+        if ((values.InvoiceNumber === '') && (values.Customer === '') && (type === 'Select')) {
+            invalidMsg1.push(`Select Retailer.`)
         }
-        if ((returnMode === 2) && (values.ItemName === '')) {
-            invalidMsg1.push(`Item is Required`)
-        };
-        if ((returnMode === 1) && (values.InvoiceNumber === '')) {
-            invalidMsg1.push(`Invoice No. is Required`)
-        };
+        else if ((values.InvoiceNumber === '') && (type === 'Select')) {
+            invalidMsg1.push(`Select Invoice No.`)
+        }
 
         if (invalidMsg1.length > 0) {
             CustomAlert({
@@ -634,7 +614,7 @@ const SalesReturn = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -671,15 +651,25 @@ const SalesReturn = (props) => {
                 TaxType: "GST",
                 ReturnItemImages: []
             })
+
+
         })
 
+        const filterData = ReturnItems.filter((i) => {
+            return i.Quantity > 0
+        })
+
+        if (filterData.length === 0) {
+            CustomAlert({
+                Type: 4,
+                Message: " Please Enter One Item Quantity"
+            })
+            return btnIsDissablefunc({ btnId, state: false })
+        }
 
         const invalidMsg1 = []
-        debugger
+
         ReturnItems.forEach((i) => {
-            if ((i.Quantity === undefined)) {
-                invalidMsg1.push(`${i.ItemName} : Quantity Is Required`)
-            }
             if ((i.Rate === undefined)) {
                 invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
             };
@@ -719,9 +709,8 @@ const SalesReturn = (props) => {
                     RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    ReturnItems: ReturnItems,
+                    ReturnItems: filterData,
                 });
-
                 // if (pageMode === mode.edit) {
                 //     dispatch(updateCategoryTypeID({ jsonBody, updateId: values.id, btnId }));
                 // }
