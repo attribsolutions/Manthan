@@ -38,50 +38,80 @@ export const listPageActionsButtonFunc = (props) => {
     } = props;
 
     function editHandler(rowData, btnmode, btnId) {
+        try {
+            const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+            btnIsDissablefunc({ btnId, state: true })
 
-        const config = { editId: rowData.id, btnmode, subPageMode, btnId }
-        btnIsDissablefunc({ btnId, state: true })
-
-        if (editBodyfunc) {
-            editBodyfunc({ rowData, btnmode, subPageMode, btnId })
-        } else {
-            dispatch(editActionFun({ ...config }));
+            if (editBodyfunc) {
+                editBodyfunc({ rowData, btnmode, subPageMode, btnId })
+            } else {
+                dispatch(editActionFun({ ...config }));
+            }
+        } catch (error) {
+            CustomAlert({
+                Type: 3,
+                Message: "Action Not define",
+            })
         }
     };
 
     function copyHandler(rowData, btnmode, btnId) {
-        const config = { editId: rowData.id, btnmode, subPageMode, btnId }
-        btnIsDissablefunc({ btnId, state: true })
+        try {
+            const config = { editId: rowData.id, btnmode, subPageMode, btnId }
+            btnIsDissablefunc({ btnId, state: true })
 
-        if (copyBodyfunc) {
-            copyBodyfunc({ rowData, btnmode, subPageMode, btnId })
-        } else {
-            dispatch(editActionFun({ ...config }));
+            if (copyBodyfunc) {
+                copyBodyfunc({ rowData, btnmode, subPageMode, btnId })
+            } else {
+                dispatch(editActionFun({ ...config }));
+            }
+        } catch (error) {
+            CustomAlert({
+                Type: 3,
+                Message: "Action Not define",
+            })
         }
+
     };
 
     function downHandler(rowData, downbtnType) {
-        downBtnFunc(rowData, downbtnType);
+        try {
+            downBtnFunc(rowData, downbtnType);
+        } catch (error) {
+            CustomAlert({
+                Type: 3,
+                Message: "Action Not define",
+            })
+        }
+
     };
 
-    
+
 
     async function deleteHandler(rowData, btnId) {
-        if (deleteBodyfunc) {
-            const config = { rowData, subPageMode, btnId }
-            deleteBodyfunc({ ...config })
-            return
-        } else {
-            const rep = await CustomAlert({
-                Type: 8,
-                Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-            })
-            if (rep) {
-                btnIsDissablefunc({ btnId, state: true })
-                const config = { deleteId: rowData.id, subPageMode, btnId }
-                dispatch(deleteActionFun({ ...config }))
+        try {
+            if (deleteBodyfunc) {
+                const config = { rowData, subPageMode, btnId }
+                deleteBodyfunc({ ...config })
+                return
+            } else {
+                const rep = await CustomAlert({
+                    Type: 8,
+                    Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+                })
+                if (rep) {
+                    btnIsDissablefunc({ btnId, state: true })
+                    const config = { deleteId: rowData.id, subPageMode, btnId }
+                    dispatch(deleteActionFun({ ...config }))
+                }
             }
+        } catch (error) {
+            CustomAlert({
+                Type: 3,
+                Message: "Action Not define",
+            })
         }
+
     }
 
     function makeBtnHandler(rowData) {
@@ -221,10 +251,10 @@ export const listPageActionsButtonFunc = (props) => {
                                     className=" fas fa-file-download" ></span> </Button>
                             : null
                     }
-                    
+
                     {
                         (updateBtnFunc) ?
-                            <Button style={{width:"30px"}}
+                            <Button style={{ width: "30px" }}
                                 type="button"
                                 id={`btn-delete-${rowData.id}`}
                                 className={editSelfBtnCss}
@@ -234,7 +264,7 @@ export const listPageActionsButtonFunc = (props) => {
                                     updateBtnFunc(rowData, mode.copy, btnId)
                                 }}
                             >
-                                <i  className="dripicons-document-edit "></i>
+                                <i className="dripicons-document-edit "></i>
                             </Button>
                             : null
                     }

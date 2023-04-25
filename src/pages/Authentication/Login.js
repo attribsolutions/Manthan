@@ -50,10 +50,10 @@ const Login = props => {
   }
 
 
-  function createSuperAdminHandler() {
-    const jsonBody = JSON.stringify([]);
-    dispatch(postSuperAdmin(jsonBody))
-  }
+  // function createSuperAdminHandler() {
+  //   const jsonBody = JSON.stringify([]);
+  //   dispatch(postSuperAdmin(jsonBody))
+  // }
 
   return (
     <React.Fragment>
@@ -126,9 +126,9 @@ const Login = props => {
                         </div>
                       </AvForm>
 
-                      <div className="mt-4 mt-md-5 text-center">
+                      {/* <div className="mt-4 mt-md-5 text-center">
                         <p className="mb-0 text-primary fw-semibold" onClick={() => { createSuperAdminHandler() }}> Create SuperAdmin </p>
-                      </div>
+                      </div> */}
 
                     </div>
                     <div className="mt-4 mt-md-5 text-center">

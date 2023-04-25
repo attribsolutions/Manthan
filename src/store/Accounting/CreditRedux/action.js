@@ -1,14 +1,20 @@
 import {
   CREDITDEBIT_TYPE,
   CREDITDEBIT_TYPE_SUCCESS,
+  DELETE_CREDIT_LIST_ID,
+  DELETE_CREDIT_LIST_ID_SUCCESS,
   DELETE_GROUP_LIST_ID,
   DELETE_GROUP_LIST_ID_SUCCESS,
+  EDIT_CREDIT_LIST_ID,
+  EDIT_CREDIT_LIST_ID_SUCCESS,
   EDIT_GROUPMASTER_ID,
   EDIT_GROUPMASTER_ID_SUCCESS,
   GET_CREDIT_LIST,
   GET_CREDIT_LIST_SUCCESS,
   GET_GROUP_LIST,
   GET_GROUP_LIST_SUCCESS,
+  INVOICE_RETURN_ID,
+  INVOICE_RETURN_ID_SUCCESS,
   SAVE_CREDIT,
   SAVE_CREDIT_SUCCESS,
   SAVE_GROUP_MASTER,
@@ -58,15 +64,35 @@ export const CredietDebitTypeSuccess = (resp) => ({// Edit  Success
 //   payload: resp,
 // })
 
-// export const delete_GroupList_ID = (config={}) => ({// Delete  Action
-//   type: DELETE_GROUP_LIST_ID,
-//   config,
-// });
+export const Edit_CreditList_ID = (config={}) => ({// Delete  Action
+  type: EDIT_CREDIT_LIST_ID,
+  config,
+});
 
-// export const deleteGrouplistSuccess = (resp) => ({// Delete Success
-//   type: DELETE_GROUP_LIST_ID_SUCCESS,
-//   payload: resp
-// });
+export const EditCreditlistSuccess = (resp) => ({// Delete Success
+  type: EDIT_CREDIT_LIST_ID_SUCCESS,
+  payload: resp
+});
+
+export const Invoice_Return_ID = (id) => ({// Delete  Action
+  type: INVOICE_RETURN_ID,
+  id,
+});
+
+export const Invoice_Return_ID_Success = (resp) => ({// Delete Success
+  type: INVOICE_RETURN_ID_SUCCESS,
+  payload: resp
+});
+
+export const delete_CreditList_ID = (config={}) => ({// Delete  Action
+  type: DELETE_CREDIT_LIST_ID,
+  config,
+});
+
+export const deleteCreditlistSuccess = (resp) => ({// Delete Success
+  type: DELETE_CREDIT_LIST_ID_SUCCESS,
+  payload: resp
+});
 
 
 

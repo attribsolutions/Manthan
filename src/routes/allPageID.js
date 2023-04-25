@@ -102,10 +102,12 @@ export const CREDITLIMIT_LIST = 154
 export const IMPORT_FIELD_MAP = 157
 export const IMPORT_FIELD_MAP_LIST = 158
 
+export const UPLOAD_EXCEL = 184
+
 export const IMPORT_FIELD_ADD = 188
 export const IMPORT_FIELD_ADD_LIST = 189
 
-export const UPLOAD_EXCEL = 184
+export const IMPORT_FIELD_MASTER = 194
 
 
 export const ROUTE_UPDATE = 159

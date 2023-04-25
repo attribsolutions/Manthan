@@ -41,6 +41,7 @@ import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action"
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { breadcrumbReturnFunc, btnIsDissablefunc, loginIsSCMCompany, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
+import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
 const PartyItems = (props) => {
 
@@ -181,7 +182,7 @@ const PartyItems = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 206550 && !modalCss) {
             history.push({
                 pathname: url.PARTYITEM_LIST,
@@ -235,40 +236,40 @@ const PartyItems = (props) => {
             dataField: "ItemName",
             sort: true,
         },
-        {
-            text: "SelectAll",
-            dataField: "itemCheck",
-            sort: true,
-            formatter: (cellContent, row, col, k) => {
+        // {
+        //     text: "SelectAll",
+        //     dataField: "itemCheck",
+        //     sort: true,
+        //     formatter: (cellContent, row, col, k) => {
 
-                  
-                if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 
-                return (<span >
-                    <Input type="checkbox"
-                        defaultChecked={cellContent}
-                        key={row.Item}
-                        disabled={(pageMode === mode.assingLink) ? (row.hasInitialVal) ? true : false : false}
-                        onChange={e => {
-                            setitemArr(ele => {
-                                let a = { ...ele };
-                                const newrr = [...ele].map(i => {
-                                    if (row.Item === i.Item) {
-                                        i.itemCheck = !i.itemCheck;
-                                    }
-                                    return i
-                                });
-                                return newrr
-                            })
+        //         if ((row["hasInitialVal"] === undefined)) { row["hasInitialVal"] = cellContent }
 
-                        }}
-                    />
+        //         return (<span >
+        //             <Input type="checkbox"
+        //                 defaultChecked={cellContent}
+        //                 key={row.Item}
+        //                 disabled={(pageMode === mode.assingLink) ? (row.hasInitialVal) ? true : false : false}
+        //                 onChange={e => {
+        //                     setitemArr(ele => {
+        //                         let a = { ...ele };
+        //                         const newrr = [...ele].map(i => {
+        //                             if (row.Item === i.Item) {
+        //                                 i.itemCheck = !i.itemCheck;
+        //                             }
+        //                             return i
+        //                         });
+        //                         return newrr
+        //                     })
 
-                </span>
-                )
-            },
+        //                 }}
+        //             />
 
-        }
+        //         </span>
+        //         )
+        //     },
+
+        // }
     ];
 
     const pageOptions = {
@@ -297,7 +298,7 @@ const PartyItems = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const Find = itemArr.filter((index) => {
-            return (index.itemCheck === true)
+            return (index.selectCheck === true)
         })
         const btnId = event.target.id
         try {
@@ -312,6 +313,17 @@ const PartyItems = (props) => {
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
+
+    function rowSelected() {
+        
+        var data = []
+        return data = tableList.map((index) => {
+            if ((index.selectCheck)) {
+                return index.Item
+            }
+            return
+        })
+    }
 
     const PartyDropdown = () => {
         if (loginIsSCMCompany() === 1) {
@@ -381,7 +393,7 @@ const PartyItems = (props) => {
 
                                     {({ paginationProps, paginationTableProps }) => (
                                         <ToolkitProvider
-                                            keyField="id"
+                                            keyField="Item"
                                             data={tableList}
                                             columns={tableColumns}
                                             search
@@ -390,9 +402,10 @@ const PartyItems = (props) => {
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
-                                                            keyField={"id"}
+                                                            keyField={"Item"}
                                                             bordered={true}
                                                             striped={false}
+                                                            selectRow={selectAllCheck(rowSelected())}
                                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                             classes={"table align-middle table-nowrap table-hover"}
                                                             headerWrapperClasses={"thead-light"}

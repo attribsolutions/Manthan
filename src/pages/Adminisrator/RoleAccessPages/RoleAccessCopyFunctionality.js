@@ -113,19 +113,18 @@ const RoleAccessCopyFunctionality = (props) => {
         const btnId = event.target.id
         btnIsDissablefunc({ btnId, state: true })
         try {
-        const jsonBody = JSON.stringify(
-            {
-                Role: copyRole_Dropdown_Select.value,
-                Division: copyDivision_dropdown_Select.value,
-                NewRole: newRoleDropdown_Select.value,
-                NewDivision: (newDivision_dropdown_Select) ?
-                    newDivision_dropdown_Select.value
-                    : 0,
-                Company: company_dropdown_Select.value
-            })
-        dispatch(saveCopyRoleAccessAction({jsonBody,btnId}))
+            const jsonBody = JSON.stringify(
+                {
+                    Role: copyRole_Dropdown_Select.value,
+                    Division: copyDivision_dropdown_Select.value,
+                    Company: company_dropdown_Select.value,
+                    NewRole: newRoleDropdown_Select.value,
+                    NewDivision: (newDivision_dropdown_Select) ? newDivision_dropdown_Select.value : 0,
+                    NewCompany: newcompany_dropdown_Select.value
+                })
+            dispatch(saveCopyRoleAccessAction({ jsonBody, btnId }))
 
-        } catch(error){ btnIsDissablefunc({ btnId, state: false })}
+        } catch (error) { btnIsDissablefunc({ btnId, state: false }) }
     }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -214,7 +213,7 @@ const RoleAccessCopyFunctionality = (props) => {
                                 </Col>
 
                                 <Col md="3" className="mt- ">
-                                    <Button type="button" color="primary" id={"roleAccessCopy"} onClick={ CopyButton_Handler}>Copy Role</Button>
+                                    <Button type="button" color="primary" id={"roleAccessCopy"} onClick={CopyButton_Handler}>Copy Role</Button>
                                 </Col>
 
                             </Row>

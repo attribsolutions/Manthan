@@ -109,6 +109,8 @@ export const UPLOAD_EXCEL = "/Upload_Excel"
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
 
+export const IMPORT_FIELD_MASTER = "/ImportMasterMap"
+
 
 export const ROUTE_UPDATE = "/RouteUpdate"
 

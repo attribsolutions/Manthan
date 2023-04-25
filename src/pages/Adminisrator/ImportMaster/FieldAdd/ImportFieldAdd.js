@@ -9,7 +9,7 @@ import {
     Label,
     CardHeader,
     FormGroup,
-    Input,
+    Input
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { MetaTags } from "react-meta-tags";
@@ -28,7 +28,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
-    resetFunction,
+    resetFunction
 } from "../../../../components/Common/validationFunction";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc, loginCompanyID } from "../../../../components/Common/CommonFunction";
@@ -52,8 +52,8 @@ const ImportFieldAdd = (props) => {
     const fileds = {
         id: "",
         FieldName: "",
-        ControlType: "",
-        ValidationType: "",
+        ControlTypeName: "",
+        FieldValidationName: "",
         IsCompulsory: false
     }
 
@@ -132,21 +132,22 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlType, IsCompulsory, ValidationType } = hasEditVal
+                const { id, FieldName, ControlTypeName,ControlTypeID, IsCompulsory, FieldValidationName,FieldValidationID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
-                hasValid.ControlType.valid = true;
+                hasValid.ControlTypeName.valid = true;
                 hasValid.IsCompulsory.valid = true;
-                hasValid.ValidationType.valid = true;
+                hasValid.FieldValidationName.valid = true;
 
                 values.FieldName = FieldName;
-                values.ControlType = ControlType;
+                values.ControlTypeName = { label: ControlTypeName, value: ControlTypeID };
                 values.IsCompulsory = IsCompulsory;
-                values.ValidationType = ValidationType;
+                values.FieldValidationName = { label: FieldValidationName, value: FieldValidationID };
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Modules))
+                dispatch(Breadcrumb_inputName(hasEditVal.FieldName))
+                dispatch(getFieldValidations(hasEditVal.ControlTypeID))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(edit_ImportFiledAdd_Success({ Status: false }))
@@ -236,13 +237,12 @@ const ImportFieldAdd = (props) => {
                 const jsonBody = JSON.stringify({
                     FieldName: values.FieldName,
                     IsCompulsory: values.IsCompulsory,
-                    ControlType: values.ControlType.value,
-                    FieldValidation: values.ValidationType.value,
+                    ControlType: values.ControlTypeName.value,
+                    FieldValidation: values.FieldValidationName.value,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                 });
-
                 if (pageMode === mode.edit) {
                     dispatch(update_ImportFiledAdd({ jsonBody, updateId: values.id, btnId }));
                 }
@@ -273,7 +273,7 @@ const ImportFieldAdd = (props) => {
                                 <form noValidate>
 
                                     <Row className="">
-                                        <Col md={12}  >
+                                        <Col md={12} >
                                             <Card >
                                                 <CardBody className="c_card_body">
                                                     <Row>
@@ -300,34 +300,34 @@ const ImportFieldAdd = (props) => {
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.ControlType} </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.ControlTypeName} </Label>
                                                             <Select
-                                                                name="ControlType"
-                                                                value={values.ControlType}
+                                                                name="ControlTypeName"
+                                                                value={values.ControlTypeName}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={controlType_Options}
-                                                                onChange={controlTypeHandler}
+                                                                 onChange={controlTypeHandler}
                                                             />
-                                                            {isError.ControlType.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.ControlType}</small></span>
+                                                            {isError.ControlTypeName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.ControlTypeName}</small></span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.ValidationType} </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.FieldValidationName} </Label>
                                                             <Select
-                                                                name="ValidationType"
-                                                                value={values.ValidationType}
+                                                                name="FieldValidationName"
+                                                                value={values.FieldValidationName}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
                                                                 options={validationType_Options}
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                                                             />
-                                                            {isError.ValidationType.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.ValidationType}</small></span>
+                                                            {isError.FieldValidationName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.FieldValidationName}</small></span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
@@ -364,7 +364,7 @@ const ImportFieldAdd = (props) => {
                                                                 />
                                                             </Col>
                                                         </Row>
-                                                    </FormGroup >
+                                                    </FormGroup>
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -372,7 +372,6 @@ const ImportFieldAdd = (props) => {
                                 </form>
                             </CardBody>
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>

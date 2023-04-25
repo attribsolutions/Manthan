@@ -8,14 +8,13 @@ import { useDispatch } from 'react-redux';
 
 function AddressDetails_Tab(props) {
 
-    const dispatch = useDispatch();
 
     const [address, setAddress] = useState('');
     const [FSSAINo, setFSSAINo] = useState('');
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(true);
-    const [imageTable, setImageTable] = useState([]);
+    const [imageTable, setImageTable] = useState('');
 
 
     const FSSAIExipryHandler = (e, date) => {

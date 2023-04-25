@@ -1,7 +1,7 @@
 
 
 export const basicAmount = i => {
-
+debugger
     let rate = 0
     let qty = 0
     if (!(i.Rate == '')) { rate = i.Rate; };

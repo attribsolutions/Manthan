@@ -181,7 +181,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-debugger
+
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
