@@ -43,10 +43,10 @@ function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
 
 function* Get_Credit_List_GenFunc(data) {                                // getList API
   try {
-    debugger
+     
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
-      debugger
+       
       var date = convertDatefunc(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
       i.CRDRNoteDate = (`${date} ${time}`)
@@ -58,7 +58,7 @@ function* Get_Credit_List_GenFunc(data) {                                // getL
 
 function* Delete_Credit_ID_GenFunc({ config }) {                   // delete API
   try {
-    debugger
+     
     const response = yield call(del_Credit_List_API, config);
     yield put(deleteCreditlistSuccess(response))
   } catch (error) { CommonConsole(error) }
@@ -91,9 +91,9 @@ function* Edit_Creditlist_ID_GenFunc({ config }) {         //edit  Api
 }
 
 function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
-  debugger                
+                   
   try {
-    debugger
+     
     const response = yield call(InvoiceReturn_API, id.id);
     yield put(Invoice_Return_ID_Success(response.Data));
   } catch (error) { CommonConsole(error) }

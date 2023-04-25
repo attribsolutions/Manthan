@@ -57,7 +57,7 @@ const ImportFieldMap = (props) => {
         goButtonItem: state.ImportFieldMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
-debugger
+ 
     useEffect(() => {
         const page_Id = pageId.IMPORT_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));

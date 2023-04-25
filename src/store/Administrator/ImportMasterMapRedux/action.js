@@ -1,18 +1,18 @@
 import {
-  GO_BUTTON_IMPORT_MASTER_MAP_ADD,
-  GO_BUTTON_IMPORT_MASTER_MAP_ADD_SUCCESS,
+  GO_BUTTON_IMPORT_MASTER_MAP,
+  GO_BUTTON_IMPORT_MASTER_MAP_SUCCESS,
   SAVE_IMPORT_MASTER_MAP,
   SAVE_IMPORT_MASTER_MAP_SUCCESS
 } from "./actionType";
 
 
-export const GoButton_ImportMasterMap_Add = (config) => ({// Add page GO-Buuton Action
-  type: GO_BUTTON_IMPORT_MASTER_MAP_ADD,
+export const GoButton_ImportMasterMap = (config) => ({// Add page GO-Buuton Action
+  type: GO_BUTTON_IMPORT_MASTER_MAP,
   config
 });
 
-export const GoButton_ImportMasterMap_AddSuccess = (list) => ({// get List success
-  type: GO_BUTTON_IMPORT_MASTER_MAP_ADD_SUCCESS,
+export const GoButton_ImportMasterMap_Success = (list) => ({// get List success
+  type: GO_BUTTON_IMPORT_MASTER_MAP_SUCCESS,
   payload: list,
 });
 

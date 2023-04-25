@@ -196,7 +196,7 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
-debugger
+ 
     // const a = data.InvoiceItems.map((data) => ({
     //     CGST: Number(data.CGST),
     //     SGST: Number(data.SGST),

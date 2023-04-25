@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { CommonConsole, concatDateAndTime, convertDatefunc, convertTimefunc, loginCompanyID, loginJsonBody, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, concatDateAndTime, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
@@ -17,9 +17,14 @@ function* ReceiptGoButtonGenFunc({ Data }) {
     response["ListData"] = ListData;
     response["path"] = path;
     response.Data.map((index) => {
-      return index["Calculate"] = 0
+      index.InvoiceDate = concatDateAndTime(index.InvoiceDate, index.CreatedOn)
+      index["Calculate"] = 0
+      return index
     });
-
+    // const newList = yield response.Data.map((i) => {
+    //   i.InvoiceDate = concatDateAndTime(i.InvoiceDate, i.CreatedOn)
+    //   return i
+    // })
     yield put(action.ReceiptGoButtonMaster_Success(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -72,9 +77,9 @@ function* Receipt_Type_GenFunc({ jsonBody }) {
   } catch (error) { CommonConsole(error) }
 }
 
-  // delete API
-function* Delete_Receipt_ID_GenFunc({ config }) { 
-  debugger       
+// delete API
+function* Delete_Receipt_ID_GenFunc({ config }) {
+
   try {
     const response = yield call(apiCall.Receipt_Delete_API, config);
     yield put(action.deleteReceiptList_Success(response))

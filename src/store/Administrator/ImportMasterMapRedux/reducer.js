@@ -1,5 +1,5 @@
 import {
-  GO_BUTTON_IMPORT_MASTER_MAP_ADD_SUCCESS,
+  GO_BUTTON_IMPORT_MASTER_MAP_SUCCESS,
   SAVE_IMPORT_MASTER_MAP_SUCCESS,
 } from "./actionType";
 
@@ -17,7 +17,7 @@ const ImportMasterMap_Reducer = (state = INIT_STATE, action) => {
 
   switch (action.type) {
 
-    case GO_BUTTON_IMPORT_MASTER_MAP_ADD_SUCCESS:
+    case GO_BUTTON_IMPORT_MASTER_MAP_SUCCESS:
       return {
         ...state,
         addGoButton: action.payload,
