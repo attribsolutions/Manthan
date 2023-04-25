@@ -56,11 +56,11 @@ const ImportMasterMap = (props) => {
         goButtonArr,
         partyList
     } = useSelector((state) => ({
-        postMsg: state.ImportFieldMap_Reducer.postMsg,
+        postMsg: state.ImportMasterMap_Reducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        goButtonArr: state.ImportFieldMap_Reducer.addGoButton,
+        goButtonArr: state.ImportMasterMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
 
@@ -145,11 +145,11 @@ const ImportMasterMap = (props) => {
     const pagesListColumns = [
         {
             text: "Field Name",
-            dataField: "FieldName",
+            dataField: "Party_id",
         },
         {
             text: "Data Type",
-            dataField: "ControlTypeName",
+            dataField: "CustomerName",
         },
         {
             text: "Related Key Field",
@@ -177,12 +177,12 @@ const ImportMasterMap = (props) => {
 
     async function goButtonHandler() {
         // const jsonBody = JSON.stringify({
-           let  PartyId= partySelect.value;
-           let  typeId= mapTypeSelect.value;
+           let  partyId= partySelect.value;
+           let  mapType= mapTypeSelect.value;
            
         //     CompanyID: loginCompanyID()
         // })
-        dispatch(GoButton_ImportMasterMap({ PartyId,typeId }))
+        dispatch(GoButton_ImportMasterMap({ partyId,mapType }))
     };
 
     function change_ButtonHandler(e) {

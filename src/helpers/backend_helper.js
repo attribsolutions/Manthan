@@ -343,17 +343,20 @@ export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${i
 
 
 // ImportField_Add
-export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody,btnId)//get api
+export const ImportField_Add_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody, btnId)//get api
 export const ImportField_Add_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_MAP_SAVE, jsonBody, btnId)// post api
 
 // ImportMaster_Map API
-export const ImportMaster_Map_GoButton_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_FILTER, jsonBody,btnId)//get api
-export const ImportMaster_Map_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_SAVE, jsonBody, btnId)// post api
-
+export const ImportMaster_Map_Customer_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_CUSTOMER}/${partyId}`, btnId)//get api
+export const ImportMaster_Map_Customer_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_CUSTOMER, jsonBody, btnId)// post api
+export const ImportMaster_Map_Item_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_ITEM}/${partyId}`, btnId)//get api
+export const ImportMaster_Map_Item_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_ITEM, jsonBody, btnId)// post api
+export const ImportMaster_Map_Unit_GoButton_API = ({ partyId, btnId }) => get(`${url.IMPORT_MASTER_MAP_UNIT}/${partyId}`, btnId)//get api
+export const ImportMaster_Map_Unit_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody, btnId)// post api
 
 
 export const ImportFieldAdd_Save_API = ({ jsonBody, btnId }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody, btnId)// post api
-export const ImportFieldAdd_Post_API = ( jsonBody) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody)
+export const ImportFieldAdd_Post_API = (jsonBody) => post(url.IMPORT_FIELD_ADD_FILTER, jsonBody)
 export const ImportFieldAdd_Delete_API = ({ deleteId, btnId }) => del(`${url.IMPORT_FIELD_ADD_SAVE}/${deleteId}`, btnId)// delete api
 export const ImportFieldAdd_Edit_API = ({ editId, btnId }) => get(`${url.IMPORT_FIELD_ADD_SAVE}/${editId}`, btnId)// edit api
 export const ImportFieldAdd_Update_API = ({ jsonBody, updateId, btnId }) => put(`${url.IMPORT_FIELD_ADD_SAVE}/${updateId}`, jsonBody, btnId)// update api
@@ -561,7 +564,7 @@ export const SalesReturn_Delete_API = ({ deleteId, btnId }) => del(`${url.SALES_
 // Credit Debit 
 export const Credit_Debit_Type = (jsonBody) => post(url.SELECT_FIELD_DROPDOWN, jsonBody)//  postapi
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)//  postapi
-export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody,btnId )//post api
+export const Credit_Debit_Save_API = ({ jsonBody, btnId }) => post(url.CREDIT_DEBIT, jsonBody, btnId)//post api
 export const del_Credit_List_API = ({ deleteId, btnId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`, btnId)// delete api
 export const Edit_Credit_List_API = ({ editId, btnId }) => get(`${url.CREDIT_DEBIT}/${editId}`, btnId)// Edit api
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api

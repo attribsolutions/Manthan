@@ -152,8 +152,10 @@ export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
 export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'    //save
 
 //Import Master Map
-export const IMPORT_MASTER_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
-export const IMPORT_MASTER_MAP_SAVE = '/PartyImportFieldSave'    //save
+export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping'    //gobutton
+export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping'    //gobutton
+export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping'    //gobutton
+export const IMPORT_MASTER_MAP_UNIT_SAVE = '/PartyImportFieldSave'    //save
 
 //Import Field Map
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'    //save
