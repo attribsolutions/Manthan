@@ -37,7 +37,7 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text("Party", 80, 52)  //bill by 
     doc.text('Customer', 280, 52) //billed to
-    doc.text('Details of Note', 440, 52)
+    doc.text('Note Details', 440, 52)
     
 
     doc.setDrawColor(0, 0, 0);
@@ -303,7 +303,10 @@ export const reportFooterForCredit = (doc, data) => {
     const BalAmt = GrandTotal-PaidAmount
     let stringNumber = toWords(Number(PaidAmount))
     doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(1)
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
+    // doc.setLineWidth(0)
+
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
     doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
     // doc.line(360, 308, 360, 379);//vertical right1 Sub Total

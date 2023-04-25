@@ -5,8 +5,8 @@ export const columns = [
     "Invoice Date",
     "Invoice Number",
     "Grand Total",
-    "PaidAmount",
-    "BalanceAmount",
+    "Paid Amount",
+    "Balance Amount",
     
 ];
 
@@ -189,7 +189,7 @@ export const BilledByRow = (data) => {
         [`GSTIN :${data.PartyGSTIN}`],
         [`State :${data.PartyState}`],
         [`Address :${data.PartyAddress}`],
-        [`FSSAINo :${data.PartyFSSAINo}`],
+        [`FSSAI No :${data.PartyFSSAINo}`],
 
     ]
 
@@ -207,10 +207,10 @@ export const BilledByRow = (data) => {
 export const BilledToRow = (data) => {
     var BilledByArray = [
         [`Name :${data.Customer}`],
-        [`GSTIN:${data.CustomerGSTIN}`],
+        [`GSTIN :${data.CustomerGSTIN}`],
         [`State :${data.CustomerState}`],
         [`Address :${data.CustomerAddress}`],
-        [`FSSAINo :${data.CustomerFSSAINo}`],
+        [`FSSAI No :${data.CustomerFSSAINo}`],
     ]
     return BilledByArray;
 
@@ -231,7 +231,7 @@ export const DetailsRow = (data) => {
     const Date = concatDateAndTime(data.CRDRNoteDate, data.CreatedOn)
     var DetailsArray = [
         [`Note Date :${Date}`],
-        [`Note NO :${data.NoteNo}`],
+        [`Note No :${data.NoteNo}`],
         [`Note Reason :${data.NoteReason}`],
         [`Note Type :${data.NoteType}`],
         // [`Narration : ${data.Narration}`],
