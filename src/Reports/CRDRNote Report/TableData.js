@@ -149,9 +149,10 @@ export const Rows = (data) => {
             return [
                 "",
                 "",
-                `Total:${parseFloat(Total).toFixed(2)}`,
-                `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
+                "",
+                // `Total:${parseFloat(Total).toFixed(2)}`,
                 `PaidAmt:${parseFloat(TotalPaidAmount).toFixed(2)}`,
+                `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
              
               
               
@@ -183,17 +184,6 @@ export const Rows = (data) => {
 
 export const BilledByRow = (data) => {
 
-    var BilledByArray = [
-        [`Customer Name: ${data.Customer}`],
-        [`Customer GSTIN: ${data.CustomerGSTIN}`],
-        [`State :${data.CustomerState}`],
-        [`Address:${data.CustomerAddress}`],
-        [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
-    ]
-    return BilledByArray;
-}
-export const BilledToRow = (data) => {
-
     var BilledToArray = [
         [`Party Name :${data.Party}`],
         [`Party GSTIN:${data.PartyGSTIN}`],
@@ -204,6 +194,36 @@ export const BilledToRow = (data) => {
     ]
 
     return BilledToArray;
+
+    // var BilledByArray = [
+    //     [`Customer Name: ${data.Customer}`],
+    //     [`Customer GSTIN: ${data.CustomerGSTIN}`],
+    //     [`State :${data.CustomerState}`],
+    //     [`Address:${data.CustomerAddress}`],
+    //     [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
+    // ]
+    // return BilledByArray;
+}
+export const BilledToRow = (data) => {
+    var BilledByArray = [
+        [`Customer Name: ${data.Customer}`],
+        [`Customer GSTIN: ${data.CustomerGSTIN}`],
+        [`State :${data.CustomerState}`],
+        [`Address:${data.CustomerAddress}`],
+        [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
+    ]
+    return BilledByArray;
+
+    // var BilledToArray = [
+    //     [`Party Name :${data.Party}`],
+    //     [`Party GSTIN:${data.PartyGSTIN}`],
+    //     [`State :${data.PartyState}`],
+    //     [`Address:${data.PartyAddress}`],
+    //     [`PartyFSSAINo:${data.PartyFSSAINo}`],
+
+    // ]
+
+    // return BilledToArray;
 }
 
 export const DetailsRow = (data) => {
