@@ -66,7 +66,7 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
       const response = yield call(ImportMaster_Map_Customer_Save_API, config);
       yield put(save_ImportMasterMap_Success(response));
     }
-    else if (mapType === 1) {
+    else if (mapType === 2) {
       const response = yield call(ImportMaster_Map_Item_Save_API, config);
       yield put(save_ImportMasterMap_Success(response));
     }

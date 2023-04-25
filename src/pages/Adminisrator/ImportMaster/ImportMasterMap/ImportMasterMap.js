@@ -155,9 +155,9 @@ const ImportMasterMap = (props) => {
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    key={`Value-${row.id}`}
+                                    key={`mapValue-${row.id}`}
                                     defaultValue={cellContent}
-                                    onChange={(e) => row.Value = e.target.value}
+                                    onChange={(e) => row.mapValue = e.target.value}
                                 />
                             </FormGroup>
                         </Col>
@@ -187,13 +187,14 @@ const ImportMasterMap = (props) => {
         dispatch(GoButton_ImportMasterMap_Success([]))
     }
 
-    function SaveHandler(event) {
+    async function SaveHandler(event) {
         event.preventDefault();
 
 
-        function funcForParty() {
+        async function funcForParty() {
             let jsonArr = []
-            goButtonArr.forEach(i => {
+            await goButtonArr.forEach(i => {
+                debugger
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -205,12 +206,13 @@ const ImportMasterMap = (props) => {
                     })
                 }
             })
+            debugger
             return jsonArr
         }
 
-        function funcForItem() {
+        async function funcForItem() {
             let jsonArr = []
-            goButtonArr.forEach(i => {
+            await goButtonArr.forEach(i => {
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -226,9 +228,9 @@ const ImportMasterMap = (props) => {
         }
 
 
-        function funcForUnit() {
+        async function funcForUnit() {
             let jsonArr = []
-            goButtonArr.forEach(i => {
+            await goButtonArr.forEach(i => {
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -242,9 +244,10 @@ const ImportMasterMap = (props) => {
             return jsonArr
         }
         let mapType = values.MapType.value;
+
         const jsonBody = JSON.stringify(
-            (mapType === 1) ? funcForParty() :
-                (mapType === 2) ? funcForItem() : funcForUnit());
+            (mapType === 1) ? await funcForParty() :
+                (mapType === 2) ? await funcForItem() : await funcForUnit());
 
         dispatch(save_ImportMasterMap({ jsonBody, mapType, }));
 
@@ -363,8 +366,8 @@ const ImportMasterMap = (props) => {
                         <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                             {(goButtonArr.length > 0) &&
                                 <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                    // module={"Import Master Map"} 
-                                    />
+                                // module={"Import Master Map"} 
+                                />
                             }
                         </Col>
                     </FormGroup >
