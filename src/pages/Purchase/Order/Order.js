@@ -603,7 +603,14 @@ const Order = (props) => {
 
     async function assignItem_onClick() {
 
-        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
+        const config = {
+            Party:supplierSelect.value,
+            PartyName:supplierSelect.label,
+            editId: supplierSelect.value,
+            btnmode: mode.assingLink,
+            subPageMode,
+            btnId: `btn-assingLink-${supplierSelect.value}`
+        }
 
         const isConfirmed = await CustomAlert({
             Type: 7,

@@ -72,6 +72,7 @@ const CommonListPage = (props) => {
   } = props.action
 
   const {
+    editBodyfunc,
     getListbodyFunc = () => { },
     MasterModal,
     ButtonMsgLable,
@@ -234,7 +235,8 @@ const CommonListPage = (props) => {
         deleteName: deleteName,
         userAccState: userAccState,
         editActionFun: editId,
-        deleteActionFun: deleteId
+        deleteActionFun: deleteId,
+        editBodyfunc: editBodyfunc,
       })
       )
     }
