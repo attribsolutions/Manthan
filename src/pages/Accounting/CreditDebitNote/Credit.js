@@ -435,7 +435,6 @@ const Credit = (props) => {
             event.target.value = v1;
         }
 
-
         setState((i) => {
             let a = { ...i }
             a.values.GrandTotal = calculate.tAmount
