@@ -923,13 +923,13 @@ const SalesReturn = (props) => {
 
                                         </Col>
                                         <Col sm="1" className="mx-6 mt-1 ">
-                                            {((TableArr.length > 0)) ?
+                                            {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
                                                 <Change_Button onClick={(e) => {
                                                     setTableArr([])
                                                     setState((i) => {
                                                         let a = { ...i }
+                                                        a.values.ItemName = ""
                                                         a.values.InvoiceNumber = ""
-                                                        a.hasValid.InvoiceNumber.valid = true;
                                                         return a
                                                     })
                                                 }} />
