@@ -20,7 +20,7 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buuton add Page API
 
-  const { mapType } = config
+  const { mapType,partyId } = config
 
   try {
     let newResp = []
@@ -28,7 +28,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
       const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
       newResp = response.Data.map(i => ({
         "id": i.id,
-        "party": i.Party_id,
+        "party": !(i.Party_id===null)?i.Party_id:partyId,
         "fieldName": i.CustomerName,
         "fieldId": i.Customer,
         "mapValue": i.MapCustomer,
@@ -38,18 +38,19 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
       const response = yield call(ImportMaster_Map_Item_GoButton_API, config);
       newResp = response.Data.map(i => ({
         "id": i.id,
-        "party": i.Party_id,
+        "party": !(i.Party_id===null)?i.Party_id:partyId,
         "fieldName": i.Name,
         "fieldId": i.Item_id,
         "mapValue": i.MapItem,
       }))
     } else {
       const response = yield call(ImportMaster_Map_Unit_GoButton_API, config);
+    
       newResp = response.Data.map(i => ({
         "id": i.id,
-        "party": i.Party_id,
+        "party": !(i.Party_id===null)?i.Party_id:partyId,
         "fieldName": i.Name,
-        "fieldId": i.Name,
+        "fieldId": i.id,
         "mapValue": i.MapUnit,
       }))
     }
