@@ -6,7 +6,8 @@ export const columns = [
     "Invoice Number",
     "Grand Total",
     "BalanceAmount",
-    "PaidAmount"
+    "PaidAmount",
+    
 ];
 
 export const columns1 = [
@@ -34,22 +35,99 @@ export const Details = [
     " ",
 ]
 
+export const Rows1 = (data) => {
+    debugger
+    const { InvoiceItems = [] } = data
+    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    const returnArr = [];
+    let Gst = 0
+    let totalBasicAmount = 0
+    let totalCGst = 0
+    let totalSGst = 0
+    let totalAmount = 0
+    let totalQuantity = 0
+
+    InvoiceItems.forEach((element, key) => {
+        const tableitemRow = [
+            element.ItemName,
+            element.MRP,
+            `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
+            element.Rate,
+            element.BasicAmount,
+            ` ${element.CGSTPercentage}%`,
+            element.CGST,
+            ` ${element.SGSTPercentage}%`,
+            element.SGST,
+            element.Amount,
+
+        ];
+
+        function totalLots() {
+            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalCGst = Number(totalCGst) + Number(element.CGST)
+            totalSGst = Number(totalSGst) + Number(element.SGST)
+            totalAmount = Number(totalAmount) + Number(element.Amount)
+            totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+            let cgst = data["tableTot"].TotalCGst
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
+        };
+
+        function totalrow() {
+            return [
+                `Total Quantity:${parseFloat(totalQuantity).toFixed(2)} ${element.UnitName}`,
+                `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
+                ``,
+                "",
+                `isaddition`,
+                `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
+                ``,
+                `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
+                "",
+                `Amt:${parseFloat(totalAmount).toFixed(2)}`,
+            ];
+        };
+
+        if (Gst === 0) { Gst = element.GSTPercentage };
+        let aa = { TotalCGst: 0, totalSGst: 0 }
+        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+        if ((Gst === element.GSTPercentage)) {
+            data["tableTot"] = totalLots()
+            returnArr.push(tableitemRow);
+        }
+        else {
+            returnArr.push(totalrow());
+            returnArr.push(tableitemRow);
+            totalBasicAmount = 0
+            totalCGst = 0
+            totalSGst = 0
+            totalAmount = 0
+            totalQuantity = 0
+
+            data["tableTot"] = totalLots()
+            Gst = element.GSTPercentage;
+        }
+        if (key === InvoiceItems.length - 1) {
+            returnArr.push(totalrow());
+        }
+    })
+    return returnArr;
+}
+
+
 
 export const Rows = (data) => {
-    debugger
+    
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
-    // let totalBasicAmount = 0
-    // let totalCGst = 0
-    // let totalSGst = 0
-    // let totalAmount = 0
-    let totalQuantity = 0
-
+    let TotalPaidAmount = 0
+    let TotalBalanceAmt = 0
+    let Total = 0
+   
     CRDRInvoices.forEach((element, key) => {
         const BalanceAmount = Number(element.GrandTotal) - Number(element.PaidAmount)
-
+         element.BalanceAmt = BalanceAmount
         const date = concatDateAndTime(element.InvoiceDate, element.CreatedOn)
         const tableitemRow = [
             date,
@@ -58,49 +136,42 @@ export const Rows = (data) => {
             BalanceAmount,
             element.PaidAmount,
         ];
-
-        // function totalLots() {
-        //     totalQuantity = Number(element.GrandTotal) - Number(element.PaidAmount)
-        //     // totalCGst = Number(totalCGst) + Number(element.CGST)
-        //     // totalSGst = Number(totalSGst) + Number(element.SGST)
-        //     // totalAmount = Number(totalAmount) + Number(element.Amount)
-        //     // totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
-        //     let cgst = data["tableTot"].TotalCGst
-        //     return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
-        // };
+     
+        function totalLots() {
+            TotalPaidAmount = Number(TotalPaidAmount) + Number(element.PaidAmount)
+            TotalBalanceAmt = Number(TotalBalanceAmt) + Number(BalanceAmount)
+            Total = Number(Total) + Number(element.GrandTotal)
+            // let cgst = data["tableTot"].Total
+            // return ({ TotalCGst: cgst })
+        };
 
         function totalrow() {
             return [
-                // `Total Quantity:${parseFloat(totalQuantity).toFixed(2)} ${element.UnitName}`,
-                // `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
-                // ``,
-                // "",
-                // `isaddition`,
-                // `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
-                // ``,
-                // `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
-                // "",
-                // `Amt:${parseFloat(totalAmount).toFixed(2)}`,
+                "",
+                "",
+                `Total:${parseFloat(Total).toFixed(2)}`,
+                `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
+                `PaidAmt:${parseFloat(TotalPaidAmount).toFixed(2)}`,
+             
+              
+              
             ];
         };
 
-        if (Gst === 0) { Gst = element.GSTPercentage };
-        let aa = { TotalCGst: 0, totalSGst: 0 }
-        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+
+        // if (Gst === 0) { Gst = element.GSTPercentage };
+        // let aa = { TotalCGst: 0, totalSGst: 0 }
+        // if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Gst === element.GSTPercentage)) {
-            // data["tableTot"] = totalLots()
+            data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
         }
         else {
-            returnArr.push(totalrow());
+            // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
-            // totalBasicAmount = 0
-            // totalCGst = 0
-            // totalSGst = 0
-            // totalAmount = 0
-            // totalQuantity = 0
+           
 
-            // data["tableTot"] = totalLots()
+            data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
         if (key === CRDRInvoices.length - 1) {

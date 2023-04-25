@@ -320,7 +320,23 @@ export const reportFooterForGoodsCredit = (doc, data) => {
 }
 
 export const reportFooterForCredit = (doc, data) => {
-    let stringNumber = toWords(Number(data.GrandTotal))
+    debugger
+
+    const a = data.CRDRInvoices.map((data) => ({
+        GrandTotal: Number(data.GrandTotal),
+        PaidAmount: Number(data.PaidAmount),
+      
+    }));
+    var GrandTotal = 0;
+    var PaidAmount = 0;
+    
+    a.forEach(arg => {
+        GrandTotal += arg.GrandTotal;
+        PaidAmount += arg.PaidAmount;
+       
+    });
+    const BalAmt = GrandTotal-PaidAmount
+    let stringNumber = toWords(Number(PaidAmount))
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
@@ -330,27 +346,27 @@ export const reportFooterForCredit = (doc, data) => {
     doc.line(435, 340, 30, 340);//horizontal line (Bottom)
 
 
-    doc.setFontSize(8)
+    doc.setFontSize(9)
 
-    doc.text(`CGST:`, 440, 310,)
+    // doc.text(`CGST:`, 440, 310,)
     // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
-    doc.text(`SGST:`, 440, 322,)
-    // doc.text(`${totalSGST.toFixed(2)}`, 560, 322, 'right')
+    doc.text(`Paid Amount:`, 440, 322,)
+    doc.text(`${PaidAmount.toFixed(2)}`, 560, 322, 'right')
 
-    doc.text(`TotalGST:`, 440, 334,)
-    // doc.text(` ${TotalGST.toFixed(2)}`, 560, 334, 'right')/
+    doc.text(`Balance Amount:`, 440, 334,)
+    doc.text(` ${BalAmt.toFixed(2)}`, 560, 334, 'right')
 
-    doc.text(`BasicAmount:`, 440, 346,)
-    // doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 346, 'right')/
+    doc.text(`Total Amount:`, 440, 346,)
+    doc.text(`${GrandTotal.toFixed(2)}`, 560, 346, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 439, 365,)
-    // const GrandTotal = Math.round(data.GrandTotal)
-    // const Total = numberWithCommas((GrandTotal).toFixed(2))
-    // doc.text(`${Total}`, 560, 365, 'right')
+    doc.text(`Amount Paid :`, 439, 365,)
+    const PaidTotal = Math.round(PaidAmount)
+    const Total = numberWithCommas((PaidTotal).toFixed(2))
+    doc.text(`${Total}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -373,7 +389,7 @@ export const reportFooterForCredit = (doc, data) => {
     // doc.text(`Note Comment : ${data.Narration}`, 34, 328,)
     doc.setFontSize(8)
     // doc.setFont(undefined, 'bold')
-    doc.text(`Rupees:`, 33, 305,)
+    doc.text(`Rupees: ${stringNumber}`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.setFontSize(11)
     doc.text(` Prepared By`, 34, 370,)
@@ -386,7 +402,7 @@ export const reportFooterForCredit = (doc, data) => {
 }
 
 export const tableBodyforCreditGoods = (doc, data) => {
-    var options = {
+    var options1 = {
         didParseCell: (data1) => {
             if (data1.row.cells[4].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 1
@@ -484,7 +500,8 @@ export const tableBodyforCreditGoods = (doc, data) => {
     };
 
 
-    doc.autoTable(table.columns, table.Rows(data), options,);
+    doc.autoTable(table.columns1, table.Rows1(data), options1,);
+
     const optionsTable4 = {
         margin: {
             left: 30, right: 30, bottom: 110
@@ -493,42 +510,26 @@ export const tableBodyforCreditGoods = (doc, data) => {
         theme: '',
     };
     doc.autoTable(optionsTable4);
-    doc.autoTable({
-        html: '#table',
-        didParseCell(data) {
-            if (data.cell.row.index === 0) {
-                data.cell.styles.textColor = [255, 255, 255];
-                data.cell.styles.fillColor = '#FF5783';
-            }
-        }
-    })
 }
 
 
 export const tableBodyforCredit = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-            // if (data1.row.cells[4].raw === "isaddition") {
-            //     data1.row.cells[0].colSpan = 1
-            //     data1.row.cells[1].colSpan = 4
-            //     data1.row.cells[5].colSpan = 2
-            //     data1.row.cells[7].colSpan = 2
+            
+            if (data1.row.cells[0].raw === "") {
+              
+                data1.row.cells[2].styles.fontSize = 8
+                data1.row.cells[3].styles.fontSize = 8
+                data1.row.cells[4].styles.fontSize = 8
+               
 
-            //     data1.row.cells[0].styles.fontSize = 8
-            //     data1.row.cells[1].styles.fontSize = 8
-            //     data1.row.cells[5].styles.fontSize = 8
-            //     data1.row.cells[7].styles.fontSize = 8
-            //     data1.row.cells[9].styles.fontSize = 8
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[4].styles.fontStyle = "bold"
+            }
 
-            //     data1.row.cells[0].styles.fontStyle = "bold"
-            //     data1.row.cells[1].styles.fontStyle = "bold"
-            //     data1.row.cells[5].styles.fontStyle = "bold"
-            //     data1.row.cells[7].styles.fontStyle = "bold"
-            // }
-            // if (data1.row.cells[0].raw === "HSN Item Name") {
-            //     data1.row.cells[5].colSpan = 2
-            //     data1.row.cells[7].colSpan = 2   
-            // }
+        
         },
         margin: {
             left: 30, right: 22, top: 43
@@ -592,15 +593,6 @@ export const tableBodyforCredit = (doc, data) => {
         theme: '',
     };
     doc.autoTable(optionsTable4);
-    doc.autoTable({
-        html: '#table',
-        didParseCell(data) {
-            if (data.cell.row.index === 0) {
-                data.cell.styles.textColor = [255, 255, 255];
-                data.cell.styles.fillColor = '#FF5783';
-            }
-        }
-    })
 }
 
 
