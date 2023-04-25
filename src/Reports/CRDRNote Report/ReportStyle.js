@@ -198,55 +198,52 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooterForGoodsCredit = (doc, data) => {
-    let stringNumber = toWords(Number(data.GrandTotal))
-    doc.addImage(upi_qr_code, 'PNG', 359, 310, 75, 65)
+    debugger
+    const a = data.CRDRInvoices.map((data) => ({
+        GrandTotal: Number(data.GrandTotal),
+        PaidAmount: Number(data.PaidAmount),
+      
+    }));
+    var GrandTotal = 0;
+    var PaidAmount = 0;
+    
+    a.forEach(arg => {
+        GrandTotal += arg.GrandTotal;
+        PaidAmount += arg.PaidAmount;
+       
+    });
+    const BalAmt = GrandTotal-PaidAmount
+    let stringNumber = toWords(Number(PaidAmount))
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
-    // doc.line(570, 340, 30, 340);//horizontal line Footer 3
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
     doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
-    doc.line(360, 308, 360, 379);//vertical right1 Sub Total
+    // doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
-    doc.line(360, 340, 30, 340);//horizontal line (Bottom)
+    doc.line(435, 340, 30, 340);//horizontal line (Bottom)
 
-    // const a = data.InvoiceItems.map((data) => ({
-    //     CGST: Number(data.CGST),
-    //     SGST: Number(data.SGST),
-    //     BasicAmount: Number(data.BasicAmount),
-    // }));
-    // var totalCGST = 0;
-    // var totalSGST = 0;
-    // var TotalBasicAmount = 0;
-    // a.forEach(arg => {
-    //     totalCGST += arg.CGST;
-    //     totalSGST += arg.SGST;
-    //     TotalBasicAmount += arg.BasicAmount
 
-    // });
+    doc.setFontSize(9)
 
-    // const TotalGST = totalCGST + totalSGST;
-
-    doc.setFontSize(8)
-
-    doc.text(`CGST:`, 440, 310,)
+    // doc.text(`CGST:`, 440, 310,)
     // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
-    doc.text(`SGST:`, 440, 322,)
-    // doc.text(`${totalSGST.toFixed(2)}`, 560, 322, 'right')
+    doc.text(`Paid Amount:`, 440, 322,)
+    doc.text(`${PaidAmount.toFixed(2)}`, 560, 322, 'right')
 
-    doc.text(`TotalGST:`, 440, 334,)
-    // doc.text(` ${TotalGST.toFixed(2)}`, 560, 334, 'right')/
+    doc.text(`Balance Amount:`, 440, 334,)
+    doc.text(` ${BalAmt.toFixed(2)}`, 560, 334, 'right')
 
-    doc.text(`BasicAmount:`, 440, 346,)
-    // doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 346, 'right')/
+    doc.text(`Total Amount:`, 440, 346,)
+    doc.text(`${GrandTotal.toFixed(2)}`, 560, 346, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text(`Amount :`, 439, 365,)
-    // const GrandTotal = Math.round(data.GrandTotal)
-    // const Total = numberWithCommas((GrandTotal).toFixed(2))
-    // doc.text(`${Total}`, 560, 365, 'right')
+    doc.text(`Amount Paid :`, 439, 365,)
+    const PaidTotal = Math.round(PaidAmount)
+    const Total = numberWithCommas((PaidTotal).toFixed(2))
+    doc.text(`${Total}`, 560, 365, 'right')
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -262,62 +259,30 @@ export const reportFooterForGoodsCredit = (doc, data) => {
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity which it/these purports to be `, 34, 350,)
-    doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
-    doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 328,)
-    doc.setFont(undefined, 'bold')
-    doc.text(`Rupees:`, 33, 305,)
-    doc.addFont("Arial", 'Normal')
-    // doc.text(`${stringNumber}`, 65, 305,)
-    // const optionsTable4 = {
-    //     margin: {
-    //         top: 100, left: 50, right: 30,
-    //     },
-    //     showHead: 'never',
-    //     theme: 'grid',
-    //     headerStyles: {
-    //         cellPadding: 1,
-    //         lineWidth: 0,
-    //         valign: 'top',
-    //         fontStyle: 'bold',
-    //         halign: 'center',
-    //         fillColor: "white",
-    //         textColor: [0, 0, 0],
-    //         fontSize: 8,
-    //         rowHeight: 10,
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: [30, 30, 30],
-    //         cellPadding: 2,
-    //         fontSize: 7,
-    //         fontStyle: 'bold',
-    //         lineColor: [0, 0, 0]
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //         },
-    //         1: {
-    //             halign: 'right',
-    //             valign: "top",
-    //         },
-    //     },
-    //     didParseCell: function (cell, data) {
-    //         console.log("didParseCell", cell)
-    //         console.log(" didParse data", data)
+     of the nature and quantity which it/these purports to be `, 34, 321,)
+    // doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
+    // doc.setFontSize(10)
 
-    //         if (cell.row.index === 4) {
-    //             cell.cell.styles.fontSize = 12;
-    //             cell.cell.styles.lineWidth = 1
-    //         }
-    //     },
-    //     startY: 100
-    // };
+    // doc.text(`Note Comment : ${data.Narration}`, 34, 328,)
+    doc.setFontSize(8)
+    // doc.setFont(undefined, 'bold')
+    doc.text(`Rupees: ${stringNumber}`, 33, 305,)
+    doc.addFont("Arial", 'Normal')
+    doc.setFontSize(11)
+    doc.text(` Prepared By`, 34, 370,)
+    doc.text(`Authorized Signatory `, 320, 370,)
     doc.setFontSize(9)
-    // doc.autoTable(optionsTable4,);
+    doc.addFont("Arial", 'Normal')
+
+
+
 }
+
+
+
+
+
+
 
 export const reportFooterForCredit = (doc, data) => {
     debugger
@@ -487,11 +452,7 @@ export const tableBodyforCreditGoods = (doc, data) => {
                 fontStyle: 'bold',
                 halign: 'right',
             },
-            9: {
-                columnWidth: 78,
-                fontStyle: 'bold',
-                halign: 'right',
-            },
+            
         },
         tableLineColor: "black",
 
@@ -517,14 +478,16 @@ export const tableBodyforCredit = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
             
-            if (data1.row.cells[0].raw === "") {
+            if (data1.row.cells[0].raw === "Total Amoumt Paid") {
               
-                data1.row.cells[2].styles.fontSize = 8
+                data1.row.cells[0].colSpan = 3
+                 
+                data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[3].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
                
 
-                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
             }
