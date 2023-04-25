@@ -3,8 +3,8 @@ import { loginUserID } from "./CommonFunction";
 import * as mode from "../../routes/PageMode"
 
 export function SaveButton(props) {
+  const { pageMode = '', userAcc = {}, editCreatedBy } = props
 
-  const { pageMode = '', userAcc = {}, editCreatedBy , } = props;
   const isCreated = (loginUserID() === editCreatedBy)
 
   if (pageMode === mode.edit) {
@@ -13,7 +13,7 @@ export function SaveButton(props) {
     }
 
   }
-  else if ((userAcc.RoleAccess_IsSave)&&(pageMode === mode.defaultsave
+  else if ((userAcc.RoleAccess_IsSave) && (pageMode === mode.defaultsave
     || pageMode === mode.copy
     || pageMode === mode.modeSTPsave
     || pageMode === mode.dropdownAdd
@@ -22,15 +22,16 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = (props) => {
-  const { module = '', onClick } = props;
-  const btnId = `Save-${module.replace(/ /g, "")}`;
+const SaveBtn = ({ onClick, userAcc }) => {
+  const { Name } = userAcc;
+
+  const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
     <div>
       <button
         type="submit"
         id={btnId}
-        title={`Save ${module}`}
+        title={`Save ${Name}`}
         className="btn btn-primary w-md"
         onClick={onClick}
       > <i className="fas fa-save me-2"></i> Save
@@ -39,16 +40,16 @@ const SaveBtn = (props) => {
   )
 
 }
-const UpdateBtn = (props) => {
-  const { module = '', onClick } = props;
-  const btnId = `Update-${module.replace(/ /g, "")}`;
-    
+const UpdateBtn = ({ onClick, userAcc }) => {
+  const { Name } = userAcc;
+  const btnId = `Update-${Name.replace(/ /g, "")}`;
+
   return (
     <div>
       <button
         type="submit"
         id={btnId}
-        title={`Update ${module}`}
+        title={`Update ${Name}`}
         className="btn btn-success w-md"
         onClick={onClick}
       >
@@ -59,17 +60,19 @@ const UpdateBtn = (props) => {
 }
 
 export function Go_Button(props) {
-  const { onClick, id } = props
+  const { onClick, id, type = "button" } = props
   return <Button
-    id={id} type="button"
+    id={id}
+    type={type}
     color="btn btn-outline-success border-1 font-size-12 mb-2 "
     onClick={onClick} > Go</Button>
 }
 
 export function Change_Button(props) {
-  const { onClick, id } = props
+  const { onClick, id, type = "button" } = props
   return <Button
-    id={id} type="button"
+    id={id}
+    type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
 

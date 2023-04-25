@@ -149,15 +149,16 @@ export const DELETE_API_FOR_LIST_MARGIN_PAGE = '/DeleteMarginOnList'
 
 //Import Field Add 
 export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
-export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'    //save
+export const IMPORT_FIELD_MAP_SAVE = '/PartyImportFieldSave'        //save
 
 //Import Master Map
-export const IMPORT_MASTER_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
-export const IMPORT_MASTER_MAP_SAVE = '/PartyImportFieldSave'    //save
+export const IMPORT_MASTER_MAP_CUSTOMER = '/PartyCustomerMapping'    //save & get
+export const IMPORT_MASTER_MAP_ITEM = '/ItemsMapping'                //save & get
+export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping'           //save & get
 
 //Import Field Map
-export const IMPORT_FIELD_ADD_SAVE = '/ImportField'    //save
-export const IMPORT_FIELD_ADD_FILTER = '/ImportFieldList'    //list
+export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
+export const IMPORT_FIELD_ADD_FILTER = '/ImportFieldList'         //list
 
 
 //TermsAndCondtions API

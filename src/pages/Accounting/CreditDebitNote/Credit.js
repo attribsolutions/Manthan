@@ -79,6 +79,13 @@ const Credit = (props) => {
     const [userPageAccessState, setUserAccState] = useState(198);
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [calculation, Setcalculation] = useState();
+    const [Table, setTable] = useState([])
+    const [Table1, setTable1] = useState([])
+
+
+
+
+
 
 
 
@@ -120,7 +127,8 @@ const Credit = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    const { Data = [] } = ReceiptGoButton
+    let { Data = [] } = ReceiptGoButton
+
 
     const { InvoiceItems = [] } = InvoiceReturn
 
@@ -167,17 +175,23 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, } = hasEditVal
+                debugger
+                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems ,FullNoteNumber} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 // hasValid.Name.valid = true;
 
                 values.CRDRNoteDate = CRDRNoteDate;
-                values.Customer = Customer;
-                values.NoteReason = NoteReason;
+                values.Customer = { label: Customer, value: CustomerID };
+                values.NoteReason = { label: NoteReason, value: "" };
+                values.InvoiceNO = { label: FullNoteNumber, value: "" };
+
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
+                setTable(CRDRInvoices)
+                setTable1(CRDRNoteItems)
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -246,6 +260,7 @@ const Credit = (props) => {
         }
     }, [pageField])
 
+    console.log(Table)
 
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
@@ -294,15 +309,15 @@ const Credit = (props) => {
     }));
 
     const CreditDebitTypeId = CreditDebitType.find((index) => {
-        return index.Name === "CreditNote"          
-    })
-debugger
-    const GoodsCreditType = CreditDebitType.find((index) => {
-        return index.Name === "Goods CreditNote"  
-              
+        return index.Name === "CreditNote"
     })
 
-  
+    const GoodsCreditType = CreditDebitType.find((index) => {
+        return index.Name === "Goods CreditNote"
+
+    })
+
+
 
 
     function DateOnchange(e, date) {
@@ -321,7 +336,7 @@ debugger
     }
 
     function CustomerOnChange(e) { // Customer dropdown function
-        
+
 
         setState((i) => {
             i.values.GrandTotal = 0
@@ -336,7 +351,6 @@ debugger
         });
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
-
         const jsonBody1 = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: e.value
@@ -408,7 +422,7 @@ debugger
     }
 
     function val_onChange(event, row, val) {
-        debugger
+
         let input = event.target.value;
         // let result = /^\d*(\.\d{0,2})?$/.test(input);
         row.Qty = event.target.value
@@ -434,12 +448,12 @@ debugger
     };
 
     function UnitOnchange(e, row, key) {
-        
+
         row.unit = e.value
     };
 
     function invoiceclick() {
-        
+
 
     };
 
@@ -453,21 +467,31 @@ debugger
             dataField: "BaseUnitQuantity",
         },
         {
+            text: "Unit Name",
+            dataField: "UnitName",
+            headerStyle: (colum, colIndex) => {
+                return { width: '60px', textAlign: 'center' };
+            },
+
+        },
+
+        {
             text: "Quantity ",
             dataField: "Quantity",
             formatter: (cellContent, row, key) => {
-                
+debugger
                 return (<span >
                     <Input
                         key={`Qty${row.Item}${key}`}
                         id={`Qty${row.Item}`}
                         pattern={decimalRegx}
-                        defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
+                        defaultValue={pageMode === mode.view ?row.Quantity:null}
+                        disabled={pageMode === mode.view ? true : false}
                         // value={row.Calculate}
                         // type="text"
+                        placeholder="Enter Quantity"
                         autoComplete="off"
-                        className="col col-sm text-center"
+                        className="col col-sm"
                         onChange={(event) => val_onChange(event, row, key)}
 
                     />
@@ -478,24 +502,47 @@ debugger
             text: "Unit",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                const Units = row.ItemUnitDetails.map((index) => ({
-                    value: index.Unit,
-                    label: index.UnitName,
-                }));
+                debugger
+                if (pageMode !== mode.view) {
+                    const Units = row.ItemUnitDetails.map((index) => ({
+                        value: index.Unit,
+                        label: index.UnitName,
+                    }));
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Select
-                        id={`Unit${key}`}
-                        name="Unit"
-                        // defaultValue={row.Calculate}
-                        isSearchable={true}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={Units}
-                        onChange={(e) => UnitOnchange(e, row, key)}
 
-                    />
-                </span>)
+                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                        <Select
+                            id={`Unit${key}`}
+                            name="Unit"
+                            defaultValue={row.Calculate}
+                            isSearchable={true}
+                            className="react-dropdown"
+                            classNamePrefix="dropdown"
+                            options={Units}
+                            onChange={(e) => UnitOnchange(e, row, key)}
+
+                        />
+                    </span>)
+                } else {
+                    row.unit = { label:row.UnitName, value: row.Unit };
+                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                        
+                        <Select
+                            id={`Unit${key}`}
+                            name="Unit"
+                            defaultValue={row.unit}
+                            disabled={true}
+                            isSearchable={true}
+                            className="react-dropdown"
+                            classNamePrefix="dropdown"
+                            // options={Units}
+                            onChange={(e) => UnitOnchange(e, row, key)}
+
+                        />
+                    </span>)
+
+                }
+
             }
         },
         {
@@ -512,11 +559,11 @@ debugger
             dataField: "InvoiceDate",
         },
         {
-            text: "Bill No",
+            text: "Invoice No",
             dataField: "FullInvoiceNumber",
         },
         {
-            text: "Bill Amount",
+            text: "Invoice Amount",
             dataField: "GrandTotal",
         },
         {
@@ -531,15 +578,15 @@ debugger
             text: "Calculate",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                
+
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <CInput
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
                         pattern={decimalRegx}
-                        defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
+                        defaultValue={ pageMode === mode.view ?row.Amount: row.Calculate}
+                        disabled={pageMode === mode.view ? true : false}
                         // value={row.Calculate}
                         // type="text"
                         autoComplete="off"
@@ -557,7 +604,7 @@ debugger
 
 
     const saveHandeller = async (event) => {
-        debugger
+
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
@@ -577,10 +624,10 @@ debugger
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
             return index.PaidAmount > 0
         })
-        
+
         InvoiceItems.forEach(index => {
             if (index.Qty) {
-                if ((!index.unit) ) {
+                if ((!index.unit)) {
                     CustomAlert({
                         Type: 3,
                         Message: `Please Select Unit ${index.ItemName}`,
@@ -616,11 +663,11 @@ debugger
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
-                debugger
+
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
-                    NoteType: arr1.length===0? CreditDebitTypeId.id :GoodsCreditType.id,
+                    NoteType: arr1.length === 0 ? CreditDebitTypeId.id : GoodsCreditType.id,
                     GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     NoteReason: values.NoteReason.value,
@@ -634,7 +681,7 @@ debugger
                     // dispatch(updateCategoryID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-debugger
+
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
             }
@@ -807,7 +854,7 @@ debugger
 
                         <ToolkitProvider
                             keyField="id"
-                            data={InvoiceItems}
+                            data={Table1.length <= 0 ? InvoiceItems : Table1}
                             columns={pagesListColumns1}
                             search
                         >
@@ -827,7 +874,28 @@ debugger
                                         />
 
                                         {mySearchProps(toolkitProps.searchProps)}
-                                    </div>}
+                                    </div>
+
+
+                                    }
+                                    {Table1.length <= 0 ? null : <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
+
+                                            {...toolkitProps.baseProps}
+
+                                        />
+
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+
+
+                                    }
 
                                 </React.Fragment>
                             )
@@ -839,7 +907,7 @@ debugger
                             <ToolkitProvider
 
                                 keyField="id"
-                                data={Data}
+                                data={Table.length <= 0 ? Data : Table}
                                 columns={pagesListColumns}
 
                                 search
