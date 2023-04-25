@@ -20,7 +20,13 @@ export const pageHeder = (doc, data) => {
     doc.setFont('Arial')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
-    doc.text('CREDIT NOTE', 180, 34,)
+    if (data.NoteType === "CreditNote") {
+        doc.text('CREDIT NOTE', 270, 34, "center")
+
+    } else {
+        doc.text(' GOODS CREDIT NOTE', 270, 34, "center")
+
+    }
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
 }
@@ -31,15 +37,17 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.text("Customer", 80, 52)  //bill by 
     doc.text('Party', 280, 52) //billed to
+    doc.text('Details of Note', 440, 52)
+
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 55, 30, 55);//horizontal line 3
     // doc.line(409, 69, 30, 69)//horizontal line 4
-    doc.line(30, 350, 30, 16);//vertical left 1
-    doc.line(570, 350, 570, 16);//vertical left 2
-    doc.line(408, 145, 408, 16);//vertical right 1
+    // doc.line(30, 350, 30, 16);//vertical left 1
+    // doc.line(570, 350, 570, 16);//vertical left 2
+    doc.line(408, 145, 408, 43);//vertical right 1
     doc.line(220, 145, 220, 43);//vertical right 2
 
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
@@ -60,7 +68,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'Normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -91,7 +99,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'Normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -121,7 +129,7 @@ export const reportHeder1 = (doc, data) => {
             textColor: [30, 30, 30],
             cellPadding: 2,
             fontSize: 8,
-            fontStyle: 'bold',
+            fontStyle: 'Normal',
             lineColor: [0, 0, 0]
         },
         columnStyles: {
@@ -140,7 +148,7 @@ export const reportHeder1 = (doc, data) => {
 
     // let initial_y = 0
     const priLength = () => {
-        
+
         let final_y = doc.previousAutoTable.finalY
 
         if (final_y > initial_y) {
@@ -150,11 +158,15 @@ export const reportHeder1 = (doc, data) => {
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    console.log("first",doc.previousAutoTable.finalY)
+    console.log("first", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    console.log("Second",doc.previousAutoTable.finalY)
+    console.log("Second", doc.previousAutoTable.finalY)
+    priLength()
+
+    doc.autoTable(table.Details, table.DetailsRow(data), DetailsOfTransportStyle);
+    console.log("third", doc.previousAutoTable.finalY)
     priLength()
 
 
@@ -174,7 +186,7 @@ export const reportHeder3 = (doc, data) => {
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-    doc.line(408, 42, 408, 16);//vertical right 1
+    // doc.line(408, 42, 408, 16);//vertical right 1
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 25) //Invoice Id
     var date = convertDatefunc(data.InvoiceDate)
@@ -185,7 +197,7 @@ export const reportHeder3 = (doc, data) => {
 }
 
 
-export const reportFooter = (doc, data) => {
+export const reportFooterForGoodsCredit = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
     doc.addImage(upi_qr_code, 'PNG', 359, 310, 75, 65)
     doc.setDrawColor(0, 0, 0);
@@ -196,7 +208,7 @@ export const reportFooter = (doc, data) => {
     doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(360, 340, 30, 340);//horizontal line (Bottom)
- 
+
     // const a = data.InvoiceItems.map((data) => ({
     //     CGST: Number(data.CGST),
     //     SGST: Number(data.SGST),
@@ -306,7 +318,74 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
     // doc.autoTable(optionsTable4,);
 }
-export const tableBody = (doc, data) => {
+
+export const reportFooterForCredit = (doc, data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 295, 30, 295);//horizontal line Footer 2
+    doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
+    doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
+    // doc.line(360, 308, 360, 379);//vertical right1 Sub Total
+    doc.setFont('Tahoma')
+    doc.line(435, 340, 30, 340);//horizontal line (Bottom)
+
+
+    doc.setFontSize(8)
+
+    doc.text(`CGST:`, 440, 310,)
+    // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
+
+    doc.text(`SGST:`, 440, 322,)
+    // doc.text(`${totalSGST.toFixed(2)}`, 560, 322, 'right')
+
+    doc.text(`TotalGST:`, 440, 334,)
+    // doc.text(` ${TotalGST.toFixed(2)}`, 560, 334, 'right')/
+
+    doc.text(`BasicAmount:`, 440, 346,)
+    // doc.text(`${TotalBasicAmount.toFixed(2)}`, 560, 346, 'right')/
+
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(11)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Amount :`, 439, 365,)
+    // const GrandTotal = Math.round(data.GrandTotal)
+    // const Total = numberWithCommas((GrandTotal).toFixed(2))
+    // doc.text(`${Total}`, 560, 365, 'right')
+    doc.setFont(undefined, 'Normal')
+    doc.setFont('Tahoma')
+    doc.setFontSize(9)
+    doc.setFont('Tahoma')
+    doc.setFontSize(8)
+    doc.text(`Prepared by `, 35, 785,)
+    doc.text(`Received By `, 180, 785,)
+    doc.setFontSize(10)
+    // doc.text(`${data.PartyName} `, 390, 785,)
+    doc.setFontSize(10)
+    // doc.text(`${data.CustomerName} `, 140, 811,)
+    doc.setFontSize(9)
+    doc.text(`Signature `, 400, 811,)
+    doc.setFont("Arimo");
+    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+     of the nature and quantity which it/these purports to be `, 34, 321,)
+    // doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
+    // doc.setFontSize(10)
+
+    // doc.text(`Note Comment : ${data.Narration}`, 34, 328,)
+    doc.setFontSize(8)
+    // doc.setFont(undefined, 'bold')
+    doc.text(`Rupees:`, 33, 305,)
+    doc.addFont("Arial", 'Normal')
+    doc.setFontSize(11)
+    doc.text(` Prepared By`, 34, 370,)
+    doc.text(`Authorized Signatory `, 320, 370,)
+    doc.setFontSize(9)
+    doc.addFont("Arial", 'Normal')
+
+
+
+}
+
+export const tableBodyforCreditGoods = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
             if (data1.row.cells[4].raw === "isaddition") {
@@ -328,7 +407,7 @@ export const tableBody = (doc, data) => {
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
                 data1.row.cells[5].colSpan = 2
-                data1.row.cells[7].colSpan = 2   
+                data1.row.cells[7].colSpan = 2
             }
         },
         margin: {
@@ -426,6 +505,106 @@ export const tableBody = (doc, data) => {
 }
 
 
+export const tableBodyforCredit = (doc, data) => {
+    var options = {
+        didParseCell: (data1) => {
+            // if (data1.row.cells[4].raw === "isaddition") {
+            //     data1.row.cells[0].colSpan = 1
+            //     data1.row.cells[1].colSpan = 4
+            //     data1.row.cells[5].colSpan = 2
+            //     data1.row.cells[7].colSpan = 2
+
+            //     data1.row.cells[0].styles.fontSize = 8
+            //     data1.row.cells[1].styles.fontSize = 8
+            //     data1.row.cells[5].styles.fontSize = 8
+            //     data1.row.cells[7].styles.fontSize = 8
+            //     data1.row.cells[9].styles.fontSize = 8
+
+            //     data1.row.cells[0].styles.fontStyle = "bold"
+            //     data1.row.cells[1].styles.fontStyle = "bold"
+            //     data1.row.cells[5].styles.fontStyle = "bold"
+            //     data1.row.cells[7].styles.fontStyle = "bold"
+            // }
+            // if (data1.row.cells[0].raw === "HSN Item Name") {
+            //     data1.row.cells[5].colSpan = 2
+            //     data1.row.cells[7].colSpan = 2   
+            // }
+        },
+        margin: {
+            left: 30, right: 22, top: 43
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',
+            fillColor: "white",
+            textColor: [0, 0, 0],
+            fontSize: 9,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 4,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 140,
+            },
+            1: {
+                columnWidth: 100,
+                halign: 'right',
+            },
+            2: {
+                columnWidth: 100,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 100,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 100,
+                halign: 'right',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: initial_y,// 45,
+        // startY:60
+    };
+
+
+    doc.autoTable(table.columns, table.Rows(data), options,);
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 110
+        },
+        showHead: 'never',
+        theme: '',
+    };
+    doc.autoTable(optionsTable4);
+    doc.autoTable({
+        html: '#table',
+        didParseCell(data) {
+            if (data.cell.row.index === 0) {
+                data.cell.styles.textColor = [255, 255, 255];
+                data.cell.styles.fillColor = '#FF5783';
+            }
+        }
+    })
+}
+
+
+
 
 
 
@@ -433,19 +612,6 @@ export const tableBody = (doc, data) => {
 
 
 export const pageFooter = (doc, data, islast = 0, array = []) => {
-
-    let finalY = doc.previousAutoTable.finalY;
-    if (finalY > 110) {
-        pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-     
-    } else {
-        pageBorder(doc)
-        reportFooter(doc, data)
-        pageHeder(doc, data)
-    
-    }
 
     const pageCount = doc.internal.getNumberOfPages()
     console.log(pageCount)
