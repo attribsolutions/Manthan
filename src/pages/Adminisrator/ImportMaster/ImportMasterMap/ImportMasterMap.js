@@ -234,7 +234,7 @@ const ImportMasterMap = (props) => {
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
-                        "Unit": i.fieldName,
+                        "Unit": i.fieldId,
                         "MapUnit": i.mapValue,
                         "CreatedBy": loginUserID(),
                         "UpdatedBy": loginUserID()
