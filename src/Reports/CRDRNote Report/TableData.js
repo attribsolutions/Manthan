@@ -5,8 +5,8 @@ export const columns = [
     "Invoice Date",
     "Invoice Number",
     "Grand Total",
-    "BalanceAmount",
     "PaidAmount",
+    "BalanceAmount",
     
 ];
 
@@ -133,8 +133,8 @@ export const Rows = (data) => {
             date,
             element.FullInvoiceNumber,
             element.GrandTotal,
-            BalanceAmount,
             element.PaidAmount,
+            BalanceAmount,
         ];
      
         function totalLots() {
