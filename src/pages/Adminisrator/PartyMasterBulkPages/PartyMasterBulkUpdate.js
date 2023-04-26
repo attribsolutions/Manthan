@@ -456,12 +456,8 @@ const PartyMasterBulkUpdate = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-
             btnIsDissablefunc({ btnId, state: true })
-
-
             Data.forEach(i => {
-
                 if (i.Newvalue || i.NewFSSAIExipry || i.NewDistrict) {
                     const arr = {
                         SubPartyID: i.SubPartyID,
@@ -472,7 +468,6 @@ const PartyMasterBulkUpdate = (props) => {
                     }
                     arr1.push(arr)
                 }
-
             })
 
             const jsonBody = JSON.stringify({
@@ -494,8 +489,6 @@ const PartyMasterBulkUpdate = (props) => {
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
-
-
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
 
@@ -652,7 +645,6 @@ const PartyMasterBulkUpdate = (props) => {
                                                     </div>
                                                 </Col>
                                             </Row>
-
                                         </CardBody>
                                     </Card>
                                 </Col>
