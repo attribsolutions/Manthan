@@ -1,5 +1,5 @@
-import { groupBy } from 'lodash';
-import { invertDatefunc } from '../../../../components/Common/CommonFunction';
+// import { groupBy } from 'lodash';
+import { groupBy, invertDatefunc } from '../../../../components/Common/CommonFunction';
 import { CustomAlert } from '../../../../CustomAlert/ConfirmDialog';
 
 const XLSX = require('xlsx');
@@ -82,7 +82,7 @@ export const readExcelFile = async ({ file, compareParam }) => {
 
 
 
-export async function fileDetails({ compareParam = [], readjson = [], setReadJsonDetail }) {
+export async function fileDetails({ compareParam = [], readjson = [] }) {
 
 
   const fileFiled = {}
@@ -92,18 +92,29 @@ export async function fileDetails({ compareParam = [], readjson = [], setReadJso
       fileFiled[ele.FieldName] = ele.Value
     }
   })
-  debugger
+  let invoiceNO = []
+  let partyNO = []
+
   const invoice = await groupBy(readjson, (party) => {
-    debugger
     return (party[fileFiled.InvoiceNumber])
   })
   const party = await groupBy(readjson, (party) => (party[fileFiled.Party]))
+
+  await invoice.forEach((ele, a, s) => {
+    invoiceNO.push(a)
+  });
+
+  await party.forEach((ele, a, s) => {
+    partyNO.push(a)
+  });
+
   const invoiceDate = await groupBy(readjson, (party) => (party[fileFiled.InvoiceDate]))
   const amount = await readjson.reduce((total, current,) => {
     return total + Number(current[fileFiled.GrandTotal])
   }, 0)
-  setReadJsonDetail({ fileFiled, invoice, party, invoiceDate, amount })
-  return { fileFiled, invoice, party, invoiceDate, amount }
+
+
+  return { fileFiled, invoice, party, invoiceDate, amount, invoiceNO, partyNO }
 }
 
 
