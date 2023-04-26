@@ -313,7 +313,7 @@ const CreditList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             ButtonMsgLable={"Credit"}
-                            deleteName={"Credit"}
+                            deleteName={"Customer"}
 
                         />
                         : null
