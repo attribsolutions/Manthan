@@ -34,7 +34,12 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginUserID,
+    loginCompanyID
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -212,9 +217,7 @@ const EmployeeTypesMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
-                    // IsPartyConnection: values.IsPartyConnection,
                     Company: loginCompanyID(),
-                    // IsSCM: values.IsSCM,
                     IsSalesTeamMember: values.IsSalesTeamMember,
                     CreatedBy: loginUserID(),
                     CreatedOn: "2022-07-18T00:00:00",
@@ -279,52 +282,6 @@ const EmployeeTypesMaster = (props) => {
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
-
-                                                        {/* <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }}>
-                                                                        <div className="form-check form-switch form-switch-md mb-3" >
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsPartyConnection}
-                                                                                name="IsPartyConnection"
-                                                                                onChange={(e) => {
-                                                                                    setState((i) => {
-                                                                                        const a = { ...i }
-                                                                                        a.values.IsPartyConnection = e.target.checked;
-                                                                                        return a
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Row> */}
-
-                                                        {/* <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3" >
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsSCM}
-                                                                                name="IsSCM"
-                                                                                onChange={(e) => {
-                                                                                    setState((i) => {
-                                                                                        const a = { ...i }
-                                                                                        a.values.IsSCM = e.target.checked;
-                                                                                        return a
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Row> */}
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">

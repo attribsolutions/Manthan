@@ -16,7 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
 import { AlertState } from "../../../store/actions";
-import paginationFactory, {
+import {
+    paginationFactory,
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
@@ -32,7 +33,11 @@ import {
     postGSTMasterData,
     postGSTMasterDataSuccess
 } from "../../../store/Administrator/GSTRedux/action";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    loginCompanyID
+} from "../../../components/Common/CommonFunction";
 
 
 const GSTMaster = (props) => {
@@ -78,7 +83,7 @@ const GSTMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({dispatch,userAcc});
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -290,7 +295,6 @@ const GSTMaster = (props) => {
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
@@ -341,7 +345,6 @@ const GSTMaster = (props) => {
             text: "Action ",
             dataField: "",
             formatter: (cellContent, user) => (
-
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -358,10 +361,8 @@ const GSTMaster = (props) => {
                                     </Button> : <></>}
                             </FormGroup>
                         </Col>
-
                     </div>
                 </>
-
             ),
         },
     ]
@@ -405,12 +406,11 @@ const GSTMaster = (props) => {
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags> <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-             
+
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -426,7 +426,6 @@ const GSTMaster = (props) => {
                             </CardHeader>
 
                             <CardBody>
-
                                 <Row className="">
                                     <Col md={12}>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>

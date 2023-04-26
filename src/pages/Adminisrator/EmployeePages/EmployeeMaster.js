@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Label,
+  CardHeader,
+  FormGroup,
+  Input
+} from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getState,
@@ -11,7 +21,11 @@ import {
   updateEmployeeIDSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { getDistrictOnState, getDistrictOnStateSuccess, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import {
+  getDistrictOnState,
+  getDistrictOnStateSuccess,
+  getPartyListAPI
+} from "../../../store/Administrator/PartyRedux/action";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -26,7 +40,12 @@ import {
   resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, } from "../../../components/Common/CommonFunction";
+import {
+  breadcrumbReturnFunc,
+  btnIsDissablefunc,
+  loginCompanyID,
+  loginUserID,
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -47,8 +66,6 @@ const AddEmployee = (props) => {
     DOB: "",
     PAN: "",
     AadharNo: "",
-    // working_hours: "8",
-    // CompanyName: "",
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
@@ -60,7 +77,6 @@ const AddEmployee = (props) => {
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
-  // const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
@@ -144,11 +160,9 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-debugger
-        // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
-
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
-          State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
+        
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo,  EmployeeTypeName, StateName, DistrictName, 
+          State_id, District_id,  EmployeeType_id, } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.id.valid = id
@@ -261,28 +275,6 @@ debugger
     label: data.Name
   }));
 
-  // function EmployeeType_Dropdown_Handler(e) {
-  //   // dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
-
-  //   // const IsPartyConnection = employeeType.find((element) => {
-  //   //   return element.id === e.value
-  //   // });
-
-  //   // if (IsPartyConnection.IsPartyConnection) {
-  //   //   setPartyDropDownShow_UI(true)
-  //   // }
-  //   // else {
-  //   //   setPartyDropDownShow_UI(false)
-  //   // }
-  //   setState((i) => {
-  //     const a = { ...i }
-  //     a.values.CompanyName = "";
-  //     a.values.EmployeeParties = "";
-  //     a.hasValid.CompanyName.valid = false
-  //     a.hasValid.EmployeeParties.valid = false
-  //     return a
-  //   })
-  // }
 
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
@@ -295,14 +287,11 @@ debugger
   }
 
   const SaveHandler = (event) => {
-
     event.preventDefault();
     const btnId = event.target.id;
-
     try {
       if (formValid(state, setState)) {
         btnIsDissablefunc({ btnId, state: true })
-
         if ((values.EmployeeTypeName.IsPartyConnection === true) && (values.EmployeeParties.length === 0)) {
           dispatch(
             AlertState({
@@ -570,7 +559,6 @@ debugger
                               options={EmployeeType_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
-                                // EmployeeType_Dropdown_Handler(hasSelect)
                               }}
                             />
                             {isError.EmployeeTypeName.length > 0 && (
