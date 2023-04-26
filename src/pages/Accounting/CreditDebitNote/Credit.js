@@ -180,7 +180,7 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                debugger
+                
                 const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -435,7 +435,7 @@ const Credit = (props) => {
         }
         row.gstPercentage = row.GSTPercentage
         let calculate = salesReturnCalculate(row)
-        
+        debugger
         Setcalculation(calculate)
         let AmountTotal = calculate.tAmount
         row["AmountTotal"] = Number(AmountTotal)
@@ -498,7 +498,7 @@ const Credit = (props) => {
             text: "Quantity ",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 return (<span >
                     <Input
                         key={`Qty${row.Item}${key}`}
@@ -531,7 +531,7 @@ const Credit = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 if (pageMode !== mode.view) {
                     const Units = row.ItemUnitDetails.map((index) => ({
                         value: index.Unit,
@@ -578,7 +578,7 @@ const Credit = (props) => {
             text: "Rate",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 return (<span >
                     <Input
                         type="text"
@@ -690,7 +690,7 @@ const Credit = (props) => {
                     })
                     // return btnIsDissablefunc({ btnId, state: false })
                 }
-                debugger
+                
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
@@ -703,7 +703,7 @@ const Credit = (props) => {
                     TaxType: index.TaxType,
                     GST: index.GST,
                     GSTAmount: calculation.gstAmt,
-                    Amount:TotalSum,
+                    Amount:calculation.tAmount,
                     CGST: calculation.CGST,
                     SGST: calculation.SGST,
                     IGST: index.IGST,
