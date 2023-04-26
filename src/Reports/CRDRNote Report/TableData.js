@@ -19,8 +19,6 @@ export const columns1 = [
     "CGST Amt",
     "SGST %",
     "SGST Amt",
-    "Debit note",
-    "Credit note",
     "Total Amt" 
 ];
 
@@ -48,9 +46,9 @@ export const Rows1 = (data) => {
     let totalQuantity = 0
 
     CRDRNoteItems.forEach((element, key) => {
+        debugger
         const tableitemRow = [
             element.ItemName,
-            element.MRP,
             `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
             element.Rate,
             element.BasicAmount,
