@@ -295,7 +295,6 @@ const CompanyGroupMaster = (props) => {
                                                             </Row>
                                                         </FormGroup >
                                                     </Row>
-
                                                 </CardBody>
                                             </Card>
                                         </Col>
