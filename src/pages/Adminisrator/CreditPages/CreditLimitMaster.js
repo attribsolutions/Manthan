@@ -36,7 +36,12 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect, useState } from "react";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
-import { GoButton_For_CreditLimit_Add, GoButton_For_CreditLimit_AddSuccess, postCreditLimit, postCreditLimitSuccess } from "../../../store/Administrator/CreditLimitRedux/actions";
+import {
+    GoButton_For_CreditLimit_Add,
+    GoButton_For_CreditLimit_AddSuccess,
+    postCreditLimit,
+    postCreditLimitSuccess
+} from "../../../store/Administrator/CreditLimitRedux/actions";
 
 const CreditLimitMaster = (props) => {
 
@@ -151,7 +156,7 @@ const CreditLimitMaster = (props) => {
     }));
 
     const goButtonHandler = (event) => {
-        
+
         if (RouteSelect.value === undefined) {
             {
                 dispatch(
@@ -222,7 +227,7 @@ const CreditLimitMaster = (props) => {
     };
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -302,13 +307,9 @@ const CreditLimitMaster = (props) => {
                                                                 </div>
                                                             </Col>
                                                         </Row>
-
-
                                                     </Row>
-
                                                 </CardBody>
                                             </Card>
-
                                         </Col>
                                     </Row>
 
@@ -317,11 +318,9 @@ const CreditLimitMaster = (props) => {
                                     >
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-
                                                 keyField="id"
                                                 data={Data}
                                                 columns={pagesListColumns}
-
                                                 search
                                             >
                                                 {toolkitProps => (
@@ -374,7 +373,6 @@ const CreditLimitMaster = (props) => {
                                 </form>
                             </CardBody>
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment >

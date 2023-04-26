@@ -33,7 +33,7 @@ import {
   resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID} from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -221,34 +221,34 @@ const CompanyModule = (props) => {
     label: Data.Name
   }));
 
-    const SaveHandler = async (event) => {
+  const SaveHandler = async (event) => {
     event.preventDefault();
     const btnId = event.target.id
     try {
-        if (formValid(state, setState)) {
-            btnIsDissablefunc({ btnId, state: true })
+      if (formValid(state, setState)) {
+        btnIsDissablefunc({ btnId, state: true })
 
-            const jsonBody = JSON.stringify({
-              Name: values.Name,
-              Address: values.Address,
-              GSTIN: values.GSTIN,
-              PhoneNo: values.PhoneNo,
-              CompanyAbbreviation: values.CompanyAbbreviation,
-              EmailID: values.EmailID,
-              CompanyGroup: values.CompanyGroupName.value,
-              IsSCM: values.IsSCM,
-              CreatedBy: loginUserID(),
-              UpdatedBy: loginUserID(),
-            });
-            if (pageMode === mode.edit) {
-                dispatch(updateCompanyID({ jsonBody, updateId: values.id, btnId }));
-            }
-            else {
-                dispatch(saveCompany({ jsonBody, btnId }));
-            }
+        const jsonBody = JSON.stringify({
+          Name: values.Name,
+          Address: values.Address,
+          GSTIN: values.GSTIN,
+          PhoneNo: values.PhoneNo,
+          CompanyAbbreviation: values.CompanyAbbreviation,
+          EmailID: values.EmailID,
+          CompanyGroup: values.CompanyGroupName.value,
+          IsSCM: values.IsSCM,
+          CreatedBy: loginUserID(),
+          UpdatedBy: loginUserID(),
+        });
+        if (pageMode === mode.edit) {
+          dispatch(updateCompanyID({ jsonBody, updateId: values.id, btnId }));
         }
+        else {
+          dispatch(saveCompany({ jsonBody, btnId }));
+        }
+      }
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-};
+  };
 
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -269,7 +269,7 @@ const CompanyModule = (props) => {
                   </CardHeader>
 
                   <CardBody>
-                    <form  noValidate>
+                    <form noValidate>
                       <Card >
                         <CardBody className="c_card_body">
 
@@ -443,8 +443,7 @@ const CompanyModule = (props) => {
                             <Row >
                               <Col sm={2}>
                                 <SaveButton
-                                onClick={SaveHandler}
-                                saveHandeller
+                                  onClick={SaveHandler}
                                   pageMode={pageMode}
                                   userAcc={userPageAccessState}
                                   editCreatedBy={editCreatedBy}
@@ -453,10 +452,8 @@ const CompanyModule = (props) => {
                               </Col>
                             </Row>
                           </FormGroup >
-
                         </CardBody>
                       </Card>
-
                     </form>
                   </CardBody>
                 </Card>

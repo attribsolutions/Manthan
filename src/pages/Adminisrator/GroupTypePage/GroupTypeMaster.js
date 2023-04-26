@@ -31,7 +31,11 @@ import {
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginUserID, btnIsDissablefunc } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    loginUserID,
+    btnIsDissablefunc
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
@@ -274,7 +278,6 @@ const GroupTypeMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label className="col-sm-6 col-form-label" >{fieldLabel.IsReserved}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 checked={values.IsReserved}
@@ -305,9 +308,7 @@ const GroupTypeMaster = (props) => {
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
-
                                                     </Row>
-
                                                 </CardBody>
                                             </Card>
                                         </Col>
@@ -315,7 +316,6 @@ const GroupTypeMaster = (props) => {
                                 </form>
                             </CardBody>
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment>
