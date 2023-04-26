@@ -79,7 +79,6 @@ const ItemsMaster = (props) => {
         Sequence: "",
         ShortName: "",
         BarCode: '',
-        Company: [],
         BaseUnit: [],
         Category: [],
         CategoryType: [],
@@ -492,15 +491,7 @@ const ItemsMaster = (props) => {
                 isvalid = false
                 inValidMsg.push("ShortName: Is Requried")
             }
-            if (formValue.Company.length < 1) {
-                setInValidDrop(i => {
-                    const a = { ...i }
-                    a.Company = true
-                    return a
-                })
-                isvalid = false
-                inValidMsg.push("Company: Is Requried")
-            }
+          
             if (formValue.BaseUnit.length < 1) {
                 setInValidDrop(i => {
                     const a = { ...i }
