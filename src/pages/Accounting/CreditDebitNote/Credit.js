@@ -52,15 +52,14 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
-import { Amount, basicAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { Amount, basicAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 
 
 const Credit = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
-
     const fileds = {
         CRDRNoteDate: currentDate,
         Customer: "",
@@ -68,7 +67,8 @@ const Credit = (props) => {
         servicesItem: "",
         Narration: "",
         GrandTotal: 0,
-        InvoiceNO: ""
+        InvoiceNO: "",
+        calculate: ""
 
     }
 
@@ -78,9 +78,11 @@ const Credit = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(198);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [calculation, Setcalculation] = useState();
+    const [calculation, Setcalculation] = useState([]);
     const [Table, setTable] = useState([])
     const [Table1, setTable1] = useState([])
+    const [TotalSum, setTotalSum] = useState(0)
+
 
 
 
@@ -119,6 +121,9 @@ const Credit = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(ReceiptGoButtonMaster_Success([]))
         dispatch(Invoice_Return_ID_Success([]))
+        dispatch(InvoiceNumberSuccess([]))
+
+        
 
     }, []);
 
@@ -176,7 +181,7 @@ const Credit = (props) => {
             }
             if (hasEditVal) {
                 debugger
-                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems ,FullNoteNumber} = hasEditVal
+                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 // hasValid.Name.valid = true;
@@ -185,7 +190,7 @@ const Credit = (props) => {
                 values.Customer = { label: Customer, value: CustomerID };
                 values.NoteReason = { label: NoteReason, value: "" };
                 values.InvoiceNO = { label: FullNoteNumber, value: "" };
-
+                // values.BalanceAmount
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
@@ -421,29 +426,47 @@ const Credit = (props) => {
         })
     }
 
-    function val_onChange(event, row, val) {
-
-        let input = event.target.value;
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
-        row.Qty = event.target.value
+    function val_onChange(val, row, type) {
+        if (type === "qty") {
+            row["Qty"] = val;
+        }
+        else {
+            row["Rate"] = val
+        }
         row.gstPercentage = row.GSTPercentage
-        const calculate = salesReturnCalculate(row)
+        let calculate = salesReturnCalculate(row)
+        
         Setcalculation(calculate)
+        let AmountTotal = calculate.tAmount
+        row["AmountTotal"] = Number(AmountTotal)
+        let sum = 0
+
+        InvoiceItems.forEach(ind => {
+            if (ind.AmountTotal === undefined) {
+                ind.AmountTotal = 0
+            }
+            var amt = parseFloat(ind.AmountTotal)
+            sum = sum + amt
+        });
+
         let v1 = Number(row.BaseUnitQuantity);
-        let v2 = Number(input)
+        let v2 = Number(val)
         if (!(v1 >= v2)) {
-            event.target.value = v1;
+            val = v1;
         }
 
         setState((i) => {
             let a = { ...i }
-            a.values.GrandTotal = calculate.tAmount
+            a.values.GrandTotal = sum
             a.hasValid.GrandTotal.valid = true;
             return a
         })
+        setTotalSum(sum)
+
         // onChangeText({ event, state, setState })
-        AmountPaidDistribution(calculate.tAmount)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(calculate.tAmount).toFixed(2)}`))
+        AmountPaidDistribution(sum)
+        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(sum).toFixed(2)}`))
+
     };
 
     function UnitOnchange(e, row, key) {
@@ -451,10 +474,7 @@ const Credit = (props) => {
         row.unit = e.value
     };
 
-    function invoiceclick() {
-
-
-    };
+   
 
     const pagesListColumns1 = [
         {
@@ -476,22 +496,32 @@ const Credit = (props) => {
 
         {
             text: "Quantity ",
-            dataField: "Quantity",
+            dataField: "",
             formatter: (cellContent, row, key) => {
-debugger
+                debugger
                 return (<span >
                     <Input
                         key={`Qty${row.Item}${key}`}
-                        id={`Qty${row.Item}`}
+                        id={`Qty${key}`}
                         pattern={decimalRegx}
-                        defaultValue={pageMode === mode.view ?row.Quantity:null}
+                        defaultValue={null}
+                        // defaultValue={pageMode === mode.view ? row.Quantity : null}
                         disabled={pageMode === mode.view ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
                         placeholder="Enter Quantity"
                         autoComplete="off"
                         className="col col-sm"
-                        onChange={(event) => val_onChange(event, row, key)}
+                        // onChange={(event) => val_onChange(event, row, "qty")}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                val_onChange(val, row, "qty")
+                            } else {
+                                document.getElementById(`Qty${key}`).value = row.Quantity
+                            }
+                        }}
+                        onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
+
 
                     />
                 </span>)
@@ -523,9 +553,9 @@ debugger
                         />
                     </span>)
                 } else {
-                    row.unit = { label:row.UnitName, value: row.Unit };
+                    row.unit = { label: row.UnitName, value: row.Unit };
                     return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                        
+
                         <Select
                             id={`Unit${key}`}
                             name="Unit"
@@ -546,7 +576,34 @@ debugger
         },
         {
             text: "Rate",
-            dataField: "Rate",
+            dataField: "",
+            formatter: (cellContent, row, key) => {
+                debugger
+                return (<span >
+                    <Input
+                        type="text"
+                        key={`Ratey${row.Item}${key}`}
+                        id={`Ratey${key}`}
+                        defaultValue={row.Rate}
+                        disabled={pageMode === mode.view ? true : false}
+                        autoComplete="off"
+                        className="col col-sm"
+                        // onChange={(event) => val_onChange(event, row, "Rate")}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                val_onChange(val, row, "Rate")
+                            } else {
+                                document.getElementById(`Ratey${key}`).value = row.Rate
+                            }
+                        }}
+                        onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
+
+
+                    />
+                </span>)
+            }
         },
     ];
 
@@ -584,7 +641,7 @@ debugger
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
                         pattern={decimalRegx}
-                        defaultValue={ pageMode === mode.view ?row.Amount: row.Calculate}
+                        defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
                         disabled={pageMode === mode.view ? true : false}
                         // value={row.Calculate}
                         // type="text"
@@ -633,6 +690,7 @@ debugger
                     })
                     // return btnIsDissablefunc({ btnId, state: false })
                 }
+                debugger
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
@@ -645,7 +703,7 @@ debugger
                     TaxType: index.TaxType,
                     GST: index.GST,
                     GSTAmount: calculation.gstAmt,
-                    Amount: index.Amount,
+                    Amount:TotalSum,
                     CGST: calculation.CGST,
                     SGST: calculation.SGST,
                     IGST: index.IGST,
@@ -839,7 +897,6 @@ debugger
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                     InvoiceNoOnChange(hasSelect)
                                                 }}
-                                                onClick={invoiceclick}
 
                                             />
                                             {/* {isError.InvoiceNO.length > 0 && (

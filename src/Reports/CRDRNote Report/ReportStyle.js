@@ -372,27 +372,27 @@ export const reportFooterForCredit = (doc, data) => {
 export const tableBodyforCreditGoods = (doc, data) => {
     var options1 = {
         didParseCell: (data1) => {
-            if (data1.row.cells[4].raw === "isaddition") {
-                data1.row.cells[0].colSpan = 1
-                data1.row.cells[1].colSpan = 4
-                data1.row.cells[5].colSpan = 2
-                data1.row.cells[7].colSpan = 2
+            // if (data1.row.cells[4].raw === "isaddition") {
+            //     data1.row.cells[0].colSpan = 1
+            //     data1.row.cells[1].colSpan = 4
+            //     data1.row.cells[5].colSpan = 2
+            //     data1.row.cells[7].colSpan = 2
 
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[1].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
-                data1.row.cells[7].styles.fontSize = 8
-                data1.row.cells[9].styles.fontSize = 8
+            //     data1.row.cells[0].styles.fontSize = 8
+            //     data1.row.cells[1].styles.fontSize = 8
+            //     data1.row.cells[5].styles.fontSize = 8
+            //     data1.row.cells[7].styles.fontSize = 8
+            //     data1.row.cells[9].styles.fontSize = 8
 
-                data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[1].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
-            }
-            if (data1.row.cells[0].raw === "HSN Item Name") {
-                data1.row.cells[5].colSpan = 2
-                data1.row.cells[7].colSpan = 2
-            }
+            //     data1.row.cells[0].styles.fontStyle = "bold"
+            //     data1.row.cells[1].styles.fontStyle = "bold"
+            //     data1.row.cells[5].styles.fontStyle = "bold"
+            //     data1.row.cells[7].styles.fontStyle = "bold"
+            // }
+            // if (data1.row.cells[0].raw === "HSN Item Name") {
+            //     data1.row.cells[5].colSpan = 2
+            //     data1.row.cells[7].colSpan = 2
+            // }
         },
         margin: {
             left: 30, right: 22, top: 43
@@ -420,10 +420,10 @@ export const tableBodyforCreditGoods = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 160,
+                columnWidth: 155,
             },
             1: {
-                columnWidth: 30,
+                columnWidth: 38,
                 halign: 'right',
             },
             2: {
@@ -431,7 +431,7 @@ export const tableBodyforCreditGoods = (doc, data) => {
                 halign: 'right',
             },
             3: {
-                columnWidth: 40,
+                columnWidth: 45,
                 halign: 'right',
             },
             4: {
@@ -439,19 +439,19 @@ export const tableBodyforCreditGoods = (doc, data) => {
                 halign: 'right',
             },
             5: {
-                columnWidth: 30,
+                columnWidth: 40,
                 halign: 'right',
             },
             6: {
-                columnWidth: 40,
+                columnWidth: 45,
                 halign: 'right',
             },
             7: {
-                columnWidth: 30,
+                columnWidth: 45,
                 halign: 'right',
             },
             8: {
-                columnWidth: 40,
+                columnWidth: 80,
                 fontStyle: 'bold',
                 halign: 'right',
             },
