@@ -25,33 +25,33 @@ import { breadcrumbReturnFunc, groupBy, loginCompanyID } from "../../../../compo
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import { readExcelFile } from "./readFile";
+import { fileDetails, readExcelFile } from "./readFile";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
-
+import './scss.scss'
 const UploadExcel = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-
-    const [EditData, setEditData] = useState({});
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserAccState] = useState('');
-    const [preUploadjson, setPreUploadjson] = useState([])
-    const [partySelect, SetPartySelect] = useState([])
-
+    const  preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0 }
     const fileds = {
         id: "",
         Party: "",
         ImportType: "",
         PatternType: ""
     }
-
     const [state, setState] = useState(initialFiledFunc(fileds))
+    
+    const [EditData, setEditData] = useState({});
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
-
+    const [preUploadjson, setPreUploadjson] = useState([])
+    const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
+    const [partySelect, SetPartySelect] = useState([])
+   
 
     const {
         postMsg,
@@ -139,14 +139,18 @@ const UploadExcel = (props) => {
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-            const exjson = await readExcelFile({ file: files[0], compareParam, })
+
+            const readjson = await readExcelFile({ file: files[0], compareParam, })
 
             const btnerify = document.getElementById("btn-verify")
             const btnupload = document.getElementById('btn-upload')
 
-             
-            if (exjson.length > 0) {
-                setPreUploadjson(exjson)
+
+            if (readjson.length > 0) {
+                debugger
+                const aa = await fileDetails({ compareParam, readjson, setReadJsonDetail })
+                debugger
+                setPreUploadjson(readjson)
                 btnerify.style.display = "none"
                 btnupload.style.display = "block"
             }
@@ -202,7 +206,7 @@ const UploadExcel = (props) => {
 
     const SaveHandler = (event) => {
         event.preventDefault();
-         
+
         const parArr = {}
         const outerArr = []
 
@@ -314,19 +318,17 @@ const UploadExcel = (props) => {
                         </div>
 
 
-
                         <div className="mb-3 mt-3">
-                            <Container className='p-4'>
 
-                            </Container >
 
                             <Dropzone
                                 onDrop={acceptedFiles => {
+                                    document.getElementById("demo1").style.border = "4px dotted green";
                                     handleAcceptedFiles(acceptedFiles)
                                 }}
                             >
                                 {({ getRootProps, getInputProps }) => (
-                                    <div className="dropzone">
+                                    <div id='demo1' className="dropzone">
                                         <div
                                             className="dz-message needsclick mt-2"
                                             {...getRootProps()}
@@ -373,6 +375,30 @@ const UploadExcel = (props) => {
                                                     </Col>
                                                 </Row>
                                             </div>
+
+
+                                            <div >
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    No of line Item:54
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i class="fa fa-warning"></i>
+                                                    No of invoices:8
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    No of Party:5
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    No of invoice Dates:2022-2023
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    Total Amount:5454
+                                                </div>
+                                            </div>
                                             {/* <div id="file-proccess" style={{
                                                 width: "80%",
                                                 paddingRight: "40%",
@@ -391,12 +417,22 @@ const UploadExcel = (props) => {
                                                     </div>
                                                 </div>
                                             </div> */}
+
+
+
+
+                                            <details>
+                                                <summary>Epcot Center</summary>
+                                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                            </details>
                                         </Card>
                                     )
                                 })}
                             </div>
 
+
                         </div>
+
                         <div className="text- mt-4" >
 
                             <button
@@ -417,7 +453,6 @@ const UploadExcel = (props) => {
                                 Verify Files
                             </button>
                         </div>
-
 
 
 

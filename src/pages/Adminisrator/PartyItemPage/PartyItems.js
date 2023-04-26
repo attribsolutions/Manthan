@@ -118,7 +118,7 @@ const PartyItems = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+        debugger
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -143,6 +143,16 @@ const PartyItems = (props) => {
                 dispatch(Breadcrumb_inputName(PartyName))
             }
             dispatch(editPartyItemIDSuccess({ Status: false }))
+        }
+        else if (loginIsSCMCompany() === 1) {
+
+            setState((i) => {
+                const a = { ...i }
+                a.values.Name = { value: loginPartyID(), label: '' }
+                a.hasValid.Name.valid = true
+                return a
+            })
+            dispatch(getpartyItemList(loginPartyID()))
         }
     }, [])
 
@@ -207,18 +217,7 @@ const PartyItems = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => {
-        if (loginIsSCMCompany() === 1) {
-
-            setState((i) => {
-                const a = { ...i }
-                a.values.Name = { value: loginPartyID(), label: '' }
-                a.hasValid.Name.valid = true
-                return a
-            })
-            dispatch(getpartyItemList(loginPartyID()))
-        }
-    }, [])
+  
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -292,6 +291,7 @@ const PartyItems = (props) => {
                 return
             }
         }
+
         dispatch(getpartyItemList(supplier))
     };
 
@@ -315,7 +315,7 @@ const PartyItems = (props) => {
     };
 
     function rowSelected() {
-        
+
         var data = []
         return data = tableList.map((index) => {
             if ((index.selectCheck)) {

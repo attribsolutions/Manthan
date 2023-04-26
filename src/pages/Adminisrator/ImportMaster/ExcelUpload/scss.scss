@@ -1,0 +1,35 @@
+
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  max-width: 30%;
+  border-radius: 3px 3px 3px 3px;
+}
+
+.error-msg {
+  color: #021009;
+  background-color: #c7d8fd;
+}
+
+
+
+details[open] > summary {
+  list-style-type: '🔽';
+}
+
+details > summary {
+  list-style-type: '▶️';
+  padding: 4px;
+  // width: 200px;
+  background-color: #eeeeee;
+  border: none;
+  box-shadow: 1px 1px 2px #df0a0a;
+  cursor: pointer;
+}
+
+details > p {
+  background-color: #eeeeee;
+  padding: 4px;
+  margin: 0;
+  box-shadow: 1px 1px 2px #bbbbbb;
+}

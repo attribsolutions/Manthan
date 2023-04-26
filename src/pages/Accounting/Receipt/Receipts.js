@@ -342,7 +342,7 @@ const Receipts = (props) => {
     }
 
     function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
-        debugger
+
         let input = event.target.value
 
         let v1 = Number(row.BalanceAmount);
@@ -370,7 +370,7 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event) {
-        debugger
+
         let input = event.target.value
         let sum = 0
         Data.forEach(element => {
@@ -388,13 +388,13 @@ const Receipts = (props) => {
     }
 
     function AmountPaidDistribution(val1) {
-        debugger
+
         let value = Number(val1)
 
         let Amount = value
 
         Data.map((index) => {
-            debugger
+
             let amt = Number(index.BalanceAmount)
             if ((Amount > amt) && !(amt === 0)) {
 
@@ -445,7 +445,7 @@ const Receipts = (props) => {
     }
 
     const saveHandeller = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
 
@@ -480,7 +480,10 @@ const Receipts = (props) => {
             return btnIsDissablefunc({ btnId, state: false })
         }
 
-        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN") || (values.AmountPaid === undefined)) {
+        if ((values.AmountPaid === '')
+            || (values.AmountPaid === "NaN")
+            || (values.AmountPaid === undefined)
+            || (values.AmountPaid >= 0)) {
             CustomAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,

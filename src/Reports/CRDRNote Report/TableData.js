@@ -5,21 +5,20 @@ export const columns = [
     "Invoice Date",
     "Invoice Number",
     "Grand Total",
-    "BalanceAmount",
-    "PaidAmount"
+    "Paid Amount",
+    "Balance Amount",
+
 ];
 
 export const columns1 = [
     "HSN Item Name",
     "Quantity",
     "Rate",
-    "Basic Amount",
+    "Basic Amt",
     "CGST %",
-    "CGST Amount",
+    "CGST Amt",
     "SGST %",
-    "SGST Amount",
-    "Debit note",
-    "Credit note",
+    "SGST Amt",
     "Total Amt"
 ];
 
@@ -34,53 +33,56 @@ export const Details = [
     " ",
 ]
 
+export const Rows1 = (data) => {
 
-export const Rows = (data) => {
-    debugger
-    const { CRDRInvoices = [] } = data
-    CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    const { CRDRNoteItems = [] } = data
+    CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
     let Gst = 0
-    // let totalBasicAmount = 0
-    // let totalCGst = 0
-    // let totalSGst = 0
-    // let totalAmount = 0
+    let totalBasicAmount = 0
+    let totalCGst = 0
+    let totalSGst = 0
+    let totalAmount = 0
     let totalQuantity = 0
 
-    CRDRInvoices.forEach((element, key) => {
-        const BalanceAmount = Number(element.GrandTotal) - Number(element.PaidAmount)
-
-        const date = concatDateAndTime(element.InvoiceDate, element.CreatedOn)
+    CRDRNoteItems.forEach((element, key) => {
+        debugger
         const tableitemRow = [
-            date,
-            element.FullInvoiceNumber,
-            element.GrandTotal,
-            BalanceAmount,
-            element.PaidAmount,
+            element.ItemName,
+            `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
+            element.Rate,
+            element.BasicAmount,
+            ` ${element.CGSTPercentage}%`,
+            element.CGST,
+            ` ${element.SGSTPercentage}%`,
+            element.SGST,
+            element.Amount,
+
         ];
 
-        // function totalLots() {
-        //     totalQuantity = Number(element.GrandTotal) - Number(element.PaidAmount)
-        //     // totalCGst = Number(totalCGst) + Number(element.CGST)
-        //     // totalSGst = Number(totalSGst) + Number(element.SGST)
-        //     // totalAmount = Number(totalAmount) + Number(element.Amount)
-        //     // totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
-        //     let cgst = data["tableTot"].TotalCGst
-        //     return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
-        // };
+        function totalLots() {
+            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalCGst = Number(totalCGst) + Number(element.CGST)
+            totalSGst = Number(totalSGst) + Number(element.SGST)
+            totalAmount = Number(totalAmount) + Number(element.Amount)
+            totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+            let cgst = data["tableTot"].TotalCGst
+            return ({ TotalCGst: parseInt(totalCGst) + parseInt(cgst) })
+        };
 
         function totalrow() {
             return [
-                // `Total Quantity:${parseFloat(totalQuantity).toFixed(2)} ${element.UnitName}`,
-                // `BasicAmt:${parseFloat(totalBasicAmount).toFixed(2)}`,
-                // ``,
-                // "",
-                // `isaddition`,
-                // `CGSTAmt:${parseFloat(totalCGst).toFixed(2)}`,
-                // ``,
-                // `SGSTAmt:${parseFloat(totalSGst).toFixed(2)}`,
-                // "",
-                // `Amt:${parseFloat(totalAmount).toFixed(2)}`,
+                "",
+                "",
+                "",
+                "",
+                "",
+                // `CGST :${parseFloat(totalCGst).toFixed(2)}`,
+                "",
+                "",
+                // `SGST :${parseFloat(totalSGst).toFixed(2)}`,
+                "",
+                `TotalAmt :${parseFloat(totalAmount).toFixed(2)}`,
             ];
         };
 
@@ -88,19 +90,88 @@ export const Rows = (data) => {
         let aa = { TotalCGst: 0, totalSGst: 0 }
         if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Gst === element.GSTPercentage)) {
-            // data["tableTot"] = totalLots()
+            data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
         }
         else {
             returnArr.push(totalrow());
             returnArr.push(tableitemRow);
-            // totalBasicAmount = 0
-            // totalCGst = 0
-            // totalSGst = 0
-            // totalAmount = 0
-            // totalQuantity = 0
+            totalBasicAmount = 0
+            totalCGst = 0
+            totalSGst = 0
+            totalAmount = 0
+            totalQuantity = 0
 
-            // data["tableTot"] = totalLots()
+            data["tableTot"] = totalLots()
+            Gst = element.GSTPercentage;
+        }
+        if (key === CRDRNoteItems.length - 1) {
+            returnArr.push(totalrow());
+        }
+    })
+    return returnArr;
+}
+
+
+
+export const Rows = (data) => {
+    debugger
+    const { CRDRInvoices = [] } = data
+    CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    const returnArr = [];
+    let Gst = 0
+    let TotalPaidAmount = 0
+    let TotalBalanceAmt = 0
+    let Total = 0
+
+    CRDRInvoices.forEach((element, key) => {
+        const BalanceAmount = Number(element.GrandTotal) - Number(element.PaidAmount)
+        element.BalanceAmt = BalanceAmount
+        const date = concatDateAndTime(element.InvoiceDate, element.CreatedOn)
+        const tableitemRow = [
+            date,
+            element.FullInvoiceNumber,
+            Number(element.GrandTotal).toFixed(2),
+            Number(element.PaidAmount).toFixed(2),
+            Number(BalanceAmount).toFixed(2),
+        ];
+
+        function totalLots() {
+            TotalPaidAmount = Number(TotalPaidAmount) + Number(element.PaidAmount)
+            TotalBalanceAmt = Number(TotalBalanceAmt) + Number(BalanceAmount)
+            Total = Number(Total) + Number(element.GrandTotal)
+            // let cgst = data["tableTot"].Total
+            // return ({ TotalCGst: cgst })
+        };
+
+        function totalrow() {
+            return [
+                "Total Amount Paid",
+                "",
+                "",
+                // `Total:${parseFloat(Total).toFixed(2)}`,
+                `${parseFloat(TotalPaidAmount).toFixed(2)}`,
+                // `BalnceAmt:${parseFloat(TotalBalanceAmt).toFixed(2)}`,
+
+
+
+            ];
+        };
+
+
+        // if (Gst === 0) { Gst = element.GSTPercentage };
+        // let aa = { TotalCGst: 0, totalSGst: 0 }
+        // if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+        if ((Gst === element.GSTPercentage)) {
+            data["tableTot"] = totalLots()
+            returnArr.push(tableitemRow);
+        }
+        else {
+            // returnArr.push(totalrow());
+            returnArr.push(tableitemRow);
+
+
+            data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
         if (key === CRDRInvoices.length - 1) {
@@ -112,37 +183,56 @@ export const Rows = (data) => {
 
 export const BilledByRow = (data) => {
 
-    var BilledByArray = [
-        [`Customer Name: ${data.Customer}`],
-        [`Customer GSTIN: ${data.CustomerGSTIN}`],
-        [`State :${data.CustomerState}`],
-        [`Address:${data.CustomerAddress}`],
-        [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
-    ]
-    return BilledByArray;
-}
-export const BilledToRow = (data) => {
-
     var BilledToArray = [
-        [`Party Name :${data.Party}`],
-        [`Party GSTIN:${data.PartyGSTIN}`],
+        [`Name :${data.Party}`],
+        [`GSTIN :${data.PartyGSTIN}`],
         [`State :${data.PartyState}`],
-        [`Address:${data.PartyAddress}`],
-        [`PartyFSSAINo:${data.PartyFSSAINo}`],
+        [`Address :${data.PartyAddress}`],
+        [`FSSAI No :${data.PartyFSSAINo}`],
 
     ]
 
     return BilledToArray;
+
+    // var BilledByArray = [
+    //     [`Customer Name: ${data.Customer}`],
+    //     [`Customer GSTIN: ${data.CustomerGSTIN}`],
+    //     [`State :${data.CustomerState}`],
+    //     [`Address:${data.CustomerAddress}`],
+    //     [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
+    // ]
+    // return BilledByArray;
+}
+export const BilledToRow = (data) => {
+    var BilledByArray = [
+        [`Name :${data.Customer}`],
+        [`GSTIN :${data.CustomerGSTIN}`],
+        [`State :${data.CustomerState}`],
+        [`Address :${data.CustomerAddress}`],
+        [`FSSAI No :${data.CustomerFSSAINo}`],
+    ]
+    return BilledByArray;
+
+    // var BilledToArray = [
+    //     [`Party Name :${data.Party}`],
+    //     [`Party GSTIN:${data.PartyGSTIN}`],
+    //     [`State :${data.PartyState}`],
+    //     [`Address:${data.PartyAddress}`],
+    //     [`PartyFSSAINo:${data.PartyFSSAINo}`],
+
+    // ]
+
+    // return BilledToArray;
 }
 
 export const DetailsRow = (data) => {
 
     const Date = concatDateAndTime(data.CRDRNoteDate, data.CreatedOn)
     var DetailsArray = [
-        [`Note Date: ${Date}`],
-        [`Note NO: ${data.NoteNo}`],
-        [`Note Reason : ${data.NoteReason}`],
-        [`Note Type: ${data.NoteType}`],
+        [`Note Date :${Date}`],
+        [`Note No :${data.NoteNo}`],
+        [`Note Reason :${data.NoteReason}`],
+        [`Note Type :${data.NoteType}`],
         // [`Narration : ${data.Narration}`],
 
     ]

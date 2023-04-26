@@ -68,7 +68,7 @@ export const GET_GROUP_BY_GROUPTYPES_ID = "/GetGroupByGroupTypeID"
 export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
 export const GET_BRAND_TAG = "/ItemBrand"
-export const GENERAL_MASTER_SUB_TYPE = "/GeneralMasterBrandName"
+export const GENERAL_MASTER_BRAND_NAME = "/GeneralMasterBrandName"
 
 
 // M_Items_group Api
@@ -89,8 +89,6 @@ export const PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE = "/RoleAccessGetPages"
 export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE = '/RoleAccessNewUpdated'
 export const POST_COPY_ROLE_ACCESS_API = '/CopyRoleAccessabc'
 export const DELETE_ROLE_ACCESS_API = '/RoleAccessNewUpdated'
-
-
 
 export const GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE = '/RoleAccessNewUpdated'
 export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE = '/RoleAccessAddPage'
@@ -114,7 +112,6 @@ export const DIVISION_TYPES_API = '/DivisionTypes'
 //Category API
 export const CATEGORY_TYPES_API = '/CategoryTypes'
 export const CATEGORY_API = '/Category'
-
 
 //Vehicle api
 export const VEHICLE_API = '/Vehicle'
@@ -159,7 +156,6 @@ export const IMPORT_MASTER_MAP_UNIT = '/PartyUnitsMapping'           //save & ge
 //Import Field Map
 export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
 export const IMPORT_FIELD_ADD_FILTER = '/ImportFieldList'         //list
-
 
 //TermsAndCondtions API
 export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
@@ -206,7 +202,6 @@ export const CREDIT_LIMIT = '/Creditlimit'
 export const ROUTE_UPDATE_LIST = '/RouteUpdateFilter'
 export const ROUTE_UPDATE = '/RouteUpdate'
 
-
 // Loading Sheet API
 export const LOADING_SHEET_GO_BUTTON_API = '/LoadingSheetInvoices'
 export const LOADING_SHEET = '/LoadingSheet'
@@ -215,7 +210,7 @@ export const LOADING_SHEET_LIST = '/LoadingSheetList'
 //PartyMasterBulkUpdate
 export const GO_BUTTON_POST_API_FOR_PARTY_MASTER_BULK_UPDATE = '/PartyWiseUpdate' // for go button
 export const PARTY_MASTER_BULK_UPDATE = '/PartyWiseSave'
-export const SELECT_FIELD_DROPDOWN = '/GeneralMasterSubType'
+export const GENERAL_MASTER_SUB_TYPE = '/GeneralMasterSubType'
 
 //Bank
 export const BANK = '/Bank'
