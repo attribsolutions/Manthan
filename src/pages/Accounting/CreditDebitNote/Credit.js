@@ -698,11 +698,10 @@ debugger
                     })
                     // return btnIsDissablefunc({ btnId, state: false })
                 }
-            }
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
-                    Quantity: index.Qty,
+                    Quantity:Number(index.Qty),
                     Unit: index.unit,
                     BaseUnitQuantity: index.BaseUnitQuantity,
                     MRP: index.MRP,
@@ -722,6 +721,7 @@ debugger
 
                 }
                 arr1.push(CRDRNoteItems)
+            }
             
             
         })
