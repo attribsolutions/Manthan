@@ -38,7 +38,7 @@ export const reportHeder1 = (doc, data) => {
     doc.text("Party", 80, 52)  //bill by 
     doc.text('Customer', 280, 52) //billed to
     doc.text('Note Details', 440, 52)
-    
+
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
@@ -199,21 +199,26 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooterForGoodsCredit = (doc, data) => {
     debugger
-    const a = data.CRDRInvoices.map((data) => ({
-        GrandTotal: Number(data.GrandTotal),
-        PaidAmount: Number(data.PaidAmount),
-      
+    const a = data.CRDRNoteItems.map((data) => ({
+        CGST: Number(data.CGST),
+        SGST: Number(data.SGST),
+        BasicAmount: Number(data.BasicAmount),
+        Amount: Number(data.Amount),
+
     }));
-    var GrandTotal = 0;
-    var PaidAmount = 0;
-    
+
+    var Amount = 0;
+    var CGST = 0;
+    var SGST = 0;
+    var BasicAmount = 0;
+
     a.forEach(arg => {
-        GrandTotal += arg.GrandTotal;
-        PaidAmount += arg.PaidAmount;
-       
+        Amount += arg.Amount;
+        CGST += arg.CGST;
+        SGST += arg.SGST;
+        BasicAmount += arg.BasicAmount;
     });
-    const BalAmt = GrandTotal-PaidAmount
-    let stringNumber = toWords(Number(PaidAmount))
+    // const BalAmt = GrandTotal - PaidAmount
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
@@ -228,22 +233,23 @@ export const reportFooterForGoodsCredit = (doc, data) => {
     // doc.text(`CGST:`, 440, 310,)
     // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
 
-    doc.text(`Paid Amount:`, 440, 322,)
-    doc.text(`${PaidAmount.toFixed(2)}`, 560, 322, 'right')
+    doc.text(`CGST:`, 440, 322,)
+    doc.text(`${CGST.toFixed(2)}`, 560, 322, 'right')
 
-    doc.text(`Balance Amount:`, 440, 334,)
-    doc.text(` ${BalAmt.toFixed(2)}`, 560, 334, 'right')
+    doc.text(`SGST:`, 440, 334,)
+    doc.text(` ${SGST.toFixed(2)}`, 560, 334, 'right')
 
-    doc.text(`Total Amount:`, 440, 346,)
-    doc.text(`${GrandTotal.toFixed(2)}`, 560, 346, 'right')
+    doc.text(`Basic Amount:`, 440, 346,)
+    doc.text(`${BasicAmount.toFixed(2)}`, 560, 346, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.text(`Amount Paid :`, 439, 365,)
-    const PaidTotal = Math.round(PaidAmount)
+    const PaidTotal = Math.round(Amount)
     const Total = numberWithCommas((PaidTotal).toFixed(2))
     doc.text(`${Total}`, 560, 365, 'right')
+    let stringNumber = toWords(Number(Total))
     doc.setFont(undefined, 'Normal')
     doc.setFont('Tahoma')
     doc.setFontSize(9)
@@ -290,17 +296,17 @@ export const reportFooterForCredit = (doc, data) => {
     const a = data.CRDRInvoices.map((data) => ({
         GrandTotal: Number(data.GrandTotal),
         PaidAmount: Number(data.PaidAmount),
-      
+
     }));
     var GrandTotal = 0;
     var PaidAmount = 0;
-    
+
     a.forEach(arg => {
         GrandTotal += arg.GrandTotal;
         PaidAmount += arg.PaidAmount;
-       
+
     });
-    const BalAmt = GrandTotal-PaidAmount
+    const BalAmt = GrandTotal - PaidAmount
     let stringNumber = toWords(Number(PaidAmount))
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(1)
@@ -372,27 +378,25 @@ export const reportFooterForCredit = (doc, data) => {
 export const tableBodyforCreditGoods = (doc, data) => {
     var options1 = {
         didParseCell: (data1) => {
-            // if (data1.row.cells[4].raw === "isaddition") {
-            //     data1.row.cells[0].colSpan = 1
-            //     data1.row.cells[1].colSpan = 4
-            //     data1.row.cells[5].colSpan = 2
-            //     data1.row.cells[7].colSpan = 2
+            if (data1.row.cells[0].raw === "") {
+                data1.row.cells[4].colSpan = 2
+                data1.row.cells[6].colSpan = 2
 
-            //     data1.row.cells[0].styles.fontSize = 8
-            //     data1.row.cells[1].styles.fontSize = 8
-            //     data1.row.cells[5].styles.fontSize = 8
-            //     data1.row.cells[7].styles.fontSize = 8
-            //     data1.row.cells[9].styles.fontSize = 8
+                data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
+                // data1.row.cells[5].styles.fontSize = 8
+                // data1.row.cells[7].styles.fontSize = 8
+                // data1.row.cells[9].styles.fontSize = 8
 
-            //     data1.row.cells[0].styles.fontStyle = "bold"
-            //     data1.row.cells[1].styles.fontStyle = "bold"
-            //     data1.row.cells[5].styles.fontStyle = "bold"
-            //     data1.row.cells[7].styles.fontStyle = "bold"
-            // }
-            // if (data1.row.cells[0].raw === "HSN Item Name") {
-            //     data1.row.cells[5].colSpan = 2
-            //     data1.row.cells[7].colSpan = 2
-            // }
+                data1.row.cells[8].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                // data1.row.cells[5].styles.fontStyle = "bold"
+                // data1.row.cells[7].styles.fontStyle = "bold"
+            }
+            if (data1.row.cells[0].raw === "HSN Item Name") {
+                data1.row.cells[4].colSpan = 2
+                data1.row.cells[6].colSpan = 2
+            }
         },
         margin: {
             left: 30, right: 22, top: 43
@@ -431,11 +435,11 @@ export const tableBodyforCreditGoods = (doc, data) => {
                 halign: 'right',
             },
             3: {
-                columnWidth: 45,
+                columnWidth: 55,
                 halign: 'right',
             },
             4: {
-                columnWidth: 47,
+                columnWidth: 45,
                 halign: 'right',
             },
             5: {
@@ -447,15 +451,15 @@ export const tableBodyforCreditGoods = (doc, data) => {
                 halign: 'right',
             },
             7: {
-                columnWidth: 45,
+                columnWidth: 38,
                 halign: 'right',
             },
             8: {
-                columnWidth: 80,
+                columnWidth: 79,
                 fontStyle: 'bold',
                 halign: 'right',
             },
-            
+
         },
         tableLineColor: "black",
 
@@ -480,22 +484,22 @@ export const tableBodyforCreditGoods = (doc, data) => {
 export const tableBodyforCredit = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-            
+
             if (data1.row.cells[0].raw === "Total Amount Paid") {
-              
+
                 data1.row.cells[0].colSpan = 3
-                 
+
                 data1.row.cells[0].styles.fontSize = 8
                 data1.row.cells[3].styles.fontSize = 8
                 data1.row.cells[4].styles.fontSize = 8
-               
+
 
                 data1.row.cells[0].styles.fontStyle = "bold"
                 data1.row.cells[3].styles.fontStyle = "bold"
                 data1.row.cells[4].styles.fontStyle = "bold"
             }
 
-        
+
         },
         margin: {
             left: 30, right: 22, top: 43

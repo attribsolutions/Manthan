@@ -180,7 +180,7 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                debugger
+                
                 const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -435,10 +435,17 @@ const Credit = (props) => {
         }
         row.gstPercentage = row.GSTPercentage
         let calculate = salesReturnCalculate(row)
-        
+        debugger
         Setcalculation(calculate)
         let AmountTotal = calculate.tAmount
         row["AmountTotal"] = Number(AmountTotal)
+        row["BasicAmount"] = Number(calculate.baseAmt)
+        row["CGSTAmount"] = Number(calculate.CGST)
+        row["SGSTAmount"] = Number(calculate.SGST)
+        row["GSTAmount"] = Number(calculate.gstAmt)
+
+
+
         let sum = 0
 
         InvoiceItems.forEach(ind => {
@@ -457,7 +464,7 @@ const Credit = (props) => {
 
         setState((i) => {
             let a = { ...i }
-            a.values.GrandTotal = sum
+            a.values.GrandTotal = Number(sum).toFixed(2)
             a.hasValid.GrandTotal.valid = true;
             return a
         })
@@ -498,7 +505,7 @@ const Credit = (props) => {
             text: "Quantity ",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 return (<span >
                     <Input
                         key={`Qty${row.Item}${key}`}
@@ -531,7 +538,7 @@ const Credit = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 if (pageMode !== mode.view) {
                     const Units = row.ItemUnitDetails.map((index) => ({
                         value: index.Unit,
@@ -578,7 +585,7 @@ const Credit = (props) => {
             text: "Rate",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+                
                 return (<span >
                     <Input
                         type="text"
@@ -660,7 +667,7 @@ const Credit = (props) => {
 
 
     const saveHandeller = async (event) => {
-
+debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
@@ -682,6 +689,7 @@ const Credit = (props) => {
         })
 
         InvoiceItems.forEach(index => {
+            debugger
             if (index.Qty) {
                 if ((!index.unit)) {
                     CustomAlert({
@@ -690,7 +698,7 @@ const Credit = (props) => {
                     })
                     // return btnIsDissablefunc({ btnId, state: false })
                 }
-                debugger
+            }
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
@@ -699,13 +707,13 @@ const Credit = (props) => {
                     BaseUnitQuantity: index.BaseUnitQuantity,
                     MRP: index.MRP,
                     Rate: index.Rate,
-                    BasicAmount: calculation.baseAmt,
+                    BasicAmount:index.BasicAmount,
                     TaxType: index.TaxType,
                     GST: index.GST,
-                    GSTAmount: calculation.gstAmt,
-                    Amount:TotalSum,
-                    CGST: calculation.CGST,
-                    SGST: calculation.SGST,
+                    GSTAmount: index.CGSTAmount,
+                    Amount:index.AmountTotal,
+                    CGST: index.CGSTAmount,
+                    SGST: index.SGSTAmount,
                     IGST: index.IGST,
                     BatchCode: index.BatchCode,
                     CGSTPercentage: index.CGSTPercentage,
@@ -714,7 +722,8 @@ const Credit = (props) => {
 
                 }
                 arr1.push(CRDRNoteItems)
-            }
+            
+            
         })
 
         try {
@@ -741,8 +750,10 @@ const Credit = (props) => {
 
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
+            
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    
     };
 
 
