@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, } from "react";
 import {
     Col,
@@ -38,9 +37,6 @@ import Flatpickr from "react-flatpickr"
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import {
-    updateBankIDSuccess
-} from "../../../store/Accounting/BankRedux/action";
 import { currentDate } from "../../../components/Common/CommonFunction"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -53,12 +49,12 @@ import { postSelect_Field_for_dropdown } from "../../../store/Administrator/Part
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
-import { Amount, basicAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
+import { handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 
 
 const Credit = (props) => {
-    const history = useHistory()
+    const history = useHistory();
     const dispatch = useDispatch();
     const fileds = {
         CRDRNoteDate: currentDate,
@@ -72,24 +68,15 @@ const Credit = (props) => {
 
     }
 
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    const [state, setState] = useState(() => initialFiledFunc(fileds));
     const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(198);
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [calculation, Setcalculation] = useState([]);
-    const [Table, setTable] = useState([])
-    const [Table1, setTable1] = useState([])
-    const [TotalSum, setTotalSum] = useState(0)
-
-
-
-
-
-
-
-
+    const [Table, setTable] = useState([]);
+    const [Table1, setTable1] = useState([]);
+    const [TotalSum, setTotalSum] = useState(0);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -122,22 +109,15 @@ const Credit = (props) => {
         dispatch(ReceiptGoButtonMaster_Success([]))
         dispatch(Invoice_Return_ID_Success([]))
         dispatch(InvoiceNumberSuccess([]))
-
-        
-
     }, []);
 
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-    let { Data = [] } = ReceiptGoButton
-
-
-    const { InvoiceItems = [] } = InvoiceReturn
-
-    const location = { ...history.location }
+    let { Data = [] } = ReceiptGoButton;
+    const { InvoiceItems = [] } = InvoiceReturn;
+    const location = { ...history.location };
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
 
@@ -162,8 +142,6 @@ const Credit = (props) => {
         };
     }, [userAccess])
 
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -180,7 +158,7 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                
+
                 const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -204,7 +182,7 @@ const Credit = (props) => {
             }
             dispatch(EditCreditlistSuccess({ Status: false }))
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -263,9 +241,7 @@ const Credit = (props) => {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
-    }, [pageField])
-
-    console.log(Table)
+    }, [pageField]);
 
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
@@ -277,7 +253,6 @@ const Credit = (props) => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-
     // Note Reason Type id 6 Required
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -287,7 +262,6 @@ const Credit = (props) => {
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
-
     //   Note Type Api for Type identify
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -296,7 +270,6 @@ const Credit = (props) => {
         });
         dispatch(CredietDebitType(jsonBody));
     }, [])
-
 
     const PartyOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -315,15 +288,12 @@ const Credit = (props) => {
 
     const CreditDebitTypeId = CreditDebitType.find((index) => {
         return index.Name === "CreditNote"
-    })
+    });
 
     const GoodsCreditType = CreditDebitType.find((index) => {
         return index.Name === "Goods CreditNote"
 
     })
-
-
-
 
     function DateOnchange(e, date) {
         setState((i) => {
@@ -332,13 +302,13 @@ const Credit = (props) => {
             a.hasValid.DebitDate.valid = true
             return a
         })
-    }
+    };
 
     function InvoiceNoOnChange(e) {
 
         let id = e.value
         dispatch(Invoice_Return_ID(id));
-    }
+    };
 
     function CustomerOnChange(e) { // Customer dropdown function
 
@@ -362,7 +332,7 @@ const Credit = (props) => {
         });
 
         dispatch(InvoiceNumber(jsonBody1));
-    }
+    };
 
     function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
         let input = event.target.value
@@ -443,11 +413,7 @@ const Credit = (props) => {
         row["CGSTAmount"] = Number(calculate.CGST)
         row["SGSTAmount"] = Number(calculate.SGST)
         row["GSTAmount"] = Number(calculate.gstAmt)
-
-
-
         let sum = 0
-
         InvoiceItems.forEach(ind => {
             if (ind.AmountTotal === undefined) {
                 ind.AmountTotal = 0
@@ -455,13 +421,11 @@ const Credit = (props) => {
             var amt = parseFloat(ind.AmountTotal)
             sum = sum + amt
         });
-
         let v1 = Number(row.BaseUnitQuantity);
         let v2 = Number(val)
         if (!(v1 >= v2)) {
             val = v1;
         }
-
         setState((i) => {
             let a = { ...i }
             a.values.GrandTotal = Number(sum).toFixed(2)
@@ -469,8 +433,6 @@ const Credit = (props) => {
             return a
         })
         setTotalSum(sum)
-
-        // onChangeText({ event, state, setState })
         AmountPaidDistribution(sum)
         dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(sum).toFixed(2)}`))
 
@@ -480,8 +442,6 @@ const Credit = (props) => {
 
         row.unit = e.value
     };
-
-   
 
     const pagesListColumns1 = [
         {
@@ -505,7 +465,7 @@ const Credit = (props) => {
             text: "Quantity ",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                
+
                 return (<span >
                     <Input
                         key={`Qty${row.Item}${key}`}
@@ -538,7 +498,7 @@ const Credit = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                
+
                 if (pageMode !== mode.view) {
                     const Units = row.ItemUnitDetails.map((index) => ({
                         value: index.Unit,
@@ -585,7 +545,7 @@ const Credit = (props) => {
             text: "Rate",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                
+
                 return (<span >
                     <Input
                         type="text"
@@ -613,8 +573,6 @@ const Credit = (props) => {
             }
         },
     ];
-
-
 
     const pagesListColumns = [
         {
@@ -665,9 +623,7 @@ const Credit = (props) => {
         },
     ];
 
-
     const saveHandeller = async (event) => {
-debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
@@ -689,41 +645,82 @@ debugger
         })
 
         InvoiceItems.forEach(index => {
-            debugger
-            if (index.Qty) {
-                if ((!index.unit)) {
-                    CustomAlert({
-                        Type: 3,
-                        Message: `Please Select Unit ${index.ItemName}`,
-                    })
-                    // return btnIsDissablefunc({ btnId, state: false })
-                }
-                const CRDRNoteItems = {
-                    CRDRNoteDate: values.CRDRNoteDate,
-                    Item: index.Item,
-                    Quantity:Number(index.Qty),
-                    Unit: index.unit,
-                    BaseUnitQuantity: index.BaseUnitQuantity,
-                    MRP: index.MRP,
-                    Rate: index.Rate,
-                    BasicAmount:index.BasicAmount,
-                    TaxType: index.TaxType,
-                    GST: index.GST,
-                    GSTAmount: index.CGSTAmount,
-                    Amount:index.AmountTotal,
-                    CGST: index.CGSTAmount,
-                    SGST: index.SGSTAmount,
-                    IGST: index.IGST,
-                    BatchCode: index.BatchCode,
-                    CGSTPercentage: index.CGSTPercentage,
-                    SGSTPercentage: index.SGSTPercentage,
-                    IGSTPercentage: index.IGSTPercentage,
 
+            if ((!index.unit)) {
+                CustomAlert({
+                    Type: 3,
+                    Message: `Please Select Unit ${index.ItemName}`,
+                })
+                // return btnIsDissablefunc({ btnId, state: false })
+            } else {
+                if (index.Qty) {
+                    // if ((!index.unit)) {
+                    //     CustomAlert({
+                    //         Type: 3,
+                    //         Message: `Please Select Unit ${index.ItemName}`,
+                    //     })
+                    //     // return btnIsDissablefunc({ btnId, state: false })
+                    // }
+                    const CRDRNoteItems = {
+                        CRDRNoteDate: values.CRDRNoteDate,
+                        Item: index.Item,
+                        Quantity: Number(index.Qty),
+                        Unit: index.unit,
+                        BaseUnitQuantity: index.BaseUnitQuantity,
+                        MRP: index.MRP,
+                        Rate: index.Rate,
+                        BasicAmount: index.BasicAmount,
+                        TaxType: index.TaxType,
+                        GST: index.GST,
+                        GSTAmount: index.CGSTAmount,
+                        Amount: index.AmountTotal,
+                        CGST: index.CGSTAmount,
+                        SGST: index.SGSTAmount,
+                        IGST: index.IGST,
+                        BatchCode: index.BatchCode,
+                        CGSTPercentage: index.CGSTPercentage,
+                        SGSTPercentage: index.SGSTPercentage,
+                        IGSTPercentage: index.IGSTPercentage,
+
+                    }
+                    arr1.push(CRDRNoteItems)
                 }
-                arr1.push(CRDRNoteItems)
             }
-            
-            
+
+            // if (index.Qty) {
+            //     // if ((!index.unit)) {
+            //     //     CustomAlert({
+            //     //         Type: 3,
+            //     //         Message: `Please Select Unit ${index.ItemName}`,
+            //     //     })
+            //     //     // return btnIsDissablefunc({ btnId, state: false })
+            //     // }
+            //     const CRDRNoteItems = {
+            //         CRDRNoteDate: values.CRDRNoteDate,
+            //         Item: index.Item,
+            //         Quantity: Number(index.Qty),
+            //         Unit: index.unit,
+            //         BaseUnitQuantity: index.BaseUnitQuantity,
+            //         MRP: index.MRP,
+            //         Rate: index.Rate,
+            //         BasicAmount: index.BasicAmount,
+            //         TaxType: index.TaxType,
+            //         GST: index.GST,
+            //         GSTAmount: index.CGSTAmount,
+            //         Amount: index.AmountTotal,
+            //         CGST: index.CGSTAmount,
+            //         SGST: index.SGSTAmount,
+            //         IGST: index.IGST,
+            //         BatchCode: index.BatchCode,
+            //         CGSTPercentage: index.CGSTPercentage,
+            //         SGSTPercentage: index.SGSTPercentage,
+            //         IGSTPercentage: index.IGSTPercentage,
+
+            //     }
+            //     arr1.push(CRDRNoteItems)
+            // }
+
+
         })
 
         try {
@@ -750,12 +747,11 @@ debugger
 
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
-            
+
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-    
-    };
 
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -1030,8 +1026,7 @@ debugger
         )
     }
 };
-
-export default Credit
+export default Credit;
 
 
 
