@@ -439,6 +439,13 @@ const Credit = (props) => {
         Setcalculation(calculate)
         let AmountTotal = calculate.tAmount
         row["AmountTotal"] = Number(AmountTotal)
+        row["BasicAmount"] = Number(calculate.baseAmt)
+        row["CGSTAmount"] = Number(calculate.CGST)
+        row["SGSTAmount"] = Number(calculate.SGST)
+        row["GSTAmount"] = Number(calculate.gstAmt)
+
+
+
         let sum = 0
 
         InvoiceItems.forEach(ind => {
@@ -457,7 +464,7 @@ const Credit = (props) => {
 
         setState((i) => {
             let a = { ...i }
-            a.values.GrandTotal = sum
+            a.values.GrandTotal = Number(sum).toFixed(2)
             a.hasValid.GrandTotal.valid = true;
             return a
         })
@@ -660,7 +667,7 @@ const Credit = (props) => {
 
 
     const saveHandeller = async (event) => {
-
+debugger
         const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
@@ -682,6 +689,7 @@ const Credit = (props) => {
         })
 
         InvoiceItems.forEach(index => {
+            debugger
             if (index.Qty) {
                 if ((!index.unit)) {
                     CustomAlert({
@@ -690,7 +698,7 @@ const Credit = (props) => {
                     })
                     // return btnIsDissablefunc({ btnId, state: false })
                 }
-                
+            }
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
@@ -699,13 +707,13 @@ const Credit = (props) => {
                     BaseUnitQuantity: index.BaseUnitQuantity,
                     MRP: index.MRP,
                     Rate: index.Rate,
-                    BasicAmount: calculation.baseAmt,
+                    BasicAmount:index.BasicAmount,
                     TaxType: index.TaxType,
                     GST: index.GST,
-                    GSTAmount: calculation.gstAmt,
-                    Amount:calculation.tAmount,
-                    CGST: calculation.CGST,
-                    SGST: calculation.SGST,
+                    GSTAmount: index.CGSTAmount,
+                    Amount:index.AmountTotal,
+                    CGST: index.CGSTAmount,
+                    SGST: index.SGSTAmount,
                     IGST: index.IGST,
                     BatchCode: index.BatchCode,
                     CGSTPercentage: index.CGSTPercentage,
@@ -714,7 +722,8 @@ const Credit = (props) => {
 
                 }
                 arr1.push(CRDRNoteItems)
-            }
+            
+            
         })
 
         try {
@@ -741,8 +750,10 @@ const Credit = (props) => {
 
                     dispatch(saveCredit({ jsonBody, btnId }));
                 }
+            
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    
     };
 
 
