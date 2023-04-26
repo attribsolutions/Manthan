@@ -1259,7 +1259,7 @@ const RoleAccessAdd = () => {
                 let isShowOnMenu_Id
 
                 PageAccess.map((i2) => {
-                    
+
                     const roleCond = `RoleAccess_${i2.Name}`
                     const pageCond = `PageAccess_${i2.Name}`
 
@@ -1335,45 +1335,37 @@ const RoleAccessAdd = () => {
         // />
         return (
             <div className='sticky-div1'>
-                <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                    {({ paginationProps, paginationTableProps }) => (
-                        <ToolkitProvider
-                            keyField="id"
-                            data={tableDataRedux}
-                            columns={[...tableHederList]}
-                            search
-                        >
-                            {(toolkitProps) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    headerClasses="header-class"
-                                                    classes={"table  table-bordered"}
-                                                    noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                                {mySearchProps(toolkitProps.searchProps,)}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="align-items-md-center mt-30">
-                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                            <PaginationListStandalone {...paginationProps} />
-                                        </Col>
-                                    </Row>
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    )}
 
-                </PaginationProvider>
+                <ToolkitProvider
+                    keyField="id"
+                    data={tableDataRedux}
+                    columns={[...tableHederList]}
+                    search
+                >
+                    {(toolkitProps) => (
+                        <React.Fragment>
+                            <Row>
+                                <Col xl="12">
+                                    <div className="table-responsive">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            responsive
+                                            bordered={false}
+                                            striped={false}
+                                            headerClasses="header-class"
+                                            classes={"table  table-bordered"}
+                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                            {...toolkitProps.baseProps}
+                                        />
+                                        {mySearchProps(toolkitProps.searchProps,)}
+                                    </div>
+                                </Col>
+                            </Row>
+
+                        </React.Fragment>
+                    )}
+                </ToolkitProvider>
+
             </div>
         )
 
@@ -1387,161 +1379,172 @@ const RoleAccessAdd = () => {
         <div className="page-content" >
             <MetaTags> <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
             <Container fluid>
-                <CardBody >
-                    {
-                        !showTableOnUI ?
 
-                            <CardHeader className="card-header   text-black  c_card_body"  >
-                                <Row className="mt-3">
-                                    <Col sm={3}>
-                                        <FormGroup className="mb-3 row ">
-                                            <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                            <Col sm={9}>
+                {
+                    !showTableOnUI ?
+
+                        <CardHeader className="card-header   text-black  c_card_body"  >
+                            <Row className="mt-3">
+                                <Col sm={3}>
+                                    <FormGroup className="mb-3 row ">
+                                        <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
+                                        <Col sm={9}>
+                                            <Select
+                                                value={role_dropdown_Select}
+                                                options={Role_DropdownOption}
+                                                className="rounded-bottom"
+                                                placeholder="Select..."
+                                                onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                                classNamePrefix="select2-selection"
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm={4} className="">
+                                    <FormGroup className="mb-3 row" >
+                                        <Label className="col-sm-3 p-2">Division</Label>
+                                        <Col md="9">
+                                            <Select
+                                                value={division_dropdown_Select}
+                                                className="rounded-bottom"
+                                                placeholder="Select..."
+                                                options={DivisionTypesValues}
+                                                onChange={(e) => { handllerDivisionTypes(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm={4} className="">
+                                    <FormGroup className="mb-3 row" >
+                                        <Label className="col-sm-3 p-2">Company</Label>
+                                        <Col md="9">
+                                            <Select
+                                                value={company_dropdown_Select}
+                                                className="rounded-bottom"
+                                                placeholder="Select..."
+                                                options={CompanyValues}
+                                                onChange={(e) => { setCompany_dropdown_Select(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm={1}>
+                                    <div className="col col-2">
+                                        <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <div>
+                            </div>
+
+                        </CardHeader>
+
+                        :
+                        <div>
+                            <Row style={{ backgroundColor: "#dddddd", }} className='mb-1 mt-n head '>
+                                <Row sm={12} >
+                                    <Col sm={3} className="p-2 ">
+                                        <Label className="p-2 col-sm-3">Role</Label>
+                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                            <h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                    </Col>
+
+                                    <Col sm={4} className="p-2 ">
+                                        {(division_dropdown_Select.value > 0)
+                                            ?
+                                            <> <Label className=" p-2 col-sm-3">Division</Label>
+                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                    <h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                            </>
+                                            : null}
+                                    </Col>
+
+                                    <Col sm={4} className="p-2 ">
+                                        <Label className="p-2 col-sm-4">Company</Label>
+                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                            <h className="text-black">{company_dropdown_Select.label}</h></Button>
+                                    </Col>
+                                    <Col sm={1} className="p-2 mt-1">
+                                        <Button type="button"
+                                            color="btn btn-outline-secondary"
+                                            className="btn-sm"
+                                            onClick={() => { ChangeButtonHandeler() }}>
+                                            <h className="text-black">Change</h></Button>
+
+                                    </Col>
+
+                                </Row>
+                            </Row>
+                            <div className="card-header headbody  text-black"
+                                style={{
+                                    backgroundColor: "rgb(231 231 231)",
+                                    marginLeft: "-8px",
+                                    marginRight: "-8px"
+                                }} >
+                                <Row >
+                                    <Col sm={4}>
+                                        <FormGroup className="row">
+                                            <Label className="col-sm-3 p-2 ml-n5">Module</Label>
+                                            <Col sm={8} style={{ zIndex: "3" }}>
                                                 <Select
-                                                    value={role_dropdown_Select}
-                                                    options={Role_DropdownOption}
-                                                    className="rounded-bottom"
-                                                    placeholder="Select..."
-                                                    onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                                    value={module_DropdownSelect}
+                                                    placeholder="select.."
+                                                    options={Module_DropdownOption}
+                                                    onChange={(e) => { Module_DropdownSelectHandller(e) }}
                                                     classNamePrefix="select2-selection"
                                                 />
                                             </Col>
                                         </FormGroup>
                                     </Col>
 
-                                    <Col sm={4} className="">
-                                        <FormGroup className="mb-3 row" >
-                                            <Label className="col-sm-3 p-2">Division</Label>
-                                            <Col md="9">
+                                    <Col sm={4}>
+                                        <FormGroup className=" row ">
+                                            <Label className="col-sm-3 p-2">Page</Label>
+                                            <Col sm={8} style={{ zIndex: "3" }}>
                                                 <Select
-                                                    value={division_dropdown_Select}
-                                                    className="rounded-bottom"
-                                                    placeholder="Select..."
-                                                    options={DivisionTypesValues}
-                                                    onChange={(e) => { handllerDivisionTypes(e) }}
+                                                    value={page_DropdownSelect}
+                                                    placeholder="select.."
+                                                    options={Page_DropdownOption}
+                                                    onChange={(e) => { Page_DropdownSelectHandller(e) }}
+                                                    classNamePrefix="select2-selection"
                                                 />
                                             </Col>
                                         </FormGroup>
-                                    </Col>
+                                    </Col >
 
-                                    <Col sm={4} className="">
-                                        <FormGroup className="mb-3 row" >
-                                            <Label className="col-sm-3 p-2">Company</Label>
-                                            <Col md="9">
-                                                <Select
-                                                    value={company_dropdown_Select}
-                                                    className="rounded-bottom"
-                                                    placeholder="Select..."
-                                                    options={CompanyValues}
-                                                    onChange={(e) => { setCompany_dropdown_Select(e) }}
-                                                />
-                                            </Col>
-                                        </FormGroup>
+                                    <Col sm={3} >
+                                        <Button type="button" color="btn btn-outline-success" className=""
+                                            onClick={() => { AddPageButton_Handeler() }}>
+                                            {page_DropdownSelect.value === 0 ? 'Add All Page' : "Add Page"}</Button>
                                     </Col>
-                                    <Col sm={1}>
-                                        <div className="col col-2">
-                                            <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
-                                        </div>
+                                    <Col sm={1} >
+                                        {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
+                                        <SaveButton
+                                            pageMode={pageMode}
+                                            userAcc={userAccState}
+                                            module={"RoleAccess"}
+                                            onClick={saveHandeller}
+                                            editCreatedBy={editCreatedBy}
+                                        />
                                     </Col>
                                 </Row>
-                                <div>
-                                </div>
-
-                            </CardHeader>
-
-                            :
-                            <div>
-                                <Row style={{ backgroundColor: "#dddddd", }} className='mb-1 mt-n3 head '>
-                                    <Row sm={12} >
-                                        <Col sm={3} className="p-2 ">
-                                            <Label className="p-2 col-sm-3">Role</Label>
-                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                <h className="text-black">{role_dropdown_Select.label}</h></Button>
-                                        </Col>
-
-                                        <Col sm={4} className="p-2 ">
-                                            {(division_dropdown_Select.value > 0)
-                                                ?
-                                                <> <Label className=" p-2 col-sm-3">Division</Label>
-                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                        <h className="text-black">{division_dropdown_Select.label}</h></Button>
-                                                </>
-                                                : null}
-                                        </Col>
-
-                                        <Col sm={4} className="p-2 ">
-                                            <Label className="p-2 col-sm-4">Company</Label>
-                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
-                                                <h className="text-black">{company_dropdown_Select.label}</h></Button>
-                                        </Col>
-                                        <Col sm={1} className="p-2 mt-1">
-                                            <Button type="button"
-                                                color="btn btn-outline-secondary"
-                                                className="btn-sm"
-                                                onClick={() => { ChangeButtonHandeler() }}>
-                                                <h className="text-black">Change</h></Button>
-
-                                        </Col>
-
-                                    </Row>
-                                </Row>
-                                <CardHeader className="card-header headbody  text-black" style={{ backgroundColor: "rgb(231 231 231)" }} >
-                                    <Row style={{ marginRight: "4px" }}>
-                                        <Col sm={4}>
-                                            <FormGroup className="row">
-                                                <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                <Col sm={8} style={{ zIndex: "3" }}>
-                                                    <Select
-                                                        value={module_DropdownSelect}
-                                                        placeholder="select.."
-                                                        options={Module_DropdownOption}
-                                                        onChange={(e) => { Module_DropdownSelectHandller(e) }}
-                                                        classNamePrefix="select2-selection"
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-                                        <Col sm={4}>
-                                            <FormGroup className=" row ">
-                                                <Label className="col-sm-3 p-2">Page</Label>
-                                                <Col sm={8} style={{ zIndex: "3" }}>
-                                                    <Select
-                                                        value={page_DropdownSelect}
-                                                        placeholder="select.."
-                                                        options={Page_DropdownOption}
-                                                        onChange={(e) => { Page_DropdownSelectHandller(e) }}
-                                                        classNamePrefix="select2-selection"
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col >
-
-                                        <Col sm={3} >
-                                            <Button type="button" color="btn btn-outline-success" className=""
-                                                onClick={() => { AddPageButton_Handeler() }}>
-                                                {page_DropdownSelect.value === 0 ? 'Add All Page' : "Add Page"}</Button>
-                                        </Col>
-                                        <Col sm={1} >
-                                            {/* <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button> */}
-                                            <SaveButton
-                                                pageMode={pageMode}
-                                                userAcc={userAccState}
-                                                module={"RoleAccess"}
-                                                onClick={saveHandeller}
-                                                editCreatedBy={editCreatedBy}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </CardHeader>
+                                
                             </div>
-                    }
-
-                </CardBody>
+                            
+                        </div>
+                }
+                <div  style={{
+                    marginLeft:"-7px",
+                    paddingTop:'4px'
+                                }}>
+                <RoleAccTable ></RoleAccTable>
+                </div>
 
             </Container>
 
-            <RoleAccTable ></RoleAccTable>
+
 
         </div>
     </React.Fragment>
