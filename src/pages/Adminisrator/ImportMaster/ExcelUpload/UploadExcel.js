@@ -25,7 +25,7 @@ import { breadcrumbReturnFunc, groupBy, loginCompanyID } from "../../../../compo
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import { readExcelFile } from "./readFile";
+import { fileDetails, readExcelFile } from "./readFile";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -35,23 +35,23 @@ const UploadExcel = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-
-    const [EditData, setEditData] = useState({});
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserAccState] = useState('');
-    const [preUploadjson, setPreUploadjson] = useState([])
-    const [partySelect, SetPartySelect] = useState([])
-
+    const  preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0 }
     const fileds = {
         id: "",
         Party: "",
         ImportType: "",
         PatternType: ""
     }
-
     const [state, setState] = useState(initialFiledFunc(fileds))
+    
+    const [EditData, setEditData] = useState({});
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
-
+    const [preUploadjson, setPreUploadjson] = useState([])
+    const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
+    const [partySelect, SetPartySelect] = useState([])
+   
 
     const {
         postMsg,
@@ -139,14 +139,18 @@ const UploadExcel = (props) => {
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-            const exjson = await readExcelFile({ file: files[0], compareParam, })
+
+            const readjson = await readExcelFile({ file: files[0], compareParam, })
 
             const btnerify = document.getElementById("btn-verify")
             const btnupload = document.getElementById('btn-upload')
 
 
-            if (exjson.length > 0) {
-                setPreUploadjson(exjson)
+            if (readjson.length > 0) {
+                debugger
+                const aa = await fileDetails({ compareParam, readjson, setReadJsonDetail })
+                debugger
+                setPreUploadjson(readjson)
                 btnerify.style.display = "none"
                 btnupload.style.display = "block"
             }
@@ -379,7 +383,7 @@ const UploadExcel = (props) => {
                                                     No of line Item:54
                                                 </div>
                                                 <div className="error-msg">
-                                                <i class="fa fa-warning"></i>
+                                                    <i class="fa fa-warning"></i>
                                                     No of invoices:8
                                                 </div>
                                                 <div className="error-msg">
