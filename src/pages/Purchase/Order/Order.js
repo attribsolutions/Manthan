@@ -133,7 +133,6 @@ const Order = (props) => {
         PartyList: state.PartyMasterReducer.partyList
     }));;
 
-    console.log()
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -603,14 +602,7 @@ const Order = (props) => {
 
     async function assignItem_onClick() {
 
-        const config = {
-            Party:supplierSelect.value,
-            PartyName:supplierSelect.label,
-            editId: supplierSelect.value,
-            btnmode: mode.assingLink,
-            subPageMode,
-            btnId: `btn-assingLink-${supplierSelect.value}`
-        }
+        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
 
         const isConfirmed = await CustomAlert({
             Type: 7,
@@ -1143,7 +1135,9 @@ const Order = (props) => {
 
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                            <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            <SaveButton
+                                pageMode={pageMode}
+                                userAcc={userAccState}
                                 onClick={saveHandeller}
                             />
                         </div>

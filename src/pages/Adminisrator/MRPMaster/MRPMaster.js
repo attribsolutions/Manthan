@@ -38,7 +38,7 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { breadcrumbReturnFunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 
 const MRPMaster = (props) => {
@@ -47,6 +47,7 @@ const MRPMaster = (props) => {
     const history = useHistory();
     const formRef = useRef(null);
     let editMode = history.location.pageMode;
+    let IsSCM = loginIsSCMCompany()
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
@@ -117,8 +118,8 @@ const MRPMaster = (props) => {
             var effectiveDate = editDataGatingFromList.EffectiveDate
 
             const jsonBody = JSON.stringify({
-                Division: divisionid,
-                Party: partyId,
+                Division: IsSCM === 1 ? 0 : divisionid,
+                Party: IsSCM === 1 ? 0 : partyId,
                 EffectiveDate: effectiveDate
             });
             dispatch(postGoButtonForMRP_Master(jsonBody))
@@ -237,13 +238,14 @@ const MRPMaster = (props) => {
             })
         );
     };
+
     const GoButton_Handler = (event, values) => {
 
         let division = { ...division_dropdown_Select }
         let party = { ...party_dropdown_Select }
 
         const jsonBody = JSON.stringify({
-            Division: division.value ? division.value : " ",
+            Division: division.value ? division.value : 0,
             Party: party.value ? party.value : 0,
             EffectiveDate: effectiveDate
         });
@@ -371,9 +373,10 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+        debugger
         var ItemData = TableData.map((index) => ({
-            Division: division_dropdown_Select.value,
-            Party: party_dropdown_Select.value,
+            Division: (IsSCM === 1) ? null : division_dropdown_Select.value,
+            Party: (IsSCM === 1) ? null : party_dropdown_Select.value,
             EffectiveDate: effectiveDate,
             Company: loginCompanyID(),
             CreatedBy: loginUserID(),
@@ -395,7 +398,7 @@ const MRPMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode ===mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === mode.edit) || (pageMode === mode.copy) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
@@ -420,40 +423,48 @@ const MRPMaster = (props) => {
                                     <Col>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
                                             <CardHeader className="card-header   text-black c_card_body" >
-                                                <Row className="mt-3 " >
-                                                    <Col sm={3}>
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-6 p-2 " style={{ width: "2cm" }}>Division</Label>
-                                                            <Col sm={8} >
-                                                                <Select
-                                                                    value={division_dropdown_Select}
-                                                                    options={Division_DropdownOptions}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    className="divisionName"
-                                                                    placeholder="select"
-                                                                    onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
-                                                                    classNamePrefix="select2-selection"
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col>
 
-                                                    <Col sm={3} >
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-6 p-2" style={{ width: "2.5cm" }} >Party Name</Label>
-                                                            <Col sm={8} >
-                                                                <Select
-                                                                    value={party_dropdown_Select}
-                                                                    options={PartyDropdown_Options}
-                                                                    isDisabled={editMode === "edit" ? true : false}
-                                                                    className="rounded-bottom"
-                                                                    placeholder="select"
-                                                                    onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
-                                                                    classNamePrefix="select2-selection"
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col>
+                                                <Row className="mt-3 " >
+                                                    {(IsSCM === 1) ?
+                                                        null
+                                                        :
+                                                        <Col sm={3}>
+                                                            <FormGroup className="mb-3 row ">
+                                                                <Label className="col-sm-6 p-2 " style={{ width: "2cm" }}>Division</Label>
+                                                                <Col sm={8} >
+                                                                    <Select
+                                                                        value={division_dropdown_Select}
+                                                                        options={Division_DropdownOptions}
+                                                                        isDisabled={editMode === "edit" ? true : false}
+                                                                        className="divisionName"
+                                                                        placeholder="select"
+                                                                        onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
+                                                                        classNamePrefix="select2-selection"
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>}
+
+                                                    {(IsSCM === 1) ?
+                                                        null
+                                                        :
+                                                        <Col sm={3} >
+                                                            <FormGroup className="mb-3 row ">
+                                                                <Label className="col-sm-6 p-2" style={{ width: "2.5cm" }} >Party Name</Label>
+                                                                <Col sm={8} >
+                                                                    <Select
+                                                                        value={party_dropdown_Select}
+                                                                        options={PartyDropdown_Options}
+                                                                        isDisabled={editMode === "edit" ? true : false}
+                                                                        className="rounded-bottom"
+                                                                        placeholder="select"
+                                                                        onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                        classNamePrefix="select2-selection"
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
+                                                    }
 
                                                     <Col sm={4}>
                                                         <FormGroup className="mb-3 row col ">

@@ -59,7 +59,7 @@ const GRNAdd = (props) => {
         postMsg,
         userAccess,
     } = useSelector((state) => ({
-        supplierAddress: state.CommonAPI_Reducer.supplierAddress,
+        // supplierAddress: state.CommonAPI_Reducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -71,7 +71,7 @@ const GRNAdd = (props) => {
         let page_Id = pageId.GRN_ADD_1;
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getSupplierAddress())
+        // dispatch(getSupplierAddress())
     }, [])
 
     // userAccess useEffect

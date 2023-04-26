@@ -186,7 +186,7 @@ const OrderList = () => {
     }, [makeIBInvoice])
 
     const makeBtnFunc = (list = []) => {
-        
+
         const obj = list[0]
         if (subPageMode === url.IB_INVOICE_STP) {
             const jsonBody = JSON.stringify({
@@ -269,7 +269,7 @@ const OrderList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-        
+
         btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             let filtersBody = {}
@@ -356,7 +356,9 @@ const OrderList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>{fieldLabel.FromDate}</Label>
+                                style={{ width: "83px" }}>
+                                {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}
+                            </Label>
                             <Col sm="7">
                                 <Flatpickr
                                     name='FromDate'
@@ -376,7 +378,9 @@ const OrderList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>{fieldLabel.ToDate}</Label>
+                                style={{ width: "65px" }}>
+                                {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}
+                            </Label>
                             <Col sm="7">
                                 <Flatpickr
                                     name="ToDate"
@@ -397,8 +401,9 @@ const OrderList = () => {
                     <Col sm="5">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-
-                                style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                style={{ width: "115px" }}>
+                                {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
+                            </Label>
                             <Col sm="5">
                                 <Select
                                     name="Supplier"
