@@ -56,7 +56,7 @@ const Receipts = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [ID, setID] = useState("");
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-    console.log(pageMode)
+
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -219,7 +219,7 @@ const Receipts = (props) => {
             dispatch(saveReceiptMaster_Success({ Status: false }))
             dispatch(ReceiptGoButtonMaster_Success([]))
             setState(() => resetFunction(fileds, state))// Clear form values 
-            // dispatch(Breadcrumb_inputName(''))
+
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -300,13 +300,10 @@ const Receipts = (props) => {
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <CInput
-                        key={`Quantity${row.FullInvoiceNumber}${key}`}
-                        id={`Quantity${row.FullInvoiceNumber}`}
+                        key={`Quantity-${row.Invoice}`}
+                        id={`Quantity-${row.Invoice}`}
                         pattern={decimalRegx}
                         defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
                         autoComplete="off"
                         className="col col-sm text-center"
                         onChange={(e) => CalculateOnchange(e, row, key)}
@@ -373,8 +370,8 @@ const Receipts = (props) => {
     };
 
     function AmountPaid_onChange(event) {
+
         let input = event.target.value
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
         let sum = 0
         Data.forEach(element => {
             sum = sum + Number(element.BalanceAmount)
@@ -412,7 +409,7 @@ const Receipts = (props) => {
                 index.Calculate = 0;
             }
             try {
-                document.getElementById(`Quantity${index.FullInvoiceNumber}`).value = index.Calculate
+                document.getElementById(`Quantity-${index.Invoice}`).value = index.Calculate
             } catch (e) { }
         })
     }
@@ -483,7 +480,10 @@ const Receipts = (props) => {
             return btnIsDissablefunc({ btnId, state: false })
         }
 
-        if ((values.AmountPaid === 0) || (values.AmountPaid === "NaN") || (values.AmountPaid === undefined)) {
+        if ((values.AmountPaid === '')
+            || (values.AmountPaid === "NaN")
+            || (values.AmountPaid === undefined)
+            || (values.AmountPaid >= 0)) {
             CustomAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,
@@ -830,7 +830,7 @@ const Receipts = (props) => {
                                                 className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Description"
                                                 autoComplete='off'
-                                                autoFocus={true}
+                                                // autoFocus={true}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
                                             />
                                             {isError.Description.length > 0 && (
@@ -846,7 +846,7 @@ const Receipts = (props) => {
 
                         <ToolkitProvider
 
-                            keyField="id"
+                            keyField="Invoice"
                             data={Data}
                             columns={pagesListColumns}
 
@@ -856,7 +856,7 @@ const Receipts = (props) => {
                                 <React.Fragment>
                                     <div className="table">
                                         <BootstrapTable
-                                            keyField={"id"}
+                                            keyField={"Invoice"}
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
@@ -882,7 +882,6 @@ const Receipts = (props) => {
                                         onClick={saveHandeller}
                                         userAcc={userPageAccessState}
                                         editCreatedBy={editCreatedBy}
-                                        module={"Receipts"}
                                     />
 
                                 </Col>

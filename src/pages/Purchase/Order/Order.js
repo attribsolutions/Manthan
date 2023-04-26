@@ -603,7 +603,14 @@ const Order = (props) => {
 
     async function assignItem_onClick() {
 
-        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
+        const config = {
+            Party:supplierSelect.value,
+            PartyName:supplierSelect.label,
+            editId: supplierSelect.value,
+            btnmode: mode.assingLink,
+            subPageMode,
+            btnId: `btn-assingLink-${supplierSelect.value}`
+        }
 
         const isConfirmed = await CustomAlert({
             Type: 7,
@@ -767,7 +774,9 @@ const Order = (props) => {
                 })
                 return returnFunc();
             }
-            if ((termsAndCondition.length === 0) && !(subPageMode === url.IB_ORDER)) {
+            if ((termsAndCondition.length === 0) && !(subPageMode === url.ORDER_2)
+                && !(subPageMode === url.ORDER_4) && !(subPageMode === url.IB_ORDER)
+            ) {
                 CustomAlert({
                     Type: 4,
                     Message: "Please Enter One Terms And Condition",
@@ -1135,7 +1144,7 @@ const Order = (props) => {
                     {
                         ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                module={"Order"} onClick={saveHandeller}
+                                onClick={saveHandeller}
                             />
                         </div>
                             : <div className="row save1"></div>

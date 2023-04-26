@@ -21,14 +21,15 @@ import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, loginCompanyID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, groupBy, loginCompanyID } from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
 import { readExcelFile } from "./readFile";
 import CInput from "../../../../CustomValidateForm/CInput";
 import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
-
+import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
+import './scss.scss'
 const UploadExcel = (props) => {
 
     const dispatch = useDispatch();
@@ -116,7 +117,6 @@ const UploadExcel = (props) => {
     }));
 
 
-
     function goButtonHandler() {
         const jsonBody = JSON.stringify({
             PartyID: partySelect.value,
@@ -126,73 +126,60 @@ const UploadExcel = (props) => {
     };
 
 
-    const SaveHandler = (event) => {
-        event.preventDefault();
-        // const BOMItems = ItemTabDetails.map((index) => ({
-        //     Item: index.Item,
-        //     Quantity: index.Quantity,
-        //     Unit: index.Unit
-        // }))
-        // if (formValid(state, setState)) {
-
-        //     let BOMrefID = 0
-        //     if ((pageMode === mode.edit)) {
-        //         BOMrefID = EditData.id
-        //     };
-
-        //     const jsonBody = JSON.stringify({
-        //         // BomDate: values.BomDate,
-        //         // EstimatedOutputQty: values.EstimatedOutputQty,
-        //         // Comment: values.Comment,
-        //         // IsActive: values.IsActive,
-        //         // Item: values.ItemName.value,
-        //         // Unit: values.UnitName.value,
-        //         // CreatedBy: loginUserID(),
-        //         // Company: loginCompanyID(),
-        //         // BOMItems: BOMItems,
-        //         // IsVDCItem: values.IsVDCItem,
-        //         // ReferenceBom: BOMrefID
-        //     });
-
-
-
-        //     // if (pageMode === mode.edit) {
-        //     //     dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-        //     // }
-        //     // else {
-        //     //     dispatch(saveBOMMaster(jsonBody));
-        //     // }
-        // }
-    };
-
-
-    function upload() {
+    async function upload() {
 
         var files = selectedFiles;
         if (files.length == 0) {
-            alert("Please choose any file...");
+            CustomAlert({
+                Type: 3,
+                Message: "Please choose any file...",
+            })
             return;
         }
         var filename = files[0].name;
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
-            const exjson = readExcelFile({ file: files[0], compareParam, })
+            const exjson = await readExcelFile({ file: files[0], compareParam, })
 
             const btnerify = document.getElementById("btn-verify")
             const btnupload = document.getElementById('btn-upload')
 
-            if (exjson) {
+
+            if (exjson.length > 0) {
                 setPreUploadjson(exjson)
                 btnerify.style.display = "none"
                 btnupload.style.display = "block"
             }
 
         } else {
-            alert("Please select a valid excel file.");
+            CustomAlert({
+                Type: 3,
+                Message: "Please select a valid excel file.",
+            })
         }
     }
 
-    function handleAcceptedFiles(files) {
+    async function handleAcceptedFiles(files) {
+
+        if (selectedFiles.length > 0) {
+            const isConfirmed = await CustomAlert({
+                Type: 8,
+                Message: "Do you confirm your choice?",
+            });
+            if (!isConfirmed) {
+                return
+            }
+        };
+        try {
+            const btnerify = document.getElementById("btn-verify")
+            const btnupload = document.getElementById('btn-upload')
+            const progDiv = document.getElementById("file-proccess")
+
+            btnerify.style.display = "block"
+            btnupload.style.display = "none"
+            progDiv.style.display = "none"
+        } catch (d) { }
+
         files.map(file =>
             Object.assign(file, {
                 preview: URL.createObjectURL(file),
@@ -201,6 +188,7 @@ const UploadExcel = (props) => {
         )
         setselectedFiles(files)
     }
+
     function formatBytes(bytes, decimals = 2) {
         if (bytes === 0) return "0 Bytes"
         const k = 1024
@@ -212,49 +200,76 @@ const UploadExcel = (props) => {
     }
 
 
-    // useEffect(() => {
-    //     try {
+    const SaveHandler = (event) => {
+        event.preventDefault();
+
+        const parArr = {}
+        const outerArr = []
+
+        compareParam.forEach(ele => {
+            if ((ele.Value !== null)) {
+                parArr[ele.FieldName] = ele.Value
+            }
+        })
+
+        const c_invoice = compareParam.find(i => (i.FieldName === "InvoiceNumber"))
+        const invoiceGroup = groupBy(preUploadjson, (party) => (party[c_invoice.Value]))
+
+        invoiceGroup.forEach(inv => {
+            let parentObj;
+            let invoiceItems = []
+            inv.forEach(ele => {
+                parentObj = {
+                    "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
+                    "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
+                    "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : '',
+                    "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
+                    "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                    "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
+                    "Party": ele[parArr.Party] ? ele[parArr.Party] : '',
+                    "CreatedBy": ele[parArr.CreatedBy] ? ele[parArr.CreatedBy] : '',
+                    "UpdatedBy": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                    "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
+                }
 
 
-    //         let a = document.getElementById("preloader1")
-    //         if (a) {
-    //             setTimeout(() => {
-    //                 a.style.display = 'none'
-    //             }, 7000);
-    //         }
-    //         let k = document.getElementById("pace-progress1")
 
-    //         if (k) {
+                invoiceItems.push({
+                    "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
+                    "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
+                    "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
+                    "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : '',
+                    "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
+                    "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
+                    "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
+                    "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                    "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
+                    "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                    "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
+                    "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
+                    "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
+                    "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : '',
+                    "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : '',
+                    "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : '',
+                    "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : '',
+                    "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : '',
+                    "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : '',
+                    "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : '',
+                    "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : '',
+                    "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : '',
+                    "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
+                    "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
+                    "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : '',
+                    "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : '',
 
-    //             let t = 80
-    //             let myInterval
-    //             setTimeout(() => {
-    //                 myInterval = setInterval(myTimer, 500);
-    //             }, 4000);
+                })
+            })
 
-    //             function myTimer() {
+            outerArr.push({ ...parentObj, ...invoiceItems })
+        });
+        console.log('Upload data', outerArr)
+    };
 
-    //                 console.log("myInterval")
-    //                 t = t + 5
-
-    //                 let b = document.getElementById("pace-progress1")
-    //                 
-    //                 // let c = document.getElementById("sr-only")
-
-    //                 b.style.width = `${t}%`
-    //                 // c.innerText = `${t}%`
-    //                 if (t === 100) {
-    //                     clearInterval(myInterval)
-    //                 }
-
-    //             }
-
-
-    //         }
-
-    //     } catch (e) { }
-
-    // })
 
 
     if (!(userPageAccessState === '')) {
@@ -299,19 +314,17 @@ const UploadExcel = (props) => {
                         </div>
 
 
-
                         <div className="mb-3 mt-3">
-                            <Container className='p-4'>
 
-                            </Container >
 
                             <Dropzone
                                 onDrop={acceptedFiles => {
+                                    document.getElementById("demo1").style.border = "4px dotted green";
                                     handleAcceptedFiles(acceptedFiles)
                                 }}
                             >
                                 {({ getRootProps, getInputProps }) => (
-                                    <div className="dropzone">
+                                    <div id='demo1' className="dropzone">
                                         <div
                                             className="dz-message needsclick mt-2"
                                             {...getRootProps()}
@@ -358,7 +371,31 @@ const UploadExcel = (props) => {
                                                     </Col>
                                                 </Row>
                                             </div>
-                                            <div id="file-proccess" style={{
+
+
+                                            <div >
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    No of line Item:54
+                                                </div>
+                                                <div className="error-msg">
+                                                <i class="fa fa-warning"></i>
+                                                    No of invoices:8
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    No of Party:5
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    No of invoice Dates:2022-2023
+                                                </div>
+                                                <div className="error-msg">
+                                                    <i className="fa fa-error"></i>
+                                                    Total Amount:5454
+                                                </div>
+                                            </div>
+                                            {/* <div id="file-proccess" style={{
                                                 width: "80%",
                                                 paddingRight: "40%",
                                                 marginBottom: "10px",
@@ -375,21 +412,31 @@ const UploadExcel = (props) => {
                                                         <span id='file-proccess-lable'>0% </span>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
+
+
+
+
+                                            <details>
+                                                <summary>Epcot Center</summary>
+                                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                            </details>
                                         </Card>
                                     )
                                 })}
                             </div>
 
+
                         </div>
-                        <div className="text-center mt-4" >
-                          
+
+                        <div className="text- mt-4" >
+
                             <button
                                 type="button"
                                 style={{ display: "none" }}
                                 id='btn-upload'
                                 className="btn btn-success "
-                                onClick={upload}
+                                onClick={SaveHandler}
                             >
                                 Upload Files
                             </button>
@@ -402,7 +449,6 @@ const UploadExcel = (props) => {
                                 Verify Files
                             </button>
                         </div>
-
 
 
 

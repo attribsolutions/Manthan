@@ -19,7 +19,7 @@ import {
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as mode from "../../../routes/PageMode"
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
-import { Receipt_Print } from "../../../helpers/backend_helper";
+import { Edit_Credit_List_API, Receipt_Print } from "../../../helpers/backend_helper";
 import Credit from "./Credit";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
@@ -36,7 +36,9 @@ const CreditList = () => {
     const fileds = {
         FromDate: currentDate,
         ToDate: currentDate,
-        Customer: { value: "", label: "All" }
+        Customer: { value: "", label: "All" },
+        NoteType: ""
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -117,6 +119,18 @@ const CreditList = () => {
         label: index.Name,
     }));
 
+  
+    const NoteType= []
+    CreditDebitType.forEach(index => {
+        if (index.Name === "CreditNote" || index.Name === "Goods CreditNote") {
+            const arr = {
+                value: index.id,
+                label: index.Name,
+            }
+            NoteType.push(arr)
+        }
+    })
+
     useEffect(() => {
         if (CreditDebitType.length > 0) {
             goButtonHandler(true)
@@ -126,23 +140,33 @@ const CreditList = () => {
     function goButtonHandler() {
 
         const CreditDebitTypeId = CreditDebitType.find((index) => {
-            return index.Name === "Credit"
+            return index.Name === "CreditNote"
         })
 
+        const GoodsCreditType = CreditDebitType.find((index) => {
+            return index.Name === "Goods CreditNote"
+
+        })
+        
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
             PartyID: loginPartyID(),
-            NoteType: CreditDebitTypeId.id
+            NoteType: values.NoteType === "" ? CreditDebitTypeId.id : values.NoteType.value
         });
         dispatch(GetCreditList(jsonBody, hasPagePath));
     }
 
+    customerOptions.unshift({
+        value: "",
+        label: " All"
+    });
+
 
     function downBtnFunc(row) {
-        var ReportType = report.Receipt;
-        dispatch(getpdfReportdata(Receipt_Print, ReportType, row.id))
+        var ReportType = report.Credit;
+        dispatch(getpdfReportdata(Edit_Credit_List_API, ReportType, { editId: row.id }))
     }
 
     function fromdateOnchange(e, date) {
@@ -173,15 +197,27 @@ const CreditList = () => {
 
     }
 
+    function NoteTypeOnChange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.NoteType = e;
+            a.hasValid.NoteType.valid = true
+            return a
+        })
+
+    }
+
+
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-                    <Col sm="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>FromDate</Label>
-                            <Col sm="7">
+                    <Col sm={2} className="">
+                        <FormGroup className=" mb-2 row mt-3 " >
+                            <Label className="col-sm-4 p-2"
+                                style={{ width: "66px" }}>FromDate</Label>
+                            <Col sm={7}>
                                 <Flatpickr
                                     name='FromDate'
                                     value={values.FromDate}
@@ -198,11 +234,11 @@ const CreditList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>ToDate</Label>
-                            <Col sm="7">
+                    <Col sm={2} className="">
+                        <FormGroup className=" row mt-3 " >
+                            <Label className="col-sm-4 p-2"
+                                style={{ width: "60px" }}>ToDate</Label>
+                            <Col sm={7}>
                                 <Flatpickr
                                     name="ToDate"
                                     value={values.ToDate}
@@ -219,11 +255,11 @@ const CreditList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm="5">
-                        <FormGroup className="mb-2 row mt-3 " >
-                            <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>Customer</Label>
-                            <Col sm="5">
+                    <Col sm={3}>
+                        <FormGroup className=" row mt-3 " >
+                            <Label className="col-sm-2 p-2"
+                                style={{ width: "85px" }}>Customer</Label>
+                            <Col sm={7}>
                                 <Select
                                     name="Customer"
                                     classNamePrefix="select2-Customer"
@@ -235,7 +271,23 @@ const CreditList = () => {
                         </FormGroup>
                     </Col >
 
-                    <Col sm="1" className="mt-3 ">
+                    <Col sm={3}>
+                        <FormGroup className=" row mt-3 " >
+                            <Label className="col-md-3 p-2"
+                                style={{ width: "90px" }}>NoteType</Label>
+                            <Col sm={8}>
+                                <Select
+                                    name="Customer"
+                                    classNamePrefix="select2-Customer"
+                                    value={values.NoteType}
+                                    options={NoteType}
+                                    onChange={NoteTypeOnChange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
+
+                    <Col sm={2} className="mt-3 " style={{ paddingLeft: "100px" }}>
                         <Go_Button onClick={goButtonHandler} />
                     </Col>
                 </div>

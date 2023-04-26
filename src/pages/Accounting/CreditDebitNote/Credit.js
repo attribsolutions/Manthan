@@ -52,15 +52,14 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
-import { Amount, basicAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { Amount, basicAmount, handleKeyDown } from "../../Purchase/Order/OrderPageCalulation";
 import { salesReturnCalculate } from "../../Sale/Invoice/SalesReturn/SalesCalculation";
 
 
 const Credit = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
-
     const fileds = {
         CRDRNoteDate: currentDate,
         Customer: "",
@@ -68,7 +67,8 @@ const Credit = (props) => {
         servicesItem: "",
         Narration: "",
         GrandTotal: 0,
-        InvoiceNO: ""
+        InvoiceNO: "",
+        calculate: ""
 
     }
 
@@ -78,6 +78,18 @@ const Credit = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(198);
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [calculation, Setcalculation] = useState([]);
+    const [Table, setTable] = useState([])
+    const [Table1, setTable1] = useState([])
+    const [TotalSum, setTotalSum] = useState(0)
+
+
+
+
+
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -109,6 +121,9 @@ const Credit = (props) => {
         dispatch(commonPageField(page_Id))
         dispatch(ReceiptGoButtonMaster_Success([]))
         dispatch(Invoice_Return_ID_Success([]))
+        dispatch(InvoiceNumberSuccess([]))
+
+        
 
     }, []);
 
@@ -117,7 +132,8 @@ const Credit = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    const { Data = [] } = ReceiptGoButton
+    let { Data = [] } = ReceiptGoButton
+
 
     const { InvoiceItems = [] } = InvoiceReturn
 
@@ -164,17 +180,23 @@ const Credit = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                const {  CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, } = hasEditVal
+                debugger
+                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 // hasValid.Name.valid = true;
 
-                values. CRDRNoteDate =  CRDRNoteDate;
-                values.Customer = Customer;
-                values.NoteReason = NoteReason;
+                values.CRDRNoteDate = CRDRNoteDate;
+                values.Customer = { label: Customer, value: CustomerID };
+                values.NoteReason = { label: NoteReason, value: "" };
+                values.InvoiceNO = { label: FullNoteNumber, value: "" };
+                // values.BalanceAmount
                 values.servicesItem = servicesItem;
                 values.Narration = Narration;
                 values.GrandTotal = GrandTotal;
+                setTable(CRDRInvoices)
+                setTable1(CRDRNoteItems)
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -243,6 +265,7 @@ const Credit = (props) => {
         }
     }, [pageField])
 
+    console.log(Table)
 
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
@@ -291,8 +314,16 @@ const Credit = (props) => {
     }));
 
     const CreditDebitTypeId = CreditDebitType.find((index) => {
-        return index.Name === "Credit"
+        return index.Name === "CreditNote"
     })
+
+    const GoodsCreditType = CreditDebitType.find((index) => {
+        return index.Name === "Goods CreditNote"
+
+    })
+
+
+
 
     function DateOnchange(e, date) {
         setState((i) => {
@@ -311,6 +342,7 @@ const Credit = (props) => {
 
     function CustomerOnChange(e) { // Customer dropdown function
 
+
         setState((i) => {
             i.values.GrandTotal = 0
             i.hasValid.GrandTotal.valid = true;
@@ -324,7 +356,6 @@ const Credit = (props) => {
         });
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
-
         const jsonBody1 = JSON.stringify({
             PartyID: loginPartyID(),
             CustomerID: e.value
@@ -395,33 +426,55 @@ const Credit = (props) => {
         })
     }
 
-    function val_onChange(event, row, val) {
-        debugger
-        let input = event.target.value;
-        let Rate =row.Rate;
-        // let result = /^\d*(\.\d{0,2})?$/.test(input);
+    function val_onChange(val, row, type) {
+        if (type === "qty") {
+            row["Qty"] = val;
+        }
+        else {
+            row["Rate"] = val
+        }
+        row.gstPercentage = row.GSTPercentage
+        let calculate = salesReturnCalculate(row)
+        
+        Setcalculation(calculate)
+        let AmountTotal = calculate.tAmount
+        row["AmountTotal"] = Number(AmountTotal)
         let sum = 0
-        row.Qty = event.target.value
-        const calculate=  salesReturnCalculate(row)
+
+        InvoiceItems.forEach(ind => {
+            if (ind.AmountTotal === undefined) {
+                ind.AmountTotal = 0
+            }
+            var amt = parseFloat(ind.AmountTotal)
+            sum = sum + amt
+        });
 
         let v1 = Number(row.BaseUnitQuantity);
-        let v2 = Number(input)
+        let v2 = Number(val)
         if (!(v1 >= v2)) {
-            event.target.value = v1;
+            val = v1;
         }
 
-        
         setState((i) => {
             let a = { ...i }
-            a.values.GrandTotal = calculate.tAmount
+            a.values.GrandTotal = sum
             a.hasValid.GrandTotal.valid = true;
             return a
         })
+        setTotalSum(sum)
+
         // onChangeText({ event, state, setState })
-        AmountPaidDistribution(calculate.tAmount)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(calculate.tAmount).toFixed(2)}`))
+        AmountPaidDistribution(sum)
+        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(sum).toFixed(2)}`))
+
     };
 
+    function UnitOnchange(e, row, key) {
+
+        row.unit = e.value
+    };
+
+   
 
     const pagesListColumns1 = [
         {
@@ -433,22 +486,42 @@ const Credit = (props) => {
             dataField: "BaseUnitQuantity",
         },
         {
+            text: "Unit Name",
+            dataField: "UnitName",
+            headerStyle: (colum, colIndex) => {
+                return { width: '60px', textAlign: 'center' };
+            },
+
+        },
+
+        {
             text: "Quantity ",
-            dataField: "Quantity",
+            dataField: "",
             formatter: (cellContent, row, key) => {
                 debugger
                 return (<span >
                     <Input
                         key={`Qty${row.Item}${key}`}
-                        id={`Qty${row.Item}`}
+                        id={`Qty${key}`}
                         pattern={decimalRegx}
-                        defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
+                        defaultValue={null}
+                        // defaultValue={pageMode === mode.view ? row.Quantity : null}
+                        disabled={pageMode === mode.view ? true : false}
+                        placeholder="Enter Quantity"
                         autoComplete="off"
-                        className="col col-sm text-center"
-                        onChange={(event) => val_onChange(event, row, key)}
+                        className="col col-sm"
+                        // onChange={(event) => val_onChange(event, row, "qty")}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                val_onChange(val, row, "qty")
+                            } else {
+                                document.getElementById(`Qty${key}`).value = row.Quantity
+                            }
+                        }}
+                        onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
+
 
                     />
                 </span>)
@@ -458,31 +531,79 @@ const Credit = (props) => {
             text: "Unit",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                const Units = row.ItemUnitDetails.map((index) => ({
-                    value: index.Unit,
-                    label: index.UnitName,
-                }));
+                debugger
+                if (pageMode !== mode.view) {
+                    const Units = row.ItemUnitDetails.map((index) => ({
+                        value: index.Unit,
+                        label: index.UnitName,
+                    }));
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <Select
-                        id={`Unit${key}`}
-                        name="Unit"
-                        // defaultValue={row.Calculate}
-                        isSearchable={true}
-                        className="react-dropdown"
-                        classNamePrefix="dropdown"
-                        options={Units}
-                        onChange={(event) => {
-                            row.GST_ID = event.value
-                            row.GST = event.label
-                        }}
-                    />
-                </span>)
+
+                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                        <Select
+                            id={`Unit${key}`}
+                            name="Unit"
+                            defaultValue={row.Calculate}
+                            isSearchable={true}
+                            className="react-dropdown"
+                            classNamePrefix="dropdown"
+                            options={Units}
+                            onChange={(e) => UnitOnchange(e, row, key)}
+
+                        />
+                    </span>)
+                } else {
+                    row.unit = { label: row.UnitName, value: row.Unit };
+                    return (<span style={{ justifyContent: 'center', width: "100px" }}>
+
+                        <Select
+                            id={`Unit${key}`}
+                            name="Unit"
+                            defaultValue={row.unit}
+                            disabled={true}
+                            isSearchable={true}
+                            className="react-dropdown"
+                            classNamePrefix="dropdown"
+                            // options={Units}
+                            onChange={(e) => UnitOnchange(e, row, key)}
+
+                        />
+                    </span>)
+
+                }
+
             }
         },
         {
             text: "Rate",
-            dataField: "Rate",
+            dataField: "",
+            formatter: (cellContent, row, key) => {
+                debugger
+                return (<span >
+                    <Input
+                        type="text"
+                        key={`Ratey${row.Item}${key}`}
+                        id={`Ratey${key}`}
+                        defaultValue={row.Rate}
+                        disabled={pageMode === mode.view ? true : false}
+                        autoComplete="off"
+                        className="col col-sm"
+                        // onChange={(event) => val_onChange(event, row, "Rate")}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                            if ((isnum) || (val === '')) {
+                                val_onChange(val, row, "Rate")
+                            } else {
+                                document.getElementById(`Ratey${key}`).value = row.Rate
+                            }
+                        }}
+                        onKeyDown={(e) => handleKeyDown(e, InvoiceItems)}
+
+
+                    />
+                </span>)
+            }
         },
     ];
 
@@ -494,11 +615,11 @@ const Credit = (props) => {
             dataField: "InvoiceDate",
         },
         {
-            text: "Bill No",
+            text: "Invoice No",
             dataField: "FullInvoiceNumber",
         },
         {
-            text: "Bill Amount",
+            text: "Invoice Amount",
             dataField: "GrandTotal",
         },
         {
@@ -513,15 +634,15 @@ const Credit = (props) => {
             text: "Calculate",
             dataField: "",
             formatter: (cellContent, row, key) => {
-                debugger
+
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <CInput
                         key={`Quantity${row.FullInvoiceNumber}${key}`}
                         id={`Quantity${row.FullInvoiceNumber}`}
                         pattern={decimalRegx}
-                        defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
+                        defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
+                        disabled={pageMode === mode.view ? true : false}
                         // value={row.Calculate}
                         // type="text"
                         autoComplete="off"
@@ -539,6 +660,8 @@ const Credit = (props) => {
 
 
     const saveHandeller = async (event) => {
+
+        const arr1 = []
         event.preventDefault();
         const btnId = event.target.id;
         if ((values.Amount === 0) || (values.Amount === "NaN")) {
@@ -548,6 +671,7 @@ const Credit = (props) => {
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
+
         const ReceiptInvoices1 = Data.map((index) => ({
             Invoice: index.Invoice,
             GrandTotal: index.GrandTotal,
@@ -556,19 +680,55 @@ const Credit = (props) => {
         const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
             return index.PaidAmount > 0
         })
+
+        InvoiceItems.forEach(index => {
+            if (index.Qty) {
+                if ((!index.unit)) {
+                    CustomAlert({
+                        Type: 3,
+                        Message: `Please Select Unit ${index.ItemName}`,
+                    })
+                    // return btnIsDissablefunc({ btnId, state: false })
+                }
+                debugger
+                const CRDRNoteItems = {
+                    CRDRNoteDate: values.CRDRNoteDate,
+                    Item: index.Item,
+                    Quantity: index.Qty,
+                    Unit: index.unit,
+                    BaseUnitQuantity: index.BaseUnitQuantity,
+                    MRP: index.MRP,
+                    Rate: index.Rate,
+                    BasicAmount: calculation.baseAmt,
+                    TaxType: index.TaxType,
+                    GST: index.GST,
+                    GSTAmount: calculation.gstAmt,
+                    Amount:TotalSum,
+                    CGST: calculation.CGST,
+                    SGST: calculation.SGST,
+                    IGST: index.IGST,
+                    BatchCode: index.BatchCode,
+                    CGSTPercentage: index.CGSTPercentage,
+                    SGSTPercentage: index.SGSTPercentage,
+                    IGSTPercentage: index.IGSTPercentage,
+
+                }
+                arr1.push(CRDRNoteItems)
+            }
+        })
+
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-
-                     CRDRNoteDate: values. CRDRNoteDate,
+                    CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
-                    NoteType: CreditDebitTypeId.id,
+                    NoteType: arr1.length === 0 ? CreditDebitTypeId.id : GoodsCreditType.id,
                     GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     NoteReason: values.NoteReason.value,
-                    CRDRNoteItems: [],
+                    CRDRNoteItems: arr1 ? arr1 : [],
                     Party: loginPartyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -601,11 +761,11 @@ const Credit = (props) => {
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel. CRDRNoteDate}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
                                         <Col sm="7">
                                             <Flatpickr
                                                 name='CreditDate'
-                                                value={values. CRDRNoteDate}
+                                                value={values.CRDRNoteDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="Select..."
                                                 options={{
@@ -739,9 +899,9 @@ const Credit = (props) => {
                                                 }}
 
                                             />
-                                            {isError.InvoiceNO.length > 0 && (
+                                            {/* {isError.InvoiceNO.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.InvoiceNO}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -750,13 +910,13 @@ const Credit = (props) => {
 
                         <ToolkitProvider
                             keyField="id"
-                            data={InvoiceItems}
+                            data={Table1.length <= 0 ? InvoiceItems : Table1}
                             columns={pagesListColumns1}
                             search
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table">
+                                    {InvoiceItems.length <= 0 ? null : <div className="table">
                                         <BootstrapTable
                                             keyField={"id"}
                                             bordered={true}
@@ -772,42 +932,38 @@ const Credit = (props) => {
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
 
+
+                                    }
+                                    {Table1.length <= 0 ? null : <div className="table">
+                                        <BootstrapTable
+                                            keyField={"id"}
+                                            bordered={true}
+                                            striped={false}
+                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                            classes={"table align-middle table-nowrap table-hover"}
+                                            headerWrapperClasses={"thead-light"}
+
+                                            {...toolkitProps.baseProps}
+
+                                        />
+
+                                        {mySearchProps(toolkitProps.searchProps)}
+                                    </div>
+
+
+                                    }
+
                                 </React.Fragment>
                             )
                             }
                         </ToolkitProvider>
-                        {/* <FormGroup>
-                            <Row>
-                                <Col sm={2} style={{ marginBottom: "10px", marginTop: "-5px" }}>
-                                    <button type="button" style={{ width: "120px" }} onClick={CalculateOnClick} className="btn btn-primary  waves-effect waves-light">Calculate</button>
-                                </Col>
-                                <Col sm={2} style={{ marginTop: "-5px" }}>
-                                    <Input
-                                        name="GrandTotal"
-                                        id="GrandTotal"
-                                        value={values.GrandTotal}
-                                        type="text"
-                                        className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
-                                        placeholder="Please Enter Amount"
-                                        autoComplete='off'
-                                        autoFocus={true}
-                                        // onChange={(event) => { onChangeText({ event, state, setState }) }}
-                                        onChange={AmountPaid_onChange}
-                                    />
-                                    {isError.GrandTotal.length > 0 && (
-                                        <span className="text-danger f-8"><small>{isError.GrandTotal}</small></span>
 
-                                    )}
-                                </Col>
-
-                            </Row>
-                        </FormGroup > */}
 
                         {
                             <ToolkitProvider
 
                                 keyField="id"
-                                data={Data}
+                                data={Table.length <= 0 ? Data : Table}
                                 columns={pagesListColumns}
 
                                 search

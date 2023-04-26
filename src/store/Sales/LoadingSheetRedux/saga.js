@@ -10,7 +10,7 @@ function* goBtn_Post_API_GenFun({ filters }) {
     try {
         const response = yield call(Loading_Sheet_Go_Button_API, filters);
         response.Data.map((index) => {
-            index["Check"] = false
+            index["selectCheck"] = false
             return index
         });
         yield put(LoadingSheet_GoBtn_API_Succcess(response));

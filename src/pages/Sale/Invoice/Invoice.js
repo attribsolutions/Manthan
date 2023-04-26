@@ -800,12 +800,7 @@ const Invoice = (props) => {
                 index.StockDetails.forEach((ele) => {
 
                     if (ele.Qty > 0) {
-                        var demo = {
-                            Rate: ele.Rate,
-                            GSTPercentage: ele.GST,
-                            Quantity: ele.Qty
-                        }
-
+                    
                         const calculate = discountCalculate(ele, index)
 
                         grand_total = grand_total + Number(calculate.tAmount)
@@ -838,33 +833,6 @@ const Invoice = (props) => {
                             DiscountAmount: calculate.disCountAmt,
                         })
 
-                        // invoiceItems.push({
-                        //     Item: index.Item,
-                        //     Unit: index.UnitDrop.value,
-                        //     BatchCode: ele.BatchCode,
-                        //     Quantity: ele.Qty,
-                        //     BatchDate: ele.BatchDate,
-                        //     BatchID: ele.id,
-                        //     BaseUnitQuantity: ele.BaseUnitQuantity,
-                        //     LiveBatch: ele.LiveBatche,
-                        //     MRP: ele.LiveBatcheMRPID,
-                        //     Rate: ele.Rate,
-                        //     BasicAmount: basicAmt.toFixed(2),
-                        //     GSTAmount: cgstAmt.toFixed(2),
-                        //     GST: ele.LiveBatcheGSTID,
-                        //     CGST: (cgstAmt / 2).toFixed(2),
-                        //     SGST: (cgstAmt / 2).toFixed(2),
-                        //     IGST: 0,
-                        //     GSTPercentage: ele.GST,
-                        //     CGSTPercentage: (ele.GST / 2),
-                        //     SGSTPercentage: (ele.GST / 2),
-                        //     IGSTPercentage: 0,
-                        //     Amount: amount,
-                        //     TaxType: 'GST',
-                        //     DiscountType: "",
-                        //     Discount: "0",
-                        //     DiscountAmount: "0",
-                        // })
                     }
                 })
             })

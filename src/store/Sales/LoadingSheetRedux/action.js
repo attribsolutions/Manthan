@@ -53,7 +53,6 @@ export const LoadingSheetListActionSuccess = (resp) => ({
     payload: resp,
 });
 
-
 export const UpdateLoadingSheet = (id) => ({  
     type: LOADING_SHEET_UPDATE_API,
     id,
@@ -63,7 +62,6 @@ export const UpdateLoadingSheetSucccess = (data) => ({
     type: LOADING_SHEET_UPDATE_API_ACTION_SUCCESS,
     payload: data,
 });
-
 
 export const DeleteLoadingSheet = (config = {}) => ({  
     type: DELETE_LOADING_SHEET,

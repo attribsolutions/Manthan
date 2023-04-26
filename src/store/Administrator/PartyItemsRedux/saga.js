@@ -13,13 +13,13 @@ function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
 }
 
 
-function* getPartyItemGenFunc({ SupplierID }) {                                   // getList API
+function* getPartyItemGenFunc({ SupplierID }) {                       // getList API
   try {
     const response = yield call(get_Party_Item_List, SupplierID);
     response.Data.map((item) => {
-      item["itemCheck"] = false
+      item["selectCheck"] = false
       if (item.Party > 0) {
-        { item["itemCheck"] = true }
+        { item["selectCheck"] = true }
       }
       return item
     });
@@ -39,21 +39,20 @@ function* getPartyListGenFunc() {                                              /
 
 function* editPartyItems_ID_GenratorFunction({ config  }) {               // edit API 
   const { btnmode } = config;
-  
+  debugger
   try {
     const response = yield call(edit_PartyItem_List_Api, config);
     response.pageMode = btnmode;
-
-    let Party = {};
+debugger
     const PartyItem = response.Data.map((item) => {
       item["itemCheck"] = false
       if (item.Party > 0) {
-        Party = item;
         item.itemCheck = true;
       }
       return item
     });
-    response.Data = { ...Party, PartyItem };
+    response.Data = { ...config, PartyItem };
+    
     yield put(editPartyItemIDSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
