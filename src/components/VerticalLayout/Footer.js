@@ -1,14 +1,13 @@
 import React, { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { Container, Row, Col } from "reactstrap"
-import { getUserDetailsAction } from "../../store/actions"
-import { loginCompanyName, loginUserDetails } from "../Common/CommonFunction"
+import { loginCompanyName, loginIsSCMCompany, loginUserDetails } from "../Common/CommonFunction"
 
 const Footer = () => {
-
+ 
   let FooterDetails = loginUserDetails()
-  let CompanyName=loginCompanyName()
+  let CompanyName = loginCompanyName()
+  let IsSCMCompany = loginIsSCMCompany() === 1 ? "IsSCM" : "Non-SCM"
 
   return (
     <React.Fragment>
@@ -28,7 +27,7 @@ const Footer = () => {
                 </Link>
               </div>
             </Col> */}
-            <Col md={2} >{new Date().getFullYear()} © FoodERP </Col>
+            {/* <Col md={2} >{new Date().getFullYear()} © FoodERP </Col> */}
             <Col md={2} >
               <span className="text-black">Party : </span>
               <span className="pl-4 text-primary">{FooterDetails.PartyName}</span>
@@ -36,8 +35,8 @@ const Footer = () => {
             <Col md={2}><span className="text-black">Role : </span>
               <span className="pl-4 text-primary">{FooterDetails.RoleName}</span>
             </Col>
-            <Col md={2} ><span className="text-black">Company : </span>
-              <span className="pl-4 text-primary">{CompanyName}</span>
+            <Col md={4} ><span className="text-black">Company : </span>
+              <span className="pl-4 text-primary">{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span>
             </Col>
 
             <Col md={4} >
