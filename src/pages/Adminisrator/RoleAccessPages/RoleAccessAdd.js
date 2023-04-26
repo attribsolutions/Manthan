@@ -1178,7 +1178,7 @@ const RoleAccessAdd = () => {
             division = 0
         }
         if (role > 0) {
-            
+
             dispatch(GO_Button_RoleAccess_AddPage_Action(role, division, company));
             setShowTableOnUI(true)
         }
@@ -1247,7 +1247,7 @@ const RoleAccessAdd = () => {
     };
 
     const saveHandeller = (event) => {
-        
+
 
         event.preventDefault();
         const btnId = event.target.id
@@ -1259,11 +1259,14 @@ const RoleAccessAdd = () => {
                 let isShowOnMenu_Id
 
                 PageAccess.map((i2) => {
-                    const cond = `RoleAccess_${i2.Name}`
-                    if ((i2.Name === "IsShowOnMenu")) {
+                    
+                    const roleCond = `RoleAccess_${i2.Name}`
+                    const pageCond = `PageAccess_${i2.Name}`
+
+                    if (((i2.Name === "IsShowOnMenu") && (i1[pageCond] > 0))) {
                         isShowOnMenu_Id = i2.id
                     }
-                    else if ((i1[cond] > 0)) {
+                    else if (((i1[roleCond] > 0) && (i1[pageCond] > 0))) {
                         accArray.push({ "PageAccess": i2.id })
                     }
                 })
@@ -1316,7 +1319,7 @@ const RoleAccessAdd = () => {
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
-            
+
             dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
