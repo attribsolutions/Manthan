@@ -291,6 +291,9 @@ export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Ap
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
 export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 
 
+//BulkInvoices
+export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
+
 //   IB_INVOICE==Inter Branch Invoice
 export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List filter Api
 export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
