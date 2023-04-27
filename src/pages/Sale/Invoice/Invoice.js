@@ -43,7 +43,7 @@ import {
 import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
-import { discountCalculate } from "./invoiceCaculations";
+import { discountCalculate, stockDistributeFunc } from "./invoiceCaculations";
 import "./invoice.scss"
 
 const Invoice = (props) => {
@@ -558,7 +558,7 @@ const Invoice = (props) => {
                         </div>
                         <div className="bottom-div">
                             <span>Amount:</span>
-                            <samp id={`tAmount${row.id}`}>{row.OrderQty}</samp>
+                            <samp id={`tAmount${row.id}`}>{row.tAmount}</samp>
                         </div>
 
                     </>
@@ -672,64 +672,7 @@ const Invoice = (props) => {
         } catch (e) { };
     };
 
-    function stockDistributeFunc(index) {
-
-        const v1 = index.Quantity;
-        let tAmount = 0
-        let orderqty = Number(v1) * Number(index.ConversionUnit);
-
-        index.StockDetails = index.StockDetails.map(i2 => {
-
-            let stockqty = Number(i2.BaseUnitQuantity);
-
-            if ((orderqty > stockqty) && !(orderqty === 0)) {
-                orderqty = orderqty - stockqty
-                i2.Qty = stockqty.toFixed(3)
-            } else if ((orderqty <= stockqty) && (orderqty > 0)) {
-                i2.Qty = orderqty.toFixed(3)
-                orderqty = 0
-            }
-            else {
-                i2.Qty = 0;
-            }
-            try {
-                document.getElementById(`batchQty${index.id}-${i2.id}`).value = i2.Qty
-            } catch (e) { }
-
-
-            if (i2.Qty > 0) {
-                const calculate = discountCalculate(i2, index)
-                tAmount = tAmount + Number(calculate.tAmount)
-            }
-
-
-            return i2
-        });
-
-
-        const t1 = (v1 * index.ConversionUnit);
-        const t2 = index.StockUnit;
-        const t3 = index.StockTotal;
-        const tA4 = tAmount.toFixed(2)
-        index.tAmount = tA4
-
-        if (t1 > t3) {
-            try {
-                document.getElementById(`OrderQty${index.id}`).value = t3.toFixed(3)
-            } catch (e) { }
-        };
-        try {
-            index.StockInValid = false
-            index.StockInvalidMsg = null
-            document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
-        } catch (e) { };
-        try {
-            document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
-            document.getElementById(`tAmount${index.id}`).innerText = tA4;
-        } catch (e) { };
-
-    };
-
+ 
     function orderQtyOnChange(event, index) {
 
         let input = event.target.value
