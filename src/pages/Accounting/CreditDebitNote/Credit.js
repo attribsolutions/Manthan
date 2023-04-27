@@ -405,7 +405,7 @@ const Credit = (props) => {
         }
         row.gstPercentage = row.GSTPercentage
         let calculate = salesReturnCalculate(row)
-        debugger
+        
         Setcalculation(calculate)
         let AmountTotal = calculate.tAmount
         row["AmountTotal"] = Number(AmountTotal)

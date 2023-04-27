@@ -164,7 +164,7 @@ export const reportHeder2 = (doc, data) => {
 }
 
 export const reportFooterForGoodsCredit = (doc, data) => {
-    debugger
+    
     const a = data.CRDRNoteItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
@@ -230,7 +230,7 @@ export const reportFooterForGoodsCredit = (doc, data) => {
 }
 
 export const reportFooterForCredit = (doc, data) => {
-    debugger
+    
 
     const a = data.CRDRInvoices.map((data) => ({
         GrandTotal: Number(data.GrandTotal),

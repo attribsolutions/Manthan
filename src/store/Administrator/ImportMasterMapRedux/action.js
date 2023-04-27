@@ -1,4 +1,6 @@
 import {
+  EXCEL_UPLOAD_SAVE,
+  EXCEL_UPLOAD_SAVE_SUCCESS,
   GO_BUTTON_IMPORT_MASTER_MAP,
   GO_BUTTON_IMPORT_MASTER_MAP_SUCCESS,
   SAVE_IMPORT_MASTER_MAP,
@@ -26,6 +28,15 @@ export const save_ImportMasterMap_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
+export const ExcelUpload_save_action = (config = {}) => ({// save Action
+  type: EXCEL_UPLOAD_SAVE,
+  config,
+});
+
+export const ExcelUpload_save_action_Success = (resp) => ({// Save  success
+  type: EXCEL_UPLOAD_SAVE_SUCCESS,
+  payload: resp,
+});
 
 
 
