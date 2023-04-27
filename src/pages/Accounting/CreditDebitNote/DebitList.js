@@ -123,6 +123,17 @@ const DebitList = () => {
         label: index.Name,
     }));
 
+    // const NoteType= []
+    // CreditDebitType.forEach(index => {
+    //     if (index.Name === "CreditNote" || index.Name === "Goods CreditNote") {
+    //         const arr = {
+    //             value: index.id,
+    //             label: index.Name,
+    //         }
+    //         NoteType.push(arr)
+    //     }
+    // })
+
     customerOptions.unshift({
         value: "",
         label: " All"
@@ -167,6 +178,16 @@ const DebitList = () => {
         })
     }
 
+    function NoteTypeOnChange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.NoteType = e;
+            a.hasValid.NoteType.valid = true
+            return a
+        })
+
+    }
+
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
@@ -187,75 +208,92 @@ const DebitList = () => {
 
     }
 
-    // const HeaderContent = () => {
-    //     return (
-    //         <div className="px-2   c_card_filter text-black" >
-    //             <div className="row" >
-    //                 <Col sm="3" className="">
-    //                     <FormGroup className="mb- row mt-3 " >
-    //                         <Label className="col-sm-5 p-2"
-    //                             style={{ width: "83px" }}>FromDate</Label>
-    //                         <Col sm="7">
-    //                             <Flatpickr
-    //                                 name='FromDate'
-    //                                 value={values.FromDate}
-    //                                 className="form-control d-block p-2 bg-white text-dark"
-    //                                 placeholder="Select..."
-    //                                 options={{
-    //                                     altInput: true,
-    //                                     altFormat: "d-m-Y",
-    //                                     dateFormat: "Y-m-d",
-    //                                 }}
-    //                                 onChange={fromdateOnchange}
-    //                             />
-    //                         </Col>
-    //                     </FormGroup>
-    //                 </Col>
+    
+    const HeaderContent = () => {
+        return (
+            <div className="px-2   c_card_filter text-black" >
+                <div className="row" >
+                    <Col sm={2} className="">
+                        <FormGroup className=" mb-2 row mt-3 " >
+                            <Label className="col-sm-4 p-2"
+                                style={{ width: "66px" }}>FromDate</Label>
+                            <Col sm={7}>
+                                <Flatpickr
+                                    name='FromDate'
+                                    value={values.FromDate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={fromdateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
 
-    //                 <Col sm="3" className="">
-    //                     <FormGroup className="mb- row mt-3 " >
-    //                         <Label className="col-sm-5 p-2"
-    //                             style={{ width: "65px" }}>ToDate</Label>
-    //                         <Col sm="7">
-    //                             <Flatpickr
-    //                                 name="ToDate"
-    //                                 value={values.ToDate}
-    //                                 className="form-control d-block p-2 bg-white text-dark"
-    //                                 placeholder="Select..."
-    //                                 options={{
-    //                                     altInput: true,
-    //                                     altFormat: "d-m-Y",
-    //                                     dateFormat: "Y-m-d",
-    //                                 }}
-    //                                 onChange={todateOnchange}
-    //                             />
-    //                         </Col>
-    //                     </FormGroup>
-    //                 </Col>
+                    <Col sm={2} className="">
+                        <FormGroup className=" row mt-3 " >
+                            <Label className="col-sm-4 p-2"
+                                style={{ width: "60px" }}>ToDate</Label>
+                            <Col sm={7}>
+                                <Flatpickr
+                                    name="ToDate"
+                                    value={values.ToDate}
+                                    className="form-control d-block p-2 bg-white text-dark"
+                                    placeholder="Select..."
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onChange={todateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
 
-    //                 <Col sm="5">
-    //                     <FormGroup className="mb-2 row mt-3 " >
-    //                         <Label className="col-md-4 p-2"
-    //                             style={{ width: "115px" }}>Customer</Label>
-    //                         <Col sm="5">
-    //                             <Select
-    //                                 name="Customer"
-    //                                 classNamePrefix="select2-Customer"
-    //                                 value={values.Customer}
-    //                                 options={customerOptions}
-    //                                 onChange={CustomerOnChange}
-    //                             />
-    //                         </Col>
-    //                     </FormGroup>
-    //                 </Col >
+                    <Col sm={3}>
+                        <FormGroup className=" row mt-3 " >
+                            <Label className="col-sm-2 p-2"
+                                style={{ width: "85px" }}>Customer</Label>
+                            <Col sm={7}>
+                                <Select
+                                    name="Customer"
+                                    classNamePrefix="select2-Customer"
+                                    value={values.Customer}
+                                    options={customerOptions}
+                                    onChange={CustomerOnChange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
 
-    //                 <Col sm="1" className="mt-3 ">
-    //                     <Go_Button onClick={goButtonHandler} />
-    //                 </Col>
-    //             </div>
-    //         </div>
-    //     )
-    // }
+                    <Col sm={3}>
+                        <FormGroup className=" row mt-3 " >
+                            <Label className="col-md-3 p-2"
+                                style={{ width: "90px" }}>NoteType</Label>
+                            <Col sm={8}>
+                                <Select
+                                    name="Customer"
+                                    classNamePrefix="select2-Customer"
+                                    // value={values.NoteType}
+                                    // options={NoteType}
+                                    onChange={NoteTypeOnChange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
+
+                    <Col sm={2} className="mt-3 " style={{ paddingLeft: "100px" }}>
+                        <Go_Button onClick={goButtonHandler} />
+                    </Col>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <React.Fragment>
