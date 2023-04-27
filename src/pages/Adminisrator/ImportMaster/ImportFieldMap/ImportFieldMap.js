@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -116,6 +116,12 @@ const ImportFieldMap = (props) => {
         }
     }, [postMsg])
 
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Field Count"} :${goButtonItem.length}`))
+    }, [goButtonItem])
+
+
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -222,9 +228,7 @@ const ImportFieldMap = (props) => {
                                                 />
                                             </Col>
                                         </FormGroup>
-                                    </Col >
-
-
+                                    </Col>
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonItem.length === 0) ?
@@ -232,12 +236,9 @@ const ImportFieldMap = (props) => {
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }
-
                                     </Col>
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div className="mt-1">

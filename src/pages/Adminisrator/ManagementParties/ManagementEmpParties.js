@@ -2,9 +2,7 @@ import React, { useEffect, useState, } from "react";
 import {
     Button,
     Col,
-    Container,
     FormGroup,
-    Input,
     Label,
     Row,
 } from "reactstrap";
@@ -12,7 +10,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import {
@@ -32,7 +30,13 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { getEmployeedropdownList, getPartyTableList, getPartyTableListSuccess, saveManagementParties, saveManagementParties_Success } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import {
+    getEmployeedropdownList,
+    getPartyTableList,
+    getPartyTableListSuccess,
+    saveManagementParties,
+    saveManagementParties_Success
+} from "../../../store/Administrator/ManagementPartiesRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 
 const ManagementEmpParties = (props) => {
@@ -140,6 +144,11 @@ const ManagementEmpParties = (props) => {
         }
     }, [postMsg])
 
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Management Count"} :${partyList.length}`))
+    }, [partyList])
+
     const employeeListOptions = employeeList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -156,7 +165,7 @@ const ManagementEmpParties = (props) => {
             dispatch(getPartyTableList(jsonBody));
         }
     }
-   
+
     function rowSelected() {
         return partyList.map((index) => { return (index.selectCheck) && index.id })
     }
@@ -335,7 +344,7 @@ const ManagementEmpParties = (props) => {
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
-                                                {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")}
+                                                {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, "Route Update")} */}
                                                 {mySearchProps(toolkitProps.searchProps)}
                                             </div>
 
