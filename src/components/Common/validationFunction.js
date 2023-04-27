@@ -87,7 +87,7 @@ export const formValChange = ({ event, state, setState }) => {
 
         switch (type) {
             case "select":
-                debugger
+                
                 const result = Array.isArray(value);
                 if (!result) {
                     if (!(value.value === undefined)) {

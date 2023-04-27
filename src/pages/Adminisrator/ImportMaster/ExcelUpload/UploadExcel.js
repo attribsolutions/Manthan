@@ -43,7 +43,7 @@ const UploadExcel = (props) => {
         ImportType: "",
         PatternType: ""
     }
-    debugger
+    
     const [state, setState] = useState(initialFiledFunc(fileds))
 
     const [EditData, setEditData] = useState({});
@@ -162,9 +162,9 @@ const UploadExcel = (props) => {
 
             const readjson = await readExcelFile({ file: files[0], compareParam, })
             if (readjson.length > 0) {
-                debugger
+                
                 const aa = await fileDetails({ compareParam, readjson })
-                debugger
+                
                 const btnerify = document.getElementById("btn-verify");
                 const btnupload = document.getElementById('btn-upload');
                 const filedetail = document.getElementById('filedetail');

@@ -144,7 +144,7 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-debugger
+
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
         const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,

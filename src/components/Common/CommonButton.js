@@ -4,7 +4,7 @@ import * as mode from "../../routes/PageMode"
 
 export function SaveButton(props) {
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
-debugger
+
   const isCreated = (loginUserID() === editCreatedBy)
 
   if (pageMode === mode.edit) {
