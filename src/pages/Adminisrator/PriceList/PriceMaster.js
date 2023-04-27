@@ -25,6 +25,7 @@ import { useHistory } from "react-router-dom";
 import {
     delete_PriceList,
     delete_PriceListSuccess,
+    editPriceListSuccess,
     priceListByPartyAction,
     savePriceMasterAction,
     savePriceMasterActionSuccess,
@@ -35,8 +36,10 @@ import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID } 
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
+import * as mode from "../../../routes/PageMode"
 
 const PriceMaster = (props) => {
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -44,7 +47,7 @@ const PriceMaster = (props) => {
     let editDataGatingFromList = props.state;
 
     //SetState  Edit data Geting From Modules List component
-    const [pageMode, setPageMode] = useState("save");
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
 
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserAccState] = useState("");
@@ -77,6 +80,7 @@ const PriceMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = undefined;
         if (editDataGatingFromList === undefined) {
             let locationPath = history.location.pathname;
@@ -111,6 +115,38 @@ const PriceMaster = (props) => {
         }
 
     }, [PostAPIResponse])
+
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
+        debugger
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                // setModalCss(true)
+            }
+            else if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            if (hasEditVal) {
+                const { PartyTypeId, PartyTypeName } = hasEditVal
+                // if (!(partyType_dropdown_Select === '')) {
+                setPartyType_dropdown_Select({ value: PartyTypeId, label: PartyTypeName })
+                dispatch(priceListByPartyAction(PartyTypeId))
+                setHasPartySelect(true)
+                // }
+            }
+            dispatch(editPriceListSuccess({ Status: false }))
+        }
+
+    }, [])
 
     useEffect(() => {
         if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
@@ -193,7 +229,6 @@ const PriceMaster = (props) => {
             btnIsDissablefunc({ btnId, state: true })
             dispatch(delete_PriceList({ btnId, deleteId: price.value }))
         }
-
     }
     function goButtonHandler() { // party Type Go Button API Call
         if (!(partyType_dropdown_Select === '')) {

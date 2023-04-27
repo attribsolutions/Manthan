@@ -57,7 +57,7 @@ const ImportFieldMap = (props) => {
         goButtonItem: state.ImportFieldMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
     }));
- 
+
     useEffect(() => {
         const page_Id = pageId.IMPORT_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
@@ -182,8 +182,13 @@ const ImportFieldMap = (props) => {
         event.preventDefault();
 
         let jsonArr = []
+        const invalid = []
 
         goButtonItem.forEach(i => {
+            
+            if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
+                invalid.push({ [i.FieldName]: "this filed Requird." })
+            }
             if ((!(i.Value === '') && !(i.Value === null))) {
                 const obj = {
                     Value: i.Value,
@@ -197,9 +202,13 @@ const ImportFieldMap = (props) => {
             }
         })
 
-        const jsonBody = JSON.stringify(jsonArr);
-        dispatch(save_ImportFiledMap({ jsonBody }));
-
+        if (invalid.length > 0) {
+            CustomAlert({ Type: 3, Message: invalid })
+            return
+        } else {
+            const jsonBody = JSON.stringify(jsonArr);
+            dispatch(save_ImportFiledMap({ jsonBody }));
+        }
     };
 
     if (!(userPageAccessState === '')) {

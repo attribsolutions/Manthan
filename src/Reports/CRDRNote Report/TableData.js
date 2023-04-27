@@ -21,13 +21,14 @@ export const columns1 = [
     "Total Amt"
 ];
 
-
 export const BilledBy = [
     "Billed by",
 ]
+
 export const BilledTo = [
     "Billed by",
 ]
+
 export const Details = [
     " ",
 ]
@@ -44,7 +45,7 @@ export const Rows1 = (data) => {
     let totalQuantity = 0
 
     CRDRNoteItems.forEach((element, key) => {
-        debugger
+        
         const tableitemRow = [
             element.ItemName,
             `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
@@ -110,10 +111,8 @@ export const Rows1 = (data) => {
     return returnArr;
 }
 
-
-
 export const Rows = (data) => {
-    debugger
+    
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -184,6 +183,7 @@ export const BilledByRow = (data) => {
 
     return BilledToArray;
 }
+
 export const BilledToRow = (data) => {
     var BilledByArray = [
         [`Name :${data.Customer}`],

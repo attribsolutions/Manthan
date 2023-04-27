@@ -30,20 +30,21 @@ function* get_PriceListPage_GenFunc() {
 //delete
 function* delete_PriceList_GenFun({ config = {} }) {
   try {
-    
+
     const response = yield call(delete_PriceList_API, config);
     yield put(delete_PriceListSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
 
-
-
 // edit api
-function* Edit_PriceList__GenFunc({ config = {} }) {
-  const { btnmode } = config;
+function* Edit_PriceList__GenFunc({ config }) {
+
+  const { btnmode, PartyTypeName, PartyTypeId } = config;
   try {
     const response = yield call(edit_PriceList, config);
     response.pageMode = btnmode
+    response.Data["PartyTypeName"] = PartyTypeName
+    response.Data["PartyTypeId"] = PartyTypeId
     yield put(editPriceListSuccess(response));
   } catch (error) { CommonConsole(error) }
 }
@@ -55,7 +56,6 @@ function* Update_PriceList_GenFunc({ config = {} }) {
     yield put(updatePriceListSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
-
 
 function* PriceListSaga() {
   yield takeEvery(POST_PRICE_LIST_DATA, Save_PriceList_GenFunc);

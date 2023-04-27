@@ -14,6 +14,7 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import { PRICE } from "../../../routes/route_url";
 import { MetaTags } from "react-meta-tags";
 import * as pageId from "../../../routes/allPageID"
+import * as mode from "../../../routes/PageMode"
 
 const PriceList = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,8 @@ const PriceList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
+
+  const { pageField, userAccess = [] } = reducers
 
   const action = {
     getList: getPriceListPage,
@@ -46,7 +49,15 @@ const PriceList = () => {
   }, []);
 
 
-  const { pageField,userAccess=[] } = reducers
+  function editBodyfunc(row) {
+
+    const config = { ...row }
+    config.PartyTypeName = row.rowData.PLPartyTypeName
+    config.PartyTypeId = row.rowData.PLPartyType;
+    config.editId = row.rowData.PLPartyType
+
+    dispatch(editPriceList(config))
+  }
 
   return (
     <React.Fragment>
@@ -60,6 +71,7 @@ const PriceList = () => {
             masterPath={PRICE}
             ButtonMsgLable={"Price"}
             deleteName={"Name"}
+            editBodyfunc={editBodyfunc}
           />
           : null
       }
