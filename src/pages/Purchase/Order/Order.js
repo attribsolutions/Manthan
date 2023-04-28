@@ -239,6 +239,7 @@ const Order = (props) => {
 
     useEffect(() => {
         if (assingItemData.Status === true) {
+            debugger
             setisOpen_assignLink(true);
         }
     }, [assingItemData]);
@@ -602,7 +603,14 @@ const Order = (props) => {
 
     async function assignItem_onClick() {
 
-        const config = { editId: supplierSelect.value, btnmode: mode.assingLink, subPageMode, btnId: `btn-assingLink-${supplierSelect.value}` }
+        const config = {
+            editId: supplierSelect.value,
+            PartyName: supplierSelect.label,
+            Party: supplierSelect.value,
+            btnmode: mode.assingLink,
+            subPageMode,
+            btnId: `btn-assingLink-${supplierSelect.value}`
+        }
 
         const isConfirmed = await CustomAlert({
             Type: 7,
