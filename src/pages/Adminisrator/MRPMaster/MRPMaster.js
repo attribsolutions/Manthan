@@ -104,7 +104,7 @@ const MRPMaster = (props) => {
     }, [dispatch]);
 
     useEffect(() => {
-        debugger
+     
         const editDataGatingFromList = history.location.editValue
 
         const locationPath = history.location.pathname
@@ -379,7 +379,7 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
+     
         var ItemData = TableData.map((index) => ({
             Division: (IsSCM === 1) ? null : division_dropdown_Select.value,
             Party: (IsSCM === 1) ? null : party_dropdown_Select.value,

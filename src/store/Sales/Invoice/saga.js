@@ -31,6 +31,7 @@ import {
   MAKE_IB_INVOICE_ACTION
 } from "./actionType";
 import *as url from "../../../routes/route_url"
+import { discountCalculate, stockDistributeFunc } from "../../../pages/Sale/Invoice/invoiceCaculations";
 
 
 //post api for Invoice Master
@@ -117,8 +118,9 @@ export function invoice_GoButton_dataConversion_Func(response) {
       i1["StockInValid"] = false;
       i1["StockInvalidMsg"] = '';
 
-      let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
 
+      let count = Number(i1.Quantity) * Number(i1.ConversionUnit);
+      let tAmount = 0;
       i1.StockDetails = i1.StockDetails.map(i2 => {
 
         i1.StockUnit = i2.UnitName;
@@ -135,11 +137,19 @@ export function invoice_GoButton_dataConversion_Func(response) {
         else {
           i2.Qty = 0;
         }
+        if (i2.Qty > 0) {
+          const calculate = discountCalculate(i2, i1)
+          tAmount = tAmount + Number(calculate.tAmount)
+        }
         return i2
       });
 
       let t1 = Number(i1.StockTotal);
       let t2 = Number(i1.Quantity) * i1.ConversionUnit;
+      let tA4 = tAmount.toFixed(2);
+
+      i1.tAmount = tA4;
+
       if (t1 < t2) {
         i1.StockInValid = true
         let diffrence = Math.abs(i1.Quantity * i1.ConversionUnit - i1.StockTotal);
@@ -171,7 +181,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     else if (subPageMode === url.IB_INVOICE) {
       response = yield call(IB_Invoice_GoButton_API, config); // GO-Botton IB-invoice Add Page API
     }
-    
+
     yield put(GoButtonForinvoiceAddSuccess(invoice_GoButton_dataConversion_Func(response.Data)));
 
   } catch (error) { CommonConsole(error) }
@@ -185,8 +195,8 @@ function* makeIB_InvoiceGenFunc({ body }) {
     response["page_Mode"] = pageMode
     response["customer"] = customer
 
-    yield put(makeIB_InvoiceActionSuccess(response))
     yield invoice_GoButton_dataConversion_Func({ response, goBtnId })
+    yield put(makeIB_InvoiceActionSuccess(response))
 
   } catch (error) { CommonConsole(error) }
 }

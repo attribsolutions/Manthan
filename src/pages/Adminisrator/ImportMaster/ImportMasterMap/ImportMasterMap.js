@@ -198,6 +198,9 @@ const ImportMasterMap = (props) => {
         async function funcForParty() {
             let jsonArr = []
             await goButtonArr.forEach(i => {
+
+                
+
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -208,6 +211,8 @@ const ImportMasterMap = (props) => {
                     })
                 }
             })
+
+
             return jsonArr
         }
 

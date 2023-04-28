@@ -21,7 +21,7 @@ import Select from "react-select";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, groupBy, loginCompanyID } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, groupBy, loginCompanyID, loginUserID } from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, } from "../../../../components/Common/validationFunction";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
@@ -30,20 +30,22 @@ import CInput from "../../../../CustomValidateForm/CInput";
 import { GoButton_ImportFiledMap_Add, GoButton_ImportFiledMap_AddSuccess } from "../../../../store/Administrator/ImportFieldMapRedux/action";
 import { CustomAlert } from "../../../../CustomAlert/ConfirmDialog";
 import './scss.scss'
+import { ExcelUpload_save_action, ExcelUpload_save_action_Success } from "../../../../store/Administrator/ImportMasterMapRedux/action";
 const UploadExcel = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const  preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0 }
+    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [],partyNO:[] }
     const fileds = {
         id: "",
         Party: "",
         ImportType: "",
         PatternType: ""
     }
-    const [state, setState] = useState(initialFiledFunc(fileds))
     
+    const [state, setState] = useState(initialFiledFunc(fileds))
+
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -51,22 +53,19 @@ const UploadExcel = (props) => {
     const [preUploadjson, setPreUploadjson] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
     const [partySelect, SetPartySelect] = useState([])
-   
+
 
     const {
         postMsg,
-        updateMsg,
         pageField,
         userAccess,
-        VehicleNumber,
         partyList,
         compareParam = []
     } = useSelector((state) => ({
-        postMsg: state.BOMReducer.PostData,
-        updateMsg: state.BOMReducer.updateMsg,
+        postMsg: state.ImportMasterMap_Reducer.excelPostMsg,
+
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        VehicleNumber: state.VehicleReducer.VehicleList,
         partyList: state.PartyMasterReducer.partyList,
         compareParam: state.ImportFieldMap_Reducer.addGoButton,
     }));
@@ -111,15 +110,35 @@ const UploadExcel = (props) => {
         }
     }, [pageField])
 
+    useEffect(async () => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(ExcelUpload_save_action_Success({ Status: false }))
+            CustomAlert({
+                Type: 1,
+                Message: postMsg.Message,
+            })
+
+
+        }
+        else if (postMsg.Status === true) {
+            dispatch(ExcelUpload_save_action_Success({ Status: false }))
+            CustomAlert({
+                Type: 4,
+                Message: JSON.stringify(postMessage.Message),
+            })
+        }
+    }, [postMsg])
+
     const PartyDropdown_Options = partyList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
 
-    function goButtonHandler() {
+    function goButtonHandler(e) {
         const jsonBody = JSON.stringify({
-            PartyID: partySelect.value,
+            PartyID: e.value,
             CompanyID: loginCompanyID()
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
@@ -140,17 +159,20 @@ const UploadExcel = (props) => {
         var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
         if (extension == '.XLS' || extension == '.XLSX' || extension == '.CSV') {
 
+
             const readjson = await readExcelFile({ file: files[0], compareParam, })
-
-            const btnerify = document.getElementById("btn-verify")
-            const btnupload = document.getElementById('btn-upload')
-
-
             if (readjson.length > 0) {
-                debugger
-                const aa = await fileDetails({ compareParam, readjson, setReadJsonDetail })
-                debugger
+                
+                const aa = await fileDetails({ compareParam, readjson })
+                
+                const btnerify = document.getElementById("btn-verify");
+                const btnupload = document.getElementById('btn-upload');
+                const filedetail = document.getElementById('filedetail');
+
+                setReadJsonDetail(aa)
                 setPreUploadjson(readjson)
+
+                // filedetail.style.display = "block"
                 btnerify.style.display = "none"
                 btnupload.style.display = "block"
             }
@@ -207,7 +229,7 @@ const UploadExcel = (props) => {
     const SaveHandler = (event) => {
         event.preventDefault();
 
-        const parArr = {}
+        const parArr = readJsonDetail.fileFiled
         const outerArr = []
 
         compareParam.forEach(ele => {
@@ -216,10 +238,10 @@ const UploadExcel = (props) => {
             }
         })
 
-        const c_invoice = compareParam.find(i => (i.FieldName === "InvoiceNumber"))
-        const invoiceGroup = groupBy(preUploadjson, (party) => (party[c_invoice.Value]))
+        // const c_invoice = compareParam.find(i => (i.FieldName === "InvoiceNumber"))
+        // const invoiceGroup = await groupBy(preUploadjson, (party) => (party[c_invoice.Value]))
 
-        invoiceGroup.forEach(inv => {
+        readJsonDetail.invoice.forEach(inv => {
             let parentObj;
             let invoiceItems = []
             inv.forEach(ele => {
@@ -231,8 +253,8 @@ const UploadExcel = (props) => {
                     "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
                     "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
                     "Party": ele[parArr.Party] ? ele[parArr.Party] : '',
-                    "CreatedBy": ele[parArr.CreatedBy] ? ele[parArr.CreatedBy] : '',
-                    "UpdatedBy": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
                     "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                 }
 
@@ -269,9 +291,12 @@ const UploadExcel = (props) => {
                 })
             })
 
-            outerArr.push({ ...parentObj, ...invoiceItems })
+            outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
         });
+
         console.log('Upload data', outerArr)
+        const jsonBody = JSON.stringify(outerArr)
+        dispatch(ExcelUpload_save_action({ jsonBody, }));
     };
 
 
@@ -297,20 +322,14 @@ const UploadExcel = (props) => {
                                                     classNamePrefix="select2-Customer"
                                                     value={partySelect}
                                                     options={PartyDropdown_Options}
-                                                    onChange={(e) => { SetPartySelect(e) }}
+                                                    onChange={(e) => {
+                                                        SetPartySelect(e)
+                                                        goButtonHandler(e)
+                                                    }}
                                                 />
                                             </Col>
                                         </FormGroup>
                                     </Col >
-
-
-
-                                    <Col md="1"></Col>
-                                    <Col sm="2" className="mt-3 ">
-                                        <Go_Button
-                                            onClick={goButtonHandler}
-                                        />
-                                    </Col>
                                 </div>
 
                             </div>
@@ -377,27 +396,43 @@ const UploadExcel = (props) => {
                                             </div>
 
 
-                                            <div >
-                                                <div className="error-msg">
-                                                    <i className="fa fa-error"></i>
-                                                    No of line Item:54
-                                                </div>
-                                                <div className="error-msg">
-                                                    <i class="fa fa-warning"></i>
-                                                    No of invoices:8
-                                                </div>
-                                                <div className="error-msg">
-                                                    <i className="fa fa-error"></i>
-                                                    No of Party:5
-                                                </div>
-                                                <div className="error-msg">
-                                                    <i className="fa fa-error"></i>
-                                                    No of invoice Dates:2022-2023
-                                                </div>
-                                                <div className="error-msg">
+                                            <div id="filedetail">
+
+
+                                                <details>
+                                                    <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
+                                                    <div className="error-msg">
+                                                        <p>
+                                                            {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                </details>
+
+                                                <details>
+                                                    <summary>No. of Party :{readJsonDetail.party.size}</summary>
+                                                    <div className="error-msg">
+                                                        <p>
+                                                            {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                        </p>
+                                                    </div>
+                                                </details>
+                                                <details>
+                                                    <summary> From Dates :20-01-2021</summary>
+                                                    <div className="error-msg">
+                                                        <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                                    </div>
+                                                </details>
+                                                <details>
+                                                    <summary>Total Amount :{readJsonDetail.amount}</summary>
+                                                    <div className="error-msg">
+                                                        <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                                    </div>
+                                                </details>
+                                                {/* <div className="error-msg">
                                                     <i className="fa fa-error"></i>
                                                     Total Amount:5454
-                                                </div>
+                                                </div> */}
                                             </div>
                                             {/* <div id="file-proccess" style={{
                                                 width: "80%",
@@ -421,10 +456,7 @@ const UploadExcel = (props) => {
 
 
 
-                                            <details>
-                                                <summary>Epcot Center</summary>
-                                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
-                                            </details>
+
                                         </Card>
                                     )
                                 })}
