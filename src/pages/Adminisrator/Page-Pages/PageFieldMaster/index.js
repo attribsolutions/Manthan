@@ -12,7 +12,7 @@ import Select from "react-select";
 import { Tbody, Th, Thead, Tr } from "react-super-responsive-table";
 // import './css.css'
 function PageFieldMaster_Tab(props) {
-
+debugger
     const dispatch = useDispatch();
 
     const { pageFieldTabTable, setPageFieldTabTable } = props
@@ -38,9 +38,9 @@ function PageFieldMaster_Tab(props) {
         value: data.id,
         label: data.Name
     }));
-
+    debugger
     function PageField_Tab_AddRow_Handler() {
-
+        debugger
         var newarr1 = [...pageFieldTabTable, {
             ControlID: '',
             FieldLabel: '',
@@ -54,6 +54,7 @@ function PageFieldMaster_Tab(props) {
             ListPageSeq: '',
             ShowInDownload: false,
             DownloadDefaultSelect: false,
+
 
         }]
         setPageFieldTabTable(newarr1)
@@ -76,6 +77,15 @@ function PageFieldMaster_Tab(props) {
             x.style.display = "none";
         }
     }
+
+    // useEffect(() => {
+    //     debugger
+    //     const FieldValidations_DropdownOptions = pageFieldTabTable.map((data) => ({
+    //         value: data.PageFieldValidation,
+    //     }));
+    
+    // }, [props])
+    
 
     function arrow_value1(key) {
         if (pageFieldTabTable[key].DefaultSort = 1) {
@@ -119,11 +129,19 @@ function PageFieldMaster_Tab(props) {
     function FieldValidation_Dropdown_Handler(e, key) {
         PageField_onChange_Handler(e, "FieldValidation", key);
     }
+    const ValidationTypeOptions = (TableValue,key) => {
+        debugger
+        return pageFieldTabTable[key].PageFieldValidation.map(i=>({
+            lable:i.id,
+            value:i.Name
+        }))
+        
+    }
 
     return (
         <>
             <div className="table-rep-plugin  mx-n4 " >
-                <div 
+                <div
                     className=" table-responsive "
                     data-pattern="priority-columns "
                 >
@@ -147,8 +165,9 @@ function PageFieldMaster_Tab(props) {
                         </Thead>
 
                         <Tbody>
-
-                            {pageFieldTabTable.map((TableValue, key) => (
+                        
+                            {pageFieldTabTable.map((TableValue,key) => (
+                                
                                 <tr  >
                                     <td className='thsticky ' style={{ zIndex: "1", }}>
                                         <div style={{ width: "150px", }}>
@@ -191,7 +210,12 @@ function PageFieldMaster_Tab(props) {
                                                 id={`FieldValidation-${key}`}
                                                 autoComplete="off"
                                                 value={pageFieldTabTable[key].FieldValidation}
-                                                options={FieldValidations_DropdownOptions}
+                                                // options={FieldValidations_DropdownOptions}
+                                                options={ pageFieldTabTable[key].PageFieldValidation.map(i=>({
+                                                    label:i.Name,
+                                                    value:i.id
+                                                }))}
+
                                                 onChange={(e) => { FieldValidation_Dropdown_Handler(e, key); }}
                                             // onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                             />
