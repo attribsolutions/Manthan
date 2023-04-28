@@ -483,7 +483,7 @@ const Receipts = (props) => {
         if ((values.AmountPaid === '')
             || (values.AmountPaid === "NaN")
             || (values.AmountPaid === undefined)
-            || (values.AmountPaid >= 0)) {
+            || (values.AmountPaid === 0)) {
             CustomAlert({
                 Type: 4,
                 Message: `Amount Paid value can not be 0`,
