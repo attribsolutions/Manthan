@@ -14,6 +14,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { MetaTags } from "react-meta-tags";
 import {
+    BreadcrumbShowCountlabel,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
@@ -127,8 +128,12 @@ const BankAssign = (props) => {
     }, [postMsg])
 
 
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Bank Count"} :${Data.length}`))
+    }, [Data])
+
     function handllerIsSelfDepositoryBank(event, row, key) {
-       
+
         row.IsSelfDepositoryBank = event
 
         if (event) {
@@ -159,7 +164,7 @@ const BankAssign = (props) => {
             text: " Customer Bank",
             dataField: "CustomerBank",
             formatter: (cellContent, row, key) => {
-                
+
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={row.CustomerBank}
@@ -271,7 +276,7 @@ const BankAssign = (props) => {
     };
 
     const saveHandeller = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         try {
