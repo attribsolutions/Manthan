@@ -18,7 +18,6 @@ import {
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
-    getGroupList,
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
@@ -50,7 +49,6 @@ const PartyItems = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userAccState, setUserAccState] = useState("");
-    const [itemArr, setitemArr] = useState([]);
 
     const fileds = {
         id: "",
@@ -67,6 +65,7 @@ const PartyItems = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -89,13 +88,10 @@ const PartyItems = (props) => {
         dispatch(getPartyItemListSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyListAPI())
-        dispatch(getGroupList());
+        if (!(hasShowloction && hasShowModal)) {
+            dispatch(getPartyListAPI())
+        }
     }, []);
-
-    useEffect(() => {
-        setitemArr(tableList)
-    }, [tableList]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -112,13 +108,15 @@ const PartyItems = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            if (!props.isAssing) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -132,13 +130,21 @@ const PartyItems = (props) => {
                 hasEditVal = location.editValue
             }
             if (hasEditVal) {
-                const { Party, PartyName } = hasEditVal
+                const { Party, PartyName, PartyItem = [] } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 values.Name = { value: Party, label: PartyName };
 
-                dispatch(getpartyItemList(Party))
+                const convArr = PartyItem.map((item) => {
+                    item["selectCheck"] = false
+                    if (item.Party > 0) {
+                        { item["selectCheck"] = true }
+                    }
+                    return item
+                });
+                dispatch(getPartyItemListSuccess(convArr))
+                
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(PartyName))
             }
@@ -216,8 +222,6 @@ const PartyItems = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-  
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -297,7 +301,7 @@ const PartyItems = (props) => {
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        const Find = itemArr.filter((index) => {
+        const Find = tableList.filter((index) => {
             return (index.selectCheck === true)
         })
         const btnId = event.target.id
