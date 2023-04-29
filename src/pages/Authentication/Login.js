@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
+import { AvForm, AvField, AvInput } from "availity-reactstrap-validation"
 
 
 /// tsdfddf Punam demotest
@@ -24,11 +24,9 @@ import logo from "../../assets/images/logo-sm.svg"
 import CarouselPage from "./CarouselPage"
 import axios from "axios";
 
-
-
-
-
 const Login = props => {
+  debugger
+
   const dispatch = useDispatch()
 
 
@@ -43,9 +41,9 @@ const Login = props => {
     } catch (e) { }
   }, [])
 
-  
 
   const handleValidSubmit = (event, values) => {
+
     dispatch(loginUser(values, props.history))
   }
 
@@ -92,12 +90,13 @@ const Login = props => {
                         <div className="mb-3">
                           <AvField
                             name="UserName"
-                            label="UseName"
+                            label="UserName"
                             className="form-control"
                             placeholder="Enter User Name"
                             type="text"
                             required
                           />
+                          
                         </div>
                         <div className="mb-3">
                           <div className="d-flex align-items-start">
@@ -132,7 +131,7 @@ const Login = props => {
 
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} Minia . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">© {new Date().getFullYear()}. Crafted with <i className="mdi mdi-heart text-danger"></i> by Attrib Solution</p>
                     </div>
                   </div>
                 </div>
