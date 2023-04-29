@@ -27,8 +27,7 @@ const VanLoadingSheet = (data) => {
     doc.setProperties({
         title: "Report"
     });
-    const options = { filename: "report" }
-    // window.open(doc.output('dataurlnewwindow')
+    const options = { filename: "LoadingSheet Report" }
     doc.output('dataurlnewwindow', options);
 
     // return(<></>);
