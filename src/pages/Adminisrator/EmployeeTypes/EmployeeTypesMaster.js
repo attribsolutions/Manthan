@@ -13,13 +13,14 @@ import {
 import { MetaTags } from "react-meta-tags";
 import {
     editEmployeeTypeSuccess,
+    getEmployeeTypelist,
     PostEmployeeTypeSubmit,
     PostEmployeeTypeSubmitSuccess,
     updateEmployeeTypeID,
     updateEmployeeTypeIDSuccess
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {
     AlertState,
     commonPageField,
@@ -34,15 +35,22 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, loginCompanyID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginUserID,
+    loginCompanyID
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const EmployeeTypesMaster = (props) => {
+
     const dispatch = useDispatch();
     const history = useHistory()
-
+    const location = useLocation()
     const fileds = {
         id: "",
         Name: "",
@@ -56,7 +64,7 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-
+    console.log("userPageAccessState in Employee type", userPageAccessState)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         updateMsg,
@@ -68,13 +76,14 @@ const EmployeeTypesMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+
     useEffect(() => {
         const page_Id = pageId.EMPLOYEETYPE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
 
-    const location = { ...history.location }
+
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -84,9 +93,15 @@ const EmployeeTypesMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-
+        debugger
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -97,7 +112,7 @@ const EmployeeTypesMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
+            setUserAccState(userAcc);
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
@@ -140,38 +155,46 @@ const EmployeeTypesMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
+                // history.push({
+                //     Data: postMsg.Data
+                // })
+                dispatch(getEmployeeTypelist())
+
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.EMPLOYEETYPE_lIST })
             }
             else {
-                dispatch(AlertState({
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.EMPLOYEETYPE_lIST,
-
-                }))
+                })
+                if (promise) { history.push({ pathname: url.EMPLOYEETYPE_lIST }) }
             }
-        }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+
+        } else if
+            (postMsg.Status === true) {
+            CustomAlert({
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -202,7 +225,6 @@ const EmployeeTypesMaster = (props) => {
         }
     }, [pageField])
 
-
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -212,9 +234,7 @@ const EmployeeTypesMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
-                    // IsPartyConnection: values.IsPartyConnection,
                     Company: loginCompanyID(),
-                    // IsSCM: values.IsSCM,
                     IsSalesTeamMember: values.IsSalesTeamMember,
                     CreatedBy: loginUserID(),
                     CreatedOn: "2022-07-18T00:00:00",
@@ -233,11 +253,9 @@ const EmployeeTypesMaster = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-20.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -279,52 +297,6 @@ const EmployeeTypesMaster = (props) => {
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
-
-                                                        {/* <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }}>
-                                                                        <div className="form-check form-switch form-switch-md mb-3" >
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsPartyConnection}
-                                                                                name="IsPartyConnection"
-                                                                                onChange={(e) => {
-                                                                                    setState((i) => {
-                                                                                        const a = { ...i }
-                                                                                        a.values.IsPartyConnection = e.target.checked;
-                                                                                        return a
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Row> */}
-
-                                                        {/* <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3" >
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsSCM}
-                                                                                name="IsSCM"
-                                                                                onChange={(e) => {
-                                                                                    setState((i) => {
-                                                                                        const a = { ...i }
-                                                                                        a.values.IsSCM = e.target.checked;
-                                                                                        return a
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Row> */}
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">

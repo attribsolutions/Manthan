@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -100,6 +100,12 @@ const ImportMasterMap = (props) => {
         }
     }, [pageField])
 
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${"Import Count"} :${goButtonArr.length}`))
+    }, [goButtonArr])
+
+
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -108,8 +114,6 @@ const ImportMasterMap = (props) => {
                 Type: 1,
                 Message: postMsg.Message,
             })
-
-
         }
         else if (postMsg.Status === true) {
             dispatch(save_ImportMasterMap_Success({ Status: false }))
@@ -119,6 +123,8 @@ const ImportMasterMap = (props) => {
             })
         }
     }, [postMsg])
+
+
 
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -162,11 +168,9 @@ const ImportMasterMap = (props) => {
                             </FormGroup>
                         </Col>
                     </div>
-
                 </>
             ),
         },
-
     ];
 
     async function goButtonHandler(event) {
@@ -194,7 +198,9 @@ const ImportMasterMap = (props) => {
         async function funcForParty() {
             let jsonArr = []
             await goButtonArr.forEach(i => {
-                debugger
+
+                
+
                 if ((!(i.mapValue === '') && !(i.mapValue === null))) {
                     jsonArr.push({
                         "Party": i.party,
@@ -202,11 +208,11 @@ const ImportMasterMap = (props) => {
                         "MapCustomer": i.mapValue,
                         "CreatedBy": loginUserID(),
                         "UpdatedBy": loginUserID()
-
                     })
                 }
             })
-            debugger
+
+
             return jsonArr
         }
 
@@ -260,15 +266,13 @@ const ImportMasterMap = (props) => {
 
 
                 <div className="page-content">
-
                     <div className="px-2 c_card_header text-black" >
                         <div className="px-2   c_card_filter text-black" >
                             <form onSubmit={(event) => goButtonHandler(event)} noValidate>
-                                <div className="row" >
+                                <div className="row">
                                     <Col sm="5">
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
-
                                                 style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
                                             <Col style={{ maxWidth: "300px" }} >
                                                 <Select
@@ -291,7 +295,6 @@ const ImportMasterMap = (props) => {
                                     <Col sm="5">
                                         <FormGroup className="mb-2 row mt-3 " >
                                             <Label className=" p-2"
-
                                                 style={{ maxWidth: "115px" }}>{fieldLabel.MapType}</Label>
                                             <Col style={{ maxWidth: "300px" }} >
                                                 <Select
@@ -307,12 +310,9 @@ const ImportMasterMap = (props) => {
                                                 {isError.MapType.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.MapType}</small></span>
                                                 )}
-
                                             </Col>
                                         </FormGroup>
-                                    </Col >
-
-
+                                    </Col>
 
                                     <Col sm="2" className="mt-3 ">
                                         {(goButtonArr.length === 0) ?
@@ -320,21 +320,17 @@ const ImportMasterMap = (props) => {
                                             :
                                             <Change_Button onClick={change_ButtonHandler} />
                                         }
-
                                     </Col>
                                 </div>
                             </form>
                         </div>
-
                     </div>
 
                     <div className="mt-1">
-
                         <ToolkitProvider
                             keyField="id"
                             data={goButtonArr}
                             columns={pagesListColumns}
-
                             search
                         >
                             {toolkitProps => (
@@ -346,13 +342,10 @@ const ImportMasterMap = (props) => {
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                             classes={"table align-middle  table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
-
-
                                 </React.Fragment>
                             )
                             }
@@ -370,9 +363,8 @@ const ImportMasterMap = (props) => {
                                 />
                             }
                         </Col>
-                    </FormGroup >
+                    </FormGroup>
                 </form>
-
             </React.Fragment>
         );
     }

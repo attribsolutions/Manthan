@@ -30,11 +30,13 @@ const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
   // const history = useHistory();
   const [paswErr, setPaswErr] = useState(false)
-  const { sendOTPSuccessMsg_redux, sendOtpMegError_reducx, sendPasswordError_reducx, sendPasswordMsg_reducx } = useSelector(state => ({
+  const { sendOTPSuccessMsg_redux, sendOtpMegError_reducx, sendPasswordError_reducx, sendPasswordMsg_reducx,Loading } = useSelector(state => ({
     sendOTPSuccessMsg_redux: state.ForgetPassword.sendOTPSuccessMsg,
     sendOtpMegError_reducx: state.ForgetPassword.sendOtpMegError,
     sendPasswordMsg_reducx: state.ForgetPassword.sendPasswordMsg,
     sendPasswordError_reducx: state.ForgetPassword.sendPasswordError,
+    Loading: state.ForgetPassword.Loading,
+
 
 
   }))
@@ -84,8 +86,12 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
+    debugger
     var jsonBody = JSON.stringify({
       Email: values.email,
+      Phone:""
+
+
     })
     dispatch(userForgetPassword_sendOTP(jsonBody))
   }
@@ -101,6 +107,7 @@ const ForgetPasswordPage = props => {
     else {
       // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
+      debugger
       var jsonBody = JSON.stringify({
         UserID: values.userId,
         OTP: values.OTP,
@@ -228,7 +235,7 @@ const ForgetPasswordPage = props => {
                                 />
                               </div>
                               <div className="mb-3 mt-4">
-                                <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
+                                <button disabled={Loading} className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
                               </div>
                             </AvForm>
                           }

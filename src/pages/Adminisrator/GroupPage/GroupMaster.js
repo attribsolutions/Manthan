@@ -35,7 +35,11 @@ import {
 } from "../../../components/Common/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID } from "../../../components/Common/CommonFunction";
+import {
+    breadcrumbReturnFunc,
+    btnIsDissablefunc,
+    loginUserID
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
@@ -90,7 +94,7 @@ const GroupMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-      
+
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -106,9 +110,9 @@ const GroupMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-    
+
         if ((hasShowloction || hasShowModal)) {
-         
+
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -308,18 +312,15 @@ const GroupMaster = (props) => {
                                                                     />
                                                                 </Col>
                                                             </Row>
-                                                        </FormGroup >
+                                                        </FormGroup>
                                                     </Row>
-
                                                 </CardBody>
                                             </Card>
                                         </Col>
                                     </Row>
                                 </form>
                             </CardBody>
-
                         </Card>
-
                     </Container>
                 </div>
             </React.Fragment >

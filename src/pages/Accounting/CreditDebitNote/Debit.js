@@ -32,6 +32,7 @@ import {
     btnIsDissablefunc,
     currentDate,
     loginCompanyID,
+    loginPartyID,
     loginUserID
 } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
@@ -51,6 +52,10 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import CInput from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
+import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
+import { CredietDebitType, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 const Credit = (props) => {
@@ -65,6 +70,8 @@ const Credit = (props) => {
         Amount: "",
         ServiceItems: "",
         Narration: "",
+        ReceiptNO: "",
+        ReceiptDate: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -78,13 +85,18 @@ const Credit = (props) => {
     const {
         postMsg,
         pageField,
+        RetailerList,
         ReceiptGoButton,
+        ReceiptModeList,
+        CreditDebitType,
         updateMsg,
         userAccess } = useSelector((state) => ({
-            postMsg: state.BankReducer.postMsg,
-            updateMsg: state.BankReducer.updateMessage,
+            postMsg: state.CredietDebitReducer.postMsg,
+            RetailerList: state.CommonAPI_Reducer.RetailerList,
+            CreditDebitType: state.CredietDebitReducer.CreditDebitType,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
+            ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
@@ -94,16 +106,19 @@ const Credit = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-
+    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    // const { Data = [] } = ReceiptGoButton
+    let { Data = [] } = ReceiptGoButton;
 
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
+
+
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -157,58 +172,58 @@ const Credit = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveBankMaster_Success({ Status: false }))
+            dispatch(saveCredit_Success({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
 
+
             if (pageMode === "other") {
-                dispatch(AlertState({
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
             }
             else {
-                dispatch(AlertState({
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.BANK_LIST,
-                }))
+                })
+                if (promise) {
+                    history.push({
+                        pathname: url.DEBIT_LIST,
+                    })
+                }
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(saveBankMaster_Success({ Status: false }))
-            dispatch(AlertState({
+            dispatch(saveCredit_Success({ Status: false }))
+            CustomAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            setState(() => resetFunction(fileds, state)) // Clear form values 
-            history.push({
-                pathname: url.BANK_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateBankIDSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
+    // useEffect(() => {
+    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+    //         setState(() => resetFunction(fileds, state)) // Clear form values 
+    //         history.push({
+    //             pathname: url.BANK_LIST,
+    //         })
+    //     } else if (updateMsg.Status === true && !modalCss) {
+    //         dispatch(updateBankIDSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 3,
+    //                 Status: true,
+    //                 Message: JSON.stringify(updateMsg.Message),
+    //             })
+    //         );
+    //     }
+    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -217,56 +232,117 @@ const Credit = (props) => {
         }
     }, [pageField])
 
-    const pagesListColumns = [
-        {
-            text: "InvoiceDate",
-            dataField: "InvoiceDate",
-        },
-        {
-            text: "Bill No",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Bill Amount",
-            dataField: "GrandTotal",
-        },
-        {
-            text: "Paid",
-            dataField: "PaidAmount",
-        },
-        {
-            text: "Bal Amt",
-            dataField: "BalanceAmount",
-        },
-        {
-            text: "Calculate",
-            dataField: "",
-            formatter: (cellContent, row, key) => {
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: loginPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <CInput
-                        key={`Quantity${row.FullInvoiceNumber}${key}`}
-                        id={`Quantity${row.FullInvoiceNumber}`}
-                        pattern={decimalRegx}
-                        defaultValue={row.Calculate}
-                        // disabled={page_Mode === mode.modeSTPsave ? true : false}
-                        // value={row.Calculate}
-                        // type="text"
-                        autoComplete="off"
-                        className="col col-sm text-center"
-                    // onChange={(e) => CalculateOnchange(e, row, key)}
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 7
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
+    }, []);
 
-                    />
-                </span>)
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            },
-        },
-    ];
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 5
+        });
+        dispatch(CredietDebitType(jsonBody));
+    }, [])
+
+    const customerOptions = RetailerList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
+    const ReceiptModeOptions = ReceiptModeList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+    debugger
+    const CreditDebitTypeId = CreditDebitType.find((index) => {
+        return index.Name === "DebitNote"
+    });
+
+
+    function ReciptDateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.ReceiptDate = date;
+            a.hasValid.ReceiptDate.valid = true
+            return a
+        })
+    };
+
+
+    function DebitDateOnchange(e, date) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.DebitDate = date;
+            a.hasValid.DebitDate.valid = true
+            return a
+        })
+    };
+
+
+    // const pagesListColumns = [
+    //     {
+    //         text: "InvoiceDate",
+    //         dataField: "InvoiceDate",
+    //     },
+    //     {
+    //         text: "Invoice No",
+    //         dataField: "FullInvoiceNumber",
+    //     },
+    //     {
+    //         text: "Invoice Amount",
+    //         dataField: "GrandTotal",
+    //     },
+    //     {
+    //         text: "Paid",
+    //         dataField: "PaidAmount",
+    //     },
+    //     {
+    //         text: "Bal Amt",
+    //         dataField: "BalanceAmount",
+    //     },
+    //     {
+    //         text: "Calculate",
+    //         dataField: "",
+    //         // formatter: (cellContent, row, key) => {
+
+    //         //     return (<span style={{ justifyContent: 'center', width: "100px" }}>
+    //         //         <CInput
+    //         //             key={`Quantity${row.FullInvoiceNumber}${key}`}
+    //         //             id={`Quantity${row.FullInvoiceNumber}`}
+    //         //             pattern={decimalRegx}
+    //         //             defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
+    //         //             disabled={pageMode === mode.view ? true : false}
+    //         //             // value={row.Calculate}
+    //         //             // type="text"
+    //         //             autoComplete="off"
+    //         //             className="col col-sm text-center"
+    //         //             onChange={(e) => CalculateOnchange(e, row, key)}
+
+    //         //         />
+    //         //     </span>)
+    //         // },
+    //         // headerStyle: (colum, colIndex) => {
+    //         //     return { width: '140px', textAlign: 'center' };
+    //         // },
+    //     },
+    // ];
 
 
     const saveHandeller = async (event) => {
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -274,17 +350,26 @@ const Credit = (props) => {
                 btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    Name: values.Name,
+                    CRDRNoteDate: values.DebitDate,
+                    Customer: values.PartyName.value,
+                    NoteType: CreditDebitTypeId.id,
+                    GrandTotal: values.Amount,
+                    Narration: values.Narration,
+                    Comment: values.Comment,
+                    ReceiptNO: values.ReceiptNO,
+                    ReceiptDate: values.ReceiptDate,
+                    CRDRNoteItems: [],
+                    CRDRInvoices: [],
+                    Party: loginPartyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
-                    Company: loginCompanyID(),
                 });
 
                 if (pageMode === mode.edit) {
-                    dispatch(updateBankID({ jsonBody, updateId: values.id, btnId }));
+                    // dispatch(updateBankID({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-                    dispatch(saveBankMaster({ jsonBody, btnId }));
+                    dispatch(saveCredit({ jsonBody, btnId }));
                 }
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
@@ -300,14 +385,7 @@ const Credit = (props) => {
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
                     <form noValidate>
-                        {/* <Card> */}
-                        {/* <CardHeader className="card-header   text-black c_card_header" >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader> */}
-                        {/* <div className="px-2 c_card_filter header text-black mb-2" > */}
-                        {/* <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <CardBody className="c_card_body"> */}
+
                         <div className="px-2 c_card_filter header text-black mb-2" >
 
                             <Row>
@@ -326,7 +404,7 @@ const Credit = (props) => {
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
-                                            // onChange={ReturnDate_Onchange}
+                                                onChange={DebitDateOnchange}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -372,7 +450,7 @@ const Credit = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                // options={ReturnReasonOptions}
+                                                options={customerOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                 }}
@@ -425,7 +503,7 @@ const Credit = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                // options={ItemOptions}
+                                                options={ReceiptModeOptions}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
                                                 }}
@@ -465,15 +543,85 @@ const Credit = (props) => {
                                 </Col >
 
                             </Row>
+
+                            {values.ServiceItems.label === "Cheque Bounce" ? <Row>
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptNO}</Label>
+                                        <Col sm="7">
+
+                                            <Select
+                                                id=" ReceiptNO"
+                                                name="ReceiptNO"
+                                                value={values.ReceiptNO}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={customerOptions}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                }}
+                                            />
+
+                                            {isError.ReceiptNO.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ReceiptNO}</small></span>
+                                            )}
+                                        </Col>
+
+
+                                    </FormGroup>
+                                </Col >
+                                <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReceiptDate}</Label>
+                                        <Col sm="7">
+
+                                            <Flatpickr
+                                                name='ReceiptDate'
+                                                value={values.ReceiptDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="Select..."
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
+                                                onChange={ReciptDateOnchange}
+                                            />
+
+                                            {isError.ReceiptDate.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ReceiptDate}</small></span>
+                                            )}
+                                        </Col>
+
+                                    </FormGroup>
+                                </Col >
+
+                            </Row> : null}
+
+
                             {/* </CardBody> */}
                             {/* </CardBody> */}
 
                             {/* </div> */}
 
                         </div>
+                        <FormGroup>
+                            <Col sm={2} style={{ marginLeft: "3px" }} >
+                                <SaveButton pageMode={pageMode}
+                                    onClick={saveHandeller}
+                                    userAcc={userPageAccessState}
+                                    editCreatedBy={editCreatedBy}
+                                    module={"Receipts"}
+                                />
+
+                            </Col>
+                        </FormGroup >
                         {/* </Card> */}
-{/* 
-                        <ToolkitProvider
+
+                        {/* <ToolkitProvider
 
                             keyField="id"
                             data={Data}

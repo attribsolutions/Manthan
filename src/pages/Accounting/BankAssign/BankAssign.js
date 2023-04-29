@@ -14,6 +14,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { MetaTags } from "react-meta-tags";
 import {
+    BreadcrumbShowCountlabel,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
@@ -126,11 +127,12 @@ const BankAssign = (props) => {
         }
     }, [postMsg])
 
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`${" Bank Assign Count"} :${Data.length}`))
+    }, [Data])
 
     function handllerIsSelfDepositoryBank(event, row, key) {
-       
         row.IsSelfDepositoryBank = event
-
         if (event) {
             document.getElementById(`IsDefault${key}`).disabled = false;
             document.getElementById(`AccountNo${key}`).disabled = false;
@@ -153,13 +155,13 @@ const BankAssign = (props) => {
         {
             text: "Name",
             dataField: "BankName",
-            // sort: true,
         },
+
         {
             text: " Customer Bank",
             dataField: "CustomerBank",
             formatter: (cellContent, row, key) => {
-                
+
                 return (<span >
                     <Input type="checkbox"
                         defaultChecked={row.CustomerBank}
@@ -169,6 +171,7 @@ const BankAssign = (props) => {
                 )
             },
         },
+
         {
             text: "Depository Bank",
             dataField: "IsSelfDepositoryBank",
@@ -183,6 +186,7 @@ const BankAssign = (props) => {
                 )
             },
         },
+
         {
             text: "Show On Invoice",
             dataField: "IsDefault",
@@ -199,6 +203,7 @@ const BankAssign = (props) => {
                 )
             },
         },
+
         {
             text: "Account No",
             dataField: "AccountNo",
@@ -215,11 +220,11 @@ const BankAssign = (props) => {
                     </span>
                 )
             },
-
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
+
         {
             text: "IFSC",
             dataField: "IFSC",
@@ -237,11 +242,11 @@ const BankAssign = (props) => {
                     </span>
                 )
             },
-
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
+
         {
             text: "Branch ",
             dataField: "BranchName",
@@ -271,7 +276,7 @@ const BankAssign = (props) => {
     };
 
     const saveHandeller = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -289,7 +294,6 @@ const BankAssign = (props) => {
                 UpdatedBy: loginUserID(),
                 Company: loginCompanyID()
             }))
-
 
             const data = postJson.filter((i) => {
                 return (i.IsSelfDepositoryBank === true) || ((i.CustomerBank === true))

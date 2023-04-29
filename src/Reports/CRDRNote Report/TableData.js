@@ -1,5 +1,4 @@
-import { concatDateAndTime, convertDatefunc } from "../../components/Common/CommonFunction";
-import { invoice } from "../ReportIndex";
+import { concatDateAndTime } from "../../components/Common/CommonFunction";
 
 export const columns = [
     "Invoice Date",
@@ -22,19 +21,19 @@ export const columns1 = [
     "Total Amt"
 ];
 
-
 export const BilledBy = [
     "Billed by",
 ]
+
 export const BilledTo = [
     "Billed by",
 ]
+
 export const Details = [
     " ",
 ]
 
 export const Rows1 = (data) => {
-
     const { CRDRNoteItems = [] } = data
     CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -46,7 +45,7 @@ export const Rows1 = (data) => {
     let totalQuantity = 0
 
     CRDRNoteItems.forEach((element, key) => {
-        debugger
+        
         const tableitemRow = [
             element.ItemName,
             `${Number(element.Quantity).toFixed(2)} ${element.UnitName}`,
@@ -112,10 +111,8 @@ export const Rows1 = (data) => {
     return returnArr;
 }
 
-
-
 export const Rows = (data) => {
-    debugger
+    
     const { CRDRInvoices = [] } = data
     CRDRInvoices.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -140,8 +137,6 @@ export const Rows = (data) => {
             TotalPaidAmount = Number(TotalPaidAmount) + Number(element.PaidAmount)
             TotalBalanceAmt = Number(TotalBalanceAmt) + Number(BalanceAmount)
             Total = Number(Total) + Number(element.GrandTotal)
-            // let cgst = data["tableTot"].Total
-            // return ({ TotalCGst: cgst })
         };
 
         function totalrow() {
@@ -158,16 +153,11 @@ export const Rows = (data) => {
             ];
         };
 
-
-        // if (Gst === 0) { Gst = element.GSTPercentage };
-        // let aa = { TotalCGst: 0, totalSGst: 0 }
-        // if (data["tableTot"] === undefined) { data["tableTot"] = aa }
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow);
         }
         else {
-            // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
 
 
@@ -189,20 +179,11 @@ export const BilledByRow = (data) => {
         [`State :${data.PartyState}`],
         [`Address :${data.PartyAddress}`],
         [`FSSAI No :${data.PartyFSSAINo}`],
-
     ]
 
     return BilledToArray;
-
-    // var BilledByArray = [
-    //     [`Customer Name: ${data.Customer}`],
-    //     [`Customer GSTIN: ${data.CustomerGSTIN}`],
-    //     [`State :${data.CustomerState}`],
-    //     [`Address:${data.CustomerAddress}`],
-    //     [`CustomerFSSAINo :${data.CustomerFSSAINo}`],
-    // ]
-    // return BilledByArray;
 }
+
 export const BilledToRow = (data) => {
     var BilledByArray = [
         [`Name :${data.Customer}`],
@@ -212,17 +193,6 @@ export const BilledToRow = (data) => {
         [`FSSAI No :${data.CustomerFSSAINo}`],
     ]
     return BilledByArray;
-
-    // var BilledToArray = [
-    //     [`Party Name :${data.Party}`],
-    //     [`Party GSTIN:${data.PartyGSTIN}`],
-    //     [`State :${data.PartyState}`],
-    //     [`Address:${data.PartyAddress}`],
-    //     [`PartyFSSAINo:${data.PartyFSSAINo}`],
-
-    // ]
-
-    // return BilledToArray;
 }
 
 export const DetailsRow = (data) => {
@@ -233,7 +203,7 @@ export const DetailsRow = (data) => {
         [`Note No :${data.NoteNo}`],
         [`Note Reason :${data.NoteReason}`],
         [`Note Type :${data.NoteType}`],
-        // [`Narration : ${data.Narration}`],
+        [`Narration : ${data.Narration}`],
 
     ]
 

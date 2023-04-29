@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
+
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Label,
+  CardHeader,
+  FormGroup,
+  Input,
+  Button,
+  Modal
+} from "reactstrap";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   getState,
@@ -11,7 +25,11 @@ import {
   updateEmployeeIDSuccess
 } from "../../../store/Administrator/EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { getDistrictOnState, getDistrictOnStateSuccess, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import {
+  getDistrictOnState,
+  getDistrictOnStateSuccess,
+  getPartyListAPI
+} from "../../../store/Administrator/PartyRedux/action";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -26,12 +44,19 @@ import {
   resetFunction
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, } from "../../../components/Common/CommonFunction";
+import {
+  breadcrumbReturnFunc,
+  btnIsDissablefunc,
+  loginCompanyID,
+  loginUserID,
+} from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
+import EmployeeTypesMaster from "../EmployeeTypes/EmployeeTypesMaster";
+import AddMaster from "./Drodown";
 
 const AddEmployee = (props) => {
 
@@ -47,8 +72,6 @@ const AddEmployee = (props) => {
     DOB: "",
     PAN: "",
     AadharNo: "",
-    // working_hours: "8",
-    // CompanyName: "",
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
@@ -60,8 +83,8 @@ const AddEmployee = (props) => {
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
-  // const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
+  console.log("userPageAccessState in Employee Master", userPageAccessState)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -73,6 +96,7 @@ const AddEmployee = (props) => {
     postMsg,
     userAccess,
     pageField,
+    EmployeeTypePostMsg,
     updateMsg } = useSelector((state) => ({
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
@@ -80,11 +104,11 @@ const AddEmployee = (props) => {
       partyList: state.PartyMasterReducer.partyList,
       company: state.EmployeesReducer.CompanyNames,
       postMsg: state.EmployeesReducer.postMessage,
+      EmployeeTypePostMsg: state.EmployeeTypeReducer.PostEmployeeType,
       updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     }));
-
 
   const values = { ...state.values }
   const { isError } = state;
@@ -102,6 +126,16 @@ const AddEmployee = (props) => {
     dispatch(getPartyListAPI())
     dispatch(getState());
   }, [dispatch]);
+
+  // useEffect(() => {
+
+  //   if ((location.Data)) {
+  //     const { id, Name } = location.Data
+  //     const values = {
+  //       ...state.values.EmployeeTypeName = { value: id, label: Name }
+  //     }
+  //   }
+  // }, [location])
 
   // userAccess useEffect
   useEffect(() => {
@@ -144,11 +178,12 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-debugger
+
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
         const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
           State_id, District_id, Company_id, EmployeeType_id, } = hasEditVal
+
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.id.valid = id
@@ -261,29 +296,6 @@ debugger
     label: data.Name
   }));
 
-  // function EmployeeType_Dropdown_Handler(e) {
-  //   // dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
-
-  //   // const IsPartyConnection = employeeType.find((element) => {
-  //   //   return element.id === e.value
-  //   // });
-
-  //   // if (IsPartyConnection.IsPartyConnection) {
-  //   //   setPartyDropDownShow_UI(true)
-  //   // }
-  //   // else {
-  //   //   setPartyDropDownShow_UI(false)
-  //   // }
-  //   setState((i) => {
-  //     const a = { ...i }
-  //     a.values.CompanyName = "";
-  //     a.values.EmployeeParties = "";
-  //     a.hasValid.CompanyName.valid = false
-  //     a.hasValid.EmployeeParties.valid = false
-  //     return a
-  //   })
-  // }
-
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
     setState((i) => {
@@ -295,14 +307,11 @@ debugger
   }
 
   const SaveHandler = (event) => {
-
     event.preventDefault();
     const btnId = event.target.id;
-
     try {
       if (formValid(state, setState)) {
         btnIsDissablefunc({ btnId, state: true })
-
         if ((values.EmployeeTypeName.IsPartyConnection === true) && (values.EmployeeParties.length === 0)) {
           dispatch(
             AlertState({
@@ -354,7 +363,6 @@ debugger
     return (
       <React.Fragment>
         <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
 
@@ -557,10 +565,11 @@ debugger
 
                   <Card className="mt-n2">
                     <CardBody className="c_card_body">
+
                       <Row >
-                        <FormGroup className="mb-2 col col-sm-3 ">
-                          <Label htmlFor="validationCustom01"> {fieldLabel.EmployeeTypeName} </Label>
-                          <Col sm={12}>
+                        <Col md="3">
+                          <FormGroup className="mb-3 ">
+                            <Label > {fieldLabel.EmployeeTypeName}</Label>
                             <Select
                               name="EmployeeTypeName"
                               value={values.EmployeeTypeName}
@@ -570,19 +579,24 @@ debugger
                               options={EmployeeType_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState });
-                                // EmployeeType_Dropdown_Handler(hasSelect)
                               }}
                             />
                             {isError.EmployeeTypeName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.EmployeeTypeName}</small></span>
                             )}
-                          </Col>
-                        </FormGroup>
+                          </FormGroup>
+                        </Col>
 
-                        <Col md="1">  </Col>
-                        <div className="col-lg-3 col-md-4">
-                          <div className="mb-3">
-                            <Label htmlFor="validationCustom01">{fieldLabel.EmployeeParties} </Label>
+                        <Col md="1" className=" mt-3">
+                          <AddMaster
+                            masterModal={EmployeeTypesMaster}
+                            masterPath={url.EMPLOYEETYPE}
+                          />
+                        </Col>
+
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label>{fieldLabel.EmployeeParties}</Label>
                             <Select
                               name="EmployeeParties"
                               value={values.EmployeeParties}
@@ -594,8 +608,8 @@ debugger
                               }}
                               classNamePrefix="dropdown"
                             />
-                          </div>
-                        </div>
+                          </FormGroup>
+                        </Col>
                       </Row>
 
                       <FormGroup className="mt-3">
@@ -611,6 +625,7 @@ debugger
                           </Col>
                         </Row>
                       </FormGroup>
+
                     </CardBody>
                   </Card>
                 </form>
@@ -618,7 +633,9 @@ debugger
             </Card>
           </Container>
         </div>
+
       </React.Fragment >
+
     );
   }
   else {

@@ -1,10 +1,6 @@
-
-import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
-import { convertDatefunc, convertOnlyTimefunc, convertTimefunc } from "../../components/Common/CommonFunction";
-
+let initial_y = 0
 
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
@@ -13,8 +9,6 @@ export const pageBorder = (doc) => {
     doc.line(570, 379, 570, 16);//vertical line (Right)
     doc.line(570, 379, 30, 379);//horizontal line (Bottom)   
 }
-let initial_y = 0
-
 export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
@@ -22,10 +16,8 @@ export const pageHeder = (doc, data) => {
     doc.setFontSize(15)
     if (data.NoteType === "CreditNote") {
         doc.text('CREDIT NOTE', 270, 34, "center")
-
     } else {
         doc.text(' GOODS CREDIT NOTE', 270, 34, "center")
-
     }
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
@@ -44,12 +36,8 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, 43, 30, 43) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, 55, 30, 55);//horizontal line 3
-    // doc.line(409, 69, 30, 69)//horizontal line 4
-    // doc.line(30, 350, 30, 16);//vertical left 1
-    // doc.line(570, 350, 570, 16);//vertical left 2
     doc.line(408, 145, 408, 43);//vertical right 1
     doc.line(220, 145, 220, 43);//vertical right 2
-
     doc.line(570, 145, 30, 145) //horizontal line 1 billby upper
 
     var BilledByStyle = {
@@ -77,12 +65,12 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 190,
                 halign: 'lfet',
             }
-
         },
         tableLineColor: "black",
         startY: 55,
 
     };
+
     var BilledToStyle = {
         margin: {
             top: 45, left: 220, right: 35,
@@ -113,6 +101,7 @@ export const reportHeder1 = (doc, data) => {
         startY: 55,
 
     };
+
     var DetailsOfTransportStyle = {
         margin: {
             top: 45, left: 408, right: 35,
@@ -141,16 +130,12 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
-
         startY: 55,
 
     };
 
-    // let initial_y = 0
     const priLength = () => {
-
         let final_y = doc.previousAutoTable.finalY
-
         if (final_y > initial_y) {
             initial_y = final_y
         }
@@ -169,36 +154,17 @@ export const reportHeder1 = (doc, data) => {
     console.log("third", doc.previousAutoTable.finalY)
     priLength()
 
-
-
 }
 
 export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setFont(undefined, 'bold')
-    // doc.text(`GSTIN:${data.CustomerGSTIN}`, 38, 65)
-    // doc.text(`GSTIN:${data.PartyGSTIN}`, 238, 65)
+   
 }
-
-export const reportHeder3 = (doc, data) => {
-    doc.setFont('Tahoma')
-    doc.setFontSize(9)
-    doc.setDrawColor(0, 0, 0);
-    doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-    // doc.line(408, 42, 408, 16);//vertical right 1
-    doc.setFont(undefined, 'bold')
-    doc.text(`Invoice No:   ${data.InvoiceNumber}`, 415, 25) //Invoice Id
-    var date = convertDatefunc(data.InvoiceDate)
-    var time = convertOnlyTimefunc(data.CreatedOn)
-    doc.text(`Invoice Date: ${date}  ${time}`, 415, 40) //Invoice date
-
-
-}
-
 
 export const reportFooterForGoodsCredit = (doc, data) => {
-    debugger
+    
     const a = data.CRDRNoteItems.map((data) => ({
         CGST: Number(data.CGST),
         SGST: Number(data.SGST),
@@ -218,30 +184,19 @@ export const reportFooterForGoodsCredit = (doc, data) => {
         SGST += arg.SGST;
         BasicAmount += arg.BasicAmount;
     });
-    // const BalAmt = GrandTotal - PaidAmount
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
     doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
-    // doc.line(360, 308, 360, 379);//vertical right1 Sub Total
     doc.setFont('Tahoma')
     doc.line(435, 340, 30, 340);//horizontal line (Bottom)
-
-
     doc.setFontSize(9)
-
-    // doc.text(`CGST:`, 440, 310,)
-    // doc.text(`${totalCGST.toFixed(2)}`, 560, 310, 'right')
-
     doc.text(`CGST:`, 440, 322,)
     doc.text(`${CGST.toFixed(2)}`, 560, 322, 'right')
-
     doc.text(`SGST:`, 440, 334,)
     doc.text(` ${SGST.toFixed(2)}`, 560, 334, 'right')
-
     doc.text(`Basic Amount:`, 440, 346,)
     doc.text(`${BasicAmount.toFixed(2)}`, 560, 346, 'right')
-
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
@@ -258,20 +213,13 @@ export const reportFooterForGoodsCredit = (doc, data) => {
     doc.text(`Prepared by `, 35, 785,)
     doc.text(`Received By `, 180, 785,)
     doc.setFontSize(10)
-    // doc.text(`${data.PartyName} `, 390, 785,)
     doc.setFontSize(10)
-    // doc.text(`${data.CustomerName} `, 140, 811,)
     doc.setFontSize(9)
     doc.text(`Signature `, 400, 811,)
     doc.setFont("Arimo");
     doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
      of the nature and quantity which it/these purports to be `, 34, 321,)
-    // doc.text(`A/C No: 2715500354564564564564565456456 IFSC Code:BKID00015422 `, 34, 318,)
-    // doc.setFontSize(10)
-
-    // doc.text(`Note Comment : ${data.Narration}`, 34, 328,)
     doc.setFontSize(8)
-    // doc.setFont(undefined, 'bold')
     doc.text(`Rupees: ${stringNumber}`, 33, 305,)
     doc.addFont("Arial", 'Normal')
     doc.setFontSize(11)
@@ -279,19 +227,10 @@ export const reportFooterForGoodsCredit = (doc, data) => {
     doc.text(`Authorized Signatory `, 320, 370,)
     doc.setFontSize(9)
     doc.addFont("Arial", 'Normal')
-
-
-
 }
 
-
-
-
-
-
-
 export const reportFooterForCredit = (doc, data) => {
-    debugger
+    
 
     const a = data.CRDRInvoices.map((data) => ({
         GrandTotal: Number(data.GrandTotal),
@@ -384,14 +323,10 @@ export const tableBodyforCreditGoods = (doc, data) => {
 
                 data1.row.cells[8].styles.fontSize = 8
                 data1.row.cells[6].styles.fontSize = 8
-                // data1.row.cells[5].styles.fontSize = 8
-                // data1.row.cells[7].styles.fontSize = 8
-                // data1.row.cells[9].styles.fontSize = 8
-
+             
                 data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[6].styles.fontStyle = "bold"
-                // data1.row.cells[5].styles.fontStyle = "bold"
-                // data1.row.cells[7].styles.fontStyle = "bold"
+                
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
                 data1.row.cells[4].colSpan = 2
@@ -464,12 +399,10 @@ export const tableBodyforCreditGoods = (doc, data) => {
         tableLineColor: "black",
 
         startY: initial_y,// 45,
-        // startY:60
     };
 
 
     doc.autoTable(table.columns1, table.Rows1(data), options1,);
-
     const optionsTable4 = {
         margin: {
             left: 30, right: 30, bottom: 110
@@ -479,7 +412,6 @@ export const tableBodyforCreditGoods = (doc, data) => {
     };
     doc.autoTable(optionsTable4);
 }
-
 
 export const tableBodyforCredit = (doc, data) => {
     var options = {
@@ -565,14 +497,6 @@ export const tableBodyforCredit = (doc, data) => {
     doc.autoTable(optionsTable4);
 }
 
-
-
-
-
-
-
-
-
 export const pageFooter = (doc, data, islast = 0, array = []) => {
 
     const pageCount = doc.internal.getNumberOfPages()
@@ -595,5 +519,3 @@ export const pageFooter = (doc, data, islast = 0, array = []) => {
         }
     }
 }
-
-// original
