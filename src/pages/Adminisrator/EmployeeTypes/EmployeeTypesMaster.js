@@ -64,7 +64,7 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [modalCss, setModalCss] = useState(false);
     const [editCreatedBy, seteditCreatedBy] = useState("");
-
+    console.log("userPageAccessState in Employee type", userPageAccessState)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         updateMsg,
@@ -75,6 +75,7 @@ const EmployeeTypesMaster = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
 
     useEffect(() => {
         const page_Id = pageId.EMPLOYEETYPE
@@ -92,9 +93,15 @@ const EmployeeTypesMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-
+        debugger
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -106,9 +113,7 @@ const EmployeeTypesMaster = (props) => {
 
         if (userAcc) {
             setUserAccState(userAcc);
-            if (!props.isdrodownMode) {
-                breadcrumbReturnFunc({ dispatch, userAcc });
-            }
+            breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
@@ -161,6 +166,9 @@ const EmployeeTypesMaster = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                // history.push({
+                //     Data: postMsg.Data
+                // })
                 dispatch(getEmployeeTypelist())
 
                 props.isOpenModal(false)
@@ -217,7 +225,6 @@ const EmployeeTypesMaster = (props) => {
         }
     }, [pageField])
 
-
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -245,8 +252,6 @@ const EmployeeTypesMaster = (props) => {
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''

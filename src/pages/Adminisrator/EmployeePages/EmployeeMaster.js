@@ -84,6 +84,7 @@ const AddEmployee = (props) => {
   const [userPageAccessState, setUserAccState] = useState('');
   const [modalCss, setModalCss] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
+  console.log("userPageAccessState in Employee Master", userPageAccessState)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -95,6 +96,7 @@ const AddEmployee = (props) => {
     postMsg,
     userAccess,
     pageField,
+    EmployeeTypePostMsg,
     updateMsg } = useSelector((state) => ({
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
@@ -102,6 +104,7 @@ const AddEmployee = (props) => {
       partyList: state.PartyMasterReducer.partyList,
       company: state.EmployeesReducer.CompanyNames,
       postMsg: state.EmployeesReducer.postMessage,
+      EmployeeTypePostMsg: state.EmployeeTypeReducer.PostEmployeeType,
       updateMsg: state.EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
@@ -123,6 +126,16 @@ const AddEmployee = (props) => {
     dispatch(getPartyListAPI())
     dispatch(getState());
   }, [dispatch]);
+
+  // useEffect(() => {
+
+  //   if ((location.Data)) {
+  //     const { id, Name } = location.Data
+  //     const values = {
+  //       ...state.values.EmployeeTypeName = { value: id, label: Name }
+  //     }
+  //   }
+  // }, [location])
 
   // userAccess useEffect
   useEffect(() => {
@@ -282,7 +295,6 @@ const AddEmployee = (props) => {
     value: data.id,
     label: data.Name
   }));
-
 
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
@@ -578,6 +590,7 @@ const AddEmployee = (props) => {
                         <Col md="1" className=" mt-3">
                           <AddMaster
                             masterModal={EmployeeTypesMaster}
+                            masterPath={url.EMPLOYEETYPE}
                           />
                         </Col>
 
@@ -612,7 +625,7 @@ const AddEmployee = (props) => {
                           </Col>
                         </Row>
                       </FormGroup>
-                      
+
                     </CardBody>
                   </Card>
                 </form>

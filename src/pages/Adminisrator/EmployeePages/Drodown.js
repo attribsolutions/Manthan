@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Modal } from 'reactstrap'
 import * as mode from "../../../routes/PageMode"
+import * as url from "../../../routes/route_url";
 
 const AddMaster = (props) => {
- 
+
     const [isOpen, setIsOpen] = useState(false)
 
     return (
@@ -25,7 +26,9 @@ const AddMaster = (props) => {
                 size="xl"
             >
                 <props.masterModal
+                    masterPath={props.masterPath}
                     isOpenModal={setIsOpen}
+                    isdropdown={true}
                     pageMode={mode.dropdownAdd}
                 />
             </Modal>
