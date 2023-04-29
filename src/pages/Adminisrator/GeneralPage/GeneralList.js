@@ -47,18 +47,17 @@ const GeneralList = (props) => {
         const page_Id = pageId.GENERAL_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+        dispatch(PostGenerallist(getlistBody()));
     }, []);
 
     const { pageField, userAccess = [] } = reducers
 
-    useEffect(() => {
-     
-        const jsonBody = JSON.stringify({
+    function getlistBody() {
+        return JSON.stringify({
             TypeID: 2,
             Company: loginCompanyID(),
         });
-        dispatch(PostGenerallist(jsonBody));
-    }, []);
+    }
 
     return (
         <React.Fragment>
@@ -72,6 +71,7 @@ const GeneralList = (props) => {
                         reducers={reducers}
                         MasterModal={GeneralMaster}
                         masterPath={url.GENERAL}
+                        getListbodyFunc={getlistBody}
                         ButtonMsgLable={"General"}
                         deleteName={"Name"}
                     />
