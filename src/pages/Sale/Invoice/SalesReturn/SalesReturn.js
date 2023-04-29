@@ -671,19 +671,19 @@ const SalesReturn = (props) => {
 
         ReturnItems.forEach((i) => {
 
-            if ((i.Unit === undefined)) {
+            if ((i.Unit === undefined) || (i.Unit === null)) {
                 invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
             }
-            else if ((i.MRP === undefined)) {
+            else if ((i.MRP === undefined) || (i.MRP === null)) {
                 invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
             }
-            else if ((i.GST === undefined)) {
+            else if ((i.GST === undefined) || (i.GST === null)) {
                 invalidMsg1.push(`${i.ItemName} : GST Is Required`)
             }
-            else if ((i.Rate === undefined)) {
+            else if ((i.Rate === undefined) || (i.Rate === null)) {
                 invalidMsg1.push(`${i.ItemName} : Rate Is Required`)
             }
-            else if ((i.BatchCode === undefined)) {
+            else if ((i.BatchCode === undefined) || (i.BatchCode === null)) {
                 invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
             };
         })

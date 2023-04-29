@@ -13,13 +13,14 @@ import {
 import { MetaTags } from "react-meta-tags";
 import {
     editEmployeeTypeSuccess,
+    getEmployeeTypelist,
     PostEmployeeTypeSubmit,
     PostEmployeeTypeSubmitSuccess,
     updateEmployeeTypeID,
     updateEmployeeTypeIDSuccess
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {
     AlertState,
     commonPageField,
@@ -43,11 +44,13 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
+import { CustomAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const EmployeeTypesMaster = (props) => {
+
     const dispatch = useDispatch();
     const history = useHistory()
-
+    const location = useLocation()
     const fileds = {
         id: "",
         Name: "",
@@ -79,7 +82,7 @@ const EmployeeTypesMaster = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-    const location = { ...history.location }
+
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -102,8 +105,10 @@ const EmployeeTypesMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdrodownMode) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -145,38 +150,43 @@ const EmployeeTypesMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (props.pageMode === mode.dropdownAdd) {
+                CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                }))
+                })
+                dispatch(getEmployeeTypelist())
+
+                props.isOpenModal(false)
+            }
+            else if (pageMode === mode.edit) {
+                CustomAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+                history.push({ pathname: url.EMPLOYEETYPE_lIST })
             }
             else {
-                dispatch(AlertState({
+                dispatch(Breadcrumb_inputName(''))
+                const promise = await CustomAlert({
                     Type: 1,
-                    Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.EMPLOYEETYPE_lIST,
-
-                }))
+                })
+                if (promise) { history.push({ pathname: url.EMPLOYEETYPE_lIST }) }
             }
-        }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
-            dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
+
+        } else if
+            (postMsg.Status === true) {
+            CustomAlert({
+                Type: 3,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
@@ -240,7 +250,7 @@ const EmployeeTypesMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-20.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
