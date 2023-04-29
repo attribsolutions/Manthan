@@ -32,8 +32,8 @@ import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster/itemIndex"
 
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
-import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
-import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
+import PartyList from "../pages/Adminisrator/PartyMaster/PartyList";
+import PartyMaster from "../pages/Adminisrator/PartyMaster/PartyMaster";
 
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
