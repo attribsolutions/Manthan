@@ -27,7 +27,8 @@ function pageFooter(doc,data) {
       });
     // window.open('dataurlnewwindow');
     
-    doc.output('dataurlnewwindow');
+    const options = { filename: "Receipt Report" }
+    doc.output('dataurlnewwindow', options);
 
     // return(<></>);
 }
