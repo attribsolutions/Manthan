@@ -243,7 +243,7 @@ const MRPMaster = (props) => {
     };
 
     const GoButton_Handler = (event, values) => {
-        debugger
+  
         let division = { ...division_dropdown_Select }
         let party = { ...party_dropdown_Select }
 

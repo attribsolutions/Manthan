@@ -157,7 +157,6 @@ const Order = (props) => {
 
   
     useEffect(() => {  // userAccess useEffect
-        debugger
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -242,7 +241,6 @@ const Order = (props) => {
 
     useEffect(() => {
         if (assingItemData.Status === true) {
-            debugger
             setisOpen_assignLink(true);
         }
     }, [assingItemData]);
